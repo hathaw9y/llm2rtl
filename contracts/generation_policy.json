@@ -1,0 +1,22 @@
+{
+  "purpose": "Generation and evidence rules independent of model and board",
+  "rules": [
+    "Read applicable project policies and hardware profile before freezing design contracts.",
+    "Model-based generation plans require a separate module_mapping.json between model graph review and bringup planning. It owns graph-to-module assignments and hardware transformation rationale; bringup.json references its exact path and SHA-256 without duplicating that mapping. Standalone operator generation records operator-spec scope instead of inventing a model graph.",
+    "Before generating bringup.json (including drafts), implementation contract freeze or implementation dispatch, present the concrete module_mapping.json and obtain explicit user approval of that exact mapping. Parent review, input clarification, silence or a general generation request is not approval. Record the actual user decision separately in module_mapping_approval.json bound to the mapping path and SHA-256; mapping changes require fresh user approval. Honor rejection and revocation, and never fabricate user consent.",
+    "Run check_planning.py --before-bringup with exact mapping and approval hashes before authoring bringup.json. The plan must reference that checked approval separately from its mapping reference. Bringup validation requires approval pins even without stage consumption; a read-only gate does not prevent out-of-band writes or authenticate historical creation order.",
+    "Validate planning before affected contract freeze; run both the planning reference gate and the contract gate before dispatch and promotion. Missing or stale planning references and blocked stage coverage prevent dispatch; structural PASS does not replace semantic, numerical or user hardware acceptance review.",
+    "Freeze numeric, interface, memory, schedule and verification requirements before RTL implementation.",
+    "Compute tensor ports access local memory; separate transport infrastructure performs DDR transfers.",
+    "Designs with DDR-to-local or local-to-DDR transfers MUST reuse ip/infrastructure/datamover_engine; substitute transport engines are forbidden. Declare transport in the design index, including all inline variant external transfers.",
+    "The model scheduler owns DataMover commands and error recovery. Declare command, completion, DDR and local-memory connection endpoints; independent integration verification must compare these declarations with actual RTL and source closure.",
+    "Use explicit validated adapters for width, layout or protocol mismatches.",
+    "Isolate each design's contracts, sources and evidence; do not relabel prior evidence.",
+    "Independent verification compares implementation and evidence against frozen contracts; absent evidence blocks the corresponding claim.",
+    "Contract changes require parent approval and re-verification of affected boundaries."
+  ],
+  "job_control_contract": "docs/hdl_module_interface_contract.md",
+  "schema": "llm2rtl.policy.v1",
+  "policy_id": "generation_policy",
+  "design_contract_index": "contracts/designs/README.md"
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "llm2rtl_v2.kernel_variant.schema.v1",
+  "title": "LLM2RTL kernel variant contract",
+  "type": "object",
+  "required": [
+    "schema",
+    "variant_id",
+    "operation",
+    "architecture",
+    "tile",
+    "numeric",
+    "tensor_ports",
+    "accumulation",
+    "scheduler",
+    "target"
+  ],
+  "properties": {
+    "schema": {"const": "llm2rtl_v2.kernel_variant.v1"},
+    "variant_id": {"type": "string", "minLength": 1},
+    "operation": {"type": "string", "minLength": 1},
+    "architecture": {"type": "object"},
+    "tile": {"type": "object"},
+    "numeric": {"type": "object"},
+    "tensor_ports": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["role", "direction", "element_bits", "port_bits", "memory_native_port_bits", "packing"],
+        "properties": {
+          "role": {"type": "string"},
+          "direction": {"enum": ["read", "write"]},
+          "element_bits": {"type": "integer", "minimum": 1},
+          "port_bits": {"type": "integer", "minimum": 1},
+          "memory_native_port_bits": {"type": "integer", "minimum": 1},
+          "packing": {"type": "string"},
+          "memory_class": {
+            "type": "string",
+            "description": "Local memory class from contracts/memory_ownership.json (ip_internal_private, vendor_child_private, system_shared_pl, or system_weight_uram). A compute engine's own tensor_ports must never be external_ps_ddr; DDR movement is declared separately under external_transfers and implemented by an infrastructure IP, not by the compute engine's own ports. The compiler rejects external_ps_ddr here."
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "accumulation": {"type": "object"},
+    "scheduler": {"type": "object"},
+    "target": {"type": "object"}
+  },
+  "additionalProperties": true
+}

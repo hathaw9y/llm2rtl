@@ -1,0 +1,109 @@
+{
+  "schema": "llm2rtl_v2.kernel_variant.v1",
+  "variant_id": "projection_gemm_ws32_w4a4_acc16",
+  "operation": "gemm",
+  "architecture": {
+    "dataflow": "weight_stationary_systolic",
+    "physical_pe_rows": 32,
+    "physical_pe_columns": 32,
+    "dsp_per_pe_intent": 0
+  },
+  "tile": {"m": 32, "n": 32, "k": 32},
+  "numeric": {
+    "activation_bits": 4,
+    "activation_signed": true,
+    "weight_bits": 4,
+    "weight_signed": true,
+    "product_bits": 8,
+    "accumulator_bits": 16,
+    "accumulator_signed": true
+  },
+  "tensor_ports": [
+    {
+      "role": "activation",
+      "direction": "read",
+      "element_bits": 4,
+      "port_bits": 128,
+      "memory_native_port_bits": 128,
+      "packing": "one tile row per native word",
+      "memory_class": "system_shared_pl"
+    },
+    {
+      "role": "weight",
+      "direction": "read",
+      "element_bits": 4,
+      "port_bits": 128,
+      "memory_native_port_bits": 128,
+      "packing": "one tile row per native word",
+      "memory_class": "system_weight_uram_or_bram"
+    },
+    {
+      "role": "partial_sum",
+      "direction": "read",
+      "element_bits": 16,
+      "port_bits": 512,
+      "memory_native_port_bits": 512,
+      "packing": "one output tile row per native word",
+      "memory_class": "system_shared_pl"
+    },
+    {
+      "role": "output",
+      "direction": "write",
+      "element_bits": 16,
+      "port_bits": 512,
+      "memory_native_port_bits": 512,
+      "packing": "one output tile row per native word",
+      "memory_class": "system_shared_pl"
+    }
+  ],
+  "accumulation": {
+    "across_k_tiles": true,
+    "storage": "external_output_in_place",
+    "first_k_tile": "zero",
+    "later_k_tiles": "read_add_write",
+    "overflow": "twos_complement_wrap",
+    "rounding": "none",
+    "saturation": "none"
+  },
+  "scheduler": {
+    "full_dimensions_owned_by": "gemm_engine",
+    "loop_order": ["m", "n", "k"],
+    "edge_policy": "zero_pad_to_tile",
+    "global_stride_owned_by": "gemm_engine",
+    "bank_conflicts_owned_by": "model_scheduler",
+    "local_output_policy": "reuse_one_tile_buffer_after_ddr_drain"
+  },
+  "external_transfers": {
+    "activation": {
+      "direction": "ddr_to_local",
+      "transport": "datamover_engine",
+      "logical_shape_limit": "M <= 64 and K <= 64",
+      "layout": "zero-padded 32x32 tile-major",
+      "bytes": "ceil(M/32) * ceil(K/32) * 512",
+      "maximum_bytes": 2048
+    },
+    "weight": {
+      "direction": "ddr_to_local",
+      "transport": "datamover_engine",
+      "logical_shape_limit": "K <= 64 and N <= 64",
+      "layout": "zero-padded 32x32 tile-major",
+      "bytes": "ceil(K/32) * ceil(N/32) * 512",
+      "maximum_bytes": 2048
+    },
+    "output": {
+      "direction": "local_to_ddr",
+      "transport": "datamover_engine",
+      "when": "after_final_k_tile_per_output_tile",
+      "bytes_per_tile": 2048,
+      "ddr_region_start_hex": "0x57a00000",
+      "ddr_region_end_inclusive_hex": "0x779fffff",
+      "alignment_bytes": 16
+    }
+  },
+  "target": {
+    "board": "AMD ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 200,
+    "device_resources": {"lut": 230400, "ff": 460800, "dsp": 1728, "bram36": 312, "uram": 96}
+  }
+}
