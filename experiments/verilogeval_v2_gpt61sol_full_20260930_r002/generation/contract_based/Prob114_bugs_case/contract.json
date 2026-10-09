@@ -1,0 +1,19 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {"code": "input unsigned 8 bits", "out": "output unsigned 4 bits", "valid": "output 1 bit"},
+    "source_evidence": "problem.txt explicitly lists code (8 bits), out (4 bits), valid and module TopModule; no clock/reset ports"
+  },
+  "semantics": {
+    "behavior": "Combinational exact scancode recognition, no state or added latency",
+    "mapping": {"45": 0, "16": 1, "1e": 2, "26": 3, "25": 4, "2e": 5, "36": 6, "3d": 7, "3e": 8, "46": 9},
+    "recognized": "out equals corresponding key and valid equals 1",
+    "unrecognized": "out equals 0 and valid equals 0",
+    "cycle_reset_initialization": "No clock/reset or initialization requirement appears in original interface. Outputs depend on current code after combinational settling; no retained previous output.",
+    "source_evidence": "problem.txt: If the input does not match any of the cases, both output signals would be set to 0"
+  },
+  "numeric": {"code": "8-bit unsigned bit pattern; mapping keys are hexadecimal", "out": "4-bit unsigned digit 0 through 9", "arithmetic": "No rounding, overflow or saturation operations"},
+  "verification": {"oracle": "Independent array of original scancodes indexed by expected decimal digit; search array for expected valid/out", "coverage": "All 256 binary inputs ascending and descending, plus alternating recognized/unrecognized transitions", "sampling": "Drive code then sample after 1 ns combinational settle; no clock", "failure": "$fatal on any mismatch or bounded timeout", "success": "Explicit PASS only after all comparisons"},
+  "specification_ambiguities": ["Original text does not explicitly define X/Z input behavior. Use exact four-state case matching with default zeros; binary-input exhaustive checks are the required functional oracle."]
+}

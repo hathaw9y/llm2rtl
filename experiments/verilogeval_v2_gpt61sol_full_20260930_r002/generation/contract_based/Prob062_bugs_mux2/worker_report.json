@@ -1,0 +1,19 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "cases": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "development/01 and dev_checks.jsonl", "simulation": "PASS: 131079 mux checks", "compiler": "Icarus 12, -g2012 -Wall -Wno-timescale"}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Original text describes an 8-bit mux but declares scalar out. Scalar width preserved under explicit harness instructions; selected input is truncated to its least-significant bit.",
+    "Unknown-selector behavior is unspecified by the problem; supplemental tests check standard conditional merge semantics.",
+    "No synthesis or board verification performed, as instructed."
+  ],
+  "justified_rtl_changes": ["Initial implementation replaces scalar bitwise selector masks with conditional selection. Original port names and widths are preserved; no clock, reset, state, extra ports or latency added."],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "artifacts": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json"}
+}

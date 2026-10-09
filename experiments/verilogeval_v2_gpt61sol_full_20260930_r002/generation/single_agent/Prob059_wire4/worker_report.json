@@ -1,0 +1,26 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "results": "Correct sequential fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "dev_checks.jsonl and development/01",
+      "results": "Icarus 12 compilation and simulation passed; 65 self-checking cases."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Four continuous assignments implement a->w, b->x, b->y, c->z with the original one-bit ports and no latency.",
+  "testbench": "Checks initial unknown propagation and all 64 combinations of 0, 1, X, and Z inputs, using case inequality, fatal mismatches, and a bounded timeout.",
+  "static_review": "Single drivers, exact port names and widths, no storage, clock, reset, or extra ports. Initial candidate preserved before development checks."
+}

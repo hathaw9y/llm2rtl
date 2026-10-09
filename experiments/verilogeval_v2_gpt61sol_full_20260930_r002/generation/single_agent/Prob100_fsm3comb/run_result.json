@@ -1,0 +1,183 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob100_fsm3comb",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob100_fsm3comb",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob100_fsm3comb/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790745625.3296435,
+    "ended_at_unix": 1790745724.6548073,
+    "seconds": 99.32516431808472,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 75157,
+      "cached_input_tokens": 45056,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1614,
+      "reasoning_output_tokens": 41
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "c87a888131b642515e1a396e9f267d6949d19d2affc961c76efa3e6571259710",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "details": "Correct fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+      },
+      {
+        "name": "initial",
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "evidence": "development/01",
+        "details": "Icarus 12 compilation and matching vvp simulation passed; 24 checks cover all eight state/input combinations and repeated transitions."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "Unknown input/state behavior is unspecified by the problem and was not asserted.",
+      "No synthesis or board verification performed."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "interface": "TopModule with original one-bit in/out and two-bit state/next_state ports; combinational with no added ports or latency.",
+      "static_review": "All four states match the original table; assignments cover every branch with no storage inferred; out is asserted only in D.",
+      "numeric_widths": "Two-bit state constants and one-bit output.",
+      "pipeline": "None; no clock or reset specified."
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob100_fsm3comb_test.sv": "2bc594d2dffaf74377c4941d07c6c4698949cf3ef1cb2e18fea6a0f2f875187c",
+      "candidate.sv": "c87a888131b642515e1a396e9f267d6949d19d2affc961c76efa3e6571259710",
+      "Prob100_fsm3comb_ref.sv": "d4a2719711748110fc288874c24d0c73a42a3edbc687e0a8aae8c6b7e1665c1e"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob100_fsm3comb_test.sv",
+        "Prob100_fsm3comb_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01536331232637167
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb100_fsm3comb_test.sv:18: $finish called at 501 (1ps)\nHint: Output 'next_state' has no mismatches.\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 100 samples\n\nSimulation finished at 501 ps\nMismatches: 0 in 100 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008874970488250256
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob100_fsm3comb_test.sv": "2bc594d2dffaf74377c4941d07c6c4698949cf3ef1cb2e18fea6a0f2f875187c",
+      "candidate.sv": "c87a888131b642515e1a396e9f267d6949d19d2affc961c76efa3e6571259710",
+      "Prob100_fsm3comb_ref.sv": "d4a2719711748110fc288874c24d0c73a42a3edbc687e0a8aae8c6b7e1665c1e"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob100_fsm3comb_test.sv",
+        "Prob100_fsm3comb_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013536116108298302
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb100_fsm3comb_test.sv:18: $finish called at 501 (1ps)\nHint: Output 'next_state' has no mismatches.\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 100 samples\n\nSimulation finished at 501 ps\nMismatches: 0 in 100 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.00858387816697359
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

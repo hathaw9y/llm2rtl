@@ -1,0 +1,102 @@
+{
+  "schema": "llm2rtl.standalone_attention_rtl_validation.v1",
+  "status": "PASS",
+  "scope": "bounded standalone MHA Attention ISA",
+  "parent_acceptance": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/tensor_isa_final002/parent_acceptance.json",
+    "sha256": "8efae2f38907cb83bc2f307fe13f31f18f6a949785109be9f12b291ac01d1cd4"
+  },
+  "integration_manifest": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/tensor_isa_final002/manifest.json",
+    "sha256": "45b2bf8040b450a55f02c37dee5d72d0c02da74f9353b27232ac14c111a76a8f"
+  },
+  "independent_child_reviews": [
+    {
+      "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/math_review.json",
+      "sha256": "1a5a14d4bcea589ce2cab5e1b821d6ec55f23121134c187a0966c2f56dcaa0a2"
+    },
+    {
+      "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/executor_review.json",
+      "sha256": "73b3b6b9055d53eb0c299f3399d7d5ed9b97395cd98ef674b5fbed38a6b80df5"
+    },
+    {
+      "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_ackfix.json",
+      "sha256": "9ff83dc35de95a72e99dc0c33c05a612228f19bd02ade0efde8d7678765c7131"
+    }
+  ],
+  "integration_crosscheck": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/tensor_isa_review_final002.json",
+    "sha256": "9601631cebc849477f47222a11e3f5b81ccab70e51ebcfb3844696eda2db3ab4"
+  },
+  "tests": {
+    "program_python": 8,
+    "hardware_reference_python": 3,
+    "executor_cases": 243,
+    "control_cases_per_latency": 38,
+    "control_read_latencies": [
+      1,
+      2
+    ],
+    "main_integration_cases": 52,
+    "main_profiles": 9,
+    "latency2_prefill_cases": 36,
+    "computed_banks_compared": 13,
+    "lint_profiles": 9
+  },
+  "configuration": {
+    "main_sim_and_prefill_OOC": {
+      "CMD_ADDR_WIDTH": 6,
+      "MAX_COMMANDS": 64,
+      "CMD_READ_LATENCY": 1
+    },
+    "latency2_sim": {
+      "CMD_ADDR_WIDTH": 6,
+      "MAX_COMMANDS": 64,
+      "CMD_READ_LATENCY": 2
+    },
+    "strict_lint_source_only": {
+      "CMD_ADDR_WIDTH": 10,
+      "MAX_COMMANDS": 1024,
+      "CMD_READ_LATENCY": 1
+    }
+  },
+  "metrics": {
+    "profile": "prefill",
+    "timing": {
+      "wns_ns": 0.149,
+      "setup_failing": 0,
+      "whs_ns": 0.061,
+      "hold_failing": 0,
+      "wpws_ns": 1.958,
+      "pulse_failing": 0
+    },
+    "resources": {
+      "total_lut": 16992,
+      "logic_lut": 16892,
+      "lutram": 100,
+      "srl": 0,
+      "ff": 7004,
+      "ramb36": 38,
+      "ramb18": 1,
+      "uram": 0,
+      "dsp": 8
+    },
+    "scope": "unplaced OOC with external boundary hold excluded"
+  },
+  "clock_ns": 5,
+  "part": "xczu7ev-ffvc1156-2-e",
+  "vivado": "2025.2",
+  "residual_advisories": [
+    "17 DSP pipeline DRC warnings",
+    "1 SYNTH6 RAM output-register methodology advisory"
+  ],
+  "hardware_scope": "scalar immutable per-build descriptors; tokens/queries<=32, inputs/outputs/headwidth<=256, heads<=4, head_dim<=64; not all Cartesian maxima proven",
+  "softmax_exp": "exp2ROM+FP32interpolation, relativeerror<=1e-5 for[-80,0], below-80cutoff0",
+  "historical_implementation_result": "frozen pending-review result remains preserved; parent_acceptance is completed final state",
+  "generic_whole_model_checker": "unsupported standalone schema; no generic model gate PASS claim",
+  "routed_timing": false,
+  "board_execution": false,
+  "model_quality": false,
+  "persistent_KV_cache": false,
+  "failed_trials_preserved": true
+}

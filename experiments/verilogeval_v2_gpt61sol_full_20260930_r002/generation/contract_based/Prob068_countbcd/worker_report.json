@@ -1,0 +1,22 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "coverage": "Correct fixture passed, injected fault failed, repaired fixture passed"},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only", "evidence": "contract_gate.json"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "dev_checks.jsonl and development/01", "coverage": "10153 positive edges; exhaustive decimal period; all carries; 9999-to-0000 wrap; held reset; reset asserted between edges and at count 0099; positive and negative edge sampling"}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board work performed, as required.",
+    "Initial state and illegal BCD state behavior are unspecified; functional checks begin after synchronous reset.",
+    "Enable mapping and current-state timing, zero reset value, and modulo-10000 wrap are interpreted as recorded in contract.json."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "files": {"rtl": "candidate.sv", "unchanged_initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json"},
+  "interface_cycle_contract": "TopModule with original clk/reset/ena[2:0]/q[15:0]; synchronous active-high reset; one decimal increment per positive edge; combinational carries; no added latency or ports.",
+  "numeric_width_decisions": "Four unsigned four-bit BCD digits; sized constants; decimal modulo-10000 wrap.",
+  "static_review": "Single sequential driver, nonblocking register assignments, complete reset, implicit digit hold when carry is absent, no auxiliary source dependencies."
+}

@@ -1,0 +1,75 @@
+{
+  "schema": "llm2rtl.quantization_contract_audit.v1",
+  "status": "READ_ONLY_IMPLEMENTATION_BOUNDARY_REVIEW",
+  "scope": "No RTL or synthesis claim",
+  "source_sha256": {
+    "quantization_implementation_proposal.json": "a3f21d11c23396f45c8f57aafba4a0290884591fd3db1ff3f1a6efcb5eccdd5a",
+    "isa_spec.json": "1b212ac05048122b4377581433052a91efa24c5c3bc3ce9bba3d0f7219cf630c",
+    "bank_layout.json": "dcd26383f787310d301cc6976d27fc76cf8ec44baed43fdf4258039f2441a6f2",
+    "contracts/numeric_contract.json": "f5bb6dbf52528e9fe921867e465aca6c74768402be7860cedeadc950e9bf9261",
+    "contracts/compute_interface.json": "c2b579e39ac9b4cb7fbb6ca2fb751e7020d11d7b9a597a942ebb64550f772d06",
+    "scripts/isa_interpreter.py": "224ab0b9a79ee567310832a5cbbc223266c6bb5c82e6f020107e1bd46a57b8f5",
+    "scripts/exact_numeric.py": "c263de75595554d33955093fe57d7dfc461cc9337f0e2d5fa18e7edfc36aee3c"
+  },
+  "critical_semantics": [
+    {
+      "rule": "FP32 division then INT RNE are separate boundaries",
+      "fixture": "xBF16=0x3f80, scaleFP32=0x3f2aaaab yields quotient0x3fc00000 then INT2. Direct rational INT rounding wrongly produces1."
+    },
+    {
+      "rule": "Finite division quotient overflow saturates successfully",
+      "fixture": "Static scaleFP32=1bit with \u00b1largest BF16: quotientInf clips\u00b1127; Pnegative clips0. Distinguish invalid-input and overflow flags."
+    },
+    {
+      "rule": "Minimum nonzero dynamic scale stays positive",
+      "fixture": "BF16minimum0x0001 /127 yields FP32scale0x00000204, quant127. Only all-zero groups use scale1."
+    },
+    {
+      "rule": "P masked/padded BF16 values numerically ignored",
+      "fixture": "Masked NaN/Inf/negative finite must write0 and not affect max; selected NaN/Inf errors. Full padded coverage remains mandatory."
+    },
+    {
+      "rule": "Valid finite negative P clips0",
+      "fixture": "All-negative valid group has scale1 and output0; negative finite is not an error."
+    },
+    {
+      "rule": "A selected row groups renumber from output0",
+      "fixture": "mstart15,mcount17,source32 rows must regroup first16 selectedrows despite source16 boundary."
+    },
+    {
+      "rule": "Q/P scale order head-major, data row-major",
+      "fixture": "Scale=head*ceil(rows/16)+rowgroup. Test9 distinct head maxima and groups2 at rows17."
+    },
+    {
+      "rule": "Embedding validates selected lane only",
+      "fixture": "All4 lane selectors; arbitrary/nonfinite unused FP32lanes succeed. Selector-valid perrow and all16Bscale-block coverage mandatory."
+    },
+    {
+      "rule": "B7 static readiness independent of RoPE window",
+      "fixture": "B7 profile11 may describe recent rows32/nonzero position. Dedicated static_valid; generation=max(component gens). Layer29 lastVblock ends6016; Kpaddingfourth lane ignored."
+    },
+    {
+      "rule": "DQ signed zero and stored BF16 finite policy",
+      "fixture": "InputINT8\u2212128 errors; \u22121\u00d7FP32minpositive yields BF16\u2212zero; maxfiniteFP32scale\u00d71 may BF16roundInf and musterror."
+    }
+  ],
+  "interface_refinements": {
+    "conditional_roles": "Dynamic quant and DQ mask101/count2; ignored middlebank0 is not acquired. Static111/count3 and tableowner22. DQdestinationB0 legal despite ignoredmiddle0 alias. Explicit unused generation policy.",
+    "producer": "Initialize full output descriptor and padded scale extents; oldC metadata ignored; acceptedCgen+1 without wrap; accepted data+scale writes before finish.",
+    "source_rows": "Quant allows selected rows/prefix <=source rows. DQ source rows exactlymcount. Validate P context/position and staticcomponent, not stale C fields.",
+    "embedding": "Capture2bits*32selectors and32validbits with command; selected scale=294912+row*16+lane*4.",
+    "native": "128bitread/noresponse-ready; bound accepted+queued responses<=4. Fourlane arithmetic needs response buffering or request throttling because one BF16beat carries8 values."
+  },
+  "minimum_directed_fixtures": [
+    "A rows1/16/17/32 K576/K1536 selected source tails and crossgroups",
+    "Q9head/group distinct maxima",
+    "K/V static layers0/29 and head/feature groups",
+    "P contexts1/15/16/17/33/1024 with causal/padded exceptions",
+    "DQ32rows all selectors, signedzero and invalidselectedscale",
+    "FP32 division double-rounding witness and \u00b1halfties",
+    "dynamic subnormal maximum and allzero",
+    "static quotientoverflow saturation",
+    "invalid selected source/lane/static validity and ignored nonfinites",
+    "stalled reads/writes, two passes same generation, errors after partialwrites, live reset and oldC reuse"
+  ]
+}

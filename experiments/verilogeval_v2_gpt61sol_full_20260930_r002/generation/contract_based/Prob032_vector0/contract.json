@@ -1,0 +1,29 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"vec": "3-bit packed vector [2:0]"},
+    "outputs": {"outv": "3-bit packed vector [2:0]", "o2": "1 bit", "o1": "1 bit", "o0": "1 bit"},
+    "source_evidence": "Original problem lists vec, outv, o2, o1, o0 with these widths."
+  },
+  "semantics": {
+    "equations": ["outv = vec", "o2 = vec[2]", "o1 = vec[1]", "o0 = vec[0]"],
+    "timing": "Combinational connections; no clock, cycle delay, or input acceptance event.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No storage or initialized state; outputs reflect input four-state values after combinational settling.",
+    "source_evidence": "Original problem says outputs the same vector and connect o0 to position 0, o1 to position 1, etc."
+  },
+  "numeric": {
+    "width": 3,
+    "bit_order": "Position 0 is vec[0]; position 2 is vec[2].",
+    "arithmetic": "None; no rounding, overflow, truncation, or signed interpretation."
+  },
+  "verification": {
+    "oracle": "Original problem direct vector identity and specified bit positions.",
+    "coverage": "All eight binary vectors, repeated transitions, and all 64 combinations of 0/1/X/Z to check wire propagation.",
+    "sampling": "Drive inputs then sample after a 1 ns combinational settling interval; this is a testbench observation delay, not DUT latency.",
+    "failure": "$fatal on any case-inequality mismatch or bounded timeout.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

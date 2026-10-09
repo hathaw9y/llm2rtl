@@ -1,0 +1,37 @@
+{
+  "status": "frozen",
+  "module": "TopModule",
+  "interface": {
+    "clk": "input 1 bit",
+    "load": "input 1 bit",
+    "data": "input unsigned [511:0]",
+    "q": "output unsigned [511:0]"
+  },
+  "semantics": {
+    "type": "sequential",
+    "edge": "posedge clk",
+    "load_priority": true,
+    "load": "q <= data when load is asserted",
+    "evolution": "q_next[i] = q[i-1] XOR q[i+1], outside indices equal zero",
+    "output": "registered state, unchanged between rising edges"
+  },
+  "numeric_widths": {
+    "state_bits": 512,
+    "cell_bits": 1,
+    "arithmetic": "bitwise XOR only"
+  },
+  "latency_reset_behavior": {
+    "latency": "one rising edge updates state",
+    "reset": "none",
+    "initial_state": "unspecified until a load"
+  },
+  "specification_ambiguities": [],
+  "verification_plan": [
+    "zero and all-one loads",
+    "all 512 one-hot seeds and four evolution steps each",
+    "alternating pattern",
+    "deterministic pseudorandom states with repeated and consecutive loads",
+    "check output stability before rising edge",
+    "independent per-cell oracle with explicit boundaries"
+  ]
+}

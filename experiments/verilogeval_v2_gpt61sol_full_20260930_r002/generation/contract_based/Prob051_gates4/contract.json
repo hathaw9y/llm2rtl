@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "in": "4-bit vector [3:0]"
+    },
+    "outputs": {
+      "out_and": "1 bit",
+      "out_or": "1 bit",
+      "out_xor": "1 bit"
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "evidence": "Original problem explicitly specifies a combinational circuit and 4-input AND, OR, XOR gates.",
+    "out_and": "1 iff all four binary input bits are 1",
+    "out_or": "1 iff at least one binary input bit is 1",
+    "out_xor": "1 iff an odd number of binary input bits are 1",
+    "timing": "Continuously responds to input changes; no clock or cycle latency. Testbench samples after combinational settling.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No state or initialization specified; outputs depend on current inputs."
+  },
+  "numeric": {
+    "input_width": 4,
+    "output_width": 1,
+    "interpretation": "Individual Boolean bits; XOR is parity, not arithmetic sum.",
+    "overflow_rounding": "Not applicable."
+  },
+  "verification": {
+    "oracle": "Enumerate all 16 binary vectors; independently count set bits and compare count==4, count!=0, count%2==1.",
+    "sampling": "Drive input then wait 1 ns before comparison.",
+    "coverage": "Ascending and descending exhaustive binary sweeps; supplementary X/Z gate propagation checks.",
+    "failure": "Case-inequality comparisons with $fatal; bounded timeout; PASS printed only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Four-state inputs",
+      "evidence": "Original problem does not explicitly define X/Z behavior.",
+      "resolution": "Use standard SystemVerilog gate reduction semantics; X/Z checks are supplemental, not additional binary functional requirements."
+    }
+  ]
+}

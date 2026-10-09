@@ -1,0 +1,61 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in1": {
+        "direction": "input",
+        "width": 1
+      },
+      "in2": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "out = in1 AND (NOT in2)",
+    "timing": "Pure combinational gate; output responds to current inputs without clocked latency.",
+    "clock": null,
+    "reset": null,
+    "initialization": "No state or initialization required.",
+    "truth_table": [
+      {
+        "in1": 0,
+        "in2": 0,
+        "out": 0
+      },
+      {
+        "in1": 0,
+        "in2": 1,
+        "out": 0
+      },
+      {
+        "in1": 1,
+        "in2": 0,
+        "out": 1
+      },
+      {
+        "in1": 1,
+        "in2": 1,
+        "out": 0
+      }
+    ]
+  },
+  "numeric": {
+    "type": "Single-bit Boolean signals",
+    "operation": "Bitwise inversion of in2 followed by bitwise AND with in1.",
+    "arithmetic": "No arithmetic, signedness conversion, rounding, truncation, saturation, or overflow."
+  },
+  "verification": {
+    "plan": "Independent self-checking testbench enumerates all four binary input combinations and compares against literal truth-table outputs after combinational settling, then repeats in reverse order to check input responsiveness.",
+    "compile": "Icarus Verilog v12, -g2012, explicit top dev_tb, finite external timeout.",
+    "simulation": "Matching vvp with finite external timeout and PASS/FAIL marker.",
+    "scope": "Development verification only; no official evaluation or synthesis."
+  },
+  "specification_ambiguities": []
+}

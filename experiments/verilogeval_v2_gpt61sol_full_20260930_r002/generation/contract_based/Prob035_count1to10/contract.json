@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "ports": {"clk": "input one bit", "reset": "input one bit", "q": "output unsigned four bits"}},
+  "semantics": {"clock": "positive edge, per original problem", "reset": "active high synchronous: q becomes 1 at a rising edge with reset high", "count": "on each rising edge without reset, advance through 1..10 inclusive and wrap 10 to 1", "between_edges": "q holds; reset changes alone do not change q", "initialization": "original problem gives no power-up value; no initialization added and tests require defined behavior only after reset"},
+  "numeric": {"representation": "unsigned 4-bit binary", "legal_values": "1 through 10 inclusive", "wrap": "10 to 1, not binary overflow", "arithmetic": "sized four-bit increment"},
+  "verification": {"oracle": "independent integer sequence derived from original problem", "sampling": "check after rising-edge nonblocking updates; check hold at falling edge and reset transitions", "cases": "repeated full cycles, all legal values, 10-to-1 wrap, held reset, reset during count including at 10, reset pulse without rising edge", "tool": "mandatory dev_check.py initial using Icarus 12", "termination": "fatal mismatches, bounded timeout, explicit PASS"},
+  "specification_ambiguities": ["Power-up q and behavior from illegal states 0 or 11..15 are unspecified; no recovery requirement or test expectation is imposed."]
+}

@@ -1,0 +1,39 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 3,
+      "b": 3
+    },
+    "outputs": {
+      "out_or_bitwise": 3,
+      "out_or_logical": 1,
+      "out_not": 6
+    }
+  },
+  "semantics": {
+    "out_or_bitwise": "Each bit i is a[i] OR b[i].",
+    "out_or_logical": "One when either input vector is nonzero; zero when both are zero.",
+    "out_not": "Bits [5:3] are bitwise inverse of b; bits [2:0] are bitwise inverse of a.",
+    "timing": "Combinational; original specification describes vector operations with no clock, reset, storage, or latency.",
+    "initialization": "No initialized state specified or required; outputs follow inputs under Verilog four-state operator semantics."
+  },
+  "numeric": {
+    "input_width": 3,
+    "bitwise_width": 3,
+    "logical_width": 1,
+    "inverse_width": 6,
+    "interpretation": "Bit vectors; inversion is within each 3-bit vector, with b above a."
+  },
+  "verification": {
+    "oracle_source": "Original problem.txt vector operation and placement requirements.",
+    "binary_cases": "Exhaust all 64 a/b pairs using per-bit truth tables and a separate nonzero predicate.",
+    "sampling": "Sample after a 1 ns combinational settling interval, without clock or reset.",
+    "unknown_cases": "Additional directed X/Z cases exercise standard four-state OR and inversion semantics.",
+    "termination": "Fatal mismatch and bounded timeout; PASS emitted only after all checks."
+  },
+  "specification_ambiguities": [
+    "X/Z input behavior is not explicitly described; use standard Verilog bitwise and logical operator semantics. No state or startup value is specified."
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob138_2012_q2fsm",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob138_2012_q2fsm",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob138_2012_q2fsm/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790735074.7394767,
+    "ended_at_unix": 1790735153.5503185,
+    "seconds": 78.81084251403809,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 73212,
+      "cached_input_tokens": 54272,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2056,
+      "reasoning_output_tokens": 41
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "98ef97426342ff612460d73f35aaa6ca5980343edc6740f63b7b156f092a6fc2",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "outcome": "passed",
+        "details": "All 12 specified state transitions match; z is high only in E and F; synchronous active-high reset selects A on the rising edge; separate always_comb and always_ff blocks; complete default state recovery and no inferred latch."
+      },
+      {
+        "name": "Icarus development compilation",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "outcome": "failed",
+        "exit_code": 139,
+        "log": "dev_compile.log",
+        "exit_status_file": "dev_compile.exit",
+        "details": "Compiler exited with status 139 without diagnostic output."
+      },
+      {
+        "name": "development simulation",
+        "outcome": "not run",
+        "details": "Compilation failed. Independent dev_tb.sv is retained and includes exhaustive length-eight input sequences, transition coverage, synchronous-reset checks, and finite timeout protection."
+      }
+    ],
+    "development_outcome": "Initial candidate delivered unchanged after static review; development compilation failed and simulation success is not claimed.",
+    "limitations": [
+      "RTL has not been dynamically validated because the development compiler failed.",
+      "Official evaluation results are unavailable.",
+      "No synthesis, timing analysis, or board validation performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob138_2012_q2fsm_ref.sv": "d4fc98953061961badc2b9fae62831f301f986b6ba1a963ece1c183ad4cd7808",
+      "Prob138_2012_q2fsm_test.sv": "0d414aeee013f7392e60b05d529ba47a37f2c7b458abbdfb78d0b140c1f785af",
+      "candidate.sv": "98ef97426342ff612460d73f35aaa6ca5980343edc6740f63b7b156f092a6fc2"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob138_2012_q2fsm_test.sv",
+        "Prob138_2012_q2fsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015057903714478016
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb138_2012_q2fsm_test.sv:18: $finish called at 2001 (1ps)\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 400 samples\n\nSimulation finished at 2001 ps\nMismatches: 0 in 400 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009634804911911488
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob138_2012_q2fsm_ref.sv": "d4fc98953061961badc2b9fae62831f301f986b6ba1a963ece1c183ad4cd7808",
+      "Prob138_2012_q2fsm_test.sv": "0d414aeee013f7392e60b05d529ba47a37f2c7b458abbdfb78d0b140c1f785af",
+      "candidate.sv": "98ef97426342ff612460d73f35aaa6ca5980343edc6740f63b7b156f092a6fc2"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob138_2012_q2fsm_test.sv",
+        "Prob138_2012_q2fsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013873924501240253
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb138_2012_q2fsm_test.sv:18: $finish called at 2001 (1ps)\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 400 samples\n\nSimulation finished at 2001 ps\nMismatches: 0 in 400 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009434600360691547
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

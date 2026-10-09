@@ -1,0 +1,46 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1
+    },
+    "outputs": {
+      "q": 4
+    }
+  },
+  "semantics": {
+    "clock": "All sequential updates occur on positive edges of clk, as stated in original problem.",
+    "reset": "Active-high synchronous: at a positive edge with reset=1, q becomes 0. Reset transitions between positive edges do not update q.",
+    "count": "At each positive edge with reset=0, increment q modulo 16; output holds between positive edges.",
+    "initialization": "Original problem provides no initial state; no initialization is implemented and counting is verified after a synchronous reset."
+  },
+  "numeric": {
+    "representation": "4-bit unsigned binary",
+    "minimum": 0,
+    "maximum": 15,
+    "period_cycles": 16,
+    "wrap": "15 increments to 0"
+  },
+  "verification": {
+    "oracle": "Independent integer model derived from original counter and synchronous reset requirements. Sample output after nonblocking assignments settle.",
+    "directed_cases": [
+      "Reset at first rising edge",
+      "Reset assertion and deassertion between edges must not change output",
+      "All 16 values and repeated wraparound",
+      "Reset from nonzero count",
+      "Reset held across multiple edges",
+      "No update on falling edges"
+    ],
+    "timeout": "Bounded simulation timeout with fatal failure",
+    "success": "PASS printed only after all checks succeed"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Power-up state",
+      "evidence": "Original specifies synchronous reset but no initial value.",
+      "resolution": "Do not assign an initial value or require a specific power-up output; establish known state using reset before counting checks."
+    }
+  ]
+}

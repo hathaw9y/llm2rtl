@@ -1,0 +1,57 @@
+{
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "checkpoint_file_sha256": "80521b40281d6ce74e35c9282c22539e75aa0ac8578892b2a59955ef78d55da1",
+  "device": "xczu7ev-ffvc1156-2-e",
+  "tool_version": "Vivado/Vitis 2025.2",
+  "pl_clock_mhz": 100,
+  "scope": "First-layer checkpoint o_proj and post-attention residual, prefill32 and decode1, first 16 BF16 outputs per row; Q/score/softmax/context checked in the same program",
+  "readback_limit": "Existing B5 GPIO tap exposes first 16 elements per row; all 576 elements are computed in PL but only 16 per row are compared on board",
+  "hardware_reuse": "BIT/XSA/HWH/psu_init byte-identical to prior routed ADD probe",
+  "base_routed_timing": {
+    "routed_setup_wns_ns": 0.866,
+    "routed_hold_whs_ns": 0.01,
+    "routed_pulse_wpws_ns": 3.5
+  },
+  "base_routed_resources": {
+    "lut": 194502,
+    "ff": 87504,
+    "bram_tile": 103.5,
+    "uram": 64,
+    "dsp": 281
+  },
+  "artifact_sha256": {
+    "zcu104_dma_rms_gemm_rope_attention_add_board_probe.bit": "304a1ea0dc1efc5f59ca663be2300ab935b57eeea6019db69f53ccbc01ea4bdc",
+    "zcu104_dma_rms_gemm_rope_attention_add_board_probe.xsa": "3fba70e43793d6b765fc34d37d2038093c53e1ee8a8cdaac533812bdd2210f21",
+    "zcu104_dma_rms_gemm_rope_attention_add_board_probe.hwh": "e343a4fcf85987e0ccdbcb6502edaaf3bc354b4433c90fe90ab5989884e29f9f",
+    "zcu104_first_layer_attention_output_probe.elf": "7edea627b882de4a48b27caa4b6f1864ff81fa16675a40cd39f4a2c1d34d51a2",
+    "psu_init.tcl": "b7ae4853b7b0c4136e24330472d72979d2b48ca6112cdc0fe3bb3fe32628f9a8",
+    "run_on_zcu104.tcl": "814bbcd68c0d767a70dd23c764f885785738dabbf26e4c1fa426a51caf7cfff4"
+  },
+  "source_sha256": {
+    "scripts/generate_first_layer_attention_output_vectors.py": "18e454f273141764cdb4ba6cc89a3485b1971a457bf3e0197ec769777d8dc75f",
+    "scripts/run_first_layer_attention_output_probe_xsim.sh": "c4b3c75f12775fc1fc493f86b9051cb4112fc5bcd39330479bb5a5e2f28bab44",
+    "scripts/build_first_layer_attention_output_board_app.py": "5142a41a2cdee23578e1a14446d94bd90821a66f497b5f36ed4225736c5df218",
+    "scripts/verify_first_layer_attention_output_board_artifacts.py": "cf670128eccac957645c62d3d4166a3d3582d430ea0f2e872fafc5fe8035da47",
+    "first_layer_attention_output_board_probe/main.c": "1ca427f0395c3237271967fc1845e02a04523127668be4c8d2496e3e31d03399",
+    "first_layer_attention_output_board_probe/vectors.h": "f4aef7ce810776aea4a31076f18096d843f747162d25a2286e1a2c8cf3b250ff",
+    "first_layer_attention_output_board_probe/README.md": "aedc4aa97451a90fc7a4e15681a7c4e63fa18cb546e27075a21cf663508ece30",
+    "tb/tb_smollm2_first_layer_attention_output_probe.sv": "9ca30075e8c50aa31c246031c8d1d530c0fe2a622afc54796fb6b0b581fd8e1c"
+  },
+  "golden_sha256": {
+    "decode1_projected_words.hex": "9537661a83ca31a3ff0511e40c11e6eac0e4793bede9cbd24968f44a202cd9db",
+    "decode1_residual_words.hex": "cb80aa2f59f349857b748e0d40668bc63cd0beb7ca2f706beea40a96a73cde90",
+    "o_weight_tiles_words.hex": "f6524d42468756b6b179ece8b6f9c6c6096d3133562d5a685f10992468dbd64e",
+    "prefill32_projected_words.hex": "f8603306ee10c5c447b01d1855888734fb2845619a4aac73cc2708a1e158ced2",
+    "prefill32_residual_words.hex": "0de8f872cb7865c575cff431fe381f3238df863d8233d360bcd667f0023587ff"
+  },
+  "reference": "HF eager BF16 layer0 self_attn output after real o_proj and input residual; pinned context projection is bitwise equal to HF output",
+  "acceptance": "Q <=8 BF16 ULP; score, softmax, context <=16 ULP; o_proj and residual <=16 ULP or <=0.002 absolute BF16 value error",
+  "simulation": "integrated prefill32/decode1 checkpoint o_proj and residual first 16 outputs per row PASS",
+  "physical_board": {
+    "status": "user_reported_pass",
+    "report_path": "first_layer_attention_output_board_probe/board_run_user_report.json",
+    "report_sha256": "6821713ad4f367c74d1129f5b087c73b8f7ec3ad09dc3669d907a31833ab2dee",
+    "artifact_identity_note": "Associated with the 100 MHz first-layer attention-output handoff by conversation context. The UART text does not independently identify the programmed BIT or ELF by hash; board serial number and host hash check were not reported.",
+    "scope": "User-run first-layer attention output and post-attention residual probe, prefill32/decode1. The existing GPIO tap compares the first 16 of 576 BF16 values per row. K/V cache operands were loaded from pinned reference data; this is not full-model inference."
+  }
+}

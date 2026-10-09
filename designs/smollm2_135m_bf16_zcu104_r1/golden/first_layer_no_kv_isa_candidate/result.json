@@ -1,0 +1,157 @@
+{
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "status": "candidate_functional_pass_rtl_enabled_board_pending",
+  "scope": "layer 0 from embedding to post-FFN residual; positions start at zero; no KV cache store/load or reuse",
+  "host_role": "tokens, dimensions, static DDR addresses and ISA scheduling only; tensor operations in interpreter/PL model",
+  "rtl_change": "ROPE B8 enabled in dispatcher, router, executor and board probe; final ADD B0 exposed for board comparison",
+  "bank_capacity_check": "every interpreter bank write is checked against the existing 13-bank capacity table",
+  "cases": {
+    "prefill32": {
+      "tokens": [
+        11,
+        28,
+        45,
+        62,
+        79,
+        96,
+        113,
+        130,
+        147,
+        164,
+        181,
+        198,
+        215,
+        232,
+        249,
+        266,
+        283,
+        300,
+        317,
+        334,
+        351,
+        368,
+        385,
+        402,
+        419,
+        436,
+        453,
+        470,
+        487,
+        504,
+        521,
+        538
+      ],
+      "rows": 32,
+      "commands": 106,
+      "chunks": 7,
+      "chunk_record_counts": [
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        10
+      ],
+      "command_bytes": 1696,
+      "opcode_counts": {
+        "DMA_LOAD": 62,
+        "END": 7,
+        "RMSNORM": 2,
+        "GEMM": 27,
+        "ROPE": 2,
+        "ATTN_SCORE": 1,
+        "SOFTMAX": 1,
+        "ATTN_VALUE": 1,
+        "ADD": 2,
+        "SILU_MUL": 1
+      },
+      "end_to_end_layer_output": {
+        "name": "prefill32",
+        "shape": [
+          32,
+          576
+        ],
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "exact": true
+      },
+      "oracle_checks": {
+        "RMSNORM_input_layernorm": 1,
+        "GEMM_q_proj": 1,
+        "GEMM_k_proj": 1,
+        "GEMM_v_proj": 1,
+        "ROPE_key_B8": 1,
+        "SOFTMAX": 1,
+        "ATTN_VALUE": 1,
+        "GEMM_o_proj": 1,
+        "ADD_attention": 1,
+        "RMSNORM_post_attention_layernorm": 1,
+        "GEMM_gate_proj": 1,
+        "GEMM_up_proj": 1,
+        "SILU_MUL": 1,
+        "GEMM_down_proj": 1,
+        "ADD_ffn": 1
+      },
+      "current_rtl_blockers": [],
+      "records_sha256": "9bfe78d9ae9f62a41ef06864f9818c4949b9f18c10dd46c1bb57f4362866ee21"
+    },
+    "single_token_cold": {
+      "tokens": [
+        11
+      ],
+      "rows": 1,
+      "commands": 73,
+      "chunks": 5,
+      "chunk_record_counts": [
+        16,
+        16,
+        16,
+        16,
+        9
+      ],
+      "command_bytes": 1168,
+      "opcode_counts": {
+        "DMA_LOAD": 31,
+        "RMSNORM": 2,
+        "GEMM": 27,
+        "ROPE": 2,
+        "END": 5,
+        "ATTN_SCORE": 1,
+        "SOFTMAX": 1,
+        "ATTN_VALUE": 1,
+        "ADD": 2,
+        "SILU_MUL": 1
+      },
+      "end_to_end_layer_output": {
+        "name": "single_token_cold",
+        "shape": [
+          1,
+          576
+        ],
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "exact": true
+      },
+      "oracle_checks": {
+        "RMSNORM_input_layernorm": 1,
+        "GEMM_q_proj": 1,
+        "GEMM_k_proj": 1,
+        "GEMM_v_proj": 1,
+        "ROPE_key_B8": 1,
+        "SOFTMAX": 1,
+        "ATTN_VALUE": 1,
+        "GEMM_o_proj": 1,
+        "ADD_attention": 1,
+        "RMSNORM_post_attention_layernorm": 1,
+        "GEMM_gate_proj": 1,
+        "GEMM_up_proj": 1,
+        "SILU_MUL": 1,
+        "GEMM_down_proj": 1,
+        "ADD_ffn": 1
+      },
+      "current_rtl_blockers": [],
+      "records_sha256": "e59827d338fc8bb8a9ffb6d38add37a3510d1dae84bf0a18fcda83888cfefda8"
+    }
+  }
+}

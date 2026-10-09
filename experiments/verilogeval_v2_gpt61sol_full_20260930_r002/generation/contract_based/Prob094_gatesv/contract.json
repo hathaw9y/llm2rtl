@@ -1,0 +1,41 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "in": "4-bit [3:0]"
+    },
+    "outputs": {
+      "out_both": "4-bit [3:0]",
+      "out_any": "4-bit [3:0]",
+      "out_different": "4-bit [3:0]"
+    },
+    "clock_reset": "None specified or present; no added ports"
+  },
+  "semantics": {
+    "evidence": "Original problem describes relationships between current input bits, without clock, reset, storage or sampling edges.",
+    "behavior": "Combinational, no added latency or state",
+    "out_both": "For i=0..2, in[i] AND in[i+1]",
+    "out_any": "For i=1..3, in[i] OR in[i-1]",
+    "out_different": "For i=0..3, in[i] XOR in[(i+1) modulo 4]",
+    "initialization": "No initialization contract or state; outputs follow current input after combinational settling",
+    "unspecified_outputs": "Drive out_both[3] and out_any[0] to zero; not functional requirements"
+  },
+  "numeric": {
+    "type": "Four unsigned single-bit lanes per vector",
+    "operations": "Bitwise AND, OR, XOR; no arithmetic rounding, overflow or saturation"
+  },
+  "verification": {
+    "oracle": "Scalar neighbor equations from original problem, excluding unspecified bits",
+    "coverage": "All 16 binary vectors, all 256 four-state vectors, repeated transitions",
+    "sampling": "Drive inputs then allow 1 ns combinational settling; no clock edges in original specification",
+    "failure": "Case-inequality checks with $fatal, bounded timeout, final PASS marker",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "out_both[3] and out_any[0] not required by original text",
+      "resolution": "Constant zero for deterministic implementation; verification does not impose these values"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 8
+      },
+      "parity": {
+        "direction": "output",
+        "width": 1
+      }
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "function": "parity equals XOR of all eight data bits; appended parity makes total number of ones even",
+    "timing": "Pure combinational function of current input, no clock or added cycle latency",
+    "reset": "No reset port or reset behavior specified",
+    "initialization": "No stored state or specified initial value; output follows input after combinational settling",
+    "evidence": "Original problem explicitly says parity bit is just the XOR of all 8 data bits and lists only in and parity ports"
+  },
+  "numeric": {
+    "input": "Eight individual binary data bits; signedness irrelevant",
+    "output": "One bit, population count modulo two",
+    "overflow_rounding_saturation": "Not applicable"
+  },
+  "verification": {
+    "oracle": "Count asserted bits using integer addition and take count modulo two, independently of RTL reduction XOR",
+    "coverage": "All 256 binary input values, repeated transitions, zero/all-one boundaries and each one-hot input",
+    "sampling": "Drive input then wait one simulation time unit for combinational settling before comparing with case inequality",
+    "failure": "$fatal on mismatch or bounded timeout; PASS only after all checks",
+    "primary_command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,41 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "outcome": "One one-bit register; nonblocking positive-edge capture; no reset, initialization, extra ports, arithmetic, or submodules. Matches frozen contract under documented q-output interpretation."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "outcome": "FAILED: exit 139, no diagnostic text and no simulation executable",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "outcome": "NOT RUN: compilation failed",
+      "planned_command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim"
+    }
+  ],
+  "development_outcome": "Contract structural gate passed; static review completed; development tool failed, therefore simulation success is not claimed.",
+  "limitations": [
+    "Original problem lists q as input, incompatible with an observable D flip-flop. Implemented q as output and documented the resolution in the frozen contract.",
+    "No successful development compile or simulation due to compiler exit 139.",
+    "No official evaluation results available.",
+    "No synthesis, timing, or board verification performed."
+  ],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  },
+  "contract_corrections": []
+}

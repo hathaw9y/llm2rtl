@@ -1,0 +1,23 @@
+{
+  "scope": "Exact GEMM and dot source identity across module golden, bounded integration and module OOC; outcomes recorded separately.",
+  "runs": {
+    "qwen_gemm_n8_xsim_run002": {
+      "qwen_gemm_executor.sv": "82c4aded3bf4c81db5525d5bbd979c7a148bfc76cd334f1f7bc0913cd298c351",
+      "qwen_dot16x4.sv": "c8a2cb7f072a08ed78d73b933ba952c0c419fb991bbed942edd391fc846c0dcc"
+    },
+    "qwen_gemm_n8_board_shell_xsim_run001": {
+      "qwen_gemm_executor.sv": "82c4aded3bf4c81db5525d5bbd979c7a148bfc76cd334f1f7bc0913cd298c351",
+      "qwen_dot16x4.sv": "c8a2cb7f072a08ed78d73b933ba952c0c419fb991bbed942edd391fc846c0dcc"
+    },
+    "qwen_gemm_n8_ooc_run001": {
+      "qwen_gemm_executor.sv": "82c4aded3bf4c81db5525d5bbd979c7a148bfc76cd334f1f7bc0913cd298c351",
+      "qwen_dot16x4.sv": "c8a2cb7f072a08ed78d73b933ba952c0c419fb991bbed942edd391fc846c0dcc"
+    },
+    "qwen_gemm_n8_xsim_run003": {
+      "qwen_gemm_executor.sv": "82c4aded3bf4c81db5525d5bbd979c7a148bfc76cd334f1f7bc0913cd298c351",
+      "qwen_dot16x4.sv": "c8a2cb7f072a08ed78d73b933ba952c0c419fb991bbed942edd391fc846c0dcc"
+    }
+  },
+  "profile_snapshot_note": "OOC source/hardware_profile.json captured the prior GEMM_output_lanes=4 metadata before current profile was updated to8. That field is not read by executor_ooc.tcl; actual elaborated RTL explicitly instantiates OUTPUTS(8). Part/200MHz5ns/native read3 are unchanged. Preserve original snapshot and hash without relabeling it.",
+  "enhanced_test_result": "run003 PASS all10 golden cases, upper-half W4/scale/previous faults, upper-burst reset refill. run002 preserved as failed test assertion: INIT intentionally clears destination before numeric faults; fixed test uses ACCUM to check no result writes."
+}

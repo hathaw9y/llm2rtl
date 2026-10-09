@@ -1,0 +1,53 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "ena": {
+        "direction": "output",
+        "width": 3
+      },
+      "q": {
+        "direction": "output",
+        "width": 16
+      }
+    }
+  },
+  "semantics": {
+    "clock": "All sequential updates occur on the positive edge of clk.",
+    "reset": "Synchronous active-high reset takes priority and sets all digits to zero on a rising edge. No asynchronous effect.",
+    "count": "With reset low, increment by one decimal count on each rising edge; wrap 9999 to 0000.",
+    "enables": "Combinational from current q, independent of reset: ena[0] is true when ones=9; ena[1] when ones=tens=9; ena[2] when ones=tens=hundreds=9. They indicate carry for the next non-reset rising edge.",
+    "initialization": "No specified power-up value; reset must be clocked before defined counting behavior."
+  },
+  "numeric": {
+    "encoding": "Unsigned BCD: q[3:0] ones, q[7:4] tens, q[11:8] hundreds, q[15:12] thousands.",
+    "legal_digits": "0 through 9 in each 4-bit digit.",
+    "overflow": "Decimal modulo 10000, each enabled digit wraps 9 to 0.",
+    "invalid_states": "No behavior required for invalid BCD encodings or before reset."
+  },
+  "verification": {
+    "oracle": "Independent integer model increments modulo 10000 and converts to four decimal nibbles.",
+    "coverage": "Run more than two complete periods; check q and all enables every cycle; exercise reset during counting and while a carry is pending; hold reset across multiple edges.",
+    "reset_timing": "Toggle reset between clock edges and verify q holds until a positive edge.",
+    "execution": "Explicit dev_tb top with Icarus -g2012 and matching vvp, finite external and testbench timeouts."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Enable mapping and reset interaction",
+      "resolution": "Map ena[0:2] to digits[1:3]; combinational carry predicates of current lower digits, without reset gating, as increment indications."
+    },
+    {
+      "topic": "Initialization and invalid digit states",
+      "resolution": "Unspecified; no added initialization or recovery requirement."
+    }
+  ]
+}

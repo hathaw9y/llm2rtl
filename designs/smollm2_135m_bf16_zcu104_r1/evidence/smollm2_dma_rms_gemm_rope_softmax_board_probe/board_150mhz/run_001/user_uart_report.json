@@ -1,0 +1,27 @@
+{
+  "reported_on": "2026-10-01",
+  "source": "User-supplied physical ZCU104 UART output after the 150 MHz cumulative Softmax handoff",
+  "raw_user_message": "SmolLM2-135M BF16 ZCU104 DMA_LOAD+RMSNORM+GEMM+ROPE+SOFTMAX probe checkpoint 93efa2f097d58c2a74874c7e644dbc9b0cee75a2 prefill32 Q RoPE compare=512 mismatches=0 prefill32 K RoPE compare=512 mismatches=0 prefill32 Softmax compare=512 mismatches=0 decode Q RoPE compare=16 mismatches=0 decode K RoPE compare=16 mismatches=0 decode Softmax compare=16 mismatches=0 BOARD DMA_LOAD RMSNORM GEMM ROPE SOFTMAX PASS",
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "bundle_sha256_at_handoff": "64cdb5a4ae149f061c273f063ca01cdf7c4470413420d41662cfe2b8e0291c93",
+  "bit_sha256_at_handoff": "ba1e8ce21e0c1a7facbd8f76e35f486356d909ac1e125468245acb0125496287",
+  "elf_sha256_at_handoff": "4084015bc3ea068b9a3533cb18b64cfbc538274665caf62457ff220d3fa079ab",
+  "host_hash_output_received": false,
+  "checks": {
+    "prefill_q_rope_compared": 512,
+    "prefill_q_rope_mismatches": 0,
+    "prefill_k_rope_compared": 512,
+    "prefill_k_rope_mismatches": 0,
+    "prefill_softmax_compared": 512,
+    "prefill_softmax_mismatches": 0,
+    "decode_q_rope_compared": 16,
+    "decode_q_rope_mismatches": 0,
+    "decode_k_rope_compared": 16,
+    "decode_k_rope_mismatches": 0,
+    "decode_softmax_compared": 16,
+    "decode_softmax_mismatches": 0,
+    "board_result": "PASS"
+  },
+  "scope": "DDR DMA_LOAD B0/B3/B7/B8, PL RMSNorm/GEMM/RoPE, GPIO checkpoint ATTN_SCORE probe to B10, PL in-place Softmax; first 16 B4/B5 and first head B10 accepted writes per row compared for prefill32/decode1",
+  "limitation": "UART text does not identify programmed BIT/ELF hash; handoff attribution rests on run context. ATTN_SCORE arithmetic is not implemented in this probe; checkpoint score data is supplied through GPIO. Q/K projection uses synthetic one-hot weights. Board output observation is at accepted write taps, not bank readback; it is not full-model inference."
+}

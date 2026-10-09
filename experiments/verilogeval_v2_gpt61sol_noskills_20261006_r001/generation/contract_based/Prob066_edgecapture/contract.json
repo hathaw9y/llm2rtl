@@ -1,0 +1,35 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "reset": 1, "in": 32},
+    "outputs": {"out": 32}
+  },
+  "semantics": {
+    "evidence": "Original problem: examine each bit, capture changes from 1 in one clock cycle to 0 the next; output remains 1 until active high synchronous reset; all sequential logic positive edge.",
+    "sampling": "At each rising edge remember the current in vector for comparison on the next rising edge.",
+    "capture": "When reset is low, each out bit becomes its old value OR (previous sampled input bit is 1 AND current input bit is 0).",
+    "reset": "At a rising edge with reset high, clear all out bits with priority over capture. Sample in on that edge as well.",
+    "initialization": "No initial value is specified; no initial block or artificial power-up initialization is added."
+  },
+  "numeric": {
+    "width": 32,
+    "operation": "Independent bitwise logic with no signed arithmetic or cross-bit effects"
+  },
+  "verification": {
+    "oracle": "Per-bit behavioral model based on successive positive-edge input samples and sticky capture until synchronous reset.",
+    "cases": ["reset priority", "reset between clock edges has no immediate effect", "steady inputs", "rising transitions", "falling transitions", "all 32 bit positions", "sticky output", "input changes between edges", "consecutive reset edges", "deterministic varied vectors"],
+    "sampling": "Drive inputs away from positive edges; check after nonblocking updates and before next edge.",
+    "termination": "Fatal on mismatch, bounded timeout, PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Reset behavior for input history register is not explicitly specified.",
+      "resolution": "History samples in on every rising edge, including reset; reset clears only captured output. This follows the stated reset of captured output and comparison of consecutive clock cycles."
+    },
+    {
+      "issue": "Power-up values and behavior before the first input sample/reset are unspecified.",
+      "resolution": "Leave registers uninitialized; verification asserts defined output only after a synchronous reset and defined history after sampling."
+    }
+  ]
+}

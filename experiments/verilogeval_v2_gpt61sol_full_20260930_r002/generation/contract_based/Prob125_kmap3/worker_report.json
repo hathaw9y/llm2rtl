@@ -1,0 +1,73 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790746298.3960357,
+      "source_sha256": "a7af6c3d739b3d4b30803658c1eec12a63a1f258991c81d6c1435a439d352fc3",
+      "testbench_sha256": "5becc1536b3ede809a8b486824ac8d038cdf2ece4391340b23b223a11e624462",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob125_kmap3/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.012815039604902267
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS all 32 original-map checks\ndev_tb.sv:53: $finish called at 32000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.006181424483656883
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "X/Z input behavior is unspecified by the original problem and was not tested.",
+    "No synthesis or board work performed, per benchmark instructions."
+  ],
+  "justified_changes": {
+    "rtl": [
+      "Initial combinational implementation out = a | (c & ~b); all three map dont-care entries choose 1. No RTL revisions."
+    ],
+    "testbench": [
+      "Independent literal map oracle covers all 16 binary inputs in forward and reverse order. No testbench revisions."
+    ],
+    "contract": [
+      "Frozen before RTL and structurally validated. No contract revisions."
+    ]
+  },
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repair passed",
+  "contract_validation": "passed_structure_only",
+  "interface_cycle_review": "TopModule has original five one-bit ports, combinational behavior, no clock/reset/state/added latency.",
+  "numeric_review": "One-bit Boolean operations only.",
+  "static_review": "Single continuous output driver; no latches or dependencies.",
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json",
+    "development_evidence": "development/01 and dev_checks.jsonl"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"name": "environment_smoke", "status": "passed", "evidence": "environment_smoke.json", "cases": ["correct sequential fixture passed", "deliberately wrong fixture failed", "repaired fixture passed"]},
+    {"name": "contract_validation", "status": "passed_structure_only", "evidence": "contract_gate.json"},
+    {"name": "initial", "status": "passed", "evidence": "development/01/result.json", "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; no warnings", "simulation": "Matching vvp passed all 256 eight-bit sequences, all 12 transitions, reset from all six states for both w values, reset priority and synchronous timing"}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development PASS does not establish official correctness; no official evaluation was accessed.",
+    "The original problem does not specify reset polarity or destination. Implementation and development checks assume active-high synchronous reset to A; this is recorded in the frozen contract.",
+    "The original problem specifies no power-up state. RTL has no initialization and the testbench does not constrain pre-reset output.",
+    "Contract validation is structural only."
+  ],
+  "justified_rtl_tb_changes": [],
+  "artifacts": {"rtl": "candidate.sv", "unchanged_initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json", "development_history": "dev_checks.jsonl"}
+}

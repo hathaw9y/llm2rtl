@@ -1,0 +1,52 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "PASS (passed_structure_only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "outcome": "PASS; candidate.sv and candidate_initial.sv are byte-identical"
+    },
+    {
+      "name": "static_rtl_review",
+      "outcome": "PASS by inspection",
+      "details": "Exact ports; rising-edge always_ff; load priority over ena; disabled hold; 64-bit concatenations implement all four shifts with sign replication for right shifts; no reset or initialization added; single driver and no module dependencies."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "outcome": "FAILED",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "exit_record": "dev_compile.exit",
+      "details": "Compiler terminated with code 139, with empty diagnostic output and no executable generated."
+    },
+    {
+      "name": "development_simulation",
+      "outcome": "NOT RUN; compilation did not produce an executable"
+    }
+  ],
+  "development_outcome": "Contract structure passed and RTL statically reviewed. Development compile failed; no simulation success is claimed. Initial candidate delivered unchanged.",
+  "limitations": [
+    "Development testbench was created but could not execute because the compiler failed.",
+    "Rising-edge operation is the conventional interpretation of the unspecified clock edge.",
+    "Initial state and unknown-control behavior are unspecified by the problem.",
+    "Official evaluation results are unavailable; no synthesis, timing, or board validation performed."
+  ],
+  "artifacts": [
+    "contract.json",
+    "contract_gate.json",
+    "contract_gate_history.jsonl",
+    "contract_validation.log",
+    "candidate.sv",
+    "candidate_initial.sv",
+    "dev_tb.sv",
+    "dev_compile.log",
+    "dev_compile.exit"
+  ]
+}

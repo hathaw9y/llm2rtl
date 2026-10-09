@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "outcome": "passed",
+      "details": "Correct fixture passed, injected fault failed, repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "outcome": "simulation_failed",
+      "evidence": "development/01/result.json",
+      "reason": "Reset task left pending requests active, causing an unmodeled edge transaction."
+    },
+    {
+      "command": "python3 dev_check.py --label initial_tb_reset_fix",
+      "outcome": "passed",
+      "evidence": "development/02/result.json",
+      "cycles": 4042
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation.",
+    "Original text omits explicit reset contents. Implemented zero global history and weakly not-taken (01) PHT counters.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_original": "dev_tb_before_reset_fix.sv",
+      "change": "Clear predict_valid and train_valid when beginning asynchronous reset.",
+      "justification": "The reset task deasserted reset before the next rising edge while stale requests remained active; the model did not account for that intervening transaction. Clearing requests makes the reset sequence idle without changing oracle values or removing checks."
+    }
+  ],
+  "implementation": {
+    "interface": "Original TopModule ports and widths preserved.",
+    "cycle_semantics": "Combinational prediction uses current PHT/history. Positive-edge training saturates a two-bit counter. Misprediction recovery has priority over speculative history updates. Asynchronous active-high reset.",
+    "widths": "7-bit XOR indices and history, 128 two-bit unsigned saturating counters.",
+    "latency": "Combinational prediction; state updates on the next rising edge.",
+    "static_review": "Single sequential driver, nonblocking register updates, bounded unsigned counter arithmetic."
+  }
+}

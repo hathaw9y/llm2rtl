@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    },
+    "evidence": "Original problem names TopModule and lists one-bit input in and output out."
+  },
+  "semantics": {
+    "equation": "out = in",
+    "timing": "Combinational continuous connection; no clock cycles or added latency.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or initialization; output follows the current input.",
+    "evidence": "Original problem: assign the output port to the same value as the input port combinationally."
+  },
+  "numeric": {
+    "width": 1,
+    "interpretation": "Single logic bit, no arithmetic or signed interpretation.",
+    "overflow_rounding": "Not applicable."
+  },
+  "verification": {
+    "oracle": "Original specification equality of output and currently driven input.",
+    "coverage": "Both binary levels, repeated levels, both transition directions, and supplemental X/Z propagation checks.",
+    "sampling": "Check after a simulation settling interval following each drive; no clock required.",
+    "failure": "$fatal on mismatch or bounded timeout.",
+    "success": "Explicit PASS line only after every check succeeds.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Four-state behavior",
+      "evidence": "Original text does not separately discuss X or Z.",
+      "resolution": "Direct connection preserves all four SystemVerilog logic values; X/Z checks are supplemental to the exhaustive binary cases."
+    }
+  ]
+}

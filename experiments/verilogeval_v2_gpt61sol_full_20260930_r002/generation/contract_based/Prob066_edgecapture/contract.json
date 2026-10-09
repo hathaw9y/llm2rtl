@@ -1,0 +1,57 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "in": 32
+    },
+    "outputs": {
+      "out": 32
+    }
+  },
+  "semantics": {
+    "evidence": "Original: 1 in one clock cycle to 0 the next; output remains 1 until active high synchronous reset; all sequential logic on positive clock edges.",
+    "sampling": "Sample in on every positive clk edge, including reset edges.",
+    "transition": "For each bit, on a non-reset positive edge set out if previous sampled input was 1 and current input is 0; otherwise retain out.",
+    "reset": "At positive edge with reset=1, clear all output bits; reset dominates capture.",
+    "history": "Previous input stores the current input on every positive edge.",
+    "latency": "Capture visible immediately after the detecting positive edge NBA update.",
+    "initialization": "No specified power-up values; no RTL initialization. Verification establishes known state with synchronous reset."
+  },
+  "numeric": {
+    "width": 32,
+    "interpretation": "32 independent Boolean lanes, indexed 0 through 31",
+    "arithmetic": "No signed arithmetic, rounding, saturation or overflow."
+  },
+  "verification": {
+    "oracle": "Per-bit sampled history and sticky state derived from original prose, compared after NBA settling.",
+    "directed": [
+      "synchronous reset between edges",
+      "reset dominance over falling transitions",
+      "constant low and high",
+      "rising edges do not capture",
+      "all bits falling",
+      "individual bit independence",
+      "sticky retention",
+      "reset with high input then falling on next edge",
+      "unsampled input pulse"
+    ],
+    "random": "Deterministic pseudorandom input and reset cycles",
+    "timeout": "Bounded simulation with fatal timeout",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Power-up state",
+      "evidence": "Original provides reset behavior but no initial values.",
+      "resolution": "Leave registers uninitialized and do not require defined output before first reset."
+    },
+    {
+      "topic": "Input history during reset",
+      "evidence": "Original resets captured output and describes successive input cycles without specifying reset of history.",
+      "resolution": "Continue sampling input during reset; a high sample on reset followed by low on the next non-reset edge captures a fall."
+    }
+  ]
+}

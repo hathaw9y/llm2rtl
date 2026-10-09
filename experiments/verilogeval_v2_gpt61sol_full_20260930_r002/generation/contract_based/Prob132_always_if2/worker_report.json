@@ -1,0 +1,62 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790747401.89848,
+      "source_sha256": "89a86b29cb53c6edddab37efd39dc6c20af52ba641758a97d9868fad31adca26",
+      "testbench_sha256": "6d7ef2494b86697d5f0510bac258270278033429cbfbe7e396cc0c616fc85fda",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob132_always_if2/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.012230916880071163
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: 128 truth-table and transition checks\ndev_tb.sv:52: $finish called at 128000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.005885820835828781
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Unknown/high-impedance input behavior is not specified and was not independently tested.",
+    "No synthesis or board work performed."
+  ],
+  "justified_RTL_changes": [
+    {
+      "stage": "initial",
+      "reason": "Complete both original combinational conditionals with zero-valued else branches to eliminate retained outputs and inferred latches. Original TopModule ports and zero-cycle behavior preserved. Legacy output reg and always @(*) retained for original interface/style compatibility."
+    }
+  ],
+  "justified_TB_changes": [],
+  "contract_changes": [],
+  "verification_summary": "Independent eight-entry truth table; all 64 previous/current binary input pairs, 128 comparisons, #1 settling, fatal mismatch and bounded timeout. Icarus 12 compilation and simulation passed.",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_gate": "passed_structure_only",
+  "initial_snapshot_preserved": true
+}

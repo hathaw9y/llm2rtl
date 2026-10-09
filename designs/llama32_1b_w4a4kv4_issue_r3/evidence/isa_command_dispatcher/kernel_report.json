@@ -1,0 +1,111 @@
+{
+  "schema": "llm2rtl.kernel_report.v1",
+  "status": "passed",
+  "design_id": "llama32_1b_w4a4kv4_issue",
+  "revision": "r3",
+  "module_id": "isa_command_dispatcher",
+  "agent_role": "typed_command_decode_in_order_issue_bank_acquire_release",
+  "coverage_level": "target_infrastructure_control_rtl",
+  "contract_sha256": "919ac6231abad1fb7557ba8c5334364fe8be0c06d0339b5cc70cb4ec550a092b",
+  "source_sha256": "47e0d2d53c92e5df607df11959771215359990ce5370ebebc1f14f458b1ca805",
+  "source_manifest_sha256": "248806b35651a1f03abaf9ef675dd554f93eb3177e7040c80a7edf74bc201cff",
+  "source_manifest": {
+    "rtl_sha256": "47e0d2d53c92e5df607df11959771215359990ce5370ebebc1f14f458b1ca805",
+    "testbench_sha256": "daeaaa8b6b84af82991066b3ae3ee6c7a84dcd3bb9a3206e4e746381f63aba88",
+    "vivado_tcl_sha256": "1337daf953c2043bed0330c60ac476bbdb5ac647dbd1b1f60a847c918e4d77c4"
+  },
+  "test_vector_sha256": "1bcec8a8e48ac6827b6fc925e51bf117440bed8b7ee788239cf8ef99ee122b5d",
+  "verification_report_sha256": "639671d9d3c78aac4880ec84df434f9dc701bdf57dd0c2b853305df9c0b01548",
+  "interface_contract": {
+    "clock": "aclk",
+    "reset": "synchronous active-low aresetn",
+    "instruction_width_bits": 128,
+    "command_bram_word_bits": 128,
+    "command_bram_read_latency_cycles": 2,
+    "issue_order": "strict PC order with no lookahead past blocked current PC",
+    "maximum_outstanding_commands": 15,
+    "scope": "bank ownership control only"
+  },
+  "implemented_behavior": {
+    "fsm": ["IDLE", "FETCH", "CHECK_ISSUE", "END_DRAIN", "ERROR_DRAIN", "DONE_STATE", "ERROR_STATE"],
+    "pc_advance": "on selected executor request acceptance",
+    "request_policy": "typed valid/start is independent of ready/busy and payload remains stable while blocked",
+    "pending_policy": "MM2S by destination tag, S2MM by source tag, SA by output bank plus stored source tuple",
+    "release_policy": "matching executor responses release ownership independently of current PC",
+    "error_policy": "stop issue, continue response acceptance, terminate only after pending and external busy drain",
+    "end_policy": "wait for all pending entries and all external busy inputs to clear"
+  },
+  "simulation": {
+    "tool": "Vivado XSIM 2025.2 exact xsimk snapshot",
+    "status": "passed",
+    "pass_marker": "PASS: isa_command_dispatcher r3 multi-outstanding ownership verification",
+    "log": "xsim_direct.log",
+    "log_sha256": "639671d9d3c78aac4880ec84df434f9dc701bdf57dd0c2b853305df9c0b01548",
+    "coverage": [
+      "two independent DMA loads accepted before either completion",
+      "same-bank stall with no lookahead and later release",
+      "completion release during later fetch",
+      "exact typed MM2S S2MM and SA field mapping",
+      "valid and payload stability under executor backpressure",
+      "opcode-coded acquire on request acceptance",
+      "simultaneous independent MM2S S2MM and SA completion releases",
+      "zero wrong-type and mismatched response identity rejection without illegal release",
+      "executor-error release followed by error drain and later-issue suppression",
+      "bank zero and GEMM destination-source alias rejection",
+      "END waits for pending and external busy",
+      "reset during fetch issue blocked END drain and error drain",
+      "repeated successful programs",
+      "1024 non-END commands accepted through PC 1023 then missing-END error"
+    ]
+  },
+  "golden_model": {
+    "status": "passed",
+    "case_count": 4,
+    "log": "golden_model.log",
+    "log_sha256": "12b524289b04466fdf0a6960a20279fe4b4ff2fcf4272ec46de50d2dca7ee724"
+  },
+  "verilator": {
+    "executable": "/usr/bin/verilator",
+    "version": "Verilator 4.038 2020-07-11 rev v4.036-114-g0cd4a57ad",
+    "command": "/usr/bin/verilator --lint-only --Wall --Wno-fatal designs/llama32_1b_w4a4kv4_issue_r3/rtl/isa_command_dispatcher.sv",
+    "status": "passed",
+    "warning_count": 0
+  },
+  "vivado": {
+    "version": "2025.2 build 6299465",
+    "stage": "post_synth_ooc",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_period_ns": 5.0,
+    "status": "passed",
+    "wns_ns": 2.123,
+    "tns_ns": 0.0,
+    "setup_failing_endpoints": 0,
+    "whs_ns": 0.081,
+    "ths_ns": 0.0,
+    "hold_failing_endpoints": 0,
+    "wpws_ns": 2.225,
+    "tpws_ns": 0.0,
+    "pulse_width_failing_endpoints": 0,
+    "ooc_clock_source": "BUFGCE_HDIO_X0Y2",
+    "drc_checks_found": 0,
+    "methodology_checks_found": 0,
+    "timing_report_sha256": "a859e9eaf08ec6a6b115b4d718526d431c9ce5c24913e470182b9791f015c392"
+  },
+  "resources": {
+    "clb_luts": 436,
+    "clb_registers": 286,
+    "dsp": 0,
+    "bram_tiles": 0,
+    "uram": 0,
+    "bonded_iob": 0,
+    "assessment": "multi-outstanding infrastructure control RTL"
+  },
+  "does_not_claim": [
+    "bank payload read or write datapath",
+    "BRAM or URAM implementation and arbitration",
+    "DMA or GEMM executor implementation",
+    "tensor arithmetic or full-model correctness",
+    "post-place or post-route timing",
+    "board integration, bitstream, or physical-board validation"
+  ]
+}

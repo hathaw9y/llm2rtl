@@ -1,0 +1,181 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob095_review2015_fsmshift",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob095_review2015_fsmshift",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob095_review2015_fsmshift/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790735153.6057012,
+    "ended_at_unix": 1790735221.376322,
+    "seconds": 67.77062153816223,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 71459,
+      "cached_input_tokens": 51456,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1598,
+      "reasoning_output_tokens": 52
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "e7d83abd244722e39761eea40d40cb877c4a209a8a7bec873f037cf5f8a20558",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "outcome": "passed",
+        "details": "Exact TopModule ports; positive-edge sequential logic; active-high synchronous reset; explicitly sized 3-bit saturating counter; combinational enable for counts 0 through 3; no latches or multiple drivers."
+      },
+      {
+        "name": "Icarus development compilation",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "exit_status": 139,
+        "outcome": "tool_failure",
+        "logs": [
+          "dev_compile.log",
+          "dev_status.log"
+        ],
+        "details": "Compiler exited with status 139 and no diagnostic output."
+      },
+      {
+        "name": "development simulation",
+        "outcome": "not_run",
+        "details": "Compilation failed; no simulation success claimed. Independent dev_tb.sv includes expected-value checks, reset during activity, held reset, synchronous reset pulse, permanent disable, and an internal timeout."
+      }
+    ],
+    "development_outcome": "Initial candidate delivered unchanged after static review; development compilation failed before simulation.",
+    "limitations": [
+      "Dynamic behavior has not been validated because the requested compiler failed.",
+      "Initial state before a synchronous reset is unspecified.",
+      "Official evaluation results are unavailable; no official testbench or reference RTL accessed.",
+      "No synthesis, timing analysis, or board validation performed."
+    ],
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "e7d83abd244722e39761eea40d40cb877c4a209a8a7bec873f037cf5f8a20558",
+      "Prob095_review2015_fsmshift_ref.sv": "a0926e66cc422a056dcaa0e090a7d43be84aaed96e119e4ba762a78a0c87f84a",
+      "Prob095_review2015_fsmshift_test.sv": "04a07679a16566bb0ed4d8c28ea3f18c89efff880f820a83cbcfd0617b6e153e"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob095_review2015_fsmshift_test.sv",
+        "Prob095_review2015_fsmshift_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015845329500734806
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb095_review2015_fsmshift_test.sv:17: $finish called at 1001 (1ps)\nHint: Output 'shift_ena' has no mismatches.\nHint: Total mismatched samples is 0 out of 200 samples\n\nSimulation finished at 1001 ps\nMismatches: 0 in 200 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008848086930811405
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "e7d83abd244722e39761eea40d40cb877c4a209a8a7bec873f037cf5f8a20558",
+      "Prob095_review2015_fsmshift_ref.sv": "a0926e66cc422a056dcaa0e090a7d43be84aaed96e119e4ba762a78a0c87f84a",
+      "Prob095_review2015_fsmshift_test.sv": "04a07679a16566bb0ed4d8c28ea3f18c89efff880f820a83cbcfd0617b6e153e"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob095_review2015_fsmshift_test.sv",
+        "Prob095_review2015_fsmshift_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013632746413350105
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb095_review2015_fsmshift_test.sv:17: $finish called at 1001 (1ps)\nHint: Output 'shift_ena' has no mismatches.\nHint: Total mismatched samples is 0 out of 200 samples\n\nSimulation finished at 1001 ps\nMismatches: 0 in 200 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008744988590478897
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

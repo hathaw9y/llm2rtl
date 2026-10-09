@@ -1,0 +1,89 @@
+{
+  "schema": "llm2rtl.kernel_report.v1",
+  "module_id": "fp32_bf16_epilogue",
+  "status": "SIMULATION_AND_STRICT_LINT_PASS_OOC_PENDING",
+  "coverage_level": "target_exact_numeric_datapath",
+  "memory_access_scope": "local_payload_stream_only",
+  "parent_contract": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/modules/int8_gemm_executor.json",
+    "sha256": "5a21d45e1461bedc5dad49348c25d142a07f13a8c3e6125abbd9f5d7f0ccb19c"
+  },
+  "child_contract": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/datapaths/fp32_bf16_epilogue.json",
+    "sha256": "bfdbcda07d9fc29b38a4bcfa0f3ed188603a3f3d2988ee41d028ad5a0fd6c20b"
+  },
+  "source_sha256": {
+    "designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+    "designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+    "designs/smollm2_135m_w8a8_zcu104_r1/rtl/fp32_bf16_epilogue.sv": "3fbf60151b57fe04f4aa1546f62735562b283a5499a0c18e6cf281e085e78611"
+  },
+  "test_sha256": {
+    "designs/smollm2_135m_w8a8_zcu104_r1/evidence/fp32_bf16_epilogue/run_sim.py": "80efcf02ef635c94a29fd8a01a0d3b15d8a8c49d4622dca6753388fb9922b37c",
+    "designs/smollm2_135m_w8a8_zcu104_r1/evidence/fp32_bf16_epilogue/tb.sv": "3bf8a7529ea09f0690e7d83261ac882281fed0f6ac54c30544ffe16d07071b8f",
+    "designs/smollm2_135m_w8a8_zcu104_r1/evidence/fp32_bf16_epilogue/mul.hex": "ac6c59a8f5ce9db229b54e5d702ca33114882fa7d2b3c08a2c65523045fdc652",
+    "designs/smollm2_135m_w8a8_zcu104_r1/evidence/fp32_bf16_epilogue/epi.hex": "8b675a1256d6010afa61e67ae592768dfa8834139501e3a01e458190712ae064"
+  },
+  "simulation": {
+    "multiplier_cases": 11972,
+    "epilogue_bundles": 4864,
+    "result": "PASS",
+    "oracle": "exact Fraction binary32 and BF16 rounding",
+    "stalls": true,
+    "midstream_reset_replay": true,
+    "complete_golden_command_ids": [
+      84,
+      226,
+      1352,
+      1495,
+      2621,
+      2764
+    ],
+    "independent_numpy_binary32": true,
+    "unstalled_latency_cycles": {
+      "multiplier": 6,
+      "epilogue": 9
+    },
+    "II1_tested_initial_continuous_cycles": 39
+  },
+  "lint": {
+    "tool": "Verilator",
+    "command": "verilator --lint-only --top-module fp32_bf16_epilogue -Wall w8a8_fp32_pkg.sv w8a8_fp32_mul.sv fp32_bf16_epilogue.sv",
+    "status": "PASS_NO_WARNINGS",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "interface": {
+    "reset": "synchronous active-low resetn",
+    "tag_bits": 96,
+    "lanes": 4,
+    "little_lane_order": true,
+    "stalled_payload_sidebands_stable": true,
+    "latency_unstalled_cycles": 9,
+    "multiplier_latency_unstalled_cycles": 6,
+    "initiation_interval": 1
+  },
+  "arithmetic": {
+    "rounding": "nearest_even",
+    "subnormal": "gradual",
+    "negative_zero": "preserved",
+    "combined_scale_zero": "allowed because parent validates original positive scales",
+    "nonfinite_error": "masked lanes only",
+    "int32_overflow_detector": false
+  },
+  "ooc": {
+    "status": "NOT_RUN_BUILD_MACHINE_AWAITING_USER_DESIGNATION",
+    "requested_tool": "Vivado2025.2",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_ns": 5.0,
+    "script": "designs/smollm2_135m_w8a8_zcu104_r1/evidence/fp32_bf16_epilogue/ooc.tcl",
+    "timing_stage": null,
+    "resources": null
+  },
+  "does_not_claim": [
+    "200MHz timing closure",
+    "resource fit",
+    "parent memory write acceptance",
+    "full executor integration",
+    "physical board validation",
+    "full model accuracy"
+  ]
+}

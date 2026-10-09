@@ -1,0 +1,55 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial_snapshot_preserved",
+      "result": "PASS"
+    },
+    {
+      "name": "static_review",
+      "result": "PASS by inspection",
+      "details": "Exact ports; explicit two-bit one-hot states; asynchronous active-high reset to A; rising-edge state update; combinational Mealy output; no latches or multiple drivers."
+    },
+    {
+      "name": "development_compile_initial",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "log": "compile_initial.log",
+      "status_log": "development_status.log",
+      "timeout_seconds": 30
+    },
+    {
+      "name": "development_compile_explicit_ivl_path",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "log": "compile_retry.log",
+      "status_log": "development_retry_status.log",
+      "timeout_seconds": 30
+    },
+    {
+      "name": "development_simulation",
+      "result": "not_run",
+      "reason": "Both compiler invocations exited 139 with empty diagnostic logs."
+    }
+  ],
+  "development_outcome": "Best RTL delivered after static review; development simulation unverified because Icarus compilation failed.",
+  "limitations": [
+    "No successful development elaboration or simulation.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing analysis or board validation performed.",
+    "Power-up before reset and illegal-state behavior are outside the specified behavior."
+  ],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

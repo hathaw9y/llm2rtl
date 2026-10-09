@@ -1,0 +1,24 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "in": 1}, "outputs": {"out": 1}, "extra_ports": false},
+  "semantics": {
+    "equation": "At each posedge clk: out_next = out_previous XOR in_sampled",
+    "sampling_evidence": "Original problem: flip-flop is positive edge triggered by clk",
+    "feedback_evidence": "Original problem: XOR takes in along with output out of the flip-flop",
+    "reset": "None; original explicitly states there is no reset",
+    "initialization": "No specified initial value; leave register uninitialized (X in four-state simulation)",
+    "between_edges": "Retain stored output through input changes and falling clock edges",
+    "latency": "Single flip-flop update on rising edge, observed after nonblocking assignment"
+  },
+  "numeric": {"width": 1, "operator": "bitwise XOR with four-state Verilog semantics", "signed_arithmetic": false, "rounding_overflow": "Not applicable"},
+  "verification": {
+    "oracle_basis": "Original circuit: hold for in=0, toggle for in=1; X XOR either binary value stays X",
+    "natural_start": "Check uninitialized X and continued X through rising edges",
+    "known_state_tests": "Testbench deposits 0 and 1 into stored output between edges to explore both legal possible physical initial states; DUT has no initializer",
+    "directed": "Both known states, hold, toggle, repeated toggle, input changes away from rising edges, falling-edge retention, X/Z inputs",
+    "observation": "Before rising edge and one time unit after rising edge for NBA completion",
+    "evaluator": "python3 dev_check.py --label initial",
+    "timeout": "Bounded testbench timeout with fatal; explicit PASS after checks"
+  },
+  "specification_ambiguities": ["Power-up state is not specified. No deterministic initialization is added; known-state tests require simulation-only deposits."]
+}

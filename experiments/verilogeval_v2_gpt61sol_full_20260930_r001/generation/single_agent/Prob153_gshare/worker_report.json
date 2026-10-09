@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "completed",
+      "details": "Reviewed exact ports, 7-bit XOR indices, two-bit saturation, asynchronous active-high reset, pre-edge prediction, prediction-valid history update, and misprediction recovery priority."
+    },
+    {
+      "name": "Icarus development compilation",
+      "result": "failed",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "details": "Compiler exited with code 139 with no diagnostic output; no simulation executable was produced. Initial shell orchestration also encountered a read-only zsh variable, recorded in dev_tool_error.log, and was corrected before rerunning compilation."
+    },
+    {
+      "name": "development simulation",
+      "result": "not run",
+      "details": "Compilation failed. Independent dev_tb.sv includes exhaustive entry saturation checks, simultaneous prediction/training, recovery priority, asynchronous reset, randomized scoreboard checks, and a finite simulation watchdog. These checks have not executed."
+    }
+  ],
+  "development_outcome": "Delivered statically reviewed synthesizable candidate.sv; candidate_initial.sv preserved before development checks and identical to final RTL. No simulation success is claimed.",
+  "limitations": [
+    "Problem does not explicitly specify reset counter values; counters initialize to weakly not-taken (01), and global history initializes to zero.",
+    "Development compilation failed with exit code 139, so functional simulation remains unverified.",
+    "No synthesis, timing analysis, board access, or official evaluation was performed."
+  ]
+}

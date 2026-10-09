@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "w": 1}, "outputs": {"z": 1}},
+  "semantics": {
+    "evidence": "Original problem explicitly requires positive-edge sequential logic and lists all six states, their outputs, and both outgoing transitions.",
+    "clock": "State changes at posedge clk; z is the combinational Moore output of the current state.",
+    "reset": "Assume active-high synchronous reset to A, with priority over w. Synchronous timing follows the positive-edge-only requirement; polarity and destination are not explicitly stated.",
+    "initialization": "No initial state specified; do not initialize state before reset.",
+    "transitions_w0_w1": {"A": ["B", "A"], "B": ["C", "D"], "C": ["E", "D"], "D": ["F", "A"], "E": ["E", "D"], "F": ["C", "D"]},
+    "outputs": {"A": 0, "B": 0, "C": 0, "D": 0, "E": 1, "F": 1}
+  },
+  "numeric": {"input_domain": "one-bit binary w and reset", "state_encoding": "six distinct 3-bit constants", "arithmetic": "none"},
+  "verification": {"oracle": "Independent integer-state transition table transcribed from original problem", "sampling": "Drive while clock low; check before edge and after NBA settling; check stability at falling edge", "cases": "All 256 eight-bit input sequences from reset, all twelve state/input transitions, reset priority from every state with each w, synchronous reset between edges", "completion": "Fatal mismatches, bounded timeout, PASS only after coverage checks"},
+  "specification_ambiguities": ["Reset polarity and destination are unspecified; assume active-high reset to A, the first listed state.", "No power-up state is specified; pre-reset output is unconstrained and is not asserted by the testbench."]
+}

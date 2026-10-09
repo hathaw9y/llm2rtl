@@ -1,0 +1,32 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "observations": "Correct fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+    },
+    {
+      "name": "initial",
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence_directory": "development/01",
+      "observations": "Icarus 12 compilation and simulation passed; 1695 behavioral checks."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification does not establish official correctness; official evaluation was not accessed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation_notes": [
+    "Moore FSM preserves direction through digging and falling and implements fall-before-dig-before-bump priority.",
+    "Fall duration includes the entry cycle and saturates at 21 so arbitrary fall lengths cannot wrap; splatter occurs only upon landing after more than 20 falling cycles."
+  ],
+  "testbench_notes": [
+    "Independent behavioral oracle models activity, direction, and unbounded integer fall duration.",
+    "Directed checks cover both directions, simultaneous bumps, digging persistence, landing priorities, falls of 1 through 22 cycles, a 300-cycle fall, dead-state persistence, asynchronous reset, and randomized inputs."
+  ]
+}

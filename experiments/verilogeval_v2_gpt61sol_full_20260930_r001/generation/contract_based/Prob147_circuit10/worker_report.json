@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (passed_structure_only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial preservation",
+      "result": "PASS",
+      "detail": "candidate_initial.sv copied immediately after initial implementation, before any development checks or edits; identical to final candidate."
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS",
+      "detail": "Exact one-bit ports; one positive-edge flip-flop; nonblocking state assignment; combinational XOR; no reset, initialization, latches, extra registers or dependencies."
+    },
+    {
+      "name": "Icarus development compilation",
+      "result": "FAIL_TOOL",
+      "exit_code": 139,
+      "log": "compile.log",
+      "status_file": "compile_status.json",
+      "timeout_seconds": 30
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT_RUN",
+      "reason": "Compilation failed.",
+      "log": "simulation.log"
+    }
+  ],
+  "development_outcome": "Frozen contract gate passed. Synthesizable initial RTL delivered unchanged. Self-checking dev_tb.sv covers original waveform rows and all eight state/input combinations with clock-edge and hold checks, but was not executed because the specified Icarus compiler exited with code 139.",
+  "limitations": [
+    "No successful development elaboration or simulation; compiler produced no captured diagnostics.",
+    "The waveform does not specify same-timestamp input/clock scheduling; contract records the previous-stable-input sampling interpretation.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing, or hardware validation performed."
+  ]
+}

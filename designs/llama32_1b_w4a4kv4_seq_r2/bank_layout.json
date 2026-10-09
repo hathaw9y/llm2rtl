@@ -1,0 +1,50 @@
+{
+  "schema": "llm2rtl.bank_layout.v1",
+  "design_id": "llama32_1b_w4a4kv4_seq",
+  "revision": "r2",
+  "bank_id_width": 8,
+  "physical_bank_count_for_dispatcher_checkpoint": 4,
+  "reset_state": "free",
+  "banks": [
+    {
+      "bank_id": "BANK_A",
+      "numeric_id": 0,
+      "capacity_words": 4096,
+      "word_bits": 128,
+      "format": "signed_a4_per_token_absmax_or_bf16_control_fixture",
+      "layout": "packed_row_major",
+      "producers": ["DMA_LOAD", "GEMM"],
+      "consumers": ["GEMM", "DMA_STORE"]
+    },
+    {
+      "bank_id": "BANK_B",
+      "numeric_id": 1,
+      "capacity_words": 4096,
+      "word_bits": 128,
+      "format": "signed_w4_group64_with_scale_metadata",
+      "layout": "packed_weight_tile",
+      "producers": ["DMA_LOAD"],
+      "consumers": ["GEMM"]
+    },
+    {
+      "bank_id": "BANK_C",
+      "numeric_id": 2,
+      "capacity_words": 4096,
+      "word_bits": 128,
+      "format": "signed_a4_per_token_absmax_or_accumulator_tile",
+      "layout": "packed_row_major",
+      "producers": ["DMA_LOAD", "GEMM"],
+      "consumers": ["GEMM", "DMA_STORE"]
+    },
+    {
+      "bank_id": "BANK_TMP",
+      "numeric_id": 3,
+      "capacity_words": 4096,
+      "word_bits": 128,
+      "format": "operation_defined_local_tile",
+      "layout": "packed_row_major",
+      "producers": ["DMA_LOAD", "GEMM"],
+      "consumers": ["GEMM", "DMA_STORE"]
+    }
+  ]
+}

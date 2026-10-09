@@ -1,0 +1,41 @@
+{
+  "revision_count": 1,
+  "checks": [
+    {
+      "label": "smoke_environment",
+      "status": "passed",
+      "details": "Correct fixture passed, injected fault failed, repaired fixture passed."
+    },
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence": "development/01/result.json",
+      "reason": "At 125 ns, expected state=1 and q=0; initial RTL produced state=0 and q=1."
+    },
+    {
+      "label": "revision_1",
+      "status": "passed",
+      "evidence": "development/02/result.json",
+      "coverage": "Original waveform at every timestamp, initial unknowns, all eight binary state/input combinations and following rising edges."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Waveform input changes coincident with rising edges are applied as nonblocking stimulus so the flip-flop samples the preceding input values, as indicated by the original trace."
+  ],
+  "justified_rtl_changes": [
+    {
+      "revision": 1,
+      "reason": "Original waveform shows mixed inputs preserve state: 65 ns preserves 0 after 10, while 125 ns preserves 1 after 10. Replaced AND update with majority carry update (a & b) | (state & (a | b)). Combinational q remains XOR parity."
+    }
+  ],
+  "justified_tb_changes": [
+    {
+      "saved_prior_version": "dev_tb_before_revision_1.sv",
+      "reason": "Supplementary transition oracle incorrectly assumed AND next-state. Corrected to clear on 00, set on 11, hold on mixed inputs. All original waveform expected values and timestamp relationships retained."
+    }
+  ],
+  "interface_cycle_semantics": "TopModule with original one-bit ports; one uninitialized positive-edge flip-flop, no reset or extra latency; combinational q.",
+  "static_review": "One sequential driver using nonblocking assignment, no latch, explicit one-bit logic, synthesizable DUT. No synthesis or board work performed."
+}

@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "in": 8
+    },
+    "outputs": {
+      "anyedge": 8
+    },
+    "reset": "None in original interface; no reset added"
+  },
+  "semantics": {
+    "sampling": "All sequential logic uses positive edge of clk, per original problem.",
+    "equation": "After rising edge n, anyedge[b] = sampled_in[n][b] XOR sampled_in[n-1][b].",
+    "latency": "Registered indication for the cycle following the edge that samples a changed input; no extra output pipeline.",
+    "between_edges": "Output holds even when input changes.",
+    "initialization": "Original specifies no initial value or reset; history and output are uninitialized. First sampled comparison can be unknown."
+  },
+  "numeric": {
+    "width": 8,
+    "operation": "Eight independent one-bit change comparisons; no arithmetic, signedness, rounding, or overflow."
+  },
+  "verification": {
+    "oracle": "Compare each sampled bit against independently stored prior sample using four-state equality/inequality.",
+    "phases": "Drive away from rising edge, compare after NBA updates, verify hold between edges.",
+    "coverage": [
+      "startup unknown",
+      "stable samples",
+      "each bit rising and falling",
+      "all bits toggling",
+      "exhaustive ordered pairs of known 8-bit samples",
+      "transient between edges",
+      "unknown sample and recovery"
+    ],
+    "evaluator": "python3 dev_check.py --label initial",
+    "timeout": "Bounded simulation watchdog"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Startup",
+      "evidence": "No reset port or initialization requirement is present.",
+      "resolution": "Do not add initialization; require known functional comparisons after history is sampled."
+    }
+  ]
+}

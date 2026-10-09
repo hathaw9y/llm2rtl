@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in1": {"direction": "input", "width": 1},
+      "in2": {"direction": "input", "width": 1},
+      "out": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "function": "out = NOT (in1 OR in2)",
+    "truth_table": ["00 -> 1", "01 -> 0", "10 -> 0", "11 -> 0"],
+    "timing": "Combinational; output follows current inputs without clocked latency or added delay.",
+    "clock": "None",
+    "reset": "None",
+    "initialization": "No stored state or initialization required."
+  },
+  "numeric": {
+    "operands": "One-bit logic values",
+    "result_width": 1,
+    "operation": "Bitwise NOR",
+    "arithmetic": "No arithmetic, rounding, truncation, saturation, or overflow."
+  },
+  "verification": {
+    "plan": "Independently enumerate all four binary input combinations and compare output against explicit truth-table constants after combinational settling; repeat transitions to check stateless response.",
+    "tool": "Icarus Verilog v12, SystemVerilog -g2012, explicit dev_tb top",
+    "timeouts": "Finite shell timeouts for compilation and simulation plus testbench watchdog.",
+    "scope": "Development verification only; no official evaluation, synthesis, or board access."
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,33 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "sel": {"direction": "input", "width": 1},
+      "a": {"direction": "input", "width": 8, "range": "7:0"},
+      "b": {"direction": "input", "width": 8, "range": "7:0"},
+      "out": {"direction": "output", "width": 8, "range": "7:0"}
+    }
+  },
+  "semantics": {
+    "function": "sel=0 selects all eight bits of a; sel=1 selects all eight bits of b",
+    "timing": "Pure combinational selection, no clock or cycle latency, no stored state",
+    "reset": "No reset port or reset behavior",
+    "initialization": "No initialization required; output follows current inputs",
+    "unknown_select": "Use standard SystemVerilog conditional-operator bitwise merge for X/Z select"
+  },
+  "numeric": {
+    "data": "Unsigned eight-bit bit patterns, preserved exactly",
+    "arithmetic": "None; no rounding, saturation, extension, truncation, or overflow"
+  },
+  "verification": {
+    "oracle": "For each known select, independently compare each output bit to the corresponding selected input bit",
+    "coverage": "Exhaust all 256 a values, 256 b values, and both known select values; exercise X/Z select with matching and differing bits",
+    "tools": "Icarus Verilog v12, explicit dev_tb top, -g2012, finite compile and simulation timeouts",
+    "static": "Check port widths, purely combinational driver, absence of state and simulation-only DUT constructs"
+  },
+  "specification_ambiguities": [
+    "The example declares scalar out despite describing an 8-bit mux. Treat this buggy declaration as requiring correction to out[7:0].",
+    "The problem does not specify X/Z select behavior; standard conditional operator merge semantics are used."
+  ]
+}

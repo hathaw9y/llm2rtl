@@ -1,0 +1,84 @@
+{
+  "status": "passed",
+  "checked_utc": "2026-09-30T04:26:19.008281+00:00",
+  "synthetic_agent_debugging": {
+    "status": "passed",
+    "model": "gpt-6.1-sol",
+    "scope": "Synthetic debugging preflight excluded from benchmark score",
+    "seconds": 64.89423108100891,
+    "initial_check": "simulation_failed",
+    "final_check": "passed",
+    "check_count": 2,
+    "worker_report": {
+      "revision_count": 1,
+      "checks": [
+        {
+          "command": "python3 smoke_environment.py",
+          "status": "passed",
+          "evidence": "environment_smoke.json"
+        },
+        {
+          "command": "python3 dev_check.py --label initial",
+          "status": "simulation_failed",
+          "evidence": "development/01/result.json",
+          "failure_log": "development/01/simulation.log",
+          "failure": "Expected sampled d=0"
+        },
+        {
+          "command": "python3 dev_check.py --label revision_1",
+          "status": "passed",
+          "evidence": "development/02/result.json",
+          "simulation_log": "development/02/simulation.log"
+        }
+      ],
+      "fix": "Changed q <= ~d to q <= d at each positive clock edge; no reset or initialization added.",
+      "revision_file": "candidate_revision_1.sv",
+      "preservation": {
+        "candidate_initial_unchanged": true,
+        "testbench_unchanged": true,
+        "helpers_edited": false
+      },
+      "official_feedback": "unavailable"
+    }
+  },
+  "initial_benchmark_jobs": [
+    {
+      "mode": "single_agent",
+      "problem_id": "Prob075_counter_2bc",
+      "development_status": "passed",
+      "official_status": "passed",
+      "development_check_count": 1,
+      "development_failed_check_count": 0,
+      "revision_count": 0
+    },
+    {
+      "mode": "contract_based",
+      "problem_id": "Prob075_counter_2bc",
+      "development_status": "passed",
+      "official_status": "passed",
+      "development_check_count": 2,
+      "development_failed_check_count": 1,
+      "revision_count": 0
+    },
+    {
+      "mode": "contract_based",
+      "problem_id": "Prob058_alwaysblock2",
+      "development_status": "passed",
+      "official_status": "passed",
+      "development_check_count": 1,
+      "development_failed_check_count": 0,
+      "revision_count": 0
+    },
+    {
+      "mode": "single_agent",
+      "problem_id": "Prob058_alwaysblock2",
+      "development_status": "passed",
+      "official_status": "passed",
+      "development_check_count": 1,
+      "development_failed_check_count": 0,
+      "revision_count": 0
+    }
+  ],
+  "generation_settings_changed_after_first_dispatch": false,
+  "reuse_of_previous_candidates": false
+}

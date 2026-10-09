@@ -1,0 +1,71 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "areset": {
+        "direction": "input",
+        "width": 1
+      },
+      "load": {
+        "direction": "input",
+        "width": 1
+      },
+      "ena": {
+        "direction": "input",
+        "width": 1
+      },
+      "data": {
+        "direction": "input",
+        "width": 4,
+        "range": "[3:0]"
+      },
+      "q": {
+        "direction": "output",
+        "width": 4,
+        "range": "[3:0]"
+      }
+    }
+  },
+  "semantics": {
+    "clock": "posedge clk",
+    "reset": "Asynchronous active-high areset: posedge areset clears q immediately; asserted reset also overrides all clocked operations.",
+    "priority": [
+      "areset",
+      "load",
+      "ena",
+      "hold"
+    ],
+    "update": "At posedge clk when reset is low: load=1 copies data; else ena=1 shifts right one bit; else q holds.",
+    "sampling": "load, ena and data sampled on rising clock edge; no changes between clock edges except reset assertion.",
+    "initialization": "No specified power-up value before reset or load; no initial assignment.",
+    "reset_release": "Deasserting reset alone does not change q."
+  },
+  "numeric": {
+    "width": 4,
+    "signedness": "unsigned bit vector",
+    "shift": "Logical right shift: next q[3]=0, next q[2:0]=old q[3:1]; old q[0] discarded.",
+    "load": "Exact 4-bit copy; no arithmetic, saturation or rounding."
+  },
+  "verification": {
+    "oracle": "Independent integer model: load copies data; shift uses integer division by two; disabled holds; reset clears.",
+    "coverage": [
+      "All 16 prior values x all 4 load/ena combinations x all 16 data values",
+      "Asynchronous reset between rising edges, including asserted load and ena",
+      "Reset held across rising edges",
+      "Reset release without a clock edge",
+      "Input changes without a rising edge",
+      "Repeated shifts to zero"
+    ],
+    "comparison": "Case inequality after nonblocking assignments settle; fatal on mismatch.",
+    "bounds": "Finite shell compile/simulation timeouts and testbench watchdog.",
+    "scope": "Own development testbench only; no official evaluation, synthesis or board work."
+  },
+  "specification_ambiguities": [
+    "Power-up contents before reset/load are unspecified; tests first assert reset."
+  ]
+}

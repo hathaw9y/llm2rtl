@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"x": 1, "y": 1}, "outputs": {"z": 1}, "clock_reset": "None in original interface"},
+  "semantics": {"a": "(x ^ y) & x, explicitly specified", "b": "XNOR: waveform gives 00->1, 10->0, 01->0, 11->1", "composition": "Two instances each of A and B, all driven by x,y; z=(a1|b1)^(a2&b2)", "latency": "Combinational, no clock, reset, or stored state specified", "initialization": "No specified initial unknown requirement; output follows current inputs after combinational settling"},
+  "numeric": {"width": "All ports and intermediates unsigned single bits", "arithmetic": "Bitwise Boolean operators; no rounding or overflow"},
+  "verification": {"oracle": "Independent top truth table derived from original A equation, B waveform and gate composition: 00=1,01=0,10=1,11=1", "waveform": "Replay all original 0 through 90 ns entries at exact timestamps, sample 1 ps after each to allow delta settling", "coverage": "All binary input pairs and all ordered transitions, timeout and fatal mismatches", "evaluation": "python3 dev_check.py --label initial; development verification only"},
+  "specification_ambiguities": ["B is given as a waveform rather than an equation; repeated input values and all four binary combinations support the combinational XNOR interpretation. No clock or state mechanism is specified.", "Behavior for X/Z inputs is not specified; RTL uses natural four-state bitwise operators, and verification covers defined binary inputs."]
+}

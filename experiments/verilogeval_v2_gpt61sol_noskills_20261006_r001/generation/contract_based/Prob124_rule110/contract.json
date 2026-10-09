@@ -1,0 +1,19 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "load": 1, "data": 512}, "outputs": {"q": 512}},
+  "semantics": {
+    "clock": "All sequential logic updates on the positive edge, as explicitly specified.",
+    "load": "At each positive edge, active high load synchronously replaces q with data; otherwise advance one Rule 110 step.",
+    "neighbors": "For cell i, left is old q[i+1], center old q[i], right old q[i-1]. Out-of-range neighbors are zero.",
+    "rule": {"111": 0, "110": 1, "101": 1, "100": 0, "011": 1, "010": 1, "001": 1, "000": 0},
+    "initialization": "No reset or initial state is specified; leave state uninitialized until synchronous load. No required defined evolution before load."
+  },
+  "numeric": {"cell_count": 512, "indices": "511:0", "cell_values": "one-bit Boolean", "arithmetic": "none"},
+  "verification": {
+    "oracle": "Independent per-cell case lookup of the original eight-row truth table using a saved pre-edge vector.",
+    "sampling": "Drive on falling edges, check unchanged before rising edge, sample after rising-edge nonblocking updates.",
+    "coverage": "All eight neighborhoods, both zero boundaries, all-zero/all-one/alternating loads, isolated endpoint and interior cells, repeated loads and randomized loads/evolution.",
+    "termination": "Fatal mismatches, bounded timeout, PASS only after all checks."
+  },
+  "specification_ambiguities": ["Power-up q is unspecified: no reset or initialization is provided. Verification of defined Rule 110 transitions begins after a load."]
+}

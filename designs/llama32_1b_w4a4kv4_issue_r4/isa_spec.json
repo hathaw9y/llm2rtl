@@ -1,0 +1,112 @@
+{
+  "schema": "llm2rtl.isa_spec.v1",
+  "design_id": "llama32_1b_w4a4kv4_issue_unified_bank",
+  "revision": "r4",
+  "status": "reviewed",
+  "common_contracts": {
+    "contracts/common/isa_command_contract.json": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15",
+    "contracts/common/local_bank_contract.json": "9c5708dd695dab2eb952694d17001bb58add5add2a7528a3f8a1211c247df6a1",
+    "contracts/common/evidence_identity_contract.json": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda"
+  },
+  "instruction_record": {
+    "width_bits": 128,
+    "command_bram_word_bits": 128,
+    "words_per_instruction": 1,
+    "field_layout_msb_first": {
+      "opcode": [127, 124],
+      "src1_bank": [123, 120],
+      "src2_bank": [119, 116],
+      "dst_bank": [115, 112],
+      "offset_or_gemm_shape": [111, 80],
+      "byte_count": [79, 57],
+      "axi_address": [56, 25],
+      "reserved": [24, 0]
+    },
+    "gemm_shape_layout": {
+      "m": [31, 26],
+      "n": [25, 15],
+      "k": [14, 3],
+      "reserved": [2, 0]
+    }
+  },
+  "command_transport": {
+    "command_order_owner": "ps_software",
+    "residency_tiling_owner": "ps_software",
+    "recovery_policy_owner": "ps_software",
+    "pl_dispatcher_role": "route_execute_report_only",
+    "request_protocol": "ready_valid",
+    "response_protocol": "ready_valid",
+    "program_transport": "ps_preloaded_command_bram",
+    "queue_policy": "no_ring_queue",
+    "dispatch_policy": "strict_in_order_single_pc_scoreboard",
+    "execution_policy": "issue_on_request_handshake_with_scoreboard_completion",
+    "outstanding_policy": "bank_hazard_limited_multiple",
+    "pc_advance_event": "executor_command_acceptance",
+    "response_collection": "independent_of_current_pc",
+    "program_terminal_policy": "end_opcode_then_drain_outstanding",
+    "blocked_pc_policy": "stall_without_lookahead",
+    "ready_valid_rule": "request_valid_depends_on_a_buffered_legal_bank-eligible_command_and_never_on_executor_ready",
+    "program_publish_order": ["instruction_records_ending_in_END", "start"],
+    "mutation_while_busy": "forbidden"
+  },
+  "opcodes": [
+    {
+      "opcode": "END",
+      "encoding": 0,
+      "module_id": "isa_command_dispatcher",
+      "opcode_class": "control",
+      "operands": [],
+      "operand_semantics": "terminal record; issue stops and DONE waits for all acquired banks and pending responses to drain",
+      "completion_semantics": "DONE only after no read/write bank is busy and no pending executor command remains",
+      "failure_semantics": "missing END before the maximum program length enters error-drain"
+    },
+    {
+      "opcode": "DMA_LOAD",
+      "encoding": 1,
+      "module_id": "datamover_executor",
+      "opcode_class": "dma_load",
+      "operands": [
+        {"name": "external_source", "kind": "external_ddr_address"},
+        {"name": "destination", "kind": "local_bank_id"},
+        {"name": "local_offset", "kind": "dimension"},
+        {"name": "byte_count", "kind": "transfer_length"}
+      ],
+      "operand_semantics": "axi_address is the 32-bit DDR byte address, dst_bank is 1..15, offset is the local byte offset and byte_count is nonzero",
+      "completion_semantics": "exclusive destination-bank acquire occurs on command handshake and release occurs on matching MM2S status",
+      "failure_semantics": "error status releases ownership, stops new issue and enters error-drain"
+    },
+    {
+      "opcode": "DMA_STORE",
+      "encoding": 2,
+      "module_id": "datamover_executor",
+      "opcode_class": "dma_store",
+      "operands": [
+        {"name": "source", "kind": "local_bank_id"},
+        {"name": "external_destination", "kind": "external_ddr_address"},
+        {"name": "local_offset", "kind": "dimension"},
+        {"name": "byte_count", "kind": "transfer_length"}
+      ],
+      "operand_semantics": "dst_bank field names source bank 1..15; axi_address is destination DDR byte address",
+      "completion_semantics": "exclusive source-bank acquire occurs on command handshake and release occurs on matching S2MM status",
+      "failure_semantics": "error status releases ownership, stops new issue and enters error-drain"
+    },
+    {
+      "opcode": "GEMM",
+      "encoding": 3,
+      "module_id": "gemm_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {"name": "activation", "kind": "local_bank_id"},
+        {"name": "weight", "kind": "local_bank_id"},
+        {"name": "output", "kind": "local_bank_id"},
+        {"name": "m", "kind": "dimension"},
+        {"name": "n", "kind": "dimension"},
+        {"name": "k", "kind": "dimension"}
+      ],
+      "operand_semantics": "src1/src2/dst are banks 1..15, destination differs from both sources, packed shape supplies M/N/K and GEMM owns internal tiling",
+      "completion_semantics": "exclusive ownership of every distinct operand bank is acquired on start and released on matching done",
+      "failure_semantics": "error done releases ownership, stops new issue and enters error-drain"
+    }
+  ],
+  "unresolved_decisions": []
+}

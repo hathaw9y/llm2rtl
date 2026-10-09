@@ -1,0 +1,200 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob080_timer",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob080_timer",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob080_timer/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791274447.9564245,
+    "ended_at_unix": 1791274517.00763,
+    "seconds": 69.05120587348938,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 77771,
+      "cached_input_tokens": 65408,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2296,
+      "reasoning_output_tokens": 51
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "fafb926b315776a23cb42747909c8e3bf79f419be899e0683a1c49bd6cb73fa3",
+  "contract_sha256": "4b4ea4e8ea2518c33250a0522f5ca8c7f13c45630270f48b5c5960997788bf9c",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "cases": [
+          "correct fixture passes",
+          "deliberately wrong fixture fails",
+          "repaired fixture passes"
+        ]
+      },
+      {
+        "name": "contract_validation",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "coverage": "526889 cycles; all 1024 durations, terminal hold, active reload, consecutive loads, input changes between edges, positive-edge sampling and negative-edge stability"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official evaluation; official correctness is not established.",
+      "The literal single D flip-flop sentence conflicts with 10-bit timer storage; implemented one 10-bit clocked counter register according to explicit timer behavior.",
+      "Initial counter value is unspecified. RTL has no initialization or reset; testbench observes startup and checks functional behavior after loading a known value."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "check_history": "dev_checks.jsonl"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "fafb926b315776a23cb42747909c8e3bf79f419be899e0683a1c49bd6cb73fa3",
+      "Prob080_timer_ref.sv": "14b34884220ceb1058f834d04d86cdd7b2798163f8e816ad7ed3ea146cf05f41",
+      "Prob080_timer_test.sv": "86c79e899dcab371d0e244e8775b36c4f0f16259496911bfc41c4d20b8ae2e87"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob080_timer_test.sv",
+        "Prob080_timer_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012790383771061897
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb080_timer_test.sv:55: $finish called at 35636 (1ps)\nHint: Output 'tc' has no mismatches.\nHint: Total mismatched samples is 0 out of 7127 samples\n\nSimulation finished at 35636 ps\nMismatches: 0 in 7127 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.03159249760210514
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "fafb926b315776a23cb42747909c8e3bf79f419be899e0683a1c49bd6cb73fa3",
+      "Prob080_timer_ref.sv": "14b34884220ceb1058f834d04d86cdd7b2798163f8e816ad7ed3ea146cf05f41",
+      "Prob080_timer_test.sv": "86c79e899dcab371d0e244e8775b36c4f0f16259496911bfc41c4d20b8ae2e87"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob080_timer_test.sv",
+        "Prob080_timer_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013035370968282223
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb080_timer_test.sv:55: $finish called at 35636 (1ps)\nHint: Output 'tc' has no mismatches.\nHint: Total mismatched samples is 0 out of 7127 samples\n\nSimulation finished at 35636 ps\nMismatches: 0 in 7127 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.03195285331457853
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

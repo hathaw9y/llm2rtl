@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "observed": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 validate_contract.py",
+      "status": "passed_structure_only",
+      "evidence": "contract_gate.json"
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "check_count": 132608,
+      "evidence": "development/01/result.json"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation; official correctness remains unevaluated.",
+    "Unknown or high-impedance selector behavior is unspecified by the original problem and was not tested."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": "Combinational indexed selection out = in[sel] with original port widths and TopModule name.",
+  "verification": "Independent scan oracle; exhaustive one-hot and one-cold selection pairs, all-zero/all-one, alternating vectors, selected X/Z data, fatal mismatch checks and bounded timeout."
+}

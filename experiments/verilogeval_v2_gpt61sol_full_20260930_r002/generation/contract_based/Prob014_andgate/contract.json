@@ -1,0 +1,53 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    },
+    "evidence": "problem.txt explicitly names TopModule and lists a, b, out; all ports one bit."
+  },
+  "semantics": {
+    "function": "out is the Boolean AND of a and b",
+    "truth_table": {
+      "00": 0,
+      "01": 0,
+      "10": 0,
+      "11": 1
+    },
+    "timing": "Combinational, no clock or cycle latency; observe after simulator settling.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No state or initial value required; output follows current inputs.",
+    "evidence": "Original problem: The module should implement a 2-input AND gate."
+  },
+  "numeric": {
+    "width": "All operands and result are one bit.",
+    "representation": "Boolean logic; no arithmetic, rounding, overflow, or saturation."
+  },
+  "verification": {
+    "oracle": "Explicit original AND truth table, independent of DUT expression.",
+    "cases": "All four binary combinations plus repeated transitions to demonstrate no state.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling.",
+    "failure": "$fatal on mismatch and bounded timeout.",
+    "success": "Line beginning PASS after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z inputs",
+      "evidence": "Original problem does not specify unknown or high-impedance behavior.",
+      "resolution": "Use standard SystemVerilog bitwise AND semantics; required oracle coverage is binary inputs only."
+    }
+  ]
+}

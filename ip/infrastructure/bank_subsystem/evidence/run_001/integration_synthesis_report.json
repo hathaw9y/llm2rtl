@@ -1,0 +1,100 @@
+{
+  "schema": "llm2rtl.independent_integration_synthesis_report.v1",
+  "status": "passed_post_synthesis_ooc_with_p3_constraints",
+  "module_id": "bank_subsystem",
+  "run_id": "run_001",
+  "source_read_only": true,
+  "tool": {
+    "name": "Vivado",
+    "version": "2025.2",
+    "build": "6299465"
+  },
+  "target": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "top": "bank_subsystem",
+    "clock_period_ns": 5.0,
+    "mode": "post-synthesis out-of-context"
+  },
+  "identity": {
+    "module_index_sha256": "e13b62631b2a041842441fb7d0812181586a8ce48fff35f9d0f99075cc46d4ef",
+    "module_contract_sha256": "6b92646818f4e7179689262811b25d4641d3e1226fbb73fdaf39be11559e7eab",
+    "rtl_sha256": "d5352d4676c81746284abbbb475bc25b11fd42a25a737eb2d924456f3185d522",
+    "fresh_ooc_dcp_sha256": "409491fae3aa10c2573de7a1459fa6fc6b24fab46ad6824d6dc2d5730a19719f",
+    "contextualized_dcp_sha256": "66a8e444665a4e5e5294a95b130124d67ad8713920adf9d68b054a28c81d903e"
+  },
+  "source_closure": {
+    "exact_frozen_sources": true,
+    "behavioral_memory_substitute": false,
+    "blackboxes": 0,
+    "actual_primitives": true
+  },
+  "resources": {
+    "LUT": 297,
+    "FF": 1576,
+    "DSP": 0,
+    "RAMB36E2": 56,
+    "RAMB18": 0,
+    "URAM288": 32,
+    "hierarchy": {
+      "u_bank0_RAMB36E2": 8,
+      "u_bank1_RAMB36E2": 16,
+      "u_bank2_URAM288": 32,
+      "u_bank3_RAMB36E2": 32
+    }
+  },
+  "original_clock_only_ooc": {
+    "WNS_ns": 2.158,
+    "TNS_ns": 0.0,
+    "WHS_ns": 0.082,
+    "THS_ns": 0.0,
+    "WPWS_ns": 1.8,
+    "failing_endpoints": 0,
+    "drc_checks": 0,
+    "methodology_TIMING_18": 1000,
+    "HD_CLK_SRC_set": false,
+    "io_delays_set": false
+  },
+  "independent_contextual_timing": {
+    "verifier_only_constraints": true,
+    "HD_CLK_SRC_set": true,
+    "input_output_delay_max_ns": 0.5,
+    "input_output_delay_min_ns": 0.0,
+    "external_port_hold_false_paths_only": true,
+    "internal_hold_still_timed": true,
+    "setup_endpoints": 12170,
+    "hold_endpoints": 2476,
+    "WNS_ns": 1.865,
+    "TNS_ns": 0.0,
+    "WHS_ns": 0.088,
+    "THS_ns": 0.0,
+    "WPWS_ns": 1.8,
+    "methodology_checks": 0,
+    "drc_checks": 0
+  },
+  "warnings": [
+    {
+      "severity": "P3",
+      "id": "TIMING_CONTEXT_NOT_IN_IMPLEMENTATION_TCL",
+      "detail": "The frozen OOC Tcl supplies only create_clock; its raw WNS omits HD.CLK_SRC and I/O delays. Independent verifier-only constraints close synthesized-OOC timing, but integration or board constraints must carry the real context."
+    },
+    {
+      "severity": "P3",
+      "id": "URAM_CASCADE_UNDER_PIPELINED",
+      "detail": "Vivado Synth 8-6013 reports one absorbed stage versus three recommended for the 2x8 UltraRAM matrix. Synthesized OOC timing passes, but routed placement remains unproven."
+    }
+  ],
+  "evidence": {
+    "timing_summary_sha256": "89e613e587c1784d8c53e924911c1529bab31b54677db1f4ceb396f0a5247f62",
+    "utilization_sha256": "4bb618aeb3852379ed5760e99c761658107ca5882723fa92aa396e50ba4580e5",
+    "drc_sha256": "37400e47590f5714c590f94d876403f616fb8bb3474fcae76d2a410f2a1ca183",
+    "methodology_sha256": "9f41744ddc145539e5f750387a39bc8d7ae9ae138f9ee067f9e3d13cc6285988",
+    "ram_utilization_sha256": "2e0f72b1498b4caeabd73b5b28007f73ebf12d875922e253ae0326b464940aba",
+    "context_timing_sha256": "91301e3242ed9d71aa3845c02c604be19a3a65bd96d47a4e582f1cafe5ae0503",
+    "context_methodology_sha256": "b1a9857dc13de8585b110ce2874ba1d67d21ba9ef8418b07a306ab9ccea88032",
+    "context_drc_sha256": "bd66fef51aeea9c1dea947fbf441057970e0876955f844e7e1ac37ad1c8f6549"
+  },
+  "limitations": [
+    "No placement, routing, board wrapper, bitstream, or physical-board timing is claimed.",
+    "The independent contextual constraints are audit evidence and do not modify the frozen implementation Tcl."
+  ]
+}

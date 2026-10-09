@@ -1,0 +1,42 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "name": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "cycles": 3530,
+      "coverage": [
+        "all 128 PHT entries",
+        "both saturating-counter boundaries",
+        "same-entry prediction and training with pre-edge prediction",
+        "misprediction recovery priority",
+        "invalid request gating",
+        "asynchronous reset",
+        "2500 deterministic randomized cycles"
+      ]
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "The supplied problem does not explicitly specify reset values. Implementation and development oracle assume history resets to zero and all PHT counters reset to weakly not taken (01).",
+    "No assertion is made about state before the first reset."
+  ],
+  "justified_RTL_TB_changes": [],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "check_history": "dev_checks.jsonl"
+  }
+}

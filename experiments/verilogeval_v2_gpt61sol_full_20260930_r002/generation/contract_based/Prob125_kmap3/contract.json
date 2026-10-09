@@ -1,0 +1,75 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1,
+      "d": 1
+    },
+    "outputs": {
+      "out": 1
+    },
+    "evidence": "Original problem port list; no clock or reset ports."
+  },
+  "semantics": {
+    "kind": "combinational Karnaugh map",
+    "columns_ab": [
+      "01",
+      "00",
+      "10",
+      "11"
+    ],
+    "rows_cd": {
+      "00": [
+        "dont_care",
+        0,
+        1,
+        1
+      ],
+      "01": [
+        0,
+        0,
+        "dont_care",
+        "dont_care"
+      ],
+      "11": [
+        0,
+        1,
+        1,
+        1
+      ],
+      "10": [
+        0,
+        1,
+        1,
+        1
+      ]
+    },
+    "latency": "Combinational only, no added cycles or state.",
+    "reset_initialization": "None specified; no state or reset. Unknown input behavior unspecified.",
+    "dont_care_policy": "Choose 1 for all three dont-care cells; legal choice under original problem."
+  },
+  "numeric": {
+    "input_output_width_bits": 1,
+    "interpretation": "Boolean, unsigned",
+    "arithmetic": "No arithmetic, rounding, overflow or saturation."
+  },
+  "verification": {
+    "oracle": "Direct original row/column lookup, independent of minimized Boolean expression.",
+    "coverage": "All 16 binary input combinations, repeated in reverse order; constrained cells exact comparison; dont-care cells require a binary output without prescribing its value.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling.",
+    "failure": "$fatal on mismatches; independent bounded timeout; PASS line only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "The symbol d denotes both an input and dont-care map entries.",
+      "resolution": "Map entries labeled d are unconstrained outputs; row cd includes the input d, as explicitly stated in the original text."
+    },
+    {
+      "issue": "X/Z input behavior unspecified.",
+      "resolution": "No invented X/Z functional requirements; verify all binary inputs."
+    }
+  ]
+}

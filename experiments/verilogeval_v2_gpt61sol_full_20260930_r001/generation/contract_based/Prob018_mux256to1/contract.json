@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 256,
+        "packed_range": "[255:0]"
+      },
+      "sel": {
+        "direction": "input",
+        "width": 8,
+        "packed_range": "[7:0]"
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "out = the bit of in whose index equals the unsigned value of sel",
+    "selection": "sel=0 selects in[0]; sel=255 selects in[255]",
+    "timing": "Pure combinational behavior, no clock or registered latency; output follows input and selector after combinational settling",
+    "reset": "No reset port or reset behavior",
+    "initialization": "No stored state or initialization requirement",
+    "legal_selectors": "All binary values 0 through 255",
+    "handshake": "None"
+  },
+  "numeric": {
+    "input_type": "256 packed independent bits",
+    "selector_type": "8-bit unsigned index",
+    "output_type": "One selected bit without arithmetic",
+    "arithmetic": "No rounding, truncation, saturation, accumulation, or overflow"
+  },
+  "verification": {
+    "oracle": "Independent loop over all 256 positions; select the position equal to sel",
+    "directed": "All selectors with zero, all-one, alternating, one-hot, and one-cold inputs; walking hot/cold bits with all selectors",
+    "random": "Deterministic pseudo-random input vectors checked across all selectors",
+    "timing": "Check after settling; mutate data with fixed selector and selector with fixed data",
+    "execution": "Icarus v12, -g2012, explicit dev_tb top, finite compile and simulation timeouts, fatal on mismatch"
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z selector values is not specified; no additional requirement is imposed."
+  ]
+}

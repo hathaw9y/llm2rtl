@@ -1,0 +1,17 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "areset": 1, "bump_left": 1, "bump_right": 1, "ground": 1, "dig": 1}, "outputs": {"walk_left": 1, "walk_right": 1, "aaah": 1, "digging": 1}},
+  "semantics": {
+    "clock": "All state transitions sample inputs at posedge clk.",
+    "reset": "Active-high asynchronous reset on posedge areset; while asserted reset dominates clock. Sets walking left, remembered direction left, and fall duration zero. No power-up state guaranteed without reset.",
+    "outputs": "Moore outputs: walking left/right assert corresponding walking output only; falling asserts aaah only; digging asserts digging only; splattered asserts none.",
+    "walking": "When ground=0 enter falling retaining direction. Otherwise dig=1 enters digging retaining direction. Otherwise bump in current direction reverses walking direction; both bumps therefore reverse direction.",
+    "digging": "Remain digging regardless of dig and bumps while ground=1. On ground=0 enter falling retaining direction.",
+    "falling": "Ignore bumps and dig. Remain falling while ground=0. At ground=1 resume remembered walking direction if fall duration <=20, else enter permanent splattered state.",
+    "duration": "Entry edge into falling starts duration at 1 for its first falling clock interval. Every subsequent edge remaining airborne increments duration. Thus 20 consecutive falling output intervals survive landing; 21 splatter on landing. Never splatter while airborne.",
+    "splattered": "Absorbing until asynchronous reset."
+  },
+  "numeric": {"fall_duration": "Unsigned 5-bit count saturating at 21; represents exact duration through 20 and all durations exceeding 20 without wraparound.", "other_arithmetic": "No data arithmetic, rounding, or signed operations."},
+  "verification": {"method": "Independent behavioral scoreboard using abstract activity, remembered direction, and integer duration; compare all outputs after each rising edge and asynchronous reset.", "directed": "Both walking directions; each and simultaneous bumps; fall/dig/bump priority; persistent digging; bump/dig ignored during falls and landing; falls of 1,19,20,21,22,32,100 cycles; repeated falls; absorbing splatter; reset in walking, digging, falling and splattered states.", "random": "Deterministic pseudorandom inputs with repeated resets and scoreboard checks.", "tools": "Icarus v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts; no official tests, synthesis, or hardware."},
+  "specification_ambiguities": []
+}

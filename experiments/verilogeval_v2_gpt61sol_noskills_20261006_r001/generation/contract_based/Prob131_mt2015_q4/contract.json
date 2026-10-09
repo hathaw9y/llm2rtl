@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"x": "1-bit", "y": "1-bit"}, "outputs": {"z": "1-bit"}},
+  "semantics": {"A": "(x XOR y) AND x", "B": "XNOR of x and y: waveform gives 00->1, 01->0, 10->0, 11->1", "composition": "z = (A1 OR B1) XOR (A2 AND B2), with identical x,y inputs to both pairs", "timing": "Combinational; no clock or reset ports or sequential behavior specified. Replay waveform inputs at original times 0 through 90 ns and sample after delta settling within each timestamp.", "initialization": "No storage or prescribed initial unknown output; output is determined by input values."},
+  "numeric": {"widths": "All signals are single-bit", "operations": "Bitwise Boolean gates; no signed arithmetic"},
+  "verification": {"oracle": "Independent truth table derived from original A formula, B waveform, and gate composition: 00->1, 01->0, 10->1, 11->1", "waveform": "Replay every original row at its original timestamp", "coverage": "All four binary input combinations, repeated waveform values and transitions", "failure": "$fatal on mismatches; bounded timeout; PASS only after all checks"},
+  "specification_ambiguities": ["B is described only by sampled binary waveform values; infer combinational XNOR from the complete binary truth table. Behavior for X/Z inputs is not specified."]
+}

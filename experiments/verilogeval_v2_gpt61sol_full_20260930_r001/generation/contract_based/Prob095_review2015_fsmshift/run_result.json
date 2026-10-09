@@ -1,0 +1,185 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob095_review2015_fsmshift",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob095_review2015_fsmshift",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob095_review2015_fsmshift/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790735142.1310852,
+    "ended_at_unix": 1790735244.9174178,
+    "seconds": 102.78633332252502,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 125645,
+      "cached_input_tokens": 111232,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2494,
+      "reasoning_output_tokens": 43
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "a89873cb1546b1b32fc92871d2bd907e0ddc4719289cb7813298ce7c5646b9ed",
+  "contract_sha256": "9106a44931e986d928aa8b8b8ad24f5ea3f1b837319917ab48ff51c05e7aaa02",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "frozen contract structural gate",
+        "result": "passed_structure_only",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "static RTL review",
+        "result": "passed",
+        "details": "Exact ports; posedge synchronous active-high reset; sized unsigned counter saturates at four; no initialization, latches, or dependencies."
+      },
+      {
+        "name": "Icarus development compilation",
+        "exit_code": 139,
+        "log": "compile.log",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "status_log": "compile_status.log"
+      },
+      {
+        "name": "independent self-checking development simulation",
+        "log": "simulation.log",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+        "result": "not run because compilation failed"
+      }
+    ],
+    "development_outcome": "RTL delivered unchanged; contract structural gate passed; Icarus compilation failed with exit code 139 and no diagnostics; simulation not run.",
+    "limitations": [
+      "Official evaluation not accessed or run.",
+      "Power-up state before sampled reset is unspecified.",
+      "No synthesis, timing, or board evidence produced.",
+      "Contract gate validates structure only."
+    ],
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_rtl": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a89873cb1546b1b32fc92871d2bd907e0ddc4719289cb7813298ce7c5646b9ed",
+      "Prob095_review2015_fsmshift_ref.sv": "a0926e66cc422a056dcaa0e090a7d43be84aaed96e119e4ba762a78a0c87f84a",
+      "Prob095_review2015_fsmshift_test.sv": "04a07679a16566bb0ed4d8c28ea3f18c89efff880f820a83cbcfd0617b6e153e"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob095_review2015_fsmshift_test.sv",
+        "Prob095_review2015_fsmshift_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.016488205641508102
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb095_review2015_fsmshift_test.sv:17: $finish called at 1001 (1ps)\nHint: Output 'shift_ena' has no mismatches.\nHint: Total mismatched samples is 0 out of 200 samples\n\nSimulation finished at 1001 ps\nMismatches: 0 in 200 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008586926385760307
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a89873cb1546b1b32fc92871d2bd907e0ddc4719289cb7813298ce7c5646b9ed",
+      "Prob095_review2015_fsmshift_ref.sv": "a0926e66cc422a056dcaa0e090a7d43be84aaed96e119e4ba762a78a0c87f84a",
+      "Prob095_review2015_fsmshift_test.sv": "04a07679a16566bb0ed4d8c28ea3f18c89efff880f820a83cbcfd0617b6e153e"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob095_review2015_fsmshift_test.sv",
+        "Prob095_review2015_fsmshift_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012675969861447811
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb095_review2015_fsmshift_test.sv:17: $finish called at 1001 (1ps)\nHint: Output 'shift_ena' has no mismatches.\nHint: Total mismatched samples is 0 out of 200 samples\n\nSimulation finished at 1001 ps\nMismatches: 0 in 200 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008481109514832497
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

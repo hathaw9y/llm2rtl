@@ -1,0 +1,48 @@
+{
+  "revision_count": 2,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "compile_failed",
+      "evidence": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob128_fsm_ps2/development/01"
+    },
+    {
+      "label": "revision_1",
+      "status": "compile_failed",
+      "evidence": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob128_fsm_ps2/development/02"
+    },
+    {
+      "label": "revision_2",
+      "status": "passed",
+      "evidence": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob128_fsm_ps2/development/03"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board work performed.",
+    "Pre-reset behavior is unspecified by the problem and is not asserted by the testbench."
+  ],
+  "justified_rtl_changes": [
+    {
+      "revision": 1,
+      "change": "Replace enum state type with explicit two-bit localparams and logic registers.",
+      "reason": "Investigated Icarus 12 compiler crash and successful supplemental Icarus 11 compilation; attempted representation compatibility fix without changing FSM behavior."
+    },
+    {
+      "revision": 2,
+      "change": "Replace always_comb with always @(*).",
+      "reason": "Icarus 12 still crashed after revision 1; supplemental diagnostic highlighted constant-select handling in always_* processes. Equivalent combinational syntax avoids the crash and required Icarus 12 verification passes."
+    }
+  ],
+  "justified_tb_changes": [],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  },
+  "interface_cycle_semantics": "TopModule with clk, synchronous active-high reset, 8-bit in, and done. One byte sampled per positive edge; done is high during the cycle after byte three is sampled, and the following edge can accept a new header.",
+  "numeric_widths": "Four states encoded in two bits; only in[3] determines a header.",
+  "static_review": "Complete combinational assignments, nonblocking sequential state updates, unchanged ports and no extra latency.",
+  "verification": "Smoke environment passed correct/fault/repair checks. Required Icarus 12 helper passed revision_2 with 3359 independent packet-parser comparisons."
+}

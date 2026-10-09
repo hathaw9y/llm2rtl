@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"in": {"width": 8}},
+    "outputs": {"pos": {"width": 3}},
+    "evidence": "Original problem lists only input in (8 bits) and output pos (3 bits)."
+  },
+  "semantics": {
+    "function": "For nonzero in, pos is the smallest bit index i with in[i] equal to 1; for zero in, pos is zero.",
+    "timing": "Combinational, with no added clock, reset, state, or cycle latency: original problem describes an input-vector priority encoder and supplies no clock/reset ports.",
+    "initialization": "No initial output value is specified; verify after driving a defined input and allowing combinational settling.",
+    "example": "8'b10010000 maps to 3'd4 per the original problem."
+  },
+  "numeric": {
+    "input_domain": "All 256 binary 8-bit vectors",
+    "output_range": "Unsigned bit index 0 through 7, represented in 3 bits",
+    "priority": "Bit 0 has highest priority; bit 7 has lowest priority.",
+    "zero": "Zero input and any input with bit 0 set both report 0."
+  },
+  "verification": {
+    "oracle": "Independently scan original-spec input indices from 7 down to 0, overwriting expected index on each set bit, leaving the least significant set index; default expected zero.",
+    "coverage": "Exhaust all 256 binary inputs in ascending and descending order, including zero, each one-hot input, all ones, and original example.",
+    "sampling": "Drive input then wait 1 ns before checking output with case inequality.",
+    "completion": "Fatal on mismatches, bounded timeout, PASS line only after all checks; run fixed dev_check.py initial."
+  },
+  "specification_ambiguities": [
+    {"topic": "Four-state inputs", "evidence": "Original specification defines high bits and binary example but no X/Z behavior.", "resolution": "Do not impose an X/Z oracle; verify the full binary domain."}
+  ]
+}

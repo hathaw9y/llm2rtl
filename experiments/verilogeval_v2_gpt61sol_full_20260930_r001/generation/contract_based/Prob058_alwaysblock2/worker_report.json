@@ -1,0 +1,50 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial_preservation",
+      "result": "PASS",
+      "detail": "candidate_initial.sv preserved immediately after initial implementation; identical to candidate.sv.",
+      "identical": true
+    },
+    {
+      "name": "static_review",
+      "result": "PASS",
+      "detail": "Exact six scalar ports; continuous XOR, complete combinational blocking assignment, positive-edge nonblocking registered XOR; no reset or initialization added; no child modules."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "TOOL_FAILURE",
+      "exit_code": 139,
+      "log": "development_compile.log",
+      "exit_record": "development_compile.exit",
+      "detail": "No diagnostics emitted and no simulation executable produced. A direct retry returned the same exit code, also without diagnostics."
+    },
+    {
+      "name": "development_simulation",
+      "result": "NOT_RUN",
+      "detail": "Compile did not produce dev_sim."
+    }
+  ],
+  "development_outcome": "RTL implemented and statically reviewed against frozen contract; simulation unverified because Icarus failed.",
+  "limitations": [
+    "No successful development simulation; Icarus returned exit code 139.",
+    "Official evaluation was not accessed and results are unknown.",
+    "No synthesis, timing analysis or board work performed.",
+    "Registered output has no specified initial value before its first positive clock edge."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

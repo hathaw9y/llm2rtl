@@ -1,0 +1,29 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"a": 5, "b": 5, "c": 5, "d": 5, "e": 5, "f": 5},
+    "outputs": {"w": 8, "x": 8, "y": 8, "z": 8},
+    "ranges": "All vectors use descending ranges [width-1:0]. No other ports."
+  },
+  "semantics": {
+    "function": "{w,x,y,z} = {a,b,c,d,e,f,2'b11}",
+    "ordering": "a occupies bits 31:27; b 26:22; c 21:17; d 16:12; e 11:7; f 6:2; bits 1:0 are both one. w is bits 31:24, x 23:16, y 15:8, z 7:0.",
+    "timing": "Pure combinational mapping; changes propagate without a clock or cycle latency, after combinational settling.",
+    "reset_initialization": "No reset, initialization, or state. Outputs depend on current inputs only.",
+    "transactions": "No acceptance handshake or restrictions on input changes."
+  },
+  "numeric": {
+    "representation": "Unsigned bit vectors; preserve each input bit exactly.",
+    "width": "30 input bits plus two explicitly sized one bits produce exactly 32 output bits.",
+    "arithmetic": "No arithmetic, sign extension, rounding, overflow, saturation, or truncation."
+  },
+  "verification": {
+    "oracle": "Independently pack a,b,c,d,e,f by unsigned shifts of 27,22,17,12,7,2 and OR with 32'd3; compare individual output bytes.",
+    "directed": "All zero, all one, alternating patterns, and walking-one and walking-zero tests over every one of the 30 input positions.",
+    "random": "1000 deterministic pseudorandom 30-bit input patterns, checked after settling.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; matching vvp; finite compile and simulation timeouts.",
+    "scope": "Independent development tests only; no official evaluation, synthesis, or board checks."
+  },
+  "specification_ambiguities": []
+}

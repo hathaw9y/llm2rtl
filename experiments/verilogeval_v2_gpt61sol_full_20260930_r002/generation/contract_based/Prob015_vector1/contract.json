@@ -1,0 +1,27 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {"in": "input [15:0]", "out_hi": "output [7:0]", "out_lo": "output [7:0]"},
+    "evidence": "Original problem explicitly lists these three ports and widths."
+  },
+  "semantics": {
+    "equations": ["out_hi = in[15:8]", "out_lo = in[7:0]"],
+    "timing": "Combinational; no clock, state, or added cycle latency. Test after combinational settling.",
+    "reset": "No reset port or reset behavior specified; none added.",
+    "initialization": "No state or initialization specified. Outputs reflect current input bits.",
+    "evidence": "Original states combinational circuit splitting lower [7:0] and upper [15:8] bytes."
+  },
+  "numeric": {
+    "input_width": 16,
+    "output_width": 8,
+    "interpretation": "Packed bits; no arithmetic, rounding, saturation, or signed conversion. Bit order preserved."
+  },
+  "verification": {
+    "oracle": "From original byte split: independently compute binary upper byte by division by 256 and lower byte by remainder modulo 256.",
+    "coverage": "All 65536 binary input words, plus directed asymmetric byte values and X/Z bit propagation checks.",
+    "sampling": "Drive input, wait 1 ns for combinational settling, compare with case inequality.",
+    "completion": "Fatal on mismatch, bounded timeout, PASS line only after every check; run prescribed dev_check.py."
+  },
+  "specification_ambiguities": []
+}

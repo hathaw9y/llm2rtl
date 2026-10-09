@@ -1,0 +1,175 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob122_kmap4",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob122_kmap4",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob122_kmap4/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790730620.5291753,
+    "ended_at_unix": 1790730675.9218266,
+    "seconds": 55.39265155792236,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 71097,
+      "cached_input_tokens": 61312,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1315,
+      "reasoning_output_tokens": 9
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "ab0e0052a99219b78a6377f88cb93739499728c1b0d0a3125afbfe8341626f8b",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "pass",
+        "details": "Exact TopModule interface; one-bit ports; combinational continuous assignment; no state, clock, reset, inferred latch, or nonsynthesizable DUT constructs."
+      },
+      {
+        "name": "Icarus development compile",
+        "result": "pass",
+        "options": "-g2012 -Wall -s dev_tb",
+        "timeout_seconds": 20,
+        "exit_code": 0,
+        "log": "compile.log"
+      },
+      {
+        "name": "Exhaustive independent map-cell simulation",
+        "result": "pass",
+        "cases_checked": 16,
+        "timeout_seconds": 20,
+        "exit_code": 0,
+        "log": "simulation.log"
+      }
+    ],
+    "development_outcome": "Initial candidate implements four-input odd parity and passes all 16 binary input combinations. candidate_initial.sv was preserved before development checks. No RTL revisions were needed.",
+    "limitations": [
+      "Official evaluation has not run and its results are unavailable.",
+      "Development simulation covers binary inputs; the problem specifies no unknown-state behavior.",
+      "No synthesis, timing analysis, or board testing performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "ab0e0052a99219b78a6377f88cb93739499728c1b0d0a3125afbfe8341626f8b",
+      "Prob122_kmap4_ref.sv": "4094b301b666c925eb833a38df14836c24f6e90f56d1903a4c3db1e4a6c6d01e",
+      "Prob122_kmap4_test.sv": "1752d6f03374c971cc2364affd4a0f4052c7956e5d14d1b146c40af886eb2b73"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob122_kmap4_test.sv",
+        "Prob122_kmap4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015371190384030342
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb122_kmap4_test.sv:38: $finish called at 1161 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 232 samples\n\nSimulation finished at 1161 ps\nMismatches: 0 in 232 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008417181670665741
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "ab0e0052a99219b78a6377f88cb93739499728c1b0d0a3125afbfe8341626f8b",
+      "Prob122_kmap4_ref.sv": "4094b301b666c925eb833a38df14836c24f6e90f56d1903a4c3db1e4a6c6d01e",
+      "Prob122_kmap4_test.sv": "1752d6f03374c971cc2364affd4a0f4052c7956e5d14d1b146c40af886eb2b73"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob122_kmap4_test.sv",
+        "Prob122_kmap4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011039847508072853
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb122_kmap4_test.sv:38: $finish called at 1161 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 232 samples\n\nSimulation finished at 1161 ps\nMismatches: 0 in 232 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007919443771243095
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

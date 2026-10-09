@@ -1,0 +1,14 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "j": 1, "k": 1}, "outputs": {"out": 1}},
+  "semantics": {
+    "state_output": "Moore machine: OFF has out=0, ON has out=1; out reflects current registered state without extra latency.",
+    "transition": "At a rising clock edge, OFF goes to ON iff j=1, while ON goes to OFF iff k=1. k is irrelevant in OFF and j is irrelevant in ON, as shown by the original diagram.",
+    "reset": "Original specifies active-high synchronous reset to OFF; reset overrides transitions at the sampling clock edge and has no asynchronous effect.",
+    "initialization": "Original supplies no power-up state; no declaration initialization is added and functional checks start with a sampled reset.",
+    "clock": "Use rising-edge sampling, the conventional interpretation of the original clocked synchronous machine; no clock edge is explicitly stated."
+  },
+  "numeric": {"state_count": 2, "state_encoding": {"OFF": 0, "ON": 1}, "port_width": "All ports are single-bit; no arithmetic or signed behavior."},
+  "verification": {"oracle": "Independent expected state updated from the original OFF/ON transition diagram on each rising edge, with synchronous reset priority.", "coverage": "All j/k combinations in each state, reset in both states with all input combinations, midcycle reset and input changes, repeated holds and toggles.", "sampling": "Compare before each rising edge to verify state retention and after a delay to allow nonblocking assignment settlement.", "completion": "Fatal on mismatch or bounded timeout; print PASS only after all checks complete."},
+  "specification_ambiguities": ["The original does not explicitly identify a clock edge; rising-edge operation is assumed.", "Power-up state and behavior for unknown reset/j/k inputs are unspecified; no required initial known value or unknown-input transition behavior is imposed."]
+}

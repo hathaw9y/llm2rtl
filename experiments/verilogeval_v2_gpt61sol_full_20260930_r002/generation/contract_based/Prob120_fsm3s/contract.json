@@ -1,0 +1,14 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "in": 1}, "outputs": {"out": 1}},
+  "semantics": {
+    "evidence": "problem.txt: Moore transition table; synchronous active high reset to A; positive-edge sequential logic",
+    "reset": "At every rising clk edge, reset=1 takes priority and sets state A; reset changes between edges do not change state.",
+    "transitions": {"A": {"0": "A", "1": "B"}, "B": {"0": "C", "1": "B"}, "C": {"0": "A", "1": "D"}, "D": {"0": "C", "1": "B"}},
+    "output": "Combinational Moore decode: out=1 in D, otherwise 0; reflects updated state after each rising-edge NBA update, with no extra cycle.",
+    "initialization": "No specified power-up state; establish A using synchronous reset before checking functional behavior."
+  },
+  "numeric": {"ports": "All ports one bit", "state": "Four states encoded with two bits", "arithmetic": "None"},
+  "verification": {"oracle": "Independent integer-state table derived directly from original problem", "sampling": "Drive at falling edge; compare before rising edge and after NBA settling", "coverage": "All binary input sequences of length 8, every transition, reset from every state, reset between edges, Moore input independence", "timeout": "Bounded simulation with fatal mismatch and explicit PASS"},
+  "specification_ambiguities": [{"topic": "Power-up and unknown inputs", "evidence": "Original specifies reset and binary table only", "resolution": "No power-up guarantee or X-input behavior asserted; no DUT initialization added"}]
+}

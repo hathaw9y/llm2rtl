@@ -1,0 +1,23 @@
+{
+  "reported_on": "2026-10-01",
+  "source": "User-supplied physical ZCU104 UART output after the 150 MHz RMSNorm+GEMM board handoff",
+  "raw_user_message": "SmolLM2-135M BF16 ZCU104 DMA_LOAD+RMSNORM+GEMM probe checkpoint 93efa2f097d58c2a74874c7e644dbc9b0cee75a2 prefill32 RMS compare=512 mismatches=0 prefill32 GEMM compare=512 mismatches=0 decode RMS compare=16 mismatches=0 decode GEMM compare=16 mismatches=0 BOARD DMA_LOAD RMSNORM GEMM PASS",
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "bundle_sha256_at_handoff": "d08b406bd94256437fdb7567620a9a39f54c898d974413c0b9e6bbe5a25e359e",
+  "bit_sha256_at_handoff": "5b88994f18eb8f54a3dc601b0b4d669dbdc751d56fca670f8c0b09fc5a37e76b",
+  "elf_sha256_at_handoff": "7790e1b8aa18517c6afe845ea38a6a166ffd423e75c5eba2acffaf5e0a791dc1",
+  "host_hash_output_received": false,
+  "checks": {
+    "prefill_rms_compared": 512,
+    "prefill_rms_mismatches": 0,
+    "prefill_gemm_compared": 512,
+    "prefill_gemm_mismatches": 0,
+    "decode_rms_compared": 16,
+    "decode_rms_mismatches": 0,
+    "decode_gemm_compared": 16,
+    "decode_gemm_mismatches": 0,
+    "board_result": "PASS"
+  },
+  "scope": "DDR DMA_LOAD of first-layer input, gamma and one-hot projection; PL RMSNorm and GEMM; first 16 B2/B4 accepted writes per row compared for prefill32 and decode1",
+  "limitation": "The UART text does not identify the programmed BIT or ELF hash; attribution to the handed-off 150 MHz package rests on the run context. The board probe observes accepted B2/B4 write ports, not later physical bank readback. It does not verify DMA_STORE, all output features on board, later layers, or full-model inference."
+}

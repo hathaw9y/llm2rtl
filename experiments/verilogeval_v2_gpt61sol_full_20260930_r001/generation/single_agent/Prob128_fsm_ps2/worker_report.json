@@ -1,0 +1,30 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Exact TopModule ports; synchronous active-high reset; two-bit four-state FSM; nonblocking state assignments; complete case with recovery default; done decoded from COMPLETE. SECOND and THIRD ignore input marker, while SEARCH and COMPLETE examine in[3]."
+    },
+    {
+      "name": "independent development testbench compile",
+      "result": "tool_failure",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+      "options": "-g2012 -Wall -s dev_tb",
+      "timeout_seconds": 20,
+      "exit_code": 139,
+      "logs": ["compile.log", "development_status.log"]
+    },
+    {
+      "name": "development simulation",
+      "result": "not_run",
+      "details": "Compilation failed. No simulation success is claimed. dev_tb.sv includes a reference byte counter, directed messages and resets, back-to-back messages, deterministic pseudorandom bytes, and a finite simulation watchdog."
+    }
+  ],
+  "development_outcome": "Initial candidate preserved as candidate_initial.sv and delivered unchanged as candidate.sv. Static review passed; dynamic verification unavailable due to compiler exit 139.",
+  "limitations": [
+    "No successful development simulation.",
+    "Official evaluation was not accessed and its result is unknown.",
+    "No synthesis, timing, or board validation performed."
+  ]
+}

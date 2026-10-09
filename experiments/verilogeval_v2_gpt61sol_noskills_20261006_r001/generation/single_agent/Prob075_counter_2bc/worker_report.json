@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "smoke_environment",
+      "status": "passed",
+      "details": "Correct fixture passed, injected fault failed, repaired fixture passed."
+    },
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence": "development/01",
+      "reason": "Testbench left training enabled across an unmodeled rising edge after reset release."
+    },
+    {
+      "label": "tb_correction",
+      "status": "passed",
+      "evidence": "development/02",
+      "details": "Icarus 12 compile and simulation passed; 219 checks."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No power-up state is specified; testbench establishes state using asynchronous reset."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_original": "dev_tb_initial_failed.sv",
+      "change": "Disable training at reset release until the next modeled training step.",
+      "justification": "Prevent an unintended training edge between reset release and step invocation; expected values and all directed checks remain intact."
+    }
+  ]
+}

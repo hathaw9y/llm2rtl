@@ -1,0 +1,43 @@
+{
+  "revision_count": 1,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "outcome": "passed",
+      "cases": [
+        "correct fixture passed",
+        "injected fault failed",
+        "repaired fixture passed"
+      ]
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "outcome": "compile_failed",
+      "evidence": "development/01/result.json",
+      "detail": "Icarus 12 compiler return code 139; supplemental Icarus 11 compilation succeeded with always_* sensitivity warnings."
+    },
+    {
+      "command": "python3 dev_check.py --label revision_1",
+      "outcome": "passed",
+      "evidence": "development/02/result.json",
+      "cycle_checks": 1473
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Original diagram duplicates the no-request condition for A-to-D and omits D transitions. Implemented the prose: device 2 receives a grant when it is the only requester and retains it while r[2] is asserted.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [
+    {
+      "revision": 1,
+      "reason": "Compatibility correction after Icarus 12 compilation crash and inspection of supplemental diagnostics.",
+      "change": "Replaced enum state type with explicit two-bit localparam codes and always_comb with always @*. FSM transitions, synchronous reset, interface and output timing are preserved."
+    }
+  ],
+  "justified_tb_changes": [],
+  "interface_cycle_semantics": "TopModule(clk, resetn, r[2:0], g[2:0]); active-low synchronous reset to idle, positive-edge transitions, Moore grants, release enters idle before arbitration on a later edge.",
+  "static_review": "Separate combinational state table and sequential state register, nonblocking sequential assignment, complete combinational assignments, two-bit state and three-bit grant widths, no added ports or pipeline latency.",
+  "testbench_coverage": "All 64 pairs of request patterns from idle and each grant state; pre-edge output stability; grant priority, retention, release, repeated synchronous resets; bounded timeout."
+}

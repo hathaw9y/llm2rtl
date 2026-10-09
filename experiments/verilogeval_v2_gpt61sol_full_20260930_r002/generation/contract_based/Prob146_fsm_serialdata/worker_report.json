@@ -1,0 +1,19 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "evidence": "environment_smoke.json", "details": "Correct fixture passed, deliberately wrong fixture failed, repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only", "evidence": "contract_gate.json"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "dev_checks.jsonl", "logs": "development/01", "details": "Icarus 12 compilation and matching vvp simulation passed; 5857 samples and 378 valid frames checked."}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official correctness; official evaluation was not accessed.",
+    "The phrase each time it finds a stop bit is interpreted in the context of correctly received bytes: late high samples after a bad stop resynchronize without done. This ambiguity is recorded in contract.json.",
+    "Pre-reset state and out_byte when done is low are unspecified and not constrained by the testbench.",
+    "No synthesis or board work performed."
+  ],
+  "justified_changes": {"rtl": [], "testbench": [], "contract": []},
+  "artifacts": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json"},
+  "implementation_summary": "Single positive-edge FSM, active-high synchronous reset, eight LSB-first data samples, done on valid stop edge, invalid-stop recovery until high. Three-bit data index; no added ports or latency.",
+  "static_review": "Single RTL module with no dependencies, no simulation-only constructs, sized counter arithmetic and nonblocking sequential assignments. Initial snapshot preserved before checks."
+}

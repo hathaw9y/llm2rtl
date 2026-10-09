@@ -1,0 +1,35 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "clk": "input one bit",
+      "x": "input one bit",
+      "z": "output one bit"
+    },
+    "reset_port": null
+  },
+  "semantics": {
+    "state": "Three separate D flip-flops: q_xor, q_and, q_or",
+    "initialization": "All three outputs are zero before the machine begins, per original final paragraph; implement explicit initial values without adding a reset input.",
+    "edge": "Original specifies positive clock edge for all sequential logic. Each equation uses the pre-edge register value and x sampled at that edge.",
+    "transition": {
+      "q_xor_next": "x XOR q_xor",
+      "q_and_next": "x AND NOT q_and",
+      "q_or_next": "x OR NOT q_or"
+    },
+    "output": "z = NOT (q_xor OR q_and OR q_or), combinational; initially z=1; no additional output register",
+    "between_edges": "Changes to x alone do not affect the registers or z."
+  },
+  "numeric": {
+    "widths": "All ports and three register values are single bits.",
+    "operations": "Bitwise XOR, AND, OR and complement; no arithmetic, rounding or overflow."
+  },
+  "verification": {
+    "oracle": "Independent explicit binary state transition tables derived from original three gate descriptions. Observe only public output.",
+    "coverage": "Check initial output, both input values, long constant runs, alternating inputs, and all 8-bit patterns applied consecutively; track reachable transitions; check output before rising edge, after NBA settling, on falling edge and during input changes.",
+    "timeout": "Bounded simulation timeout and fatal on any mismatch.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

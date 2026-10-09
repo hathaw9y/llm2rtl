@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "evidence": "environment_smoke.json", "details": "Correct sequential fixture passed, deliberately wrong fixture failed, repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only", "details": "Frozen contract structurally accepted before RTL creation."},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "development/01", "summary": "Icarus 12 compilation and matching vvp simulation passed; 24 comparisons cover all 12 specified patterns twice."}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Unreachable input patterns 3, 8, 11 and 12 have no specified output and were not assigned oracle expectations.",
+    "No X/Z input behavior specified or verified.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": {
+    "source": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface_cycle_contract": "Original one-bit ports preserved; combinational continuous outputs, no clock, reset, state, or extra latency.",
+    "numeric_width_decisions": "One-bit Boolean operators only; a is the most significant input bit.",
+    "minimum_sop": "(~a & ~b & c) | (c & d)",
+    "minimum_pos": "c & (~a | d) & (~b | d)",
+    "minimality_reason": "SOP: minterm 2 requires the three-literal group {2,3}; minterms 7 and 15 share the two-literal group {3,7,11,15}. POS: all c=0 patterns form an eight-cell zero/don't-care group; the remaining zeros 6 and 10 require separate four-cell groups b & ~d and a & ~d, also covering 14. These give two SOP terms/five literals and three POS clauses/five literals.",
+    "static_review": "Single top definition, no dependencies, latches, sequential logic, or simulation-only DUT constructs."
+  }
+}

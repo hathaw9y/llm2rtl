@@ -1,0 +1,174 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob118_history_shift",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob118_history_shift",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob118_history_shift/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790734321.9553497,
+    "ended_at_unix": 1790734398.793243,
+    "seconds": 76.83789396286011,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 73143,
+      "cached_input_tokens": 54144,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1915,
+      "reasoning_output_tokens": 31
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "00038f2bf2f1768cc9b71c1f6118f261670dec8b91d206441235fb81efb90d66",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "pass",
+        "details": "Exact benchmark ports and widths; positive-edge clock; active-high asynchronous reset; misprediction priority; 32-bit shift discards bit 31 and inserts youngest direction at bit 0; implicit hold when idle; nonblocking sequential assignments."
+      },
+      {
+        "name": "Icarus development compilation",
+        "result": "tool_failure",
+        "exit_code": 139,
+        "timeout_seconds": 20,
+        "log": "development_compile.log",
+        "details": "Requested Icarus path, -g2012, -Wall, and explicit dev_tb top used. Compiler produced no diagnostic text and no runnable output."
+      },
+      {
+        "name": "development simulation",
+        "result": "not_executed",
+        "timeout_seconds": 20,
+        "log": "development_simulation.log",
+        "details": "Matching vvp could not open dev_sim because compilation failed."
+      }
+    ],
+    "development_outcome": "Initial candidate retained without RTL revisions. Independent self-checking testbench prepared for directed and randomized shifting, hold, rollback priority, truncation, and asynchronous reset checks, but simulation was not completed due to compiler failure.",
+    "limitations": [
+      "No successful development simulation; RTL correctness assessed by static review only.",
+      "No synthesis, timing, or board checks performed.",
+      "Official evaluation results are unavailable."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "00038f2bf2f1768cc9b71c1f6118f261670dec8b91d206441235fb81efb90d66",
+      "Prob118_history_shift_test.sv": "3ef648e073e179c4cc76d321415c88f4e3b4343ded373f460b0eac55abd85f23",
+      "Prob118_history_shift_ref.sv": "d12c500ae7ce613237d33f611f5339c9673c2f4ad0b61b3de4d2677efec05c00"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob118_history_shift_test.sv",
+        "Prob118_history_shift_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.016983043402433395
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb118_history_shift_test.sv:104: $finish called at 10276 (1ps)\nHint: Output 'predict_history' has no mismatches.\nHint: Total mismatched samples is 0 out of 2055 samples\n\nSimulation finished at 10276 ps\nMismatches: 0 in 2055 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.023765793070197105
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "00038f2bf2f1768cc9b71c1f6118f261670dec8b91d206441235fb81efb90d66",
+      "Prob118_history_shift_test.sv": "3ef648e073e179c4cc76d321415c88f4e3b4343ded373f460b0eac55abd85f23",
+      "Prob118_history_shift_ref.sv": "d12c500ae7ce613237d33f611f5339c9673c2f4ad0b61b3de4d2677efec05c00"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob118_history_shift_test.sv",
+        "Prob118_history_shift_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015514236874878407
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb118_history_shift_test.sv:104: $finish called at 10276 (1ps)\nHint: Output 'predict_history' has no mismatches.\nHint: Total mismatched samples is 0 out of 2055 samples\n\nSimulation finished at 10276 ps\nMismatches: 0 in 2055 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.02233302127569914
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

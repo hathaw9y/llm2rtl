@@ -1,0 +1,18 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "reset": 1}, "outputs": {"ena": 3, "q": 16}},
+  "semantics": {
+    "clock": "All sequential logic updates at positive clk edges, as explicitly specified.",
+    "reset": "Synchronous active-high reset takes priority and sets all digits to zero at a positive edge; no between-edge reset update.",
+    "count": "Increment by one decimal count at each positive edge with reset low, wrapping 9999 to 0000.",
+    "enables": "Combinational current-state carry conditions: ena[0] when ones=9, ena[1] when lower two digits=99, ena[2] when lower three digits=999. Reset does not gate these conditions.",
+    "initialization": "No power-up value specified; do not initialize RTL. Verification establishes known state with synchronous reset."
+  },
+  "numeric": {"encoding": "Four unsigned 4-bit BCD digits: ones q[3:0], tens q[7:4], hundreds q[11:8], thousands q[15:12]", "range": "0000 through 9999", "overflow": "Decimal modulo 10000", "illegal_bcd": "Behavior outside legal BCD state is unspecified"},
+  "verification": {"oracle": "Independent integer modulo-10000 count converted to BCD; enables computed from integer decimal remainders", "sampling": "Check settled outputs after positive edges, and stability at falling edges and between edges during reset assertion", "coverage": "All 10000 states and wraparound, sustained counting, reset while counting, held reset, reset at nonzero carry condition", "termination": "Fatal on mismatch, bounded timeout, explicit PASS"},
+  "specification_ambiguities": [
+    {"issue": "Enable bit mapping and timing not explicitly enumerated", "resolution": "Use ena[0] for digit 1, ena[1] for digit 2, ena[2] for digit 3; current lower-digit carry conditions indicate increment on the upcoming edge."},
+    {"issue": "Reset value and overflow not written numerically", "resolution": "Use conventional decimal counter reset to 0000 and wrap from 9999 to 0000."},
+    {"issue": "Power-up and invalid BCD states unspecified", "resolution": "No initialization or invalid-state recovery requirement; test functional behavior after reset."}
+  ]
+}

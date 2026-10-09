@@ -1,0 +1,55 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "areset": 1,
+      "bump_left": 1,
+      "bump_right": 1,
+      "ground": 1,
+      "dig": 1
+    },
+    "outputs": {
+      "walk_left": 1,
+      "walk_right": 1,
+      "aaah": 1,
+      "digging": 1
+    },
+    "source": "problem.txt interface list; no extra ports"
+  },
+  "semantics": {
+    "clock": "All sequential transitions occur on clk positive edge, as stated in problem.txt.",
+    "reset": "Positive-edge asynchronous areset sets walking left and clears fall duration; reset dominates clock inputs.",
+    "initialization": "No behavior before reset is specified; no RTL initial values and no oracle comparison before first reset.",
+    "outputs": "Moore outputs reflect current state: left=1000, right=0100, fall=0010, dig=0001, dead=0000, ordered walk_left/walk_right/aaah/digging.",
+    "walking_priority": "ground=0 => fall; else dig=1 => dig; else bump in current walking direction reverses direction. Both bumps reverse direction.",
+    "direction_memory": "Retain direction during digging and falling, including entry and landing; ignore bumps in these states.",
+    "digging": "Remain digging while ground=1 regardless of dig; ground=0 enters falling.",
+    "falling": "Remain falling while ground=0, regardless of bumps or dig. Landing returns to remembered walking direction for duration <=20; duration >20 enters permanent dead state.",
+    "fall_cycles": "Entry edge begins first falling interval. Each consecutive falling interval from one positive edge to the next counts one cycle. Thus N consecutive ground=0 samples followed by ground=1 produce N falling cycles; N=20 survives and N=21 splatters.",
+    "dead": "All outputs zero until areset, regardless of inputs.",
+    "evidence": "problem.txt paragraphs specifying priority, original direction, more than 20 clock cycles, landing-only death, Moore outputs and asynchronous reset"
+  },
+  "numeric": {
+    "fall_counter": "5-bit unsigned saturating counter, maximum 21. Set to 1 on entering falling, increment for each continued falling interval until 21. Compare >20 on landing. No wrap for unbounded fall.",
+    "ports": "All ports one bit. No signed arithmetic or quantization."
+  },
+  "verification": {
+    "oracle": "Independent behavioral model using activity, direction, and unbounded integer duration, derived from original prose.",
+    "sampling": "Drive inputs at negative edges, model positive-edge transitions, compare outputs after nonblocking settling; also verify Moore output stability before next edge.",
+    "directed": "Asynchronous reset between clock edges, both directions, all walking input combinations, fall/dig/bump priorities, sustained digging, falling direction retention, landing ignores dig and bumps, lengths 1/19/20/21/22/32/257, permanent death and reset recovery.",
+    "random": "Deterministic randomized inputs with repeated resets, checked against independent model.",
+    "success": "Bounded timeout, fatal on every mismatch, explicit PASS after all checks; primary command python3 dev_check.py --label initial."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Fall cycle wording",
+      "resolution": "Count complete Moore falling intervals, including interval following entry, consistent with falls for more than 20 clock cycles. Explicitly test 20/21 boundary."
+    },
+    {
+      "topic": "Before first reset",
+      "resolution": "Unspecified; do not impose output values before reset."
+    }
+  ]
+}

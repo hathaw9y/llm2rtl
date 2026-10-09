@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "sel": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "When sel=0, out=a; when sel=1, out=b.",
+    "timing": "Pure combinational response to current inputs; no clock or cycle latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization requirement."
+  },
+  "numeric": {
+    "representation": "One-bit logic signals.",
+    "arithmetic": "Selection only; no arithmetic, rounding, truncation, saturation, or overflow."
+  },
+  "verification": {
+    "plan": "Independently enumerate all eight binary combinations of a, b, sel; compute expected output using a procedural branch on sel; wait for combinational settling and compare with case inequality.",
+    "coverage": "Both select values, every data pair, successive input changes.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts.",
+    "scope": "Original binary mux specification only."
+  },
+  "specification_ambiguities": [
+    "Behavior for unknown or high-impedance input values is unspecified; no additional requirement is imposed."
+  ]
+}

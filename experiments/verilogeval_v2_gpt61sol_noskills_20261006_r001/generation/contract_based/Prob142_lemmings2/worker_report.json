@@ -1,0 +1,32 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence": "development/01/result.json"
+    },
+    {
+      "label": "tb_reset_timing_fix",
+      "status": "passed",
+      "evidence": "development/02/result.json"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_validation": "passed_structure_only; contract_gate.json",
+  "limitations": [
+    "Development verification is not official evaluation.",
+    "Power-up state before reset is unspecified and was not checked.",
+    "Verification uses binary input combinations; unspecified X/Z behavior is not constrained."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_original": "dev_tb_initial.sv",
+      "reason": "Original reset task released reset after a falling edge, then tick waited for the following falling edge. The intervening rising edge sampled stale stimulus without updating the oracle, causing the initial mismatch. Release now occurs just after the reset-held rising edge so the next tick drives before the next active edge. Expected values and coverage were unchanged."
+    }
+  ],
+  "verification_coverage": "45098 output comparisons: asynchronous reset in walking/falling states, all 4096 four-cycle binary input sequences, directed falling/landing bump priority, and Moore output stability before active clock edges.",
+  "initial_snapshot_unchanged": true
+}

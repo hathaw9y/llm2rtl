@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"a": 4, "b": 4, "c": 4, "d": 4, "e": 4}, "outputs": {"q": 4}},
+  "semantics": {"kind": "combinational", "selection": {"0": "b", "1": "e", "2": "a", "3": "d", "4 through 15": "4'hf"}, "timing_evidence": "Original waveform changes c every 5 ns from 15 through 90 ns; q follows without clock or latency.", "reset": "No reset or clock ports are specified.", "initialization": "All inputs and q are unknown at 0, 5 and 10 ns; unknown c produces unknown q."},
+  "numeric": {"width": 4, "encoding": "Waveform a through f are hexadecimal values.", "arithmetic": "None; selected data passes through at full width."},
+  "verification": {"original_replay": "Replay unknown inputs at 0, 5, 10 ns and all original rows at their original timestamps, sampling after delta settling.", "additional_cases": "Exercise each data input over all 16 values for every selector, plus selected unknown data and invalid selector independence.", "success": "Self-checks use case inequality, fatal mismatches, bounded timeout and a PASS line."},
+  "specification_ambiguities": ["The waveform only shows one data tuple; generalized multiplexing is inferred from the four matching selections.", "Partially unknown selectors are not specified; propagate unknown q for any unknown selector to preserve the all-unknown initial rows."]
+}

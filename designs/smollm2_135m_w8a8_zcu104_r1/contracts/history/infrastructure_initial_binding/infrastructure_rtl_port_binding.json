@@ -1,0 +1,228 @@
+{
+  "schema": "llm2rtl.infrastructure_binding.v1",
+  "status": "frozen",
+  "authorization": "User approved isa_dispatcher and bank_controller by \uad6c\ud604 \uc2dc\uc791\ud574 following specific module proposal",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "clock": "clk, synchronous active-low resetn",
+  "part": "xczu7ev-ffvc1156-2-e",
+  "clock_ns": 5.0,
+  "vivado": "2025.2",
+  "lane_packing": "operand0 in low slice; bank0 in least significant array slice; descending flat vectors",
+  "ownership": "single exclusive module-port-role per bank; tuple acquire all-or-none on engine command handshake; compare releases against captured acquisition transaction/generation, not current producer descriptor generation",
+  "state_outputs": {
+    "bank_busy": 16,
+    "bank_owner_port": 80,
+    "bank_desc_present": 16,
+    "bank_profiles": 80,
+    "bank_rows": 176,
+    "bank_cols": 256,
+    "bank_positions": 160,
+    "bank_layers": 80,
+    "bank_generations": 512,
+    "bank_data_valid": 16,
+    "bank_scale_valid": 16,
+    "bank_b7_static_valid": 1,
+    "bank_b7_rope_valid": 1,
+    "bank_embedding_lanes": 64,
+    "bank_embedding_lane_valid": 32
+  },
+  "acquire": {
+    "inputs": {
+      "acquire_valid": 1,
+      "acquire_transaction_id": 32,
+      "acquire_used_bank_mask": 3,
+      "acquire_bank_ids": 12,
+      "acquire_roles": 15,
+      "acquire_generations": 96
+    },
+    "outputs": {
+      "acquire_ready": 1,
+      "acquire_error_code": 8
+    },
+    "valid_rule": "dispatcher asserts only actual engine command acceptance; ready/error are combinational eligibility independent of valid; valid&&ready commits all used banks same edge"
+  },
+  "release": {
+    "inputs": {
+      "release_valid": 1,
+      "release_transaction_id": 32,
+      "release_used_bank_mask": 3,
+      "release_bank_ids": 12,
+      "release_roles": 15,
+      "release_generations": 96
+    },
+    "outputs": {
+      "release_ready": 1,
+      "release_error_code": 8
+    },
+    "rule": "valid&&ready with error00 clears all matching banks; malformed/stale/wrong owner returns07 and changes none. No release merely because an engine is idle."
+  },
+  "config": {
+    "inputs": {
+      "cfg_valid": 1,
+      "cfg_transaction_id": 32,
+      "cfg_bank": 4,
+      "cfg_profile": 5,
+      "cfg_rows": 11,
+      "cfg_cols": 16,
+      "cfg_position": 10,
+      "cfg_layer": 5,
+      "cfg_component": 2,
+      "cfg_generation": 32,
+      "cfg_resp_ready": 1
+    },
+    "outputs": {
+      "cfg_ready": 1,
+      "cfg_resp_valid": 1,
+      "cfg_resp_transaction_id": 32,
+      "cfg_resp_error_code": 8
+    },
+    "rule": "free-bank-only atomic descriptor mutation; shape/profile/capacity/component/generation checked before mutation; exactly one held response; descriptor operation completes internally and performs no tensor access; no bank lock retained solely for response transport"
+  },
+  "producer": {
+    "inputs": {
+      "producer_valid": 1,
+      "producer_transaction_id": 32,
+      "producer_role": 5,
+      "producer_bank": 4,
+      "producer_accepted_generation": 32,
+      "producer_generation": 32,
+      "producer_profile": 5,
+      "producer_rows": 11,
+      "producer_cols": 16,
+      "producer_position": 10,
+      "producer_layer": 5
+    },
+    "outputs": {
+      "producer_ready": 1,
+      "producer_error_code": 8
+    },
+    "rule": "begin destination update only matching acquired bank/transaction/role/original generation; new generation=accepted+1 nonwrapping; validate shape/profile; clear data/scale and embedding flags; acquired generation remains original for response/release"
+  },
+  "invalidate": {
+    "inputs": {
+      "invalidate_valid": 1,
+      "invalidate_transaction_id": 32,
+      "invalidate_role": 5,
+      "invalidate_bank": 4,
+      "invalidate_generation": 32
+    },
+    "outputs": {
+      "invalidate_ready": 1,
+      "invalidate_error_code": 8
+    }
+  },
+  "coverage": {
+    "inputs": {
+      "coverage_valid": 1,
+      "coverage_bank": 4,
+      "coverage_component": 2,
+      "coverage_generation": 32,
+      "coverage_transaction_id": 32,
+      "coverage_role": 5,
+      "coverage_data_complete": 1,
+      "coverage_scale_complete": 1
+    },
+    "outputs": {
+      "coverage_ready": 1,
+      "coverage_error_code": 8
+    },
+    "trust_boundary": "future byte/strobe coverage service supplies complete flags after exact expected extent coverage; this module NEVER derives coverage from counts/completion alone; absent service ties valid low. Non-B7 component0; B7 component1 rope,2static; validate matching owner/txn/current component epoch. Partial completeness flags monotonic within epoch. Invalidations dominate validity."
+  },
+  "embedding": {
+    "inputs": {
+      "embedding_valid": 1,
+      "embedding_transaction_id": 32,
+      "embedding_role": 5,
+      "embedding_generation": 32,
+      "embedding_row": 5,
+      "embedding_lane": 2
+    },
+    "outputs": {
+      "embedding_ready": 1,
+      "embedding_error_code": 8
+    },
+    "rule": "only acquired B3 embedding_rows_INT8; selected lane metadata from matched accepted scale write; row<configured rows; coverage data/scale validity does not waive lane metadata checks"
+  },
+  "arbitration": "No rejected metadata or ownership event mutates state. Disjoint acquire/release may coexist. Same-bank overlap must be serialized without combinational ready/valid cycles or partial commit. Document deterministic priority; acquire_ready cannot depend on acquire_valid. Reset is coordinated and clears ownership/descriptors; START does not reach bank reset.",
+  "engine_slots": {
+    "0": "MM2S external future DMA adapter",
+    "1": "S2MM external future DMA adapter",
+    "2": "existing GEMM_INT8/QK/PV shared executor",
+    "3": "existing QUANTIZE/DEQUANTIZE executor"
+  },
+  "engine_cmd": {
+    "outputs": {
+      "engine_cmd_valid": 4,
+      "engine_cmd_opcode": 16,
+      "engine_cmd_payload": 448,
+      "engine_cmd_bank_ids": 48,
+      "engine_cmd_transaction_id": 128,
+      "engine_cmd_generations": 384,
+      "engine_cmd_desc_present": 12,
+      "engine_cmd_profiles": 60,
+      "engine_cmd_rows": 132,
+      "engine_cmd_cols": 192,
+      "engine_cmd_positions": 120,
+      "engine_cmd_layers": 60,
+      "engine_cmd_desc_generations": 384,
+      "engine_cmd_data_valid": 12,
+      "engine_cmd_scale_valid": 12,
+      "engine_cmd_desc_busy": 12,
+      "engine_cmd_desc_owner": 60,
+      "engine_cmd_b7_static_valid": 4,
+      "engine_cmd_embedding_lanes": 256,
+      "engine_cmd_embedding_lane_valid": 128
+    },
+    "inputs": {
+      "engine_cmd_ready": 4
+    },
+    "snapshot": "exact existing GEMM/quant cmd fields in slot slices; used-bank busy/owner snapshot anticipates same-edge acquire and names expected roles. Payload/identity/all descriptor fields stable while offered/stalled; no valid withdrawn on async error. Engine role output need not feed validity (avoid combinational loop)."
+  },
+  "engine_resp": {
+    "inputs": {
+      "engine_resp_valid": 4,
+      "engine_resp_transaction_id": 128,
+      "engine_resp_used_bank_mask": 12,
+      "engine_resp_used_bank_count": 8,
+      "engine_resp_bank_ids": 48,
+      "engine_resp_generations": 384,
+      "engine_resp_error_code": 32
+    },
+    "outputs": {
+      "engine_resp_ready": 4
+    },
+    "rule": "compare every field to accepted per-slot scoreboard before releasing; serialize responses/release as needed, retain accepted record until release accepted. Wrong/duplicate response07 never releases bank; accept later matching response to drain."
+  },
+  "dispatcher_control": {
+    "inputs": {
+      "clk": 1,
+      "resetn": 1,
+      "start": 1,
+      "cmd_doutb": 128
+    },
+    "outputs": {
+      "busy": 1,
+      "done": 1,
+      "error": 1,
+      "error_code": 8,
+      "current_pc": 4,
+      "cmd_enb": 1,
+      "cmd_addrb": 4
+    },
+    "command_BRAM_read_latency": 2,
+    "program": "16 records max; END opcode0; work records0..14, missing END at finalrecord errors01 and drains",
+    "transaction": "32bit monotonic across START; reset only coordinated reset; no wrap/reuse; exhaust=>07 no issue",
+    "inflight": "one per external slot plus one cfg; strict currentPC, no lookahead; bank-hazard limited multiple. FENCE drains prior accepted operations then PC advances. END drains and done only quiescent; START resets program status/PC only. Error halts NEW offers, retains already presented stalled command until accepted and tracked, drains matching quiescent completions. Unmatched identity keeps ownership until real match or coordinated reset.",
+    "opcode_scope": "END0 DMA_LOAD1 DMA_STORE2 GEMM3 QK6 PV8 FENCE11 QUANT13 DEQUANT14 BANK_CONFIG15; RMS4 ROPE5 SOFTMAX7 ADD9 SILU10 reserved12 rejected01 before any bank access until later executor wave",
+    "validation": "reserved payload/ignoredbank fields and static supported command legality identical isa_codec.validate_command; runtime input/profile/coverage arithmetic checks remain executors responsibility. DMA range/capacity/alignment/aux checked before issue, vendor status tags not treated as full identity."
+  },
+  "does_not_claim": [
+    "bank physical memory/router",
+    "coverage service implementation",
+    "DMA data transport/vendor status binding",
+    "real GEMM/quant payload integration",
+    "nonlinear execution",
+    "full model/board deployment"
+  ]
+}

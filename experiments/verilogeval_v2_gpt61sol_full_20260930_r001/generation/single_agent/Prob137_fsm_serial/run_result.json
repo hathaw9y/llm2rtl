@@ -1,0 +1,176 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob137_fsm_serial",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob137_fsm_serial",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob137_fsm_serial/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790738356.3945744,
+    "ended_at_unix": 1790738475.2031817,
+    "seconds": 118.80860781669617,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 91883,
+      "cached_input_tokens": 75520,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2148,
+      "reasoning_output_tokens": 102
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "0851559136e059d64cc9c4c7841f11ab1389b67a2d64c9fc52255a4d9914ddee",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "manual RTL review",
+        "result": "passed",
+        "details": "Checked positive-edge sequential logic, active-high synchronous reset, eight data samples after start, one-cycle done pulse on valid stop, back-to-back frames, and wait-for-high recovery after invalid stop. Counter width is three bits."
+      },
+      {
+        "name": "Icarus development compilation",
+        "result": "tool_failure",
+        "exit_code": 139,
+        "timeout_seconds": 20,
+        "top": "dev_tb",
+        "language_flag": "-g2012",
+        "log": "compile.log",
+        "details": "Compiler exited without diagnostics and did not produce dev_sim."
+      },
+      {
+        "name": "development simulation",
+        "result": "not_run_successfully",
+        "timeout_seconds": 20,
+        "log": "simulation.log",
+        "details": "Matching vvp could not open the absent dev_sim executable."
+      }
+    ],
+    "development_outcome": "Initial candidate delivered unchanged; independent self-checking testbench supplied, but simulation unverified due to compilation tool failure.",
+    "limitations": [
+      "No successful development simulation or compiler lint result.",
+      "Official evaluation was not accessed and its results are unavailable.",
+      "No synthesis, timing, or board evidence was produced."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "0851559136e059d64cc9c4c7841f11ab1389b67a2d64c9fc52255a4d9914ddee",
+      "Prob137_fsm_serial_ref.sv": "5344c780c84e0360c6a5d86963b22ce411db7dbdb14058cc949fe0bdc76ffd4b",
+      "Prob137_fsm_serial_test.sv": "1b9efc2dc5f8ad922d052842021c79513b01460d6450c2a4393e3b49a68ee3b6"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob137_fsm_serial_test.sv",
+        "Prob137_fsm_serial_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013818136416375637
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb137_fsm_serial_test.sv:45: $finish called at 4526 (1ps)\nHint: Output 'done' has no mismatches.\nHint: Total mismatched samples is 0 out of 905 samples\n\nSimulation finished at 4526 ps\nMismatches: 0 in 905 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012432832270860672
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "0851559136e059d64cc9c4c7841f11ab1389b67a2d64c9fc52255a4d9914ddee",
+      "Prob137_fsm_serial_ref.sv": "5344c780c84e0360c6a5d86963b22ce411db7dbdb14058cc949fe0bdc76ffd4b",
+      "Prob137_fsm_serial_test.sv": "1b9efc2dc5f8ad922d052842021c79513b01460d6450c2a4393e3b49a68ee3b6"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob137_fsm_serial_test.sv",
+        "Prob137_fsm_serial_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013300408609211445
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb137_fsm_serial_test.sv:45: $finish called at 4526 (1ps)\nHint: Output 'done' has no mismatches.\nHint: Total mismatched samples is 0 out of 905 samples\n\nSimulation finished at 4526 ps\nMismatches: 0 in 905 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012120053172111511
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

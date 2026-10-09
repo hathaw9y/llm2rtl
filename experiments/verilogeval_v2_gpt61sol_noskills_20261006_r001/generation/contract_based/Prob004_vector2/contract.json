@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "in": 32
+    },
+    "outputs": {
+      "out": 32
+    },
+    "evidence": "Original interface specifies only input in (32 bits) and output out (32 bits)."
+  },
+  "semantics": {
+    "operation": "Reverse the order of four bytes, preserving bit order within each byte.",
+    "mapping": {
+      "out[31:24]": "in[7:0]",
+      "out[23:16]": "in[15:8]",
+      "out[15:8]": "in[23:16]",
+      "out[7:0]": "in[31:24]"
+    },
+    "timing": "Combinational; no clock, reset, or added latency because original interface has only in and out.",
+    "initialization": "No stored state or specified initial value; output reflects current input including four-state bits."
+  },
+  "numeric": {
+    "vector_width": 32,
+    "byte_width": 8,
+    "byte_count": 4,
+    "arithmetic": "None; unsigned bit permutation without bit reversal."
+  },
+  "verification": {
+    "oracle": "For each input bit i, compare output bit (3-i/8)*8+i%8 with input bit i, directly from original byte reversal requirement.",
+    "sampling": "Drive input then wait 1 ns for combinational settling.",
+    "cases": [
+      "zero",
+      "all ones",
+      "distinct bytes",
+      "alternating bits",
+      "all walking one and walking zero positions",
+      "deterministic pseudorandom vectors",
+      "unknown and high impedance bit propagation"
+    ],
+    "failure": "Case inequality with $fatal, bounded timeout, PASS only after every check."
+  },
+  "specification_ambiguities": []
+}

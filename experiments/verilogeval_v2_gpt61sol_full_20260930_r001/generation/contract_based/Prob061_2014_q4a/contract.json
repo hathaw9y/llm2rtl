@@ -1,0 +1,59 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "w": {
+        "direction": "input",
+        "width": 1
+      },
+      "R": {
+        "direction": "input",
+        "width": 1
+      },
+      "E": {
+        "direction": "input",
+        "width": 1
+      },
+      "L": {
+        "direction": "input",
+        "width": 1
+      },
+      "Q": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "next_state": "Q_next = L ? R : (E ? w : Q)",
+    "priority": "Load L takes priority over shift E; loading does not require E.",
+    "hold": "When L=0 and E=0, retain Q. Between positive clock edges Q remains unchanged.",
+    "reset": "No reset port or reset behavior specified; R is load data, not reset.",
+    "initialization": "No specified initial state; do not initialize Q. First load or enabled shift establishes known state.",
+    "sampling": "Controls and selected data are sampled on each rising clock edge; updated Q is visible after that edge."
+  },
+  "numeric": {
+    "data_type": "Single unsigned bit for all ports",
+    "arithmetic": "No arithmetic; select and store one bit without conversion.",
+    "overflow_rounding_saturation": "Not applicable"
+  },
+  "verification": {
+    "oracle": "Independent state model using control truth table: 00 hold, 01 shift (L=0 E=1), 10 and 11 load (L=1).",
+    "coverage": "For each known previous Q value, exhaust all 16 combinations of L,E,R,w. Include conflicting load/shift data, repeated holds and between-edge input changes.",
+    "initial_state": "Do not require any power-up value; initialize model and DUT via synchronous load.",
+    "timing": "Check no change before rising edges or at falling edges, and check state after nonblocking updates.",
+    "tool": "Icarus Verilog v12 -g2012 with explicit dev_tb top and matching vvp, finite shell timeouts; no official tests or synthesis."
+  },
+  "specification_ambiguities": [
+    {
+      "item": "Simultaneous L and E",
+      "resolution": "Interpret asserted load as unconditional load with priority over shift, consistent with L asserted when it should load."
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob155_lemmings4",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob155_lemmings4",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob155_lemmings4/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790737829.1308117,
+    "ended_at_unix": 1790737975.0111542,
+    "seconds": 145.88034296035767,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 99013,
+      "cached_input_tokens": 85888,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2776,
+      "reasoning_output_tokens": 191
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "8f05020a060aa69acf31674db8b150bc653ddf86795c0d18724a5b3e3df4f088",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "completed",
+        "details": "Reviewed Moore output decoding, asynchronous active-high reset, fall-over-dig-over-bump priority, direction preservation, absorbing splat state, and five-bit fall counter saturation at 21. No RTL revisions made."
+      },
+      {
+        "name": "development compile",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "exit_code": 139,
+        "result": "tool failure; no executable produced",
+        "log": "dev_compile.log"
+      },
+      {
+        "name": "development simulation attempt",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+        "result": "could not run: dev_sim unavailable following compiler failure",
+        "log": "dev_sim.log"
+      }
+    ],
+    "development_outcome": "Initial synthesizable candidate delivered unchanged. Independent self-checking testbench created, but simulation success is not claimed because the required compiler failed.",
+    "limitations": [
+      "Development simulation was not executed successfully.",
+      "Official evaluation results are unavailable and were not accessed.",
+      "No synthesis, timing analysis, or board testing performed."
+    ],
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_rtl": "candidate_initial.sv",
+      "testbench": "dev_tb.sv"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "8f05020a060aa69acf31674db8b150bc653ddf86795c0d18724a5b3e3df4f088",
+      "Prob155_lemmings4_ref.sv": "a238a1a879b4b4213bedf9bb47a23ece031df6a3d9cb836c5c42769141ae522c",
+      "Prob155_lemmings4_test.sv": "3f22f4ca91763277dcb324821a257ebdbb98fbcdb2daf4011211de72715573e7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob155_lemmings4_test.sv",
+        "Prob155_lemmings4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01916297059506178
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb155_lemmings4_test.sv:158: $finish called at 5016 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Output 'digging' has no mismatches.\nHint: Total mismatched samples is 0 out of 1003 samples\n\nSimulation finished at 5016 ps\nMismatches: 0 in 1003 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.017239389941096306
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "8f05020a060aa69acf31674db8b150bc653ddf86795c0d18724a5b3e3df4f088",
+      "Prob155_lemmings4_ref.sv": "a238a1a879b4b4213bedf9bb47a23ece031df6a3d9cb836c5c42769141ae522c",
+      "Prob155_lemmings4_test.sv": "3f22f4ca91763277dcb324821a257ebdbb98fbcdb2daf4011211de72715573e7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob155_lemmings4_test.sv",
+        "Prob155_lemmings4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.016830055974423885
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb155_lemmings4_test.sv:158: $finish called at 5016 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Output 'digging' has no mismatches.\nHint: Total mismatched samples is 0 out of 1003 samples\n\nSimulation finished at 5016 ps\nMismatches: 0 in 1003 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.016487118788063526
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

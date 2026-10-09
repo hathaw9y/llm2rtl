@@ -1,0 +1,1381 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
+| Date              : Thu Oct  1 15:23:51 2026
+| Host              : admin1-SYS-521C-NR running 64-bit Ubuntu 22.04.5 LTS
+| Command           : report_timing -delay_type max -max_paths 10 -path_type full_clock_expanded -file /tmp/smollm2_attention_placed_paths.rpt
+| Design            : system_wrapper
+| Device            : xczu7ev-ffvc1156
+| Speed File        : -2  PRODUCTION 1.30 05-15-2022
+| Design State      : Fully Placed
+| Temperature Grade : E
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (VIOLATED) :        -0.833ns  (required time - arrival time)
+  Source:                 system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Destination:            system_i/probe/inst/core/fabric/real_softmax.softmax/interp_product_r0/DSP_A_B_DATA_INST/CEB2
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Path Group:             clk_pl_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            6.666ns  (clk_pl_0 rise@6.666ns - clk_pl_0 rise@0.000ns)
+  Data Path Delay:        7.272ns  (logic 2.208ns (30.363%)  route 5.064ns (69.637%))
+  Logic Levels:           27  (CARRY8=8 LUT2=5 LUT3=4 LUT4=3 LUT5=1 LUT6=5 MUXF7=1)
+  Clock Path Skew:        0.069ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.941ns = ( 8.607 - 6.666 ) 
+    Source Clock Delay      (SCD):    2.050ns
+    Clock Pessimism Removal (CPR):    0.178ns
+  Clock Uncertainty:      0.152ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.296ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      1.842ns (routing 0.701ns, distribution 1.141ns)
+  Clock Net Delay (Destination): 1.773ns (routing 0.632ns, distribution 1.141ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_pl_0 rise edge)
+                                                      0.000     0.000 r  
+    PS8_X0Y0             PS8                          0.000     0.000 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.180     0.180    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.028     0.208 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.842     2.050    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X57Y151        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X57Y151        FDRE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.079     2.129 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/Q
+                         net (fo=149, estimated)      0.301     2.430    system_i/probe/inst/core/fabric/real_softmax.softmax/column_w[1]
+    SLICE_X55Y150        LUT6 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.096     2.526 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35/O
+                         net (fo=1, routed)           0.010     2.536    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35_n_0
+    SLICE_X55Y150        MUXF7 (Prop_F7MUX_CD_SLICEL_I1_O)
+                                                      0.064     2.600 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22/O
+                         net (fo=32, estimated)       0.251     2.851    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22_n_0
+    SLICE_X55Y146        LUT2 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.035     2.886 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4/O
+                         net (fo=17, estimated)       0.208     3.094    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4_n_0
+    SLICE_X55Y141        LUT5 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.123     3.217 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3/O
+                         net (fo=29, estimated)       0.154     3.371    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3_n_0
+    SLICE_X55Y140        LUT6 (Prop_F6LUT_SLICEL_I4_O)
+                                                      0.097     3.468 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22/O
+                         net (fo=12, estimated)       0.353     3.821    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22_n_0
+    SLICE_X53Y129        LUT3 (Prop_H6LUT_SLICEM_I2_O)
+                                                      0.053     3.874 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56/O
+                         net (fo=16, estimated)       0.192     4.066    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56_n_0
+    SLICE_X52Y129        LUT3 (Prop_F5LUT_SLICEL_I0_O)
+                                                      0.143     4.209 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_52/O
+                         net (fo=4, estimated)        0.390     4.599    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_73_n_0
+    SLICE_X52Y129        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[6])
+                                                      0.224     4.823 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_49/O[6]
+                         net (fo=1, estimated)        0.371     5.194    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude6[7]
+    SLICE_X56Y130        LUT2 (Prop_C6LUT_SLICEM_I0_O)
+                                                      0.037     5.231 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55/O
+                         net (fo=3, estimated)        0.092     5.323    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55_n_0
+    SLICE_X56Y131        LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038     5.361 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31/O
+                         net (fo=1, estimated)        0.151     5.512    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31_n_0
+    SLICE_X57Y131        CARRY8 (Prop_CARRY8_SLICEM_DI[3]_CO[7])
+                                                      0.106     5.618 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12/CO[7]
+                         net (fo=1, estimated)        0.026     5.644    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12_n_0
+    SLICE_X57Y132        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     5.659 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_4/CO[7]
+                         net (fo=2, estimated)        0.245     5.904    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude41_in
+    SLICE_X58Y130        LUT3 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.050     5.954 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3/O
+                         net (fo=3, estimated)        0.101     6.055    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3_n_0
+    SLICE_X58Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.090 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14/O
+                         net (fo=3, estimated)        0.096     6.186    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14_n_0
+    SLICE_X59Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.221 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4/O
+                         net (fo=7, estimated)        0.112     6.333    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4_n_0
+    SLICE_X58Y128        LUT4 (Prop_D6LUT_SLICEL_I2_O)
+                                                      0.050     6.383 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4/O
+                         net (fo=3, estimated)        0.192     6.575    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4_n_0
+    SLICE_X57Y125        LUT6 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.098     6.673 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6/O
+                         net (fo=1, routed)           0.022     6.695    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6_n_0
+    SLICE_X57Y125        CARRY8 (Prop_CARRY8_SLICEM_S[5]_CO[7])
+                                                      0.159     6.854 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3/CO[7]
+                         net (fo=1, estimated)        0.026     6.880    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3_n_0
+    SLICE_X57Y126        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     6.895 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2/CO[7]
+                         net (fo=1, estimated)        0.026     6.921    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2_n_0
+    SLICE_X57Y127        CARRY8 (Prop_CARRY8_SLICEM_CI_O[0])
+                                                      0.056     6.977 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[24]_i_3/O[0]
+                         net (fo=1, estimated)        0.139     7.116    system_i/probe/inst/core/fabric/real_softmax.softmax/bf16_to_q16_return0[17]
+    SLICE_X58Y127        LUT3 (Prop_B5LUT_SLICEL_I1_O)
+                                                      0.165     7.281 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2/O
+                         net (fo=4, estimated)        0.176     7.457    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2_n_0
+    SLICE_X58Y126        LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     7.508 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8/O
+                         net (fo=1, routed)           0.009     7.517    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8_n_0
+    SLICE_X58Y126        CARRY8 (Prop_CARRY8_SLICEL_S[1]_CO[7])
+                                                      0.186     7.703 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1/CO[7]
+                         net (fo=1, estimated)        0.026     7.729    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1_n_0
+    SLICE_X58Y127        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.076     7.805 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7/O[1]
+                         net (fo=1, estimated)        0.283     8.088    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7_n_14
+    SLICE_X59Y125        LUT4 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.036     8.124 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6/O
+                         net (fo=1, estimated)        0.135     8.259    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6_n_0
+    SLICE_X58Y123        LUT6 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.050     8.309 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2/O
+                         net (fo=4, estimated)        0.098     8.407    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2_n_0
+    SLICE_X58Y123        LUT4 (Prop_B6LUT_SLICEL_I0_O)
+                                                      0.036     8.443 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_1/O
+                         net (fo=12, estimated)       0.879     9.322    system_i/probe/inst/core/fabric/real_softmax.softmax/interp_product_r0/CEB2
+    DSP48E2_X8Y49        DSP_A_B_DATA                                 r  system_i/probe/inst/core/fabric/real_softmax.softmax/interp_product_r0/DSP_A_B_DATA_INST/CEB2
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_pl_0 rise edge)
+                                                      6.666     6.666 r  
+    PS8_X0Y0             PS8                          0.000     6.666 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.143     6.809    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.025     6.834 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.773     8.607    system_i/probe/inst/core/fabric/real_softmax.softmax/interp_product_r0/CLK
+    DSP48E2_X8Y49        DSP_A_B_DATA                                 r  system_i/probe/inst/core/fabric/real_softmax.softmax/interp_product_r0/DSP_A_B_DATA_INST/CLK
+                         clock pessimism              0.178     8.785    
+                         clock uncertainty           -0.152     8.633    
+    DSP48E2_X8Y49        DSP_A_B_DATA (Setup_DSP_A_B_DATA_DSP48E2_CLK_CEB2)
+                                                     -0.144     8.489    system_i/probe/inst/core/fabric/real_softmax.softmax/interp_product_r0/DSP_A_B_DATA_INST
+  -------------------------------------------------------------------
+                         required time                          8.489    
+                         arrival time                          -9.322    
+  -------------------------------------------------------------------
+                         slack                                 -0.833    
+
+Slack (VIOLATED) :        -0.557ns  (required time - arrival time)
+  Source:                 system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Destination:            system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg/DSP_A_B_DATA_INST/CEA2
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Path Group:             clk_pl_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            6.666ns  (clk_pl_0 rise@6.666ns - clk_pl_0 rise@0.000ns)
+  Data Path Delay:        6.848ns  (logic 2.207ns (32.228%)  route 4.641ns (67.772%))
+  Logic Levels:           27  (CARRY8=8 LUT2=5 LUT3=4 LUT4=2 LUT5=2 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.063ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.810ns = ( 8.476 - 6.666 ) 
+    Source Clock Delay      (SCD):    2.050ns
+    Clock Pessimism Removal (CPR):    0.176ns
+  Clock Uncertainty:      0.152ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.296ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      1.842ns (routing 0.701ns, distribution 1.141ns)
+  Clock Net Delay (Destination): 1.642ns (routing 0.632ns, distribution 1.010ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_pl_0 rise edge)
+                                                      0.000     0.000 r  
+    PS8_X0Y0             PS8                          0.000     0.000 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.180     0.180    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.028     0.208 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.842     2.050    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X57Y151        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X57Y151        FDRE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.079     2.129 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/Q
+                         net (fo=149, estimated)      0.301     2.430    system_i/probe/inst/core/fabric/real_softmax.softmax/column_w[1]
+    SLICE_X55Y150        LUT6 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.096     2.526 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35/O
+                         net (fo=1, routed)           0.010     2.536    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35_n_0
+    SLICE_X55Y150        MUXF7 (Prop_F7MUX_CD_SLICEL_I1_O)
+                                                      0.064     2.600 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22/O
+                         net (fo=32, estimated)       0.251     2.851    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22_n_0
+    SLICE_X55Y146        LUT2 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.035     2.886 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4/O
+                         net (fo=17, estimated)       0.208     3.094    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4_n_0
+    SLICE_X55Y141        LUT5 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.123     3.217 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3/O
+                         net (fo=29, estimated)       0.154     3.371    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3_n_0
+    SLICE_X55Y140        LUT6 (Prop_F6LUT_SLICEL_I4_O)
+                                                      0.097     3.468 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22/O
+                         net (fo=12, estimated)       0.353     3.821    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22_n_0
+    SLICE_X53Y129        LUT3 (Prop_H6LUT_SLICEM_I2_O)
+                                                      0.053     3.874 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56/O
+                         net (fo=16, estimated)       0.192     4.066    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56_n_0
+    SLICE_X52Y129        LUT3 (Prop_F5LUT_SLICEL_I0_O)
+                                                      0.143     4.209 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_52/O
+                         net (fo=4, estimated)        0.390     4.599    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_73_n_0
+    SLICE_X52Y129        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[6])
+                                                      0.224     4.823 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_49/O[6]
+                         net (fo=1, estimated)        0.371     5.194    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude6[7]
+    SLICE_X56Y130        LUT2 (Prop_C6LUT_SLICEM_I0_O)
+                                                      0.037     5.231 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55/O
+                         net (fo=3, estimated)        0.092     5.323    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55_n_0
+    SLICE_X56Y131        LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038     5.361 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31/O
+                         net (fo=1, estimated)        0.151     5.512    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31_n_0
+    SLICE_X57Y131        CARRY8 (Prop_CARRY8_SLICEM_DI[3]_CO[7])
+                                                      0.106     5.618 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12/CO[7]
+                         net (fo=1, estimated)        0.026     5.644    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12_n_0
+    SLICE_X57Y132        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     5.659 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_4/CO[7]
+                         net (fo=2, estimated)        0.245     5.904    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude41_in
+    SLICE_X58Y130        LUT3 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.050     5.954 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3/O
+                         net (fo=3, estimated)        0.101     6.055    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3_n_0
+    SLICE_X58Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.090 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14/O
+                         net (fo=3, estimated)        0.096     6.186    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14_n_0
+    SLICE_X59Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.221 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4/O
+                         net (fo=7, estimated)        0.112     6.333    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4_n_0
+    SLICE_X58Y128        LUT4 (Prop_D6LUT_SLICEL_I2_O)
+                                                      0.050     6.383 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4/O
+                         net (fo=3, estimated)        0.192     6.575    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4_n_0
+    SLICE_X57Y125        LUT6 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.098     6.673 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6/O
+                         net (fo=1, routed)           0.022     6.695    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6_n_0
+    SLICE_X57Y125        CARRY8 (Prop_CARRY8_SLICEM_S[5]_CO[7])
+                                                      0.159     6.854 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3/CO[7]
+                         net (fo=1, estimated)        0.026     6.880    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3_n_0
+    SLICE_X57Y126        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     6.895 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2/CO[7]
+                         net (fo=1, estimated)        0.026     6.921    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2_n_0
+    SLICE_X57Y127        CARRY8 (Prop_CARRY8_SLICEM_CI_O[0])
+                                                      0.056     6.977 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[24]_i_3/O[0]
+                         net (fo=1, estimated)        0.139     7.116    system_i/probe/inst/core/fabric/real_softmax.softmax/bf16_to_q16_return0[17]
+    SLICE_X58Y127        LUT3 (Prop_B5LUT_SLICEL_I1_O)
+                                                      0.165     7.281 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2/O
+                         net (fo=4, estimated)        0.176     7.457    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2_n_0
+    SLICE_X58Y126        LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     7.508 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8/O
+                         net (fo=1, routed)           0.009     7.517    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8_n_0
+    SLICE_X58Y126        CARRY8 (Prop_CARRY8_SLICEL_S[1]_CO[7])
+                                                      0.186     7.703 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1/CO[7]
+                         net (fo=1, estimated)        0.026     7.729    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1_n_0
+    SLICE_X58Y127        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.076     7.805 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7/O[1]
+                         net (fo=1, estimated)        0.283     8.088    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7_n_14
+    SLICE_X59Y125        LUT4 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.036     8.124 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6/O
+                         net (fo=1, estimated)        0.135     8.259    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6_n_0
+    SLICE_X58Y123        LUT6 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.050     8.309 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2/O
+                         net (fo=4, estimated)        0.099     8.408    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2_n_0
+    SLICE_X58Y123        LUT5 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.035     8.443 r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1/O
+                         net (fo=35, estimated)       0.455     8.898    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg/CEA2
+    DSP48E2_X5Y51        DSP_A_B_DATA                                 r  system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg/DSP_A_B_DATA_INST/CEA2
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_pl_0 rise edge)
+                                                      6.666     6.666 r  
+    PS8_X0Y0             PS8                          0.000     6.666 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.143     6.809    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.025     6.834 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.642     8.476    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg/CLK
+    DSP48E2_X5Y51        DSP_A_B_DATA                                 r  system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg/DSP_A_B_DATA_INST/CLK
+                         clock pessimism              0.176     8.652    
+                         clock uncertainty           -0.152     8.500    
+    DSP48E2_X5Y51        DSP_A_B_DATA (Setup_DSP_A_B_DATA_DSP48E2_CLK_CEA2)
+                                                     -0.159     8.341    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg/DSP_A_B_DATA_INST
+  -------------------------------------------------------------------
+                         required time                          8.341    
+                         arrival time                          -8.898    
+  -------------------------------------------------------------------
+                         slack                                 -0.557    
+
+Slack (VIOLATED) :        -0.447ns  (required time - arrival time)
+  Source:                 system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Destination:            system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg__0/DSP_A_B_DATA_INST/CEA2
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Path Group:             clk_pl_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            6.666ns  (clk_pl_0 rise@6.666ns - clk_pl_0 rise@0.000ns)
+  Data Path Delay:        6.740ns  (logic 2.207ns (32.745%)  route 4.533ns (67.255%))
+  Logic Levels:           27  (CARRY8=8 LUT2=5 LUT3=4 LUT4=2 LUT5=2 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.061ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.812ns = ( 8.478 - 6.666 ) 
+    Source Clock Delay      (SCD):    2.050ns
+    Clock Pessimism Removal (CPR):    0.176ns
+  Clock Uncertainty:      0.152ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.296ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      1.842ns (routing 0.701ns, distribution 1.141ns)
+  Clock Net Delay (Destination): 1.644ns (routing 0.632ns, distribution 1.012ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_pl_0 rise edge)
+                                                      0.000     0.000 r  
+    PS8_X0Y0             PS8                          0.000     0.000 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.180     0.180    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.028     0.208 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.842     2.050    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X57Y151        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X57Y151        FDRE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.079     2.129 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/Q
+                         net (fo=149, estimated)      0.301     2.430    system_i/probe/inst/core/fabric/real_softmax.softmax/column_w[1]
+    SLICE_X55Y150        LUT6 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.096     2.526 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35/O
+                         net (fo=1, routed)           0.010     2.536    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35_n_0
+    SLICE_X55Y150        MUXF7 (Prop_F7MUX_CD_SLICEL_I1_O)
+                                                      0.064     2.600 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22/O
+                         net (fo=32, estimated)       0.251     2.851    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22_n_0
+    SLICE_X55Y146        LUT2 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.035     2.886 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4/O
+                         net (fo=17, estimated)       0.208     3.094    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4_n_0
+    SLICE_X55Y141        LUT5 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.123     3.217 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3/O
+                         net (fo=29, estimated)       0.154     3.371    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3_n_0
+    SLICE_X55Y140        LUT6 (Prop_F6LUT_SLICEL_I4_O)
+                                                      0.097     3.468 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22/O
+                         net (fo=12, estimated)       0.353     3.821    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22_n_0
+    SLICE_X53Y129        LUT3 (Prop_H6LUT_SLICEM_I2_O)
+                                                      0.053     3.874 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56/O
+                         net (fo=16, estimated)       0.192     4.066    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56_n_0
+    SLICE_X52Y129        LUT3 (Prop_F5LUT_SLICEL_I0_O)
+                                                      0.143     4.209 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_52/O
+                         net (fo=4, estimated)        0.390     4.599    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_73_n_0
+    SLICE_X52Y129        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[6])
+                                                      0.224     4.823 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_49/O[6]
+                         net (fo=1, estimated)        0.371     5.194    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude6[7]
+    SLICE_X56Y130        LUT2 (Prop_C6LUT_SLICEM_I0_O)
+                                                      0.037     5.231 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55/O
+                         net (fo=3, estimated)        0.092     5.323    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55_n_0
+    SLICE_X56Y131        LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038     5.361 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31/O
+                         net (fo=1, estimated)        0.151     5.512    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31_n_0
+    SLICE_X57Y131        CARRY8 (Prop_CARRY8_SLICEM_DI[3]_CO[7])
+                                                      0.106     5.618 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12/CO[7]
+                         net (fo=1, estimated)        0.026     5.644    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12_n_0
+    SLICE_X57Y132        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     5.659 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_4/CO[7]
+                         net (fo=2, estimated)        0.245     5.904    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude41_in
+    SLICE_X58Y130        LUT3 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.050     5.954 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3/O
+                         net (fo=3, estimated)        0.101     6.055    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3_n_0
+    SLICE_X58Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.090 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14/O
+                         net (fo=3, estimated)        0.096     6.186    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14_n_0
+    SLICE_X59Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.221 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4/O
+                         net (fo=7, estimated)        0.112     6.333    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4_n_0
+    SLICE_X58Y128        LUT4 (Prop_D6LUT_SLICEL_I2_O)
+                                                      0.050     6.383 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4/O
+                         net (fo=3, estimated)        0.192     6.575    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4_n_0
+    SLICE_X57Y125        LUT6 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.098     6.673 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6/O
+                         net (fo=1, routed)           0.022     6.695    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6_n_0
+    SLICE_X57Y125        CARRY8 (Prop_CARRY8_SLICEM_S[5]_CO[7])
+                                                      0.159     6.854 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3/CO[7]
+                         net (fo=1, estimated)        0.026     6.880    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3_n_0
+    SLICE_X57Y126        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     6.895 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2/CO[7]
+                         net (fo=1, estimated)        0.026     6.921    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2_n_0
+    SLICE_X57Y127        CARRY8 (Prop_CARRY8_SLICEM_CI_O[0])
+                                                      0.056     6.977 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[24]_i_3/O[0]
+                         net (fo=1, estimated)        0.139     7.116    system_i/probe/inst/core/fabric/real_softmax.softmax/bf16_to_q16_return0[17]
+    SLICE_X58Y127        LUT3 (Prop_B5LUT_SLICEL_I1_O)
+                                                      0.165     7.281 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2/O
+                         net (fo=4, estimated)        0.176     7.457    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2_n_0
+    SLICE_X58Y126        LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     7.508 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8/O
+                         net (fo=1, routed)           0.009     7.517    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8_n_0
+    SLICE_X58Y126        CARRY8 (Prop_CARRY8_SLICEL_S[1]_CO[7])
+                                                      0.186     7.703 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1/CO[7]
+                         net (fo=1, estimated)        0.026     7.729    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1_n_0
+    SLICE_X58Y127        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.076     7.805 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7/O[1]
+                         net (fo=1, estimated)        0.283     8.088    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7_n_14
+    SLICE_X59Y125        LUT4 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.036     8.124 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6/O
+                         net (fo=1, estimated)        0.135     8.259    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6_n_0
+    SLICE_X58Y123        LUT6 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.050     8.309 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2/O
+                         net (fo=4, estimated)        0.099     8.408    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2_n_0
+    SLICE_X58Y123        LUT5 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.035     8.443 r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1/O
+                         net (fo=35, estimated)       0.347     8.790    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg__0/CEA2
+    DSP48E2_X5Y49        DSP_A_B_DATA                                 r  system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg__0/DSP_A_B_DATA_INST/CEA2
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_pl_0 rise edge)
+                                                      6.666     6.666 r  
+    PS8_X0Y0             PS8                          0.000     6.666 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.143     6.809    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.025     6.834 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.644     8.478    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg__0/CLK
+    DSP48E2_X5Y49        DSP_A_B_DATA                                 r  system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg__0/DSP_A_B_DATA_INST/CLK
+                         clock pessimism              0.176     8.654    
+                         clock uncertainty           -0.152     8.502    
+    DSP48E2_X5Y49        DSP_A_B_DATA (Setup_DSP_A_B_DATA_DSP48E2_CLK_CEA2)
+                                                     -0.159     8.343    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r_reg__0/DSP_A_B_DATA_INST
+  -------------------------------------------------------------------
+                         required time                          8.343    
+                         arrival time                          -8.790    
+  -------------------------------------------------------------------
+                         slack                                 -0.447    
+
+Slack (VIOLATED) :        -0.441ns  (required time - arrival time)
+  Source:                 system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Destination:            system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0__0/DSP_A_B_DATA_INST/CEA2
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Path Group:             clk_pl_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            6.666ns  (clk_pl_0 rise@6.666ns - clk_pl_0 rise@0.000ns)
+  Data Path Delay:        6.734ns  (logic 2.207ns (32.774%)  route 4.527ns (67.226%))
+  Logic Levels:           27  (CARRY8=8 LUT2=5 LUT3=4 LUT4=2 LUT5=2 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.061ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.812ns = ( 8.478 - 6.666 ) 
+    Source Clock Delay      (SCD):    2.050ns
+    Clock Pessimism Removal (CPR):    0.176ns
+  Clock Uncertainty:      0.152ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.296ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      1.842ns (routing 0.701ns, distribution 1.141ns)
+  Clock Net Delay (Destination): 1.644ns (routing 0.632ns, distribution 1.012ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_pl_0 rise edge)
+                                                      0.000     0.000 r  
+    PS8_X0Y0             PS8                          0.000     0.000 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.180     0.180    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.028     0.208 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.842     2.050    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X57Y151        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X57Y151        FDRE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.079     2.129 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/Q
+                         net (fo=149, estimated)      0.301     2.430    system_i/probe/inst/core/fabric/real_softmax.softmax/column_w[1]
+    SLICE_X55Y150        LUT6 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.096     2.526 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35/O
+                         net (fo=1, routed)           0.010     2.536    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35_n_0
+    SLICE_X55Y150        MUXF7 (Prop_F7MUX_CD_SLICEL_I1_O)
+                                                      0.064     2.600 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22/O
+                         net (fo=32, estimated)       0.251     2.851    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22_n_0
+    SLICE_X55Y146        LUT2 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.035     2.886 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4/O
+                         net (fo=17, estimated)       0.208     3.094    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4_n_0
+    SLICE_X55Y141        LUT5 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.123     3.217 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3/O
+                         net (fo=29, estimated)       0.154     3.371    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3_n_0
+    SLICE_X55Y140        LUT6 (Prop_F6LUT_SLICEL_I4_O)
+                                                      0.097     3.468 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22/O
+                         net (fo=12, estimated)       0.353     3.821    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22_n_0
+    SLICE_X53Y129        LUT3 (Prop_H6LUT_SLICEM_I2_O)
+                                                      0.053     3.874 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56/O
+                         net (fo=16, estimated)       0.192     4.066    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56_n_0
+    SLICE_X52Y129        LUT3 (Prop_F5LUT_SLICEL_I0_O)
+                                                      0.143     4.209 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_52/O
+                         net (fo=4, estimated)        0.390     4.599    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_73_n_0
+    SLICE_X52Y129        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[6])
+                                                      0.224     4.823 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_49/O[6]
+                         net (fo=1, estimated)        0.371     5.194    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude6[7]
+    SLICE_X56Y130        LUT2 (Prop_C6LUT_SLICEM_I0_O)
+                                                      0.037     5.231 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55/O
+                         net (fo=3, estimated)        0.092     5.323    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55_n_0
+    SLICE_X56Y131        LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038     5.361 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31/O
+                         net (fo=1, estimated)        0.151     5.512    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31_n_0
+    SLICE_X57Y131        CARRY8 (Prop_CARRY8_SLICEM_DI[3]_CO[7])
+                                                      0.106     5.618 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12/CO[7]
+                         net (fo=1, estimated)        0.026     5.644    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12_n_0
+    SLICE_X57Y132        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     5.659 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_4/CO[7]
+                         net (fo=2, estimated)        0.245     5.904    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude41_in
+    SLICE_X58Y130        LUT3 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.050     5.954 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3/O
+                         net (fo=3, estimated)        0.101     6.055    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3_n_0
+    SLICE_X58Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.090 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14/O
+                         net (fo=3, estimated)        0.096     6.186    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14_n_0
+    SLICE_X59Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.221 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4/O
+                         net (fo=7, estimated)        0.112     6.333    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4_n_0
+    SLICE_X58Y128        LUT4 (Prop_D6LUT_SLICEL_I2_O)
+                                                      0.050     6.383 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4/O
+                         net (fo=3, estimated)        0.192     6.575    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4_n_0
+    SLICE_X57Y125        LUT6 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.098     6.673 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6/O
+                         net (fo=1, routed)           0.022     6.695    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6_n_0
+    SLICE_X57Y125        CARRY8 (Prop_CARRY8_SLICEM_S[5]_CO[7])
+                                                      0.159     6.854 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3/CO[7]
+                         net (fo=1, estimated)        0.026     6.880    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3_n_0
+    SLICE_X57Y126        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     6.895 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2/CO[7]
+                         net (fo=1, estimated)        0.026     6.921    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2_n_0
+    SLICE_X57Y127        CARRY8 (Prop_CARRY8_SLICEM_CI_O[0])
+                                                      0.056     6.977 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[24]_i_3/O[0]
+                         net (fo=1, estimated)        0.139     7.116    system_i/probe/inst/core/fabric/real_softmax.softmax/bf16_to_q16_return0[17]
+    SLICE_X58Y127        LUT3 (Prop_B5LUT_SLICEL_I1_O)
+                                                      0.165     7.281 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2/O
+                         net (fo=4, estimated)        0.176     7.457    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2_n_0
+    SLICE_X58Y126        LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     7.508 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8/O
+                         net (fo=1, routed)           0.009     7.517    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8_n_0
+    SLICE_X58Y126        CARRY8 (Prop_CARRY8_SLICEL_S[1]_CO[7])
+                                                      0.186     7.703 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1/CO[7]
+                         net (fo=1, estimated)        0.026     7.729    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1_n_0
+    SLICE_X58Y127        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.076     7.805 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7/O[1]
+                         net (fo=1, estimated)        0.283     8.088    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7_n_14
+    SLICE_X59Y125        LUT4 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.036     8.124 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6/O
+                         net (fo=1, estimated)        0.135     8.259    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6_n_0
+    SLICE_X58Y123        LUT6 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.050     8.309 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2/O
+                         net (fo=4, estimated)        0.099     8.408    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2_n_0
+    SLICE_X58Y123        LUT5 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.035     8.443 r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1/O
+                         net (fo=35, estimated)       0.341     8.784    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0__0/CEA2
+    DSP48E2_X5Y48        DSP_A_B_DATA                                 r  system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0__0/DSP_A_B_DATA_INST/CEA2
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_pl_0 rise edge)
+                                                      6.666     6.666 r  
+    PS8_X0Y0             PS8                          0.000     6.666 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.143     6.809    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.025     6.834 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.644     8.478    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0__0/CLK
+    DSP48E2_X5Y48        DSP_A_B_DATA                                 r  system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0__0/DSP_A_B_DATA_INST/CLK
+                         clock pessimism              0.176     8.654    
+                         clock uncertainty           -0.152     8.502    
+    DSP48E2_X5Y48        DSP_A_B_DATA (Setup_DSP_A_B_DATA_DSP48E2_CLK_CEA2)
+                                                     -0.159     8.343    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0__0/DSP_A_B_DATA_INST
+  -------------------------------------------------------------------
+                         required time                          8.343    
+                         arrival time                          -8.784    
+  -------------------------------------------------------------------
+                         slack                                 -0.441    
+
+Slack (VIOLATED) :        -0.434ns  (required time - arrival time)
+  Source:                 system_i/probe/inst/core/fabric/real_attention.value/row_r_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Destination:            system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_4/CAS_IN_EN_A
+                            (rising edge-triggered cell URAM288 clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Path Group:             clk_pl_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            6.666ns  (clk_pl_0 rise@6.666ns - clk_pl_0 rise@0.000ns)
+  Data Path Delay:        6.286ns  (logic 2.873ns (45.705%)  route 3.413ns (54.295%))
+  Logic Levels:           18  (CARRY8=1 DSP_A_B_DATA=1 DSP_ALU=1 DSP_M_DATA=1 DSP_MULTIPLIER=1 DSP_OUTPUT=1 DSP_PREADD_DATA=1 LUT2=1 LUT5=3 LUT6=3 URAM288=4)
+  Clock Path Skew:        -0.232ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.860ns = ( 8.526 - 6.666 ) 
+    Source Clock Delay      (SCD):    2.201ns
+    Clock Pessimism Removal (CPR):    0.109ns
+  Clock Uncertainty:      0.152ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.296ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      1.993ns (routing 0.701ns, distribution 1.292ns)
+  Clock Net Delay (Destination): 1.692ns (routing 0.632ns, distribution 1.060ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_pl_0 rise edge)
+                                                      0.000     0.000 r  
+    PS8_X0Y0             PS8                          0.000     0.000 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.180     0.180    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.028     0.208 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.993     2.201    system_i/probe/inst/core/fabric/real_attention.value/aclk
+    SLICE_X71Y143        FDRE                                         r  system_i/probe/inst/core/fabric/real_attention.value/row_r_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X71Y143        FDRE (Prop_DFF_SLICEM_C_Q)
+                                                      0.078     2.279 r  system_i/probe/inst/core/fabric/real_attention.value/row_r_reg[1]/Q
+                         net (fo=17, estimated)       0.282     2.561    system_i/probe/inst/core/fabric/real_attention.value/row_r_reg_n_0_[1]
+    SLICE_X70Y138        LUT6 (Prop_E6LUT_SLICEM_I4_O)
+                                                      0.148     2.709 r  system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0_i_23/O
+                         net (fo=2, estimated)        0.204     2.913    system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0_i_23_n_0
+    SLICE_X71Y138        LUT2 (Prop_E5LUT_SLICEM_I1_O)
+                                                      0.102     3.015 f  system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0_i_13/O
+                         net (fo=1, estimated)        0.247     3.262    system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/A[5]
+    DSP48E2_X7Y54        DSP_A_B_DATA (Prop_DSP_A_B_DATA_DSP48E2_A[5]_A2_DATA[5])
+                                                      0.192     3.454 r  system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/DSP_A_B_DATA_INST/A2_DATA[5]
+                         net (fo=1, routed)           0.000     3.454    system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/DSP_A_B_DATA.A2_DATA<5>
+    DSP48E2_X7Y54        DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_DSP48E2_A2_DATA[5]_A2A1[5])
+                                                      0.076     3.530 r  system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/DSP_PREADD_DATA_INST/A2A1[5]
+                         net (fo=1, routed)           0.000     3.530    system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/DSP_PREADD_DATA.A2A1<5>
+    DSP48E2_X7Y54        DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_DSP48E2_A2A1[5]_U[11])
+                                                      0.505     4.035 f  system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/DSP_MULTIPLIER_INST/U[11]
+                         net (fo=1, routed)           0.000     4.035    system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/DSP_MULTIPLIER.U<11>
+    DSP48E2_X7Y54        DSP_M_DATA (Prop_DSP_M_DATA_DSP48E2_U[11]_U_DATA[11])
+                                                      0.047     4.082 r  system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/DSP_M_DATA_INST/U_DATA[11]
+                         net (fo=1, routed)           0.000     4.082    system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/DSP_M_DATA.U_DATA<11>
+    DSP48E2_X7Y54        DSP_ALU (Prop_DSP_ALU_DSP48E2_U_DATA[11]_ALU_OUT[11])
+                                                      0.585     4.667 r  system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/DSP_ALU_INST/ALU_OUT[11]
+                         net (fo=1, routed)           0.000     4.667    system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/DSP_ALU.ALU_OUT<11>
+    DSP48E2_X7Y54        DSP_OUTPUT (Prop_DSP_OUTPUT_DSP48E2_ALU_OUT[11]_P[11])
+                                                      0.109     4.776 f  system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0/DSP_OUTPUT_INST/P[11]
+                         net (fo=3, estimated)        0.330     5.106    system_i/probe/inst/core/fabric/real_attention.value/compute_role_read_addr[15]_16[11]
+    SLICE_X68Y133        LUT5 (Prop_D6LUT_SLICEL_I4_O)
+                                                      0.036     5.142 r  system_i/probe/inst/core/fabric/real_attention.value/read_valid_pipe_r[10][0]_i_20/O
+                         net (fo=1, estimated)        0.235     5.377    system_i/probe/inst/core/fabric/real_attention.value/read_valid_pipe_r[10][0]_i_20_n_0
+    SLICE_X67Y132        CARRY8 (Prop_CARRY8_SLICEM_DI[1]_CO[3])
+                                                      0.144     5.521 r  system_i/probe/inst/core/fabric/real_attention.value/read_valid_pipe_r_reg[10][0]_i_9/CO[3]
+                         net (fo=1, estimated)        0.215     5.736    system_i/probe/inst/core/fabric/fabric/banks/ownership/role_fault_r[15]_i_3_1[0]
+    SLICE_X67Y132        LUT6 (Prop_F6LUT_SLICEM_I0_O)
+                                                      0.037     5.773 f  system_i/probe/inst/core/fabric/fabric/banks/ownership/read_valid_pipe_r[10][0]_i_6/O
+                         net (fo=2, estimated)        0.048     5.821    system_i/probe/inst/core/fabric/real_attention.value/read_lane_pipe_r_reg[10][0]
+    SLICE_X67Y132        LUT5 (Prop_H5LUT_SLICEM_I2_O)
+                                                      0.066     5.887 r  system_i/probe/inst/core/fabric/real_attention.value/read_valid_pipe_r[10][0]_i_2/O
+                         net (fo=17, estimated)       0.653     6.540    system_i/probe/inst/core/fabric/real_attention.value/fabric/banks/router/bank_enb173_out
+    SLICE_X65Y125        LUT6 (Prop_G6LUT_SLICEL_I1_O)
+                                                      0.035     6.575 f  system_i/probe/inst/core/fabric/real_attention.value/u_xpm_memory_sdpram_i_146__0/O
+                         net (fo=5, estimated)        0.302     6.877    system_i/probe/inst/core/fabric/real_attention.value/a_read_addr__0_0[14]
+    SLICE_X63Y117        LUT5 (Prop_D6LUT_SLICEM_I1_O)
+                                                      0.051     6.928 r  system_i/probe/inst/core/fabric/real_attention.value/u_xpm_memory_sdpram_i_145__6/O
+                         net (fo=4, estimated)        0.893     7.821    system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/enb
+    URAM288_X0Y16        URAM288 (Prop_URAM_288K_INST_URAM288_EN_A_CAS_OUT_EN_A)
+                                                      0.215     8.036 r  system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_0/CAS_OUT_EN_A
+                         net (fo=1, estimated)        0.001     8.037    system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_0_n_2
+    URAM288_X0Y17        URAM288 (Prop_URAM_288K_INST_URAM288_CAS_IN_EN_A_CAS_OUT_EN_A)
+                                                      0.149     8.186 r  system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_1/CAS_OUT_EN_A
+                         net (fo=1, estimated)        0.001     8.187    system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_1_n_2
+    URAM288_X0Y18        URAM288 (Prop_URAM_288K_INST_URAM288_CAS_IN_EN_A_CAS_OUT_EN_A)
+                                                      0.149     8.336 r  system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_2/CAS_OUT_EN_A
+                         net (fo=1, estimated)        0.001     8.337    system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_2_n_2
+    URAM288_X0Y19        URAM288 (Prop_URAM_288K_INST_URAM288_CAS_IN_EN_A_CAS_OUT_EN_A)
+                                                      0.149     8.486 r  system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_3/CAS_OUT_EN_A
+                         net (fo=1, estimated)        0.001     8.487    system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_3_n_2
+    URAM288_X0Y20        URAM288                                      r  system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_4/CAS_IN_EN_A
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_pl_0 rise edge)
+                                                      6.666     6.666 r  
+    PS8_X0Y0             PS8                          0.000     6.666 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.143     6.809    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.025     6.834 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.692     8.526    system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/clka
+    URAM288_X0Y20        URAM288                                      r  system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_4/CLK
+                         clock pessimism              0.109     8.635    
+                         clock uncertainty           -0.152     8.483    
+    URAM288_X0Y20        URAM288 (Setup_URAM_288K_INST_URAM288_CLK_CAS_IN_EN_A)
+                                                     -0.430     8.053    system_i/probe/inst/core/fabric/fabric/banks/memories/banks[10].wide.ultra.odd_mem/u_xpm_memory_sdpram/xpm_memory_base_inst/gen_wr_a.gen_byte_narrow.for_mem_cols[1].mem_reg_uram_4
+  -------------------------------------------------------------------
+                         required time                          8.053    
+                         arrival time                          -8.487    
+  -------------------------------------------------------------------
+                         slack                                 -0.434    
+
+Slack (VIOLATED) :        -0.418ns  (required time - arrival time)
+  Source:                 system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Destination:            system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0/DSP_A_B_DATA_INST/CEB2
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Path Group:             clk_pl_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            6.666ns  (clk_pl_0 rise@6.666ns - clk_pl_0 rise@0.000ns)
+  Data Path Delay:        6.725ns  (logic 2.207ns (32.818%)  route 4.518ns (67.182%))
+  Logic Levels:           27  (CARRY8=8 LUT2=5 LUT3=4 LUT4=2 LUT5=2 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.062ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.811ns = ( 8.477 - 6.666 ) 
+    Source Clock Delay      (SCD):    2.050ns
+    Clock Pessimism Removal (CPR):    0.176ns
+  Clock Uncertainty:      0.152ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.296ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      1.842ns (routing 0.701ns, distribution 1.141ns)
+  Clock Net Delay (Destination): 1.643ns (routing 0.632ns, distribution 1.011ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_pl_0 rise edge)
+                                                      0.000     0.000 r  
+    PS8_X0Y0             PS8                          0.000     0.000 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.180     0.180    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.028     0.208 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.842     2.050    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X57Y151        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X57Y151        FDRE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.079     2.129 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/Q
+                         net (fo=149, estimated)      0.301     2.430    system_i/probe/inst/core/fabric/real_softmax.softmax/column_w[1]
+    SLICE_X55Y150        LUT6 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.096     2.526 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35/O
+                         net (fo=1, routed)           0.010     2.536    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35_n_0
+    SLICE_X55Y150        MUXF7 (Prop_F7MUX_CD_SLICEL_I1_O)
+                                                      0.064     2.600 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22/O
+                         net (fo=32, estimated)       0.251     2.851    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22_n_0
+    SLICE_X55Y146        LUT2 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.035     2.886 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4/O
+                         net (fo=17, estimated)       0.208     3.094    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4_n_0
+    SLICE_X55Y141        LUT5 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.123     3.217 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3/O
+                         net (fo=29, estimated)       0.154     3.371    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3_n_0
+    SLICE_X55Y140        LUT6 (Prop_F6LUT_SLICEL_I4_O)
+                                                      0.097     3.468 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22/O
+                         net (fo=12, estimated)       0.353     3.821    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22_n_0
+    SLICE_X53Y129        LUT3 (Prop_H6LUT_SLICEM_I2_O)
+                                                      0.053     3.874 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56/O
+                         net (fo=16, estimated)       0.192     4.066    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56_n_0
+    SLICE_X52Y129        LUT3 (Prop_F5LUT_SLICEL_I0_O)
+                                                      0.143     4.209 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_52/O
+                         net (fo=4, estimated)        0.390     4.599    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_73_n_0
+    SLICE_X52Y129        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[6])
+                                                      0.224     4.823 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_49/O[6]
+                         net (fo=1, estimated)        0.371     5.194    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude6[7]
+    SLICE_X56Y130        LUT2 (Prop_C6LUT_SLICEM_I0_O)
+                                                      0.037     5.231 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55/O
+                         net (fo=3, estimated)        0.092     5.323    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55_n_0
+    SLICE_X56Y131        LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038     5.361 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31/O
+                         net (fo=1, estimated)        0.151     5.512    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31_n_0
+    SLICE_X57Y131        CARRY8 (Prop_CARRY8_SLICEM_DI[3]_CO[7])
+                                                      0.106     5.618 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12/CO[7]
+                         net (fo=1, estimated)        0.026     5.644    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12_n_0
+    SLICE_X57Y132        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     5.659 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_4/CO[7]
+                         net (fo=2, estimated)        0.245     5.904    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude41_in
+    SLICE_X58Y130        LUT3 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.050     5.954 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3/O
+                         net (fo=3, estimated)        0.101     6.055    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3_n_0
+    SLICE_X58Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.090 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14/O
+                         net (fo=3, estimated)        0.096     6.186    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14_n_0
+    SLICE_X59Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.221 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4/O
+                         net (fo=7, estimated)        0.112     6.333    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4_n_0
+    SLICE_X58Y128        LUT4 (Prop_D6LUT_SLICEL_I2_O)
+                                                      0.050     6.383 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4/O
+                         net (fo=3, estimated)        0.192     6.575    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4_n_0
+    SLICE_X57Y125        LUT6 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.098     6.673 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6/O
+                         net (fo=1, routed)           0.022     6.695    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6_n_0
+    SLICE_X57Y125        CARRY8 (Prop_CARRY8_SLICEM_S[5]_CO[7])
+                                                      0.159     6.854 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3/CO[7]
+                         net (fo=1, estimated)        0.026     6.880    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3_n_0
+    SLICE_X57Y126        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     6.895 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2/CO[7]
+                         net (fo=1, estimated)        0.026     6.921    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2_n_0
+    SLICE_X57Y127        CARRY8 (Prop_CARRY8_SLICEM_CI_O[0])
+                                                      0.056     6.977 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[24]_i_3/O[0]
+                         net (fo=1, estimated)        0.139     7.116    system_i/probe/inst/core/fabric/real_softmax.softmax/bf16_to_q16_return0[17]
+    SLICE_X58Y127        LUT3 (Prop_B5LUT_SLICEL_I1_O)
+                                                      0.165     7.281 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2/O
+                         net (fo=4, estimated)        0.176     7.457    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2_n_0
+    SLICE_X58Y126        LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     7.508 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8/O
+                         net (fo=1, routed)           0.009     7.517    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8_n_0
+    SLICE_X58Y126        CARRY8 (Prop_CARRY8_SLICEL_S[1]_CO[7])
+                                                      0.186     7.703 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1/CO[7]
+                         net (fo=1, estimated)        0.026     7.729    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1_n_0
+    SLICE_X58Y127        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.076     7.805 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7/O[1]
+                         net (fo=1, estimated)        0.283     8.088    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7_n_14
+    SLICE_X59Y125        LUT4 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.036     8.124 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6/O
+                         net (fo=1, estimated)        0.135     8.259    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6_n_0
+    SLICE_X58Y123        LUT6 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.050     8.309 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2/O
+                         net (fo=4, estimated)        0.099     8.408    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2_n_0
+    SLICE_X58Y123        LUT5 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.035     8.443 r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1/O
+                         net (fo=35, estimated)       0.332     8.775    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0/CEB2
+    DSP48E2_X5Y50        DSP_A_B_DATA                                 r  system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0/DSP_A_B_DATA_INST/CEB2
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_pl_0 rise edge)
+                                                      6.666     6.666 r  
+    PS8_X0Y0             PS8                          0.000     6.666 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.143     6.809    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.025     6.834 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.643     8.477    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0/CLK
+    DSP48E2_X5Y50        DSP_A_B_DATA                                 r  system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0/DSP_A_B_DATA_INST/CLK
+                         clock pessimism              0.176     8.653    
+                         clock uncertainty           -0.152     8.501    
+    DSP48E2_X5Y50        DSP_A_B_DATA (Setup_DSP_A_B_DATA_DSP48E2_CLK_CEB2)
+                                                     -0.144     8.357    system_i/probe/inst/core/fabric/real_softmax.softmax/product_r0/DSP_A_B_DATA_INST
+  -------------------------------------------------------------------
+                         required time                          8.357    
+                         arrival time                          -8.775    
+  -------------------------------------------------------------------
+                         slack                                 -0.418    
+
+Slack (VIOLATED) :        -0.359ns  (required time - arrival time)
+  Source:                 system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Destination:            system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[26]/CE
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Path Group:             clk_pl_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            6.666ns  (clk_pl_0 rise@6.666ns - clk_pl_0 rise@0.000ns)
+  Data Path Delay:        6.729ns  (logic 2.207ns (32.798%)  route 4.522ns (67.202%))
+  Logic Levels:           27  (CARRY8=8 LUT2=5 LUT3=4 LUT4=2 LUT5=2 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.084ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.790ns = ( 8.456 - 6.666 ) 
+    Source Clock Delay      (SCD):    2.050ns
+    Clock Pessimism Removal (CPR):    0.176ns
+  Clock Uncertainty:      0.152ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.296ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      1.842ns (routing 0.701ns, distribution 1.141ns)
+  Clock Net Delay (Destination): 1.622ns (routing 0.632ns, distribution 0.990ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_pl_0 rise edge)
+                                                      0.000     0.000 r  
+    PS8_X0Y0             PS8                          0.000     0.000 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.180     0.180    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.028     0.208 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.842     2.050    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X57Y151        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X57Y151        FDRE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.079     2.129 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/Q
+                         net (fo=149, estimated)      0.301     2.430    system_i/probe/inst/core/fabric/real_softmax.softmax/column_w[1]
+    SLICE_X55Y150        LUT6 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.096     2.526 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35/O
+                         net (fo=1, routed)           0.010     2.536    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35_n_0
+    SLICE_X55Y150        MUXF7 (Prop_F7MUX_CD_SLICEL_I1_O)
+                                                      0.064     2.600 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22/O
+                         net (fo=32, estimated)       0.251     2.851    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22_n_0
+    SLICE_X55Y146        LUT2 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.035     2.886 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4/O
+                         net (fo=17, estimated)       0.208     3.094    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4_n_0
+    SLICE_X55Y141        LUT5 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.123     3.217 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3/O
+                         net (fo=29, estimated)       0.154     3.371    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3_n_0
+    SLICE_X55Y140        LUT6 (Prop_F6LUT_SLICEL_I4_O)
+                                                      0.097     3.468 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22/O
+                         net (fo=12, estimated)       0.353     3.821    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22_n_0
+    SLICE_X53Y129        LUT3 (Prop_H6LUT_SLICEM_I2_O)
+                                                      0.053     3.874 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56/O
+                         net (fo=16, estimated)       0.192     4.066    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56_n_0
+    SLICE_X52Y129        LUT3 (Prop_F5LUT_SLICEL_I0_O)
+                                                      0.143     4.209 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_52/O
+                         net (fo=4, estimated)        0.390     4.599    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_73_n_0
+    SLICE_X52Y129        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[6])
+                                                      0.224     4.823 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_49/O[6]
+                         net (fo=1, estimated)        0.371     5.194    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude6[7]
+    SLICE_X56Y130        LUT2 (Prop_C6LUT_SLICEM_I0_O)
+                                                      0.037     5.231 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55/O
+                         net (fo=3, estimated)        0.092     5.323    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55_n_0
+    SLICE_X56Y131        LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038     5.361 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31/O
+                         net (fo=1, estimated)        0.151     5.512    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31_n_0
+    SLICE_X57Y131        CARRY8 (Prop_CARRY8_SLICEM_DI[3]_CO[7])
+                                                      0.106     5.618 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12/CO[7]
+                         net (fo=1, estimated)        0.026     5.644    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12_n_0
+    SLICE_X57Y132        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     5.659 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_4/CO[7]
+                         net (fo=2, estimated)        0.245     5.904    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude41_in
+    SLICE_X58Y130        LUT3 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.050     5.954 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3/O
+                         net (fo=3, estimated)        0.101     6.055    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3_n_0
+    SLICE_X58Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.090 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14/O
+                         net (fo=3, estimated)        0.096     6.186    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14_n_0
+    SLICE_X59Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.221 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4/O
+                         net (fo=7, estimated)        0.112     6.333    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4_n_0
+    SLICE_X58Y128        LUT4 (Prop_D6LUT_SLICEL_I2_O)
+                                                      0.050     6.383 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4/O
+                         net (fo=3, estimated)        0.192     6.575    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4_n_0
+    SLICE_X57Y125        LUT6 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.098     6.673 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6/O
+                         net (fo=1, routed)           0.022     6.695    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6_n_0
+    SLICE_X57Y125        CARRY8 (Prop_CARRY8_SLICEM_S[5]_CO[7])
+                                                      0.159     6.854 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3/CO[7]
+                         net (fo=1, estimated)        0.026     6.880    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3_n_0
+    SLICE_X57Y126        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     6.895 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2/CO[7]
+                         net (fo=1, estimated)        0.026     6.921    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2_n_0
+    SLICE_X57Y127        CARRY8 (Prop_CARRY8_SLICEM_CI_O[0])
+                                                      0.056     6.977 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[24]_i_3/O[0]
+                         net (fo=1, estimated)        0.139     7.116    system_i/probe/inst/core/fabric/real_softmax.softmax/bf16_to_q16_return0[17]
+    SLICE_X58Y127        LUT3 (Prop_B5LUT_SLICEL_I1_O)
+                                                      0.165     7.281 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2/O
+                         net (fo=4, estimated)        0.176     7.457    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2_n_0
+    SLICE_X58Y126        LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     7.508 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8/O
+                         net (fo=1, routed)           0.009     7.517    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8_n_0
+    SLICE_X58Y126        CARRY8 (Prop_CARRY8_SLICEL_S[1]_CO[7])
+                                                      0.186     7.703 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1/CO[7]
+                         net (fo=1, estimated)        0.026     7.729    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1_n_0
+    SLICE_X58Y127        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.076     7.805 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7/O[1]
+                         net (fo=1, estimated)        0.283     8.088    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7_n_14
+    SLICE_X59Y125        LUT4 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.036     8.124 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6/O
+                         net (fo=1, estimated)        0.135     8.259    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6_n_0
+    SLICE_X58Y123        LUT6 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.050     8.309 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2/O
+                         net (fo=4, estimated)        0.099     8.408    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2_n_0
+    SLICE_X58Y123        LUT5 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.035     8.443 r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1/O
+                         net (fo=35, estimated)       0.336     8.779    system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1_n_0
+    SLICE_X59Y122        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[26]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_pl_0 rise edge)
+                                                      6.666     6.666 r  
+    PS8_X0Y0             PS8                          0.000     6.666 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.143     6.809    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.025     6.834 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.622     8.456    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X59Y122        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[26]/C
+                         clock pessimism              0.176     8.632    
+                         clock uncertainty           -0.152     8.480    
+    SLICE_X59Y122        FDRE (Setup_AFF_SLICEL_C_CE)
+                                                     -0.060     8.420    system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[26]
+  -------------------------------------------------------------------
+                         required time                          8.420    
+                         arrival time                          -8.779    
+  -------------------------------------------------------------------
+                         slack                                 -0.359    
+
+Slack (VIOLATED) :        -0.359ns  (required time - arrival time)
+  Source:                 system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Destination:            system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[27]/CE
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Path Group:             clk_pl_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            6.666ns  (clk_pl_0 rise@6.666ns - clk_pl_0 rise@0.000ns)
+  Data Path Delay:        6.730ns  (logic 2.207ns (32.793%)  route 4.523ns (67.207%))
+  Logic Levels:           27  (CARRY8=8 LUT2=5 LUT3=4 LUT4=2 LUT5=2 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.084ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.790ns = ( 8.456 - 6.666 ) 
+    Source Clock Delay      (SCD):    2.050ns
+    Clock Pessimism Removal (CPR):    0.176ns
+  Clock Uncertainty:      0.152ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.296ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      1.842ns (routing 0.701ns, distribution 1.141ns)
+  Clock Net Delay (Destination): 1.622ns (routing 0.632ns, distribution 0.990ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_pl_0 rise edge)
+                                                      0.000     0.000 r  
+    PS8_X0Y0             PS8                          0.000     0.000 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.180     0.180    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.028     0.208 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.842     2.050    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X57Y151        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X57Y151        FDRE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.079     2.129 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/Q
+                         net (fo=149, estimated)      0.301     2.430    system_i/probe/inst/core/fabric/real_softmax.softmax/column_w[1]
+    SLICE_X55Y150        LUT6 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.096     2.526 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35/O
+                         net (fo=1, routed)           0.010     2.536    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35_n_0
+    SLICE_X55Y150        MUXF7 (Prop_F7MUX_CD_SLICEL_I1_O)
+                                                      0.064     2.600 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22/O
+                         net (fo=32, estimated)       0.251     2.851    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22_n_0
+    SLICE_X55Y146        LUT2 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.035     2.886 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4/O
+                         net (fo=17, estimated)       0.208     3.094    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4_n_0
+    SLICE_X55Y141        LUT5 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.123     3.217 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3/O
+                         net (fo=29, estimated)       0.154     3.371    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3_n_0
+    SLICE_X55Y140        LUT6 (Prop_F6LUT_SLICEL_I4_O)
+                                                      0.097     3.468 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22/O
+                         net (fo=12, estimated)       0.353     3.821    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22_n_0
+    SLICE_X53Y129        LUT3 (Prop_H6LUT_SLICEM_I2_O)
+                                                      0.053     3.874 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56/O
+                         net (fo=16, estimated)       0.192     4.066    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56_n_0
+    SLICE_X52Y129        LUT3 (Prop_F5LUT_SLICEL_I0_O)
+                                                      0.143     4.209 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_52/O
+                         net (fo=4, estimated)        0.390     4.599    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_73_n_0
+    SLICE_X52Y129        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[6])
+                                                      0.224     4.823 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_49/O[6]
+                         net (fo=1, estimated)        0.371     5.194    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude6[7]
+    SLICE_X56Y130        LUT2 (Prop_C6LUT_SLICEM_I0_O)
+                                                      0.037     5.231 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55/O
+                         net (fo=3, estimated)        0.092     5.323    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55_n_0
+    SLICE_X56Y131        LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038     5.361 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31/O
+                         net (fo=1, estimated)        0.151     5.512    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31_n_0
+    SLICE_X57Y131        CARRY8 (Prop_CARRY8_SLICEM_DI[3]_CO[7])
+                                                      0.106     5.618 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12/CO[7]
+                         net (fo=1, estimated)        0.026     5.644    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12_n_0
+    SLICE_X57Y132        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     5.659 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_4/CO[7]
+                         net (fo=2, estimated)        0.245     5.904    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude41_in
+    SLICE_X58Y130        LUT3 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.050     5.954 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3/O
+                         net (fo=3, estimated)        0.101     6.055    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3_n_0
+    SLICE_X58Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.090 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14/O
+                         net (fo=3, estimated)        0.096     6.186    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14_n_0
+    SLICE_X59Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.221 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4/O
+                         net (fo=7, estimated)        0.112     6.333    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4_n_0
+    SLICE_X58Y128        LUT4 (Prop_D6LUT_SLICEL_I2_O)
+                                                      0.050     6.383 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4/O
+                         net (fo=3, estimated)        0.192     6.575    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4_n_0
+    SLICE_X57Y125        LUT6 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.098     6.673 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6/O
+                         net (fo=1, routed)           0.022     6.695    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6_n_0
+    SLICE_X57Y125        CARRY8 (Prop_CARRY8_SLICEM_S[5]_CO[7])
+                                                      0.159     6.854 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3/CO[7]
+                         net (fo=1, estimated)        0.026     6.880    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3_n_0
+    SLICE_X57Y126        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     6.895 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2/CO[7]
+                         net (fo=1, estimated)        0.026     6.921    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2_n_0
+    SLICE_X57Y127        CARRY8 (Prop_CARRY8_SLICEM_CI_O[0])
+                                                      0.056     6.977 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[24]_i_3/O[0]
+                         net (fo=1, estimated)        0.139     7.116    system_i/probe/inst/core/fabric/real_softmax.softmax/bf16_to_q16_return0[17]
+    SLICE_X58Y127        LUT3 (Prop_B5LUT_SLICEL_I1_O)
+                                                      0.165     7.281 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2/O
+                         net (fo=4, estimated)        0.176     7.457    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2_n_0
+    SLICE_X58Y126        LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     7.508 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8/O
+                         net (fo=1, routed)           0.009     7.517    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8_n_0
+    SLICE_X58Y126        CARRY8 (Prop_CARRY8_SLICEL_S[1]_CO[7])
+                                                      0.186     7.703 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1/CO[7]
+                         net (fo=1, estimated)        0.026     7.729    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1_n_0
+    SLICE_X58Y127        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.076     7.805 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7/O[1]
+                         net (fo=1, estimated)        0.283     8.088    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7_n_14
+    SLICE_X59Y125        LUT4 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.036     8.124 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6/O
+                         net (fo=1, estimated)        0.135     8.259    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6_n_0
+    SLICE_X58Y123        LUT6 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.050     8.309 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2/O
+                         net (fo=4, estimated)        0.099     8.408    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2_n_0
+    SLICE_X58Y123        LUT5 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.035     8.443 r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1/O
+                         net (fo=35, estimated)       0.337     8.780    system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1_n_0
+    SLICE_X59Y122        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[27]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_pl_0 rise edge)
+                                                      6.666     6.666 r  
+    PS8_X0Y0             PS8                          0.000     6.666 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.143     6.809    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.025     6.834 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.622     8.456    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X59Y122        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[27]/C
+                         clock pessimism              0.176     8.632    
+                         clock uncertainty           -0.152     8.480    
+    SLICE_X59Y122        FDRE (Setup_AFF2_SLICEL_C_CE)
+                                                     -0.059     8.421    system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[27]
+  -------------------------------------------------------------------
+                         required time                          8.421    
+                         arrival time                          -8.780    
+  -------------------------------------------------------------------
+                         slack                                 -0.359    
+
+Slack (VIOLATED) :        -0.359ns  (required time - arrival time)
+  Source:                 system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Destination:            system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[28]/CE
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Path Group:             clk_pl_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            6.666ns  (clk_pl_0 rise@6.666ns - clk_pl_0 rise@0.000ns)
+  Data Path Delay:        6.729ns  (logic 2.207ns (32.798%)  route 4.522ns (67.202%))
+  Logic Levels:           27  (CARRY8=8 LUT2=5 LUT3=4 LUT4=2 LUT5=2 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.084ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.790ns = ( 8.456 - 6.666 ) 
+    Source Clock Delay      (SCD):    2.050ns
+    Clock Pessimism Removal (CPR):    0.176ns
+  Clock Uncertainty:      0.152ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.296ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      1.842ns (routing 0.701ns, distribution 1.141ns)
+  Clock Net Delay (Destination): 1.622ns (routing 0.632ns, distribution 0.990ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_pl_0 rise edge)
+                                                      0.000     0.000 r  
+    PS8_X0Y0             PS8                          0.000     0.000 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.180     0.180    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.028     0.208 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.842     2.050    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X57Y151        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X57Y151        FDRE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.079     2.129 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/Q
+                         net (fo=149, estimated)      0.301     2.430    system_i/probe/inst/core/fabric/real_softmax.softmax/column_w[1]
+    SLICE_X55Y150        LUT6 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.096     2.526 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35/O
+                         net (fo=1, routed)           0.010     2.536    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35_n_0
+    SLICE_X55Y150        MUXF7 (Prop_F7MUX_CD_SLICEL_I1_O)
+                                                      0.064     2.600 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22/O
+                         net (fo=32, estimated)       0.251     2.851    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22_n_0
+    SLICE_X55Y146        LUT2 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.035     2.886 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4/O
+                         net (fo=17, estimated)       0.208     3.094    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4_n_0
+    SLICE_X55Y141        LUT5 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.123     3.217 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3/O
+                         net (fo=29, estimated)       0.154     3.371    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3_n_0
+    SLICE_X55Y140        LUT6 (Prop_F6LUT_SLICEL_I4_O)
+                                                      0.097     3.468 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22/O
+                         net (fo=12, estimated)       0.353     3.821    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22_n_0
+    SLICE_X53Y129        LUT3 (Prop_H6LUT_SLICEM_I2_O)
+                                                      0.053     3.874 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56/O
+                         net (fo=16, estimated)       0.192     4.066    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56_n_0
+    SLICE_X52Y129        LUT3 (Prop_F5LUT_SLICEL_I0_O)
+                                                      0.143     4.209 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_52/O
+                         net (fo=4, estimated)        0.390     4.599    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_73_n_0
+    SLICE_X52Y129        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[6])
+                                                      0.224     4.823 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_49/O[6]
+                         net (fo=1, estimated)        0.371     5.194    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude6[7]
+    SLICE_X56Y130        LUT2 (Prop_C6LUT_SLICEM_I0_O)
+                                                      0.037     5.231 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55/O
+                         net (fo=3, estimated)        0.092     5.323    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55_n_0
+    SLICE_X56Y131        LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038     5.361 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31/O
+                         net (fo=1, estimated)        0.151     5.512    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31_n_0
+    SLICE_X57Y131        CARRY8 (Prop_CARRY8_SLICEM_DI[3]_CO[7])
+                                                      0.106     5.618 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12/CO[7]
+                         net (fo=1, estimated)        0.026     5.644    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12_n_0
+    SLICE_X57Y132        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     5.659 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_4/CO[7]
+                         net (fo=2, estimated)        0.245     5.904    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude41_in
+    SLICE_X58Y130        LUT3 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.050     5.954 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3/O
+                         net (fo=3, estimated)        0.101     6.055    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3_n_0
+    SLICE_X58Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.090 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14/O
+                         net (fo=3, estimated)        0.096     6.186    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14_n_0
+    SLICE_X59Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.221 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4/O
+                         net (fo=7, estimated)        0.112     6.333    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4_n_0
+    SLICE_X58Y128        LUT4 (Prop_D6LUT_SLICEL_I2_O)
+                                                      0.050     6.383 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4/O
+                         net (fo=3, estimated)        0.192     6.575    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4_n_0
+    SLICE_X57Y125        LUT6 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.098     6.673 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6/O
+                         net (fo=1, routed)           0.022     6.695    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6_n_0
+    SLICE_X57Y125        CARRY8 (Prop_CARRY8_SLICEM_S[5]_CO[7])
+                                                      0.159     6.854 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3/CO[7]
+                         net (fo=1, estimated)        0.026     6.880    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3_n_0
+    SLICE_X57Y126        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     6.895 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2/CO[7]
+                         net (fo=1, estimated)        0.026     6.921    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2_n_0
+    SLICE_X57Y127        CARRY8 (Prop_CARRY8_SLICEM_CI_O[0])
+                                                      0.056     6.977 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[24]_i_3/O[0]
+                         net (fo=1, estimated)        0.139     7.116    system_i/probe/inst/core/fabric/real_softmax.softmax/bf16_to_q16_return0[17]
+    SLICE_X58Y127        LUT3 (Prop_B5LUT_SLICEL_I1_O)
+                                                      0.165     7.281 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2/O
+                         net (fo=4, estimated)        0.176     7.457    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2_n_0
+    SLICE_X58Y126        LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     7.508 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8/O
+                         net (fo=1, routed)           0.009     7.517    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8_n_0
+    SLICE_X58Y126        CARRY8 (Prop_CARRY8_SLICEL_S[1]_CO[7])
+                                                      0.186     7.703 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1/CO[7]
+                         net (fo=1, estimated)        0.026     7.729    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1_n_0
+    SLICE_X58Y127        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.076     7.805 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7/O[1]
+                         net (fo=1, estimated)        0.283     8.088    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7_n_14
+    SLICE_X59Y125        LUT4 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.036     8.124 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6/O
+                         net (fo=1, estimated)        0.135     8.259    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6_n_0
+    SLICE_X58Y123        LUT6 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.050     8.309 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2/O
+                         net (fo=4, estimated)        0.099     8.408    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2_n_0
+    SLICE_X58Y123        LUT5 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.035     8.443 r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1/O
+                         net (fo=35, estimated)       0.336     8.779    system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1_n_0
+    SLICE_X59Y122        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[28]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_pl_0 rise edge)
+                                                      6.666     6.666 r  
+    PS8_X0Y0             PS8                          0.000     6.666 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.143     6.809    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.025     6.834 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.622     8.456    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X59Y122        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[28]/C
+                         clock pessimism              0.176     8.632    
+                         clock uncertainty           -0.152     8.480    
+    SLICE_X59Y122        FDRE (Setup_BFF_SLICEL_C_CE)
+                                                     -0.060     8.420    system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[28]
+  -------------------------------------------------------------------
+                         required time                          8.420    
+                         arrival time                          -8.779    
+  -------------------------------------------------------------------
+                         slack                                 -0.359    
+
+Slack (VIOLATED) :        -0.359ns  (required time - arrival time)
+  Source:                 system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Destination:            system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[29]/CE
+                            (rising edge-triggered cell FDRE clocked by clk_pl_0  {rise@0.000ns fall@3.333ns period=6.666ns})
+  Path Group:             clk_pl_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            6.666ns  (clk_pl_0 rise@6.666ns - clk_pl_0 rise@0.000ns)
+  Data Path Delay:        6.730ns  (logic 2.207ns (32.793%)  route 4.523ns (67.207%))
+  Logic Levels:           27  (CARRY8=8 LUT2=5 LUT3=4 LUT4=2 LUT5=2 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.084ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.790ns = ( 8.456 - 6.666 ) 
+    Source Clock Delay      (SCD):    2.050ns
+    Clock Pessimism Removal (CPR):    0.176ns
+  Clock Uncertainty:      0.152ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.296ns
+    Phase Error              (PE):    0.000ns
+  Clock Net Delay (Source):      1.842ns (routing 0.701ns, distribution 1.141ns)
+  Clock Net Delay (Destination): 1.622ns (routing 0.632ns, distribution 0.990ns)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_pl_0 rise edge)
+                                                      0.000     0.000 r  
+    PS8_X0Y0             PS8                          0.000     0.000 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.180     0.180    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.028     0.208 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.842     2.050    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X57Y151        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X57Y151        FDRE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.079     2.129 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lane_r_reg[1]/Q
+                         net (fo=149, estimated)      0.301     2.430    system_i/probe/inst/core/fabric/real_softmax.softmax/column_w[1]
+    SLICE_X55Y150        LUT6 (Prop_C6LUT_SLICEL_I2_O)
+                                                      0.096     2.526 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35/O
+                         net (fo=1, routed)           0.010     2.536    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_35_n_0
+    SLICE_X55Y150        MUXF7 (Prop_F7MUX_CD_SLICEL_I1_O)
+                                                      0.064     2.600 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22/O
+                         net (fo=32, estimated)       0.251     2.851    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[11]_i_22_n_0
+    SLICE_X55Y146        LUT2 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.035     2.886 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4/O
+                         net (fo=17, estimated)       0.208     3.094    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[11]_i_4_n_0
+    SLICE_X55Y141        LUT5 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.123     3.217 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3/O
+                         net (fo=29, estimated)       0.154     3.371    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[23]_i_3_n_0
+    SLICE_X55Y140        LUT6 (Prop_F6LUT_SLICEL_I4_O)
+                                                      0.097     3.468 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22/O
+                         net (fo=12, estimated)       0.353     3.821    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_22_n_0
+    SLICE_X53Y129        LUT3 (Prop_H6LUT_SLICEM_I2_O)
+                                                      0.053     3.874 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56/O
+                         net (fo=16, estimated)       0.192     4.066    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_56_n_0
+    SLICE_X52Y129        LUT3 (Prop_F5LUT_SLICEL_I0_O)
+                                                      0.143     4.209 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_52/O
+                         net (fo=4, estimated)        0.390     4.599    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_73_n_0
+    SLICE_X52Y129        CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[6])
+                                                      0.224     4.823 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_49/O[6]
+                         net (fo=1, estimated)        0.371     5.194    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude6[7]
+    SLICE_X56Y130        LUT2 (Prop_C6LUT_SLICEM_I0_O)
+                                                      0.037     5.231 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55/O
+                         net (fo=3, estimated)        0.092     5.323    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_55_n_0
+    SLICE_X56Y131        LUT6 (Prop_A6LUT_SLICEM_I3_O)
+                                                      0.038     5.361 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31/O
+                         net (fo=1, estimated)        0.151     5.512    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[0]_i_31_n_0
+    SLICE_X57Y131        CARRY8 (Prop_CARRY8_SLICEM_DI[3]_CO[7])
+                                                      0.106     5.618 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12/CO[7]
+                         net (fo=1, estimated)        0.026     5.644    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_12_n_0
+    SLICE_X57Y132        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     5.659 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[0]_i_4/CO[7]
+                         net (fo=2, estimated)        0.245     5.904    system_i/probe/inst/core/fabric/real_softmax.softmax/magnitude41_in
+    SLICE_X58Y130        LUT3 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.050     5.954 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3/O
+                         net (fo=3, estimated)        0.101     6.055    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[1]_i_3_n_0
+    SLICE_X58Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.090 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14/O
+                         net (fo=3, estimated)        0.096     6.186    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_14_n_0
+    SLICE_X59Y128        LUT2 (Prop_E6LUT_SLICEL_I0_O)
+                                                      0.035     6.221 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4/O
+                         net (fo=7, estimated)        0.112     6.333    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[3]_i_4_n_0
+    SLICE_X58Y128        LUT4 (Prop_D6LUT_SLICEL_I2_O)
+                                                      0.050     6.383 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4/O
+                         net (fo=3, estimated)        0.192     6.575    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[6]_i_4_n_0
+    SLICE_X57Y125        LUT6 (Prop_F6LUT_SLICEM_I1_O)
+                                                      0.098     6.673 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6/O
+                         net (fo=1, routed)           0.022     6.695    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[8]_i_6_n_0
+    SLICE_X57Y125        CARRY8 (Prop_CARRY8_SLICEM_S[5]_CO[7])
+                                                      0.159     6.854 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3/CO[7]
+                         net (fo=1, estimated)        0.026     6.880    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[8]_i_3_n_0
+    SLICE_X57Y126        CARRY8 (Prop_CARRY8_SLICEM_CI_CO[7])
+                                                      0.015     6.895 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2/CO[7]
+                         net (fo=1, estimated)        0.026     6.921    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[16]_i_2_n_0
+    SLICE_X57Y127        CARRY8 (Prop_CARRY8_SLICEM_CI_O[0])
+                                                      0.056     6.977 f  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r_reg[24]_i_3/O[0]
+                         net (fo=1, estimated)        0.139     7.116    system_i/probe/inst/core/fabric/real_softmax.softmax/bf16_to_q16_return0[17]
+    SLICE_X58Y127        LUT3 (Prop_B5LUT_SLICEL_I1_O)
+                                                      0.165     7.281 r  system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2/O
+                         net (fo=4, estimated)        0.176     7.457    system_i/probe/inst/core/fabric/real_softmax.softmax/max_q_r[17]_i_2_n_0
+    SLICE_X58Y126        LUT2 (Prop_B6LUT_SLICEL_I1_O)
+                                                      0.051     7.508 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8/O
+                         net (fo=1, routed)           0.009     7.517    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_rep[9]_i_8_n_0
+    SLICE_X58Y126        CARRY8 (Prop_CARRY8_SLICEL_S[1]_CO[7])
+                                                      0.186     7.703 r  system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1/CO[7]
+                         net (fo=1, estimated)        0.026     7.729    system_i/probe/inst/core/fabric/real_softmax.softmax/lut_index_r_reg_rep[9]_i_1_n_0
+    SLICE_X58Y127        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.076     7.805 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7/O[1]
+                         net (fo=1, estimated)        0.283     8.088    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r_reg[19]_i_7_n_14
+    SLICE_X59Y125        LUT4 (Prop_D6LUT_SLICEL_I0_O)
+                                                      0.036     8.124 r  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6/O
+                         net (fo=1, estimated)        0.135     8.259    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_6_n_0
+    SLICE_X58Y123        LUT6 (Prop_D6LUT_SLICEL_I1_O)
+                                                      0.050     8.309 f  system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2/O
+                         net (fo=4, estimated)        0.099     8.408    system_i/probe/inst/core/fabric/real_softmax.softmax/FSM_onehot_state_r[19]_i_2_n_0
+    SLICE_X58Y123        LUT5 (Prop_A6LUT_SLICEL_I4_O)
+                                                      0.035     8.443 r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1/O
+                         net (fo=35, estimated)       0.337     8.780    system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r[30]_i_1_n_0
+    SLICE_X59Y122        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[29]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_pl_0 rise edge)
+                                                      6.666     6.666 r  
+    PS8_X0Y0             PS8                          0.000     6.666 r  system_i/ps/inst/PS8_i/PLCLK[0]
+                         net (fo=1, estimated)        0.143     6.809    system_i/ps/inst/pl_clk_unbuffered[0]
+    BUFG_PS_X0Y88        BUFG_PS (Prop_BUFG_PS_I_O)
+                                                      0.025     6.834 r  system_i/ps/inst/buffer_pl_clk_0.PL_CLK_0_BUFG/O
+    X1Y2 (CLOCK_ROOT)    net (fo=100824, estimated)
+                                                      1.622     8.456    system_i/probe/inst/core/fabric/real_softmax.softmax/aclk
+    SLICE_X59Y122        FDRE                                         r  system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[29]/C
+                         clock pessimism              0.176     8.632    
+                         clock uncertainty           -0.152     8.480    
+    SLICE_X59Y122        FDRE (Setup_BFF2_SLICEL_C_CE)
+                                                     -0.059     8.421    system_i/probe/inst/core/fabric/real_softmax.softmax/exp_r_reg[29]
+  -------------------------------------------------------------------
+                         required time                          8.421    
+                         arrival time                          -8.780    
+  -------------------------------------------------------------------
+                         slack                                 -0.359    
+
+
+
+

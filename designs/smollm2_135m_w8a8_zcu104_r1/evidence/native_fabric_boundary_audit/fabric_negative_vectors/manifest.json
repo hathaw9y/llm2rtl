@@ -1,0 +1,44 @@
+{
+  "scope": "Prepared independent control/payload negative fixtures; actual fabric RTL required, no DUT preload/model substitutes",
+  "source_bytes": 1152,
+  "source_address": 1048576,
+  "expected_store_address": 2097152,
+  "expected_store_bytes": 128,
+  "programs": {
+    "partial_duplicate": {
+      "records": 5,
+      "sha256": "c17d13350f4afcc753c3204fa7ef9ddda42364feb120e85e2ac7dd00a2212826"
+    },
+    "fill_tail_next_start": {
+      "records": 3,
+      "sha256": "30ee65c32a3c0a522d37813741b512a07c7ca2328de7fa00b1a7d046edf43ad4"
+    },
+    "fault_load": {
+      "records": 3,
+      "sha256": "fce63d1980f0f05025810558e1314620296071813ba85e2c418e797afc07f58e"
+    },
+    "full_load": {
+      "records": 3,
+      "sha256": "fce63d1980f0f05025810558e1314620296071813ba85e2c418e797afc07f58e"
+    },
+    "fault_store_next_start": {
+      "records": 2,
+      "sha256": "bbb837809ef44000bc951614d7bc7f2994ca410348ddd18634dd27e66f2ddcf1"
+    }
+  },
+  "assets": {
+    "source.bin": "5c70f1f0199dc7a0a8aac730c9b4a9194989af854f30f730dca5cd9d87d1411e",
+    "source.hex": "786329fdd79d93b485608a1acf18e368ca104721939a6bf3e6337adbc4999008",
+    "expected_store.bin": "e22425831e72d3fff1a7fabee0b78fa5d1fcc0b28156d0c204d5d2c7ab2ca917",
+    "expected_store.hex": "35b5d408d96aa4775bd36a0e011d13c23e14044a8e0f807c10ff77524e0f579a"
+  },
+  "codec_sha256": "1d6647bd92987d92b5234316aae979dea435251fb8142235342c13c5fef4cfcd",
+  "checks": [
+    "partial1136of1152plusduplicate16 cannotmake whole source ready; STORE128 rejects04 with no native/vendor S2MM",
+    "subsequent START fills only missing16 without config and preserves physicaldata+coverage; exact128byte STORE succeeds",
+    "first partialKEEPffffe malformed LOAD beat never writes, firstfault60 sticky and busy ownership retained; coordinated reset only recovery",
+    "vendor cmd offered before earlybadstatus stays stable through stall/error and eventually can accept",
+    "STORE held AXIS beat stable after wrongtag, native pending responses drain, source retained and no syntheticcompletion",
+    "all memory/compute/control instances real; DDRonly external BFM"
+  ]
+}

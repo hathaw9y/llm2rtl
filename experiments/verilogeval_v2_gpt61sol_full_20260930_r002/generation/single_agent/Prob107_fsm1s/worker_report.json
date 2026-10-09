@@ -1,0 +1,36 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "label": "initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "evidence_directory": "development/01",
+      "coverage": "All four state/input transitions, repeated transitions, synchronous reset from both states, reset priority for both input values, reset pulse between rising edges, and output stability between edges."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis or board work was performed.",
+    "Behavior before the first synchronous reset and unknown input values is not specified by the problem and is not asserted by the testbench."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface_cycle_semantics": "Original one-bit ports preserved; rising-edge state updates with active-high synchronous reset to B. State A outputs 0 and B outputs 1; input 0 toggles and input 1 holds.",
+    "numeric_widths": "One-bit state and ports.",
+    "latency": "Output reflects current registered state without an additional pipeline stage.",
+    "static_review": "Single state driver, nonblocking sequential assignments, no inferred latches or extra ports."
+  }
+}

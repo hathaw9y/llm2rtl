@@ -1,0 +1,118 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "llama32_1b_w4a4kv4_issue_unified_bank",
+  "revision": "r4",
+  "module_id": "isa_command_dispatcher",
+  "module_kind": "infrastructure",
+  "agent_role": "typed_command_decode_in_order_issue_unified_bank_acquire_release",
+  "routed_opcodes": ["END", "DMA_LOAD", "DMA_STORE", "GEMM"],
+  "status": "frozen",
+  "target": {"board": "ZCU104", "part": "xczu7ev-ffvc1156-2-e", "clock_mhz": 200, "vivado": "2025.2"},
+  "source_scope": {
+    "allowed": [
+      "designs/llama32_1b_w4a4kv4_issue_r4/rtl/isa_command_dispatcher.sv",
+      "designs/llama32_1b_w4a4kv4_issue_r4/tb/tb_isa_command_dispatcher.sv",
+      "designs/llama32_1b_w4a4kv4_issue_r4/scripts/run_dispatcher_verification.tcl",
+      "designs/llama32_1b_w4a4kv4_issue_r4/evidence/isa_command_dispatcher/*"
+    ],
+    "forbidden": ["contracts/**", "scripts/check_*.py", "verification/framework/**", "ip/**", "boards/**", "designs/llama32_1b_w4a4kv4_seq_r1/**", "designs/llama32_1b_w4a4kv4_seq_r2/**"]
+  },
+  "parameters": {
+    "AXI_ADDR_WIDTH": 32,
+    "BTT_WIDTH": 23,
+    "BANK_NUM": 16,
+    "BANK_NUM_WIDTH": 4,
+    "TAG_WIDTH": 4,
+    "BANK_ADDR_WIDTH": 32,
+    "BANK_READ_LAT": 2,
+    "CMD_DATA_WIDTH": 128,
+    "MAX_COMMANDS": 1024,
+    "MAX_M": 32,
+    "MAX_N": 1024,
+    "MAX_K": 2048,
+    "OPCODE_WIDTH": 4
+  },
+  "interface": {
+    "clock_reset": "aclk and synchronous active-low aresetn",
+    "program": {
+      "inputs": ["cmd_dispatcher_start"],
+      "outputs": ["cmd_dispatcher_busy", "cmd_dispatcher_done", "cmd_dispatcher_error", "cmd_dispatcher_error_code[7:0]", "current_pc[9:0]"],
+      "termination": "END record followed by drain of all pending responses and all bank busy bits"
+    },
+    "command_bram": {
+      "outputs": ["cmd_bram_enb", "cmd_bram_addrb[BANK_ADDR_WIDTH-1:0]"],
+      "input": "cmd_bram_doutb[CMD_DATA_WIDTH-1:0]",
+      "read_latency_cycles": 2,
+      "bank": 0,
+      "address_unit": "128-bit command word"
+    },
+    "mm2s_typed_request": ["m_ctrl_mm2s_cmd_valid", "m_ctrl_mm2s_cmd_ready", "m_ctrl_mm2s_cmd_addr", "m_ctrl_mm2s_cmd_btt", "m_ctrl_mm2s_cmd_offset", "m_ctrl_mm2s_cmd_bank", "m_ctrl_mm2s_cmd_tag"],
+    "mm2s_response": ["s_ctrl_mm2s_sts_valid", "m_ctrl_mm2s_sts_ready", "s_ctrl_mm2s_sts_tag", "s_ctrl_mm2s_sts_error"],
+    "s2mm_typed_request": ["m_ctrl_s2mm_cmd_valid", "m_ctrl_s2mm_cmd_ready", "m_ctrl_s2mm_cmd_addr", "m_ctrl_s2mm_cmd_btt", "m_ctrl_s2mm_cmd_offset", "m_ctrl_s2mm_cmd_bank", "m_ctrl_s2mm_cmd_tag"],
+    "s2mm_response": ["s_ctrl_s2mm_sts_valid", "m_ctrl_s2mm_sts_ready", "s_ctrl_s2mm_sts_tag", "s_ctrl_s2mm_sts_error"],
+    "gemm_typed_request": ["m_ctrl_sa_start", "m_ctrl_sa_busy", "m_ctrl_sa_m_size", "m_ctrl_sa_n_size", "m_ctrl_sa_k_size", "m_ctrl_sa_act_bank", "m_ctrl_sa_wgt_bank", "m_ctrl_sa_out_bank", "m_ctrl_sa_out_base_addr"],
+    "gemm_response": ["s_ctrl_sa_done", "m_ctrl_sa_done_ready", "s_ctrl_sa_error", "s_ctrl_sa_act_bank", "s_ctrl_sa_wgt_bank", "s_ctrl_sa_out_bank"],
+    "bank_ownership_only": {
+      "outputs": ["bank_acquire[1:BANK_NUM-1][OPCODE_WIDTH-1:0]", "bank_release[1:BANK_NUM-1]"],
+      "inputs": ["bank_busy[1:BANK_NUM-1]"],
+      "ownership": "one exclusive owner per bank with no read/write distinction",
+      "excluded": "all bank payload read/write ports and address routing"
+    }
+  },
+  "execution_contract": {
+    "issue_order": "strictly increasing PC; blocked current command prevents lookahead",
+    "pc_advance": "only on selected executor request acceptance; GEMM start is its acceptance event",
+    "multiple_outstanding": "allowed when every required bank is free and target executor accepts",
+    "request_valid_rule": "valid is asserted from buffered decoded command and bank eligibility independently of executor ready and remains stable until handshake",
+    "acquire_rule": "one-cycle acquire owner code is emitted on the same edge as command acceptance",
+    "release_rule": "one-cycle release is emitted on matching response acceptance independent of current PC",
+    "response_ready_rule": "response ready outputs remain asserted whenever reset is released so pulse-style completion producers are not backpressured",
+    "bank_zero_rule": "bank 0 is command BRAM and is illegal for DMA or GEMM operands",
+    "bank_conflict_rule": "an operation requires every distinct referenced bank to have its single bank_busy bit deasserted",
+    "gemm_lock_rule": "GEMM acquires one exclusive lock for every distinct activation weight and output bank; destination cannot alias either source",
+    "pending_identity": "MM2S is keyed by destination bank, S2MM by source bank and GEMM by output bank with stored source-bank tuple",
+    "response_validation": "tag or returned bank tuple must be legal and match a pending command before release",
+    "end_rule": "END issues no executor request and waits until all pending entries and the single bank_busy vector are zero",
+    "error_rule": "decode, missing-END, response identity or executor-status error stops new issue, continues accepting/releasing already pending completions, and asserts terminal error only after drain",
+    "simultaneous_completion_rule": "independent MM2S, S2MM and GEMM responses may release different exclusively-owned banks in the same cycle",
+    "reset_rule": "clears PC, buffered command, pending entries and acquire/release outputs; external bank subsystem shares reset"
+  },
+  "numeric": {
+    "kind": "control_only",
+    "command_width_bits": 128,
+    "bank_ids": "1 through 15, with 0 reserved",
+    "tensor_arithmetic": "none"
+  },
+  "verification": {
+    "golden": "designs/llama32_1b_w4a4kv4_issue_r4/run_dispatcher_model.py",
+    "vectors": "designs/llama32_1b_w4a4kv4_issue_r4/vectors/dispatcher_cases.json",
+    "required_cases": [
+      "two DMA_LOAD commands to different banks handshake before either completion",
+      "a second command using a busy bank stalls at the same PC until release",
+      "blocked current command never fetches or issues a later command",
+      "MM2S S2MM and GEMM typed fields exactly match the 128-bit record",
+      "request valid and every typed payload remain stable under ready backpressure",
+      "acquire pulses occur exactly on command acceptance with the correct opcode owner",
+      "responses release matching banks while dispatcher fetches checks or stalls on later commands",
+      "simultaneous independent completion responses generate all required releases",
+      "spurious zero wrong-type or mismatched response identity enters error-drain without an illegal release",
+      "executor error releases its owned banks and stops all later issue",
+      "GEMM destination-source alias and bank zero reject",
+      "END waits for pending table and the unified external bank_busy vector to clear",
+      "missing END by MAX_COMMANDS enters error-drain",
+      "reset in fetch issue blocked and drain states clears dispatcher ownership state",
+      "repeated complete programs"
+    ],
+    "required_tools": ["self-checking XSIM", "Verilator lint with retained version", "Vivado 2025.2 OOC synthesis"],
+    "required_evidence": ["kernel_report.json", "module_ooc_synthesis_report.json", "subagent_result.json"],
+    "clock_constraint_ns": 5.0
+  },
+  "does_not_claim": [
+    "bank read or write datapath",
+    "BRAM or URAM arbitration and physical routing",
+    "DMA or GEMM executor implementation",
+    "tensor arithmetic correctness",
+    "full-model execution",
+    "board integration bitstream or physical-board validation"
+  ]
+}

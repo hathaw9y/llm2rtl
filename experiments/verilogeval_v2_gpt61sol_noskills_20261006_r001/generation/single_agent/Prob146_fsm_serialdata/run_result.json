@@ -1,0 +1,187 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob146_fsm_serialdata",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob146_fsm_serialdata",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob146_fsm_serialdata/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791275465.683725,
+    "ended_at_unix": 1791275562.5630035,
+    "seconds": 96.87927889823914,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 74900,
+      "cached_input_tokens": 65408,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2179,
+      "reasoning_output_tokens": 42
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "82322fa4c84b654f12fc7df4b3532d8aa13311d2ed38fee7768402eb285bb167",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "cases": [
+          "correct fixture passed",
+          "injected fault failed",
+          "repaired fixture passed"
+        ]
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "coverage": "All 256 byte values, back-to-back frames, invalid stops and delayed recovery, reset throughout frames and recovery, randomized stream; 5851 cycles and 373 valid frames."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation was not accessed or run.",
+      "Output byte is checked only when done is asserted, as specified."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation_notes": "Positive-edge synchronous active-high reset. Eight LSB-first data samples follow the start bit. A valid expected stop pulses done and publishes the byte. A missing stop discards the frame and waits for a high bit before seeking a new start."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "82322fa4c84b654f12fc7df4b3532d8aa13311d2ed38fee7768402eb285bb167",
+      "Prob146_fsm_serialdata_test.sv": "327ed68f9dcd3c6ff453b4d7a3d5c326c80fb338c099aa49ff4d82f3339b81b2",
+      "Prob146_fsm_serialdata_ref.sv": "530a38bea8b90455f64bf9cf022b417e02dbdbe7ef2a5bfa61a7c3c38f52f208"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob146_fsm_serialdata_test.sv",
+        "Prob146_fsm_serialdata_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015051190741360188
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb146_fsm_serialdata_test.sv:45: $finish called at 4526 (1ps)\nHint: Output 'out_byte' has no mismatches.\nHint: Output 'done' has no mismatches.\nHint: Total mismatched samples is 0 out of 905 samples\n\nSimulation finished at 4526 ps\nMismatches: 0 in 905 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014117387123405933
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "82322fa4c84b654f12fc7df4b3532d8aa13311d2ed38fee7768402eb285bb167",
+      "Prob146_fsm_serialdata_test.sv": "327ed68f9dcd3c6ff453b4d7a3d5c326c80fb338c099aa49ff4d82f3339b81b2",
+      "Prob146_fsm_serialdata_ref.sv": "530a38bea8b90455f64bf9cf022b417e02dbdbe7ef2a5bfa61a7c3c38f52f208"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob146_fsm_serialdata_test.sv",
+        "Prob146_fsm_serialdata_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01494507770985365
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb146_fsm_serialdata_test.sv:45: $finish called at 4526 (1ps)\nHint: Output 'out_byte' has no mismatches.\nHint: Output 'done' has no mismatches.\nHint: Total mismatched samples is 0 out of 905 samples\n\nSimulation finished at 4526 ps\nMismatches: 0 in 905 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014063018374145031
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

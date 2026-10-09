@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence_directory": "development/01",
+      "coverage": "12744 cycles; run lengths 0 through 20, discard and flag boundaries, sustained errors, consecutive sequences, reset during run lengths 0 through 9, exhaustive 10-bit streams, pre-edge and post-edge Moore output stability.",
+      "compile": "Icarus 12 with -g2012 -Wall -Wno-timescale; no diagnostics",
+      "simulation": "Matching vvp completed with explicit PASS"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board work performed.",
+    "Pre-reset state is unspecified by the problem and is not checked."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Moore FSM with run states for zero through six ones, separate discard and flag states, and a persistent error state for seven or more ones. Active-high synchronous reset treats prior input as zero. Outputs decode only registered state, with no additional latency or ports.",
+  "static_review": "Complete combinational next-state assignment, explicit enum if/else transitions, nonblocking sequential assignment, original ports and reset retained. Four-bit enum accommodates ten states.",
+  "artifacts": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "dev_checks.jsonl", "development/01"]
+}

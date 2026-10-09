@@ -1,0 +1,39 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "smollm2_bank_memories",
+  "module_kind": "infrastructure",
+  "status": "frozen",
+  "target": {"board": "ZCU104", "part": "xczu7ev-ffvc1156-2-e", "clock_mhz": 200},
+  "routed_opcodes": ["DMA_LOAD", "DMA_STORE", "GEMM", "RMSNORM", "ROPE", "ATTN_SCORE", "SOFTMAX", "ATTN_VALUE", "ADD", "SILU_MUL"],
+  "interface": {
+    "bank_count": 13,
+    "word_bits": 128,
+    "word_bytes": 16,
+    "address_bits": 16,
+    "read_latency_cycles": 3,
+    "ports": "one byte-enabled 128-bit synchronous write port A and one 128-bit synchronous read port B per bank",
+    "source_wrappers": ["ip/infrastructure/datamover_engine/rtl/bram_bank.sv", "ip/infrastructure/datamover_engine/rtl/uram_bank.sv"],
+    "bank_port_router": "smollm2_bank_port_router outputs connect directly to corresponding bank ports",
+    "ownership": "owned by common bank_ownership_table and checked by router, not memory"
+  },
+  "numeric": {"kind": "BF16_bit_storage", "arithmetic": "none", "byte_order": "16 consecutive bytes form one 128-bit word; byte strobes address corresponding little-endian byte lanes"},
+  "capacity_words_by_bank": [2304,2304,2304,36864,2304,2304,768,512,24576,24576,36864,2304,6144],
+  "primitive_assignment": {
+    "URAM_banks": [3,8,9,10],
+    "BRAM_banks": [0,1,2,4,5,6,7,11,12],
+    "total_payload_bytes": 2306048
+  },
+  "control_rules": {
+    "read": "three-cycle synchronous read response, with read-first XPM mode; same-word simultaneous read/write value is not used by approved executors",
+    "write": "byte strobes control each of the 16 bytes; address outside bank capacity is rejected by common wrapper",
+    "chunk": "END/DONE does not reset or clear memory; reset clears read outputs but tensor_valid is maintained separately",
+    "completion": "DMA or compute done must occur only after the last accepted bank write; this memory module does not generate command completion"
+  },
+  "verification": {
+    "required_cases": ["first and last word of every bank", "byte strobe update", "three-cycle read latency", "simultaneous read and write at different addresses", "data retention across a chunk gap and reset", "Vivado BRAM/URAM primitive count and 200 MHz OOC timing"],
+    "required_tools": ["self-checking XSIM with XPM library", "Verilator lint with wrapper stubs", "Vivado out-of-context synthesis"],
+    "proof_scope": "physical local storage only; no DDR integration, compute arithmetic, routed board implementation or physical-board inference"
+  }
+}

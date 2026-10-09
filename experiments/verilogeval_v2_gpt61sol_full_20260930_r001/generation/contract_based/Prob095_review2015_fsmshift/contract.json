@@ -1,0 +1,53 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "shift_ena": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "positive edge",
+    "reset": "active high synchronous; sampled high resets sequence on every rising edge",
+    "sequence": "After a rising edge sampling reset=1, shift_ena=1. With subsequent reset=0 edges, output is 1,1,1,0 and stays 0 indefinitely. The reset-edge-to-next-edge interval is the first of four enabled cycles.",
+    "held_reset": "Each high reset sample restarts the sequence, holding output high while reset remains sampled high.",
+    "initialization": "No specified power-up state; behavior is required after a sampled reset.",
+    "pattern_detection": "No pattern input exists; only reset starts the sequence.",
+    "between_edges": "Output changes only as a consequence of rising clock edges; reset changes between edges have no immediate effect."
+  },
+  "numeric": {
+    "payload_arithmetic": "none",
+    "state_storage": "Unsigned 3-bit saturating elapsed-cycle counter, values 0 through 4; reset to 0, increment until 4, hold at 4.",
+    "output_equation": "shift_ena = elapsed_cycles < 4",
+    "overflow": "No wraparound in reachable post-reset states; no rounding or signed operations."
+  },
+  "verification": {
+    "oracle": "Independent integer remaining-cycle model: reset sets remaining=4; each non-reset rising edge decrements a positive remaining value; expected output is remaining>0. Check after NBA settling.",
+    "directed_cases": [
+      "single-edge reset and four-cycle duration",
+      "long inactive hold",
+      "reset during each active cycle",
+      "reset after completion",
+      "consecutive high reset samples",
+      "reset pulse entirely between rising edges has no effect"
+    ],
+    "additional_cases": "Deterministic pseudo-random reset samples compared against the independent oracle.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts.",
+    "scope": "Independent development tests only; no official reference or evaluation access."
+  },
+  "specification_ambiguities": [
+    "Power-up behavior before the first synchronous reset is unspecified.",
+    "The mention of pattern detection adds no input or detection behavior to the given interface."
+  ]
+}

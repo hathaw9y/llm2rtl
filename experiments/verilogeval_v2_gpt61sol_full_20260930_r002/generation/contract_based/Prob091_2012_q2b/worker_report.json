@@ -1,0 +1,64 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790745578.2862375,
+      "source_sha256": "0ebd8fcc78889ba5f236cdaa39fdcb1f37f2a1edefef003537783096a93f7003",
+      "testbench_sha256": "a5429eb83c7b414c806459b323ba5afa7ad72ad8e99216b3bd90d43d8dfc5867",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob091_2012_q2b/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.012614783830940723
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS 48 legal transition checks\ndev_tb.sv:53: $finish called at 49000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.006399521604180336
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Original specification assumes legal one-hot states; illegal and unknown input behavior has no specified functional oracle.",
+    "No synthesis or board work performed."
+  ],
+  "justified_RTL_changes": [],
+  "justified_TB_changes": [],
+  "contract_changes": [],
+  "implementation": {
+    "Y1": "y[0] & w",
+    "Y3": "(y[1] | y[2] | y[4] | y[5]) & ~w",
+    "interface_and_cycle": "Original ports; combinational with no clock, reset, storage or extra latency",
+    "numeric_widths": "Six unsigned state bits and one-bit Boolean signals",
+    "static_review": "Direct continuous assignments; no latch, register, module dependency or multiple driver"
+  },
+  "coverage": "Independent original transition table checked all 12 legal state/input combinations repeatedly, for 48 total comparisons.",
+  "environment_smoke": "Helper reported passed: correct passed, injected fault failed, repair passed.",
+  "contract_gate": "Structural validation passed before RTL creation",
+  "initial_snapshot_unchanged": true
+}

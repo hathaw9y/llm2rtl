@@ -1,0 +1,221 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob021_mux256to1v",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob021_mux256to1v",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob021_mux256to1v/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790744410.259955,
+    "ended_at_unix": 1790744545.0669868,
+    "seconds": 134.80703234672546,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 126040,
+      "cached_input_tokens": 105472,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2344,
+      "reasoning_output_tokens": 26
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "82a3fc284b7acdc2df7bfe44fce3268072651043a47da77bf27db2578e03615f",
+  "contract_sha256": "8395b9788b33ee784cb3d54a9f2b3185d8982fbaa34a54dc05659afaffafd132",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "initial",
+        "check_index": 1,
+        "checked_at_unix": 1790744511.791022,
+        "source_sha256": "82a3fc284b7acdc2df7bfe44fce3268072651043a47da77bf27db2578e03615f",
+        "testbench_sha256": "4f5c6722a9a5ff0a30ce997ebe23d81e0ca6cce1682ed742575cd0aa1a5ee024",
+        "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob021_mux256to1v/development/01",
+        "compile": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+            "-g2012",
+            "-Wall",
+            "-Wno-timescale",
+            "-s",
+            "dev_tb",
+            "-o",
+            "dev.vvp",
+            "candidate.sv",
+            "dev_tb.sv"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.011716187000274658
+        },
+        "simulation": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+            "dev.vvp"
+          ],
+          "returncode": 0,
+          "stdout": "PASS: mux mapping verified in 12544 checks\ndev_tb.sv:69: $finish called at 12544000 (1ps)\n",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.1686612917110324
+        },
+        "status": "passed"
+      }
+    ],
+    "development_outcome": "passed",
+    "environment_smoke": "passed: correct sequential fixture passed, deliberately wrong fixture failed, repaired fixture passed",
+    "contract_gate": "passed_structure_only; frozen before RTL creation",
+    "rtl_changes": [
+      {
+        "stage": "initial",
+        "justification": "Original mapping is implemented by selecting four bits at the 10-bit base {sel, 2'b00}; no clock, reset, state, extra ports, or pipeline."
+      }
+    ],
+    "tb_changes": [
+      {
+        "stage": "initial",
+        "justification": "Independent per-bit oracle follows original in[4*sel+b] mapping; checks all selectors and values, zero/one backgrounds, walking bits, random vectors, and selected X/Z payloads after combinational settling."
+      }
+    ],
+    "contract_changes": [],
+    "limitations": [
+      "Development PASS is not official correctness; official evaluation has not run.",
+      "Original specification does not define unknown-selector behavior; no expected output is asserted for X/Z selectors.",
+      "No synthesis, timing, or board work performed."
+    ],
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "development_evidence": "dev_checks.jsonl and development/01"
+    },
+    "static_review": "Exact required interface, all selection bases within 0..1020, purely combinational continuous assignment, no submodule dependencies or state."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "82a3fc284b7acdc2df7bfe44fce3268072651043a47da77bf27db2578e03615f",
+      "Prob021_mux256to1v_test.sv": "df41724f53f058edd7d013b63f0dcec5e256a2f813d1e2ceee09ba058195d51e",
+      "Prob021_mux256to1v_ref.sv": "1e40712c23700dcb47156ce6fa7809ed417fafd52e8583c323cab5a5e5fd4788"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob021_mux256to1v_test.sv",
+        "Prob021_mux256to1v_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013790367171168327
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb021_mux256to1v_test.sv:20: $finish called at 10000 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 2000 samples\n\nSimulation finished at 10000 ps\nMismatches: 0 in 2000 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.19045455660670996
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "82a3fc284b7acdc2df7bfe44fce3268072651043a47da77bf27db2578e03615f",
+      "Prob021_mux256to1v_test.sv": "df41724f53f058edd7d013b63f0dcec5e256a2f813d1e2ceee09ba058195d51e",
+      "Prob021_mux256to1v_ref.sv": "1e40712c23700dcb47156ce6fa7809ed417fafd52e8583c323cab5a5e5fd4788"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob021_mux256to1v_test.sv",
+        "Prob021_mux256to1v_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013322856277227402
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb021_mux256to1v_test.sv:20: $finish called at 10000 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 2000 samples\n\nSimulation finished at 10000 ps\nMismatches: 0 in 2000 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.19364010728895664
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

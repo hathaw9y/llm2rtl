@@ -1,0 +1,194 @@
+{
+  "schema": "llm2rtl.rtl_port_binding.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "status": "implementation_binding",
+  "scope": "Exact elaboration widths and producer metadata refinements of approved module contract; no arithmetic/array/ISA policy change",
+  "module_contract": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/modules/int8_gemm_executor.json",
+    "sha256": "5a21d45e1461bedc5dad49348c25d142a07f13a8c3e6125abbd9f5d7f0ccb19c"
+  },
+  "audit": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/evidence/executor_contract_audit/report.json",
+    "sha256": "84fb4801f94c55e6586b6038fd3192db715a87fbe965910cace291a2d31514b7"
+  },
+  "children": {
+    "int8_dot_core": {
+      "ports": {
+        "clk": 1,
+        "resetn": 1,
+        "step_valid": 1,
+        "step_ready": 1,
+        "step_a": 128,
+        "step_b": 2048,
+        "step_row": 7,
+        "step_first_k": 1,
+        "step_last_k": 1,
+        "step_n_valid": 5,
+        "step_tag": 96,
+        "step_scale": 32,
+        "result_valid": 1,
+        "result_ready": 1,
+        "result_sums": 512,
+        "result_n_valid": 5,
+        "result_tag": 96,
+        "result_scale": 32
+      }
+    },
+    "fp32_bf16_epilogue": {
+      "ports": {
+        "clk": 1,
+        "resetn": 1,
+        "in_valid": 1,
+        "in_ready": 1,
+        "in_sums": 128,
+        "in_scales": 128,
+        "in_mask": 4,
+        "in_tag": 96,
+        "out_valid": 1,
+        "out_ready": 1,
+        "out_bf16": 64,
+        "out_mask": 4,
+        "out_tag": 96,
+        "out_error": 1
+      }
+    },
+    "w8a8_fp32_mul": {
+      "ports": {
+        "clk": 1,
+        "resetn": 1,
+        "s_valid": 1,
+        "s_ready": 1,
+        "s_a": 32,
+        "s_b": 32,
+        "s_tag": 96,
+        "m_valid": 1,
+        "m_ready": 1,
+        "m_result": 32,
+        "m_tag": 96,
+        "m_nonfinite": 1
+      }
+    }
+  },
+  "core_tag": {
+    "bits31_0": "linear BF16 destination element index",
+    "bits36_32": "N valid count1..16",
+    "bits95_37": "zero reserved",
+    "FIFO": "store512 sums+96tag+32scale; result_n_valid must match tag count; no extra unbudgeted metadata"
+  },
+  "epilogue_tag": {
+    "bits31_0": "BF16 output linear base element index for this four-lane bundle",
+    "bits95_32": "zero reserved; parent retains accepted command identity"
+  },
+  "executor": {
+    "rtl_module": "smollm2_int8_gemm_executor",
+    "clock_reset": {
+      "clk": 1,
+      "resetn": 1
+    },
+    "command_inputs": {
+      "cmd_valid": 1,
+      "cmd_opcode": 4,
+      "cmd_payload": 112,
+      "cmd_bank_ids": 12,
+      "cmd_transaction_id": 32,
+      "cmd_generations": 96
+    },
+    "command_outputs": {
+      "cmd_ready": 1
+    },
+    "descriptor_inputs": {
+      "cmd_desc_present": 3,
+      "cmd_profiles": 15,
+      "cmd_rows": 33,
+      "cmd_cols": 48,
+      "cmd_positions": 30,
+      "cmd_layers": 15,
+      "cmd_desc_generations": 96,
+      "cmd_data_valid": 3,
+      "cmd_scale_valid": 3,
+      "cmd_desc_busy": 3,
+      "cmd_desc_owner": 15
+    },
+    "descriptor_capture": "all fields stable with command and captured on accept; packed role order A low lane, B middle, C high; busy/owners refer to atomic controller acquisition, descriptor generations must match accepted command identity; source data/scale flags refer to same generation; C need not be ready",
+    "roles_outputs": {
+      "a_role": 5,
+      "b_role": 5,
+      "c_role": 5
+    },
+    "read_outputs": {
+      "a_rd_valid": 1,
+      "a_rd_bank": 4,
+      "a_rd_address": 19,
+      "a_rd_wide": 1,
+      "b_rd_valid": 1,
+      "b_rd_bank": 4,
+      "b_rd_address": 19,
+      "b_rd_wide": 1
+    },
+    "read_inputs": {
+      "a_rd_ready": 1,
+      "a_rd_resp_valid": 1,
+      "a_rd_data": 256,
+      "b_rd_ready": 1,
+      "b_rd_resp_valid": 1,
+      "b_rd_data": 256
+    },
+    "write_outputs": {
+      "c_wr_valid": 1,
+      "c_wr_bank": 4,
+      "c_wr_address": 19,
+      "c_wr_data": 128,
+      "c_wr_strb": 16
+    },
+    "write_inputs": {
+      "c_wr_ready": 1
+    },
+    "response_outputs": {
+      "resp_valid": 1,
+      "resp_transaction_id": 32,
+      "resp_used_bank_mask": 3,
+      "resp_used_bank_count": 2,
+      "resp_bank_ids": 12,
+      "resp_generations": 96,
+      "resp_error_code": 8
+    },
+    "response_inputs": {
+      "resp_ready": 1
+    },
+    "producer_begin_outputs": {
+      "dst_begin_valid": 1,
+      "dst_begin_bank": 4,
+      "dst_begin_accepted_generation": 32,
+      "dst_begin_generation": 32,
+      "dst_begin_profile": 5,
+      "dst_begin_rows": 11,
+      "dst_begin_cols": 16,
+      "dst_begin_position": 10,
+      "dst_begin_layer": 5
+    },
+    "producer_begin_inputs": {
+      "dst_begin_ready": 1,
+      "dst_begin_error_code": 8
+    },
+    "producer_begin_semantics": "QK/PV only after command/source validation before any memory requests; score profile16 or context19 shape derived from command; generation=acceptedCgen+1, no wrap; begin acceptance atomically resets producer C coverage/profile under existing owner. ready+error_code!=0 rejects transition with no memory request. Response still carries accepted original generations. GEMM uses configured C and preserves N tile coverage.",
+    "invalidate_outputs": {
+      "dst_invalidate_valid": 1,
+      "dst_invalidate_bank": 4,
+      "dst_invalidate_generation": 32
+    },
+    "invalidate_inputs": {
+      "dst_invalidate_ready": 1
+    },
+    "invalidate_semantics": "after drain on any matched command error invalidate C active generation before error response; for attention use new generation if begin succeeded, otherwise accepted generation. Fabric ack publishes invalidation before ownership release; no autonomous reset or retry.",
+    "credit_invariant": "per A/B role outstanding accepted reads plus queued returned beats <=4; read responses have no ready and must always be captured; credits freed on processing, not merely response arrival",
+    "write_commit": "native accepted wr handshake commits selected-byte coverage atomically. No success sideband needed; response after all accepted responses processed and final write/coverage accepted."
+  },
+  "implementation_scope": "Only approved shared GEMM executor and its internal arithmetic children; no board wrapper or other opcode executor generated by this packet",
+  "evidence_exclusions": [
+    "full model validation",
+    "board pass",
+    "timing pass before real synthesis"
+  ],
+  "build_policy": "RTL/simulation permitted current workspace; synthesis and package wait user-designated machine"
+}

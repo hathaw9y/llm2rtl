@@ -1,0 +1,64 @@
+{
+  "schema": "llm2rtl.infrastructure_module.v1",
+  "module_id": "bank_ownership_table",
+  "version": 1,
+  "status": "frozen_for_implementation",
+  "purpose": "store one exclusive module-port-role owner for every local data bank",
+  "parameters": {
+    "BANK_NUM": 16,
+    "PORT_ROLE_WIDTH": 3
+  },
+  "interface": {
+    "clock_reset": ["aclk", "aresetn"],
+    "acquire_request": ["acquire_valid[0:BANK_NUM-1]", "acquire_port[0:BANK_NUM-1][PORT_ROLE_WIDTH-1:0]"],
+    "release_request": ["release_valid[0:BANK_NUM-1]", "release_port[0:BANK_NUM-1][PORT_ROLE_WIDTH-1:0]"],
+    "ownership_state": ["bank_busy[0:BANK_NUM-1]", "bank_owner_port[0:BANK_NUM-1][PORT_ROLE_WIDTH-1:0]"],
+    "fault": ["ownership_error", "ownership_error_code"]
+  },
+  "semantics": [
+    "owner_port identifies a module port role and never an opcode or whole module",
+    "all asserted acquire_valid entries form one atomic request",
+    "if any requested bank is busy or both acquired and released in one cycle then no acquire entry commits",
+    "all asserted release_valid entries form one atomic request",
+    "if any released bank is free or release_port does not match bank_owner_port then no release entry commits",
+    "valid matching releases and a disjoint valid acquire may commit in the same cycle",
+    "reset clears all busy bits owners and error state",
+    "bank zero is legal"
+  ],
+  "error_codes": {
+    "NONE": 0,
+    "ACQUIRE_CONFLICT": 1,
+    "RELEASE_FREE": 2,
+    "RELEASE_OWNER_MISMATCH": 3,
+    "ACQUIRE_RELEASE_OVERLAP": 4
+  },
+  "dispatcher_mapping": {
+    "MM2S.operand0": "MM2S_ARBITER(1)",
+    "S2MM.operand0": "S2MM_ARBITER(2)",
+    "GEMM.src0": "GEMM_ACT(3)",
+    "GEMM.src1": "GEMM_WGT(4)",
+    "GEMM.dst": "GEMM_PSUM(5)"
+  },
+  "gemm_distinct_bank_requirement": true,
+  "verification": {
+    "target_part": "xczu7ev-ffvc1156-2-e",
+    "target_clock_ns": 5.0,
+    "vivado": "2025.2",
+    "required_cases": [
+      "reset clears every bank",
+      "bank zero acquire and matching release",
+      "three-bank atomic GEMM acquire maps src0 activation src1 weight and dst psum",
+      "one busy operand rejects the entire three-bank acquire",
+      "mismatching owner release rejects the entire release and preserves state",
+      "same-cycle disjoint release and acquire",
+      "same-bank acquire and release overlap faults without state change",
+      "two different banks may have the same module-port-role owner"
+    ]
+  },
+  "does_not_claim": [
+    "bank payload routing or arbitration",
+    "bank memory implementation",
+    "GEMM datapath implementation",
+    "board integration or bitstream"
+  ]
+}

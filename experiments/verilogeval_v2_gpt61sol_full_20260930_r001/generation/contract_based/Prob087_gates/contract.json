@@ -1,0 +1,80 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": {
+        "width": 1
+      },
+      "b": {
+        "width": 1
+      }
+    },
+    "outputs": {
+      "out_and": {
+        "width": 1
+      },
+      "out_or": {
+        "width": 1
+      },
+      "out_xor": {
+        "width": 1
+      },
+      "out_nand": {
+        "width": 1
+      },
+      "out_nor": {
+        "width": 1
+      },
+      "out_xnor": {
+        "width": 1
+      },
+      "out_anotb": {
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "combinational",
+    "equations": {
+      "out_and": "a & b",
+      "out_or": "a | b",
+      "out_xor": "a ^ b",
+      "out_nand": "~(a & b)",
+      "out_nor": "~(a | b)",
+      "out_xnor": "~(a ^ b)",
+      "out_anotb": "a & ~b"
+    },
+    "timing": "Outputs follow current inputs after combinational settling; no clock or cycle latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization required.",
+    "handshake": "None."
+  },
+  "numeric": {
+    "type": "One-bit unsigned logic",
+    "arithmetic": "Boolean bitwise gates; no arithmetic, rounding, saturation, or overflow.",
+    "four_state": "Use standard SystemVerilog bitwise gate semantics; original problem specifies binary truth table without extra X/Z requirements."
+  },
+  "verification": {
+    "method": "Independent explicit binary truth table, not replicated gate expressions.",
+    "output_order": [
+      "out_and",
+      "out_or",
+      "out_xor",
+      "out_nand",
+      "out_nor",
+      "out_xnor",
+      "out_anotb"
+    ],
+    "truth_table": {
+      "00": "0001110",
+      "01": "0111000",
+      "10": "0111001",
+      "11": "1100010"
+    },
+    "coverage": "All four binary input pairs, then repeat in reverse order to check input changes.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp; finite compile and simulation timeouts.",
+    "acceptance": "Every seven-bit output tuple exactly equals the truth table after settling; fatal mismatch and final PASS marker."
+  },
+  "specification_ambiguities": []
+}

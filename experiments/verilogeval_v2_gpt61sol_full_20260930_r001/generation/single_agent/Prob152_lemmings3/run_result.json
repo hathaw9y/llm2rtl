@@ -1,0 +1,177 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob152_lemmings3",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob152_lemmings3",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob152_lemmings3/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790736005.951036,
+    "ended_at_unix": 1790736093.661416,
+    "seconds": 87.7103807926178,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 115167,
+      "cached_input_tokens": 93952,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2157,
+      "reasoning_output_tokens": 40
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "db5652ab865c754849c6a9910d6b514f500d7632c8fffc5c63d3a344cb469524",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "outcome": "passed",
+        "details": "Six Moore states retain direction through falling and digging. Walking precedence is fall, dig, then the bump in the current walking direction. Positive-edge asynchronous areset selects walking left. Combinational next-state defaults and illegal-state recovery are present; sequential assignments are nonblocking."
+      },
+      {
+        "name": "Icarus development compile",
+        "outcome": "tool_failed",
+        "exit_code": 139,
+        "timeout_seconds": 30,
+        "top": "dev_tb",
+        "language_option": "-g2012",
+        "log": "dev_compile.log",
+        "status_file": "dev_compile_status.json",
+        "details": "Compile exited with code 139 and emitted no diagnostics. No development simulation was run."
+      }
+    ],
+    "development_outcome": "Initial synthesizable candidate retained without revisions. Independent self-checking testbench created, but compile tool failure prevented dynamic validation.",
+    "limitations": [
+      "No successful development compile or simulation; testbench coverage is planned, not demonstrated.",
+      "No synthesis, timing analysis, or board testing performed.",
+      "Official evaluation is external and its results are unavailable."
+    ],
+    "rtl_files": [
+      "candidate.sv",
+      "candidate_initial.sv"
+    ],
+    "testbench_files": [
+      "dev_tb.sv"
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "db5652ab865c754849c6a9910d6b514f500d7632c8fffc5c63d3a344cb469524",
+      "Prob152_lemmings3_test.sv": "d590a84966e727ec6052c9e611753d936575d3c7a967d4b98f3227732bbdf632",
+      "Prob152_lemmings3_ref.sv": "5c906d944feb771b438f3caa560deb964cc6b1cff178ff6ba7f7d4a3a2ebf6b0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob152_lemmings3_test.sv",
+        "Prob152_lemmings3_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014103056862950325
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb152_lemmings3_test.sv:94: $finish called at 2216 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Output 'digging' has no mismatches.\nHint: Total mismatched samples is 0 out of 443 samples\n\nSimulation finished at 2216 ps\nMismatches: 0 in 443 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010575835593044758
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "db5652ab865c754849c6a9910d6b514f500d7632c8fffc5c63d3a344cb469524",
+      "Prob152_lemmings3_test.sv": "d590a84966e727ec6052c9e611753d936575d3c7a967d4b98f3227732bbdf632",
+      "Prob152_lemmings3_ref.sv": "5c906d944feb771b438f3caa560deb964cc6b1cff178ff6ba7f7d4a3a2ebf6b0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob152_lemmings3_test.sv",
+        "Prob152_lemmings3_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010779314674437046
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb152_lemmings3_test.sv:94: $finish called at 2216 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Output 'digging' has no mismatches.\nHint: Total mismatched samples is 0 out of 443 samples\n\nSimulation finished at 2216 ps\nMismatches: 0 in 443 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0111948661506176
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

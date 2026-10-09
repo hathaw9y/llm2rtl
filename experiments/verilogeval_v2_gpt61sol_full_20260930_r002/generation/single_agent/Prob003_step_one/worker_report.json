@@ -1,0 +1,18 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "evidence": "development/01", "simulator": "Icarus 12", "compile_returncode": 0, "simulation_returncode": 0}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "No synthesis or board work performed."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "interface_cycle_contract": "TopModule has one single-bit output named one, continuously driven high; no clock, reset, inputs, or added latency.",
+  "numeric_width_decisions": "Explicit one-bit constant 1'b1.",
+  "pipeline_latency_and_ii": "Not applicable to a constant output.",
+  "static_review": "Single continuous driver with the exact specified interface.",
+  "testbench_coverage": "Checks logic high after time-zero settling, at 1 ps, and over 100 subsequent samples; case inequality rejects X/Z; bounded timeout."
+}

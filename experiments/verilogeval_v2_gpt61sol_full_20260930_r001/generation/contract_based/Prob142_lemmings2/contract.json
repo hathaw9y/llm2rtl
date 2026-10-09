@@ -1,0 +1,64 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": {
+        "width": 1
+      },
+      "areset": {
+        "width": 1
+      },
+      "bump_left": {
+        "width": 1
+      },
+      "bump_right": {
+        "width": 1
+      },
+      "ground": {
+        "width": 1
+      }
+    },
+    "outputs": {
+      "walk_left": {
+        "width": 1
+      },
+      "walk_right": {
+        "width": 1
+      },
+      "aaah": {
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "All state transitions occur on rising clk edges.",
+    "reset": "Active-high asynchronous areset; rising areset sets walking-left immediately; held high overrides clock transitions. Deassertion does not change state.",
+    "initialization": "No specified power-up state before reset.",
+    "states": [
+      "walking left",
+      "walking right",
+      "falling with remembered left",
+      "falling with remembered right"
+    ],
+    "walking_left": "If ground=0 enter falling-left regardless of bumps; otherwise bump_left=1 changes to walking-right, regardless of bump_right; otherwise remain walking-left.",
+    "walking_right": "If ground=0 enter falling-right regardless of bumps; otherwise bump_right=1 changes to walking-left, regardless of bump_left; otherwise remain walking-right.",
+    "falling": "Ignore both bumps. ground=0 continues falling; ground=1 resumes remembered walking direction at that edge, ignoring landing-edge bumps.",
+    "outputs": "Moore outputs: walking-left=(1,0,0), walking-right=(0,1,0), either falling state=(0,0,1), in order walk_left,walk_right,aaah. Input changes between edges do not change outputs except asynchronous reset.",
+    "sampling": "ground and bumps sampled on rising clock; outputs reflect updated state after sequential update."
+  },
+  "numeric": {
+    "ports": "Single-bit unsigned Boolean signals.",
+    "arithmetic": "No arithmetic, overflow, rounding, saturation, or numeric datapath.",
+    "state_encoding": "Four states may be represented by two unsigned bits; encoding not externally observable."
+  },
+  "verification": {
+    "oracle": "Independent behavioral model using separate remembered-direction and falling Boolean variables, derived from original problem.",
+    "coverage": "Test every combination of ground and bumps from all four states; simultaneous bumps; wrong-side bumps; falling persistence; fall-entry and landing bump suppression; asynchronous reset in every state; held reset; input mutation between edges.",
+    "comparison": "Compare all three outputs after each rising edge and asynchronous reset, and between edges for Moore stability.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp; finite shell timeout and testbench watchdog. Preserve compilation and simulation logs."
+  },
+  "specification_ambiguities": [
+    "Behavior before reset and for unknown input values is unspecified; development tests use binary inputs and assert reset before functional checks."
+  ]
+}

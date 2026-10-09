@@ -1,0 +1,29 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"sel": 3, "data0": 4, "data1": 4, "data2": 4, "data3": 4, "data4": 4, "data5": 4},
+    "outputs": {"out": 4},
+    "port_types": "Unsigned packed logic vectors; no other ports"
+  },
+  "semantics": {
+    "function": "sel 0 through 5 selects the corresponding data0 through data5; sel 6 or 7 produces zero",
+    "timing": "Pure combinational logic; out follows current inputs after combinational settling, with no clock-cycle latency",
+    "reset": "No reset port or reset behavior",
+    "initialization": "No stored state or initialization requirement",
+    "handshake": "None"
+  },
+  "numeric": {
+    "data_width": 4,
+    "selector_width": 3,
+    "behavior": "Bit-exact forwarding of four-bit data or 4'b0000; no arithmetic, rounding, truncation, saturation, or overflow"
+  },
+  "verification": {
+    "oracle": "Independent testbench array indexed by integer selector for 0 through 5, otherwise four-bit zero",
+    "coverage": "For all eight selectors, vary each of the six inputs independently over all sixteen four-bit values against nonuniform baseline inputs; additionally check all-zero and all-one inputs",
+    "timing": "Check after a finite combinational settling delay following each input change",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp; finite external timeouts",
+    "review": "Check exact interface, complete combinational assignment, sized case labels, no state or simulation constructs in DUT"
+  },
+  "specification_ambiguities": ["Behavior for X/Z selector bits is unspecified by the original problem; no verification requirement is imposed for those values."]
+}

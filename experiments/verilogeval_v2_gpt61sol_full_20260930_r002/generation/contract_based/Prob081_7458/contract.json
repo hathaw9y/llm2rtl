@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "p1a": 1,
+      "p1b": 1,
+      "p1c": 1,
+      "p1d": 1,
+      "p1e": 1,
+      "p1f": 1,
+      "p2a": 1,
+      "p2b": 1,
+      "p2c": 1,
+      "p2d": 1
+    },
+    "outputs": {
+      "p1y": 1,
+      "p2y": 1
+    }
+  },
+  "semantics": {
+    "p1y": "(p1a AND p1b AND p1c) OR (p1d AND p1e AND p1f)",
+    "p2y": "(p2a AND p2b) OR (p2c AND p2d)",
+    "timing": "Combinational continuous outputs; no clock or cycle latency. Evidence: original describes four AND gates and two OR gates and permits assign statements.",
+    "reset": "None: original interface contains no reset.",
+    "initialization": "No stored state or specified initial value; outputs follow gate evaluation of current inputs."
+  },
+  "numeric": {
+    "widths": "All inputs and outputs are one bit, as explicitly specified.",
+    "operations": "Bitwise AND and OR; no arithmetic, signed interpretation, truncation, or overflow.",
+    "unknowns": "Use standard SystemVerilog four-state gate semantics; original specifies no special X/Z handling."
+  },
+  "verification": {
+    "top": "dev_tb",
+    "oracle": "From original gate definitions: binary output is true when either corresponding group has every input high; independent equality predicates.",
+    "coverage": "Exhaustive 1024 binary vectors including all-zero, all-one, isolated groups, and cross-output independence.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling; no original waveform timing exists.",
+    "failure": "Case-inequality comparisons with $fatal; bounded timeout.",
+    "success": "Explicit PASS line only after every vector passes.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

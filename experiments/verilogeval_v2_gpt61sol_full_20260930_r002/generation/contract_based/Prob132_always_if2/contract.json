@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "cpu_overheated": 1,
+      "arrived": 1,
+      "gas_tank_empty": 1
+    },
+    "outputs": {
+      "shut_off_computer": 1,
+      "keep_driving": 1
+    },
+    "ports": "Original names, directions, scalar widths, and output reg declarations preserved."
+  },
+  "semantics": {
+    "evidence": "Original uses always @(*) with incomplete if assignments; no clock or reset ports exist. Fix missing assignments to prevent inferred latches.",
+    "shut_off_computer": "1 if cpu_overheated is true; otherwise 0.",
+    "keep_driving": "If arrived is false, complement gas_tank_empty; otherwise 0.",
+    "timing": "Combinational response after simulator settling; no added cycles or state.",
+    "reset_initialization": "No reset or initial value is specified; outputs determined by current inputs, no retained history."
+  },
+  "numeric": {
+    "width": "All ports are one-bit unsigned; constants explicitly one-bit.",
+    "arithmetic": "Only Boolean conditions and one-bit complement; no rounding, overflow, or saturation."
+  },
+  "verification": {
+    "oracle": "Original conditional intent, independent explicit Boolean truth table for all eight binary combinations.",
+    "coverage": "All previous/current binary input pairs, including overheating deassertion and arrival after driving; compare after #1 settling.",
+    "failure": "Case-inequality checks with $fatal; bounded timeout; PASS marker only on success.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Intro calls this an adder-subtractor with zero flag, but supplied module has unrelated control ports.",
+      "resolution": "Use supplied module and port-level conditional intent."
+    },
+    {
+      "issue": "Missing else behavior is not explicitly written.",
+      "resolution": "Interpret bug as unintended latches; add zero-valued else branches for safe shutdown/driving control."
+    },
+    {
+      "issue": "Unknown or high-impedance input behavior is unspecified.",
+      "resolution": "Do not claim a required four-state truth table beyond ordinary Verilog if and bitwise complement semantics; test all binary inputs."
+    }
+  ]
+}

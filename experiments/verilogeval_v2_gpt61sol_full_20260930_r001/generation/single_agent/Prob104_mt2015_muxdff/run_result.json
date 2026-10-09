@@ -1,0 +1,173 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob104_mt2015_muxdff",
+  "official_status": "functional_failure",
+  "workflow_status": "failed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob104_mt2015_muxdff",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob104_mt2015_muxdff/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790739596.1714406,
+    "ended_at_unix": 1790739684.374914,
+    "seconds": 88.2034740447998,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 72468,
+      "cached_input_tokens": 61824,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1499,
+      "reasoning_output_tokens": 24
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "e95312de7bc3aad05412983eaeab4ac5fa50cc2cf4cb2b56508a2a8554f6ba15",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "pass",
+        "details": "Exact one-bit benchmark ports; rising-edge always_ff; nonblocking assignments; L selects r_in, otherwise q_in; no unspecified reset or initialization added."
+      },
+      {
+        "name": "Icarus development compile",
+        "result": "tool_failure",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "exit_code": 139,
+        "log": "dev_compile.log",
+        "details": "Compiler exited with status 139; diagnostic log is empty."
+      },
+      {
+        "name": "development simulation",
+        "result": "not_run",
+        "details": "Compilation failed. Independent dev_tb.sv covers all eight input combinations twice, rising-edge updates, and output stability between rising edges; these checks were not executed."
+      }
+    ],
+    "development_outcome": "Initial synthesizable candidate delivered unchanged; static review passed, development simulation unavailable due to compiler failure.",
+    "limitations": [
+      "No successful simulation result is claimed.",
+      "Official evaluation was not accessed and its results are unavailable.",
+      "No synthesis, timing, or board evidence was produced.",
+      "Initial output is unspecified until the first rising clock edge, as required by the absence of reset."
+    ]
+  },
+  "final": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "Prob104_mt2015_muxdff_test.sv": "82f72a64b7516b4734b15e1679749cd6a1cdbd335b454d5990861157a75685ba",
+      "candidate.sv": "e95312de7bc3aad05412983eaeab4ac5fa50cc2cf4cb2b56508a2a8554f6ba15",
+      "Prob104_mt2015_muxdff_ref.sv": "257c3835380c39315cefe2325abc26ac916c4a47423ce2eacb32569add966f1c"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob104_mt2015_muxdff_test.sv",
+        "Prob104_mt2015_muxdff_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013504564762115479
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb104_mt2015_muxdff_test.sv:21: $finish called at 996 (1ps)\nHint: Output 'Q' has 1 mismatches. First mismatch occurred at time 5.\nHint: Total mismatched samples is 1 out of 199 samples\n\nSimulation finished at 996 ps\nMismatches: 1 in 199 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0077614327892661095
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "Prob104_mt2015_muxdff_test.sv": "82f72a64b7516b4734b15e1679749cd6a1cdbd335b454d5990861157a75685ba",
+      "candidate.sv": "e95312de7bc3aad05412983eaeab4ac5fa50cc2cf4cb2b56508a2a8554f6ba15",
+      "Prob104_mt2015_muxdff_ref.sv": "257c3835380c39315cefe2325abc26ac916c4a47423ce2eacb32569add966f1c"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob104_mt2015_muxdff_test.sv",
+        "Prob104_mt2015_muxdff_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011320718564093113
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb104_mt2015_muxdff_test.sv:21: $finish called at 996 (1ps)\nHint: Output 'Q' has 1 mismatches. First mismatch occurred at time 5.\nHint: Total mismatched samples is 1 out of 199 samples\n\nSimulation finished at 996 ps\nMismatches: 1 in 199 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007520298473536968
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "R"
+}

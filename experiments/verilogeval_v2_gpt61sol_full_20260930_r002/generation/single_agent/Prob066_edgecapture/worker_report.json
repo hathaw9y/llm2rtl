@@ -1,0 +1,30 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": "correct fixture passed; injected fault failed; repaired fixture passed"
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; return code 0",
+      "simulation": "matching vvp; return code 0; PASS: 373 sampled-cycle checks",
+      "evidence": "development/01 and dev_checks.jsonl"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis, timing, or board verification performed.",
+    "Power-up register values are unspecified; testbench establishes known state using synchronous reset."
+  ],
+  "justified_changes": {
+    "rtl": "Initial implementation samples the 32-bit input every positive clock edge and ORs detected falling edges into the sticky output; active-high synchronous reset has priority for output clearing. No RTL revisions.",
+    "testbench": "Independent per-bit sampled-cycle oracle tests reset priority, synchronous behavior, immediate post-reset falling edges, every bit including bits 0 and 31, sticky captures, alternating patterns, consecutive resets, and randomized cycles. No testbench corrections."
+  },
+  "interface_cycle_contract": "TopModule(clk, reset, in[31:0], out[31:0]); capture on each positive edge without extra latency; reset clears out on positive edge.",
+  "numeric_widths": "All data and history vectors are 32 bits; operations are bitwise.",
+  "static_review": "Single sequential driver, nonblocking assignments, no added ports or pipeline stages."
+}

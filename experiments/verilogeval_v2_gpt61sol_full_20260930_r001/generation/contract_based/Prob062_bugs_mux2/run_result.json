@@ -1,0 +1,179 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob062_bugs_mux2",
+  "official_status": "functional_failure",
+  "workflow_status": "failed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob062_bugs_mux2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob062_bugs_mux2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790733987.0599275,
+    "ended_at_unix": 1790734085.1764114,
+    "seconds": 98.11648440361023,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 141621,
+      "cached_input_tokens": 128000,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2185,
+      "reasoning_output_tokens": 14
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "59cfdc8d8980c6f29ad8ba0aed9ceda087cf5e24bb4493fb22b542e0cc163b01",
+  "contract_sha256": "bde3aecc5a2addac1544edcbbff1fc77568cf1a12ed87009eda0346476046cd9",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract gate",
+        "command": "python3 validate_contract.py",
+        "result": "PASS (structure only)",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "compile and warnings",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "result": "PASS, exit 0, no diagnostics",
+        "log": "dev_compile.log"
+      },
+      {
+        "name": "development simulation",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+        "result": "PASS, exit 0, 131072 binary combinations and 4 X/Z cases",
+        "log": "dev_simulation.log"
+      },
+      {
+        "name": "static review",
+        "result": "Eight-bit inputs and output, scalar select, single combinational continuous assignment; no state, reset, arithmetic, latches, dependencies, or simulation-only DUT constructs"
+      }
+    ],
+    "development_outcome": "Initial candidate passed all independent development checks. candidate_initial.sv was preserved immediately after implementation before development checks; no RTL revisions were needed.",
+    "limitations": [
+      "Output width interpreted as eight bits to fix the scalar declaration in the buggy example, consistent with the stated eight-bit mux.",
+      "X/Z selector behavior is a standard SystemVerilog conditional merge choice; original problem does not explicitly define it.",
+      "Contract gate checks structure only, not functional correctness.",
+      "Official evaluation was not accessed and its results are unavailable.",
+      "No synthesis, timing analysis, or board work performed."
+    ]
+  },
+  "final": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "59cfdc8d8980c6f29ad8ba0aed9ceda087cf5e24bb4493fb22b542e0cc163b01",
+      "Prob062_bugs_mux2_test.sv": "020ebc5c365a0c3c23ff64ab2506e84bd2ce9a5046f8090c310fd6c104a525d2",
+      "Prob062_bugs_mux2_ref.sv": "3735cd6a576c3ab365e0b42bcd95198b6ce609792a0ad7cb1765e12667417436"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob062_bugs_mux2_test.sv",
+        "Prob062_bugs_mux2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013184305280447006
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb062_bugs_mux2_test.sv:47: $finish called at 570 (1ps)\nHint: Output 'out' has 111 mismatches. First mismatch occurred at time 20.\nHint: Total mismatched samples is 111 out of 114 samples\n\nSimulation finished at 570 ps\nMismatches: 111 in 114 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007434532977640629
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 111,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "59cfdc8d8980c6f29ad8ba0aed9ceda087cf5e24bb4493fb22b542e0cc163b01",
+      "Prob062_bugs_mux2_test.sv": "020ebc5c365a0c3c23ff64ab2506e84bd2ce9a5046f8090c310fd6c104a525d2",
+      "Prob062_bugs_mux2_ref.sv": "3735cd6a576c3ab365e0b42bcd95198b6ce609792a0ad7cb1765e12667417436"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob062_bugs_mux2_test.sv",
+        "Prob062_bugs_mux2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010170845314860344
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb062_bugs_mux2_test.sv:47: $finish called at 570 (1ps)\nHint: Output 'out' has 111 mismatches. First mismatch occurred at time 20.\nHint: Total mismatched samples is 111 out of 114 samples\n\nSimulation finished at 570 ps\nMismatches: 111 in 114 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007273628376424313
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 111,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "R"
+}

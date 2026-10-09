@@ -1,0 +1,62 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "in": {
+        "direction": "input",
+        "width": 32
+      },
+      "out": {
+        "direction": "output",
+        "width": 32
+      }
+    }
+  },
+  "semantics": {
+    "clock": "All state updates at positive edge of clk",
+    "history": "previous input is sampled on every positive edge, including reset edges",
+    "transition": "For each bit i, falling[i] = previous_sample[i] AND NOT current_in[i]",
+    "output": "At each positive edge, reset=1 clears out to zero with priority; otherwise out becomes old out OR falling",
+    "persistence": "Captured bits remain set until a rising edge with reset high",
+    "initialization": "No power-up initialization specified. Output is defined after synchronous reset; history is defined after one sampled edge.",
+    "between_edges": "out holds its value; reset and in changes alone do not update state"
+  },
+  "numeric": {
+    "vectors": "32 independent unsigned one-bit channels indexed 31:0",
+    "operations": "Bitwise NOT, AND and OR only; no arithmetic, rounding, overflow or saturation"
+  },
+  "verification": {
+    "oracle": "Independent per-bit scoreboard storing previous sampled bit and sticky captured bit",
+    "directed": [
+      "synchronous reset and reset priority",
+      "unchanged zero and one inputs",
+      "rising edges do not capture",
+      "each of 32 falling edges captures corresponding bit",
+      "sticky behavior after further toggles",
+      "reset clears captured state",
+      "input sampled during reset used on following cycle",
+      "between-edge input and reset changes do not affect output"
+    ],
+    "random": "1000 randomized input samples with intermittent synchronous reset",
+    "tools": "Icarus v12 compile with -g2012 and explicit dev_tb top; compile and vvp each bounded by timeout; independent simulation watchdog"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "history during reset",
+      "resolution": "Reset explicitly clears capture output only; input history continues sampling each clock, preserving definition of consecutive-cycle transition."
+    },
+    {
+      "topic": "power-up state",
+      "resolution": "Unspecified; no initial values added, tests establish state by synchronous reset."
+    }
+  ]
+}

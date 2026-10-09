@@ -1,0 +1,47 @@
+{
+  "revision_count": 0,
+  "contract_corrections": 0,
+  "checks": [
+    {
+      "name": "contract structural gate",
+      "result": "PASS",
+      "log": "contract_validation_retry.log",
+      "scope": "required fields and frozen status only"
+    },
+    {
+      "name": "initial candidate preservation",
+      "result": "PASS",
+      "detail": "candidate_initial.sv copied immediately after initial RTL creation, before development checks; byte-identical to candidate.sv"
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS",
+      "detail": "Exact TopModule interface, combinational complete assignment, unsigned two-bit indices, least-significant-set-bit priority, zero fallback, no state or extra ports; no child dependencies"
+    },
+    {
+      "name": "Icarus development compilation",
+      "result": "TOOL_FAILURE",
+      "exit_code": 139,
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "logs": [
+        "dev_compile.log",
+        "dev_compile.exit",
+        "development_tool_failure.log"
+      ]
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT_RUN",
+      "reason": "Compilation failed and produced no executable"
+    }
+  ],
+  "development_outcome": "RTL implemented and statically reviewed; development compilation failed with exit 139 and empty diagnostics. No simulation success claimed.",
+  "limitations": [
+    "Binary input behavior specified; X/Z behavior unspecified.",
+    "Exhaustive independent testbench provided but not executed because the compiler failed.",
+    "No synthesis, timing, board validation, or official evaluation performed."
+  ],
+  "setup_notes": [
+    "First gate invocation completed, but its shell postprocessing failed because zsh reserves status as read-only; repeated gate using contract_rc passed. Original gate log and gate history retained."
+  ]
+}

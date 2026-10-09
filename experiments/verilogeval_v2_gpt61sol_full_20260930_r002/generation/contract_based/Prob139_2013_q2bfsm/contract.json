@@ -1,0 +1,20 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "resetn": 1, "x": 1, "y": 1}, "outputs": {"f": 1, "g": 1}},
+  "semantics": {
+    "clock": "All sequential logic samples on positive clk edges.",
+    "reset": "Synchronous active-low resetn: an edge with resetn=0 enters A with f=g=0, from every state.",
+    "startup": "First edge with resetn=1 after A enters a one-cycle f=1 state. Next edge ends f and enters x monitoring; x during the f pulse is ignored, as the original says Then ... monitor x.",
+    "pattern": "During monitoring, sample consecutive x values on rising edges. Detect 101 with overlapping prefixes (11 retains prefix 1; 100 clears prefix). After the third sample edge, the following output cycle has g=1.",
+    "y_window": "The edge detecting the final x=1 starts g=1 but does not sample y. The next two rising edges sample y while g=1. Either y=1 latches g high until reset. If both are 0, g falls after the second edge and remains low until reset.",
+    "initialization": "No power-up state is specified; no initializer or pre-reset output guarantee is imposed.",
+    "evidence": "Original problem: synchronous, active low; after the next clock edge f for one clock cycle; Then monitor x; 1,0,1 in three successive cycles; g on following clock cycle; While maintaining g=1 monitor y within at most two cycles."
+  },
+  "numeric": {"ports": "All ports are one bit, unsigned Boolean signals.", "state": "Nine states fit in four bits; no arithmetic datapath or overflow behavior."},
+  "verification": {"oracle": "Independent procedural history detector and y sample counter grounded in original text, not DUT state encodings.", "sampling": "Drive at falling edge, compare after rising-edge NBA settlement; check synchronous reset between edges.", "coverage": "Directed startup, ignored early x/y, repeated-one prefix, interrupted pattern, first/second/late y, permanent outputs, reset from each reachable phase; exhaustive short input histories and reproducible longer histories.", "tools": "Required smoke check, structural contract validator, then fixed dev_check.py initial evaluation with bounded self-checking dev_tb."},
+  "specification_ambiguities": [
+    {"topic": "Following clock cycle", "resolution": "g is high in the cycle immediately after the edge sampling the third x bit, with no extra idle cycle.", "basis": "Clock-cycle outputs follow the sampling edge that completes 101."},
+    {"topic": "Monitoring starts after f", "resolution": "The edge ending the f pulse enters monitoring; first x sample is the next edge.", "basis": "The sequential wording says Then monitor x after the one-cycle f pulse."},
+    {"topic": "Power-up", "resolution": "No defined behavior before synchronous reset is required.", "basis": "Original specifies reset behavior but no initial value."}
+  ]
+}

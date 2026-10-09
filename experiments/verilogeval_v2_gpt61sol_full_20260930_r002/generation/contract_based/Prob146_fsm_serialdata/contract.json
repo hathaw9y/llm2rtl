@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "in": 1, "reset": 1}, "outputs": {"out_byte": 8, "done": 1}},
+  "semantics": {
+    "clock": "All input bits sampled at positive clock edges, as explicitly specified.",
+    "reset": "Active-high synchronous reset has priority, aborts any frame, returns to idle and clears done at the sampled edge.",
+    "frame": "An idle low sample is the start bit; the following eight rising edges capture data bits 0 through 7. The next rising edge samples the stop bit.",
+    "completion": "A high expected stop sample asserts done immediately after that edge for one cycle, with the assembled byte. The next edge can accept a new low start bit.",
+    "bad_stop": "A low expected stop sample rejects the byte and waits for a high sample. That high restores idle; only a subsequent low sample starts a new byte.",
+    "initialization": "No power-up behavior is specified. Tests first apply a synchronous reset; out_byte is only checked when done is asserted.",
+    "output": "out_byte is valid when done is 1 and is otherwise don't-care, explicitly specified."
+  },
+  "numeric": {"data": "Unsigned 8-bit byte, least significant serial bit first", "counter": "3-bit index for exactly eight data samples", "arithmetic": "No numeric arithmetic, rounding or saturation"},
+  "verification": {"oracle": "Independent serial frame parser derived from original problem; compare after positive edges and NBA settling", "cases": ["idle", "all 256 byte values", "back-to-back frames", "bad stop and long low recovery", "reset in every frame phase", "synchronous reset between edges", "deterministic mixed input stream"], "mandatory": "smoke_environment.py then validate_contract.py then dev_check.py --label initial", "timeout": "Bounded testbench timeout, fatal on mismatch, explicit PASS marker"},
+  "specification_ambiguities": [{"text": "It should assert done each time it finds a stop bit", "resolution": "Interpret stop bit as the correctly positioned stop of a valid frame. A late high after a missing stop only resynchronizes, because the original requires correctly received bytes and waiting before attempting the next byte."}, {"text": "Reset value of out_byte and pre-reset behavior are unspecified", "resolution": "Implementation clears byte on reset; verification does not constrain byte outside done or check pre-reset state."}]
+}

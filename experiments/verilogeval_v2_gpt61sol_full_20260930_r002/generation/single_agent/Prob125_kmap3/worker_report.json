@@ -1,0 +1,37 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "dev_checks.jsonl",
+      "logs_directory": "development/01",
+      "coverage": "All 13 specified binary input combinations, forward and reverse; three dont-care cells exercised without output constraints."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Unknown-valued input behavior is unspecified by the original problem.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "TopModule implements out = a | (c & ~b); d does not affect this valid minimized function.",
+  "interface_cycle_contract": "Original one-bit ports; purely combinational with no extra ports or latency.",
+  "static_review": "Single continuous driver, one-bit bitwise operations, no state or inferred latches.",
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  }
+}

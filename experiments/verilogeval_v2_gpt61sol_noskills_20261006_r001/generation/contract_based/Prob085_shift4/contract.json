@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "areset": 1,
+      "load": 1,
+      "ena": 1,
+      "data": 4
+    },
+    "outputs": {
+      "q": 4
+    }
+  },
+  "semantics": {
+    "clock": "All sequential logic on positive clk edge, as stated in original final sentence.",
+    "reset": "Original areset requirement: asynchronous positive edge assertion resets q to zero; while asserted reset dominates clock operations.",
+    "priority": "Original (4): load has higher priority than ena; reset dominates both.",
+    "load": "Original (2): on positive clk edge load data[3:0].",
+    "shift": "Original (3): on positive clk edge with ena and no load, shift right with zero entering q[3].",
+    "hold": "With no reset, load, or ena, preserve register contents.",
+    "initialization": "No power-up value specified; no initialization is added. Verification establishes state by reset before functional checks."
+  },
+  "numeric": {
+    "width": 4,
+    "data_values": "All 16 bit patterns",
+    "shift": "Logical right shift one bit, q[0] discarded, q[3] zero"
+  },
+  "verification": {
+    "oracle": "Independent behavioral state model grounded in original requirements; shift calculated by unsigned integer division by two.",
+    "sampling": "Drive controls at falling edge; compare after rising-edge nonblocking assignments settle. Check asynchronous assertion away from clock edges and no changes from controls alone.",
+    "cases": [
+      "Reset off-edge and with conflicting controls",
+      "All 16 loads with ena both low and high",
+      "All 16 loaded states shifted to zero",
+      "Hold all 16 states",
+      "Reset held across edges and deassertion without state change"
+    ],
+    "failure": "$fatal mismatches and bounded timeout; PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    "Power-up register state is unspecified; tests do not require a particular value before reset."
+  ]
+}

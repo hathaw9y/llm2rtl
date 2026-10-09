@@ -1,0 +1,209 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob045_edgedetect2",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob045_edgedetect2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob045_edgedetect2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790750595.1524637,
+    "ended_at_unix": 1790750723.739228,
+    "seconds": 128.58676481246948,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 125598,
+      "cached_input_tokens": 110720,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2161,
+      "reasoning_output_tokens": 11
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "a7c6ffa13abe575a69c3ac64136dad92001ca2c64ee0e896bac5ea6e88845c1a",
+  "contract_sha256": "10b34788d751050185bdf88adb6f956460902e228f53bf3e11a4300996e18bdb",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "initial",
+        "check_index": 1,
+        "checked_at_unix": 1790750696.1439412,
+        "source_sha256": "a7c6ffa13abe575a69c3ac64136dad92001ca2c64ee0e896bac5ea6e88845c1a",
+        "testbench_sha256": "c4e66f7b26d06eda9c8e716b74f54b64a559d027f8e056702377de7b4ebf560b",
+        "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob045_edgedetect2/development/01",
+        "compile": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+            "-g2012",
+            "-Wall",
+            "-Wno-timescale",
+            "-s",
+            "dev_tb",
+            "-o",
+            "dev.vvp",
+            "candidate.sv",
+            "dev_tb.sv"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.012981385923922062
+        },
+        "simulation": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+            "dev.vvp"
+          ],
+          "returncode": 0,
+          "stdout": "PASS: 131105 sampled comparisons and hold checks\ndev_tb.sv:84: $finish called at 1311066000 (1ps)\n",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 3.699048738926649
+        },
+        "status": "passed"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development simulation only; official evaluation has not occurred.",
+      "No synthesis or board work performed.",
+      "Original specification has no reset or defined initial state; uninitialized registers are preserved."
+    ],
+    "justified_rtl_changes": [
+      {
+        "stage": "initial",
+        "description": "Eight-bit sample history and registered XOR detect both rising and falling transitions on positive clock edges, with original interface and no added reset or latency."
+      }
+    ],
+    "justified_tb_changes": [],
+    "contract": "Frozen contract passed structural validation before RTL creation; no contract revisions.",
+    "coverage": "131105 sampled comparisons plus output hold checks; all 65536 ordered known-byte pairs, individual bit transitions, stable input, unsampled pulse, startup unknown, unknown propagation and recovery.",
+    "static_review": "Single sequential driver, nonblocking assignments, explicit 8-bit widths, no extra ports, no initial blocks in DUT.",
+    "initial_snapshot_preserved": true
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a7c6ffa13abe575a69c3ac64136dad92001ca2c64ee0e896bac5ea6e88845c1a",
+      "Prob045_edgedetect2_ref.sv": "8b54c0faa026c483b2eb6fdd30f131e954366022d5d951a1ccd343e057f58df8",
+      "Prob045_edgedetect2_test.sv": "e1e1fb847dd0b234e26387f1fe6786149daf5553f6ca335e05fd392374deb3fe"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob045_edgedetect2_test.sv",
+        "Prob045_edgedetect2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015237539075314999
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb045_edgedetect2_test.sv:45: $finish called at 1140 (1ps)\nHint: Output 'anyedge' has no mismatches.\nHint: Total mismatched samples is 0 out of 228 samples\n\nSimulation finished at 1140 ps\nMismatches: 0 in 228 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009349392727017403
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a7c6ffa13abe575a69c3ac64136dad92001ca2c64ee0e896bac5ea6e88845c1a",
+      "Prob045_edgedetect2_ref.sv": "8b54c0faa026c483b2eb6fdd30f131e954366022d5d951a1ccd343e057f58df8",
+      "Prob045_edgedetect2_test.sv": "e1e1fb847dd0b234e26387f1fe6786149daf5553f6ca335e05fd392374deb3fe"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob045_edgedetect2_test.sv",
+        "Prob045_edgedetect2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012621909379959106
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb045_edgedetect2_test.sv:45: $finish called at 1140 (1ps)\nHint: Output 'anyedge' has no mismatches.\nHint: Total mismatched samples is 0 out of 228 samples\n\nSimulation finished at 1140 ps\nMismatches: 0 in 228 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008151124231517315
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

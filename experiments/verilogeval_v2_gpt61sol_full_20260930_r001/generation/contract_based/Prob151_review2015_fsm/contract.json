@@ -1,0 +1,33 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "reset": 1, "data": 1, "done_counting": 1, "ack": 1},
+    "outputs": {"shift_ena": 1, "counting": 1, "done": 1}
+  },
+  "semantics": {
+    "clock": "All sequential changes occur on the positive edge of clk.",
+    "reset": "Active-high synchronous reset has priority in every phase; after its rising edge all outputs are zero and pattern search starts with no history. No power-up initialization is specified.",
+    "search": "Sample data on each rising edge while searching for contiguous 1101. Preserve the longest matching suffix on mismatches, so 11101 and 1101101 detect correctly when searching.",
+    "shift": "The rising edge sampling the final pattern 1 enters shift phase, asserting shift_ena immediately afterward. It stays high for four complete clock periods; four subsequent rising edges correspond to the four additional bits. After the fourth edge shift_ena falls and counting rises.",
+    "count": "Hold counting until a rising edge with done_counting high while already counting; then counting falls and done rises. done_counting is ignored during search and shifting.",
+    "notify": "Hold done until a rising edge with ack high while already in notification; then return to empty search. ack is ignored in other phases, including the edge first entering notification. Data on the acknowledgement edge is not part of the next pattern.",
+    "outputs": "Moore outputs, mutually exclusive; all zero in search. data is ignored during shifting, counting and notification by this control-only FSM."
+  },
+  "numeric": {
+    "ports": "All ports are unsigned single-bit control signals.",
+    "datapath": "No duration storage, arithmetic, counters, saturation or rounding is required. Four shift cycles are encoded as four distinct states.",
+    "state": "Ten states fit in four bits; unused encodings recover to empty search."
+  },
+  "verification": {
+    "oracle": "Independent behavioral model with a rolling four-bit search history and a phase-local remaining shift-cycle count, comparing all outputs after every rising edge.",
+    "directed": "Exercise 1101, repeated ones, failed prefixes, all 256 eight-bit search streams, exactly four shifts, early done_counting/ack, held done, acknowledgement and repeated transactions.",
+    "reset": "Reset in search and each active phase; check synchronous behavior between edges and priority at edges.",
+    "random": "Deterministic pseudorandom input controls and occasional reset, with cycle-by-cycle oracle comparison.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts; no synthesis or official evaluation."
+  },
+  "specification_ambiguities": [
+    "Overlap handling is not explicitly stated; searching for an occurrence of contiguous 1101 is interpreted as retaining valid suffix prefixes.",
+    "Cycle boundaries are interpreted as a Moore FSM: done_counting and ack are consumed only in their respective active phases."
+  ]
+}

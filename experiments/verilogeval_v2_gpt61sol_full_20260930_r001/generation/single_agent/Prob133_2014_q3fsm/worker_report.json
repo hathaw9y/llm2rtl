@@ -1,0 +1,16 @@
+{
+  "revision_count": 1,
+  "checks": [
+    {"name": "initial development compile", "tool": "Icarus Verilog v12", "top": "dev_tb", "timeout_seconds": 30, "exit_code": 139, "result": "compiler terminated without diagnostics", "log": "compile.log"},
+    {"name": "initial RTL-only compile", "top": "TopModule", "timeout_seconds": 30, "exit_code": 139, "result": "compiler terminated without diagnostics", "log": "rtl_compile.log"},
+    {"name": "revised development compile", "tool": "Icarus Verilog v12", "flags": "-g2012 -Wall -s dev_tb", "timeout_seconds": 30, "exit_code": 0, "result": "pass, no compiler warnings", "log": "compile_revision1.log"},
+    {"name": "development simulation", "tool": "matching vvp", "timeout_seconds": 30, "exit_code": 0, "result": "PASS: 2583 cycle checks", "log": "simulation_revision1.log", "coverage": "all 64 pairs of three-sample windows, idle behavior, start-edge exclusion, ignored s during activity, random inputs and resets"},
+    {"name": "static RTL review", "result": "eight-state FSM with three-bit state register, complete combinational assignments, positive-edge sequential updates, active-high synchronous reset, no inferred latches"}
+  ],
+  "development_outcome": "Final candidate passed independent self-checking development simulation. One revision replaced enum-valued ternary expressions with explicit branches after compiler failures. Initial and revised candidates are preserved.",
+  "limitations": [
+    "Official evaluation was not accessed and its results are unknown.",
+    "Development simulation is independent and does not establish official benchmark acceptance.",
+    "No synthesis, implementation, timing analysis, or board testing was performed."
+  ]
+}

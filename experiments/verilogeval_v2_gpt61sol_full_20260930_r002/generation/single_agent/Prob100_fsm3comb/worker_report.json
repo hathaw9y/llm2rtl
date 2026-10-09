@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "details": "Correct fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+    },
+    {
+      "name": "initial",
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "details": "Icarus 12 compilation and matching vvp simulation passed; 24 checks cover all eight state/input combinations and repeated transitions."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Unknown input/state behavior is unspecified by the problem and was not asserted.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface": "TopModule with original one-bit in/out and two-bit state/next_state ports; combinational with no added ports or latency.",
+    "static_review": "All four states match the original table; assignments cover every branch with no storage inferred; out is asserted only in D.",
+    "numeric_widths": "Two-bit state constants and one-bit output.",
+    "pipeline": "None; no clock or reset specified."
+  }
+}

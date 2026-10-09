@@ -1,0 +1,38 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "coverage": "All 65536 binary input pairs",
+      "evidence": "development/01 and dev_checks.jsonl"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed.",
+    "Unknown input behavior is unspecified by the problem and was not assigned an oracle."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": [
+    "candidate.sv",
+    "candidate_initial.sv"
+  ],
+  "testbench_files": [
+    "dev_tb.sv"
+  ],
+  "interface_cycle_contract": "Original ports preserved; combinational outputs, no clocks, reset, or added latency.",
+  "numeric_width_decisions": "Sum wraps to 8 bits; overflow detects equal operand signs and a differing result sign. Test oracle uses integer signed addition and range [-128,127].",
+  "static_review": "Single continuous driver per output; explicit port widths; no state or inferred latches."
+}

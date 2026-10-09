@@ -1,0 +1,34 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"clk": 1, "areset": 1, "x": 1},
+    "outputs": {"z": 1},
+    "evidence": "Original problem explicitly lists these ports; harness requires TopModule."
+  },
+  "semantics": {
+    "acceptance": "Sample x on every positive clock edge while areset is low.",
+    "conversion": "LSB-first serial two's complement: copy zeros and the first one, then invert all subsequent bits until reset.",
+    "output_phase": "Moore output reflects the bit sampled at the most recent positive clock edge after state update; x changes between edges do not change z.",
+    "reset": "Positive-edge asynchronous active-high areset restarts conversion and sets the Moore reset state output to zero; asserted reset holds this state on clock edges.",
+    "initialization": "No power-up state is specified; operation is checked after an explicit asynchronous reset.",
+    "length": "Arbitrary number of bits; no fixed counter or end marker.",
+    "evidence": "Original specifies Moore state machine, one bit per cycle beginning at LSB, positive-edge sequential logic, and conversion bounded by reset release/assertion."
+  },
+  "numeric": {
+    "bit_width": 1,
+    "ordering": "least-significant bit first",
+    "equation": "For any finite N-bit input, output equals (-input) modulo 2**N.",
+    "overflow": "Finite width two's complement wraps; serial state supports unbounded length."
+  },
+  "verification": {
+    "oracle": "Independent finite-width arithmetic negation for exhaustive short words and 64-bit boundary words, plus a 257-bit long carry-boundary pattern.",
+    "sampling": "Drive x before rising edges; compare z after nonblocking updates; check output remains stable after x changes between clock edges.",
+    "reset_cases": "Asynchronous assertions away from clock edges, held reset, reset during active conversion, repeated conversions.",
+    "checks": "Mandatory smoke environment, structural contract validator, dev_check.py initial; testbench has fatal mismatches, timeout, and final PASS."
+  },
+  "specification_ambiguities": [
+    {"topic": "Reset output", "resolution": "Original does not explicitly give reset z; use zero in the pre-first-one Moore state, consistent with leading zero conversion."},
+    {"topic": "Power-up", "resolution": "Original has no defined pre-reset initialization; no pre-reset output requirement is imposed."}
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clock": 1,
+      "a": 1
+    },
+    "outputs": {
+      "p": 1,
+      "q": 1
+    },
+    "reset": "No reset port specified."
+  },
+  "semantics": {
+    "p": "High-level transparent latch: follows a while clock=1, holds while clock=0. Evidence: p tracks a at 90..110 ns and holds 1 throughout 115..140 ns.",
+    "q": "Capture held p on falling clock edge, then hold until the next falling edge. Evidence: q starts x, becomes 0 at 55 ns, 1 at 115 ns, and 0 at 175 ns.",
+    "simultaneous_inputs": "At 115 ns clock and a fall together; p retains its preceding high-phase value 1 and q captures 1. At 175 ns clock falls while a rises; p and q retain/capture preceding p=0.",
+    "initialization": "No initialization or reset: p and q are x at 0..20 ns. First high phase sets p at 25 ns; q remains x until 55 ns."
+  },
+  "numeric": {
+    "widths": "All ports and stored values are single bits.",
+    "logic": "Four-state simulation checks use case inequality to preserve initial x expectations."
+  },
+  "verification": {
+    "oracle": "Replay every original table row at its stated timestamp, with simultaneous clock/a changes and post-settle comparisons to literal original p/q values.",
+    "directed": "After replay check high-phase transparency, low-phase retention, and falling-edge captures of both zero and one.",
+    "completion": "Fatal on mismatch or bounded timeout; print PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "The finite trace cannot distinguish a falling-edge register for q from a low-level transparent latch driven by p, since p is constant while clock is low. Use falling-edge capture, consistent with all observed q transitions.",
+    "Behavior for unknown clock or unknown a after initialization is not specified by the supplied binary stimulus."
+  ]
+}

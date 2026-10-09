@@ -1,0 +1,184 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob149_ece241_2013_q4",
+  "official_status": "functional_failure",
+  "official_analyzer_code": "R",
+  "workflow_status": "failed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob149_ece241_2013_q4",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob149_ece241_2013_q4/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791274573.2142556,
+    "ended_at_unix": 1791274628.8461893,
+    "seconds": 55.63193392753601,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 55966,
+      "cached_input_tokens": 48512,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2026,
+      "reasoning_output_tokens": 31
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "078285d1801ff2f1bebcba9a76c3f72ebe05a1a33b03a5ab54fb75bcc710c96e",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "cases": "Correct fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "evidence": "development/01",
+        "result": "Icarus 12 compilation and simulation passed; 1287 output and synchronous timing checks."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is independent and does not establish official evaluation correctness.",
+      "Only physically valid sensor patterns 000, 001, 011, and 111 are specified and verified. Other patterns retain the current state.",
+      "Power-up state is unspecified; checks begin after a synchronous reset."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "Registers water level and direction of the most recent distinct level change. Intermediate levels assert supplemental flow on upward changes and retain it while unchanged. Extreme levels override supplemental flow. Active-high synchronous reset selects the all-outputs-asserted lowest level.",
+    "initial_snapshot": "candidate_initial.sv"
+  },
+  "final": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "078285d1801ff2f1bebcba9a76c3f72ebe05a1a33b03a5ab54fb75bcc710c96e",
+      "Prob149_ece241_2013_q4_test.sv": "9960ee5afb688df4d1ea88fb41b0bf3f4ca0ad84f78fce34291c65f1b0dcb09c",
+      "Prob149_ece241_2013_q4_ref.sv": "e31ed6b179de4a33384b70182dc83a894ba4db0da08ab72945f3dd6f60788e06"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob149_ece241_2013_q4_test.sv",
+        "Prob149_ece241_2013_q4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0167909050360322
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb149_ece241_2013_q4_test.sv:84: $finish called at 10200 (1ps)\nHint: Output 'fr2' has no mismatches.\nHint: Output 'fr1' has no mismatches.\nHint: Output 'fr0' has no mismatches.\nHint: Output 'dfr' has 1171 mismatches. First mismatch occurred at time 30.\nHint: Total mismatched samples is 1171 out of 2040 samples\n\nSimulation finished at 10200 ps\nMismatches: 1171 in 2040 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.024289884604513645
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1171,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "078285d1801ff2f1bebcba9a76c3f72ebe05a1a33b03a5ab54fb75bcc710c96e",
+      "Prob149_ece241_2013_q4_test.sv": "9960ee5afb688df4d1ea88fb41b0bf3f4ca0ad84f78fce34291c65f1b0dcb09c",
+      "Prob149_ece241_2013_q4_ref.sv": "e31ed6b179de4a33384b70182dc83a894ba4db0da08ab72945f3dd6f60788e06"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob149_ece241_2013_q4_test.sv",
+        "Prob149_ece241_2013_q4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015133166685700417
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb149_ece241_2013_q4_test.sv:84: $finish called at 10200 (1ps)\nHint: Output 'fr2' has no mismatches.\nHint: Output 'fr1' has no mismatches.\nHint: Output 'fr0' has no mismatches.\nHint: Output 'dfr' has 1171 mismatches. First mismatch occurred at time 30.\nHint: Total mismatched samples is 1171 out of 2040 samples\n\nSimulation finished at 10200 ps\nMismatches: 1171 in 2040 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.024338040500879288
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1171,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

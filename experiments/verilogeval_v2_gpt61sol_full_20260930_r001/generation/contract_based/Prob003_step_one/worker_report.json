@@ -1,0 +1,37 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "outcome": "pass",
+      "details": "Exact TopModule interface with one scalar output, continuously assigned sized constant 1'b1. No state, clock, reset, arithmetic, latches, or simulation-only DUT constructs. Initial candidate is preserved unchanged."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim.vvp candidate.sv dev_tb.sv",
+      "outcome": "tool_failed",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "exit_code_file": "dev_compile.exitcode",
+      "details": "Compiler exited with code 139 without diagnostic output; no simulation executable was produced."
+    },
+    {
+      "name": "development_simulation",
+      "outcome": "not_run",
+      "details": "Compilation failed, so matching vvp could not be run."
+    }
+  ],
+  "development_outcome": "RTL implemented and statically reviewed; development compilation failed in the tool, and simulation success is not claimed.",
+  "limitations": [
+    "No successful development simulation due to compiler exit code 139.",
+    "Official evaluation is external and its results are unavailable.",
+    "No synthesis or board testing performed."
+  ]
+}

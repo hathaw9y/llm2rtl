@@ -1,0 +1,197 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob150_review2015_fsmonehot",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob150_review2015_fsmonehot",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob150_review2015_fsmonehot/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791273821.6483264,
+    "ended_at_unix": 1791273888.5230334,
+    "seconds": 66.87470746040344,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 84088,
+      "cached_input_tokens": 69632,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2676,
+      "reasoning_output_tokens": 20
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "731e1ea808ac0759c522218076f753122f22308a72c8b14e5883f26fe93ef34c",
+  "contract_sha256": "1a079502b1aad48c9a7cb10362f0c1869ade42c9417d9ee7f576e9f8c1d0ce2b",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "check": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "description": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+      },
+      {
+        "check": "contract_structure",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "check": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "coverage": "95 checks: directed traversal plus all 80 legal one-hot state/binary-input combinations. Icarus 12 compilation and matching vvp simulation passed."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development PASS is not official correctness; official evaluation was not accessed.",
+      "Original specification does not define illegal zero-hot/multi-hot states or unknown inputs. Oracle covers legal one-hot states and binary inputs.",
+      "Contract gate verifies structure only."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "implementation": "Direct combinational one-hot incoming-transition equations and Moore output equations. No clock/reset ports or stored state, as specified.",
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "check_history": "dev_checks.jsonl"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "731e1ea808ac0759c522218076f753122f22308a72c8b14e5883f26fe93ef34c",
+      "Prob150_review2015_fsmonehot_ref.sv": "8c98048c249e46db3a8f2f1ea48633e73b96a61428e5d3b0c57b3f22adcb83d9",
+      "Prob150_review2015_fsmonehot_test.sv": "1f8f30812e321bd95a85b91cbc8872fd237e0cec88061b4988bd00a0baf8d879"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob150_review2015_fsmonehot_test.sv",
+        "Prob150_review2015_fsmonehot_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01548767276108265
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb150_review2015_fsmonehot_test.sv:22: $finish called at 1501 (1ps)\nHint: Output 'B3_next' has no mismatches.\nHint: Output 'S_next' has no mismatches.\nHint: Output 'S1_next' has no mismatches.\nHint: Output 'Count_next' has no mismatches.\nHint: Output 'Wait_next' has no mismatches.\nHint: Output 'done' has no mismatches.\nHint: Output 'counting' has no mismatches.\nHint: Output 'shift_ena' has no mismatches.\nHint: Total mismatched samples is 0 out of 300 samples\n\nSimulation finished at 1501 ps\nMismatches: 0 in 300 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011062679812312126
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "731e1ea808ac0759c522218076f753122f22308a72c8b14e5883f26fe93ef34c",
+      "Prob150_review2015_fsmonehot_ref.sv": "8c98048c249e46db3a8f2f1ea48633e73b96a61428e5d3b0c57b3f22adcb83d9",
+      "Prob150_review2015_fsmonehot_test.sv": "1f8f30812e321bd95a85b91cbc8872fd237e0cec88061b4988bd00a0baf8d879"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob150_review2015_fsmonehot_test.sv",
+        "Prob150_review2015_fsmonehot_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013984658755362034
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb150_review2015_fsmonehot_test.sv:22: $finish called at 1501 (1ps)\nHint: Output 'B3_next' has no mismatches.\nHint: Output 'S_next' has no mismatches.\nHint: Output 'S1_next' has no mismatches.\nHint: Output 'Count_next' has no mismatches.\nHint: Output 'Wait_next' has no mismatches.\nHint: Output 'done' has no mismatches.\nHint: Output 'counting' has no mismatches.\nHint: Output 'shift_ena' has no mismatches.\nHint: Total mismatched samples is 0 out of 300 samples\n\nSimulation finished at 1501 ps\nMismatches: 0 in 300 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012244665995240211
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

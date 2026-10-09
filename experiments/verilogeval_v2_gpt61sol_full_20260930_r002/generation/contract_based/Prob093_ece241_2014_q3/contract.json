@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"c": 1, "d": 1}, "outputs": {"mux_in": 4}, "external_selector_mapping": "{a,b}=00,01,10,11 selects mux_in[0], [1], [2], [3] respectively"},
+  "semantics": {"kind": "combinational", "evidence": "Original block diagram has only c and d inputs and mux_in outputs; K-map specifies values for all binary combinations.", "clock_reset_initialization": "No clock, reset, or state is specified or added. Outputs settle combinationally without cycle latency.", "truth_table_cd_00_01_11_10": {"mux_in_0": "0,1,1,1", "mux_in_1": "0,0,0,0", "mux_in_2": "1,0,1,1", "mux_in_3": "0,0,1,0"}, "implementation": "Three 2-to-1 muxes plus constant zero; the external 4-to-1 mux is not part of TopModule.", "minimality": "Three distinct nonconstant required functions, none equal to c or d, each need a mux output; three muxes achieve that lower bound."},
+  "numeric": {"type": "unsigned single-bit Boolean signals", "output_order": "Packed mux_in[3:0] follows binary ab index, not K-map Gray column position", "arithmetic": "No arithmetic, rounding, overflow, or saturation"},
+  "verification": {"oracle": "Literal original K-map rows in Gray column order, independently mapped to binary selector indices", "coverage": "All four c,d combinations and all four external a,b selections, repeated in changing orders", "sampling": "Drive inputs then wait one simulation time unit for combinational settling", "failure": "$fatal on vector or selected-output mismatch, bounded timeout, PASS only after all comparisons"},
+  "specification_ambiguities": ["X/Z input behavior is unspecified by the binary K-map; no extra acceptance requirement is inferred."]
+}

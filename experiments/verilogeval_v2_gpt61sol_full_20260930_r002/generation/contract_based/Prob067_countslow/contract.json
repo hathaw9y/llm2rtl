@@ -1,0 +1,34 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"clk": 1, "reset": 1, "slowena": 1},
+    "outputs": {"q": 4},
+    "source": "problem.txt interface list; harness mandates TopModule"
+  },
+  "semantics": {
+    "clock": "All sequential logic triggered on positive edge, as stated in problem.txt.",
+    "reset": "Active high synchronous reset sets q to zero at rising edge, regardless of slowena.",
+    "transition": "At each rising edge: if reset, q=0; else if slowena, q=(q+1) modulo 10; else hold q.",
+    "visibility": "New q is visible after the rising-edge sequential update; no extra latency.",
+    "initialization": "No initial value is specified; no power-up initialization is added. Tests begin numerical checking after a reset edge.",
+    "between_edges": "q holds despite changes to reset or slowena between positive edges."
+  },
+  "numeric": {
+    "representation": "4-bit unsigned q",
+    "legal_values_after_reset": "0 through 9 inclusive",
+    "wrap": "9 increments to 0; period is 10 enabled rising edges",
+    "constants": "Explicit 4-bit RTL constants"
+  },
+  "verification": {
+    "oracle": "Independent integer count of enabled rising edges since last reset, modulo 10, grounded in original problem.txt.",
+    "sampling": "Drive inputs at falling edges; compare before rising edge and after NBA settling. Check stability at falling edges and on off-edge reset pulses.",
+    "coverage": "Reset with either enable value, all ten states, repeated wraps, pauses at every value, reset from every value, bursty enables, reset priority, reset pulses without rising edges.",
+    "gate": "python3 validate_contract.py before RTL creation",
+    "development_check": "python3 dev_check.py --label initial; fatal mismatch, bounded timeout, explicit PASS marker"
+  },
+  "specification_ambiguities": [
+    {"topic": "Power-up state", "evidence": "The problem specifies synchronous reset but no initial state.", "resolution": "Do not impose a power-up value or compare q before first reset edge."},
+    {"topic": "Illegal values and unknown inputs", "evidence": "The problem describes only decade counting and binary control behavior.", "resolution": "No additional recovery behavior or unknown-input requirements are imposed; verify reachable states after reset."}
+  ]
+}

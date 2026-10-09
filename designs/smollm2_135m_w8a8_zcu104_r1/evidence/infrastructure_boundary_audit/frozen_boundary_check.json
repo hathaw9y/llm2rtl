@@ -1,0 +1,149 @@
+{
+  "status": "PASS_FROZEN_BOUNDARY_IDENTITIES",
+  "functional_acceptance": false,
+  "pins": {
+    "designs/smollm2_135m_w8a8_zcu104_r1/modules/isa_dispatcher.json": "96569710aeb2b92de39a96187553bf55e64d2e6db754ff575e01e64e14821b88",
+    "designs/smollm2_135m_w8a8_zcu104_r1/modules/bank_controller.json": "af63983a9898fb3d0c164bf6491fb73443441e55f4169798956a0a4f141d1cee",
+    "designs/smollm2_135m_w8a8_zcu104_r1/contracts/infrastructure_rtl_port_binding.json": "4a78a38ff3edd0889999be5ae44a9400d3a929cb05e72745fcfae8f256eb3397",
+    "designs/smollm2_135m_w8a8_zcu104_r1/contracts/isa_dispatcher_module_manifest.json": "95d68281cf21d16188e5c707f1ee135148712642de68f7d13212524c7e110be6",
+    "designs/smollm2_135m_w8a8_zcu104_r1/contracts/bank_controller_module_manifest.json": "23ddc285289a7e2f2f02d5a397fe18c67b3a3f1b404a94f47d74dd3af44b9767"
+  },
+  "reference_checks": [
+    {
+      "module": "isa_dispatcher",
+      "ref": "engine_completion_contract.json",
+      "match": true
+    },
+    {
+      "module": "isa_dispatcher",
+      "ref": "evidence_identity_contract.json",
+      "match": true
+    },
+    {
+      "module": "isa_dispatcher",
+      "ref": "local_bank_contract.json",
+      "match": true
+    },
+    {
+      "module": "isa_dispatcher",
+      "ref": "isa_command_contract.json",
+      "match": true
+    },
+    {
+      "module": "isa_dispatcher",
+      "ref": "isa_spec.json",
+      "match": true
+    },
+    {
+      "module": "isa_dispatcher",
+      "ref": "bank_layout.json",
+      "match": true
+    },
+    {
+      "module": "isa_dispatcher",
+      "ref": "compute_interface.json",
+      "match": true
+    },
+    {
+      "module": "isa_dispatcher",
+      "ref": "isa_codec.py",
+      "match": true
+    },
+    {
+      "module": "isa_dispatcher",
+      "ref": "binding",
+      "match": true
+    },
+    {
+      "module": "bank_controller",
+      "ref": "engine_completion_contract.json",
+      "match": true
+    },
+    {
+      "module": "bank_controller",
+      "ref": "evidence_identity_contract.json",
+      "match": true
+    },
+    {
+      "module": "bank_controller",
+      "ref": "local_bank_contract.json",
+      "match": true
+    },
+    {
+      "module": "bank_controller",
+      "ref": "isa_command_contract.json",
+      "match": true
+    },
+    {
+      "module": "bank_controller",
+      "ref": "isa_spec.json",
+      "match": true
+    },
+    {
+      "module": "bank_controller",
+      "ref": "bank_layout.json",
+      "match": true
+    },
+    {
+      "module": "bank_controller",
+      "ref": "compute_interface.json",
+      "match": true
+    },
+    {
+      "module": "bank_controller",
+      "ref": "isa_codec.py",
+      "match": true
+    },
+    {
+      "module": "bank_controller",
+      "ref": "binding",
+      "match": true
+    }
+  ],
+  "scope_correction": "Earlier boundary note proposed all15 generic routes. Frozen packet supports external MM2S/S2MM and existing GEMM/quant slots only; future nonlinear04/05/07/09/10 and reserved12 explicitly return01 before bank access. This is current implementation subset, not full ISA execution.",
+  "resolved_by_binding": [
+    "One exclusive tuple ownership ledger",
+    "Original accepted generations separate from live producer descriptor",
+    "Trusted external coverage service explicitly excluded",
+    "Same-edge engine acceptance/acquire; eligibility independent of valid",
+    "Stalled engine offer retained across asynchronous error; matched outstanding drains"
+  ],
+  "implementation_watchpoints": [
+    "Unconfigured destination C/gen0 must be acquirable for producer commands; source readiness is executor responsibility.",
+    "Original Cgen0 remains scoreboard/release identity after producer_begin publishes1.",
+    "Authenticated invalidation must prevent any later same-epoch coverage event resurrecting validity. Deterministic same-edge priority alone is insufficient.",
+    "An already-presented stalled command remains stable/valid after sticky error and is tracked if later accepted; eligibility for this retained offer must not be gated off by global error.",
+    "Before handshake descriptors and bank generations must remain stable through command stall; metadata arbitration must forbid reconfiguration of offered-but-unacquired operands or guarantee stable snapshots and valid eligibility without deadlock.",
+    "Same-bank metadata/acquire/release serialization must keep acquire eligibility independent of acquire_valid and prevent combinational ready loops.",
+    "Flags-only coverage interface tests prove authenticated metadata handling only; byte/strobe coverage service not implemented this wave.",
+    "B7 static generation can differ from window generation. Component epoch authentication uses selected component; acquired command generation uses max.",
+    "Configuration response transport does not retain bank ownership; stalled response cannot reset or conceal updated descriptors; exactly one response per accepted config."
+  ],
+  "required_tests_addendum": [
+    "producer unconfigured C then matched original-generation release",
+    "late coverage after invalidation cannot restore failed epoch",
+    "fault with stalled offered command then accept/drain",
+    "B7 window/static unequal epochs and max-generation command identity",
+    "strict supported-opcode rejection coverage for all six excluded encodings",
+    "simultaneous disjoint release/acquire and metadata conflict priority",
+    "configuration response stall while free bank reused by later command"
+  ],
+  "forbidden_claims": [
+    "RTL functional PASS",
+    "byte-mask coverage correctness",
+    "real DMA/nonlinear compute",
+    "routed or board timing"
+  ],
+  "supplemental_clarifications": {
+    "path": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/contracts/infrastructure_boundary_clarifications.json",
+    "sha256": "a98a86f0f58d54492a1c4c4639aef4750941e624cc579847a0a61109c1177f6e",
+    "binding_match": true
+  },
+  "resolved_by_clarifications": [
+    "Legal absent destination generation0",
+    "Sticky invalidated epoch prevents late coverage resurrection",
+    "Retained stalled offer remains eligible after global fault",
+    "Coverage-service claim exclusion",
+    "B7 component monotonicity distinct from producer exact+1"
+  ]
+}

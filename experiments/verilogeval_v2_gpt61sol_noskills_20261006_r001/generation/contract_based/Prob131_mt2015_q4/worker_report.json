@@ -1,0 +1,15 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"check": "python3 smoke_environment.py", "outcome": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"check": "python3 validate_contract.py", "outcome": "passed_structure_only"},
+    {"check": "python3 dev_check.py --label initial", "outcome": "passed", "compile_returncode": 0, "simulation_returncode": 0, "evidence": "development/01", "coverage": "19 original waveform rows at 0 through 90 ns, all four binary input combinations"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation was not accessed and remains pending.", "Original waveform specifies binary inputs only; X/Z behavior is not part of the verified oracle.", "Contract validation is structural only."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation_basis": "A uses the original Boolean formula. B uses XNOR inferred from every binary combination in the original waveform. Two instances of each feed the prescribed OR, AND, and final XOR.",
+  "preserved_initial_snapshot": "candidate_initial.sv"
+}

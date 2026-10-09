@@ -1,0 +1,873 @@
+{
+  "schema": "llm2rtl.user_decisions.v1",
+  "model_id": "Qwen/Qwen2.5-0.5B",
+  "status": "partial_decisions_isa_and_module_boundaries_not_finalized",
+  "execution_scope": {
+    "status": "agreed",
+    "user_selection": "1번으로하자",
+    "batch_size": 1,
+    "padding_supported": false,
+    "prefill": "causal; execute all input tokens through all 24 decoder layers; return last input token logits and updated KV cache",
+    "decode": "one input token per invocation; execute all 24 decoder layers and LM head; return logits and updated KV cache",
+    "output_boundary": [
+      "last_input_token_logits",
+      "updated_kv_cache"
+    ],
+    "excluded": [
+      "token_selection",
+      "argmax",
+      "sampling",
+      "beam_search"
+    ],
+    "ps_responsibility": "ISA generation, DDR residency tiling, addresses, data movement control and recovery; no model tensor arithmetic",
+    "pl_responsibility": "all supported model tensor operations and KV data updates through explicit ISA execution",
+    "rtl_implementation_authorized": false,
+    "context_limits": {
+      "status": "agreed",
+      "user_confirmation": "그렇게 하자",
+      "max_input_tokens": 512,
+      "max_total_context_tokens": 1024,
+      "total_context_definition": "prefill input tokens plus all tokens subsequently processed through decode",
+      "max_additional_decode_tokens_for_max_length_input": 512,
+      "overflow_behavior": "reject an invocation that would exceed the supported context; do not silently evict, wrap, or truncate KV cache",
+      "kv_payload_bytes_all_layers": {
+        "BF16": 12582912,
+        "KV8": 6291456
+      },
+      "kv_numeric_format_selected": false
+    }
+  },
+  "pending_decisions": [
+    "ddr_address_ranges_and_cache_coherency_contract",
+    "resource_budgets",
+    "numeric_formats_and_acceptance",
+    "reference_runtime_identity",
+    "isa_and_executor_boundaries",
+    "bank_layout_and_capacities",
+    "command_chunk_protocol",
+    "per_executor_implementation_contracts",
+    "gemm_processing_granularity_and_weight_group_alignment"
+  ],
+  "target_hardware": {
+    "status": "board_runtime_and_clock_agreed_ddr_and_resource_budgets_pending",
+    "user_selection": "zcu104",
+    "board": "AMD ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "profile_reference": "config/hardware/zcu104.json",
+    "part_identity_basis": "repository ZCU104 profile",
+    "target_clock_mhz": 100,
+    "runtime": "baremetal",
+    "ddr_port": null,
+    "dma_stream_width_bits": null,
+    "usable_ddr_range": null,
+    "profile_values_not_implicitly_approved": [
+      "200 MHz",
+      "S_AXI_HP0_FPD",
+      "128-bit memory stream",
+      "2 GiB usable DDR"
+    ],
+    "inspection_findings": [
+      "Profile DDR start/end addresses are unresolved.",
+      "Profile references boards/zcu104/contracts/board_memory_map.json, but boards/zcu104 is absent in current worktree."
+    ],
+    "resource_inventory_from_profile": {
+      "lut": 230400,
+      "ff": 460800,
+      "dsp": 1728,
+      "bram_36k": 312,
+      "uram": 96
+    },
+    "runtime_status": "agreed",
+    "runtime_user_selection": "Baremetal로",
+    "target_clock_period_ns": 10.0,
+    "clock_status": "agreed",
+    "clock_user_selection": "일단 넉넉하게 100MHZ로 하고 모듈을 다 만들고 올리는 식으로 하자"
+  },
+  "context_length_proposal": {
+    "status": "resolved_by_user_confirmation",
+    "user_suggestion": "안전하게 1024?",
+    "interpretation_candidate": "1024 is the total cached context cap, including prefill and subsequent decode tokens",
+    "suggested_max_input_tokens": 512,
+    "suggested_max_total_context_tokens": 1024,
+    "kv_payload_bytes_all_layers": {
+      "BF16": 12582912,
+      "KV8": 6291456
+    },
+    "numeric_format_selected": false,
+    "capacity_and_timing_signoff": false,
+    "note": "Input cap and total context cap remain unresolved until user confirms. DDR address reservation, numeric format, tiling and measured performance remain separate decisions."
+  },
+  "performance_goal_proposal": {
+    "status": "resolved_by_user_confirmation",
+    "candidate_1": "correctness first; measure prefill latency and decode latency with no initial throughput minimum",
+    "candidate_2": "explicit latency or throughput thresholds supplied by user and assessed against measured DDR bandwidth and resource estimates",
+    "clock_target_mhz": null,
+    "measurement_boundary": "end-to-end model invocation including PS command generation/publication, command chunk loading, DMA and PL execution; report component timings separately; logits and KV output completion",
+    "workloads": [
+      "prefill length 512 from empty cache",
+      "single-token decode at declared cache lengths up to 1023"
+    ]
+  },
+  "performance_goal": {
+    "status": "agreed",
+    "user_selection": "1번으로하자",
+    "priority": "correctness_first",
+    "initial_prefill_latency_limit_seconds": null,
+    "initial_decode_throughput_min_tokens_per_second": null,
+    "measurement_boundary": "end-to-end model invocation including PS command generation/publication, command chunk loading, DMA and PL execution; report component timings separately; logits and KV output completion",
+    "workloads": [
+      "prefill length 512 from empty cache",
+      "single-token decode at declared cache lengths up to 1023"
+    ],
+    "component_timings_required": [
+      "PS command generation",
+      "command chunk loading and publication",
+      "DMA",
+      "PL compute",
+      "end-to-end invocation"
+    ],
+    "clock_target_is_separate_pending_decision": true,
+    "acceptance_note": "No initial throughput floor; numerical, RTL, integration and user-run board acceptance remain required."
+  },
+  "numeric_decisions": {
+    "status": "partially_agreed",
+    "weight_bit_width": 4,
+    "weight_bit_width_status": "agreed",
+    "weight_user_selection": "Weight는 W4로 하자",
+    "activation_format": "BF16",
+    "kv_format": "BF16",
+    "accumulator_format": "FP32",
+    "nonlinear_intermediate_formats": null,
+    "weight_quantization_scheme": {
+      "status": "agreed",
+      "scheme": "symmetric signed integer W4",
+      "code_range": [
+        -7,
+        7
+      ],
+      "zero_point": 0,
+      "unused_signed_code": -8,
+      "encoding": "signed 4-bit two-complement nibbles; packing layout remains pending",
+      "scale_rule": "s=round_FP32(max(abs(w))/7), based on checkpoint BF16 weight values represented in FP32",
+      "quantization_rule": "q=clamp(round_to_nearest_integer_ties_to_even(round_FP32(w/stored_s)), -7, 7)",
+      "zero_group_rule": "s=1, q=0 for all elements",
+      "scale_format": "FP32",
+      "group_size": 128,
+      "runtime_PS_tensor_quantization_or_dequantization": false
+    },
+    "weight_scale_granularity": {
+      "axis": "K/input-feature axis separately for each output column",
+      "group_size": 128,
+      "status": "agreed",
+      "user_selection": "어",
+      "steps_per_group_at_agreed_K16": 8
+    },
+    "weight_scale_format": "FP32",
+    "zero_point_policy": "zero_point=0",
+    "weight_tensor_coverage": [
+      "Q/K/V/O projections",
+      "FFN gate/up/down projections",
+      "shared embedding/LM-head matrix"
+    ],
+    "bias_and_norm_parameter_formats": {
+      "bias": "BF16",
+      "RMSNorm_gamma": "BF16",
+      "status": "agreed"
+    },
+    "rounding_and_saturation": null,
+    "calibration_workload": null,
+    "numeric_acceptance_thresholds": null,
+    "note": "Weight quantization rule and matrix coverage agreed; GEMM scale application and FP32 accumulation agreed. Exact arithmetic/reduction, bias/rounding order, nonlinear algorithms, tensor layout/packing and accuracy acceptance remain unresolved.",
+    "activation_kv_status": "agreed",
+    "activation_kv_user_selection": "1번으로하자",
+    "weight_scale_granularity_decision_rule": "defer until GEMM weight processing granularity and bank packing are agreed",
+    "weight_scale_format_status": "agreed",
+    "gemm_scale_application": {
+      "status": "agreed",
+      "user_selection": "어",
+      "method": "FP32 group partial sum then FP32 scale application, followed by FP32 accumulation across groups",
+      "W4_mode": "BF16 activation multiplied by signed W4 code; FP32 group partial sum over K-group128; multiply by stored FP32 scale for that output/group; accumulate group contributions in FP32",
+      "attention_mode": "BF16 times BF16 dynamic operands; FP32 accumulation; no W4 group scale",
+      "final_activation_format": "BF16",
+      "bias_and_final_rounding_order": "bias added in FP32 before final BF16 activation rounding (agreed)",
+      "exact_reduction_order_and_FMA_policy": "See agreed gemm_arithmetic_decision",
+      "FP32_partial_sum_spill_and_reload": "pending"
+    },
+    "gemm_accumulator_format_status": "agreed",
+    "gemm_group_partial_sum_format": "FP32",
+    "weight_quantization_rounding_and_saturation": {
+      "rounding": "nearest-even",
+      "saturation_range": [
+        -7,
+        7
+      ],
+      "status": "agreed"
+    },
+    "bias_and_final_rounding_order": {
+      "status": "agreed",
+      "user_selection": "ㅇㅇ",
+      "QKV_flow": [
+        "GEMM FP32 result bank",
+        "vector adds checkpoint BF16 bias represented in FP32",
+        "final BF16 round-to-nearest ties-to-even"
+      ],
+      "unbiased_projection_flow": "Keep FP32 partial sums until all groups and residency tiles are accumulated, then round completed activation to BF16 with ties-to-even",
+      "bias_owner": "shared vector executor",
+      "float_overflow_underflow_subnormal_NaN_policy": "pending",
+      "GEMM_output_conversion_location": "pending between agreed GEMM output-mode and explicit vector CAST command",
+      "no_intermediate_BF16_rounding_before_bias": true
+    }
+  },
+  "weight_quantization_proposal": {
+    "status": "quantization_rule_and_coverage_agreed_execution_details_pending",
+    "recommended_candidate": {
+      "scheme": "groupwise_symmetric",
+      "group_axis": "input-feature axis of each logical weight matrix row",
+      "group_size": 128,
+      "signed_code_range": [
+        -7,
+        7
+      ],
+      "encoding": "signed 4-bit two-complement packed nibbles; -8 reserved/invalid",
+      "zero_point": 0,
+      "scale_format": "FP32",
+      "scale_rule": "s=max(abs(weight))/7; all-zero group uses s=1 and q=0; q computed using the stored scale",
+      "rounding": "round_to_nearest_ties_to_even",
+      "clipping": "clamp rounded codes to [-7,7]",
+      "matrix_scope": [
+        "all attention and FFN projection weight matrices",
+        "shared embedding/LM-head weight matrix"
+      ],
+      "nonmatrix_scope": "bias and RMSNorm gamma remain BF16",
+      "reference_rule": "dequantize q*stored_scale and compare against the pinned checkpoint; RTL/interpreter multiply and accumulation semantics remain separate decisions",
+      "activation_scale_rule": "BF16 activation and KV do not introduce integer activation or KV quantization scales",
+      "quality_status": "not_calibrated_or_validated"
+    },
+    "alternative_candidates": [
+      "symmetric per-output-row scale with less metadata and fewer scaling operations",
+      "groupwise symmetric group_size=64 with more scale metadata and scale operations"
+    ],
+    "previous_candidates_are_not_agreed": true,
+    "user_instruction": "이건 GEMM이 한번에 weight를 몇개 처리하냐로 정하자",
+    "decision_dependency": {
+      "status": "agreed_dependency_not_agreed_quantization_scheme",
+      "rule": "Choose the W4 quantization group and scale granularity based on the agreed GEMM weight processing unit, bank word packing and accumulation schedule.",
+      "distinctions": [
+        "K-direction weights contributing to one output reduction",
+        "parallel output columns",
+        "total weights consumed in a cycle or processing step",
+        "local compute tile versus DDR residency tile"
+      ],
+      "examples_are_not_design_selections": true,
+      "requirement": "Account explicitly for group boundaries, group partial sums, scale application, tail handling and scale traffic in the candidate GEMM/interpreter design.",
+      "no_implementation_authorization": true
+    },
+    "aligned_group_comparison": {
+      "status": "group128_FP32_scale_accepted_by_user",
+      "group_axis": "K axis separately for each output column; groups never span different output columns",
+      "scale_format_assumption": "FP32 for comparison only, not yet agreed",
+      "candidates": [
+        {
+          "group_size": 16,
+          "K16_processing_steps_per_group": 1,
+          "four_output_group_weight_payload_bytes": 32,
+          "four_output_group_FP32_scale_bytes": 16,
+          "scale_bytes_divided_by_weight_payload_bytes": 0.5
+        },
+        {
+          "group_size": 64,
+          "K16_processing_steps_per_group": 4,
+          "four_output_group_weight_payload_bytes": 128,
+          "four_output_group_FP32_scale_bytes": 16,
+          "scale_bytes_divided_by_weight_payload_bytes": 0.125
+        },
+        {
+          "group_size": 128,
+          "K16_processing_steps_per_group": 8,
+          "four_output_group_weight_payload_bytes": 256,
+          "four_output_group_FP32_scale_bytes": 16,
+          "scale_bytes_divided_by_weight_payload_bytes": 0.0625
+        }
+      ],
+      "recommended_candidate_group_size": 128,
+      "numerical_error_status": "unmeasured",
+      "scale_application_and_accumulation_semantics": "pending",
+      "quantization_scheme_and_tensor_coverage": "pending"
+    },
+    "signed_scheme_and_coverage_proposal": {
+      "status": "agreed",
+      "scheme": "symmetric signed integer W4",
+      "code_range": [
+        -7,
+        7
+      ],
+      "zero_point": 0,
+      "unused_signed_code": -8,
+      "encoding": "signed 4-bit two-complement nibbles; packing layout remains pending",
+      "scale_format": "FP32 (already agreed)",
+      "group_size": 128,
+      "scale_rule": "s=round_FP32(max(abs(w))/7), based on checkpoint BF16 weight values represented in FP32",
+      "quantization_rule": "q=clamp(round_to_nearest_integer_ties_to_even(round_FP32(w/stored_s)), -7, 7)",
+      "zero_group_rule": "s=1, q=0 for all elements",
+      "matrix_coverage": [
+        "Q/K/V/O projections",
+        "FFN gate/up/down projections",
+        "shared embedding/LM-head matrix"
+      ],
+      "bias_format": "BF16",
+      "RMSNorm_gamma_format": "BF16",
+      "conversion_location": "checkpoint quantization and static weight packing are offline preparation; runtime PS does not perform tensor quantization/dequantization",
+      "embedding_runtime_reconstruction": "PL operation still must be explicitly mapped in ISA and module contract",
+      "quality_validation_status": "not_executed",
+      "user_selection": "어"
+    }
+  },
+  "implementation_and_board_sequence": {
+    "status": "agreed_user_override_of_default_cumulative_board_checkpoint_sequence",
+    "user_instruction": "일단 넉넉하게 100MHZ로 하고 모듈을 다 만들고 올리는 식으로 하자",
+    "sequence": [
+      "agree model ISA and executor boundaries and bank layout",
+      "validate Python ISA interpreter and golden outputs/state",
+      "discuss and record each executor implementation contract before its HDL implementation",
+      "implement and verify all agreed modules individually including relevant synthesis/timing evidence",
+      "integrate modules and perform cumulative integration verification",
+      "build and route the complete agreed design at 100 MHz",
+      "prepare exact build artifacts, bare-metal execution procedure and expected outputs",
+      "user programs and executes the physical FPGA and returns results"
+    ],
+    "physical_board_checkpoint_required_before_next_executor": false,
+    "all_modules_before_complete_board_build": true,
+    "per_executor_preimplementation_discussion_required": true,
+    "per_module_and_integration_verification_required": true,
+    "physical_board_operator": "user",
+    "completion_claim_requires_user_run_board_evidence": true,
+    "clock_relaxation_or_parallelism_contract_change_requires_user_discussion": true,
+    "does_not_finalize_pending_isa_bank_numeric_or_module_decisions": true
+  },
+  "executor_boundary_decisions": {
+    "status": "partially_agreed",
+    "gemm": {
+      "status": "shared_executor_agreed_implementation_details_pending",
+      "user_selection": "공유하자",
+      "single_shared_executor": true,
+      "operations": [
+        "Q/K/V/O projections",
+        "FFN gate/up/down projections",
+        "LM head projection",
+        "attention QK transpose products",
+        "attention probability times V products"
+      ],
+      "numeric_modes": [
+        "W4 weight x BF16 activation",
+        "BF16 x BF16 dynamic operands"
+      ],
+      "tensor_operands": "validated logical local bank IDs only; external addresses only in explicit DMA commands",
+      "pending": [
+        "opcode encoding and mode payload",
+        "K and output parallelism",
+        "bank widths and access schedules",
+        "accumulator format",
+        "W4 scale application and group alignment",
+        "layout/transpose/GQA handling",
+        "partial-sum lifetime and command completion identity",
+        "golden numerical acceptance"
+      ],
+      "does_not_select_hidden_DDR_access_or_model_scheduling": true,
+      "rtl_implementation_authorized": false,
+      "parallelism_baseline": {
+        "status": "agreed_design_starting_point_final_module_contract_pending",
+        "user_selection": "어",
+        "k_lanes_per_output": 16,
+        "parallel_output_columns": 4,
+        "parallel_input_rows": 1,
+        "weights_per_processing_step": 64,
+        "w4_B_payload_bytes_per_step": 32,
+        "bf16_dynamic_B_payload_bytes_per_step": 128,
+        "target_clock_mhz": 100,
+        "sustained_II_or_latency_proven": false,
+        "bank_supply_width_and_ports": "pending",
+        "note": "User accepted this baseline for developing bank, accumulation and scale candidates; no HDL implementation contract is frozen."
+      }
+    },
+    "other_compute_executors": "No additional executor boundary selected; conversion/layout/embedding reconstruction responsibilities still need explicit mapping.",
+    "attention_normalization": {
+      "status": "separate_softmax_boundary_agreed_implementation_details_pending",
+      "user_selection": "별도 방식으로 하자",
+      "flow": [
+        "shared GEMM computes QK transpose",
+        "separate SOFTMAX_MASKED executor applies score scaling, causal masking and stable softmax",
+        "shared GEMM computes probability times V"
+      ],
+      "score_scale": "1/sqrt(head_dim)=1/8 for head_dim=64",
+      "supported_mask_boundary": "causal attention within agreed no-padding execution scope",
+      "stateful_online_attention_fusion_selected": false,
+      "pending": [
+        "query/head scheduling",
+        "score and probability formats",
+        "FP32 versus other intermediate precision",
+        "softmax algorithm and exp/reciprocal approximations",
+        "bank capacities and layout",
+        "completion and error response identity",
+        "numeric acceptance criteria"
+      ],
+      "example_query_tile_16_is_not_agreed": true,
+      "rtl_implementation_authorized": false
+    },
+    "remaining_boundary_proposal": {
+      "status": "three_proposed_boundaries_accepted_other_boundary_details_pending",
+      "candidate": [
+        "separate RMSNorm executor",
+        "separate RoPE executor",
+        "shared elementwise/vector executor for bias add, residual add, SiLU-times-up and required numeric conversion"
+      ],
+      "layout_handling": "Prefer explicitly specified bank storage/access layouts; add a layout executor only if required by the agreed mapping. No hidden PS tensor transformations.",
+      "embedding_handling": "Explicit DMA-selected weight rows and PL W4 reconstruction, subject to pending weight coverage and numeric decisions.",
+      "shared_vector_algorithms_and_precision": "pending",
+      "shared_vector_impl_is_not_frozen": true
+    },
+    "rmsnorm": {
+      "status": "separate_executor_boundary_agreed",
+      "user_selection": "어",
+      "operations": [
+        "per-layer input RMSNorm",
+        "per-layer post-attention RMSNorm",
+        "final RMSNorm"
+      ],
+      "implementation_details": "pending",
+      "rtl_implementation_authorized": false
+    },
+    "rope": {
+      "status": "separate_executor_boundary_agreed",
+      "user_selection": "어",
+      "operations": [
+        "Q rotary embedding",
+        "K rotary embedding"
+      ],
+      "table_generation_and_numeric_details": "pending",
+      "rtl_implementation_authorized": false
+    },
+    "vector": {
+      "status": "shared_executor_boundary_agreed",
+      "user_selection": "어",
+      "operations": [
+        "Q/K/V bias add",
+        "residual add",
+        "SiLU(gate) times up"
+      ],
+      "conversion_and_layout_handling": "shared vector executor; numeric details and tensor layouts pending",
+      "implementation_details": "pending",
+      "rtl_implementation_authorized": false,
+      "additional_modes": [
+        "DEQUANT",
+        "CAST",
+        "LAYOUT"
+      ],
+      "additional_mode_status": "agreed",
+      "additional_modes_user_selection": "그렇게 하자"
+    },
+    "agreed_core_compute_executor_inventory": [
+      "shared GEMM",
+      "masked softmax",
+      "RMSNorm",
+      "RoPE",
+      "shared vector"
+    ]
+  },
+  "gemm_parallelism_proposal": {
+    "status": "K16_N4_starting_point_accepted_by_user",
+    "clock_mhz": 100,
+    "candidate_comparison_assumptions": {
+      "parallel_output_columns": 4,
+      "parallel_query_rows": 1,
+      "sustained_II": "not_selected_or_proven"
+    },
+    "candidates": [
+      {
+        "k_weights_per_output_per_processing_step": 8,
+        "total_weights_for_4_outputs_per_step": 32,
+        "w4_weight_payload_bits_per_step": 128,
+        "bf16_dynamic_B_payload_bits_per_step": 512
+      },
+      {
+        "k_weights_per_output_per_processing_step": 16,
+        "total_weights_for_4_outputs_per_step": 64,
+        "w4_weight_payload_bits_per_step": 256,
+        "bf16_dynamic_B_payload_bits_per_step": 1024
+      },
+      {
+        "k_weights_per_output_per_processing_step": 32,
+        "total_weights_for_4_outputs_per_step": 128,
+        "w4_weight_payload_bits_per_step": 512,
+        "bf16_dynamic_B_payload_bits_per_step": 2048
+      }
+    ],
+    "weight_quantization_group_rule": "Choose a K-axis group aligned to the eventual processing block; it may span multiple lane processing steps. Do not equate all parallel output-column weights with one quantization group.",
+    "resource_and_timing_status": "no_synthesis_evidence",
+    "bank_word_bits_and_packing": "pending",
+    "group_size": "pending",
+    "actual_executor_latency_or_throughput_claimed": false
+  },
+  "gemm_numeric_proposal": {
+    "status": "candidate_2_selected_implementation_numeric_details_pending",
+    "candidate_1": {
+      "name": "BF16 weight reconstruction before dot product",
+      "weight_rule": "w_hat=round_BF16(q*stored_FP32_group_scale)",
+      "product_rule": "BF16 activation times reconstructed BF16 weight",
+      "accumulator_candidate": "FP32",
+      "output_candidate": "BF16",
+      "note": "Introduces BF16 rounding of each reconstructed weight; may share the BF16 multiply path with dynamic attention mode."
+    },
+    "candidate_2": {
+      "name": "FP32 group partial sum then scaling",
+      "group_rule": "u_g=sum_{k in group_g}(BF16_activation_k*signed_W4_code_k) with specified FP32 product/reduction/accumulation semantics",
+      "scale_rule": "v_g=round_FP32(u_g*stored_FP32_group_scale_g)",
+      "output_accumulation": "accumulate group contributions in specified FP32 order; final output rounded to BF16",
+      "attention_mode_candidate": "BF16 times BF16 dynamic operands with FP32 product/reduction/accumulation and final BF16 output; no W4 group scales",
+      "note": "One scale multiplication per output per group; exact reduction order, FMA policy, rounding, overflow/subnormal behavior and partial-sum spill format remain to be specified."
+    },
+    "signed_W4_encoding_and_range": "pending",
+    "bias_and_norm_parameter_formats": "pending",
+    "reference_comparison_status": "not_executed",
+    "rtl_implementation_authorized": false
+  },
+  "bias_rounding_proposal": {
+    "status": "candidate_1_accepted_by_user",
+    "candidate_1": {
+      "name": "add bias before final BF16 activation rounding",
+      "QKV_flow": [
+        "GEMM writes FP32 partial/result bank",
+        "vector BIAS_ADD adds BF16 checkpoint bias represented in FP32",
+        "round final activation to BF16"
+      ],
+      "O_FFN_LM_head_flow": "GEMM maintains FP32 partial sums across all groups/residency tiles; round completed unbiased result to BF16",
+      "rounding_candidate": "nearest-even",
+      "saturation_and_float_exception_policy": "pending",
+      "reason": "Avoid additional intermediate BF16 rounding before bias; give the vector executor an explicit FP32 input to BF16 output mode."
+    },
+    "candidate_2": {
+      "name": "round GEMM output to BF16 before bias",
+      "QKV_flow": [
+        "GEMM output rounded to BF16",
+        "vector bias addition",
+        "round output to BF16"
+      ],
+      "note": "Earlier BF16 intermediate and additional rounding; numerical effect must be compared."
+    },
+    "reference_comparison_status": "not_executed",
+    "rtl_implementation_authorized": false
+  },
+  "isa_control_proposal": {
+    "status": "not_agreed",
+    "source_lifetime_candidate": "Per-operand last_use/consume flag. On matched successful completion, consumed source tensor handles become invalid while non-consumed sources remain valid. Ownership release occurs on completion independently of tensor validity.",
+    "failure_candidate": "Failed commands do not commit output validity or successful source consumption; affected destinations become invalid/fault according to the eventual error contract.",
+    "destination_reuse_candidate": "Explicit GEMM INIT/ACCUM/FINAL behavior for a separately owned FP32 PSUM bank; input and output bank alias restrictions retained.",
+    "normal_END_candidate": "Drain outstanding commands; retain tensor contents/valid descriptors and KV between chunks; release ownership. No implicit tensor invalidation.",
+    "alternative": "Separate bank invalidation control opcode with additional command records and metadata control path.",
+    "fence_loop_double_buffering": "not_selected; must assess DDR alias ordering and actual chunked schedules",
+    "source_lifetime_status": "last_use_flag_policy_agreed"
+  },
+  "bank_lifetime_decision": {
+    "status": "agreed_policy_encoding_and_implementation_pending",
+    "user_selection": "어",
+    "source_policy": "Per-source-operand last_use flag, applied on matched successful completion.",
+    "last_use_true": "Invalidate the successfully consumed source tensor handle after its last use.",
+    "last_use_false": "Retain source tensor validity for later commands.",
+    "ownership_release": "Release matching owner roles on completion independently of source tensor validity.",
+    "failure": "Do not commit successful destination validity or successful source consumption for a failed command. Error/reset recovery remains to be specified.",
+    "normal_END_DONE": "Drain outstanding commands and release ownership; preserve required bank data, valid descriptors and KV state across program chunks.",
+    "shared_reset_is_not_normal_chunk_transition": true,
+    "standalone_bank_invalidation_opcode_selected": false,
+    "remaining": [
+      "Exact operand mask encoding",
+      "DMA and compute completion mapping",
+      "FP32 PSUM INIT/ACCUM/FINAL rules",
+      "descriptor readiness and destination fault rules",
+      "reset and aborted-program recovery"
+    ]
+  },
+  "command_memory_proposal": {
+    "status": "agreed_capacity_and_single_memory_policy_record_packing_pending",
+    "record_bits": 256,
+    "record_count": 1024,
+    "logical_command_memory_bytes": 32768,
+    "max_non_END_records_per_chunk": 1023,
+    "single_logical_command_memory": true,
+    "double_buffering_selected": false,
+    "record_width_reason": "Existing fixed DMA fields plus model-specific shape, mode, scale-bank, identity and lifetime flags; exact packing remains pending.",
+    "single_logical_memory_is_not_one_physical_BRAM_primitive": true,
+    "normal_chunk_protocol_candidate": [
+      "PS waits for previous successful DONE and confirms idle",
+      "PS writes complete next program image including terminal END",
+      "PS performs required memory/cache visibility ordering",
+      "PS publishes START",
+      "PL starts command PC at zero and executes without resetting preserved tensor/KV state"
+    ],
+    "PS_program_mutation_while_BUSY": "forbidden",
+    "actual_BRAM_primitive_count": "must verify in synthesis",
+    "fixed_record_alignment": "pending",
+    "user_selection": "어"
+  },
+  "command_memory_decision": {
+    "status": "agreed_capacity_and_single_memory_policy_record_packing_pending",
+    "record_bits": 256,
+    "record_count": 1024,
+    "logical_command_memory_bytes": 32768,
+    "max_non_END_records_per_chunk": 1023,
+    "single_logical_command_memory": true,
+    "double_buffering_selected": false,
+    "single_logical_memory_is_not_one_physical_BRAM_primitive": true,
+    "PS_program_mutation_while_BUSY": "forbidden",
+    "actual_BRAM_primitive_count": "must verify in synthesis",
+    "fixed_record_alignment": "pending",
+    "user_selection": "어",
+    "normal_chunk_protocol": "PS waits for successful DONE/idle, writes complete END-terminated next image, establishes memory visibility, then publishes START; no mutation while BUSY and no shared reset on normal transitions"
+  },
+  "additional_control_instruction_proposal": {
+    "status": "agreed_initial_control_policy_schedule_validation_pending",
+    "candidate": "Initially use END as the only explicit terminal/drain control instruction; no FENCE, LOOP, JUMP, standalone bank invalidation opcode or double-buffered command memory.",
+    "local_dependency_rule": "The current-PC scoreboard waits for matched completion and exclusive ownership release on operand banks.",
+    "DDR_alias_hazard_example": [
+      "DMA_STORE local bank A to DDR region R",
+      "DMA_LOAD overlapping DDR region R to distinct local bank B"
+    ],
+    "DDR_alias_hazard_reason": "Distinct local banks do not create a scoreboard dependency; request issue order alone does not prove DDR write-to-read visibility.",
+    "alias_ordering_candidate": [
+      "Reuse a common local bank when valid for capacity/layout and lifetime, so its ownership enforces completion before dependent issue",
+      "Otherwise split after the store at END; PS waits for successful DONE before publishing the dependent load chunk"
+    ],
+    "compiler_requirement": "Analyze explicit DMA address ranges and read/write ordering; reject or split unsafe programs rather than relying on implicit DDR hazards.",
+    "loop_distinction": "GEMM internally iterates over agreed local-bank compute tiles, K16 steps and group128 processing; PS emits explicit DDR-residency tiles. These do not require ISA LOOP/JUMP.",
+    "cost": "Additional chunk boundaries can increase PS publication overhead; this must be reported in end-to-end latency. A future FENCE or double buffer requires measured benefit and user discussion.",
+    "actual_model_schedule_and_command_count": "pending bank inventory/layout and runtime lowering",
+    "scope_change_rule": "Any future FENCE/LOOP/JUMP/double buffer addition requires design discussion, updated contracts and affected validation.",
+    "user_selection": "ㅇㅇ 그렇게 하자"
+  },
+  "additional_control_instruction_decision": {
+    "status": "agreed",
+    "user_selection": "ㅇㅇ 그렇게 하자",
+    "explicit_terminal_control": "END",
+    "FENCE_selected": false,
+    "LOOP_selected": false,
+    "JUMP_selected": false,
+    "standalone_bank_invalidation_selected": false,
+    "command_double_buffering_selected": false,
+    "DDR_alias_ordering": "Use a common operand bank ownership dependency where valid for capacity/layout; otherwise end the store chunk and wait for successful DONE before publishing dependent loads.",
+    "PS_generator_obligation": "Validate DMA read/write address-range dependencies and split unsafe schedules; request issue order alone is insufficient for different-bank DDR aliases.",
+    "GEMM_internal_iterations": "local-bank K16/N4 compute loops and group128 processing, not ISA control loops",
+    "PS_residency_iterations": "explicit instruction records in END-terminated program chunks",
+    "performance_accounting": "Include all chunk load/publication and boundary costs in end-to-end latency.",
+    "future_changes": "Discuss necessity/cost and update affected contracts and evidence before adding control instructions or buffering."
+  },
+  "vector_conversion_layout_proposal": {
+    "status": "agreed_modes_implementation_details_pending",
+    "executor": "existing agreed shared vector executor",
+    "proposed_additional_modes": [
+      {
+        "mode": "W4_EMBEDDING_DEQUANT",
+        "operation": "Reconstruct explicitly DMA-loaded shared embedding W4 codes and FP32 group scales to BF16 embedding activations. Runtime PS supplies token-derived DMA addresses only."
+      },
+      {
+        "mode": "CAST_FP32_TO_BF16",
+        "operation": "Round completed FP32 GEMM result banks to BF16 activation banks using the agreed final rounding policy."
+      },
+      {
+        "mode": "LAYOUT",
+        "operation": "Copy/extract/pack head and tensor tiles between distinct logical bank handles according to an explicitly defined tensor layout. No raw local address/offset tensor operand."
+      }
+    ],
+    "purpose": "Ensure embedding reconstruction, numeric conversion and required head/tile movement are explicitly lowered and executed in PL.",
+    "module_boundary_change": "Add modes to the agreed shared vector executor, not a new dedicated compute executor.",
+    "bank_layout_and_semantic_selectors": "pending",
+    "float_conversion_details": "pending",
+    "transpose_or_GQA_replication_materialization": "not_assumed; assess supported GEMM layouts and reuse before selecting extra movement",
+    "RTL_implementation_authorized": false,
+    "user_selection": "그렇게 하자"
+  },
+  "bank_inventory_proposal": {
+    "status": "agreed_design_basis_exact_layout_and_ports_pending",
+    "candidate_path": "verification/research/qwen2_5_0_5b_initial_review/bank_candidate.json",
+    "bank_count": 23,
+    "data_capacity_bytes": 582656,
+    "query_tile": 16,
+    "projection_residency_tile": {
+      "M_max": 16,
+      "N_max": 128,
+      "K": 128
+    },
+    "user_selection": "dj",
+    "selection_interpretation": "Korean keyboard input dj corresponds to 어; accepted the preceding bank/tile proposal."
+  },
+  "bank_capacity_decision": {
+    "status": "agreed_design_basis_synthesis_unverified",
+    "data_bank_count": 23,
+    "data_capacity_bytes": 582656,
+    "command_capacity_bytes": 32768,
+    "prefill_query_tile_max": 16,
+    "decode_query_rows": 1,
+    "projection_DDR_residency_tile": {
+      "M_max": 16,
+      "N_max": 128,
+      "K": 128
+    },
+    "GEMM_internal_parallelism": {
+      "K_lanes": 16,
+      "output_columns": 4,
+      "input_rows": 1
+    },
+    "bank_id_bits": 5,
+    "BF16_KV_DDR_bytes_at_context1024": 12582912,
+    "local_KV_schedule": "one KV head K/V at a time, reused across its seven Q heads; full supported context in the selected K/V local banks",
+    "FFN_partial_sum_schedule": "seven independent 16x128 FP32 PSUM banks retain accumulations across K-residency tiles and normal command chunk transitions",
+    "memory_kind_candidate": {
+      "BRAM_data_bytes": 254976,
+      "URAM_data_bytes": 327680
+    },
+    "exact_packing_word_width_roles_and_latency": "pending",
+    "synthesized_primitive_counts_or_timing": "not_verified"
+  },
+  "bank_port_proposal": {
+    "status": "agreed_interface_contract_fresh_verification_pending",
+    "native_data_word_bits": 128,
+    "native_read_latency_cycles": 3,
+    "DMA_stream_bits": 64,
+    "DMA_basis": "Reuse unchanged pinned datamover_engine_pkg MM2S_DATA_WIDTH/S2MM_DATA_WIDTH=64 and explicitly bind width-converting bank stream adapters.",
+    "bank_port_operation": "Read/write routing by acquired module-port role; assemble K16 x N4 operands over multiple memory cycles where required.",
+    "compute_step_is_not_guaranteed_one_cycle": true,
+    "DMA_alignment": "Exact padding, native word addresses and valid byte extents must be specified before consuming bank_layout.",
+    "resource_and_timing_evidence": "requires fresh 23-bank integration simulation/synthesis at 100 MHz",
+    "adapter_reuse_note": "Fixed sparse stream_bank_adapters are not general 23-bank/128-bit adapters: MM2S has fixed 4-bit bank IDs and S2MM consumes 1024-bit read words. Candidate instead uses existing parameterized mm2s_adapter/s2mm_adapter from datamover_engine with per-bank fixed bindings and explicitly verified wrappers.",
+    "adapter_sources": [
+      {
+        "path": "ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv",
+        "sha256": "0606d2b72a34765c067cbbc9ca9962e98002c24c5bb7999d482be96837b16f00"
+      },
+      {
+        "path": "ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv",
+        "sha256": "59bc18e6c8a61f163423a22664a970e28ee853e6d4cf013657a4feda171368fa"
+      }
+    ],
+    "adapter_evidence_note": "The engine run_003 pinned source closure excludes these native adapters; they need separately pinned source and fresh consumer/integration evidence at selected parameters.",
+    "user_selection": "ㅇㅇ"
+  },
+  "reference_environment_preparation": {
+    "status": "original_reference_prefill_decode_observed",
+    "venv": "/tmp/llm2rtl-qwen-reference-venv",
+    "torch_version": "2.5.1+cpu",
+    "transformers_version": "4.46.3",
+    "Qwen_model_import": "passed",
+    "installed_model_source_sha256": "4568d588b45dd28152d97c37300a5e227589bc70b9fef5224af29977ecf6abdc",
+    "matches_inspected_source_snapshot": true,
+    "requirements_path": "verification/research/qwen2_5_0_5b_initial_review/reference_environment_requirements.txt",
+    "checkpoint_revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "checkpoint_weights_downloaded": true,
+    "actual_model_runtime_trace": "original_reference_trace/summary.json",
+    "ISA_interpreter": "not_implemented",
+    "purpose": "offline validation only; not runtime PS tensor computation",
+    "scope": "Original BF16 checkpoint: two-token prefill, then one-token decode; no W4/ISA/RTL/board validation."
+  },
+  "bank_port_decision": {
+    "status": "agreed",
+    "user_selection": "ㅇㅇ",
+    "native_data_word_bits": 128,
+    "native_read_latency_cycles": 3,
+    "DMA_stream_bits": 64,
+    "bank_id_bits": 5,
+    "DMA_adapter_mapping": "existing parameterized native mm2s_adapter/s2mm_adapter, bank-specific wrappers; fixed sparse adapters are not generalized by assumption",
+    "parallel_compute_step_supply": "multiple native memory cycles allowed; K16 x N4 is not a sustained one-cycle throughput guarantee",
+    "new_configuration_verification": "required 23-bank source-closed simulation, synthesis and 100 MHz integration evidence"
+  },
+  "rope_table_proposal": {
+    "status": "agreed",
+    "positions": [
+      0,
+      1023
+    ],
+    "format": "BF16 cos[64], sin[64] per position",
+    "DDR_bytes": 262144,
+    "max_parameter_bank_transfer_bytes": 4096,
+    "reference_validation": "rope_table_candidate/validation.json",
+    "PS_role": "Publish commands and transfer precomputed constants only; no runtime frequency/trigonometric/tensor operations.",
+    "PL_role": "RoPE executor applies rotation to Q/K.",
+    "user_selection": "DDR에 두자",
+    "generation": "Offline from pinned reference source/config; no runtime PS trigonometric computation.",
+    "DDR_residency": "Precomputed table in DDR; explicit DMA_LOAD of selected contiguous positions into PARAM bank.",
+    "normal_chunk_transition": "DDR table persists; PARAM data remains valid until explicit overwrite or successful last_use consumption."
+  },
+  "gemm_arithmetic_candidate_path": "verification/research/qwen2_5_0_5b_initial_review/gemm_arithmetic_candidate.json",
+  "gemm_arithmetic_decision": {
+    "status": "agreed_arithmetic_order_implementation_verification_pending",
+    "purpose": "Deterministic GEMM arithmetic for interpreter and later RTL; no HDL implementation authorization.",
+    "lane_order": "K increasing; each output column has an independent reduction.",
+    "product": "FP32 multiplication, round-to-nearest ties-to-even; no fused multiply-add.",
+    "K16_reduction": "Adjacent balanced binary tree: 16 products -> 8 -> 4 -> 2 -> 1; every addition rounds to FP32 with ties-to-even.",
+    "W4_group": "Eight K16 tree results accumulated in increasing K order into FP32 group sum initialized to +0; then multiply by stored FP32 group scale with FP32 rounding.",
+    "W4_output": "Accumulate scaled group results in increasing group order into FP32 output partial sum initialized to +0; preserve across residency tiles and normal command chunks.",
+    "BF16_attention": "Accumulate K16 tree results in increasing K order in FP32, without group scaling.",
+    "tail": "Absent K lanes contribute +0 and perform no operand read.",
+    "output_rounding": "Previously agreed: bias in FP32 before final BF16 nearest-even for QKV; completed unbiased output casts only after full reduction.",
+    "FP32_exceptions_subnormals": "Pending separate specification and implementation feasibility review.",
+    "acceptance": "Interpreter and RTL must match this arithmetic contract; original BF16 reference and W4 model quality are separate comparisons, with tolerances still pending.",
+    "alternatives": [
+      {
+        "name": "sequential K accumulation",
+        "impact": "Different rounding order; longer dependence chain unless interleaved."
+      },
+      {
+        "name": "FMA accumulation",
+        "impact": "Different rounding semantics; requires its own golden reference and implementation/resource evaluation."
+      }
+    ],
+    "user_selection": "그래"
+  },
+  "nonlinear_rounding_decision": {
+    "status": "agreed_dtype_boundaries_implementation_pending",
+    "source": "modeling_qwen2.py, pinned Transformers 4.46.3 eager BF16 reference",
+    "rounding": "BF16 conversions round to nearest ties to even; no arithmetic fusion across listed rounding boundaries.",
+    "RMSNorm": "BF16 input -> FP32 square, mean, epsilon addition, rsqrt and normalization -> BF16 intermediate -> multiply BF16 gamma -> BF16 output. Reduction order and rsqrt implementation pending.",
+    "RoPE": "BF16 Q/K and BF16 cos/sin table; each of two products rounds to BF16, then their sum rounds to BF16. rotate_half uses [-second_half, first_half], with head dimension 64.",
+    "SOFTMAX_MASKED": "FP32 QK scratch -> BF16 score -> scale by 1/8 -> BF16 scaled score -> causal mask -> FP32 stable softmax -> BF16 probabilities. Mask construction, reduction order, exp and reciprocal implementation pending.",
+    "SILU_MUL": "BF16 gate -> SiLU -> BF16 intermediate -> multiply BF16 up -> BF16 output. SiLU approximation pending.",
+    "residual_add": "BF16 operands -> addition -> BF16 output.",
+    "limitations": "Specifies dtype boundaries only; no nonlinear approximation, exceptional/subnormal policy or numerical quality tolerance is frozen. No ISA/interpreter/RTL evidence.",
+    "user_selection": "어"
+  },
+  "bank_packing_readiness_decision": {
+    "status": "agreed_layout_and_state_basis_exact_encoding_pending",
+    "native_word_bytes": 16,
+    "endianness": "little-endian; earliest element occupies lowest bits/bytes",
+    "BF16_FP32_rows": "Row-major; each row begins on a 16-byte boundary; logical dimensions and physical row stride are separate descriptor fields.",
+    "padding": "Padding elements are zero initialized and never included in mathematical reductions. BF16 row stride rounds up to 8 elements; FP32 row stride rounds up to 4 elements.",
+    "W4_projection": "Output-major rows, K increasing; 128 K codes per row=64 bytes; first code in low nibble, second in high nibble; signed two-complement nibble; -8 rejected.",
+    "projection_scales": "One FP32 scale per output for the resident K128 group, output order matching weight rows.",
+    "embedding_scales": "7 FP32 scales per hidden896 row, padded to 8 entries=32 bytes; padding is not a scale. Up to16 rows=512 bytes.",
+    "attention_score_probability": "Physical row width1024 elements for SCORE/PROB; actual context L defines valid columns; padded columns are excluded from softmax/GEMM.",
+    "partial_assembly": "Descriptor tracks tensor identity/shape/layout and covered semantic tiles. New outputs are invalid until successful completion; assembly destinations become valid only after all required tiles complete.",
+    "partial_sum": "GEMM INIT starts from +0; ACCUM requires matching valid FP32 partial sum with expected next K group. Final tensor availability is distinct from valid partial-sum availability.",
+    "failed_commands": "Invalidate any destination affected by a failed write; preserve source liveness; do not advance assembly coverage or expected K. No rollback of physical partial writes is assumed.",
+    "chunk_END": "Preserve descriptors, coverage and partial sums on normal END/DONE.",
+    "ownership": "Unchanged atomic exclusive bank acquisition, release by matching completion; legal partial assembly never bypasses ownership.",
+    "offset_rule": "Compute commands use logical bank handles; LAYOUT may specify semantic row/column/head selection, not a raw byte offset. DMA addresses remain explicit.",
+    "limitations": "Exact command bit fields, per-layout capability matrix and the full workload schedule remain pending. No HDL implemented.",
+    "user_selection": "어"
+  },
+  "SCORE_FFN_scratch_decision": {
+    "status": "agreed",
+    "user_selection": "그렇게 하자.",
+    "bank_id": 18,
+    "attention_layout": "FP32 [M<=16, physical columns1024], valid context columns L<=1024",
+    "FFN_layout": "FP32 [M<=16,128] projection scratch for gate or up",
+    "schedule": "Gate projection completes and CAST writes GATE_TILE before SCORE is reinitialized for up. Up CAST writes UP_TILE before reuse. Seven down PSUM banks remain resident.",
+    "exclusion": "Attention score and FFN scratch lifetimes must not overlap.",
+    "descriptor_rule": "Reinitialize logical tensor identity/layout/coverage under exclusive ownership. No old score validity carried into FFN scratch.",
+    "fabric_role": "GEMM_PSUM; source for vector CAST, in addition to masked-softmax score source",
+    "verification": "Fresh compiler lifetime/descriptor checks, interpreter golden comparisons, RTL/integration and synthesis required."
+  },
+  "autonomous_design_authorization": {
+    "user_instruction": "너가 이제 알아서 다 정해봐.",
+    "remaining_design_choices": "Agent decides and records remaining ISA, bank, numerical, module and implementation choices without additional routine confirmations.",
+    "preserved_scope": "Existing agreed board/runtime/precision/context/clock/module-sharing and PS/PL division.",
+    "physical_board_execution": "User-run; do not claim unobserved hardware validation.",
+    "new_design_path": "designs/qwen25_05b_w4_shared_zcu104_r1",
+    "reason_for_separate_path": "Existing qwen25_05b_zcu104_r1 contains different512-bit ISA/separate Attention decisions; preserve it and do not inherit its evidence."
+  }
+}

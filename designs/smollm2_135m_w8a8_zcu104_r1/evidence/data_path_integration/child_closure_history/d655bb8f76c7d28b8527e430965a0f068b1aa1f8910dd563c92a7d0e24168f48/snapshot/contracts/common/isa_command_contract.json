@@ -1,0 +1,49 @@
+{
+  "schema": "llm2rtl.common_contract.v1",
+  "contract_id": "isa_command",
+  "version": 1,
+  "program_transport": "ps_preloads_complete_program_into_command_bram",
+  "program_publish_rule": "ps_writes_all_instruction_records_with_a_terminal_end_record_then_publishes_start",
+  "program_mutation_rule": "ps_must_not_modify_command_records_while_pl_is_busy",
+  "queue_policy": "no_streaming_ring_queue_and_no_producer_consumer_indices",
+  "dispatch_policy": "strict_in_order_single_pc_scoreboard",
+  "dispatch_issue_rule": "current_pc_only_asserts_valid_when_its_bank_dependencies_are_eligible_and_advances_only_on_request_valid_and_ready",
+  "blocked_pc_rule": "a_blocked_current_pc_stalls_and_later_instructions_are_not_examined",
+  "execution_rule": "accepted_commands_may_remain_outstanding_while_later_nonconflicting_commands_issue_in_program_order",
+  "outstanding_command_limit": "bounded_by_bank_ownership_and_executor_capacity",
+  "pc_advance_rule": "pc_advances_once_on_current_instruction_request_valid_and_ready",
+  "completion_tracking_rule": "each_accepted_command_remains_tracked_by_its_owned_banks_and_response_identity_until_completion_or_reset",
+  "program_completion_rule": "done_requires_all_program_commands_accepted_and_all_outstanding_commands_completed",
+  "response_acceptance_rule": "responses_are_collected_independently_of_the_current_pc_and_may_release_banks_while_a_later_command_is_blocked",
+  "atomic_reservation_rule": "all_source_and_destination_bank_ownership_changes_commit_in_the_same_cycle_as_executor_command_acceptance",
+  "request_protocol": "ready_valid",
+  "response_protocol": "ready_valid",
+  "completion_rule": "exactly_one_response_per_accepted_command",
+  "command_order_owner": "ps_software",
+  "residency_tiling_owner": "ps_software",
+  "recovery_policy_owner": "ps_software",
+  "pl_dispatcher_role": "route_execute_report_only",
+  "opcode_classes": {
+    "dma_load": {
+      "canonical_opcode": "DMA_LOAD",
+      "required_tensor_operands": ["external_ddr_address", "local_bank_id"]
+    },
+    "dma_store": {
+      "canonical_opcode": "DMA_STORE",
+      "required_tensor_operands": ["local_bank_id", "external_ddr_address"]
+    },
+    "compute": {
+      "tensor_operand_kind": "local_bank_id",
+      "forbidden_operand_kinds": [
+        "external_ddr_address",
+        "local_raw_address",
+        "local_bank_base",
+        "local_bank_offset"
+      ]
+    },
+    "control": {
+      "forbidden_operand_kinds": ["external_ddr_address"]
+    }
+  },
+  "failure_rule": "rejected_or_failed_command_does_not_commit_destination"
+}

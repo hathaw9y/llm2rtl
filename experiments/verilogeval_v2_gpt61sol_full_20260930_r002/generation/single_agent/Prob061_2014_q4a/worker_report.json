@@ -1,0 +1,15 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "coverage": "Correct sequential fixture passes, deliberately wrong fixture fails, repaired fixture passes."},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "label": "initial", "simulation_checks": 214, "evidence_directory": "development/01", "evidence_index": "dev_checks.jsonl"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not occurred.", "No synthesis or board verification performed.", "Binary control behavior verified; unspecified unknown-control behavior is not assigned an additional requirement."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "One-bit positive-edge register: L loads R with priority, otherwise E shifts w, otherwise Q holds. Original ports preserved, no reset or extra latency introduced.",
+  "verification": "Independent operation-based oracle checks initial unknown and hold behavior, every binary input combination from both stored values, load/shift conflicts, input-change stability, and falling-edge stability. Bounded timeout and fatal mismatch checks included.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv"},
+  "static_review": "Single always_ff driver, nonblocking register assignments, one-bit ports, no combinational latch or added pipeline. Initial snapshot preserved before development checks."
+}

@@ -1,0 +1,172 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob153_gshare",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob153_gshare",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob153_gshare/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790732428.1933062,
+    "ended_at_unix": 1790732540.5719342,
+    "seconds": 112.37862849235535,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 139437,
+      "cached_input_tokens": 126336,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2874,
+      "reasoning_output_tokens": 98
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "51c883e2ce2972c5691b1fbfec3806fbe8e252cf148039e59eeddda308b18ee5",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "completed",
+        "details": "Reviewed exact ports, 7-bit XOR indices, two-bit saturation, asynchronous active-high reset, pre-edge prediction, prediction-valid history update, and misprediction recovery priority."
+      },
+      {
+        "name": "Icarus development compilation",
+        "result": "failed",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "exit_code": 139,
+        "log": "dev_compile.log",
+        "details": "Compiler exited with code 139 with no diagnostic output; no simulation executable was produced. Initial shell orchestration also encountered a read-only zsh variable, recorded in dev_tool_error.log, and was corrected before rerunning compilation."
+      },
+      {
+        "name": "development simulation",
+        "result": "not run",
+        "details": "Compilation failed. Independent dev_tb.sv includes exhaustive entry saturation checks, simultaneous prediction/training, recovery priority, asynchronous reset, randomized scoreboard checks, and a finite simulation watchdog. These checks have not executed."
+      }
+    ],
+    "development_outcome": "Delivered statically reviewed synthesizable candidate.sv; candidate_initial.sv preserved before development checks and identical to final RTL. No simulation success is claimed.",
+    "limitations": [
+      "Problem does not explicitly specify reset counter values; counters initialize to weakly not-taken (01), and global history initializes to zero.",
+      "Development compilation failed with exit code 139, so functional simulation remains unverified.",
+      "No synthesis, timing analysis, board access, or official evaluation was performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "51c883e2ce2972c5691b1fbfec3806fbe8e252cf148039e59eeddda308b18ee5",
+      "Prob153_gshare_ref.sv": "12d54877b5d0a2e71bc084cbc79c8b68363d2a739b073969f7e2221da6b38a98",
+      "Prob153_gshare_test.sv": "180dacd01c7cf4666c7488d8683faa7e22ce2b130a98fb59660cc7ac3a16a8f2"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob153_gshare_test.sv",
+        "Prob153_gshare_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014820263721048832
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb153_gshare_test.sv:161: $finish called at 5416 (1ps)\nHint: Output 'predict_taken' has no mismatches.\nHint: Output 'predict_history' has no mismatches.\nHint: Total mismatched samples is 0 out of 1083 samples\n\nSimulation finished at 5416 ps\nMismatches: 0 in 1083 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.021061806939542294
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "51c883e2ce2972c5691b1fbfec3806fbe8e252cf148039e59eeddda308b18ee5",
+      "Prob153_gshare_ref.sv": "12d54877b5d0a2e71bc084cbc79c8b68363d2a739b073969f7e2221da6b38a98",
+      "Prob153_gshare_test.sv": "180dacd01c7cf4666c7488d8683faa7e22ce2b130a98fb59660cc7ac3a16a8f2"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob153_gshare_test.sv",
+        "Prob153_gshare_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011997860856354237
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb153_gshare_test.sv:161: $finish called at 5416 (1ps)\nHint: Output 'predict_taken' has no mismatches.\nHint: Output 'predict_history' has no mismatches.\nHint: Total mismatched samples is 0 out of 1083 samples\n\nSimulation finished at 5416 ps\nMismatches: 0 in 1083 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.021471144631505013
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

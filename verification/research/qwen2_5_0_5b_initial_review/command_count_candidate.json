@@ -1,0 +1,42 @@
+{
+  "status": "candidate_command_count_subtotal_not_validated_program",
+  "assumptions": {
+    "projection_tile": {
+      "M_max": 16,
+      "N": 128,
+      "K": 128
+    },
+    "FFN_down_resident_PSUM_banks": 7,
+    "FFN_gate_up_FP32_scratch": "SCORE bank, temporarily with projection layout",
+    "prefill_query_tile": 16,
+    "decode_rows": 1,
+    "SCORE_FFN_scratch_user_agreement": "agreed"
+  },
+  "per_layer": {
+    "QKV": 279,
+    "O_projection": 210,
+    "FFN": 3054,
+    "attention_head_work": 88,
+    "subtotal_excluding_norm_rope_residual_KV_stores_and_control": 3631
+  },
+  "LM_head_last_row_only": 35610,
+  "decode_subtotal": 122754,
+  "prefill512_subtotal": 2824218,
+  "capacity_only_chunk_lower_bound": {
+    "decode": 120,
+    "prefill512": 2761
+  },
+  "omitted": [
+    "embedding loads/dequant",
+    "RMSNorm gamma loads and compute",
+    "RoPE table loads/rotation/layout",
+    "residual adds",
+    "KV stores and layout",
+    "END records and DDR hazard boundaries"
+  ],
+  "limitations": [
+    "Counts enumerate the stated residency schedule only, without bit encoding or command acceptance simulation.",
+    "Not measured runtime performance, reference numerical evidence, or an optimized schedule.",
+    "Shared activation extraction across gate/up could change counts, but needs another FP32 scratch lifetime or rescheduling."
+  ]
+}

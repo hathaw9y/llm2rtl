@@ -1,0 +1,29 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"a": 8, "b": 8},
+    "outputs": {"s": 8, "overflow": 1},
+    "evidence": "Original problem explicitly lists these four ports and widths."
+  },
+  "semantics": {
+    "operation": "Continuously add the two input values; no state or added latency.",
+    "clock_reset": "No clock or reset ports are specified; combinational behavior.",
+    "initialization": "No initialization requirement or defined unknown-input behavior is specified.",
+    "evidence": "Original problem says the module should add a and b to produce s and compute signed overflow."
+  },
+  "numeric": {
+    "operands": "8-bit two's-complement, signed range -128 through 127",
+    "sum": "Low eight bits of the mathematical sum, modulo 256",
+    "overflow": "Assert if mathematical signed sum is below -128 or above 127",
+    "rounding_saturation": "No rounding or saturation; eight-bit output retains low bits"
+  },
+  "verification": {
+    "oracle": "Decode each input into an integer in [-128,127], add using integer arithmetic, compare low eight bits and signed range violation.",
+    "coverage": "Directed signed boundaries and all 65536 binary input pairs.",
+    "sampling": "Drive inputs then wait one simulation time unit for combinational settling.",
+    "failure_success": "Fatal on any mismatch; bounded timeout; PASS only after all comparisons.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

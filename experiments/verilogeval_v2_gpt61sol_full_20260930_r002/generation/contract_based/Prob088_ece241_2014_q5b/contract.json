@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "areset": 1, "x": 1}, "outputs": {"z": 1}},
+  "semantics": {
+    "evidence": "problem.txt: Mealy FSM, one-hot encoding, asynchronous active-high reset into A, sequential logic on positive clock edge",
+    "state_encoding": {"A": "2'b01", "B": "2'b10"},
+    "transitions": {"A,x=0": "A", "A,x=1": "B", "B,x=0": "B", "B,x=1": "B"},
+    "output": "Combinational: in A z=x; in B z=~x. No registered output or extra latency.",
+    "reset": "posedge areset immediately selects A; held reset selects A at each posedge clk. Output remains x in reset state A.",
+    "initialization": "No specified state before reset; no power-up initialization added.",
+    "sampling": "Transition uses x at posedge clk; after state settles, z reflects the new state and current x."
+  },
+  "numeric": {"ports": "single-bit logic", "state": "two-bit one-hot", "arithmetic": "bitwise complement only; no rounding or overflow"},
+  "verification": {"oracle": "Independent seen-one history model based on original transition/output table", "coverage": "both inputs in each state, pre/post edge outputs, between-edge x changes, asynchronous reset from B, held reset, reset release, exhaustive eight-bit streams", "failure": "$fatal on mismatch and bounded timeout", "evaluator": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": ["Pre-reset and illegal-state behavior are unspecified; functional checks begin after reset and do not constrain illegal states."]
+}

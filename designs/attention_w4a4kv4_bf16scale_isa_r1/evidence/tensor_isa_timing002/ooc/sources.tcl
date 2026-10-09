@@ -1,0 +1,14 @@
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_tensor_pkg.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/tensor_isa_timing002/prefill/generated/attention_tensor_config_pkg.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_fp32_alu.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_fp32_exp_rom.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_exp_neg.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_int4_noscale_zcu104_r1/rtl/attention_int4_quantizer.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_tensor_executor.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_descriptor_rom.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_tensor_controller.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_tensor_bank_subsystem.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_tensor_isa_top.sv}
+read_verilog -sv {/home/shmin/llm2rtl/ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv}
+read_verilog -sv {/home/shmin/llm2rtl/ip/infrastructure/bank_port_router/rtl/bank_port_router.sv}
+read_verilog -sv {/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/bram_bank.sv}

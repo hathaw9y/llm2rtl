@@ -1,0 +1,29 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"in": {"width": 3}},
+    "outputs": {"out": {"width": 2}},
+    "evidence": "Original interface specifies only in (3 bits) and out (2 bits)."
+  },
+  "semantics": {
+    "function": "out is the number of one bits in in",
+    "timing": "Combinational; no clock or cycle latency is specified or supported by the interface.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "No stored state or initial output requirement is specified; output follows input after combinational settling."
+  },
+  "numeric": {
+    "input_domain": "All eight binary 3-bit vectors",
+    "output_range": "Unsigned integer 0 through 3, exactly representable in 2 bits",
+    "operation": "Sum three unsigned bits with explicit 2-bit extension"
+  },
+  "verification": {
+    "oracle": "Independent loop counts bits equal to binary one, grounded in the original population count requirement.",
+    "cases": "Exhaust all eight binary inputs, including zero and all ones; repeat in descending order.",
+    "sampling": "Drive input and wait one time unit for combinational settling before comparing.",
+    "failure": "$fatal on mismatch or bounded timeout; PASS line only after every comparison succeeds"
+  },
+  "specification_ambiguities": [
+    "Behavior for input bits X or Z is unspecified by the original problem; verification is limited to binary inputs."
+  ]
+}

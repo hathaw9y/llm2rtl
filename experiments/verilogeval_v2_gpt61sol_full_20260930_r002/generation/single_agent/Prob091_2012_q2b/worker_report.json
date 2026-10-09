@@ -1,0 +1,20 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "evidence_directory": "development/01", "coverage": "All 12 specified state/input transitions, repeated in reverse state order; 24 comparisons", "compiler": "Icarus Verilog 12", "compile_returncode": 0, "simulation_returncode": 0}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "The specification assumes one-hot states; no behavior is specified or independently checked for invalid encodings or unknown inputs.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "interface_cycle_contract": "Original six-bit y, one-bit w, Y1 and Y3 ports preserved. Pure combinational next-state input logic with no added ports or latency.",
+  "numeric_width_decisions": "Six-bit one-hot state and one-bit Boolean outputs.",
+  "static_review": "Y1 covers the sole transition into B; Y3 covers all four transitions into D. Continuous assignments have no storage or multiple drivers. Initial snapshot preserved unchanged."
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "silu_mul_executor",
+  "module_kind": "opcode_executor",
+  "opcode": "SILU_MUL",
+  "status": "frozen",
+  "target": {
+    "board": "ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 100
+  },
+  "interface": {
+    "rtl_module": "smollm2_silu_mul_executor",
+    "compute_channel": 6,
+    "request": "opcode 10, B8 gate, B9 up, B10 output, payload [5:0] rows 1..32, remaining payload zero",
+    "response": "held done_valid/done_ready with tag B8, bank_count=3, IDs B8/B9/B10, error",
+    "bank_roles": {
+      "gate_read": 18,
+      "up_read": 19,
+      "destination_write": 20
+    },
+    "bank_word_bits": 128,
+    "layout": "[rows,1536] BF16 row-major, 192 words per row",
+    "completion_order": "after final B10 write handshake"
+  },
+  "architecture": {
+    "silu": "65536-entry BF16 lookup inferred as 32 BRAM36 tiles",
+    "multiply": "BF16 significand multiply, round-to-nearest-even, DSP inferred",
+    "lanes_per_cycle": 1,
+    "nonfinite_input": "error response without completed tensor"
+  },
+  "numeric": {
+    "reference": "Hugging Face eager BF16 SiLU(gate) followed by BF16 multiply with up, layer-0 checkpoint 93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+    "observed": "standalone exact 49152 prefill, 1536 decode, 1536 directed edge values"
+  },
+  "verification": {
+    "standalone": "XSIM pass, 100 MHz placed OOC WNS +5.348 ns, LUT 897, BRAM36 32, DSP 1",
+    "integration": "DDR DMA_LOAD B8/B9, SILU B10, END; XSIM first16 per row exact prefill32 512/512 and decode1 16/16",
+    "physical_board": "user-reported ZCU104 pass with app revision 2 and matching checkpoint: prefill32 first16/row 512/512 exact, decode1 first16/row 16/16 exact; gate/up are pinned DDR intermediates, not on-board GEMM outputs"
+  }
+}

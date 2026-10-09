@@ -1,0 +1,107 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "c": {
+        "direction": "input",
+        "width": 1
+      },
+      "d": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "pure combinational Boolean circuit",
+    "clock": "none",
+    "reset": "none",
+    "initialization": "no state or initialization required",
+    "latency": "combinational propagation only; no cycle latency",
+    "map": {
+      "column_pair": "ab",
+      "row_pair": "cd",
+      "column_order": [
+        "00",
+        "01",
+        "11",
+        "10"
+      ],
+      "row_order": [
+        "00",
+        "01",
+        "11",
+        "10"
+      ],
+      "rows": [
+        [
+          1,
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          0,
+          0
+        ]
+      ]
+    },
+    "input_acceptance": "output continuously reflects current inputs; no handshake"
+  },
+  "numeric": {
+    "type": "one-bit unsigned Boolean ports",
+    "input_domain": "all 16 binary combinations",
+    "operations": "Boolean only, no arithmetic, rounding, truncation, saturation or overflow",
+    "index_order": "abcd with a most significant when enumerating minterms",
+    "one_minterms": [
+      0,
+      1,
+      2,
+      4,
+      6,
+      7,
+      8,
+      9,
+      11,
+      15
+    ]
+  },
+  "verification": {
+    "oracle": "literal original K-map rows indexed by cd and columns by ab using Gray ordering, independently of RTL equation",
+    "coverage": "exhaust all 16 binary inputs in ascending and descending order",
+    "comparison": "case inequality against exact one-bit expected value after combinational settling",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp",
+    "timeout": "finite external timeout for each compile and simulation, plus testbench watchdog",
+    "scope": "development simulation only; no synthesis or official evaluation"
+  },
+  "specification_ambiguities": [
+    "Behavior for X or Z inputs is not specified; binary truth-table behavior is required."
+  ]
+}

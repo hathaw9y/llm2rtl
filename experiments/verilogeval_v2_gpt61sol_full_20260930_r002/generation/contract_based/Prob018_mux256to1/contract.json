@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "in": "input logic [255:0]",
+      "sel": "input logic [7:0]",
+      "out": "output logic"
+    },
+    "evidence": "Original problem explicitly lists 256-bit in, 8-bit sel and one-bit out."
+  },
+  "semantics": {
+    "function": "For every integer k from 0 through 255, sel=k selects in[k].",
+    "timing": "Pure combinational selection; output follows input or selector changes after combinational settling, with no added cycle latency.",
+    "reset": "No reset or clock ports are specified; none are added.",
+    "initialization": "No state or initialization is specified or required.",
+    "evidence": "Original calls for a 1-bit wide 256-to-1 multiplexer and explicitly maps sel=0,1,2 to in[0],in[1],in[2]."
+  },
+  "numeric": {
+    "input_bits": 256,
+    "selector_bits": 8,
+    "output_bits": 1,
+    "bit_order": "Index zero is least significant packed bit.",
+    "selector_range": "All binary values 0..255 are valid.",
+    "arithmetic": "No signed arithmetic, overflow, rounding or saturation."
+  },
+  "verification": {
+    "top": "dev_tb",
+    "oracle": "Expected values derived from original selector-to-bit mapping; scan all indices with equality rather than DUT variable indexing.",
+    "coverage": [
+      "All selectors on all-zero and all-one vectors",
+      "Walking-one and walking-zero inputs across every selector",
+      "Alternating patterns",
+      "Input changes at fixed selector and selector changes with fixed input",
+      "Selected X/Z with known selector as supplemental four-state checks"
+    ],
+    "sampling": "Check after a 1 ns combinational settling delay; no clock edges exist.",
+    "success": "Fatal on mismatch, bounded timeout, explicit PASS line; run fixed dev_check.py --label initial."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Four-state inputs",
+      "evidence": "Original does not define X/Z selector behavior or startup input values.",
+      "resolution": "No additional binary requirements; natural SystemVerilog bit-select behavior. Supplemental tests check propagation of selected X/Z only with known selector."
+    }
+  ]
+}

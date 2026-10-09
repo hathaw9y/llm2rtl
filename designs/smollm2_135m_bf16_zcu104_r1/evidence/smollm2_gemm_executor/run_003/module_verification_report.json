@@ -1,0 +1,122 @@
+{
+  "module_id": "gemm_executor",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "proof_scope": "Standalone scalar GEMM executor with behavioral bank-word model; actual XPM fabric and dispatcher integration are separate",
+  "source_sha256": {
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_gemm_executor.sv": "a46a0f731f482cb18492b0ca5b7f1c2264803cdd65ef2e58d3d4bcb290cf0566",
+    "designs/smollm2_135m_bf16_zcu104_r1/tb/tb_smollm2_gemm_executor.sv": "be53d5d9c87d2dd1b78d1ebc067fdd254f51ccccb1113263f4b43d8196308abb",
+    "designs/smollm2_135m_bf16_zcu104_r1/modules/gemm_executor.json": "5fde15bca13f51cb8751d110c8a7f2e4418aea72fc29212a74dfcec2e79e9121",
+    "designs/smollm2_135m_bf16_zcu104_r1/gemm_executor_design.md": "1d47970ba391b7e4f729fb8d0ba142193f312137b53329d1239fba596eacbb53",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/generate_gemm_vectors.py": "42080775cb96f8f1a5e06ca12109d7350f985fea12d4564a9991e5b6012ba8d2",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/generate_gemm_model_vectors.py": "54160163dd4285586be084315b70c359078bc2d5b651fc7cbab043bdf9c2d543",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_gemm_executor_xsim.sh": "d9b20a9c66b57d1109536788298488ca6855fc76057937aa058ae0ff1b63dd29",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_gemm_executor_ooc.tcl": "c7ac5360fc26cda939c19f281c896e0a74a9100915abd9bf5cd58f6e5c05bfe2",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/bank_memories_clock.xdc": "5127d6af45d0824731a9420894371f0d7825842f4e10d80851efa06bd5a3bbde",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_executor/activation.hex": "0e7429ce9859f71564efc8d74f4441c9a7be1a3d79b3dfc517ac466619f611b4",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_executor/expected.hex": "5874b8edc391f6c7789d239c55b596b80fa56451aa0dc2902469fd1e18b5ed21",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_executor/weight.hex": "71f12f063345aefb2d94097764c1fd6f5f84499d655e1d2a8611490e074388a2",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/decode_activation.hex": "918a8c744b9419dfc8fed8c96e3f2a15e803db594c8431a1038534ec4e54634c",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/decode_exact.hex": "d42ff43d210ee068cb62f32f73493565ba5b13503a18acc1e56dc7cdf029fc37",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/decode_torch.hex": "d42ff43d210ee068cb62f32f73493565ba5b13503a18acc1e56dc7cdf029fc37",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/model_weight.hex": "acef37b91bf69248c918c1c343d66f4dc8efe33b4cc4fdf6cc69f1fac2d5be57",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/prefill_activation.hex": "aed458127cfa089978cfd27916198e79c4fe995ac206a1016ea727da4074007c",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/prefill_exact.hex": "70266072e0313e50f93d19475e91d962d84ec580ad352858a7e3b15fb783b1f3",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/prefill_torch.hex": "70266072e0313e50f93d19475e91d962d84ec580ad352858a7e3b15fb783b1f3",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/manifest.json": "535e86379f8fa723daabe1247dd4777b316a4b8d1750e90ad7e387de769941f8"
+  },
+  "checks": {
+    "design_structure": "passed_structure_only for current frozen GEMM module contract",
+    "golden_generation": "deterministic random BF16 vectors use exact rational dot products and nearest-even BF16 output",
+    "xsim_self_check": "PASS run_003, Vivado XSIM 2025.2",
+    "verilator_lint": "PASS, standalone executor",
+    "vivado_ooc_synthesis": "PASS run_003, xczu7ev-ffvc1156-2-e, 5.000 ns constraint",
+    "vivado_ooc_setup_timing": "PASS WNS +1.053 ns, TNS 0, 0 failing endpoints",
+    "post_synth_drc": "0 checks found in OOC design",
+    "placed_routed_timing": "not run",
+    "board_execution": "not run",
+    "model_bf16_prefill": "PASS 8/8 bitwise RTL = exact-rational BF16 = PyTorch BF16 for layer-0 Q projection first four output columns of prefill rows 30-31",
+    "model_bf16_decode": "PASS 4/4 bitwise RTL = exact-rational BF16 = PyTorch BF16 for layer-0 Q projection first four output columns of decode token"
+  },
+  "xsim_scenarios": [
+    "integer exact BF16 dots and N offset byte strobes",
+    "2x9 @ 9x5 deterministic BF16 matrix with nonzero M and N offsets, compared to exact-rational golden",
+    "even and odd halfway BF16 rounding",
+    "subnormal input and nonfinite-input error",
+    "invalid N window rejected without writes",
+    "destination write backpressure delays DONE; response bank IDs and error remain stable until ready",
+    "32x1 @ 1x192 full M/N tile",
+    "last-token m_start=31,m_count=1 and final 192 columns of 49152-wide logits in B12",
+    "full K=1536 dot product without K split or partial sum",
+    "Pinned-checkpoint BF16 layer-0 Q projection: prefill32 rows 30-31 and decode1, K=576, first four output columns, bitwise versus exact rational and PyTorch BF16"
+  ],
+  "post_synth_resources": {
+    "clb_luts": 2391,
+    "clb_registers": 306,
+    "bram_tiles": 0,
+    "uram": 0,
+    "dsps": 7
+  },
+  "post_synth_timing_ns": {
+    "clock_period": 5.0,
+    "setup_wns": 1.053,
+    "setup_tns": 0.0,
+    "setup_failing_endpoints": 0,
+    "hold_whs": 0.073,
+    "pulse_width_wpws": 2.225
+  },
+  "prior_ooc": [
+    {
+      "run": "run_001",
+      "setup_wns_ns": -1.068,
+      "cause": "combined absolute value, leading bit detection and BF16 packing"
+    },
+    {
+      "run": "run_002",
+      "setup_wns_ns": -0.027,
+      "cause": "BF16 product and 64-bit accumulator update in one cycle"
+    }
+  ],
+  "numeric_rule": "Exact BF16 significand product; K-ascending signed 64-bit shared-exponent mantissa with 32 guard bits, magnitude-truncating alignment; final BF16 nearest-even rounding; nonfinite input errors",
+  "limitations": [
+    "The checkpoint comparison covers 12 outputs of layer-0 Q projection only; it does not establish accuracy of every GEMM or full-model prefill/decode.",
+    "Standalone module simulation uses behavioral bank words, not XPM bank subsystem or integrated dispatcher.",
+    "Scalar execution has no measured model throughput claim.",
+    "OOC timing is not placed/routed timing or board signoff; no BIT/XSA/Vitis or physical-board execution."
+  ],
+  "checkpoint": {
+    "revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+    "model_safetensors_sha256": "80521b40281d6ce74e35c9282c22539e75aa0ac8578892b2a59955ef78d55da1",
+    "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843"
+  },
+  "measured_xsim_cycles": {
+    "method": "cycles from command acceptance edge to first sampled DONE, with ready bank ports and no stalls",
+    "full_m32_n192_k1": 61441,
+    "full_k1536_one_output": 9221,
+    "checkpoint_prefill_m2_n4_k576": 27681,
+    "checkpoint_decode_m1_n4_k576": 13841
+  },
+  "cycle_model": {
+    "formula": "1 + M*N*(6*K+4) cycles per GEMM command when bank ports do not stall",
+    "bf16_mac_per_second_asymptotic_at_200mhz": 33333333.333333332,
+    "full_m32_n192_k576_cycles": 21258241,
+    "full_m32_n192_k576_seconds_at_200mhz": 0.106291205,
+    "full_m32_n192_k1536_seconds_at_200mhz": 0.283238405,
+    "checkpoint_decode_m1_n4_k576_seconds_at_200mhz": 6.9205e-05
+  },
+  "model_decode_gemm_only_lower_bound": {
+    "assumptions": "30 layers; Q=576,K=192,V=192,O=576, gate=1536, up=1536, down=576, lm_head=49152; one scalar GEMM executor at exactly 200 MHz; no stalls or DDR/other-op costs",
+    "mac_per_token": 134479872,
+    "cycles_per_token": 807697920,
+    "seconds_per_token": 4.0384896,
+    "optimistic_tokens_per_second": 0.24761732703236378,
+    "not_a_board_measurement": true
+  },
+  "model_prefill32_gemm_only_lower_bound": {
+    "assumptions": "32 token rows through 30 layers of linear GEMMs; lm_head only for final token; one scalar GEMM executor at exactly 200 MHz; no stalls or DDR/attention/nonlinear costs",
+    "cycles_for_32_tokens": 20574289920,
+    "seconds_for_32_tokens": 102.8714496,
+    "optimistic_effective_tokens_per_second": 0.31106784364784534,
+    "not_a_board_measurement": true
+  }
+}

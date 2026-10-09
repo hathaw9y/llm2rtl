@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "aresetn": 1, "x": 1}, "outputs": {"z": 1}},
+  "semantics": {
+    "evidence": "problem.txt: Mealy-type FSM recognizes 101; only 3 states; overlapping sequences; negative edge asynchronous reset; sequential logic on positive clock edge",
+    "states": ["no matching suffix", "suffix 1", "suffix 10"],
+    "sampling": "State consumes x on each posedge clk when aresetn is high.",
+    "output": "Combinational z is high exactly when the consumed history ends in 10 and current x is 1; no output register or added latency.",
+    "overlap": "After consuming a completing 1, retain suffix 1.",
+    "reset": "negedge aresetn asynchronously clears history; held-low reset clears state at each posedge; reset release does not consume x.",
+    "initialization": "No power-up initialization is specified; behavior is checked after reset."
+  },
+  "numeric": {"ports": "All ports one bit", "state_encoding": "Three states in a two-bit enum", "arithmetic": "None"},
+  "verification": {"oracle": "Independent two-bit sampled input history and valid-history count, grounded in sequence 101", "phases": "Check before and after rising edges and on input changes between edges", "cases": "All 256 eight-bit strings, directed overlap, repeated ones and zeros, asynchronous reset during partial and detected sequence, held reset", "evaluation": "python3 dev_check.py --label initial; bounded self-checking dev_tb"},
+  "specification_ambiguities": ["Power-up state before any reset is unspecified; no deterministic startup output is required or tested."]
+}

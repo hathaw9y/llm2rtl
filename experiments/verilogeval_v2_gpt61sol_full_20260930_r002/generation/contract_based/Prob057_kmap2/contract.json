@@ -1,0 +1,67 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1,
+      "d": 1
+    },
+    "outputs": {
+      "out": 1
+    },
+    "evidence": "Original problem port list; no clock or reset ports."
+  },
+  "semantics": {
+    "kind": "combinational",
+    "latency": "No clock cycles or added state; output follows current inputs after combinational settling.",
+    "reset": "None specified or provided.",
+    "initialization": "No state or initialization requirement; binary-input map defines output.",
+    "evidence": "Original Karnaugh map, columns ab=00,01,11,10 and rows cd=00,01,11,10.",
+    "rows": {
+      "00": [
+        1,
+        1,
+        0,
+        1
+      ],
+      "01": [
+        1,
+        0,
+        0,
+        1
+      ],
+      "11": [
+        0,
+        1,
+        1,
+        1
+      ],
+      "10": [
+        1,
+        1,
+        0,
+        0
+      ]
+    }
+  },
+  "numeric": {
+    "type": "One-bit Boolean inputs and output",
+    "ordering": "ab means a then b; cd means c then d",
+    "arithmetic": "No signed arithmetic, rounding, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Original K-map row/column lookup independently from RTL equation",
+    "coverage": "All 16 binary assignments, forward and reverse traversal",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling",
+    "failure": "$fatal on mismatch; bounded timeout; explicit PASS after checks",
+    "primary_command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z inputs",
+      "resolution": "Original map specifies only binary inputs; X/Z behavior is unspecified and is not assigned a required oracle value."
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob062_bugs_mux2",
+  "official_status": "compile_failure",
+  "official_analyzer_code": "R",
+  "workflow_status": "failed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob062_bugs_mux2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob062_bugs_mux2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790747717.501156,
+    "ended_at_unix": 1790747828.0079787,
+    "seconds": 110.50682306289673,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 102753,
+      "cached_input_tokens": 88960,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1878,
+      "reasoning_output_tokens": 19
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "59cbd621c924d5d35bdf6b70710d9954652f63f69d214e500aa70cfefa3f2790",
+  "contract_sha256": "bcef4f3f40f34c9acfc04b8265b4442ab7cec586a8d9c6a1b03fb3a7207428e3",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "outcome": "passed",
+        "cases": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+      },
+      {
+        "command": "python3 validate_contract.py",
+        "outcome": "passed_structure_only"
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "outcome": "passed",
+        "evidence": "development/01 and dev_checks.jsonl",
+        "simulation": "PASS: 131079 mux checks",
+        "compiler": "Icarus 12, -g2012 -Wall -Wno-timescale"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "Original text describes an 8-bit mux but declares scalar out. Scalar width preserved under explicit harness instructions; selected input is truncated to its least-significant bit.",
+      "Unknown-selector behavior is unspecified by the problem; supplemental tests check standard conditional merge semantics.",
+      "No synthesis or board verification performed, as instructed."
+    ],
+    "justified_rtl_changes": [
+      "Initial implementation replaces scalar bitwise selector masks with conditional selection. Original port names and widths are preserved; no clock, reset, state, extra ports or latency added."
+    ],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json"
+    }
+  },
+  "final": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "candidate.sv": "59cbd621c924d5d35bdf6b70710d9954652f63f69d214e500aa70cfefa3f2790",
+      "Prob062_bugs_mux2_test.sv": "020ebc5c365a0c3c23ff64ab2506e84bd2ce9a5046f8090c310fd6c104a525d2",
+      "Prob062_bugs_mux2_ref.sv": "3735cd6a576c3ab365e0b42bcd95198b6ce609792a0ad7cb1765e12667417436"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob062_bugs_mux2_test.sv",
+        "Prob062_bugs_mux2_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.13806223403662443
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "candidate.sv": "59cbd621c924d5d35bdf6b70710d9954652f63f69d214e500aa70cfefa3f2790",
+      "Prob062_bugs_mux2_test.sv": "020ebc5c365a0c3c23ff64ab2506e84bd2ce9a5046f8090c310fd6c104a525d2",
+      "Prob062_bugs_mux2_ref.sv": "3735cd6a576c3ab365e0b42bcd95198b6ce609792a0ad7cb1765e12667417436"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob062_bugs_mux2_test.sv",
+        "Prob062_bugs_mux2_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0927266413345933
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

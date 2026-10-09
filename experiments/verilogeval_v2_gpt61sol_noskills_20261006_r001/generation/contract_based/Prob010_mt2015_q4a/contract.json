@@ -1,0 +1,40 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "x": 1,
+      "y": 1
+    },
+    "outputs": {
+      "z": 1
+    },
+    "evidence": "Original interface lists input x, input y, output z; all ports one bit."
+  },
+  "semantics": {
+    "function": "z = (x ^ y) & x",
+    "timing": "Combinational continuous output with no clock or extra latency.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or specified initialization; output follows input expression, including Verilog unknown propagation.",
+    "evidence": "Original problem specifies a Boolean function and only x, y, z ports."
+  },
+  "numeric": {
+    "width": "One bit for every operand and result.",
+    "operators": "Bitwise XOR followed by bitwise AND.",
+    "binary_truth_table": [
+      "00 -> 0",
+      "01 -> 0",
+      "10 -> 1",
+      "11 -> 0"
+    ]
+  },
+  "verification": {
+    "oracle": "Explicit truth table from the original expression, independently encoded for binary and four-state inputs.",
+    "cases": "All four binary combinations and all 16 combinations from 0, 1, X, Z.",
+    "sampling": "Allow 1 ns for combinational settling after each input assignment.",
+    "failure": "$fatal on mismatch and bounded 100 ns timeout; PASS only after all cases."
+  },
+  "specification_ambiguities": [
+    "The Boolean specification does not prescribe X/Z input behavior. Preserve literal bitwise expression semantics and check four-state propagation as supplemental development coverage."
+  ]
+}

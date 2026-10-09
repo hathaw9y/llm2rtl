@@ -1,0 +1,193 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob110_fsm2",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 2,
+  "development_failed_check_count": 1,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob110_fsm2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob110_fsm2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790746233.0784962,
+    "ended_at_unix": 1790746360.2802453,
+    "seconds": 127.20174980163574,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 117183,
+      "cached_input_tokens": 92672,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2195,
+      "reasoning_output_tokens": 79
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "ba002f86e52fe2e575a98de6e27ffabc3fbf6da7fa16571075fddeb404511fb1",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "smoke_environment",
+        "status": "passed",
+        "cases": "correct passes, injected fault fails, repair passes"
+      },
+      {
+        "label": "initial",
+        "status": "simulation_failed",
+        "evidence": "development/01",
+        "reason": "Testbench oracle omitted intervening rising clock edges after reset release."
+      },
+      {
+        "label": "tb_correction",
+        "status": "passed",
+        "evidence": "development/02",
+        "result": "PASS: 147 FSM checks"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "No synthesis or board verification performed."
+    ],
+    "justified_changes": {
+      "rtl": [],
+      "testbench": [
+        {
+          "preserved_original": "dev_tb_initial.sv",
+          "change": "Update independent transition-table oracle on every positive clock edge and asynchronous reset assertion rather than only task-selected edges.",
+          "justification": "The original testbench skipped valid rising edges between reset deassertion and the next step task, producing a stale expected state. All output checks were retained."
+        }
+      ]
+    },
+    "interface_cycle_contract": "TopModule ports clk, areset, j, k, out are one bit. Active-high asynchronous reset selects OFF. Rising clock edges apply j in OFF and k in ON. Moore output is state decode with no extra cycle latency.",
+    "static_review": "Two one-bit enum states, complete combinational assignments, nonblocking state register updates, specified asynchronous reset; initial snapshot preserved unchanged.",
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_rtl": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "check_records": "dev_checks.jsonl"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "ba002f86e52fe2e575a98de6e27ffabc3fbf6da7fa16571075fddeb404511fb1",
+      "Prob110_fsm2_test.sv": "4ef6134c6d8919e1bc89489d7c30f1a79bd9c5bfbc266ce560e12a836b49cea1",
+      "Prob110_fsm2_ref.sv": "6971540f20cfd7d212f76470f91469ccc24dae102e62a387b8aabef10a98b9b4"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob110_fsm2_test.sv",
+        "Prob110_fsm2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015370454639196396
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb110_fsm2_test.sv:74: $finish called at 1206 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 241 samples\n\nSimulation finished at 1206 ps\nMismatches: 0 in 241 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01026174332946539
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "ba002f86e52fe2e575a98de6e27ffabc3fbf6da7fa16571075fddeb404511fb1",
+      "Prob110_fsm2_test.sv": "4ef6134c6d8919e1bc89489d7c30f1a79bd9c5bfbc266ce560e12a836b49cea1",
+      "Prob110_fsm2_ref.sv": "6971540f20cfd7d212f76470f91469ccc24dae102e62a387b8aabef10a98b9b4"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob110_fsm2_test.sv",
+        "Prob110_fsm2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014087827876210213
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb110_fsm2_test.sv:74: $finish called at 1206 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 241 samples\n\nSimulation finished at 1206 ps\nMismatches: 0 in 241 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009327488020062447
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

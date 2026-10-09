@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"in": "100 bits [99:0]"}, "outputs": {"out": "100 bits [99:0]"}},
+  "semantics": {"mapping": "For every i from 0 through 99, out[i] = in[99-i]", "timing": "Combinational bit reversal; original interface has no clock or reset", "initialization": "No stored state or specified initial value; output follows input including unknown bits"},
+  "numeric": {"width": 100, "interpretation": "Bit permutation without arithmetic or signed interpretation"},
+  "verification": {"oracle": "Reverse a textual binary representation of the applied input independently of DUT indexing", "cases": "Zeros, ones, every walking one and walking zero, asymmetric patterns, randomized patterns, X and Z propagation", "sampling": "Check after a 1 ns combinational settling interval", "termination": "Fatal on mismatch or bounded timeout; PASS only after all cases"},
+  "specification_ambiguities": []
+}

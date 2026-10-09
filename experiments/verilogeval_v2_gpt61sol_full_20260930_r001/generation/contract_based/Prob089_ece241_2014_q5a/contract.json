@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": {"direction": "input", "width": 1}, "areset": {"direction": "input", "width": 1}, "x": {"direction": "input", "width": 1}, "z": {"direction": "output", "width": 1}}
+  },
+  "semantics": {
+    "clock": "All input bits are sampled on rising clk edges while areset is low.",
+    "reset": "Active-high asynchronous reset on rising areset; reset state outputs z=0, discards the preceding number and forgets any first-one history. Reset dominates clock sampling while asserted.",
+    "initialization": "A reset establishes initial state; behavior before any reset is unspecified.",
+    "conversion": "Beginning on the first rising clk after reset release, copy zeros and the first one, then invert every subsequent input bit until reset.",
+    "output_timing": "Moore output depends only on registered state. After each sampling rising edge and state settling, z is the complement bit corresponding to x sampled at that edge; changing x between edges does not change z.",
+    "length": "Arbitrary number of input bits, no length counter or end port; reset delimits conversions."
+  },
+  "numeric": {
+    "ordering": "Least-significant input bit first; corresponding output bits in the same order.",
+    "equation": "For any finite N-bit prefix interpreted as X, the N emitted bits equal (-X) modulo 2^N.",
+    "width": "Single-bit datapath with finite history; no finite bound on sequence length.",
+    "overflow": "Two's complement wraparound for the selected finite prefix; no saturation or rounding."
+  },
+  "verification": {
+    "oracle": "Compute finite-width arithmetic negation independently of the FSM and compare each emitted bit after sampling.",
+    "cases": "Exhaustive numbers of widths 1 through 8, plus 32-bit boundary and mixed patterns and a long zero prefix followed by one and subsequent alternating bits.",
+    "reset": "Assert reset between clock edges during active conversion and check immediate z=0; hold across edges, release between edges and verify a fresh conversion.",
+    "moore": "Toggle x between rising edges and verify z remains unchanged.",
+    "tools": "Icarus v12 -g2012 with explicit dev_tb top and matching vvp; finite shell and testbench timeouts. No synthesis or official evaluation."
+  },
+  "specification_ambiguities": [
+    {"topic": "Moore output sampling phase", "resolution": "Interpret corresponding output as visible after the edge sampling its input, consistent with registered Moore-state updates."},
+    {"topic": "Power-up state", "resolution": "Only reset initialization is specified; no power-up initialization is added."}
+  ]
+}

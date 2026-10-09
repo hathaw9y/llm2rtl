@@ -1,0 +1,68 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "in": 1
+    },
+    "outputs": {
+      "out": 1
+    }
+  },
+  "semantics": {
+    "source": "problem.txt: Moore transition table and synchronous active high reset; all sequential logic on positive clock edge",
+    "clock": "posedge clk",
+    "reset": "reset=1 at posedge overrides input and sets state A; changes between edges do not reset state",
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "D"
+      },
+      "D": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "output": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 1
+    },
+    "sampling": "out reflects current registered state, including new state after positive-edge nonblocking updates",
+    "initialization": "No initial state specified; verification asserts reset before expecting defined output"
+  },
+  "numeric": {
+    "port_widths": "All ports one bit per original interface",
+    "state_count": 4,
+    "encoding": "Internal two-bit encoding is implementation choice; no arithmetic"
+  },
+  "verification": {
+    "oracle": "Independent table-based model from original transition table",
+    "checks": [
+      "Every transition from each state for both binary input values",
+      "Reset from every state for both input values",
+      "Reset is synchronous and has priority",
+      "Output unchanged by input/reset changes between clock edges",
+      "Exhaustive 8-bit input sequences after reset"
+    ],
+    "sampling": "Check settled output before rising edge and one time unit after rising edge",
+    "termination": "Fatal on any mismatch, bounded timeout, PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Power-up state and behavior for unknown input/reset are unspecified",
+      "resolution": "No initialization added; checks start after synchronous reset and drive binary inputs/reset"
+    }
+  ]
+}

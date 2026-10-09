@@ -1,0 +1,33 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"y": {"direction": "input", "width": 6}, "w": {"direction": "input", "width": 1}, "Y1": {"direction": "output", "width": 1}, "Y3": {"direction": "output", "width": 1}},
+    "state_encoding": {"A": "000001", "B": "000010", "C": "000100", "D": "001000", "E": "010000", "F": "100000"}
+  },
+  "semantics": {
+    "kind": "pure combinational next-state equations, no stored state",
+    "Y1": "next-state bit 1 (B): y[0] & ~w",
+    "Y3": "next-state bit 3 (D): w & (y[1] | y[2] | y[4] | y[5])",
+    "timing": "Outputs follow current inputs combinationally; no clock, cycle latency, or handshake",
+    "reset_initialization": "FSM reset state A is contextual; this module has no reset port or internal state and requires no initialization",
+    "legal_inputs": "one-hot y encoding A through F and binary w",
+    "illegal_inputs": "No required recovery for zero-hot, multi-hot, or unknown states; direct equations extend naturally without validity gating"
+  },
+  "numeric": {
+    "representation": "unsigned six-bit state vector and one-bit Boolean signals",
+    "operations": "single-bit bitwise NOT, AND and OR only",
+    "arithmetic": "No arithmetic, rounding, truncation, saturation, or overflow"
+  },
+  "verification": {
+    "oracle": "Independent transition table indexed by state A-F and input w; compare destination state B and D with Y1 and Y3",
+    "coverage": "All 12 legal state/input combinations, repeated in reverse order to detect accidental state retention",
+    "checks": "Contract gate before RTL, static interface and source review, Icarus -g2012 compilation with explicit dev_tb top, self-checking simulation",
+    "timeouts": "Finite external timeouts for each compile and simulation plus internal testbench watchdog",
+    "scope": "Independent development verification only; no official evaluation, synthesis, or board checks"
+  },
+  "specification_ambiguities": [
+    {"issue": "Prose names Y2/Y4 but explicit ports are Y1/Y3", "resolution": "Use exact declared interface Y1/Y3 for next-state bits y[1]/y[3] respectively"},
+    {"issue": "Reset into A mentioned without reset/clock ports", "resolution": "Treat as context for the external FSM; implement only requested combinational equations"}
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "details": "Correct sequential fixture passed; injected fault failed simulation as expected; repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only", "evidence": "contract_gate.json"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "dev_checks.jsonl and development/01", "details": "Icarus 12 compilation and simulation passed; 4655 output comparisons."}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development PASS is not official evaluation correctness; official evaluation has not been accessed or run.",
+    "Power-up behavior before synchronous reset and unknown-valued input behavior are unspecified by the original problem and are not asserted by the testbench.",
+    "No synthesis, timing, or board verification performed, as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": {
+    "rtl": "candidate.sv",
+    "unchanged_initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface_cycle_contract": "Original one-bit ports; synchronous active-high reset to A; transitions on positive clk edges; combinational Moore output high only in D.",
+    "numeric_widths": "Two-bit enum for four states; no arithmetic.",
+    "latency": "No extra output latency or added handshake.",
+    "static_review": "Complete transition table, explicit enum if/else assignments, one sequential state driver, no inferred combinational latch, no DUT initialization.",
+    "coverage": "All eight state/input transitions; all 256 length-eight binary input sequences; reset from every state; repeated reset; inter-edge reset pulse; input changes between edges."
+  }
+}

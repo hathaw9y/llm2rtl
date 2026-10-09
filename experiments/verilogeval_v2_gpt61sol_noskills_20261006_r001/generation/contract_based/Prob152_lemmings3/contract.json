@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "areset": 1, "bump_left": 1, "bump_right": 1, "ground": 1, "dig": 1},
+    "outputs": {"walk_left": 1, "walk_right": 1, "aaah": 1, "digging": 1}
+  },
+  "semantics": {
+    "clock": "All state changes on positive clk edge, except asynchronous positive areset edge.",
+    "reset": "areset asynchronously sets walking left; held high dominates clock edges. Original: positive edge triggered asynchronous resetting to walk left.",
+    "initialization": "No power-up state specified; verification asserts reset before checking outputs.",
+    "moore_outputs": "Exactly one action output active after reset: walking left/right, falling aaah, or digging.",
+    "walking_priority": "If ground=0 fall preserving direction; else if dig=1 dig preserving direction; else bump in current walking direction reverses direction. Both bumps reverse.",
+    "falling": "Ignore bumps and dig; ground=1 resumes original walking direction, otherwise continue falling.",
+    "digging": "Ignore bumps and dig; remain digging while ground=1, else fall preserving original walking direction.",
+    "latency": "Inputs determine state at next positive clock edge; outputs decode current state without extra registers."
+  },
+  "numeric": {
+    "ports": "All ports single bit.",
+    "state_space": "Six logical states: walk, fall and dig each retaining left or right direction.",
+    "arithmetic": "No counters, arithmetic or duration limits."
+  },
+  "verification": {
+    "oracle": "Independent behavioral model with action mode and retained direction grounded in original problem.",
+    "sampling": "Drive inputs on negative edges, check Moore outputs before positive edge and after NBA settling; assert reset between clock edges.",
+    "coverage": "All 16 input combinations from each of six logical states; directed priority, direction retention, persistent digging and asynchronous reset cases.",
+    "success": "Fatal on mismatch, bounded timeout, PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "Pre-reset initial state and behavior for unknown-valued inputs are unspecified; no assertions constrain pre-reset outputs or unknown-valued stimulus."
+  ]
+}

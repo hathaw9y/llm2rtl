@@ -1,0 +1,175 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob091_2012_q2b",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob091_2012_q2b",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob091_2012_q2b/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790732246.722284,
+    "ended_at_unix": 1790732310.1372232,
+    "seconds": 63.414939880371094,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 90874,
+      "cached_input_tokens": 75136,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1361,
+      "reasoning_output_tokens": 12
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "1aba7574d63dc287a05eae5cc4035174cbfc9f6c342f52e76355cdd323b47d94",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "pass",
+        "details": "Exact benchmark ports; combinational continuous assignments; incoming transitions match FSM; no registers or latches."
+      },
+      {
+        "name": "Icarus development compile",
+        "result": "pass",
+        "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "options": "-g2012 -Wall -s dev_tb",
+        "timeout_seconds": 20,
+        "log": "dev_compile.log"
+      },
+      {
+        "name": "development simulation",
+        "result": "pass",
+        "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "timeout_seconds": 20,
+        "coverage": "All 12 legal one-hot state/input combinations checked against independently encoded transition table.",
+        "log": "dev_simulation.log"
+      }
+    ],
+    "development_outcome": "Initial candidate passed development checks with no RTL revisions. candidate_initial.sv preserved before checks. Outputs are combinational one-bit next-state inputs with no clock, reset, or pipeline.",
+    "limitations": [
+      "Official evaluation was not accessed and results are unknown.",
+      "Invalid one-hot encodings are outside the specified assumption and were not tested.",
+      "No synthesis, Vivado timing evidence, or board validation was produced."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "1aba7574d63dc287a05eae5cc4035174cbfc9f6c342f52e76355cdd323b47d94",
+      "Prob091_2012_q2b_test.sv": "682f88f9fd806d44b91ccdaa43202204ff143bb1b02a521752b3e2bdc3e28841",
+      "Prob091_2012_q2b_ref.sv": "e860212c593a717f8517c2141034dace45baa3bd0c3f0d7e553b54f7200bcb7f"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob091_2012_q2b_test.sv",
+        "Prob091_2012_q2b_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011868687346577644
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb091_2012_q2b_test.sv:45: $finish called at 3001 (1ps)\nHint: Output 'Y1' has no mismatches.\nHint: Output 'Y3' has no mismatches.\nHint: Total mismatched samples is 0 out of 600 samples\n\nSimulation finished at 3001 ps\nMismatches: 0 in 600 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01233699917793274
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "1aba7574d63dc287a05eae5cc4035174cbfc9f6c342f52e76355cdd323b47d94",
+      "Prob091_2012_q2b_test.sv": "682f88f9fd806d44b91ccdaa43202204ff143bb1b02a521752b3e2bdc3e28841",
+      "Prob091_2012_q2b_ref.sv": "e860212c593a717f8517c2141034dace45baa3bd0c3f0d7e553b54f7200bcb7f"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob091_2012_q2b_test.sv",
+        "Prob091_2012_q2b_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010167563334107399
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb091_2012_q2b_test.sv:45: $finish called at 3001 (1ps)\nHint: Output 'Y1' has no mismatches.\nHint: Output 'Y3' has no mismatches.\nHint: Total mismatched samples is 0 out of 600 samples\n\nSimulation finished at 3001 ps\nMismatches: 0 in 600 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012240621261298656
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

@@ -1,0 +1,126 @@
+{
+  "schema": "llm2rtl.executor_contract_audit.v1",
+  "scope": "Read-only architectural preparation; no RTL correctness/synthesis claim",
+  "status": "IMPLEMENTATION_GAPS_IDENTIFIED",
+  "source_sha256": {
+    "modules/int8_gemm_executor.json": "5a21d45e1461bedc5dad49348c25d142a07f13a8c3e6125abbd9f5d7f0ccb19c",
+    "contracts/datapaths/int8_dot_core.json": "68a0eee518d475d0df3fd2e6052150ca9c9bd59b79f400eb74ee3eb48324ecff",
+    "contracts/datapaths/fp32_bf16_epilogue.json": "bfdbcda07d9fc29b38a4bcfa0f3ed188603a3f3d2988ee41d028ad5a0fd6c20b",
+    "isa_spec.json": "1b212ac05048122b4377581433052a91efa24c5c3bc3ce9bba3d0f7219cf630c",
+    "bank_layout.json": "dcd26383f787310d301cc6976d27fc76cf8ec44baed43fdf4258039f2441a6f2",
+    "contracts/numeric_contract.json": "f5bb6dbf52528e9fe921867e465aca6c74768402be7860cedeadc950e9bf9261",
+    "contracts/compute_interface.json": "c2b579e39ac9b4cb7fbb6ca2fb751e7020d11d7b9a597a942ebb64550f772d06",
+    "verification/tensor_golden/manifest.json": "fe916c48afba868a28e0ad7ee86d92dbc0d98d0a20b13c9b50676815b4a33534"
+  },
+  "findings": [
+    {
+      "id": "A01",
+      "priority": "high",
+      "issue": "Attention destination descriptor producer transition is not concretely ported",
+      "evidence": "generate_tensor_golden.py calls attention without destination BANK_CONFIG; isa_interpreter.py attention() uses auto_output() to replace destination profile/extents and increment output generation. GEMM instead preserves configured C and accumulates tile coverage.",
+      "fix": "Fabric adapter must explicitly implement command-derived score/context producer begin and successful/failed commit. Preserve captured accepted generation in response. Parent executor must not add a prerequisite destination BANK_CONFIG absent from pinned ISA golden. Distinguish producer update from ISA BANK_CONFIG opcode."
+    },
+    {
+      "id": "A02",
+      "priority": "high",
+      "issue": "Legal combined-scale zero can be mistaken for invalid original scale",
+      "fix": "Validate original sA/sB as positive finite nonzero. Permit cached combined +0 after gradual FP32 underflow; preserve FP32 dot-sign zero multiplication semantics. Reject original zero/negative/nonfinite and nonfinite combined/result."
+    },
+    {
+      "id": "A03",
+      "priority": "high",
+      "issue": "Read outstanding bound alone cannot protect no-ready response FIFO",
+      "fix": "Per-role credit condition outstanding plus response_FIFO_occupancy <4 before accepted request; capture role-local request metadata FIFO. Returned beats always captured, including after compute stall/error; credits released only when beat processed."
+    },
+    {
+      "id": "A04",
+      "priority": "high",
+      "issue": "One physical port role set does not mean common owner IDs across opcodes",
+      "fix": "Fabric derives owners [3,4,5]/[11,12,13]/[15,16,17] from accepted opcode. Lock all3 banks atomically and validate ownership snapshot; completion remains accepted bank IDs/generations."
+    },
+    {
+      "id": "A05",
+      "priority": "medium",
+      "issue": "Declared16B result metadata cannot additionally contain independent n_valid beyond tag96 and scale32",
+      "fix": "Embed n_valid in tag96 or derive it from tagged panel; report any metadata resource change."
+    },
+    {
+      "id": "A06",
+      "priority": "high",
+      "issue": "Coverage/error retirement needs explicit publication sideband",
+      "fix": "Coverage updates are native accepted write address/strb events. Add destination invalidate and producer commit sideband to fabric; no ready response before publication accepted and all read/arithmetic/output work drained. Do not reset whole C coverage between projection N tiles."
+    }
+  ],
+  "suggested_descriptor_packet": {
+    "capture": "All descriptor signals sampled with cmd_valid && cmd_ready; subsequent bank changes ignored.",
+    "role_order": "A low packed lane, then B, then C; use the same order as bank IDs/generations.",
+    "ports": {
+      "desc_present": 3,
+      "desc_profile": 15,
+      "desc_rows": 33,
+      "desc_cols": 48,
+      "desc_position": 30,
+      "desc_layer": 15,
+      "desc_generation": 96,
+      "desc_capacity_words": 57,
+      "desc_data_ready": 3,
+      "desc_scale_ready": 3,
+      "desc_busy": 3,
+      "desc_owner": 15
+    },
+    "width_rationale": "profiles5 each; rows11 each (KV1024); cols16 each (49152); position10 each; layer5 each; capacity19 each. Generation duplicated against command generation to verify immutable descriptor capture.",
+    "sidecar_locations": "Derive from pinned bank/profile: A13/W3/W15 offset294912; Q14 offset18432; K8/V9 offset196608. No DDR address ports. Profile determines format/layout,128-bit native word size; bank ID maps allocation.",
+    "coverage": "Whole source data/scale-ready flags summarize exact byte coverage from bank controller. Destination may be not-ready. Fabric must ensure flags refer to same captured generation; controller requires accepted strb events to accumulate per16-byte coverage.",
+    "optional_validity_query": "If optimizing partial-source readiness, use generation-bound selected range checks; aggregate full coverage is initially simpler and matches interpreter source require().",
+    "attention_destination": "Fabric-produced descriptor derived from rows,L,query_start opcode, not old C profile; commit generation decision documented separately while response retains accepted identity.",
+    "port_names": {
+      "cmd_profiles": 15,
+      "cmd_rows": 33,
+      "cmd_cols": 48,
+      "cmd_positions": 30,
+      "cmd_layers": 15,
+      "cmd_data_valid": 3,
+      "cmd_scale_valid": 3,
+      "cmd_desc_generations": 96,
+      "cmd_desc_present": 3,
+      "cmd_desc_busy": 3,
+      "cmd_desc_owner": 15
+    },
+    "fixed_bank_capacity_note": "Bank capacities derived internally from pinned bank ID; capacity_words port optional. Profile/format/layout fields are validated through pinned profile allowlists, not arbitrary raw local offsets."
+  },
+  "address_and_schedule_packet": {
+    "projection": "Abyte=(m_start+r)*K+k; Bbyte=n_local*K+k; Cbyte=2*(r*Ntotal+n_start+n_local). Bweight scales indexed floor(n_local/16), not global channel.",
+    "QK": "Staged logical row=local_query_head*rows+r; global h=kv_head*3+local_query_head. Abyte=r*576+h*64+k; Bbyte=token*192+kv_head*64+k. Cbyte=2*((r*9+h)*align16(L)+token). K64 reduction. Explicit masked and padding zero stores.",
+    "PV": "Abyte=(r*9+h)*align16(L)+token; Bbyte=token*192+kv_head*64+feature. Transpose B panel to n=feature and k=token before publish. Cbyte=2*(r*576+h*64+feature). Full L reduction and zero invalid lastK16 lanes.",
+    "scales": "Q/P head*ceil(rows/16)+floor(r/16); projection floor((m_start+r)/16); K kv_head; V kv_head*4+floor(feature/16).",
+    "read_alignment": "128-word addresses; wide256 only banks3/13/14/15 at even word index. Require whole beat inside capacity. Selected bytes covered; unselected padding not operands.",
+    "panel_safety": "Fill inactive panel only. Publish after all accepted reads processed and transpose complete. Reuse each panel across all staged rows before overwrite. Wait old N context steps drain before first_k context reset.",
+    "write_packing": "BF16 lane0 low16 bits;4lane epilogue bundle spans8B, split around128word or row boundaries; native strb represents actual bytes. n_valid inside tag applies short tail; QK masked zeros still require coverage."
+  },
+  "golden_scope": "Only synthetic one decoder block, full shapes, prefill32 and decode L33/L34. Context1024, negative/invalid prepared bytes, tails, stalls, concurrency and reset must be independently directed RTL tests.",
+  "producer_destination_packet": {
+    "scope": "QK/PV only; implements implicit producer initialization already in interpreter. GEMM never uses begin and requires existing configured C.",
+    "ports": {
+      "dst_begin_valid": 1,
+      "dst_begin_ready": 1,
+      "dst_begin_bank": 4,
+      "dst_begin_accepted_generation": 32,
+      "dst_begin_generation": 32,
+      "dst_begin_profile": 5,
+      "dst_begin_rows": 11,
+      "dst_begin_cols": 16,
+      "dst_begin_position": 10,
+      "dst_begin_layer": 5
+    },
+    "values": {
+      "QK": "profile16; rows=cmdrows; cols=L; position=query_start; layer0; dataextent=rows*9*align16(L)*2",
+      "PV": "profile19; rows=cmdrows; cols576; position0; layer0; dataextent=rows*576*2"
+    },
+    "generation": "New producer generation=acceptedCgeneration+1; reject 32-bit generation exhaustion instead of wrapping. Response always returns accepted original generation.",
+    "order": "Validate all source descriptor/profile/shape/scale readiness before memory access. Offer stable producer begin; no read/write accesses until begin accepted. Fabric must prevalidate/route command so rejected begin reports03 without memory accesses. Begin clears only C targeted producer coverage/validity and publishes metadata while retaining exclusive ownership acquired for original command.",
+    "ack_minimum": "ready is acceptance ack; repeated valid while stalled cannot cause repeated initialization. Fabric should provide error/reject indication or dispatcher prevalidation that guarantees eventual ready, so invalid transition does not deadlock.",
+    "ownership": "Do not use current descriptor generation to compare completion. Outstanding controller record retains captured original identity while bank descriptor new generation becomes active; release uses outstanding owner/token identity. Consumer cannot acquire until matched completion retires.",
+    "end_semantics": "Every accepted native wr updates coverage on same handshake. Require final publication visible before response. Full configured data coverage may become ready earlier but exclusive lock prevents consumption. For error, destination invalidation must be atomic with matched error response before release; if fabric cannot guarantee atomic invalidation, add explicit dst_invalidate_valid/ready and wait its ack before response. No separate successful end ack needed when wr acceptance already commits coverage.",
+    "status": "Suggested concrete interface refinement; not a modification of frozen contract or audited implementation."
+  }
+}

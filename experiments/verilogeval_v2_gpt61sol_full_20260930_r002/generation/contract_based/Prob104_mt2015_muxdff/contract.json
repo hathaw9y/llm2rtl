@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "L": 1,
+      "q_in": 1,
+      "r_in": 1
+    },
+    "outputs": {
+      "Q": 1
+    }
+  },
+  "semantics": {
+    "clock": "posedge clk, matching original always @(posedge clk)",
+    "equation": "At each rising edge, if L then Q <= r_in; else Q <= q_in.",
+    "evidence": "Original full_module loads r when L is asserted; otherwise each flip-flop receives its corresponding feedback expression through q_in.",
+    "reset": "No reset port or reset behavior in original specification.",
+    "initialization": "No initial assignment in original module; Q is unknown until first capture.",
+    "between_edges": "Q retains the last captured value; input changes and falling clock edges do not update Q.",
+    "latency": "One flip-flop only; captured value appears after nonblocking update at the same rising edge."
+  },
+  "numeric": {
+    "widths": "All ports are one bit.",
+    "interpretation": "Bit values; no arithmetic, signed conversion, rounding, overflow, or saturation.",
+    "feedback": "XOR and inter-flip-flop routing belong in full_module, not this scalar submodule."
+  },
+  "verification": {
+    "oracle": "Derived independently from original full_module load/feedback selection and posedge semantics.",
+    "coverage": [
+      "Initial unknown",
+      "All eight binary L/q_in/r_in combinations",
+      "Repeated load and feedback captures",
+      "Input mutation while clock low and high",
+      "Falling-edge retention",
+      "Three-instance factoring for all eight r vectors and feedback sequences"
+    ],
+    "sampling": "Drive away from rising edge; check retention before edge and outputs after NBA with delay.",
+    "failure": "Case-inequality comparisons, $fatal on mismatch, bounded timeout, final PASS only after all checks."
+  },
+  "specification_ambiguities": []
+}

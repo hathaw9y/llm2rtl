@@ -1,0 +1,53 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 100,
+        "range": "99:0"
+      },
+      "out_both": {
+        "direction": "output",
+        "width": 100,
+        "range": "99:0"
+      },
+      "out_any": {
+        "direction": "output",
+        "width": 100,
+        "range": "99:0"
+      },
+      "out_different": {
+        "direction": "output",
+        "width": 100,
+        "range": "99:0"
+      }
+    }
+  },
+  "semantics": {
+    "type": "combinational, no state",
+    "clock": "none",
+    "reset": "none",
+    "initialization": "none required; outputs depend continuously on current input",
+    "latency": "zero clock cycles; combinational settling only",
+    "out_both": "out_both[i] = in[i] AND in[i+1] for i=0..98; out_both[99]=0",
+    "out_any": "out_any[i] = in[i] OR in[i-1] for i=1..99; out_any[0]=0",
+    "out_different": "out_different[i] = in[i] XOR in[i+1] for i=0..98; out_different[99]=in[99] XOR in[0]"
+  },
+  "numeric": {
+    "representation": "100 independent unsigned bits",
+    "operations": "bitwise AND, OR, XOR only",
+    "arithmetic": "no arithmetic, signed interpretation, rounding, saturation, truncation or overflow",
+    "boundary": "only out_different wraps"
+  },
+  "verification": {
+    "oracle": "independent per-bit loop from equations; compare all three output vectors after input settles",
+    "directed": "all zero, all one, alternating patterns; one-hot and one-cold at every position",
+    "local_exhaustive": "all four binary values of each adjacent pair, including wrapped pair, with other bits zero",
+    "random": "1000 deterministic pseudo-random 100-bit vectors",
+    "tools": "Icarus Verilog v12, explicit dev_tb top, -g2012; finite compile and simulation timeouts",
+    "acceptance": "zero mismatches and explicit PASS; no official evaluation claims"
+  },
+  "specification_ambiguities": []
+}

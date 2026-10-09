@@ -1,0 +1,13 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "label": "initial", "check_index": 1, "compile_returncode": 0, "simulation_returncode": 0, "successful_comparisons": 5888, "evidence_directory": "development/01"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "No synthesis, timing, or board evidence was produced."],
+  "justified_rtl_changes": ["Initial implementation selects four bits at the ten-bit base address formed by concatenating sel with two zero bits. No RTL revisions."],
+  "justified_tb_changes": ["Initial independent oracle checks individual input bits for all selectors across directed and random vectors, fixed-selector input changes, and selected X/Z values. No testbench revisions."],
+  "interface_cycle_contract": "TopModule has in[1023:0], sel[7:0], out[3:0]; combinational selection with no clock, reset, or added latency.",
+  "static_review": "Selection base spans 0 through 1020; four-bit slice remains within the input. Continuous assignment has no state or latch. Initial snapshot preserved."
+}

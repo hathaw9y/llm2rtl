@@ -1,0 +1,45 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "smoke_environment",
+      "status": "passed",
+      "cases": "correct passes, injected fault fails, repair passes"
+    },
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence": "development/01",
+      "reason": "Testbench oracle omitted intervening rising clock edges after reset release."
+    },
+    {
+      "label": "tb_correction",
+      "status": "passed",
+      "evidence": "development/02",
+      "result": "PASS: 147 FSM checks"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_changes": {
+    "rtl": [],
+    "testbench": [
+      {
+        "preserved_original": "dev_tb_initial.sv",
+        "change": "Update independent transition-table oracle on every positive clock edge and asynchronous reset assertion rather than only task-selected edges.",
+        "justification": "The original testbench skipped valid rising edges between reset deassertion and the next step task, producing a stale expected state. All output checks were retained."
+      }
+    ]
+  },
+  "interface_cycle_contract": "TopModule ports clk, areset, j, k, out are one bit. Active-high asynchronous reset selects OFF. Rising clock edges apply j in OFF and k in ON. Moore output is state decode with no extra cycle latency.",
+  "static_review": "Two one-bit enum states, complete combinational assignments, nonblocking state register updates, specified asynchronous reset; initial snapshot preserved unchanged.",
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "check_records": "dev_checks.jsonl"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {"correct": "passed", "injected_fault": "simulation_failed", "repair": "passed"}
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence_directory": "development/01",
+      "coverage": "All 19 original waveform rows at their specified timestamps, covering all 16 binary input combinations",
+      "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; no diagnostics",
+      "simulation": "Matching vvp completed with explicit PASS"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation; official correctness remains unevaluated.",
+    "The original waveform specifies binary inputs only; no additional unknown-input behavior was assumed.",
+    "No synthesis, Vivado, or board verification performed."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation uses q = b | c, matching every original waveform row; no revisions."
+  ],
+  "justified_tb_changes": [
+    "Initial independent testbench directly transcribes original inputs and expected outputs, preserves 0ns through 90ns timing, samples after delta-cycle settling, and includes mismatch fatals and a bounded timeout; no revisions."
+  ],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "interface_cycle_semantics": "TopModule with one-bit a, b, c, d inputs and one-bit q output; combinational, no clock/reset or added latency",
+  "numeric_width_decisions": "One-bit bitwise OR",
+  "static_review": "Single continuous driver, no state or inferred latches; original interface preserved"
+}

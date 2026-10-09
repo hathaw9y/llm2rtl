@@ -1,0 +1,63 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "areset": {
+        "direction": "input",
+        "width": 1
+      },
+      "in": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "All sequential updates on posedge clk. Sample in at this edge when reset is low.",
+    "reset": "Active-high asynchronous reset on posedge areset; reset has priority while asserted and sets state A. Deassertion alone does not change state.",
+    "initialization": "No specified power-up state before reset; no initial block required.",
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "D"
+      },
+      "D": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "output": "Moore combinational decode: out=1 exactly in D, otherwise 0. Input changes between clock edges do not change out. State/output reflect transitions after sequential update settles."
+  },
+  "numeric": {
+    "input_output": "Single-bit logic; legal inputs are 0 and 1.",
+    "state": "Four abstract states, representable with two bits; encoding is implementation private.",
+    "arithmetic": "No arithmetic, rounding, saturation, overflow or signed numeric operations."
+  },
+  "verification": {
+    "oracle": "Independent testbench integer state with direct table lookups derived solely from problem. Compare external out with state==D after each edge.",
+    "sequences": "Enumerate all 256 eight-bit input sequences from reset; cover every state/input transition.",
+    "reset": "Assert between clock edges from every reachable state; check immediate output zero, held reset across a clock edge, and release without state advancement.",
+    "moore": "Toggle in between rising edges and check output unchanged.",
+    "execution": "Icarus -g2012 explicit dev_tb top; finite compile and simulation timeouts; testbench watchdog and clear PASS/FAIL."
+  },
+  "specification_ambiguities": [
+    "Power-up state before an asynchronous reset event is unspecified. Input X/Z behavior is unspecified; development tests use binary inputs."
+  ]
+}

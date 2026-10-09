@@ -1,0 +1,38 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence": "development/01/result.json"
+    },
+    {
+      "label": "tb_correction",
+      "status": "passed",
+      "evidence": "development/02/result.json"
+    }
+  ],
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation was not accessed or run."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_original": "dev_tb_before_correction.sv",
+      "reason": "After testing reset priority, requests remained asserted when reset was released. An intervening rising clock edge legitimately updated the DUT before the next cycle task, while the oracle still expected zero.",
+      "correction": "Clear predict_valid and train_mispredicted before reset release so the intervening edge holds zero. All expected-value and directed checks retained."
+    }
+  ],
+  "coverage": [
+    "Asynchronous reset between clock edges",
+    "Reset priority over prediction and misprediction",
+    "Misprediction priority over simultaneous prediction",
+    "Idle hold and absence of input-driven asynchronous updates",
+    "Youngest direction at bit zero and oldest-bit truncation",
+    "Forty consecutive ones and zeros",
+    "250 randomized prediction, recovery, and idle cycles"
+  ],
+  "initial_snapshot_unchanged": true
+}

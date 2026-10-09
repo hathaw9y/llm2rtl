@@ -1,0 +1,25 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {"correct": "passed", "injected_fault": "simulation_failed", "repair": "passed"}
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "label": "initial",
+      "evidence_directory": "development/01",
+      "simulator": "Icarus Verilog 12",
+      "checked_samples": 24
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation is pending.", "No synthesis or board verification performed."],
+  "justified_rtl_changes": ["Initial implementation: one-bit combinational AND derived from all four input combinations in the original waveform. No RTL revisions."],
+  "justified_tb_changes": ["Initial independent testbench replays all 19 original waveform timestamps, samples after delta-cycle settling, and checks five additional input-transition boundaries with literal expected values. No testbench revisions."],
+  "interface_cycle_contract": "TopModule has one-bit inputs a and b and one-bit output q, with no clock, reset, state, or added latency.",
+  "static_review": "Single continuous assignment, no inferred storage, no extra ports, unsigned one-bit operands.",
+  "artifacts": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "dev_checks.jsonl", "development/01"]
+}

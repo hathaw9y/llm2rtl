@@ -1,0 +1,44 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract structural validation",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (passed_structure_only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS by inspection",
+      "details": "Exact six scalar ports; one positive-edge always_ff with nonblocking assignments; load priority, enabled shift, implicit hold; no reset, initialization, arithmetic or dependencies."
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim.vvp candidate.sv dev_tb.sv",
+      "result": "FAILED: exit 139; empty compiler log; no executable produced",
+      "log": "development_compile.log",
+      "exit_log": "development_compile.exit"
+    },
+    {
+      "name": "development simulation attempt",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim.vvp",
+      "result": "FAILED: exit 255; executable unavailable",
+      "log": "development_simulation.log",
+      "exit_log": "development_simulation.exit"
+    }
+  ],
+  "development_outcome": "Initial candidate delivered without RTL revisions. Contract structural gate passed. Independent self-checking testbench prepared, but tool failure prevented behavioral simulation.",
+  "limitations": [
+    "No successful development simulation; Icarus compilation exited 139.",
+    "Simultaneous load and shift interpreted as load priority as recorded in frozen contract.",
+    "Initial Q unspecified; no reset or initialization added.",
+    "Official evaluation results unavailable; no synthesis, timing or board checks performed."
+  ],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  }
+}

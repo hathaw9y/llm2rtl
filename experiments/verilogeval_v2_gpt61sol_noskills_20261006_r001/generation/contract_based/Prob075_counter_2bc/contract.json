@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "areset": 1, "train_valid": 1, "train_taken": 1}, "outputs": {"state": 2}},
+  "semantics": {"clock": "Update at positive edge of clk, as explicitly specified.", "reset": "Positive edge of areset asynchronously sets state to 2'b01; asserted reset has priority at clock edges.", "training": "At each positive clock edge without reset, valid taken increments with saturation; valid not-taken decrements with saturation; invalid holds.", "initialization": "No power-up value specified; no initial assignment. Verification establishes known state by asynchronous reset."},
+  "numeric": {"representation": "unsigned two-bit counter", "minimum": 0, "maximum": 3, "reset_value": 1, "overflow": "Saturate at 3", "underflow": "Saturate at 0"},
+  "verification": {"oracle": "Integer reference derived directly from original saturating-counter rules", "sampling": "Drive training while clock low; compare after positive clock edge and NBA settling. Check reset off clock edges, reset-held clock edges, and no change at negative edges or reset release.", "coverage": "All four states with both valid and taken values; repeated saturation, hold, reset during training, and deterministic mixed sequences", "termination": "Fatal on mismatch, bounded timeout, PASS only after all checks"},
+  "specification_ambiguities": ["Power-up state before the first reset or clock is unspecified; verification makes no assertion about its value."]
+}

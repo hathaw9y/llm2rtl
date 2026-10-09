@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "label": "initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "compiler": "Icarus 12",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "result": "PASS: 1623 cycles checked"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation is performed externally after this turn.",
+    "Randomized tests are finite; directed tests exhaust all pairs of adjacent three-sample groups."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Eight-state Moore FSM with synchronous active-high reset. Entry into B does not sample w; each subsequent group samples three positive edges and reports exactly two high samples during the following cycle, which also starts the next group.",
+  "verification": "Independent sample-count oracle checks output after edges and stability between edges, idle behavior, entry timing, every adjacent pattern pair, pulse clearing, reset at all sample phases and asserted output, and randomized inputs. Bounded timeout and fatal mismatch checks are included.",
+  "initial_snapshot": "candidate_initial.sv"
+}

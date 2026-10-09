@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "in": {
+        "width": 1
+      }
+    },
+    "outputs": {
+      "out": {
+        "width": 1
+      }
+    },
+    "evidence": "Original interface lists input in and output out, all one bit."
+  },
+  "semantics": {
+    "relationship": "out equals in combinationally",
+    "latency": "No clock or cycle latency; evaluate after combinational settling.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or initialization specified; output follows current input including unknown values.",
+    "evidence": "The module should assign the output port to the same value as the input port combinationally."
+  },
+  "numeric": {
+    "width": 1,
+    "operation": "Identity, no arithmetic or signed interpretation",
+    "four_state": "Direct assignment preserves 0, 1, X, and Z."
+  },
+  "verification": {
+    "oracle": "Compare output with the driven input using case inequality after settling, grounded in original combinational identity requirement.",
+    "directed_cases": [
+      "0",
+      "1",
+      "X",
+      "Z",
+      "repeated values and transitions"
+    ],
+    "sampling": "One nanosecond after each drive; no clock.",
+    "timeout": "Bounded simulation with fatal timeout",
+    "success": "PASS printed only after all comparisons pass"
+  },
+  "specification_ambiguities": []
+}

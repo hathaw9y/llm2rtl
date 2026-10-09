@@ -1,0 +1,71 @@
+{
+  "schema": "llm2rtl.operator_module.v1",
+  "module_id": "attention_int4_quantizer",
+  "status": "frozen",
+  "scope": "User explicitly requests intermediate quantizer. Arithmetic child for later full Attention integration; no full Attention claim.",
+  "authorization": "2026-10-06 user: \uc911\uac04\uc5d0 \uc591\uc790\ud654\uae30\ub97c \ub9cc\ub4e4\uc5b4; W4A4KV4 BF16 scale, activation per-token, weight group32, KV token/head; full projections included.",
+  "hardware": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_ns": 5.0,
+    "tool": "Vivado 2025.2"
+  },
+  "parameters": {
+    "MAX_ELEMENTS": 256,
+    "ID_WIDTH": 8,
+    "COUNT_WIDTH": "max(1,clog2(MAX_ELEMENTS+1))"
+  },
+  "interface": {
+    "clock": "aclk",
+    "reset": "aresetn synchronous active-low",
+    "command": [
+      "cmd_valid",
+      "cmd_ready",
+      "cmd_id[ID_WIDTH-1:0]",
+      "cmd_elements[COUNT_WIDTH-1:0]"
+    ],
+    "input": [
+      "s_axis_value_tvalid",
+      "s_axis_value_tready",
+      "s_axis_value_tdata[31:0]"
+    ],
+    "output": [
+      "m_axis_quant_tvalid",
+      "m_axis_quant_tready",
+      "m_axis_quant_tdata[3:0]",
+      "m_axis_quant_tscale[15:0]",
+      "m_axis_quant_tlast"
+    ],
+    "completion": [
+      "resp_valid",
+      "resp_ready",
+      "resp_id[ID_WIDTH-1:0]",
+      "resp_error"
+    ]
+  },
+  "numeric": {
+    "input": "finite FP32; input exponent0 subnormals and signed zero treated as zero",
+    "scale": "BF16 RNE(max(abs(x))/7) computed directly from exact decoded FP32 value; clamp scale >= minimum positive normal BF16 0x0080; zero row uses 0x3f80 (1.0)",
+    "quantized": "RNE exact rational x / decoded BF16 scale, saturate signed symmetric [-7,7]; packed two-complement nibble; -8 code not produced",
+    "threshold": "rounding compares exact finite input against exactly representable BF16-scale half-integer thresholds, tie chooses even integer; no approximate reciprocal",
+    "granularity": "one command is one activation token row, one KV token/head row, or one weight group <=32 as caller chooses",
+    "group_weight_rule": "caller invokes rowwise for each output row contiguous input group32; masked tail cmd_elements"
+  },
+  "protocol": {
+    "single_outstanding": true,
+    "input_count": "consume exactly cmd_elements payload handshakes; no input consumption before accepted command",
+    "output_count": "valid normal command emits same number of signed INT4 handshakes, same scale for all, tlast only final; output/scale/last stable on stall",
+    "completion": "only after all input handshakes processed and last output accepted; no payload requests/outputs for completed command; resp held stable until ready; identity preserved",
+    "invalid_count": "0 or >MAX_ELEMENTS completes with error, consumes no input, emits no output",
+    "nonfinite": "any input NaN/Inf: consume entire commanded row then error completion, no output",
+    "reset": "cancel current command synchronously, clear all valid/state; caller coordinates bank reset"
+  },
+  "implementation": "two-pass buffered token quantizer; exact constant-divide-by7 scale rounding, exact half-integer threshold quantization; no real/shortreal/dpi synthesis arithmetic; expose standalone streaming child for later native-bank adapter",
+  "verification": [
+    "independent Python bit-exact reference using integer/Fraction calculations",
+    "random and directed zero/signedzero/subnormal/INT4extrema/nonfinite/halfway/scale-rounding/extreme exponents/group tails",
+    "input/output/completion backpressure and stable fields",
+    "count errors/reset during input or output/at least two MAX_ELEMENTS settings including non-power-of-two",
+    "Vivado XSIM exact payload+scale comparison, strict lint and OOC synthesis; record source hashes and raw exit+PASS",
+    "no full Attention/controller/board/model-quality claims"
+  ]
+}

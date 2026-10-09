@@ -1,0 +1,69 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790748067.998404,
+      "source_sha256": "3cb036fccc178285fff95bc97b8065e7d368e7adbb2e39551fb5852aed4415a9",
+      "testbench_sha256": "eaf804fb886b7927bfe8e4c901f1eaf231bbc22d7fcc17b1391eb8cf8e51d056",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob056_ece241_2013_q7/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.010586893185973167
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS JK truth table and edge stability: 221 comparisons\ndev_tb.sv:72: $finish called at 331000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.005650298669934273
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Initial hardware state is unspecified by the problem; no initialization or reset added.",
+    "X/Z values on j and k are outside the supplied binary truth table.",
+    "No synthesis or board work performed, as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract": {
+    "file": "contract.json",
+    "validation": "passed_structure_only",
+    "corrections": []
+  },
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface": "TopModule(clk,j,k,Q), all one bit",
+    "cycle": "Positive-edge JK state update; no extra latency or reset",
+    "numeric": "One-bit unsigned state with bitwise complement",
+    "static_review": "Single sequential driver, nonblocking assignments, exact original interface"
+  },
+  "coverage": "221 four-state comparisons covering initial unknown hold/toggle, clear from unknown, both known prior states and every JK pair, repeated hold/toggle/set/clear, high/low input mutation and falling-edge stability"
+}

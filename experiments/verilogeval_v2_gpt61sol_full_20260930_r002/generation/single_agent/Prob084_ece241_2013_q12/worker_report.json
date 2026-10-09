@@ -1,0 +1,15 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "simulator": "Icarus Verilog 12", "assertion_checks": 57616, "evidence": "development/01", "compile_diagnostics": "none"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "No synthesis or board work performed."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Eight uninitialized flip-flops shift toward Q[7] on enabled rising edges, with S entering Q[0]; a combinational mux selects Q[{A,B,C}]. Original ports preserved, no reset or added latency.",
+  "testbench": "Independent per-tap oracle checks initial unknown state, partial fills, all 256 MSB-first loaded patterns, every address, disabled holds, and stability before rising edges and after falling edges. Includes fatal mismatches and bounded timeout.",
+  "static_review": "One sequential driver with nonblocking assignment, exactly eight stored bits, complete combinational read, no initialization, reset, extra ports, or pipeline.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv"}
+}

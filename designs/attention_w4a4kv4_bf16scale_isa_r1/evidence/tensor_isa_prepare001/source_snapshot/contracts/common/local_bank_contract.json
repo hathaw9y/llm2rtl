@@ -1,0 +1,54 @@
+{
+  "schema": "llm2rtl.common_contract.v1",
+  "contract_id": "local_bank",
+  "version": 2,
+  "bank_id_semantics": "validated_logical_local_tensor_handle",
+  "descriptor_required_fields": [
+    "bank_id",
+    "capacity_words",
+    "word_bits",
+    "format",
+    "layout",
+    "valid",
+    "busy",
+    "owner"
+  ],
+  "ownership_mode": "single_exclusive_module_port_role_per_bank",
+  "owner_semantics": "module_port_role_not_opcode_or_module_identity",
+  "ownership_interface": {
+    "acquire": ["acquire_valid", "acquire_port"],
+    "release": ["release_valid", "release_port"],
+    "state": ["bank_busy", "bank_owner_port"],
+    "no_request_encoding": "valid_is_zero; port identifiers are never overloaded as valid bits"
+  },
+  "states": ["free", "acquired", "fault"],
+  "ownership_rules": [
+    "read_and_write_ownership_are_not_distinguished",
+    "every_dma_or_compute_operand_bank_must_be_free_before_command_acceptance",
+    "all_operand_banks_are_acquired_atomically_on_command_acceptance",
+    "each_acquired_bank_has_exactly_one_owner_module_port_role",
+    "operand_position_selects_the_module_port_role",
+    "banks_are_released_only_by_the_matching_owner_port_completion_or_reset",
+    "an_atomic_multi_bank_acquire_commits_all_requested_banks_or_none",
+    "a_release_with_a_nonmatching_owner_port_does_not_clear_the_bank",
+    "active_bank_cannot_be_overwritten",
+    "command_bram_is_separate_from_data_banks",
+    "data_bank_zero_is_legal"
+  ],
+  "router_rule": "router_resolves_bank_id_and_bank_owner_port_to_the_matching_physical_module_port",
+  "port_owner_ids": {
+    "NONE": 0,
+    "MM2S_ARBITER": 1,
+    "S2MM_ARBITER": 2,
+    "GEMM_ACT": 3,
+    "GEMM_WGT": 4,
+    "GEMM_PSUM": 5
+  },
+  "gemm_operand_role_mapping": {
+    "src0": "GEMM_ACT",
+    "src1": "GEMM_WGT",
+    "dst": "GEMM_PSUM"
+  },
+  "gemm_alias_rule": "src0_src1_and_dst_must_name_three_distinct_banks",
+  "compute_address_rule": "compute_never_receives_raw_local_address_or_offset"
+}

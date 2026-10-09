@@ -1,0 +1,27 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json"
+    },
+    {
+      "label": "initial",
+      "status": "passed",
+      "cases": 131077,
+      "evidence": "development/01/result.json"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation was not accessed.",
+    "The output width is corrected to eight bits as required by the stated 8-bit mux functionality; the scalar output in the buggy example is part of the defect."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation widens out to [7:0] and uses sel ? b : a to select all eight input bits. No subsequent RTL revisions."
+  ],
+  "justified_tb_changes": [
+    "Initial independent per-bit oracle exhaustively checks both selectors and every binary input pair, plus directed four-state cases. No testbench revisions."
+  ]
+}

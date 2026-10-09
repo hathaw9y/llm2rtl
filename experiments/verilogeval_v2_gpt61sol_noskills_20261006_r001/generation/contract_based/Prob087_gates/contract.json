@@ -1,0 +1,46 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1
+    },
+    "outputs": {
+      "out_and": 1,
+      "out_or": 1,
+      "out_xor": 1,
+      "out_nand": 1,
+      "out_nor": 1,
+      "out_xnor": 1,
+      "out_anotb": 1
+    }
+  },
+  "semantics": {
+    "kind": "combinational",
+    "equations": {
+      "out_and": "a & b",
+      "out_or": "a | b",
+      "out_xor": "a ^ b",
+      "out_nand": "~(a & b)",
+      "out_nor": "~(a | b)",
+      "out_xnor": "~(a ^ b)",
+      "out_anotb": "a & ~b"
+    },
+    "timing": "Original explicitly requires a combinational circuit; no clock, reset, state, or cycle latency.",
+    "initialization": "No initialization specified; outputs follow current inputs."
+  },
+  "numeric": {
+    "width": "All ports one bit as explicitly specified.",
+    "interpretation": "Boolean gates; bitwise Verilog operators preserve normal four-state gate propagation."
+  },
+  "verification": {
+    "oracle": "Literal truth table independently derived from the seven gate descriptions in problem.txt.",
+    "cases": "All four binary input combinations, repeated transitions, plus supplemental four-state controlling-value cases.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling; no edge-based sampling is specified.",
+    "failure": "Case inequality, fatal mismatch, bounded timeout, PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "X/Z behavior is not explicitly specified; use conventional Verilog gate semantics and mark four-state tests supplemental."
+  ]
+}

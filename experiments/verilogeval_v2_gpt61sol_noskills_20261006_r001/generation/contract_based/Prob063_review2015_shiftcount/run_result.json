@@ -1,0 +1,198 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob063_review2015_shiftcount",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob063_review2015_shiftcount",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob063_review2015_shiftcount/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791274874.4961793,
+    "ended_at_unix": 1791274935.3121018,
+    "seconds": 60.81592273712158,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 76761,
+      "cached_input_tokens": 67200,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2124,
+      "reasoning_output_tokens": 77
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "ed32b91276de76c63b4e33295aa03946a24ee562969c57d059a829629ac0f162",
+  "contract_sha256": "e298a5cbb197ad0807cc52b6a8190b937b1d651a49ca58cc7ffd2a0d18b5b75b",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "cases": "Correct fixture passed, injected fault failed, repaired fixture passed."
+      },
+      {
+        "name": "contract_structure",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "coverage": "1228 assertions; initial unknown state, partial shifts, all 16 MSB-first loads, decrement sequences and wraparound, holding and edge sampling."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official evaluation; official correctness has not been measured.",
+      "Simultaneous enables are unconstrained by the original specification and excluded from the oracle."
+    ],
+    "justified_changes": {
+      "rtl": [],
+      "testbench": [],
+      "contract": []
+    },
+    "implementation": "Four-bit positive-edge shift register/down counter, shift priority, modulo-16 decrement, no reset or initialization.",
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "development_history": "dev_checks.jsonl"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "ed32b91276de76c63b4e33295aa03946a24ee562969c57d059a829629ac0f162",
+      "Prob063_review2015_shiftcount_test.sv": "9d8cd202ecabc17b8e9f9702c973c3cf4eb546ea8048281f2af613b81cf443b5",
+      "Prob063_review2015_shiftcount_ref.sv": "745be14ac6cf96b9dfb2df944ecd6d1f9edadbcd3c740610711ad8ce1f562376"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob063_review2015_shiftcount_test.sv",
+        "Prob063_review2015_shiftcount_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012365075759589672
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb063_review2015_shiftcount_test.sv:63: $finish called at 10356 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 2071 samples\n\nSimulation finished at 10356 ps\nMismatches: 0 in 2071 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01803724467754364
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "ed32b91276de76c63b4e33295aa03946a24ee562969c57d059a829629ac0f162",
+      "Prob063_review2015_shiftcount_test.sv": "9d8cd202ecabc17b8e9f9702c973c3cf4eb546ea8048281f2af613b81cf443b5",
+      "Prob063_review2015_shiftcount_ref.sv": "745be14ac6cf96b9dfb2df944ecd6d1f9edadbcd3c740610711ad8ce1f562376"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob063_review2015_shiftcount_test.sv",
+        "Prob063_review2015_shiftcount_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009949606843292713
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb063_review2015_shiftcount_test.sv:63: $finish called at 10356 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 2071 samples\n\nSimulation finished at 10356 ps\nMismatches: 0 in 2071 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.017742294818162918
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

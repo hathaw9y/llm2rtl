@@ -1,0 +1,46 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static RTL review",
+      "outcome": "passed",
+      "details": "Exact TopModule ports; 32-bit unsigned registered state; positive-edge active-high synchronous reset; feedback mask 80200003; no additional initialization or ports."
+    },
+    {
+      "name": "initial preservation",
+      "outcome": "passed"
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "outcome": "failed; no executable produced; diagnostic log empty",
+      "log": "compile.log"
+    },
+    {
+      "name": "development simulation attempt",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "exit_code": 255,
+      "outcome": "failed; executable unavailable",
+      "log": "simulation.log"
+    },
+    {
+      "name": "tool version diagnostic",
+      "outcome": "driver reports Icarus 12.0, but reports unable to obtain backend version",
+      "log": "tool_version.log"
+    }
+  ],
+  "development_outcome": "RTL implemented and statically reviewed. Independent self-checking testbench provided, but simulation success was not established due to development compiler failure.",
+  "limitations": [
+    "Official evaluation is external and results are unavailable.",
+    "No successful development elaboration or simulation.",
+    "No synthesis, timing, or board validation performed."
+  ]
+}

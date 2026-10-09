@@ -1,0 +1,36 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "out",
+        "direction": "output",
+        "width_bits": 1
+      }
+    ],
+    "inputs": [],
+    "parameters": []
+  },
+  "semantics": {
+    "functional_equation": "out = 1'b0",
+    "timing": "Continuous constant drive, no clock or cycle latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization sequence; constant output from simulation settling onward.",
+    "transactions": "None."
+  },
+  "numeric": {
+    "output_encoding": "One-bit logic low, exactly 0.",
+    "arithmetic": "None; no rounding, truncation, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Original specification: out must equal one-bit zero.",
+    "plan": [
+      "Compile candidate.sv with independent dev_tb.sv using Icarus -g2012 and explicit dev_tb top.",
+      "Check out with four-state case inequality after time-zero settling and at multiple later times; fail on 1, X, or Z.",
+      "Use finite compile and simulation timeouts, preserve logs."
+    ],
+    "scope": "Development elaboration and simulation only; no official evaluation, synthesis, or board checks."
+  },
+  "specification_ambiguities": []
+}

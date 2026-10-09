@@ -1,0 +1,38 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "a": 1
+    },
+    "outputs": {
+      "q": 1
+    },
+    "reset": "none; original interface has no reset"
+  },
+  "semantics": {
+    "equation": "At each positive edge, q receives bitwise complement of a sampled immediately before that edge. Hold q between positive edges.",
+    "initialization": "Uninitialized q is X, matching 0 ns. No initialization or reset added.",
+    "waveform_evidence": "a starts X, changes to 0 at 5 ns and to 1 at 35 ns coincident with rising edges. q stays X at 5 ns, becomes 1 at 15 ns, stays 1 at 35 ns, becomes 0 at 45 ns.",
+    "sampling": "Coincident input changes in original table are interpreted as occurring after clock sampling, consistent with both observed transitions."
+  },
+  "numeric": {
+    "width": 1,
+    "operation": "four-state bitwise complement",
+    "signedness": "unsigned",
+    "arithmetic": "No rounding, overflow, or saturation applicable."
+  },
+  "verification": {
+    "original_replay": "Check all timestamps 0 through 90 ns, after NBA settling; drive coincident a changes using nonblocking assignments.",
+    "extended_cases": "Known inputs before rising edge, alternating values, X propagation, and changes between edges with output hold checks.",
+    "failure": "Case inequality comparisons with $fatal; bounded timeout; PASS only after all checks.",
+    "tool": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "The waveform table does not explicitly specify intra-timestamp ordering of clk and a changes, and finite traces do not uniquely identify a circuit.",
+      "resolution": "Choose minimal single inverted D register with old input sampled at coincident transitions; this matches all listed values without an extra latency stage."
+    }
+  ]
+}

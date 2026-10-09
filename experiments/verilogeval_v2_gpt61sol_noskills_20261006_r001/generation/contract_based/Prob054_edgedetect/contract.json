@@ -1,0 +1,57 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "in": 8
+    },
+    "outputs": {
+      "pedge": 8
+    },
+    "reset": "No reset port is specified."
+  },
+  "semantics": {
+    "sampling": "Sample in at each rising edge of clk.",
+    "transition": "For each bit, after rising edge n, pedge is current sampled in AND NOT sampled in at edge n-1.",
+    "latency": "Registered pulse appears in the clock cycle following the sampling edge detecting the 0-to-1 transition, with no additional pipeline stage.",
+    "hold": "pedge remains stable between rising clock edges.",
+    "initialization": "No initialization or reset is specified; previous sample and output start unspecified, and valid history is established by sampling."
+  },
+  "numeric": {
+    "width": 8,
+    "operation": "Independent bitwise detection for all eight bits; no arithmetic or signed interpretation."
+  },
+  "verification": {
+    "oracle": "Compare successive input samples according to original 0-to-1 requirement, after nonblocking updates settle.",
+    "cases": [
+      "all zero",
+      "all one",
+      "held values",
+      "falling transitions",
+      "alternating patterns",
+      "each bit individually",
+      "all pairs of 8-bit samples",
+      "changes between sampling edges"
+    ],
+    "startup": "Do not impose a deterministic power-up value; establish a previous sample before checking.",
+    "timeout": "Bounded testbench timeout with fatal mismatches and PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "clock edge",
+      "evidence": "Original says clock cycle without explicitly naming edge.",
+      "resolution": "Use rising clock edge for synchronous sampling."
+    },
+    {
+      "topic": "startup",
+      "evidence": "Original provides no reset or initial value.",
+      "resolution": "Leave state uninitialized and check deterministic behavior only after one history sample."
+    },
+    {
+      "topic": "cycle wording",
+      "evidence": "Output bit should be set the cycle after a 0 to 1 transition occurs.",
+      "resolution": "Register detection using current input and prior clock sample; visible after that edge during the following cycle."
+    }
+  ]
+}

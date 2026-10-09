@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "PASS: passed_structure_only",
+      "exit_code": 0,
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "outcome": "PASS by inspection: exact module and ports, 100-bit combinational selection, no storage, reset, arithmetic or extra interface"
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "outcome": "FAILED: compiler exited 139; empty diagnostic log; no executable produced",
+      "exit_code": 139,
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "outcome": "FAILED: dev_sim: Unable to open input file.",
+      "log": "dev_simulation.log"
+    }
+  ],
+  "development_outcome": "Initial candidate delivered unchanged. Contract structure passed and RTL inspected. Development simulation success is not established because compiler failed.",
+  "limitations": [
+    "Official evaluation has not been run or accessed.",
+    "No successful development compile or simulation; intended test coverage is unexecuted.",
+    "Unknown/high-impedance selection behavior is unspecified by the problem.",
+    "No synthesis, timing analysis or board work performed."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790743449.0772285,
+      "source_sha256": "1cc87228048b923ccde85d1d7c321e62e43fdcf9bdf5e8cb6d87acbe13103b07",
+      "testbench_sha256": "533d55cf30b319526f215c06b503ad7b57355e1c35ec59637a510d017f149433",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob144_conwaylife/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.14218141604214907
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": null,
+        "stdout": "",
+        "stderr": "",
+        "timeout": true,
+        "seconds": 30.03040140029043
+      },
+      "status": "simulation_failed"
+    },
+    {
+      "label": "tb_oracle_optimization",
+      "check_index": 2,
+      "checked_at_unix": 1790743510.0191882,
+      "source_sha256": "1cc87228048b923ccde85d1d7c321e62e43fdcf9bdf5e8cb6d87acbe13103b07",
+      "testbench_sha256": "c5addffa14b0c77ab12a41986d66cdb07390cceaa0bbff2f32a1956457ead615",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob144_conwaylife/development/02",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.14068199787288904
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS 5266 grid checks\ndev_tb.sv:107: $finish called at 52666000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 12.43793080560863
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_original": "dev_tb_initial.sv",
+      "reason": "Initial exhaustive all-cell oracle exceeded the helper 30-second simulation limit. Replaced all-cell distance filtering with equivalent enumeration of eight relative toroidal offsets. All stimuli, expected rules, and assertions retained."
+    }
+  ],
+  "environment_smoke_outcome": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "interface_cycle_contract": "TopModule with original ports; load synchronously takes priority at each rising edge, otherwise all 256 cells advance simultaneously; no reset or added latency.",
+  "numeric_width_decisions": "Each neighbor bit is zero-extended to four bits; count range is 0 through 8.",
+  "static_review_result": "Single sequential driver, constant wrapped indices, and complete combinational next-state equations.",
+  "verification_coverage": "5266 checked edges: synchronous load and pre-edge stability, zero/full grids, exhaustive neighbor configurations for both center states at five locations, seam-crossing blinker, random multi-generation evolution."
+}

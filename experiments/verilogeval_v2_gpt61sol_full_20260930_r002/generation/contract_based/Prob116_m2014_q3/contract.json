@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"x": "logic [4:1]"}, "outputs": {"f": "logic scalar"}, "evidence": "Original interface specifies four-bit x; map explicitly labels x[1], x[2], x[3], x[4]."},
+  "semantics": {"function": "Karnaugh rows x[3]x[4] and columns x[1]x[2], both in Gray order 00,01,11,10", "row_values": ["d0dd", "0d10", "11dd", "110d"], "timing": "Pure combinational function; no clock, reset, storage, or cycle latency specified", "initialization": "No initialized state; behavior for unknown input bits is unspecified", "dont_cares": "May choose either binary value at each d cell"},
+  "numeric": {"input_width": 4, "output_width": 1, "arithmetic": "Boolean only; no signed arithmetic, overflow, or rounding", "bit_mapping": "x[4] is packed MSB, x[1] packed LSB"},
+  "verification": {"oracle": "Literal original 4-by-4 map indexed by independently decoded row and column Gray labels", "coverage": "All sixteen binary inputs in ascending and descending order; compare all specified cells, permit either binary output at d cells", "sampling": "Wait one simulation time unit after each input assignment for combinational settling", "failure": "$fatal on mismatch or bounded timeout", "success": "Explicit PASS marker after exhaustive checks", "primary_command": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": [{"issue": "Interface prose specifies width but not index range", "resolution": "Use [4:1] to match explicit map bit labels"}, {"issue": "Unknown input behavior is not specified", "resolution": "No additional four-state functional requirements imposed"}]
+}

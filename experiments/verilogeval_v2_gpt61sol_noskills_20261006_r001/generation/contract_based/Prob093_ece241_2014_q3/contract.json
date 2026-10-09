@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"c": 1, "d": 1},
+    "outputs": {"mux_in": 4},
+    "external_selector_mapping": "{a,b}=00,01,10,11 selects mux_in[0], [1], [2], [3] respectively; a and b are not DUT ports"
+  },
+  "semantics": {
+    "kind": "combinational with no clock, reset, storage, or added latency",
+    "evidence": "Original interface contains only c, d, mux_in and asks for the input portion of a combinational 4-to-1 mux implementing the given K-map",
+    "columns": {"mux_in[0]": "c OR d", "mux_in[1]": "constant zero", "mux_in[2]": "c OR NOT d", "mux_in[3]": "c AND d"},
+    "implementation": "Three 2-to-1 multiplexers using conditional expressions and constants, with no other logic gates; the external 4-to-1 mux is outside TopModule",
+    "initialization": "No specified initialized state; outputs depend immediately on inputs"
+  },
+  "numeric": {
+    "widths": "All inputs are one bit; output is four bits with indices 3 down to 0",
+    "table_cd_to_mux_in": {"00": "0100", "01": "0001", "11": "1101", "10": "0101"},
+    "minimum_mux_count": "Each of the three distinct nonconstant columns requires logic and is implemented with one 2-to-1 mux; the zero column needs no mux"
+  },
+  "verification": {
+    "oracle": "Literal original K-map rows in Gray order, independently indexed using external {a,b} selection",
+    "coverage": "All four binary c,d combinations and all four external a,b selections, repeated across input transitions",
+    "sampling": "Drive inputs then wait one nanosecond for combinational settling before checking; no clock or reset exists in original specification",
+    "success": "Fatal on mismatch, bounded timeout, explicit PASS after all checks; fixed dev_check.py initial evaluation"
+  },
+  "specification_ambiguities": [
+    "The original specifies binary K-map behavior only; X/Z input behavior is unspecified and is not assigned an additional requirement."
+  ]
+}

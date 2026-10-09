@@ -1,0 +1,105 @@
+{
+  "schema": "llm2rtl.infrastructure_module.v1",
+  "module_id": "bank_port_router",
+  "version": 1,
+  "status": "frozen_for_implementation",
+  "purpose": "route each local bank physical read/write port only to the module port role that owns that bank",
+  "parameters": {
+    "BANK_NUM": 16,
+    "BANK_NUM_WIDTH": 4,
+    "PORT_ROLE_WIDTH": 3,
+    "ADDR_WIDTH": 32,
+    "WRITE_DATA_WIDTH": 128,
+    "READ_DATA_WIDTH": 128,
+    "BYTE_WRITE_WIDTH": 8,
+    "READ_LATENCY": 3,
+    "OWNER_MM2S_ARBITER": 1,
+    "OWNER_S2MM_ARBITER": 2,
+    "OWNER_GEMM_ACT": 3,
+    "OWNER_GEMM_WGT": 4,
+    "OWNER_GEMM_PSUM": 5
+  },
+  "ownership_inputs": [
+    "bank_busy[0:BANK_NUM-1]",
+    "bank_owner_port[0:BANK_NUM-1][PORT_ROLE_WIDTH-1:0]"
+  ],
+  "physical_bank_ports": {
+    "write_a": ["bank_ena", "bank_wea", "bank_addra", "bank_dina"],
+    "read_b": ["bank_enb", "bank_addrb", "bank_doutb"]
+  },
+  "module_ports": {
+    "mm2s_arbiter": {"owner_id": 1, "access": ["write"]},
+    "s2mm_arbiter": {"owner_id": 2, "access": ["read"]},
+    "gemm_act": {"owner_id": 3, "access": ["read"]},
+    "gemm_wgt": {"owner_id": 4, "access": ["read"]},
+    "gemm_psum": {"owner_id": 5, "access": ["read", "write"]}
+  },
+  "request_protocol": {
+    "write": "valid_ready; one write word is accepted on valid and ready",
+    "read": "valid_ready request followed by rsp_valid exactly READ_LATENCY cycles after acceptance",
+    "read_response_backpressure": false,
+    "request_bank_selection": "every module-port request carries a logical bank ID"
+  },
+  "routing_rules": [
+    "a request is ready only when its bank ID is in range, the bank is busy, and bank_owner_port equals that physical module-port owner ID",
+    "an unowned wrong-owner or out-of-range valid request never enables any physical bank",
+    "each physical bank write port receives at most one accepted write request per cycle",
+    "each physical bank read port receives at most one accepted read request per cycle",
+    "requests from different module ports may be accepted concurrently when they target different correctly-owned banks",
+    "GEMM_PSUM may use both physical write port A and physical read port B of its owned bank in the same cycle",
+    "the accepted read bank identity and response destination are delayed by READ_LATENCY cycles",
+    "read responses are returned only to the module port that issued the accepted request",
+    "reset clears response-valid pipelines and fault state but does not own or modify bank ownership state"
+  ],
+  "fault_contract": {
+    "outputs": ["router_error", "router_error_code", "router_error_owner", "router_error_bank"],
+    "policy": "sticky first fault until reset",
+    "codes": {
+      "NONE": 0,
+      "BANK_OUT_OF_RANGE": 1,
+      "BANK_NOT_BUSY": 2,
+      "OWNER_MISMATCH": 3,
+      "WRITE_COLLISION": 4,
+      "READ_COLLISION": 5
+    },
+    "simultaneous_fault_priority": "lowest numeric owner ID then write before read"
+  },
+  "parameter_legality": [
+    "BANK_NUM is at least 1 and no greater than 2^BANK_NUM_WIDTH",
+    "PORT_ROLE_WIDTH is at least 3",
+    "READ_LATENCY is at least 1",
+    "WRITE_DATA_WIDTH and READ_DATA_WIDTH are positive",
+    "WRITE_DATA_WIDTH is divisible by BYTE_WRITE_WIDTH",
+    "owner IDs 1 through 5 are nonzero distinct and fit PORT_ROLE_WIDTH"
+  ],
+  "verification": {
+    "target_part": "xczu7ev-ffvc1156-2-e",
+    "target_clock_ns": 5.0,
+    "vivado": "2025.2",
+    "required_cases": [
+      "MM2S owner 1 write reaches only its selected bank",
+      "S2MM owner 2 read returns only to S2MM after three cycles",
+      "GEMM ACT owner 3 and WGT owner 4 read different banks concurrently",
+      "GEMM PSUM owner 5 reads and writes its bank concurrently",
+      "different valid module ports access different owned banks concurrently",
+      "wrong owner request is not ready does not enable memory and raises fault",
+      "free bank request is blocked and raises fault",
+      "out of range bank request is blocked and raises fault",
+      "same bank competing accesses cannot corrupt physical routing",
+      "reset clears response valid pipelines and sticky fault",
+      "bank zero is routable"
+    ]
+  },
+  "integration_boundary": {
+    "upstream": ["MM2S bank-write arbiter output", "S2MM bank-read arbiter output", "GEMM ACT/WGT/PSUM ports"],
+    "downstream": ["bram_bank or uram_bank physical port arrays"],
+    "ownership_provider": "bank_ownership_table"
+  },
+  "does_not_claim": [
+    "MM2S or S2MM channel arbitration implementation",
+    "bank ownership acquisition or release",
+    "bank memory instantiation",
+    "GEMM arithmetic",
+    "board integration or bitstream"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "llm2rtl.operator_checkpoint.v1",
+  "completed_scope": "standalone intermediate FP32-to-INT4 quantizer with BF16 row scale",
+  "attention_rtl_scope": "Full Attention RTL and native-bank adapter are not implemented in this checkpoint.",
+  "source_sha256": {
+    "designs/attention_int4_noscale_zcu104_r1/modules/attention_int4_quantizer.json": "25f32c88bfda1ae3285b4c892b52301ebf490d9da46c618b95b7d44960906361",
+    "designs/attention_int4_noscale_zcu104_r1/rtl/attention_int4_quantizer.sv": "9740ff60facbed8a74f3a881dfd1d51316719a9a31a44d1852515fccbcc9db5c",
+    "designs/attention_int4_noscale_zcu104_r1/reference/quantizer_reference.py": "b1bd5271a8b8c98c015bb579432a141f9dc938fe7114b4708b1f0ea5f629fefe",
+    "designs/attention_int4_noscale_zcu104_r1/python/attention_reference.py": "db69749d8225981610138010b701dfdf6877f9e8136427e6bb7416c330acc790",
+    "designs/attention_int4_noscale_zcu104_r1/python/test_attention_reference.py": "a95a3275354e114808b130d619432883a5e6570f98be0bbdd803d28a922be75e",
+    "designs/attention_int4_noscale_zcu104_r1/architecture.md": "ae27432f20907090a8706f055b8ee94c59235c151e04379e3cee95c0ef4a80d6"
+  },
+  "quantizer_evidence": "quantizer_final001/manifest.json",
+  "quantizer_status": "simulation_lint_ooc_pass",
+  "cases": {
+    "MAX_ELEMENTS_13": 179,
+    "MAX_ELEMENTS_256": 162
+  },
+  "oracle_rows": 329,
+  "attention_numerical_reference_tests": 5,
+  "ooc": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "tool": "Vivado 2025.2",
+    "clock_ns": 5,
+    "LUT": 600,
+    "FF": 295,
+    "RAMB18": 1,
+    "DSP": 0,
+    "WNS_ns": 2.24,
+    "WHS_ns": 0.084,
+    "WPWS_ns": 1.958
+  },
+  "limitations": [
+    "Unplaced OOC estimates; external boundary hold excluded; no routed/board claim.",
+    "Full Attention numerical reference is not full Attention RTL verification.",
+    "Bank adapter must accept both payload and BF16 scale writes before command completion."
+  ],
+  "next_boundaries": [
+    "INT32 group32 projection with FP32 scaled combination",
+    "QK/maskedSoftmax/PV arithmetic",
+    "quantizer/nativebank integration and complete Attention controller binding"
+  ]
+}

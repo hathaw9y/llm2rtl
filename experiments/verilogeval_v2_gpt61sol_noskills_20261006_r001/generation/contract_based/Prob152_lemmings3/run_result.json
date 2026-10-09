@@ -1,0 +1,189 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob152_lemmings3",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 2,
+  "development_failed_check_count": 1,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob152_lemmings3",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob152_lemmings3/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791274105.815199,
+    "ended_at_unix": 1791274194.0535085,
+    "seconds": 88.23831033706665,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 113707,
+      "cached_input_tokens": 101760,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3274,
+      "reasoning_output_tokens": 219
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "58f3e3a23abf863b8617367b4d9aa04270a891b4af2bd06b1b6f469448340815",
+  "contract_sha256": "7326faa6afc88c5f18698200085e63c3f5f069173d412a3bfed5638cbc40352e",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "initial",
+        "status": "simulation_failed",
+        "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob152_lemmings3/development/01"
+      },
+      {
+        "label": "initial_tb_fix",
+        "status": "passed",
+        "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob152_lemmings3/development/02"
+      }
+    ],
+    "environment_smoke": "passed: correct passes, injected fault fails, repair passes",
+    "contract_validation": "passed_structure_only; contract frozen before RTL",
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not occurred.",
+      "Pre-reset state and unknown-valued input behavior are not specified and were not constrained."
+    ],
+    "justified_RTL_changes": [],
+    "justified_TB_changes": [
+      {
+        "preserved_old_version": "dev_tb_before_reset_timing_fix.sv",
+        "reason": "Reset task originally released reset on a negative edge and returned after that edge. The next step waited for another negative edge, allowing an unmodeled intervening positive edge with ground=0. DUT correctly fell while the oracle still expected walking.",
+        "correction": "Release reset shortly after the checked positive edge so the next step drives inputs at the following negative edge, before any intervening positive edge. All expected values and checks were retained."
+      }
+    ],
+    "contract_changes": []
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "58f3e3a23abf863b8617367b4d9aa04270a891b4af2bd06b1b6f469448340815",
+      "Prob152_lemmings3_test.sv": "d590a84966e727ec6052c9e611753d936575d3c7a967d4b98f3227732bbdf632",
+      "Prob152_lemmings3_ref.sv": "5c906d944feb771b438f3caa560deb964cc6b1cff178ff6ba7f7d4a3a2ebf6b0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob152_lemmings3_test.sv",
+        "Prob152_lemmings3_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01578688621520996
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb152_lemmings3_test.sv:94: $finish called at 2216 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Output 'digging' has no mismatches.\nHint: Total mismatched samples is 0 out of 443 samples\n\nSimulation finished at 2216 ps\nMismatches: 0 in 443 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011979318223893642
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "58f3e3a23abf863b8617367b4d9aa04270a891b4af2bd06b1b6f469448340815",
+      "Prob152_lemmings3_test.sv": "d590a84966e727ec6052c9e611753d936575d3c7a967d4b98f3227732bbdf632",
+      "Prob152_lemmings3_ref.sv": "5c906d944feb771b438f3caa560deb964cc6b1cff178ff6ba7f7d4a3a2ebf6b0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob152_lemmings3_test.sv",
+        "Prob152_lemmings3_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01440026331692934
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb152_lemmings3_test.sv:94: $finish called at 2216 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Output 'digging' has no mismatches.\nHint: Total mismatched samples is 0 out of 443 samples\n\nSimulation finished at 2216 ps\nMismatches: 0 in 443 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011795486323535442
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

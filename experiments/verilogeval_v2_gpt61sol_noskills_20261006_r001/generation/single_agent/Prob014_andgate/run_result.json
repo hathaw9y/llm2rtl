@@ -1,0 +1,186 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob014_andgate",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob014_andgate",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob014_andgate/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791272021.6832352,
+    "ended_at_unix": 1791272052.188134,
+    "seconds": 30.504899263381958,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 70637,
+      "cached_input_tokens": 63104,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 967,
+      "reasoning_output_tokens": 0
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "474d303e43a0f57ea00d739052f53e05c5284cbf04456e6b619195c143a89511",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "cases": [
+          "correct fixture passed",
+          "injected fault failed",
+          "repaired fixture passed"
+        ]
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "coverage": "All binary input combinations, directed transitions, and four-state AND behavior; bounded timeout and fatal mismatch checks."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation is not available during this turn."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "TopModule implements the specified one-bit combinational two-input AND gate using assign out = a & b. The initial candidate snapshot was preserved before development checks."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "474d303e43a0f57ea00d739052f53e05c5284cbf04456e6b619195c143a89511",
+      "Prob014_andgate_test.sv": "ce1a1501cb5258f7be87b94d756b875c9a14bb527bb214d7c07277d882170e09",
+      "Prob014_andgate_ref.sv": "cc937bac282c0018ca6a42e009f710be1f1824f55403a762810f67a2aa2f14df"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob014_andgate_test.sv",
+        "Prob014_andgate_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013321489095687866
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb014_andgate_test.sv:38: $finish called at 1096 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 219 samples\n\nSimulation finished at 1096 ps\nMismatches: 0 in 219 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0069476282224059105
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "474d303e43a0f57ea00d739052f53e05c5284cbf04456e6b619195c143a89511",
+      "Prob014_andgate_test.sv": "ce1a1501cb5258f7be87b94d756b875c9a14bb527bb214d7c07277d882170e09",
+      "Prob014_andgate_ref.sv": "cc937bac282c0018ca6a42e009f710be1f1824f55403a762810f67a2aa2f14df"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob014_andgate_test.sv",
+        "Prob014_andgate_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011045576073229313
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb014_andgate_test.sv:38: $finish called at 1096 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 219 samples\n\nSimulation finished at 1096 ps\nMismatches: 0 in 219 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007117395289242268
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

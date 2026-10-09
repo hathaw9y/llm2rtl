@@ -1,0 +1,1962 @@
+{
+  "comparison": [
+    {
+      "name": "prefill32_decode1_logits_32",
+      "shape": [
+        1,
+        49152
+      ],
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "exact": true
+    },
+    {
+      "name": "prefill32_decode1_logits_33",
+      "shape": [
+        1,
+        49152
+      ],
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "exact": true
+    },
+    {
+      "name": "prefill32_prefill32_logits_32",
+      "shape": [
+        1,
+        49152
+      ],
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "exact": true
+    },
+    {
+      "name": "prefill32_prefill32_logits_64",
+      "shape": [
+        1,
+        49152
+      ],
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "exact": true
+    }
+  ],
+  "cases": [
+    {
+      "case": "prefill32_decode1",
+      "chunks": 8,
+      "max_chunk_records": 744,
+      "commands": {
+        "DMA_LOAD": 2409,
+        "RMSNORM": 122,
+        "GEMM": 2132,
+        "ROPE": 120,
+        "DMA_STORE": 122,
+        "FENCE": 60,
+        "ATTN_SCORE": 60,
+        "SOFTMAX": 60,
+        "ATTN_VALUE": 60,
+        "ADD": 120,
+        "SILU_MUL": 60,
+        "END": 8
+      },
+      "reference_internal_checks": {
+        "RMSNORM_input_layernorm": 60,
+        "GEMM_q_proj": 60,
+        "GEMM_k_proj": 60,
+        "GEMM_v_proj": 60,
+        "ROPE_key": 60,
+        "SOFTMAX": 60,
+        "ATTN_VALUE": 60,
+        "GEMM_o_proj": 60,
+        "ADD_attention": 60,
+        "RMSNORM_post_attention_layernorm": 60,
+        "GEMM_gate_proj": 60,
+        "GEMM_up_proj": 60,
+        "SILU_MUL": 60,
+        "GEMM_down_proj": 60,
+        "ADD_ffn": 60,
+        "RMSNORM_norm": 2,
+        "GEMM_lm_head": 2
+      },
+      "kv_layers_exact": 30
+    },
+    {
+      "case": "prefill32_prefill32",
+      "chunks": 8,
+      "max_chunk_records": 744,
+      "commands": {
+        "DMA_LOAD": 2440,
+        "RMSNORM": 122,
+        "GEMM": 2132,
+        "ROPE": 120,
+        "DMA_STORE": 122,
+        "FENCE": 60,
+        "ATTN_SCORE": 60,
+        "SOFTMAX": 60,
+        "ATTN_VALUE": 60,
+        "ADD": 120,
+        "SILU_MUL": 60,
+        "END": 8
+      },
+      "reference_internal_checks": {
+        "RMSNORM_input_layernorm": 60,
+        "GEMM_q_proj": 60,
+        "GEMM_k_proj": 60,
+        "GEMM_v_proj": 60,
+        "ROPE_key": 60,
+        "SOFTMAX": 60,
+        "ATTN_VALUE": 60,
+        "GEMM_o_proj": 60,
+        "ADD_attention": 60,
+        "RMSNORM_post_attention_layernorm": 60,
+        "GEMM_gate_proj": 60,
+        "GEMM_up_proj": 60,
+        "SILU_MUL": 60,
+        "GEMM_down_proj": 60,
+        "ADD_ffn": 60,
+        "RMSNORM_norm": 2,
+        "GEMM_lm_head": 2
+      },
+      "kv_layers_exact": 30
+    }
+  ],
+  "command_samples": {
+    "DMA_LOAD_embedding_partial": {
+      "record_hex": "100000000000000900af406300000800",
+      "before": {
+        "banks": {
+          "0": {
+            "valid": false,
+            "progress": 0,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "0": {
+            "valid": false,
+            "progress": 1,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "DMA_LOAD_embedding_complete": {
+      "record_hex": "100000008b80000900af52ea0000081f",
+      "before": {
+        "banks": {
+          "0": {
+            "valid": false,
+            "progress": 31,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "0": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "89560216d851b6417bd3ac7a77b2e865d125e197467365b4d57d49d21394a721",
+              "first_bf16_hex": [
+                "bc93",
+                "bd17",
+                "bcf5",
+                "3cd3",
+                "bddb",
+                "bbe0",
+                "bd73",
+                "3d6e"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "DMA_LOAD_rope": {
+      "record_hex": "170000000000002000cf522500000000",
+      "before": {
+        "banks": {
+          "7": {
+            "valid": false,
+            "progress": 0,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "7": {
+            "valid": true,
+            "progress": 0,
+            "value": [
+              {
+                "shape": [
+                  32,
+                  32
+                ],
+                "dtype": "torch.bfloat16",
+                "sha256": "64df220b9fd5e1292cbc9eea34e1826760177eb68434227d54432356e05e416d",
+                "first_bf16_hex": [
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80"
+                ]
+              },
+              {
+                "shape": [
+                  32,
+                  32
+                ],
+                "dtype": "torch.bfloat16",
+                "sha256": "0a9fe6bd5963e4ebd7135f348e4cb016350b63fd9073190f4a71974d00a1dcaa",
+                "first_bf16_hex": [
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000"
+                ]
+              }
+            ]
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "DMA_LOAD_weight": {
+      "record_hex": "130000000000000900b6000000000000",
+      "before": {
+        "banks": {
+          "3": {
+            "valid": false,
+            "progress": 0,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "3": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "993f621dc12632e1e9ff4a2655b9582471ab38e259076839e29af5e5c97cd030",
+              "first_bf16_hex": [
+                "3c99",
+                "3c96",
+                "bd15",
+                "bd08",
+                "bce2",
+                "bce3",
+                "3cc9",
+                "bcca"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "RMSNORM": {
+      "record_hex": "40320000000000000000000000000020",
+      "before": {
+        "banks": {
+          "0": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "89560216d851b6417bd3ac7a77b2e865d125e197467365b4d57d49d21394a721",
+              "first_bf16_hex": [
+                "bc93",
+                "bd17",
+                "bcf5",
+                "3cd3",
+                "bddb",
+                "bbe0",
+                "bd73",
+                "3d6e"
+              ]
+            }
+          },
+          "3": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "993f621dc12632e1e9ff4a2655b9582471ab38e259076839e29af5e5c97cd030",
+              "first_bf16_hex": [
+                "3c99",
+                "3c96",
+                "bd15",
+                "bd08",
+                "bce2",
+                "bce3",
+                "3cc9",
+                "bcca"
+              ]
+            }
+          },
+          "2": {
+            "valid": false,
+            "progress": 0,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "0": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "89560216d851b6417bd3ac7a77b2e865d125e197467365b4d57d49d21394a721",
+              "first_bf16_hex": [
+                "bc93",
+                "bd17",
+                "bcf5",
+                "3cd3",
+                "bddb",
+                "bbe0",
+                "bd73",
+                "3d6e"
+              ]
+            }
+          },
+          "3": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "993f621dc12632e1e9ff4a2655b9582471ab38e259076839e29af5e5c97cd030",
+              "first_bf16_hex": [
+                "3c99",
+                "3c96",
+                "bd15",
+                "bd08",
+                "bce2",
+                "bce3",
+                "3cc9",
+                "bcca"
+              ]
+            }
+          },
+          "2": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "54296f591052509e5e0a4448a1c19ed7f87e1e166124a36fef77fb768a12c48a",
+              "first_bf16_hex": [
+                "bb1f",
+                "bba1",
+                "3c01",
+                "bbcb",
+                "3cb0",
+                "3ab4",
+                "bc2d",
+                "bc2a"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "GEMM_first_tile": {
+      "record_hex": "323400000000000000000120010240c0",
+      "before": {
+        "banks": {
+          "2": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "54296f591052509e5e0a4448a1c19ed7f87e1e166124a36fef77fb768a12c48a",
+              "first_bf16_hex": [
+                "bb1f",
+                "bba1",
+                "3c01",
+                "bbcb",
+                "3cb0",
+                "3ab4",
+                "bc2d",
+                "bc2a"
+              ]
+            }
+          },
+          "3": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                192,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "553488ee9266df67da7aa58ce109f9d2fc0d0e81a78fc547f5caf18e07c93cf4",
+              "first_bf16_hex": [
+                "bdb7",
+                "3e0c",
+                "bdd6",
+                "bf38",
+                "3f97",
+                "bde9",
+                "3dd5",
+                "3f2e"
+              ]
+            }
+          },
+          "4": {
+            "valid": false,
+            "progress": 0,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "2": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "54296f591052509e5e0a4448a1c19ed7f87e1e166124a36fef77fb768a12c48a",
+              "first_bf16_hex": [
+                "bb1f",
+                "bba1",
+                "3c01",
+                "bbcb",
+                "3cb0",
+                "3ab4",
+                "bc2d",
+                "bc2a"
+              ]
+            }
+          },
+          "3": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                192,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "553488ee9266df67da7aa58ce109f9d2fc0d0e81a78fc547f5caf18e07c93cf4",
+              "first_bf16_hex": [
+                "bdb7",
+                "3e0c",
+                "bdd6",
+                "bf38",
+                "3f97",
+                "bde9",
+                "3dd5",
+                "3f2e"
+              ]
+            }
+          },
+          "4": {
+            "valid": false,
+            "progress": 192,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "GEMM_middle_tile": {
+      "record_hex": "323400000000000000600120010240c0",
+      "before": {
+        "banks": {
+          "2": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "54296f591052509e5e0a4448a1c19ed7f87e1e166124a36fef77fb768a12c48a",
+              "first_bf16_hex": [
+                "bb1f",
+                "bba1",
+                "3c01",
+                "bbcb",
+                "3cb0",
+                "3ab4",
+                "bc2d",
+                "bc2a"
+              ]
+            }
+          },
+          "3": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                192,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "2207a09739a3edba5702af8edc8e407a3fa48d337c8b3059cba4f2aed22ef4b6",
+              "first_bf16_hex": [
+                "bedb",
+                "bdaf",
+                "3e82",
+                "be6e",
+                "3df7",
+                "bd97",
+                "3df2",
+                "be95"
+              ]
+            }
+          },
+          "4": {
+            "valid": false,
+            "progress": 192,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "2": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "54296f591052509e5e0a4448a1c19ed7f87e1e166124a36fef77fb768a12c48a",
+              "first_bf16_hex": [
+                "bb1f",
+                "bba1",
+                "3c01",
+                "bbcb",
+                "3cb0",
+                "3ab4",
+                "bc2d",
+                "bc2a"
+              ]
+            }
+          },
+          "3": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                192,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "2207a09739a3edba5702af8edc8e407a3fa48d337c8b3059cba4f2aed22ef4b6",
+              "first_bf16_hex": [
+                "bedb",
+                "bdaf",
+                "3e82",
+                "be6e",
+                "3df7",
+                "bd97",
+                "3df2",
+                "be95"
+              ]
+            }
+          },
+          "4": {
+            "valid": false,
+            "progress": 384,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "GEMM_last_tile": {
+      "record_hex": "323400000000000000c00120010240c0",
+      "before": {
+        "banks": {
+          "2": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "54296f591052509e5e0a4448a1c19ed7f87e1e166124a36fef77fb768a12c48a",
+              "first_bf16_hex": [
+                "bb1f",
+                "bba1",
+                "3c01",
+                "bbcb",
+                "3cb0",
+                "3ab4",
+                "bc2d",
+                "bc2a"
+              ]
+            }
+          },
+          "3": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                192,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "8f8fcd7bcd1e0d80d9aeabe5227157683f8ea1b009f72e27a7108eabb1bc8ab3",
+              "first_bf16_hex": [
+                "bc44",
+                "bd12",
+                "3e3c",
+                "bf04",
+                "3e87",
+                "bd2a",
+                "bda1",
+                "bd0c"
+              ]
+            }
+          },
+          "4": {
+            "valid": false,
+            "progress": 384,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "2": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "54296f591052509e5e0a4448a1c19ed7f87e1e166124a36fef77fb768a12c48a",
+              "first_bf16_hex": [
+                "bb1f",
+                "bba1",
+                "3c01",
+                "bbcb",
+                "3cb0",
+                "3ab4",
+                "bc2d",
+                "bc2a"
+              ]
+            }
+          },
+          "3": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                192,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "8f8fcd7bcd1e0d80d9aeabe5227157683f8ea1b009f72e27a7108eabb1bc8ab3",
+              "first_bf16_hex": [
+                "bc44",
+                "bd12",
+                "3e3c",
+                "bf04",
+                "3e87",
+                "bd2a",
+                "bda1",
+                "bd0c"
+              ]
+            }
+          },
+          "4": {
+            "valid": true,
+            "progress": 576,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "f5f0264784dec973afdf5e2da1ef7942c8f2dd9915d415223a025ecccffe1695",
+              "first_bf16_hex": [
+                "bed1",
+                "be58",
+                "bdaa",
+                "bfb9",
+                "3f4d",
+                "bf1d",
+                "3f49",
+                "3dbe"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "ROPE": {
+      "record_hex": "54700000000000000000000000000020",
+      "before": {
+        "banks": {
+          "4": {
+            "valid": true,
+            "progress": 576,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "f5f0264784dec973afdf5e2da1ef7942c8f2dd9915d415223a025ecccffe1695",
+              "first_bf16_hex": [
+                "bed1",
+                "be58",
+                "bdaa",
+                "bfb9",
+                "3f4d",
+                "bf1d",
+                "3f49",
+                "3dbe"
+              ]
+            }
+          },
+          "7": {
+            "valid": true,
+            "progress": 0,
+            "value": [
+              {
+                "shape": [
+                  32,
+                  32
+                ],
+                "dtype": "torch.bfloat16",
+                "sha256": "64df220b9fd5e1292cbc9eea34e1826760177eb68434227d54432356e05e416d",
+                "first_bf16_hex": [
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80"
+                ]
+              },
+              {
+                "shape": [
+                  32,
+                  32
+                ],
+                "dtype": "torch.bfloat16",
+                "sha256": "0a9fe6bd5963e4ebd7135f348e4cb016350b63fd9073190f4a71974d00a1dcaa",
+                "first_bf16_hex": [
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000"
+                ]
+              }
+            ]
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "4": {
+            "valid": true,
+            "progress": 576,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "4561ec89bf741f39d335fcc0e8f06bc0043f5f562abd00fcb8596937cf1ab8b3",
+              "first_bf16_hex": [
+                "bed1",
+                "be58",
+                "bdaa",
+                "bfb9",
+                "3f4d",
+                "bf1d",
+                "3f49",
+                "3dbe"
+              ]
+            }
+          },
+          "7": {
+            "valid": true,
+            "progress": 0,
+            "value": [
+              {
+                "shape": [
+                  32,
+                  32
+                ],
+                "dtype": "torch.bfloat16",
+                "sha256": "64df220b9fd5e1292cbc9eea34e1826760177eb68434227d54432356e05e416d",
+                "first_bf16_hex": [
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80",
+                  "3f80"
+                ]
+              },
+              {
+                "shape": [
+                  32,
+                  32
+                ],
+                "dtype": "torch.bfloat16",
+                "sha256": "0a9fe6bd5963e4ebd7135f348e4cb016350b63fd9073190f4a71974d00a1dcaa",
+                "first_bf16_hex": [
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000",
+                  "0000"
+                ]
+              }
+            ]
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "DMA_STORE_kv": {
+      "record_hex": "250000000000006000cf562500000000",
+      "before": {
+        "banks": {
+          "5": {
+            "valid": true,
+            "progress": 192,
+            "value": {
+              "shape": [
+                32,
+                192
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "e0b0542335b076b799388da160b597eec57aee6fb6189a7eeff23725a5640a42",
+              "first_bf16_hex": [
+                "c05a",
+                "3eb7",
+                "bf2f",
+                "bf64",
+                "3fe1",
+                "bfe3",
+                "3f20",
+                "3f89"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "5": {
+            "valid": true,
+            "progress": 192,
+            "value": {
+              "shape": [
+                32,
+                192
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "e0b0542335b076b799388da160b597eec57aee6fb6189a7eeff23725a5640a42",
+              "first_bf16_hex": [
+                "c05a",
+                "3eb7",
+                "bf2f",
+                "bf64",
+                "3fe1",
+                "bfe3",
+                "3f20",
+                "3f89"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {
+          "key": {
+            "shape": [
+              32,
+              3,
+              64
+            ],
+            "dtype": "torch.bfloat16",
+            "sha256": "e0b0542335b076b799388da160b597eec57aee6fb6189a7eeff23725a5640a42",
+            "first_bf16_hex": [
+              "c05a",
+              "3eb7",
+              "bf2f",
+              "bf64",
+              "3fe1",
+              "bfe3",
+              "3f20",
+              "3f89"
+            ]
+          }
+        },
+        "stores_since_fence": 1
+      }
+    },
+    "FENCE": {
+      "record_hex": "b0000000000000000000000000000000",
+      "before": {
+        "banks": {},
+        "ddr_kv_layer0": {
+          "key": {
+            "shape": [
+              32,
+              3,
+              64
+            ],
+            "dtype": "torch.bfloat16",
+            "sha256": "e0b0542335b076b799388da160b597eec57aee6fb6189a7eeff23725a5640a42",
+            "first_bf16_hex": [
+              "c05a",
+              "3eb7",
+              "bf2f",
+              "bf64",
+              "3fe1",
+              "bfe3",
+              "3f20",
+              "3f89"
+            ]
+          },
+          "value": {
+            "shape": [
+              32,
+              3,
+              64
+            ],
+            "dtype": "torch.bfloat16",
+            "sha256": "10b63c61ef116d3a92818fd5c812d774b6f4b1f6f47526154818078790137c7a",
+            "first_bf16_hex": [
+              "bc87",
+              "3d09",
+              "bc02",
+              "bba0",
+              "3d58",
+              "bb3a",
+              "be09",
+              "bcb9"
+            ]
+          }
+        },
+        "stores_since_fence": 2
+      },
+      "after": {
+        "banks": {},
+        "ddr_kv_layer0": {
+          "key": {
+            "shape": [
+              32,
+              3,
+              64
+            ],
+            "dtype": "torch.bfloat16",
+            "sha256": "e0b0542335b076b799388da160b597eec57aee6fb6189a7eeff23725a5640a42",
+            "first_bf16_hex": [
+              "c05a",
+              "3eb7",
+              "bf2f",
+              "bf64",
+              "3fe1",
+              "bfe3",
+              "3f20",
+              "3f89"
+            ]
+          },
+          "value": {
+            "shape": [
+              32,
+              3,
+              64
+            ],
+            "dtype": "torch.bfloat16",
+            "sha256": "10b63c61ef116d3a92818fd5c812d774b6f4b1f6f47526154818078790137c7a",
+            "first_bf16_hex": [
+              "bc87",
+              "3d09",
+              "bc02",
+              "bba0",
+              "3d58",
+              "bb3a",
+              "be09",
+              "bcb9"
+            ]
+          }
+        },
+        "stores_since_fence": 0
+      }
+    },
+    "DMA_LOAD_kv": {
+      "record_hex": "180000000000006000cf562500000000",
+      "before": {
+        "banks": {
+          "8": {
+            "valid": false,
+            "progress": 0,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "8": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                192
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "e0b0542335b076b799388da160b597eec57aee6fb6189a7eeff23725a5640a42",
+              "first_bf16_hex": [
+                "c05a",
+                "3eb7",
+                "bf2f",
+                "bf64",
+                "3fe1",
+                "bfe3",
+                "3f20",
+                "3f89"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "ATTN_SCORE": {
+      "record_hex": "648a0000000000000000000000010020",
+      "before": {
+        "banks": {
+          "4": {
+            "valid": true,
+            "progress": 576,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "4561ec89bf741f39d335fcc0e8f06bc0043f5f562abd00fcb8596937cf1ab8b3",
+              "first_bf16_hex": [
+                "bed1",
+                "be58",
+                "bdaa",
+                "bfb9",
+                "3f4d",
+                "bf1d",
+                "3f49",
+                "3dbe"
+              ]
+            }
+          },
+          "8": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                192
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "e0b0542335b076b799388da160b597eec57aee6fb6189a7eeff23725a5640a42",
+              "first_bf16_hex": [
+                "c05a",
+                "3eb7",
+                "bf2f",
+                "bf64",
+                "3fe1",
+                "bfe3",
+                "3f20",
+                "3f89"
+              ]
+            }
+          },
+          "10": {
+            "valid": false,
+            "progress": 0,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "4": {
+            "valid": true,
+            "progress": 576,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "4561ec89bf741f39d335fcc0e8f06bc0043f5f562abd00fcb8596937cf1ab8b3",
+              "first_bf16_hex": [
+                "bed1",
+                "be58",
+                "bdaa",
+                "bfb9",
+                "3f4d",
+                "bf1d",
+                "3f49",
+                "3dbe"
+              ]
+            }
+          },
+          "8": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                192
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "e0b0542335b076b799388da160b597eec57aee6fb6189a7eeff23725a5640a42",
+              "first_bf16_hex": [
+                "c05a",
+                "3eb7",
+                "bf2f",
+                "bf64",
+                "3fe1",
+                "bfe3",
+                "3f20",
+                "3f89"
+              ]
+            }
+          },
+          "10": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                9,
+                32,
+                32
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "422d3e4221289a2558c12ec4ea06a0ab03045ee310a1eb9f65251fa307e961a5",
+              "first_bf16_hex": [
+                "401c",
+                "ff7f",
+                "ff7f",
+                "ff7f",
+                "ff7f",
+                "ff7f",
+                "ff7f",
+                "ff7f"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "SOFTMAX": {
+      "record_hex": "7a000000000000000000000000010020",
+      "before": {
+        "banks": {
+          "10": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                9,
+                32,
+                32
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "422d3e4221289a2558c12ec4ea06a0ab03045ee310a1eb9f65251fa307e961a5",
+              "first_bf16_hex": [
+                "401c",
+                "ff7f",
+                "ff7f",
+                "ff7f",
+                "ff7f",
+                "ff7f",
+                "ff7f",
+                "ff7f"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "10": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                9,
+                32,
+                32
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "ec24028731ed78e34fb0e32a0ec0a84ea96fdc126cc53e8bdedee0b20d09e5e7",
+              "first_bf16_hex": [
+                "3f80",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "ATTN_VALUE": {
+      "record_hex": "8a9b0000000000000000000000010020",
+      "before": {
+        "banks": {
+          "10": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                9,
+                32,
+                32
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "ec24028731ed78e34fb0e32a0ec0a84ea96fdc126cc53e8bdedee0b20d09e5e7",
+              "first_bf16_hex": [
+                "3f80",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000"
+              ]
+            }
+          },
+          "9": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                192
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "10b63c61ef116d3a92818fd5c812d774b6f4b1f6f47526154818078790137c7a",
+              "first_bf16_hex": [
+                "bc87",
+                "3d09",
+                "bc02",
+                "bba0",
+                "3d58",
+                "bb3a",
+                "be09",
+                "bcb9"
+              ]
+            }
+          },
+          "11": {
+            "valid": false,
+            "progress": 0,
+            "value": null
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "10": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                9,
+                32,
+                32
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "ec24028731ed78e34fb0e32a0ec0a84ea96fdc126cc53e8bdedee0b20d09e5e7",
+              "first_bf16_hex": [
+                "3f80",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000"
+              ]
+            }
+          },
+          "9": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                192
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "10b63c61ef116d3a92818fd5c812d774b6f4b1f6f47526154818078790137c7a",
+              "first_bf16_hex": [
+                "bc87",
+                "3d09",
+                "bc02",
+                "bba0",
+                "3d58",
+                "bb3a",
+                "be09",
+                "bcb9"
+              ]
+            }
+          },
+          "11": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "c3f514961b9b0ebf9f6fc2c66972de2a2741acd2595ecf317cecd78f24911edb",
+              "first_bf16_hex": [
+                "bc87",
+                "3d09",
+                "bc02",
+                "bba0",
+                "3d58",
+                "bb3a",
+                "be09",
+                "bcb9"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "ADD": {
+      "record_hex": "90150000000000000000000000000020",
+      "before": {
+        "banks": {
+          "0": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "89560216d851b6417bd3ac7a77b2e865d125e197467365b4d57d49d21394a721",
+              "first_bf16_hex": [
+                "bc93",
+                "bd17",
+                "bcf5",
+                "3cd3",
+                "bddb",
+                "bbe0",
+                "bd73",
+                "3d6e"
+              ]
+            }
+          },
+          "1": {
+            "valid": true,
+            "progress": 576,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "bda6a7a0a9d7291e97e729a64472c91fc7af8a8c2f26e089a508d118d575b1f0",
+              "first_bf16_hex": [
+                "3df9",
+                "3c8e",
+                "bd1e",
+                "3c14",
+                "3e04",
+                "bcb9",
+                "3cd9",
+                "bdcf"
+              ]
+            }
+          },
+          "5": {
+            "valid": true,
+            "progress": 192,
+            "value": {
+              "shape": [
+                32,
+                192
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "e0b0542335b076b799388da160b597eec57aee6fb6189a7eeff23725a5640a42",
+              "first_bf16_hex": [
+                "c05a",
+                "3eb7",
+                "bf2f",
+                "bf64",
+                "3fe1",
+                "bfe3",
+                "3f20",
+                "3f89"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "0": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "89560216d851b6417bd3ac7a77b2e865d125e197467365b4d57d49d21394a721",
+              "first_bf16_hex": [
+                "bc93",
+                "bd17",
+                "bcf5",
+                "3cd3",
+                "bddb",
+                "bbe0",
+                "bd73",
+                "3d6e"
+              ]
+            }
+          },
+          "1": {
+            "valid": true,
+            "progress": 576,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "bda6a7a0a9d7291e97e729a64472c91fc7af8a8c2f26e089a508d118d575b1f0",
+              "first_bf16_hex": [
+                "3df9",
+                "3c8e",
+                "bd1e",
+                "3c14",
+                "3e04",
+                "bcb9",
+                "3cd9",
+                "bdcf"
+              ]
+            }
+          },
+          "5": {
+            "valid": true,
+            "progress": 192,
+            "value": {
+              "shape": [
+                32,
+                576
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "a6e265695b5ab7471831801083746ed220f9d986bcf79ad046389fa11dab8b89",
+              "first_bf16_hex": [
+                "3dd4",
+                "bca0",
+                "bd8c",
+                "3d0e",
+                "3cb4",
+                "bcf1",
+                "bd06",
+                "bd30"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "SILU_MUL": {
+      "record_hex": "a89a0000000000000000000000000020",
+      "before": {
+        "banks": {
+          "8": {
+            "valid": true,
+            "progress": 1536,
+            "value": {
+              "shape": [
+                32,
+                1536
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "33ce6ff509ca6d769db43a680c4b8a16dcd60a275193bb84c5881ff2f04020d4",
+              "first_bf16_hex": [
+                "3f22",
+                "3fb3",
+                "3f5a",
+                "3fa6",
+                "3f76",
+                "3f4c",
+                "3f63",
+                "3f9a"
+              ]
+            }
+          },
+          "9": {
+            "valid": true,
+            "progress": 1536,
+            "value": {
+              "shape": [
+                32,
+                1536
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "e9b4f55f64e4d6d5f9cf3abfb1163fa33e95881ece858d43d0889a93f5608100",
+              "first_bf16_hex": [
+                "be73",
+                "bdfb",
+                "be95",
+                "3c91",
+                "3d4e",
+                "3ef0",
+                "bb0d",
+                "3ef2"
+              ]
+            }
+          },
+          "10": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                9,
+                32,
+                32
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "ec24028731ed78e34fb0e32a0ec0a84ea96fdc126cc53e8bdedee0b20d09e5e7",
+              "first_bf16_hex": [
+                "3f80",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000",
+                "0000"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "8": {
+            "valid": true,
+            "progress": 1536,
+            "value": {
+              "shape": [
+                32,
+                1536
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "33ce6ff509ca6d769db43a680c4b8a16dcd60a275193bb84c5881ff2f04020d4",
+              "first_bf16_hex": [
+                "3f22",
+                "3fb3",
+                "3f5a",
+                "3fa6",
+                "3f76",
+                "3f4c",
+                "3f63",
+                "3f9a"
+              ]
+            }
+          },
+          "9": {
+            "valid": true,
+            "progress": 1536,
+            "value": {
+              "shape": [
+                32,
+                1536
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "e9b4f55f64e4d6d5f9cf3abfb1163fa33e95881ece858d43d0889a93f5608100",
+              "first_bf16_hex": [
+                "be73",
+                "bdfb",
+                "be95",
+                "3c91",
+                "3d4e",
+                "3ef0",
+                "bb0d",
+                "3ef2"
+              ]
+            }
+          },
+          "10": {
+            "valid": true,
+            "progress": 0,
+            "value": {
+              "shape": [
+                32,
+                1536
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "85be35d1752605698e034776e5cd715824eaf950baac194d87ae6629f841d65e",
+              "first_bf16_hex": [
+                "bdc9",
+                "be0d",
+                "be32",
+                "3c93",
+                "3d0f",
+                "3e84",
+                "bab1",
+                "3ee0"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "END": {
+      "record_hex": "00000000000000000000000000000000",
+      "before": {
+        "banks": {},
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {},
+        "ddr_kv_layer0": {},
+        "stores_since_fence": 0
+      }
+    },
+    "DMA_STORE_logits": {
+      "record_hex": "2c0000000000030000d2262500000000",
+      "before": {
+        "banks": {
+          "12": {
+            "valid": true,
+            "progress": 49152,
+            "value": {
+              "shape": [
+                1,
+                49152
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "98e70f48535d150841ddb1fff536a8fb9b1e9695de625e06be06962ce8833089",
+              "first_bf16_hex": [
+                "41b8",
+                "40d7",
+                "40db",
+                "40b4",
+                "40b4",
+                "40dc",
+                "4181",
+                "40dc"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {
+          "key": {
+            "shape": [
+              32,
+              3,
+              64
+            ],
+            "dtype": "torch.bfloat16",
+            "sha256": "e0b0542335b076b799388da160b597eec57aee6fb6189a7eeff23725a5640a42",
+            "first_bf16_hex": [
+              "c05a",
+              "3eb7",
+              "bf2f",
+              "bf64",
+              "3fe1",
+              "bfe3",
+              "3f20",
+              "3f89"
+            ]
+          },
+          "value": {
+            "shape": [
+              32,
+              3,
+              64
+            ],
+            "dtype": "torch.bfloat16",
+            "sha256": "10b63c61ef116d3a92818fd5c812d774b6f4b1f6f47526154818078790137c7a",
+            "first_bf16_hex": [
+              "bc87",
+              "3d09",
+              "bc02",
+              "bba0",
+              "3d58",
+              "bb3a",
+              "be09",
+              "bcb9"
+            ]
+          }
+        },
+        "stores_since_fence": 0
+      },
+      "after": {
+        "banks": {
+          "12": {
+            "valid": true,
+            "progress": 49152,
+            "value": {
+              "shape": [
+                1,
+                49152
+              ],
+              "dtype": "torch.bfloat16",
+              "sha256": "98e70f48535d150841ddb1fff536a8fb9b1e9695de625e06be06962ce8833089",
+              "first_bf16_hex": [
+                "41b8",
+                "40d7",
+                "40db",
+                "40b4",
+                "40b4",
+                "40dc",
+                "4181",
+                "40dc"
+              ]
+            }
+          }
+        },
+        "ddr_kv_layer0": {
+          "key": {
+            "shape": [
+              32,
+              3,
+              64
+            ],
+            "dtype": "torch.bfloat16",
+            "sha256": "e0b0542335b076b799388da160b597eec57aee6fb6189a7eeff23725a5640a42",
+            "first_bf16_hex": [
+              "c05a",
+              "3eb7",
+              "bf2f",
+              "bf64",
+              "3fe1",
+              "bfe3",
+              "3f20",
+              "3f89"
+            ]
+          },
+          "value": {
+            "shape": [
+              32,
+              3,
+              64
+            ],
+            "dtype": "torch.bfloat16",
+            "sha256": "10b63c61ef116d3a92818fd5c812d774b6f4b1f6f47526154818078790137c7a",
+            "first_bf16_hex": [
+              "bc87",
+              "3d09",
+              "bc02",
+              "bba0",
+              "3d58",
+              "bb3a",
+              "be09",
+              "bcb9"
+            ]
+          }
+        },
+        "stores_since_fence": 0
+      }
+    }
+  },
+  "fp32_accumulation_experiment": [
+    {
+      "name": "fp32_accumulate_bf16_round_logits_32",
+      "shape": [
+        1,
+        49152
+      ],
+      "max_abs": 0.375,
+      "mean_abs": 0.0913788452744484,
+      "exact": false,
+      "top1_equal": true,
+      "reference_top1_id": 282,
+      "candidate_top1_id": 282,
+      "reference_top1_margin": 1.0,
+      "candidate_top1_margin": 0.875,
+      "candidate_max_tie_count": 1,
+      "reference_top1_value": 28.375,
+      "candidate_top1_value": 28.375,
+      "different_elements": 35489
+    },
+    {
+      "name": "fp32_accumulate_bf16_round_logits_33",
+      "shape": [
+        1,
+        49152
+      ],
+      "max_abs": 0.25,
+      "mean_abs": 0.025119146332144737,
+      "exact": false,
+      "top1_equal": false,
+      "reference_top1_id": 85,
+      "candidate_top1_id": 28,
+      "reference_top1_margin": 0.125,
+      "candidate_top1_margin": 0.0,
+      "candidate_max_tie_count": 2,
+      "reference_top1_value": 26.375,
+      "candidate_top1_value": 26.25,
+      "different_elements": 14445
+    }
+  ],
+  "boundary_1024_wire_records": 2682,
+  "boundary_1024_max_chunk_records": 744,
+  "ddr_bytes_used": 292852352,
+  "bank_capacity_kib": [
+    36,
+    36,
+    36,
+    576,
+    36,
+    36,
+    12,
+    8,
+    384,
+    384,
+    576,
+    36,
+    96
+  ]
+}

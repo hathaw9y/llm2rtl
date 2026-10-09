@@ -1,0 +1,25 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "details": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "label": "initial",
+      "status": "passed",
+      "details": "Icarus 12 compilation and simulation passed; all eight original Karnaugh map entries and return to zero checked.",
+      "evidence": "development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "The original map specifies binary inputs; unknown and high-impedance inputs are not specified."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "The map is zero only for a=b=c=0, so out is a | b | c. Initial RTL is preserved unchanged in candidate_initial.sv."
+}

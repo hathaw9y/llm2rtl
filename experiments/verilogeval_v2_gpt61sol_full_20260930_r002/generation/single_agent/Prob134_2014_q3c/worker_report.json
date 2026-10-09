@@ -1,0 +1,18 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": ["correct fixture passed", "injected fault failed", "repaired fixture passed"]},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "label": "initial", "table_comparisons": 40, "simulator": "Icarus Verilog 12"}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation.",
+    "States 101, 110, and 111 and unknown inputs are unspecified by the original problem; the testbench makes no assertions for them.",
+    "No synthesis or board verification was performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Combinational next-state bit Y0 and Moore output z directly implement the five table rows. clk is preserved and unused; no state register, reset, or latency is added. Unlisted states default to zero outputs.",
+  "static_review": "Specified port names and widths preserved; complete combinational assignments; no latches or sequential state.",
+  "artifacts": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "dev_checks.jsonl", "development/01"]
+}

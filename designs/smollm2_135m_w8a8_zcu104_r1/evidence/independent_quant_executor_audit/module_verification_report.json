@@ -1,0 +1,133 @@
+{
+  "schema": "llm2rtl.independent_module_verification.v1",
+  "module_id": "quantization_executor",
+  "rtl_module": "smollm2_quantization_executor",
+  "status": "blocked",
+  "functional_status": "passed",
+  "standalone_functional_gate": "PASS",
+  "full_promotion_eligible": false,
+  "scope": "Independent read-only frozen standalone executor audit. Fresh isolated binaries compiled from actual frozen RTL and unchanged arithmetic children. Expected selected bytes independently rederived with plain Fraction oracle for all41 fixtures. No RTL/contracts/primary evidence edits and no synthesis.",
+  "source_sha256": {
+    "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+    "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+    "rtl/w8a8_fp32_div4.sv": "8f9c1884cc50e1c0e69c4101397ea1af18e6a0323e1fac0b97c9704e928667ce",
+    "rtl/w8a8_quant_lane4.sv": "d3a1459716e5ee22af9c40770be67998a0ebe5755e172cff11953bea06c9d5ad",
+    "rtl/w8a8_dequant_lane4.sv": "012c5a81dde04820412b906cb06f2279e6b358306649d6599eb45245f5fb03ee",
+    "rtl/smollm2_quantization_executor.sv": "fa02a045c836090049818f765484d5f7be0f9f95f35d1edf4b60e976fb01d411",
+    "tb/quant_executor_tb.sv": "f4a8d0cb85e91eafbed5450365f0571296c88ddb0daf91cbea8fd329226a2775",
+    "tb/quant_executor_fault_tb.sv": "d885a3c55c732724255fb54d1d511592f57808e285a0d68a01245c43023dbf99",
+    "tb/quant_executor_repeat_tb.sv": "fc0a68e6c31d4084fbafc1de5bd13e5bc76c6d8ad3dfb6d17d0b89796c0d6bf8"
+  },
+  "source_unchanged_before_after": true,
+  "frozen_contract_sha256": {
+    "contracts/datapaths/quantization_arithmetic.json": "61b35d34919d364a99e371cfbf8e50d483da08b3105d942402a1138f63d9c432",
+    "contracts/quantization_rtl_port_binding.json": "b671bd31a3fcff17a0fcd955c0df2a63f802ee963df48b3636c4ccc808acd7dd",
+    "modules/quantization_executor.json": "a4b8f62dc6af29033e6cd688ae7f09fadb0de6b6342aec0d86a907d2bcdce86f",
+    "contracts/quantization_module_manifest.json": "29f8048bd6dbc761a4c1c73b1f5acebc3401200368a99f376962b9664d689fb8"
+  },
+  "fixture_manifest_sha256": "c96b1f2578814cd004af4b6d8f50dd6d5768b7d2876019d4622bfd7a12a5c2cc",
+  "independent_fixture_oracle": {
+    "cases": 41,
+    "result": "PASS",
+    "script": "scripts/audit_quant_fixtures.py",
+    "report": "evidence/independent_quant_executor_audit/fixture_audit.json",
+    "checks": [
+      "per-mode source shape/capacity and descriptors",
+      "selected BF16/FP32/INT8 numeric lanes using separate Fraction implementation",
+      "FP32 quotient RNE before INT8 RNE/saturation",
+      "selected dynamic groups and static table address/layers",
+      "head-major sidecar and zero padding",
+      "embedding selected scale only; ignored encoded B role",
+      "full allocation and exact selected-byte mask; untouched0xa5"
+    ]
+  },
+  "arithmetic_child_functional_acceptance": "evidence/independent_quant_arithmetic_audit/module_verification_report.json",
+  "independent_replay": {
+    "unique_normal_cases": 10,
+    "unique_fault_cases": 5,
+    "unique_repeat_reset_scenarios": 4,
+    "fresh_compile_count": 3,
+    "additional_parallel_protocol_replays": 7,
+    "results": "evidence/independent_quant_executor_audit/replay_results.json",
+    "parallel_results": "evidence/independent_quant_executor_audit/parallel_protocol_replays.json",
+    "all_exit_codes_zero": true,
+    "coverage": [
+      "A17 mstart15 K1536 relative output-group indexing",
+      "P32 L1024 largest native source/destination allocation",
+      "K layer29 prefix double-rounding and V17 layer29 groups",
+      "DQ32 all scale selectors ignoring other nonfinite lanes",
+      "signed BF16 zero and subnormal dynamic scale",
+      "all-negative selected P; masked nonfinite P",
+      "static quotient overflow saturates without error",
+      "held C plus later K NaN and later DQ -128; native/child/C offers retained",
+      "post-error dynamic A without reset",
+      "selected P NaN during active REDUCE",
+      "missing static validity and embeddingselector validity reject",
+      "quant/DQ child-live and queued-C resets; threejobs/gen increment"
+    ]
+  },
+  "primary_evidence_review": {
+    "counts": {
+      "simulation_cases.json": 41,
+      "fault_cases.json": 18,
+      "repeat_cases.json": 12
+    },
+    "source_manifest_all_pins_match": true,
+    "kernel_report": "evidence/quantization_executor/kernel_report.json",
+    "test_assertions": [
+      "native in-order latency3 model with perrole accepted and queued credit<=4",
+      "native/child/C stalled offers retain valid and payload",
+      "every successful selected destination byte exactlyonce; complete allocation compare",
+      "source A/B arrays have no writable path",
+      "producer begin identity/new generation beforewrites",
+      "drain before invalidation; fault invalidation generation checked",
+      "original transaction/bank/generation response",
+      "late fault coincides stalled C offer explicitly asserted",
+      "bounded phase waits and reset flush provider pipelines"
+    ]
+  },
+  "static_review": "evidence/independent_quant_executor_audit/static_review.json",
+  "functional_findings": [],
+  "resolved_notes": [
+    {
+      "topic": "REDUCE guard",
+      "conclusion": "Gates only inactive reducer numeric inspection; normal group/mask/address streaming remains present; active REDUCE P NaN and stale-fault-to-A recovery independently pass. Original simulator oscillation mechanism not established."
+    },
+    {
+      "topic": "Producer rejection",
+      "conclusion": "Any ready-qualified nonzero producer rejection maps protocol07; old captured C generation invalidated because new generation was not published. Implementation kernel report documents policy."
+    }
+  ],
+  "integration_obligations": [
+    "ISA controller derives incoming acquisition roles atomically; executor role outputs describe captured accepted job",
+    "Native fabric exactly one in-order latency3 no-ready response per accepted role read",
+    "Global reset flushes native provider responses consistently with executor/children",
+    "Bank fabric publishes producer metadata/coverage and acknowledges generation-matched invalidation before matched completion release"
+  ],
+  "OOC": {
+    "status": "NOT_RUN_AWAITING_USER_DESIGNATED_BUILD_MACHINE",
+    "target_clock_period_ns": 5.0,
+    "part": "xczu7ev-ffvc1156-2-e",
+    "no_timing_or_resource_claim": true
+  },
+  "excluded_acceptance": [
+    "real controller/native bank fabric/DMA integration",
+    "full token ISA execution",
+    "full model numerical/calibration/quality acceptance",
+    "OOC synthesis/resource/200MHz timing closure",
+    "physical board deployment/validation"
+  ],
+  "evidence_sha256": {
+    "evidence/independent_quant_executor_audit/replay_results.json": "b3e174d1b890397f27caa032c279ea3e7aeee7963677fcbf6b72d72272547c56",
+    "evidence/independent_quant_executor_audit/parallel_protocol_replays.json": "3e75b80fe23cbd3b2a756c63520f34e5f7370769fab0333ac0dcf75bda7df4f7",
+    "evidence/independent_quant_executor_audit/fixture_audit.json": "b125b77df8c25c8041a12505b908e307336afa86417dee11253fd191282e96ba",
+    "evidence/independent_quant_executor_audit/static_review.json": "453555ee7437a8f66393a4b4910fa131bb18ccd53875f0f934f8e8265afc658c",
+    "evidence/quantization_executor/kernel_report.json": "af7789e7d7bbe4f7689de765dc54debed21ffdaaaf28bb455c31b85431648d9e",
+    "evidence/quantization_executor/source_manifest.json": "905b266646d6a063aaa6c2bfdb0fab59600a65fdeb7f84a52e5c7ce0d744aa99",
+    "evidence/quantization_executor/simulation_cases.json": "d39f48036e2c62582bfccaadbc20d2d59a8852c2eec4fb158ec99e50a9ef8170",
+    "evidence/quantization_executor/fault_cases.json": "bba75f9d0ef26f1b68a995ec61918f7b0251dcfa4152728c9f8a67f1f3e63e26",
+    "evidence/quantization_executor/repeat_cases.json": "5d48bbe3c9d08d3d77aec41e7c61c1dd815a352055f6cff373c161e84b4d567f",
+    "scripts/audit_quant_executor_replay.py": "501d262eedfa010181f08fffb89b2852e5b9c2b855ad772a2f664e28d6914666",
+    "scripts/audit_quant_executor_report.py": "8424ec9c8bac82a14c6b6d8354ccfd0f2544c3b6477b739580682209712b9966"
+  }
+}

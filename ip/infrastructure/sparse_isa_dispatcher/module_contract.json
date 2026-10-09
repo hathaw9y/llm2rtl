@@ -1,0 +1,35 @@
+{
+  "schema":"llm2rtl.infrastructure_module.v1",
+  "module_id":"sparse_isa_dispatcher",
+  "version":2,
+  "status":"frozen_for_implementation",
+  "purpose":"decode END MM2S S2MM GEMM commands using bank_config_pkg capabilities and emit per-module-port ownership",
+  "source_basis":{
+    "template":"ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv",
+    "template_sha256":"f1d4dcb08faac1f469c857132344b6be057c82b52c6f870557dde2a45a46d8fe",
+    "bank_config_pkg":"ip/infrastructure/bank_sparse_router/rtl/bank_config_pkg.sv",
+    "bank_config_pkg_sha256":"00020944752c8754b6f8208478dbacf84b6d76d1f0214dfb4778ee7f3344c7fa"
+  },
+  "instruction":{"width":128,"fields":"template v2 fields","opcodes":{"END":0,"MM2S":1,"S2MM":2,"GEMM":3},"gemm_shape_in_local_offset":{"m":"bits31:26","n":"bits25:15","k":"bits14:3"},"dma_offset_rule":"MM2S and S2MM require local_offset[31:23]==0 before narrowing to the 23-bit engine boundary","gemm_address_rule":"axi_address must be zero; compute receives bank identities only and the output bank native base is implicit word zero"},
+  "capability":{"MM2S":[0,1,2],"S2MM":[3],"GEMM":{"src0_ACT":1,"src1_WGT":2,"dst_OUT":3}},
+  "owner_ids":{"MM2S":1,"S2MM":2,"GEMM_ACT":3,"GEMM_WGT":4,"GEMM_OUT":5},
+  "public_interface": {
+    "base": "all fixed public ports and widths of cmd_dispatcher_template v2",
+    "dma_response_extension": ["s_ctrl_mm2s_sts_error_code[7:0]", "s_ctrl_s2mm_sts_error_code[7:0]"],
+    "gemm_request": ["m_ctrl_sa_cmd_valid", "m_ctrl_sa_cmd_ready", "m_ctrl_sa_m_size[5:0]", "m_ctrl_sa_n_size[10:0]", "m_ctrl_sa_k_size[11:0]", "m_ctrl_sa_act_bank[3:0]", "m_ctrl_sa_wgt_bank[3:0]", "m_ctrl_sa_out_bank[3:0]", "m_ctrl_sa_out_base_addr[31:0] tied to zero for compatibility"],
+    "gemm_response": ["s_ctrl_sa_done_valid", "m_ctrl_sa_done_ready", "s_ctrl_sa_done_error", "s_ctrl_sa_act_bank[3:0]", "s_ctrl_sa_wgt_bank[3:0]", "s_ctrl_sa_out_bank[3:0]"],
+    "ownership": ["bank_acquire_valid[0:15]", "bank_acquire_port[0:15][2:0]", "bank_release_valid[0:15]", "bank_release_port[0:15][2:0]", "bank_busy[0:15]", "bank_owner_port[0:15][2:0]"]
+  },
+  "protocol":"strict in-order current-PC ready-valid issue with outstanding nonconflicting DMA and one GEMM; request and response effects occur only on valid-and-ready; responses are backpressured while ISSUE_COMMAND preserves an offered request; END drains",
+  "dma_response_policy": {
+    "identity":"existing status tag is the bank identity and must match a pending direction-local bank",
+    "success":"error=0 and error_code=00; matching pending clears and the exact bank owner releases",
+    "descriptor_error":"error=1 and error_code in 01..06; matching pending clears, exact bank owner releases, and dispatcher error-drains with that code",
+    "transport_or_recovery_fault":"error=1 and error_code in 10,20,30,40,50; pending and ownership are retained, no release pulse is emitted, and reset is required for recovery",
+    "fail_closed":"unknown codes or inconsistent error/code qualification retain pending and ownership and report the nonzero code, or FF when error=1 with code=00"
+  },
+  "gemm_ports":["cmd_valid","cmd_ready","m","n","k","act_bank","wgt_bank","out_bank","out_base_addr","done_valid","done_ready","done_error","done bank tuple"],
+  "failure":"unsupported capability, MM2S/S2MM upper local-offset bits, or nonzero GEMM axi_address is an operand error before executor valid and before ownership acquire",
+  "verification":{"part":"xczu7ev-ffvc1156-2-e","clock_ns":5.0,"vivado":"2025.2","required":["all opcode typed payloads","capability rejects","MM2S and S2MM upper-offset reject","GEMM nonzero-address reject and zero compatibility output","GEMM owner3/4/5 atomic acquire release","DMA owner1/2","request and response backpressure stability","DMA success","descriptor codes 01 through 06 retire and release","transport codes 10 20 30 40 50 retain pending and ownership without release until reset","multiple DMA different banks","same-bank stall","spurious completion","END drain","reset and repeated program"]},
+  "does_not_claim":["executor datapaths","memory payload routing","board integration"]
+}

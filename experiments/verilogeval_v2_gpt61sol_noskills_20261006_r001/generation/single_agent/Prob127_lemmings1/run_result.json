@@ -1,0 +1,182 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob127_lemmings1",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob127_lemmings1",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob127_lemmings1/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791272450.4421737,
+    "ended_at_unix": 1791272497.29743,
+    "seconds": 46.85525679588318,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 73818,
+      "cached_input_tokens": 65280,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1705,
+      "reasoning_output_tokens": 75
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "218d3cda3e8898d042436dac819a0bca4bd42839bf63358e76de16eaa3ebe0ed",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json"
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "output_checks": 264
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "Two-state Moore FSM; positive-edge clock, asynchronous active-high reset to walking left; bumps ahead switch direction including simultaneous bumps.",
+    "testbench_coverage": "All bump combinations from both states, sustained simultaneous bumps, irrelevant bumps, no-bump holds, input changes between edges, asynchronous reset from walking right, and reset dominance at a clock edge."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "218d3cda3e8898d042436dac819a0bca4bd42839bf63358e76de16eaa3ebe0ed",
+      "Prob127_lemmings1_ref.sv": "92c8b0e80f637209925cea25d328f114857342e50f04494e2b01177cfb91181d",
+      "Prob127_lemmings1_test.sv": "769944739c0fa53eb38559e291d2982890e87dc521b539cb78b0959e529a8077"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob127_lemmings1_test.sv",
+        "Prob127_lemmings1_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014766572043299675
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb127_lemmings1_test.sv:73: $finish called at 1146 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Total mismatched samples is 0 out of 229 samples\n\nSimulation finished at 1146 ps\nMismatches: 0 in 229 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007818743586540222
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "218d3cda3e8898d042436dac819a0bca4bd42839bf63358e76de16eaa3ebe0ed",
+      "Prob127_lemmings1_ref.sv": "92c8b0e80f637209925cea25d328f114857342e50f04494e2b01177cfb91181d",
+      "Prob127_lemmings1_test.sv": "769944739c0fa53eb38559e291d2982890e87dc521b539cb78b0959e529a8077"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob127_lemmings1_test.sv",
+        "Prob127_lemmings1_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012287336401641369
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb127_lemmings1_test.sv:73: $finish called at 1146 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Total mismatched samples is 0 out of 229 samples\n\nSimulation finished at 1146 ps\nMismatches: 0 in 229 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008332787081599236
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

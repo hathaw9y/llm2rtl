@@ -1,0 +1,31 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {"clk": "input one bit", "reset": "input one bit", "q": "output unsigned 4 bits [3:0]"},
+    "evidence": "Original problem interface explicitly names clk, reset, and q (4 bits)."
+  },
+  "semantics": {
+    "clock": "Update only on positive edge of clk.",
+    "reset": "Active-high synchronous reset: if reset is high at a rising edge, q becomes 0, with priority over counting.",
+    "count": "At each rising edge with reset low, q advances by one modulo 16; output is the counter register with no additional latency.",
+    "initialization": "No power-up value is specified. No RTL initialization is added; value checks start after a sampled reset.",
+    "evidence": "Original: counts from 0 through 15 inclusive with period 16; all sequential logic positive edge; reset active high synchronous and resets counter to 0."
+  },
+  "numeric": {
+    "width": 4,
+    "range": "0..15",
+    "overflow": "15 advances to 0, modulo 16",
+    "increment": "Unsigned four-bit addition with sized constant 4'd1"
+  },
+  "verification": {
+    "oracle": "Independent integer expected counter computed from the original problem: reset selects zero; otherwise (expected+1) modulo 16.",
+    "sampling": "Drive reset away from rising edges; compare q after nonblocking assignments settle; check stability on falling edges and between edges.",
+    "coverage": "Initial sampled reset, multiple complete periods including 15-to-0, held reset, mid-count reset, and a reset pulse entirely between rising edges.",
+    "failure": "$fatal on any mismatch and bounded timeout; explicit PASS only after all checks.",
+    "tools": "Required smoke_environment.py, validate_contract.py, and dev_check.py --label initial; no synthesis or official evaluation."
+  },
+  "specification_ambiguities": [
+    {"topic": "power-up state", "evidence": "Original specifies synchronous reset but no initial value.", "resolution": "Do not impose a power-up value or assert one in the oracle; establish a known state via reset."}
+  ]
+}

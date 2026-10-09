@@ -1,0 +1,33 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"ring": 1, "vibrate_mode": 1},
+    "outputs": {"ringer": 1, "motor": 1},
+    "evidence": "Original interface lists only these four one-bit ports."
+  },
+  "semantics": {
+    "behavior": "ring=0: both outputs off; ring=1 and vibrate_mode=0: ringer on only; ring=1 and vibrate_mode=1: motor on only.",
+    "equations": {"ringer": "ring & ~vibrate_mode", "motor": "ring & vibrate_mode"},
+    "timing": "Combinational response to current inputs; no clock, stored state, or added cycle latency.",
+    "reset": "None: original interface specifies no reset.",
+    "initialization": "No initialized state; outputs resolve from current inputs after combinational settling.",
+    "evidence": "Original says whenever ring is asserted turn on either ringer or motor according to vibrate_mode."
+  },
+  "numeric": {
+    "width": "All signals are one-bit Boolean controls.",
+    "signedness": "Unsigned",
+    "arithmetic": "No arithmetic, rounding, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Explicit original-spec truth table independent of RTL equations.",
+    "coverage": "All four binary combinations and all sixteen ordered transitions, with settled output comparisons and mutual exclusion checks.",
+    "sampling": "Check one nanosecond after each input change; no clock exists.",
+    "failure": "$fatal on mismatch and bounded timeout; PASS only after all checks.",
+    "command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {"topic": "ring deasserted", "resolution": "Both outputs off, inferred from ring representing the need to ring and outputs controlling the corresponding alerts."},
+    {"topic": "X/Z inputs", "resolution": "Original specifies binary behavior only; use ordinary four-state bitwise logic without asserting additional X/Z requirements."}
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "revision_count": 0,
+  "checks": {
+    "environment_smoke": {
+      "status": "passed",
+      "checks": [
+        {
+          "case": "correct",
+          "expected_pass": true,
+          "observed": "passed"
+        },
+        {
+          "case": "injected_fault",
+          "expected_pass": false,
+          "observed": "simulation_failed"
+        },
+        {
+          "case": "repair",
+          "expected_pass": true,
+          "observed": "passed"
+        }
+      ]
+    },
+    "development": [
+      {
+        "label": "initial",
+        "status": "passed",
+        "compile_returncode": 0,
+        "simulation_returncode": 0,
+        "evidence": "development/01/result.json",
+        "checked_cases": 136192
+      }
+    ]
+  },
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Unknown or high-impedance selector values were not tested; the problem specifies selections 0 through 255."
+  ],
+  "justified_changes": {
+    "rtl": [],
+    "testbench": []
+  },
+  "implementation": "Combinational indexed selection: out = in[sel].",
+  "verification": "All 256 selections against each one-hot and one-cold input; random packed vectors; fixed-selector data changes including X and Z; fatal mismatch checks and bounded timeout.",
+  "initial_snapshot_unchanged": true
+}

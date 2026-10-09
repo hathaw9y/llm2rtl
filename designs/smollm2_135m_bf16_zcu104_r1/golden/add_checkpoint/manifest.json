@@ -1,0 +1,24 @@
+{
+  "prefill": {
+    "rows": 32,
+    "elements": 18432,
+    "left_source": "golden/rmsnorm_checkpoint/prefill_input_words.hex",
+    "right_source": "deterministic BF16 values; seed 0x135ADD",
+    "reference": "binary64 sum of two exactly represented BF16 operands, rounded to BF16 nearest-even",
+    "identity_projection_probe": "context from pinned checkpoint is used as ADD right operand after identity GEMM in PL"
+  },
+  "decode": {
+    "rows": 1,
+    "elements": 576,
+    "left_source": "golden/rmsnorm_checkpoint/decode_input_words.hex",
+    "right_source": "deterministic BF16 values; seed 0x135ADD",
+    "reference": "binary64 sum of two exactly represented BF16 operands, rounded to BF16 nearest-even",
+    "identity_projection_probe": "context from pinned checkpoint is used as ADD right operand after identity GEMM in PL"
+  },
+  "edge": {
+    "rows": 1,
+    "elements": 576,
+    "cases": 12,
+    "reference": "directed BF16 ties, cancellation, subnormals and overflow"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (passed_structure_only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial preservation",
+      "result": "PASS",
+      "detail": "candidate_initial.sv copied immediately after initial implementation before development checks"
+    },
+    {
+      "name": "compile and warnings",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "PASS, exit 0, no diagnostics",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "exhaustive independent K-map simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "PASS, exit 0, 32 comparisons covering all 16 binary combinations in ascending and descending order",
+      "log": "dev_simulation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS",
+      "detail": "Exact one-bit ports, continuous combinational assignment, no state, delays, inferred latches, external dependencies, or arithmetic-width issues"
+    }
+  ],
+  "development_outcome": "PASS; initial candidate retained without RTL revisions and matches the frozen contract in exhaustive binary development simulation.",
+  "limitations": [
+    "X/Z input behavior is unspecified and not tested.",
+    "Contract validation is structural only.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, physical timing, or board validation performed."
+  ],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv",
+    "status_log": "dev_status.log"
+  }
+}

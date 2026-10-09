@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "load": 1, "data": 256}, "outputs": {"q": 256}, "source": "problem.txt interface"},
+  "semantics": {"edge": "All sequential logic uses positive clock edges per final sentence", "load": "Active high synchronous load copies data into q at the next positive edge, taking precedence over evolution", "evolution": "With load low each positive edge updates all cells simultaneously from the prior q; neighbour counts 0,1,4..8 give zero, 2 holds the cell, 3 gives one", "mapping": "Bit row*16+column; row 0 is q[15:0]; both coordinates wrap modulo 16", "reset": "No reset port or reset behavior specified", "initialization": "No power-up value specified; no DUT initialization is added; check defined behavior after first load"},
+  "numeric": {"cell": "one unsigned bit", "neighbour_count": "unsigned 4 bits, exact range 0..8", "dimensions": [16,16], "overflow": "No overflow with 4-bit neighbour count", "rounding": "Not applicable"},
+  "verification": {"oracle": "Independent procedural coordinate-offset traversal of original neighbour rules", "sampling": "Drive on falling edge; verify unchanged output before rising edge and compare after NBA settling", "cases": "zero, all alive, isolated cells, blocks, oscillators across wrap boundaries, every neighbour count for interior and corner cells, deterministic random multigeneration evolution, repeated loads", "timeout": "Bounded simulation with fatal mismatches and final PASS marker", "evaluator": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": ["Startup q is unspecified. Tests do not assert a defined startup value or evolution before initialization."]
+}

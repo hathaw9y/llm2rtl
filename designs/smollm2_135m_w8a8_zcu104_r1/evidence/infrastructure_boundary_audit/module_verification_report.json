@@ -1,0 +1,154 @@
+{
+  "schema": "llm2rtl.independent_infrastructure_audit.v1",
+  "status": "passed",
+  "scope": "Bounded control integration of actual dispatcher and actual descriptor/ownership controller with mocked engine control completions; independently synthesized standalone modules. No tensor/DMA numerical integration.",
+  "module_tops": [
+    "smollm2_isa_dispatcher",
+    "smollm2_bank_controller"
+  ],
+  "rtl_pins": {
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/smollm2_isa_dispatcher.sv": "d3cd1974b9673fe63113e54866ab7d010559fea29219d7146b5bf8055c5e90ef",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/smollm2_bank_controller.sv": "8824065918a0a549b74cf17f8c34bd4dbf9003e52cd4466f7d297b3d04cc100a",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/bank_ownership_table.sv": "28de9cc7ad4cb40c822dd3fe17b0a6f8eb8c69fbf5570e7de66a6729611a04ff"
+  },
+  "contract_pins": {
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/contracts/infrastructure_rtl_port_binding.json": "1488d6a6f0d31fe2fac49a1735663fca17a0c64365fee45a9e14323b1d591f83",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/contracts/infrastructure_boundary_clarifications.json": "a46e21d8707990d30ee3b7145a66ea503a19fc7f0e82452c3818f0490943e59d",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/contracts/isa_dispatcher_module_manifest.json": "ad4eb6dba326fe7c42565c1a2a71826df662fa2aa5cd9973aa2bc9cb176b736f",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/contracts/bank_controller_module_manifest.json": "ae08795ef3fa491cb83c7edb2c956d5f9910f45994366fa9a62228db540ada90",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/modules/isa_dispatcher.json": "cabc05c03a3cbae0234aeb414c99671220e7e4ea69fecd05c2027e07b2d71963",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/modules/bank_controller.json": "b02958be74fe2f097b3f6f27770d406c14d81cff38207f110e8d926449ae47c8"
+  },
+  "primary_packet_identity": {
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_wave/dispatcher/kernel_report.json": "c5eb1d1faa53fc256b378058c661c3e5a2a41b18ff3cc8ca2ef179e6c528d746",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_wave/dispatcher/subagent_result.json": "d594010b3e8d7ce95ac7e40f2ae6138919b5b064846b9d505722acd6263b457f",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_wave/bank_controller/kernel_report.json": "0bd06a433c78ec19d9bbd361d7a19f66a387878cf6d950e26fac24e7021219a3",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_wave/bank_controller/subagent_result.json": "35686d92943429662ee633b8a263506a1bc43528ddf06e5e3402ead21a8fc78f"
+  },
+  "missing_required_evidence": [],
+  "functional": "PASS_FRESH_INDEPENDENT_CONTROL_INTEGRATION",
+  "standalone_ooc": "PASS_PRE_SYNTH_CLOCK_INTERNAL_5NS",
+  "strict_lint": "PASS_ACTUAL_WALL_FATAL_WARNING",
+  "independent_dynamic_evidence": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_boundary_audit/replay02/report.json",
+  "checked_engine_acceptances": 32,
+  "observed_simulation_cycles": 567,
+  "independent_static_decoder_records": 2957,
+  "requirements_covered": [
+    "Exact raw instruction opcode/payload/positional bank IDs observed on every engine acceptance",
+    "Actual tuple acquisition shares engine acceptance edge and all operands acquire expected exclusive roles",
+    "Concurrent GEMM and alternate weight-bank DMA; blocked currentPC collects prior independent completions without lookahead",
+    "Conditional usedmask101 and ignoredbank1 alias of realbank0 in DQ",
+    "Command fields stable over15cycle downstream stall with no early acquisition",
+    "END/FENCE drain; repeatedSTART preserves existing descriptor presence and global monotonically increasing transaction IDs",
+    "Wrong and duplicate response identity releases nothing; later genuine completion drains under sticky07",
+    "Failure retains already-presented stalled offer, allows eventual acquisition and tracked completion; stops new offers",
+    "Producer accepts unconfigured Cgen0, publishes1, coverage authorized at live1, completion/releases original0",
+    "Same-epoch late coverage cannot undo authenticated invalidation",
+    "B7 staticgen1/windowgen2/globalmax2; component1 abort preserves static and component2 abort preserves window",
+    "Coordinated reset during active ownership and stalled engine offer clears both modules",
+    "All16 bank index/descending public vs ascending reused-core orientation observed through actual DMA-control acceptance and matched release",
+    "Canonical bank7 data-ready equals RoPE component-valid under controller reset/config/producer/coverage/invalidate transitions",
+    "Raw Vivado5ns XDC applied before synthesis, actual bare completion markers/exit0, correct part/tool/top, no clock exceptions",
+    "Full setup/hold/pulse tables and genuine control LUT/FF physical resources independently checked"
+  ],
+  "primary_evidence_inspected": {
+    "bank": "128 directed checks plus25144 descriptor vectors and exact raw PASS logs; normative B7static position0 exception declared",
+    "dispatcher": "2957 static records plus22 directed and50 random fragments with exact raw finalPASS marker"
+  },
+  "timing": {
+    "dispatcher": {
+      "WNS": 1.551,
+      "TNS": 0.0,
+      "setup_fail": 0,
+      "setup_total": 2544,
+      "WHS": 0.071,
+      "THS": 0.0,
+      "hold_fail": 0,
+      "hold_total": 2544,
+      "WPWS": 2.225,
+      "TPWS": 0.0,
+      "pulse_fail": 0,
+      "pulse_total": 1396
+    },
+    "bank_controller": {
+      "wns_ns": 1.062,
+      "tns_ns": 0.0,
+      "setup_failing_endpoints": 0,
+      "setup_total_endpoints": 4290,
+      "whs_ns": 0.084,
+      "ths_ns": 0.0,
+      "hold_failing_endpoints": 0,
+      "hold_total_endpoints": 4290,
+      "wpws_ns": 2.225,
+      "tpws_ns": 0.0,
+      "pw_failing_endpoints": 0,
+      "pw_total_endpoints": 2645
+    }
+  },
+  "resources": {
+    "dispatcher": {
+      "LUT": 5441,
+      "FF": 1396,
+      "DSP": 0,
+      "RAMB36": 0,
+      "RAMB18": 0,
+      "URAM": 0
+    },
+    "bank_controller": {
+      "LUT": 6503,
+      "FF": 2645,
+      "DSP": 0,
+      "BRAM": 0,
+      "URAM": 0
+    }
+  },
+  "ooc_evidence": {
+    "dispatcher": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_boundary_audit/dispatcher_ooc02_audit.json",
+    "bank_controller": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_boundary_audit/bank_ooc02_audit.json"
+  },
+  "findings": [],
+  "resolved_findings": [
+    {
+      "severity": "P2",
+      "issue": "Historical dispatcher bd343 passed lint without-Wall; real strict-Wall audit exposed UNUSED bank_b7_rope_valid",
+      "evidence": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_boundary_audit/historical_dispatcher_strict_lint_failure.json",
+      "resolution": "Finald3cd uses meaningful canonical RoPE descriptor component; fresh actual-Wall lint, functional replay and OOC02 pass."
+    },
+    {
+      "severity": "P1",
+      "issue": "Initial generic invalidate could not preserve B7 peer component",
+      "resolution": "Bindingrevision2 adds invalidate_component2; independent live component-epoch tests pass. Historicalbinding preserved."
+    },
+    {
+      "severity": "P2",
+      "issue": "Pinned legacy codec allows B7 static component2 nonzero position while normative banklayout requires0",
+      "resolution": "Explicit frozen clarification; infrastructure rejects before mutation; codec and old evidence immutable."
+    }
+  ],
+  "residual_risks": [
+    "Engine memory quiescence is a mocked contract assumption; no physical DMA/native-memory response processing exercised.",
+    "Trusted external coverage complete flags are authenticated; actual byte/strobe coverage service remains unimplemented.",
+    "No actual GEMM/quant executor connected to dispatcher/controller this wave; compute source identity verified unchanged.",
+    "Combined module synthesis, external interface timing, placement/routing, HD.CLK_SRC selection and board artifacts not verified.",
+    "Standalone missing I/Odelays: dispatcher2316inputs/2922outputs; controller822inputs/1563outputs. Internal unconstrained endpoints0 for both.",
+    "Nonlinear opcodes4/5/7/9/10 and reserved12 rejected01 under current infrastructure subset; no full ISA execution claim."
+  ],
+  "promotion_eligibility": {
+    "standalone_control_packets": true,
+    "bounded_mock_control_integration": true,
+    "real_compute_or_DMA_integration": false,
+    "board_or_routed_signoff": false
+  },
+  "existing_compute_identity_check": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_boundary_audit/existing_compute_identity_check.json",
+  "skill_update_candidate": {
+    "skill": "hdl-module-verification",
+    "trigger": "A module advertises strictlintPASS but recorded command omits-Wall",
+    "problem": "An empty log from defaultlint can conceal fatal unused/declaration warnings",
+    "proposed_instruction": "For a strictlintclaim inspect exact argv and independently rerun the requested warning level; compare explicit approved declaration-local waivers and preserve failed exact-source evidence before retry.",
+    "evidence": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_boundary_audit/historical_dispatcher_strict_lint_failure.json",
+    "scope": "HDLmoduleverification only",
+    "applied_skill_edit": false
+  },
+  "primary_packet_audit": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_boundary_audit/primary_packet_audit.json",
+  "no_remaining_P0_P1_P2_findings": true
+}

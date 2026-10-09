@@ -1,0 +1,185 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob124_rule110",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob124_rule110",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob124_rule110/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790733341.8931317,
+    "ended_at_unix": 1790733470.8767612,
+    "seconds": 128.9836301803589,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 128050,
+      "cached_input_tokens": 112896,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3067,
+      "reasoning_output_tokens": 90
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "59c019faf6af289235f500f4ed88c846e7dff8e7a9b6d01c2c817836c84a75aa",
+  "contract_sha256": "e8021ccc7cb2dd74f59b19e79c10c928168d75420e8ef122ccd3200a4eb7976b",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract gate",
+        "result": "passed_structure_only",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "truth-table equation and initial preservation",
+        "result": "PASS",
+        "log": "static_review.log"
+      },
+      {
+        "name": "Icarus development compile",
+        "result": "FAIL: exit 139, no diagnostics",
+        "log": "dev_compile.log",
+        "status_log": "dev_status.log",
+        "timeout_seconds": 30
+      },
+      {
+        "name": "Icarus development compile with explicit backend path",
+        "result": "FAIL: exit 139, no diagnostics",
+        "log": "dev_compile_retry.log",
+        "status_log": "dev_status_retry.log",
+        "timeout_seconds": 30
+      },
+      {
+        "name": "development simulation",
+        "result": "NOT RUN: both compilation attempts failed"
+      }
+    ],
+    "development_outcome": "Initial synthesizable candidate retained with zero RTL revisions. Contract gate and Boolean truth-table check passed. Simulator tool failure prevented RTL simulation.",
+    "limitations": [
+      "Independent self-checking dev_tb.sv supplied but not executed because Icarus exited 139.",
+      "No simulation success claimed.",
+      "No synthesis, timing or board checks performed.",
+      "Initial state unspecified until synchronous load.",
+      "Official evaluation is external and results unavailable."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "59c019faf6af289235f500f4ed88c846e7dff8e7a9b6d01c2c817836c84a75aa",
+      "Prob124_rule110_ref.sv": "c95a474c70bb071b1b8adc0c23a86822928a2c7cb20fde28b8e48cd6a19aad81",
+      "Prob124_rule110_test.sv": "4099c733852aa603ff4ff244eb49d0712edd2df0834d68d6f827700a5ad57f00"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob124_rule110_test.sv",
+        "Prob124_rule110_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013554898090660572
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb124_rule110_test.sv:73: $finish called at 31416 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 6283 samples\n\nSimulation finished at 31416 ps\nMismatches: 0 in 6283 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.43616878893226385
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "59c019faf6af289235f500f4ed88c846e7dff8e7a9b6d01c2c817836c84a75aa",
+      "Prob124_rule110_ref.sv": "c95a474c70bb071b1b8adc0c23a86822928a2c7cb20fde28b8e48cd6a19aad81",
+      "Prob124_rule110_test.sv": "4099c733852aa603ff4ff244eb49d0712edd2df0834d68d6f827700a5ad57f00"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob124_rule110_test.sv",
+        "Prob124_rule110_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013118394650518894
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb124_rule110_test.sv:73: $finish called at 31416 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 6283 samples\n\nSimulation finished at 31416 ps\nMismatches: 0 in 6283 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.43759300373494625
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

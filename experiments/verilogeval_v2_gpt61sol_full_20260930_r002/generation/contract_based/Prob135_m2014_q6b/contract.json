@@ -1,0 +1,66 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "y": "3-bit unsigned current state",
+      "w": "1-bit transition input"
+    },
+    "outputs": {
+      "Y1": "1-bit next-state bit 1"
+    },
+    "clock_reset": "None: original interface lists only y, w, Y1."
+  },
+  "semantics": {
+    "evidence": "Implement just the next-state logic for y[1], using original A-F transition table.",
+    "state_codes": {
+      "A": "000",
+      "B": "001",
+      "C": "010",
+      "D": "011",
+      "E": "100",
+      "F": "101"
+    },
+    "next_state_w0": [
+      "B",
+      "C",
+      "E",
+      "F",
+      "E",
+      "C"
+    ],
+    "next_state_w1": [
+      "A",
+      "D",
+      "D",
+      "A",
+      "D",
+      "D"
+    ],
+    "timing": "Pure combinational response; no registers, clock, reset, or added latency.",
+    "initialization": "No specified initialization; known legal inputs determine output independently of history."
+  },
+  "numeric": {
+    "state_width": 3,
+    "input_width": 1,
+    "output_width": 1,
+    "output_selection": "Bit index 1 of encoded destination state; no arithmetic or signed interpretation."
+  },
+  "verification": {
+    "oracle": "Independent destination-state table transcribed from original problem, followed by bit-1 selection.",
+    "coverage": "All 12 legal state/input pairs in forward and reverse order; repeat to check history independence.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling.",
+    "failure": "Case inequality mismatch invokes $fatal; bounded watchdog; PASS only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Final sentence says output Y1 is y[1], while requesting next-state logic.",
+      "resolution": "Interpret Y1 as next-state bit 1, consistent with explicit next-state requirement and capital Y naming."
+    },
+    {
+      "issue": "Unused state codes 110 and 111 and X/Z inputs have no defined transitions.",
+      "resolution": "Use combinational zero default for unspecified state codes; make no specification correctness claim for them or X/Z inputs."
+    }
+  ]
+}

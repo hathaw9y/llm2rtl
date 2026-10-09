@@ -1,0 +1,92 @@
+{
+  "module_id": "int8_gemm_executor",
+  "status": "SELF_VERIFIED_STANDALONE_RTL_SIMULATION_ONLY",
+  "source_hashes": {
+    "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+    "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+    "rtl/fp32_bf16_epilogue.sv": "3fbf60151b57fe04f4aa1546f62735562b283a5499a0c18e6cf281e085e78611",
+    "rtl/int8_dot_core.sv": "9825be03f1f6021cab761a4ae15a238f81e02f43e15685abb65c8789e47b589e",
+    "rtl/smollm2_int8_gemm_executor.sv": "cec9a56c39abd6b5308cd89ce37e33e5b1be304164d175ce2ad961e6ee0a4e5b",
+    "tb/executor_tb.sv": "02584615e242da2cbb083df5a671d356da667f07ac5ae061aacd11f977f3bb38",
+    "scripts/run_executor_sim.py": "c042fd54f3a4d8499fd428ed904261c256e24d1c97fb0e3a16d28990e8732f8d",
+    "scripts/run_executor_errors.py": "4859053fed37c8b985b4d6aee64875b780fbc0c0f5f8806c471177a0a6017421",
+    "scripts/run_executor_validation.py": "9ac2fa691ebe14ed9e6e4296afeeb68e3e489de9d6d8c1f78f01738bb1844899",
+    "modules/int8_gemm_executor.json": "5a21d45e1461bedc5dad49348c25d142a07f13a8c3e6125abbd9f5d7f0ccb19c",
+    "contracts/rtl_port_binding.json": "ea033a7269285571057582d32e193dc17c115a84911d4f1646bb4cd096b78504",
+    "tb/executor_vectors/manifest.json": "671fb8376e25fe80ecc942b0ddfd48d82be6c56a7b6fd736817807ff71eaaa81"
+  },
+  "case_count": 16,
+  "error_case_count": 15,
+  "repeat_reset_scenarios": [
+    {
+      "case": "direct_m_start31_N1",
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/int8_gemm_executor/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/direct_m_start31_N1",
+        "+REPEATS=3",
+        "+RESET_PROBE=1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "case": "golden_warm_decode32_ATTN_SCORE_INT8",
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/int8_gemm_executor/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/golden_warm_decode32_ATTN_SCORE_INT8",
+        "+REPEATS=2",
+        "+RESET_PROBE=1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "case": "golden_warm_decode32_ATTN_VALUE_INT8",
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/int8_gemm_executor/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/golden_warm_decode32_ATTN_VALUE_INT8",
+        "+REPEATS=2",
+        "+RESET_PROBE=1"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "lint_command": [
+    "verilator",
+    "--lint-only",
+    "--unroll-count",
+    "2048",
+    "-Wall",
+    "-Wno-fatal",
+    "--top-module",
+    "smollm2_int8_gemm_executor",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_fp32_pkg.sv",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_fp32_mul.sv",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/fp32_bf16_epilogue.sv",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/int8_dot_core.sv",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/smollm2_int8_gemm_executor.sv"
+  ],
+  "lint_status": "PASS_NO_WIDTH_LATCH_MULTIDRIVER_ERRORS_UNUSED_ONLY",
+  "children_consumed": {
+    "functional_audit": "evidence/independent_datapath_audit/module_verification_report.json",
+    "gate": "FUNCTIONAL_ACCEPTED; OOC withheld"
+  },
+  "architecture_evidence": "13 fixtures show real256-product child acceptance; M32K1536 maxII1burst3072; inactive Bpanel filling overlaps active panel steps; four epilogue output lanes; staged A and result FIFO use registered memory reads",
+  "native_response_strategy": "Each returned beat deterministically processed at arrival, no downstream-ready; accepted-minus-processed credit<=4. No queued response beat can overwrite staged operand storage. On errors discard accepted responses and retire offered requests before invalidation.",
+  "PV_transpose": "scatter selected128bit source token featurebundle directly into inactiveN16K32 Bpanel; readiness only after everyresponse processed",
+  "remaining_gates": [
+    "independent integration verification",
+    "native fabric and concurrent alternate-bank DMA integration",
+    "Vivado2025.2 OOC on user-designated machine",
+    "5ns setup/hold/pulse-width/resource evidence",
+    "fullmodel/board validation"
+  ],
+  "scope_exclusions": [
+    "all30layers",
+    "checkpointaccuracy",
+    "otheropcodeexecutors",
+    "boardfit/route/hardwarepass"
+  ],
+  "synthesis": "NOT_RUN_PENDING_DESIGNATED_MACHINE"
+}

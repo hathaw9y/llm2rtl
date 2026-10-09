@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "data": 1, "done_counting": 1, "ack": 1}, "outputs": {"shift_ena": 1, "counting": 1, "done": 1}},
+  "semantics": {
+    "clock": "All sequential updates occur on positive clk edges, as specified.",
+    "reset": "Active high synchronous reset overrides other inputs and returns to empty pattern search; all outputs then low.",
+    "search": "Sample serial data each rising edge while searching; detect contiguous 1101, retaining overlapping prefix matches.",
+    "shift": "After the edge receiving the final 1 of 1101, shift_ena is high for exactly four complete clock cycles; four further rising edges shift the duration bits. Ignore control inputs during these cycles.",
+    "count": "After the fourth additional data edge, counting is high. A subsequent rising edge with done_counting high enters notification.",
+    "notification": "done remains high until a rising edge samples ack high; that edge returns to empty search. Data at that acknowledgment edge is not part of a new pattern.",
+    "initialization": "No power-up state is specified; do not initialize RTL. Verification establishes state with synchronous reset."
+  },
+  "numeric": {"pattern": "1101, serial order left to right", "additional_bits": 4, "counter_datapath": "Not included; done_counting is supplied externally", "output_encoding": "Moore outputs; at most one output asserted"},
+  "verification": {"oracle": "Independent history-based pattern detector and phase/cycle model derived from original text", "sampling": "Drive inputs on falling edges; check outputs before rising edge and after NBA settling", "cases": "Pattern overlaps and near misses, four shift cycles, immediate and delayed completion/ack, ignored inputs, synchronous reset in all phases, exhaustive short serial streams and deterministic random cycles", "success": "Fatal on mismatch, bounded timeout, explicit PASS line"},
+  "specification_ambiguities": ["Power-up state is unspecified; only behavior after a sampled reset is checked.", "Text does not explicitly describe overlap handling; search for every occurrence of contiguous 1101 implies preserving overlapping prefixes."]
+}

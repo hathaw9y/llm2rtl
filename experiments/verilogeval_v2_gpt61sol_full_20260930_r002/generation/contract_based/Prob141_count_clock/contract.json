@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "reset": 1, "ena": 1}, "outputs": {"pm": 1, "hh": 8, "mm": 8, "ss": 8}},
+  "semantics": {
+    "evidence": "problem.txt: all sequential logic positive edge; active high synchronous reset to 12:00 AM; reset higher priority than enable",
+    "reset": "At each rising edge with reset=1 set pm=0, hh=0x12, mm=ss=0, independent of ena",
+    "enable": "With reset=0 and ena=1 increment exactly one second at that edge; otherwise hold",
+    "rollover": "Seconds and minutes wrap 59 to 00. Hours advance 01 through 12 then 01. Toggle pm on 11:59:59 to 12:00:00 only",
+    "latency": "Outputs reflect the new registered clock after the same edge, no extra stages",
+    "initialization": "Power-up state unspecified; no initial assignments; verification establishes state by reset"
+  },
+  "numeric": {"encoding": "Unsigned packed BCD: tens in bits 7:4, units in bits 3:0", "ranges": {"hh": "01..12", "mm": "00..59", "ss": "00..59", "pm": "0 AM, 1 PM"}, "overflow": "Calendar clock wrap, no saturation"},
+  "verification": {"oracle": "Independent integer elapsed-second model modulo 86400 derived from original clock semantics", "sampling": "Drive reset and ena at falling edges, check hold before rising edge and outputs after NBA at rising edge +1 time unit", "coverage": "Reset with ena low/high, disabled hold, full 24-hour cycle, all BCD carries and hour/AM/PM boundaries, bursty enables, reset during operation", "failure": "$fatal on any mismatch and bounded timeout; PASS only after all checks"},
+  "specification_ambiguities": [{"topic": "Power-up and invalid BCD state", "evidence": "Original problem specifies reset state but no initial or invalid-state behavior", "resolution": "Do not impose power-up values or invalid-state recovery requirements; check legal reachable states after reset"}]
+}

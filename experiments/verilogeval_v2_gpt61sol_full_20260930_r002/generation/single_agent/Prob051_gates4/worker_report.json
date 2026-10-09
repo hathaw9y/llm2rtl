@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": "Correct sequential fixture passed; deliberately wrong fixture failed; repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01 and dev_checks.jsonl",
+      "coverage": "All 16 binary input combinations, including zero, all ones, and odd/even parity; independent bit-count oracle. Icarus 12 compilation and simulation succeeded."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board work performed.",
+    "Testbench exhaustively covers binary inputs; X/Z inputs were not tested."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "TopModule preserves the four-bit input and three one-bit outputs. Continuous reduction AND, OR, and XOR implement the specified combinational gates with no clock, reset, or added latency.",
+  "files": {
+    "rtl": "candidate.sv",
+    "unchanged_initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  },
+  "static_review": "Single continuous driver per output; correct reduction widths; no state or inferred latches."
+}

@@ -1,0 +1,40 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "timeout 20s python3 validate_contract.py",
+      "result": "PASS (structural validation only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 0,
+      "result": "PASS; no compiler warnings emitted",
+      "log": "development_compile.log"
+    },
+    {
+      "name": "simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "exit_code": 0,
+      "result": "PASS: 512 checks, all 256 binary inputs in ascending and descending order",
+      "log": "development_simulation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "Exact TopModule interface; complete combinational case with default, sized unsigned output constants, no state, no latches implied, no child modules or simulation constructs in DUT."
+    },
+    {
+      "name": "initial_preservation",
+      "result": "candidate_initial.sv copied immediately after initial implementation, before development checks; candidate.sv has had no revisions."
+    }
+  ],
+  "development_outcome": "Initial candidate passed independent exhaustive binary-input development simulation; delivered candidate.sv and preserved candidate_initial.sv.",
+  "limitations": [
+    "X/Z input behavior is unspecified by the original problem and was not tested.",
+    "No synthesis, timing, or board checks performed, as requested.",
+    "Official evaluation was not accessed and its results are unknown."
+  ]
+}

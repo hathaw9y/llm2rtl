@@ -1,0 +1,18 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "areset": 1, "in": 1}, "outputs": {"out": 1}, "extra_ports": false},
+  "semantics": {
+    "states": {"A": {"out": 0}, "B": {"out": 1}},
+    "transitions_from_original_diagram": {"A,in=0": "B", "A,in=1": "A", "B,in=0": "A", "B,in=1": "B"},
+    "sampling": "Sample in on rising clk edges, assuming conventional positive-edge clocking because the text does not specify an edge.",
+    "reset": "Original: asynchronously reset into state B if reset is high. Assert areset asynchronously; while high, B dominates each clock edge. Deassertion alone does not transition state.",
+    "output": "Moore output is determined by current state without an extra output register or cycle latency.",
+    "initialization": "No power-up state is specified; no initialization is added. Functional checks begin after an asserted reset."
+  },
+  "numeric": {"port_widths": "All ports are one bit as explicitly specified", "state_storage": "One bit encodes A=0 and B=1", "arithmetic": "No numeric arithmetic, rounding, saturation or overflow"},
+  "verification": {"oracle": "Independent named-state transition table taken directly from the original diagram", "sampling_phase": "Check one time unit after rising clock or reset assertion to allow nonblocking updates", "coverage": ["All four diagram transitions", "Repeated holds and toggles", "Asynchronous reset between clock edges", "Reset held across clock edges", "Reset deassertion and input changes without a rising clock", "Falling edge stability"], "timeout": "Bounded simulation timeout with fatal failure", "pass": "PASS only after all comparisons complete"},
+  "specification_ambiguities": [
+    {"issue": "Clock edge not explicitly stated", "resolution": "Use rising edge clk; conventional clocked FSM assumption, no conflicting original evidence"},
+    {"issue": "Power-up state and unknown input behavior unspecified", "resolution": "Do not prescribe initial state or X/Z input behavior; verify binary inputs after reset"}
+  ]
+}

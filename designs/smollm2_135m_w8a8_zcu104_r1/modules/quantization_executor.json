@@ -1,0 +1,144 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "module_id": "quantization_executor",
+  "module_kind": "opcode_executor",
+  "status": "frozen",
+  "implemented_opcodes": [
+    "QUANTIZE",
+    "DEQUANTIZE"
+  ],
+  "authorization": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_implementation_approval.json",
+    "sha256": "3cb075a86e08f0fe202181bd6b216566d4c6a724980c604909a809eb4716c2df"
+  },
+  "common_contracts": {
+    "engine_completion_contract": {
+      "path": "contracts/common/engine_completion_contract.json",
+      "sha256": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446"
+    },
+    "evidence_identity_contract": {
+      "path": "contracts/common/evidence_identity_contract.json",
+      "sha256": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda"
+    },
+    "isa_command_contract": {
+      "path": "contracts/common/isa_command_contract.json",
+      "sha256": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15"
+    },
+    "local_bank_contract": {
+      "path": "contracts/common/local_bank_contract.json",
+      "sha256": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d"
+    }
+  },
+  "design_refs": {
+    "isa_spec.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/isa_spec.json",
+      "sha256": "1b212ac05048122b4377581433052a91efa24c5c3bc3ce9bba3d0f7219cf630c"
+    },
+    "bank_layout.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/bank_layout.json",
+      "sha256": "dcd26383f787310d301cc6976d27fc76cf8ec44baed43fdf4258039f2441a6f2"
+    },
+    "contracts/numeric_contract.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/numeric_contract.json",
+      "sha256": "f5bb6dbf52528e9fe921867e465aca6c74768402be7860cedeadc950e9bf9261"
+    },
+    "contracts/compute_interface.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/compute_interface.json",
+      "sha256": "c2b579e39ac9b4cb7fbb6ca2fb751e7020d11d7b9a597a942ebb64550f772d06"
+    },
+    "scripts/isa_interpreter.py": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/scripts/isa_interpreter.py",
+      "sha256": "224ab0b9a79ee567310832a5cbbc223266c6bb5c82e6f020107e1bd46a57b8f5"
+    },
+    "verification/tensor_golden/manifest.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/verification/tensor_golden/manifest.json",
+      "sha256": "fe916c48afba868a28e0ad7ee86d92dbc0d98d0a20b13c9b50676815b4a33534"
+    }
+  },
+  "scope": {
+    "QUANTIZE": [
+      "mode0 A dynamic, selected BF16 rows renumbered from0, width576/1536",
+      "mode1 Q dynamic, nine heads of64, groups up to16 queries",
+      "mode2 K static, three KV heads, resident B7 prepared layer scales",
+      "mode3 V static, three KV heads and four16-feature groups, resident B7 prepared layer scales",
+      "mode4 P dynamic, nine query heads, full context1..1024, exclude causal/padding from max and store those bytes as0"
+    ],
+    "DEQUANTIZE": "mode0 gathered embedding rows width576, selected FP32 scale lane per row; exact signed INT8 to FP32 multiply then BF16 RNE"
+  },
+  "algorithm": {
+    "dynamic": "Two bank-read passes: pass1 reduce per-group BF16 absmax/P max without buffering full tensor; generate FP32_RNE(max/127), scale1 for allzero. Pass2 rereads same owned generation and quantizes each valid lane. Group order/layout exactly matches interpreter.",
+    "static": "Load valid positive finite B7 scales first; one BF16 source pass then byte output and scale sidecar.",
+    "quantization": "Exact promote BF16, FP32_RNE(x/scale), clip to [-127,127] or P[0,127], nearest-even integer rounding. Never substitute reciprocal multiplication. Finite quotient overflow saturates; invalid source/scale errors.",
+    "division": "Four pipelined restoring significand dividers, exact remainder supplies sticky bit; exponent/subnormal correction and RNE. Target four accepted lanes/cycle II1; exact latency and registers established in child cycle contract before dispatch.",
+    "dequantization": "Reuse frozen w8a8_fp32_pkg and w8a8_fp32_mul arithmetic implementation without altering children; four lanes, BF16 RNE with gradual underflow and signedzero."
+  },
+  "parallelism": {
+    "lanes": 4,
+    "dynamic_reducers": 18,
+    "resident_scale_slots": 18,
+    "full_tensor_buffer": false,
+    "bounded_native_credits_per_read_role": 4,
+    "clock_target_ns": 5.0,
+    "resource_claim": "Unmeasured; OOC required on designated machine; no fit or throughput claim"
+  },
+  "interfaces": {
+    "control": "Frozen cmd_valid/cmd_ready and captured identity response; one inflight across both opcodes",
+    "roles": "QUANT_SRC21, STATIC_TABLE22 only modes2/3, QUANT_DST23; DEQUANT_SRC24,DST25",
+    "native_data": "128bit read and byte-strobed128bit writes, three-cycle in-order responses with no response ready; reserve credits for all accepted and queued responses",
+    "descriptors": "Capture input data/scale readiness and embedding lane metadata; producer begin atomically sets destination profile/shape/position/layer/generation before any write; destination invalidation ack before matched error response",
+    "completion": "Both data and scale writes accepted, reads and arithmetic drained; original transaction/generations retained through release"
+  },
+  "verification": [
+    "Bitexact integer bytes and FP32 sidecars versus pinned interpreter golden for every mode",
+    "BF16 dequantized embedding outputs including all four selected scale lanes",
+    "rows1/16/17/32; widths576/1536 and contexts1/15/16/17/33/1024",
+    "halfway even rounding, saturation extremes, allzero, BF16/FP32 subnormals, signedzero",
+    "causal/padding zero and exclusion from P max",
+    "nonfinite input, invalid preparedscale, generation/profile/coverage errors, stalled reads/writes/response, live reset",
+    "repeated commands with producer generations and old output descriptor reuse; preserve unselected bytes",
+    "Independent read-only source audit and fresh replay; OOC remains separate"
+  ],
+  "immutables": [
+    "Existing GEMM RTL and FP32multiply/package/epilogue source identities",
+    "ISA, bank layout, original numeric and compute contracts"
+  ],
+  "allowed_refinements": [
+    "Define pipeline latency and native port packing preserving exact numerics and four-lane II1",
+    "Bound local FIFOs for no-ready responses and write backpressure; no full tensor storage",
+    "Reuse old FP32multiply/package by unchanged identity"
+  ],
+  "target": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_ns": 5.0,
+    "vivado": "2025.2",
+    "OOC": "Not run pending user-designated machine"
+  },
+  "promotion": {
+    "standalone_functional": "Required independent exact-source validation",
+    "physical": "Separate cumulative integration/route/user-board tests",
+    "full_model": false
+  },
+  "exclusions": [
+    "Calibration",
+    "Other nonlinear algorithms",
+    "Physical board access",
+    "Full-model or synthesis PASS"
+  ],
+  "rtl_binding": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_rtl_port_binding.json",
+    "sha256": "b671bd31a3fcff17a0fcd955c0df2a63f802ee963df48b3636c4ccc808acd7dd"
+  },
+  "arithmetic": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/datapaths/quantization_arithmetic.json",
+    "sha256": "61b35d34919d364a99e371cfbf8e50d483da08b3105d942402a1138f63d9c432"
+  },
+  "division_cycles": {
+    "divider": 19,
+    "quantization": 22,
+    "dequantization": 8,
+    "lanes": 4,
+    "II": 1
+  }
+}

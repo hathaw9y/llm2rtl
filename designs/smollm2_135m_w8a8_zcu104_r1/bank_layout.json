@@ -1,0 +1,627 @@
+{
+  "schema": "llm2rtl.bank_layout.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "status": "frozen",
+  "contract_version": 1,
+  "bank_count": 16,
+  "ownership_model": {
+    "mode": "single_exclusive_lock_per_bank",
+    "owner_kind": "module_port_role",
+    "busy_rule": "atomic all-used-bank acquire on executor acceptance; matched identity release after memory quiescence",
+    "valid_rule": "per descriptor/component byte coverage; cannot read merely because bank is free",
+    "chunk_rule": "END/START preserve complete and partial tensor coverage; busy clears only through drain",
+    "B7_rule": "one lock, two independently valid components; window update preserves static scale table"
+  },
+  "banks": [
+    {
+      "bank_id": "B0",
+      "name": "hidden_BF16",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "hidden"
+      ],
+      "encoded_id": 0,
+      "capacity_words": 2304,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "hidden_BF16",
+      "profile_codes": [
+        1
+      ],
+      "producers": [
+        "DEQUANTIZE",
+        "ADD"
+      ],
+      "consumers": [
+        "RMSNORM",
+        "ADD"
+      ]
+    },
+    {
+      "bank_id": "B1",
+      "name": "projection_output_BF16",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "projection_output"
+      ],
+      "encoded_id": 1,
+      "capacity_words": 2304,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "projection_output_BF16",
+      "profile_codes": [
+        2
+      ],
+      "producers": [
+        "GEMM_INT8"
+      ],
+      "consumers": [
+        "ADD"
+      ]
+    },
+    {
+      "bank_id": "B2",
+      "name": "norm_output_BF16",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "norm_output"
+      ],
+      "encoded_id": 2,
+      "capacity_words": 2304,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "norm_output_BF16",
+      "profile_codes": [
+        3
+      ],
+      "producers": [
+        "RMSNORM"
+      ],
+      "consumers": [
+        "QUANTIZE"
+      ]
+    },
+    {
+      "bank_id": "B3",
+      "name": "weight_ping_or_gamma_or_embedding",
+      "payload_capacity_bytes": 294912,
+      "scale_region_byte_offset": 294912,
+      "scale_region_capacity_bytes": 512,
+      "capacity_bytes": 295424,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "weight_INT8",
+        "gamma_BF16",
+        "embedding_rows_INT8"
+      ],
+      "encoded_id": 3,
+      "capacity_words": 18464,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "weight_ping_or_gamma_or_embedding",
+      "profile_codes": [
+        4,
+        5,
+        6
+      ],
+      "producers": [
+        "DMA_LOAD"
+      ],
+      "consumers": [
+        "GEMM_INT8",
+        "RMSNORM",
+        "DEQUANTIZE"
+      ]
+    },
+    {
+      "bank_id": "B4",
+      "name": "Q_BF16",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "Q_BF16"
+      ],
+      "encoded_id": 4,
+      "capacity_words": 2304,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "Q_BF16",
+      "profile_codes": [
+        7
+      ],
+      "producers": [
+        "GEMM_INT8",
+        "ROPE"
+      ],
+      "consumers": [
+        "ROPE",
+        "QUANTIZE"
+      ]
+    },
+    {
+      "bank_id": "B5",
+      "name": "K_BF16_or_residual",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "K_BF16",
+        "attention_residual_BF16"
+      ],
+      "encoded_id": 5,
+      "capacity_words": 2304,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "K_BF16_or_residual",
+      "profile_codes": [
+        8,
+        9
+      ],
+      "producers": [
+        "GEMM_INT8",
+        "ROPE",
+        "ADD"
+      ],
+      "consumers": [
+        "ROPE",
+        "QUANTIZE",
+        "RMSNORM",
+        "ADD"
+      ]
+    },
+    {
+      "bank_id": "B6",
+      "name": "V_BF16",
+      "payload_capacity_bytes": 12288,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 12288,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "V_BF16"
+      ],
+      "encoded_id": 6,
+      "capacity_words": 768,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "V_BF16",
+      "profile_codes": [
+        10
+      ],
+      "producers": [
+        "GEMM_INT8"
+      ],
+      "consumers": [
+        "QUANTIZE"
+      ]
+    },
+    {
+      "bank_id": "B7",
+      "name": "RoPE_and_static_KV_scales",
+      "payload_capacity_bytes": 6016,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 6016,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "RoPE_and_static_KV_scales"
+      ],
+      "components": {
+        "RoPE_window": {
+          "byte_offset": 0,
+          "capacity_bytes": 4096,
+          "lifetime": "updated for each processing block"
+        },
+        "static_KV_scales": {
+          "byte_offset": 4096,
+          "capacity_bytes": 1920,
+          "lifetime": "loaded once, retained across fragments and prefill/decode"
+        }
+      },
+      "encoded_id": 7,
+      "capacity_words": 376,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "RoPE_and_static_KV_scales",
+      "profile_codes": [
+        11
+      ],
+      "producers": [
+        "DMA_LOAD"
+      ],
+      "consumers": [
+        "ROPE",
+        "QUANTIZE"
+      ]
+    },
+    {
+      "bank_id": "B8",
+      "name": "K_INT8_or_gate_BF16",
+      "payload_capacity_bytes": 196608,
+      "scale_region_byte_offset": 196608,
+      "scale_region_capacity_bytes": 32,
+      "capacity_bytes": 196640,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "K_current_or_cache_INT8",
+        "gate_BF16"
+      ],
+      "encoded_id": 8,
+      "capacity_words": 12290,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "K_INT8_or_gate_BF16",
+      "profile_codes": [
+        12,
+        13
+      ],
+      "producers": [
+        "DMA_LOAD",
+        "QUANTIZE",
+        "GEMM_INT8"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "ATTN_SCORE_INT8",
+        "SILU_MUL"
+      ]
+    },
+    {
+      "bank_id": "B9",
+      "name": "V_INT8_or_up_BF16",
+      "payload_capacity_bytes": 196608,
+      "scale_region_byte_offset": 196608,
+      "scale_region_capacity_bytes": 64,
+      "capacity_bytes": 196672,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "V_current_or_cache_INT8",
+        "up_BF16"
+      ],
+      "encoded_id": 9,
+      "capacity_words": 12292,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "V_INT8_or_up_BF16",
+      "profile_codes": [
+        14,
+        15
+      ],
+      "producers": [
+        "DMA_LOAD",
+        "QUANTIZE",
+        "GEMM_INT8"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "ATTN_VALUE_INT8",
+        "SILU_MUL"
+      ]
+    },
+    {
+      "bank_id": "B10",
+      "name": "score_probability_or_SiLU_BF16",
+      "payload_capacity_bytes": 589824,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 589824,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "score_BF16",
+        "probability_BF16",
+        "SiLU_BF16"
+      ],
+      "encoded_id": 10,
+      "capacity_words": 36864,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "score_probability_or_SiLU_BF16",
+      "profile_codes": [
+        16,
+        17,
+        18
+      ],
+      "producers": [
+        "ATTN_SCORE_INT8",
+        "SOFTMAX",
+        "SILU_MUL"
+      ],
+      "consumers": [
+        "SOFTMAX",
+        "QUANTIZE"
+      ]
+    },
+    {
+      "bank_id": "B11",
+      "name": "attention_context_BF16",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "context_BF16"
+      ],
+      "encoded_id": 11,
+      "capacity_words": 2304,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "attention_context_BF16",
+      "profile_codes": [
+        19
+      ],
+      "producers": [
+        "ATTN_VALUE_INT8"
+      ],
+      "consumers": [
+        "QUANTIZE"
+      ]
+    },
+    {
+      "bank_id": "B12",
+      "name": "logits_BF16",
+      "payload_capacity_bytes": 98304,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 98304,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "last_token_logits"
+      ],
+      "encoded_id": 12,
+      "capacity_words": 6144,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "logits_BF16",
+      "profile_codes": [
+        20
+      ],
+      "producers": [
+        "GEMM_INT8"
+      ],
+      "consumers": [
+        "DMA_STORE"
+      ]
+    },
+    {
+      "bank_id": "B13",
+      "name": "A_or_probability_INT8",
+      "payload_capacity_bytes": 294912,
+      "scale_region_byte_offset": 294912,
+      "scale_region_capacity_bytes": 96,
+      "capacity_bytes": 295008,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "A_INT8",
+        "probability_INT8"
+      ],
+      "encoded_id": 13,
+      "capacity_words": 18438,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "A_or_probability_INT8",
+      "profile_codes": [
+        21,
+        22
+      ],
+      "producers": [
+        "QUANTIZE"
+      ],
+      "consumers": [
+        "GEMM_INT8",
+        "ATTN_VALUE_INT8"
+      ]
+    },
+    {
+      "bank_id": "B14",
+      "name": "Q_INT8",
+      "payload_capacity_bytes": 18432,
+      "scale_region_byte_offset": 18432,
+      "scale_region_capacity_bytes": 96,
+      "capacity_bytes": 18528,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "Q_INT8"
+      ],
+      "encoded_id": 14,
+      "capacity_words": 1158,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "Q_INT8",
+      "profile_codes": [
+        23
+      ],
+      "producers": [
+        "QUANTIZE"
+      ],
+      "consumers": [
+        "ATTN_SCORE_INT8"
+      ]
+    },
+    {
+      "bank_id": "B15",
+      "name": "weight_pong",
+      "payload_capacity_bytes": 294912,
+      "scale_region_byte_offset": 294912,
+      "scale_region_capacity_bytes": 128,
+      "capacity_bytes": 295040,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "weight_INT8"
+      ],
+      "encoded_id": 15,
+      "capacity_words": 18440,
+      "word_bits": 128,
+      "format": "profile-tagged BF16/INT8/FP32 components",
+      "layout": "weight_pong",
+      "profile_codes": [
+        4
+      ],
+      "producers": [
+        "DMA_LOAD"
+      ],
+      "consumers": [
+        "GEMM_INT8"
+      ]
+    }
+  ],
+  "profile_rules": {
+    "weight_INT8": {
+      "data_shape": "[N_tile,K]",
+      "row_stride_bytes": "align(K,16)",
+      "scale_shape": "[ceil(N_tile/16)]",
+      "scale_index": "floor(local_output_channel/16)",
+      "max_scale_bytes": 48
+    },
+    "embedding_rows_INT8": {
+      "data_shape": "[rows,576]",
+      "row_stride_bytes": 576,
+      "scale_shape": "[rows,4] FP32 blocks",
+      "scale_index": "row*4+descriptor.embedding_scale_lane[row]",
+      "max_scale_bytes": 512,
+      "scale_row_stride_bytes": 16,
+      "lane_selector_storage": "two-bit descriptor field per row, written by validated DMA aux; not CPU tensor processing"
+    },
+    "A_INT8": {
+      "data_shape": "[rows,K]",
+      "row_stride_bytes": "align(K,16)",
+      "scale_shape": "[ceil(rows/16)]",
+      "scale_index": "floor(row/16)",
+      "max_scale_bytes": 8
+    },
+    "Q_INT8": {
+      "data_shape": "[rows,9,64]",
+      "row_stride_bytes": 576,
+      "scale_shape": "[9,ceil(rows/16)]",
+      "scale_index": "head*ceil(rows/16)+floor(row/16)",
+      "max_scale_bytes": 72
+    },
+    "K_current_or_cache_INT8": {
+      "data_shape": "[tokens,3,64]",
+      "row_stride_bytes": 192,
+      "scale_shape": [
+        3
+      ],
+      "scale_index": "KV_head",
+      "max_scale_bytes": 12
+    },
+    "V_current_or_cache_INT8": {
+      "data_shape": "[tokens,3,64]",
+      "row_stride_bytes": 192,
+      "scale_shape": [
+        3,
+        4
+      ],
+      "scale_index": "KV_head*4+floor(feature/16)",
+      "max_scale_bytes": 48
+    },
+    "probability_INT8": {
+      "data_shape": "[rows,9,S_pad]",
+      "row_stride_bytes": "9*align(valid_context,16)",
+      "scale_shape": "[9,ceil(rows/16)]",
+      "scale_index": "head*ceil(rows/16)+floor(row/16)",
+      "max_scale_bytes": 72
+    },
+    "score_probability_BF16": {
+      "data_shape": "[rows,9,S_pad]",
+      "S_pad": "align(valid_context,16)",
+      "row_stride_bytes": "18*align(valid_context,16)"
+    },
+    "static_KV_scales": {
+      "data_shape": [
+        30,
+        64
+      ],
+      "entry_stride_bytes": 64,
+      "K_scale_byte_offset": "4096 + layer*64 + head*4",
+      "V_scale_byte_offset": "4096 + layer*64 + 16 + (head*4+floor(feature/16))*4",
+      "padding": "entry bytes 12..15 zero; entries contain 3 K FP32 scales and 12 V FP32 scales",
+      "bank": 7,
+      "bank_table_byte_offset": 4096
+    }
+  },
+  "physical_memory": {
+    "all_write_bits": 128,
+    "INT8_lanes_per_write": 16,
+    "GEMM_source_read_bits": 256,
+    "INT8_lanes_per_wide_read": 32,
+    "wide_alignment_bytes": 32,
+    "DMA_stream_bits": 128,
+    "DMA_alignment_bytes": 16,
+    "native_address_unit": "128-bit words; wide request uses an even word address",
+    "read_latency_cycles": 3,
+    "read_response": "resp_valid for every accepted read; explicit response owner association",
+    "wide_read_banks": [
+      3,
+      13,
+      14,
+      15
+    ],
+    "wide_address": "even128-bit word index, response {word[a+1],word[a]}; requests must remain within allocated bank",
+    "strobe": "16 byte lanes per write; tensor tails zero; metadata padding zero",
+    "read_backpressure": "engine must accept configured read responses without dropping them"
+  },
+  "descriptor_rules": {
+    "profile": "one of profile_encodings and allowed by the chosen bank",
+    "dimensions": "rows, cols interpreted by profile; profile-specific shape/byte extent checked before mutation",
+    "position": "RoPE/attention logical position; unused profiles require0",
+    "layer": "cache/static profiles layer0..29; unused profiles require0",
+    "component": "B7:0 full initialization,1 RoPE-window update preserving static table,2 static-table update preserving RoPE window; other banks require0",
+    "generation": "nonzero32-bit monotonically increasing within bank/component until coordinated reset; no wrap; no command may reconfigure a busy bank",
+    "validity": "configuration invalidates only targeted component; never marks data/scale valid without successful covered writes"
+  },
+  "coverage": "Per16-byte block, 16-bit accepted-byte mask; require all bytes in configured data and padded scale extents. BF16 element writes and embedding scale lane metadata tracked. Invalid tails cannot satisfy missing valid bytes. Failed commands invalidate their targeted destination/component.",
+  "output_tile_coverage": "BANK_CONFIG destination once per tensor. N-tile GEMM commands accumulate BF16 output coverage; do not reconfigure between its N tiles.",
+  "DMA_scale_extent": "weight align16(ceil(Ntile/16)*4), K16 bytes, V48 bytes, A align16(ceil(rows/16)*4), Q/P align16(9*ceil(rows/16)*4), embedding rows*16",
+  "logical_capacity_bytes": 2224928,
+  "resource_claim": "logical allocation only; inferred/routed BRAM and URAM counts unverified",
+  "descriptor_profile_shapes": {
+    "hidden_projection_norm_residual_context": "rows1..32, cols576; BF16 data rows*576*2",
+    "Q_BF16_Q_INT8": "rows1..32, cols576 (9*64); BF16 or INT8; Q8 scale align16(9*ceil(rows/16)*4)",
+    "K_BF16_V_BF16": "rows1..32, cols192 (3*64); BF16",
+    "gate_up_SiLU_BF16": "rows1..32, cols1536",
+    "weight_INT8": "rows=Ntile1..192, cols=K576 or1536; scale align16(ceil(Ntile/16)*4)",
+    "gamma_BF16": "rows1, cols576",
+    "embedding_rows_INT8": "rows1..32, cols576; data rows*576, scale rows*16, two-bit descriptor lane per row",
+    "K_V_cache_INT8": "rows=tokens1..1024, cols192, layer0..29; K16-byte padded scale, V48-byte scale",
+    "score_probability": "rows1..32, cols=valid_context1..1024, position+rows<=cols; data rows*9*align16(cols)*element_bytes",
+    "A_INT8": "rows1..32, cols576 or1536; scale align16(ceil(rows/16)*4)",
+    "last_token_logits": "rows1, cols49152, BF16",
+    "B7": "component0/1: rows1..32,cols64, position+rows<=1024; component2: rows30,cols64,position0; static scales always at4096..6015"
+  },
+  "coverage_metadata_note": "Coverage storage, descriptors and lane selectors are additional control resources, excluded from logical data-bank byte capacity. Module implementation may compress coverage if it proves identical readiness for partial/duplicate/gap writes."
+}

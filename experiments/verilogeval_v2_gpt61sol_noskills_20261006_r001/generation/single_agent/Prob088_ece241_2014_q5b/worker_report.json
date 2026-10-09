@@ -1,0 +1,27 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": "Correct sequential fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "output_checks": 125,
+      "evidence": "development/01 and dev_checks.jsonl"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Behavior before the first asynchronous reset is unspecified and is not checked."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Two-bit one-hot states A=01 and B=10, asynchronous active-high reset to A, combinational Mealy output.",
+  "verification": "Independent serial-complement oracle checks output before and after positive clock edges, both input values in both states, long zero prefixes, persistent B behavior, reset held across a clock edge, and reset assertion between edges."
+}

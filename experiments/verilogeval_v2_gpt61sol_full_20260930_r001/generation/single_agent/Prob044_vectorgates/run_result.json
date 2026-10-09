@@ -1,0 +1,175 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob044_vectorgates",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob044_vectorgates",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob044_vectorgates/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790734811.5099154,
+    "ended_at_unix": 1790734867.8043659,
+    "seconds": 56.29445123672485,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 71170,
+      "cached_input_tokens": 61312,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1325,
+      "reasoning_output_tokens": 8
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "aaf59b031e0115ef9b47525a780a5f69b5a63ffaa32cdcf34cf94a1e0fa84ea7",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "passed",
+        "details": "Exact port widths and names; combinational continuous assignments; logical OR produces one bit; inverted b occupies bits 5:3 and inverted a bits 2:0. No clock, reset, state, or pipeline required."
+      },
+      {
+        "name": "Icarus development compile",
+        "result": "passed",
+        "options": "-g2012 -Wall -s dev_tb",
+        "timeout_seconds": 20,
+        "exit_code": 0,
+        "log": "dev_compile.log"
+      },
+      {
+        "name": "exhaustive binary development simulation",
+        "result": "passed",
+        "input_pairs": 64,
+        "timeout_seconds": 20,
+        "exit_code": 0,
+        "log": "dev_simulation.log"
+      }
+    ],
+    "development_outcome": "Initial candidate passed all development checks and was retained without RTL revisions. candidate_initial.sv was preserved before development checks.",
+    "limitations": [
+      "Development simulation covers binary inputs; X/Z inputs were not tested.",
+      "Official evaluation results are unavailable.",
+      "No synthesis, timing analysis, or board validation performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob044_vectorgates_test.sv": "1ad5f4ee9503777a728ad9fc2f5fb6dd1807719070c3148bb85e96e29965a940",
+      "candidate.sv": "aaf59b031e0115ef9b47525a780a5f69b5a63ffaa32cdcf34cf94a1e0fa84ea7",
+      "Prob044_vectorgates_ref.sv": "c985c4e754baf171526e86dd8f130549132e148da7db7e3348c079162d8f8353"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob044_vectorgates_test.sv",
+        "Prob044_vectorgates_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01561606116592884
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb044_vectorgates_test.sv:39: $finish called at 1306 (1ps)\nHint: Output 'out_or_bitwise' has no mismatches.\nHint: Output 'out_or_logical' has no mismatches.\nHint: Output 'out_not' has no mismatches.\nHint: Total mismatched samples is 0 out of 261 samples\n\nSimulation finished at 1306 ps\nMismatches: 0 in 261 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010046562179923058
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob044_vectorgates_test.sv": "1ad5f4ee9503777a728ad9fc2f5fb6dd1807719070c3148bb85e96e29965a940",
+      "candidate.sv": "aaf59b031e0115ef9b47525a780a5f69b5a63ffaa32cdcf34cf94a1e0fa84ea7",
+      "Prob044_vectorgates_ref.sv": "c985c4e754baf171526e86dd8f130549132e148da7db7e3348c079162d8f8353"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob044_vectorgates_test.sv",
+        "Prob044_vectorgates_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01227565761655569
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb044_vectorgates_test.sv:39: $finish called at 1306 (1ps)\nHint: Output 'out_or_bitwise' has no mismatches.\nHint: Output 'out_or_logical' has no mismatches.\nHint: Output 'out_not' has no mismatches.\nHint: Total mismatched samples is 0 out of 261 samples\n\nSimulation finished at 1306 ps\nMismatches: 0 in 261 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009920634329319
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

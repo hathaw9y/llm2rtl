@@ -1,0 +1,57 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "c": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "type": "pure combinational",
+    "truth_table_abc_to_out": {
+      "000": 0,
+      "001": 1,
+      "010": 1,
+      "011": 1,
+      "100": 1,
+      "101": 1,
+      "110": 1,
+      "111": 1
+    },
+    "equation": "out = a OR b OR c",
+    "timing": "Continuous combinational response; no clock or cycle latency specified.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization required."
+  },
+  "numeric": {
+    "domain": "Single-bit Boolean inputs and output",
+    "operation": "Bitwise inclusive OR",
+    "signedness": "Unsigned single-bit signals",
+    "arithmetic": "No arithmetic, rounding, saturation, truncation or overflow."
+  },
+  "verification": {
+    "oracle": "Explicit truth-table constants transcribed from the original Karnaugh map, indexed by {a,b,c}.",
+    "coverage": "Exhaustively apply all eight binary combinations in forward and reverse order; compare output after combinational settling.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp.",
+    "timeouts": "Finite external timeout for every compile and simulation; testbench watchdog.",
+    "scope": "Development simulation only; no official evaluation, synthesis or board access."
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z inputs is unspecified by the binary Karnaugh map; no extra requirement imposed."
+  ]
+}

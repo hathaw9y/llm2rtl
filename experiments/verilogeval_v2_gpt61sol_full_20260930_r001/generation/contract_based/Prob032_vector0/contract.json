@@ -1,0 +1,55 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "vec": {
+        "direction": "input",
+        "width": 3,
+        "range": "[2:0]"
+      },
+      "outv": {
+        "direction": "output",
+        "width": 3,
+        "range": "[2:0]"
+      },
+      "o2": {
+        "direction": "output",
+        "width": 1
+      },
+      "o1": {
+        "direction": "output",
+        "width": 1
+      },
+      "o0": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "equations": [
+      "outv = vec",
+      "o2 = vec[2]",
+      "o1 = vec[1]",
+      "o0 = vec[0]"
+    ],
+    "timing": "Continuous combinational connections; no clock or cycle latency, outputs follow input after simulation settling.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization required.",
+    "input_domain": "All eight binary vectors are valid."
+  },
+  "numeric": {
+    "representation": "Three uninterpreted packed bits indexed 2 down to 0.",
+    "arithmetic": "None; exact bit preservation without rounding, truncation, saturation or overflow.",
+    "bit_order": "o0 is least significant bit vec[0], o1 is vec[1], o2 is vec[2]."
+  },
+  "verification": {
+    "method": "Independent self-checking testbench with explicit TopModule instance.",
+    "coverage": "Exhaust all eight binary vectors in ascending and descending order, checking vector equality and scalar bits against integer division/modulo expectations.",
+    "timing": "Allow one simulation time unit for combinational settling after each input change.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp; finite shell timeouts for compile and simulation.",
+    "success": "All comparisons pass and testbench prints PASS; nonzero exit or timeout is failure."
+  },
+  "specification_ambiguities": []
+}

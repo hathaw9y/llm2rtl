@@ -1,0 +1,26 @@
+{
+  "schema": "llm2rtl.common_contract.v1",
+  "contract_id": "local_bank",
+  "version": 1,
+  "bank_id_semantics": "validated_logical_local_tensor_handle",
+  "descriptor_required_fields": [
+    "bank_id",
+    "capacity_words",
+    "word_bits",
+    "format",
+    "layout",
+    "valid",
+    "busy",
+    "owner"
+  ],
+  "states": ["free", "filling", "ready", "compute_active", "draining", "fault"],
+  "ownership_rules": [
+    "dma_load_must_own_destination_before_write",
+    "compute_must_own_every_input_and_output_bank_before_start",
+    "dma_store_must_read_a_valid_ready_bank",
+    "active_bank_cannot_be_overwritten",
+    "ownership_changes_only_on_explicit_completion_or_reset"
+  ],
+  "router_rule": "router_resolves_bank_id_to_physical_base_extent_format_and_state",
+  "compute_address_rule": "compute_never_receives_raw_local_address_or_offset"
+}

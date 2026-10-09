@@ -1,0 +1,19 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "areset": 1, "d": 8}, "outputs": {"q": 8}},
+  "semantics": {
+    "clock": "Capture d on each positive edge of clk, as specified by 'All DFFs should be triggered by the positive edge of clk'.",
+    "reset": "Active high asynchronous reset sets all q bits to zero independently of clk; reset has priority while asserted, based on 'active high asynchronous reset' and 'output should be reset to 0'.",
+    "hold": "D flip-flops retain q between positive clock edges when reset is inactive; reset deassertion alone does not capture d.",
+    "initialization": "No initial value is specified. No RTL initialization is added, and verification does not require any pre-event power-up value.",
+    "latency": "q reflects sampled d after the positive edge sequential update, with no extra cycle."
+  },
+  "numeric": {"data_width": 8, "reset_value": "8'h00", "interpretation": "Eight independent bits; no arithmetic or signed interpretation."},
+  "verification": {
+    "oracle_source": "Original problem.txt D flip-flop and reset requirements",
+    "sampling": "Check after a 1 ns settling delay following clock/reset events to allow nonblocking updates.",
+    "cases": ["Asynchronous reset while clock low and high", "Reset dominance at rising clock", "Reset release holds zero", "All 256 input bytes captured on rising edges", "Data changes and falling edges hold q", "Reset concurrent with rising clock"],
+    "failure_handling": "Case inequality mismatches invoke $fatal; bounded timeout; PASS printed only after all checks."
+  },
+  "specification_ambiguities": ["Power-up q before the first reset or rising clock is unspecified; the implementation leaves it uninitialized and the oracle does not assert a required initial value."]
+}

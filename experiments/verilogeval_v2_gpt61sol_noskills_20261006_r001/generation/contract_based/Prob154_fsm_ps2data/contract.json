@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "in": 8}, "outputs": {"out_bytes": 24, "done": 1}},
+  "semantics": {
+    "clock": "All sequential updates occur on positive edges.",
+    "reset": "Active high synchronous reset clears packet progress and done at the sampled edge; no asynchronous response.",
+    "framing": "Discard bytes with bit 3 clear while searching. A byte with bit 3 set starts a packet; accept the next two bytes regardless of bit 3. Search resumes with the following byte, including while reporting the preceding packet.",
+    "timing": "The waveform samples byte 1 at 15ns, byte 2 at 25ns, byte 3 at 35ns, then asserts done at 45ns. Report each packet one rising edge after its third byte for one cycle.",
+    "initialization": "Waveform shows unknown done before the first reset edge. No declaration initialization is imposed. Packet data outside done is unconstrained.",
+    "output": "When done is asserted, output the completed packet in arrival order, first byte in bits 23:16."
+  },
+  "numeric": {"byte_width": 8, "packet_width": 24, "packet_length": 3, "start_bit": 3, "arithmetic": "No signed arithmetic or numeric saturation."},
+  "verification": {"oracle": "Independent byte-count and pending-packet model from original specification.", "waveform": "Replay all original input and reset values at the original rising edge timestamps and verify outputs after updates and at falling edges.", "boundaries": "Discard runs, consecutive packets, unrestricted payload bits, resets at every packet phase, synchronous reset between edges, deterministic random stream.", "checks": "Check done every cycle and out_bytes only when done; fatal on mismatch and timeout."},
+  "specification_ambiguities": ["The phrase cycle immediately after the third byte is resolved using the explicit waveform: done at 45ns for a third byte sampled at 35ns.", "Reset values for out_bytes are unspecified and are not checked."]
+}

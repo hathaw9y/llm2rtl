@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "One-bit Moore state: B=1, A=0. Input 0 toggles on the rising clock edge; input 1 holds. Active-high asynchronous reset selects B. Exact module name and ports preserved."
+    },
+    {
+      "name": "Icarus development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "log": "compile.log",
+      "details": "Compiler exited with code 139; captured diagnostic log is empty."
+    },
+    {
+      "name": "development simulation",
+      "result": "not_run",
+      "details": "Compilation failed. Independent self-checking dev_tb.sv is preserved and covers all 256 eight-input sequences, asynchronous reset, reset held across clock edges, and output stability between clock edges."
+    }
+  ],
+  "development_outcome": "Initial synthesizable RTL delivered without revisions. Static review passed; development simulation success is not claimed because the compiler failed.",
+  "limitations": [
+    "No successful development compile or simulation due to compiler exit code 139.",
+    "No synthesis, timing, or board checks performed.",
+    "Official evaluation is external and its results are unavailable."
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "cpu_overheated",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "shut_off_computer",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "arrived",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "gas_tank_empty",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "keep_driving",
+        "direction": "output",
+        "width": 1
+      }
+    ]
+  },
+  "semantics": {
+    "kind": "pure combinational, no retained state",
+    "shut_off_computer": "1 when cpu_overheated is 1; otherwise 0",
+    "keep_driving": "1 exactly when arrived is 0 and gas_tank_empty is 0; otherwise 0",
+    "timing": "Outputs reflect current inputs after combinational settling; no clock or cycle latency",
+    "reset": "No reset port or reset behavior",
+    "initialization": "No stored state or explicit initialization; defined binary inputs determine outputs",
+    "bug_fix": "Assign both outputs on all paths to eliminate inferred latches"
+  },
+  "numeric": {
+    "type": "Unsigned single-bit Boolean signals",
+    "arithmetic": "No addition, subtraction, zero flag, rounding, saturation, or overflow; only conditionals and single-bit complement",
+    "input_domain": "All eight binary input combinations; X/Z behavior not specified by the problem"
+  },
+  "verification": {
+    "oracle": "Independent truth table: shut_off_computer follows cpu_overheated; keep_driving truth table for arrived/gas_tank_empty is 00:1, 01:0, 10:0, 11:0",
+    "coverage": "Exhaust all eight binary combinations and all 64 ordered input transitions, checking outputs after settling to catch retained values",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top and matching vvp; finite timeout for each compile/simulation",
+    "pass": "Self-checking comparisons with fatal mismatch and explicit PASS marker"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Introductory sentence calls this an adder-subtractor with a zero flag, but the code contains only Boolean controls",
+      "resolution": "Use the supplied TopModule interface and control behavior; add no arithmetic ports or behavior"
+    },
+    {
+      "issue": "Missing else assignments do not explicitly state defaults",
+      "resolution": "Infer false defaults from control meanings: do not shut off a cool CPU and do not keep driving after arrival"
+    }
+  ]
+}

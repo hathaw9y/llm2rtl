@@ -1,0 +1,35 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "j": {"direction": "input", "width": 1},
+      "k": {"direction": "input", "width": 1},
+      "Q": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "clock": "Sample j and k on each positive edge of clk; update Q using the state immediately before that edge.",
+    "truth_table": {"00": "hold Qold", "01": "Q becomes 0", "10": "Q becomes 1", "11": "Q becomes bitwise complement of Qold"},
+    "between_edges": "Q retains its state regardless of input changes or falling clock edges.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "Initial Q is unspecified; no initialization is added. A set or clear clock edge establishes known state.",
+    "latency": "State updates at the sampling positive edge, observable after the sequential update settles."
+  },
+  "numeric": {
+    "state_width": 1,
+    "input_widths": 1,
+    "operation": "Single-bit logical state selection and bitwise inversion; no arithmetic, rounding, saturation, or overflow applies."
+  },
+  "verification": {
+    "oracle": "Independent testbench truth-table model using the previous expected Q.",
+    "coverage": "Establish both prior states with set/clear, then test all four j/k combinations for each prior state; exercise repeated toggles and a deterministic long sequence.",
+    "timing": "Check Q before rising edges, after rising-edge updates, on falling edges, and after input changes while clock is low.",
+    "initial_state": "Do not assert a power-up state; initialize the model through a specified clear edge.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp, finite shell and testbench timeouts."
+  },
+  "specification_ambiguities": [
+    "Power-up Q and behavior for X/Z-valued j or k are unspecified; binary truth-table behavior is the verification requirement."
+  ]
+}

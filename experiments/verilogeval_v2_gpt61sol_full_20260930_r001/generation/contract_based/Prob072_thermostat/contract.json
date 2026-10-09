@@ -1,0 +1,57 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "mode": {
+        "width": 1
+      },
+      "too_cold": {
+        "width": 1
+      },
+      "too_hot": {
+        "width": 1
+      },
+      "fan_on": {
+        "width": 1
+      }
+    },
+    "outputs": {
+      "heater": {
+        "width": 1
+      },
+      "aircon": {
+        "width": 1
+      },
+      "fan": {
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "pure combinational",
+    "heater": "On exactly when mode=1 and too_cold=1",
+    "aircon": "On exactly when mode=0 and too_hot=1",
+    "fan": "On exactly when heater, aircon, or fan_on is on",
+    "timing": "Outputs follow current inputs after combinational settling; no clock or cycle latency",
+    "reset": "No reset port or reset behavior",
+    "initialization": "No state or initialization required",
+    "simultaneous_temperature_flags": "Mode selects the applicable flag even when both flags are asserted"
+  },
+  "numeric": {
+    "type": "One-bit unsigned Boolean inputs and outputs",
+    "arithmetic": "Boolean operations only; no arithmetic, overflow, rounding, saturation, or truncation",
+    "unknown_inputs": "X/Z behavior is unspecified by the original problem; verification covers binary inputs"
+  },
+  "verification": {
+    "plan": "Exhaustively drive all 16 binary input combinations and compare outputs to an independent mode-based procedural oracle",
+    "checks": [
+      "Heater inactive in cooling mode",
+      "Aircon inactive in heating mode",
+      "Fan active with either appliance or manual request",
+      "Every output defined for all binary input combinations"
+    ],
+    "tools": "Icarus Verilog v12 with -g2012, explicit dev_tb top, and finite compile/run timeouts"
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,32 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "compile_failed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob049_m2014_q4b/development/01"
+    },
+    {
+      "label": "tb_correction_1",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob049_m2014_q4b/development/02"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_validation": "passed_structure_only",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Original specification does not explicitly state reset polarity or reset value; active-high clear-to-zero interpretation is recorded in contract.json.",
+    "Power-up state is unspecified and is not asserted by the testbench."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_version": "dev_tb_initial.sv",
+      "change": "Rename task argument context to check_name.",
+      "reason": "context is a reserved SystemVerilog keyword; initial Icarus 12 crashed and supplemental Icarus 11 diagnosed syntax errors. Expected values, timing, and all checks are unchanged."
+    }
+  ],
+  "verification_summary": "62 directed checks cover rising-edge capture, storage between edges, falling-edge hold, asynchronous reset with clock high and low, reset release, held reset, and coincident reset/clock assertion."
+}

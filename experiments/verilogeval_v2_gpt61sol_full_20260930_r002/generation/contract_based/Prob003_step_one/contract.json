@@ -1,0 +1,38 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top_module": "TopModule",
+    "ports": [
+      {
+        "name": "one",
+        "direction": "output",
+        "width_bits": 1
+      }
+    ],
+    "inputs": [],
+    "evidence": "problem.txt: module named TopModule; output one; all ports one bit unless specified"
+  },
+  "semantics": {
+    "equation": "one = 1'b1 continuously",
+    "clock": "none specified or needed",
+    "reset": "none specified or needed",
+    "latency": "no cycle latency; continuous constant drive",
+    "initialization": "No state or initial unknown behavior is specified; output is logic high after continuous assignment settles at time zero.",
+    "evidence": "problem.txt: The module should always drive 1 (or logic high)."
+  },
+  "numeric": {
+    "width_bits": 1,
+    "constant": "1'b1",
+    "arithmetic": "none",
+    "rounding_overflow": "not applicable"
+  },
+  "verification": {
+    "oracle": "Original problem requires one to equal logic high at all observations.",
+    "sampling": "After time-zero settling (#0), then after 1 ps and over multiple later simulation times; monitor any subsequent output change.",
+    "unknown_check": "Case inequality against 1'b1 rejects X and Z.",
+    "timeout": "bounded independent simulation timeout",
+    "primary_command": "python3 dev_check.py --label initial",
+    "scope": "development simulation only; no official evaluation or synthesis"
+  },
+  "specification_ambiguities": []
+}

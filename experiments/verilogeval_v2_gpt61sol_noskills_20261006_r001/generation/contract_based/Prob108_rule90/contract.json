@@ -1,0 +1,52 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "load": 1,
+      "data": 512
+    },
+    "outputs": {
+      "q": 512
+    }
+  },
+  "semantics": {
+    "clock": "All state changes occur on positive edges, as explicitly specified.",
+    "load": "When load is asserted at a positive edge, q receives data; otherwise advance one Rule 90 step.",
+    "transition": "For each i in 0..511, next q[i] equals old q[i-1] XOR old q[i+1]; missing neighbours are zero.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "No initial state is specified; do not initialize q. Tests establish known state by synchronous load.",
+    "between_edges": "q retains state between positive edges."
+  },
+  "numeric": {
+    "state_width": 512,
+    "indices": "511:0",
+    "operation": "One-bit XOR, independent of center cell",
+    "boundaries": {
+      "q[-1]": 0,
+      "q[512]": 0
+    }
+  },
+  "verification": {
+    "oracle": "Independent per-cell loop implementing the original neighbour rule with explicit zero boundaries.",
+    "sampling": "Drive at falling edges, check stability before rising edge, check results after nonblocking assignments settle.",
+    "cases": [
+      "zero state",
+      "all ones",
+      "single live cells at both boundaries and interior",
+      "alternating patterns",
+      "consecutive loads",
+      "random loaded states and long evolution",
+      "data changes while load is low"
+    ],
+    "failure": "$fatal on mismatch; bounded timeout; PASS line only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "power-up state",
+      "evidence": "Original specifies neither reset nor initialization.",
+      "resolution": "Leave state uninitialized; no correctness expectation before first load."
+    }
+  ]
+}

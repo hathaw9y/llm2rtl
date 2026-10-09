@@ -1,0 +1,62 @@
+{
+  "schema": "llm2rtl.datapath_contract.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "status": "proposed_implementation_review",
+  "module_id": "int8_dot_core",
+  "parent": "int8_gemm_executor",
+  "interface": {
+    "clock": "clk; rising edge",
+    "reset": "synchronous active-low resetn; coordinated system reset clears pipeline valid and sums",
+    "input": "step_valid/step_ready; A[16] signed8, B[16 output channels][16 K] signed8; row_index7, first_k, last_k, n_valid5, output tag and cached FP32 combined scale",
+    "layout": "byte lane0 is bits7:0; B byte index=n*16+k; n_valid1..16; row_index0..95",
+    "output": "result_valid/result_ready; sixteen signed INT32 sums, same tag, scale and valid-channel count; stable while stalled",
+    "stall": "elastic pipeline; never overwrite unretired results; stall propagates to step_ready; no accepted step dropped or duplicated"
+  },
+  "architecture": {
+    "n_lanes": 16,
+    "k_lanes": 16,
+    "products_per_issue": 256,
+    "max_logical_rows": 96,
+    "dataflow": "For each N16 panel, stream ascending K32 panels; for each K16 half issue all logical rows. Accumulate each row/N lane across the complete K; reuse B panel across rows and three GQA query heads.",
+    "dsp_packing": "disabled baseline; 256 independent registered signed 8x8 product paths; no assumption of packing correction",
+    "pipeline": "nominal multiply1 + balanced reduction4 + accumulation1 cycles; elastic stalls affect latency, not association or arithmetic",
+    "reduction_widths": [
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "sum_width": 32,
+    "psum_storage": "16 channel partitions, each96 signed32 entries, asynchronous local read and registered sum update; bypass if selected memory primitive adds a read latency. Consecutive K steps for row0 must sustain acceptance each cycle.",
+    "row_initialization": "first_k replaces prior sum; intermediate steps add; last_k emits completed vector. Command/next N panel cannot reuse a context before old tagged steps drain.",
+    "masking": "zero invalid K products and N channels before reduction; no -128 and no negative probability accepted as legal operands"
+  },
+  "numeric": {
+    "product": "exact signed16",
+    "partial_reduction": "exact signed20",
+    "accumulate": "exact signed32",
+    "overflow_detector": false,
+    "legal_bounds": {
+      "GEMM_K1536": 24774144,
+      "QK_K64": 1032256,
+      "PV_K1024": 16516096
+    },
+    "reassociation": "legal exact integer additions may be tree-reassociated; no narrowing or per-K rescaling"
+  },
+  "verification": {
+    "comparison": "bitwise INT32 equality to independent Python integer dot products",
+    "cases": [
+      "all127 and all-127 legal maxima",
+      "alternating signs and cancellation",
+      "row0 consecutive partial sums",
+      "96 interleaved contexts",
+      "first/last together",
+      "N1 and N16 masks",
+      "random input/output stalls",
+      "reset with valid work; no stale completion"
+    ],
+    "performance": "256 products accepted per unstalled cycle once operands are staged; demonstrate row0 feedback at II1 and all256 live product paths in synthesis"
+  }
+}

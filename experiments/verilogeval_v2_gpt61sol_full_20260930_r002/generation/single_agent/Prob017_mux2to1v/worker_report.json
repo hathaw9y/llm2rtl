@@ -1,0 +1,37 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "correct_fixture": "passed",
+      "deliberately_wrong_fixture": "simulation_failed",
+      "repaired_fixture": "passed"
+    },
+    {
+      "name": "initial",
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "simulator": "Icarus Verilog 12",
+      "checked_cases": 1610,
+      "evidence": "development/01",
+      "check_record": "dev_checks.jsonl"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Unknown or high-impedance selector behavior is not specified by the problem and was not assigned an oracle.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface": "TopModule with 100-bit a, b, out and one-bit sel",
+    "behavior": "Combinational selection of a for sel=0 and b for sel=1; no added ports or latency.",
+    "static_review": "Port widths and selection polarity match the original problem; continuous assignment has no storage or incomplete assignment."
+  }
+}

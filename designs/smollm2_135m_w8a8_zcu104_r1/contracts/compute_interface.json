@@ -1,0 +1,90 @@
+{
+  "schema": "llm2rtl.compute_interface_contract.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "status": "frozen",
+  "command": {
+    "handshake": "cmd_valid && cmd_ready",
+    "stable_when_stalled": "opcode, payload, banks, transaction ID and generations held stable until acceptance",
+    "fields": {
+      "opcode_bits": 4,
+      "bank_count_max": 3,
+      "bank_id_bits": 4,
+      "payload_bits": 112,
+      "transaction_id_bits": 32,
+      "descriptor_generation_bits_per_used_bank": 32
+    },
+    "conditional_operands": "QUANTIZE mode2/3 uses banks0,1,2; dynamic modes use0,2 only; DEQUANTIZE0,2; ignored encoded bank1=0 is not acquired"
+  },
+  "response": {
+    "handshake": "resp_valid && resp_ready",
+    "stable_when_stalled": true,
+    "fields": [
+      "transaction_id32",
+      "used_bank_mask3",
+      "used_bank_count2",
+      "bank_ids[3]4",
+      "descriptor_generations[3]32",
+      "error_code8"
+    ],
+    "identity": "compare against accepted record, never current PC or current owner",
+    "exactly_once": true,
+    "finish": "all accepted read responses consumed and processed; all final data, scale and BF16 writes accepted; no further memory request after completion"
+  },
+  "ownership": "Use single-exclusive role IDs; acquire every used operand atomically on command acceptance, release matching captured roles only on valid identity. Retain response/identity until release accepted.",
+  "in_place": "ROPE and SOFTMAX acquire one read-write data role, no duplicate bank acquisition; three-bank GEMM inputs/output distinct.",
+  "shared_engines": {
+    "GEMM_INT8_ATTN_SCORE_INT8_ATTN_VALUE_INT8": "one physical core, one in-flight collectively",
+    "QUANTIZE_DEQUANTIZE": "one physical core, one in-flight collectively",
+    "ADD_SILU_MUL": "one vector engine, one in-flight collectively"
+  },
+  "roles": {
+    "MM2S": 1,
+    "S2MM": 2,
+    "GEMM_A": 3,
+    "GEMM_B": 4,
+    "GEMM_C": 5,
+    "RMS_DATA": 6,
+    "RMS_GAMMA": 7,
+    "RMS_DST": 8,
+    "ROPE_RW": 9,
+    "ROPE_TABLE": 10,
+    "SCORE_Q": 11,
+    "SCORE_K": 12,
+    "SCORE_DST": 13,
+    "SOFTMAX_RW": 14,
+    "PV_P": 15,
+    "PV_V": 16,
+    "PV_DST": 17,
+    "VECTOR_SRC0": 18,
+    "VECTOR_SRC1": 19,
+    "VECTOR_DST": 20,
+    "QUANT_SRC": 21,
+    "QUANT_STATIC_TABLE": 22,
+    "QUANT_DST": 23,
+    "DEQUANT_SRC": 24,
+    "DEQUANT_DST": 25,
+    "DESCRIPTOR_UPDATE": 26
+  },
+  "error_codes": {
+    "00": "OK",
+    "01": "bad opcode/reserved fields",
+    "02": "bad bank/profile/alias",
+    "03": "bad shape/range",
+    "04": "invalid input data/scale coverage",
+    "05": "invalid/nonfinite numerical data/scale/result",
+    "06": "DMA descriptor/status/transport error",
+    "07": "completion identity/protocol error"
+  },
+  "integer_overflow_error": "No runtime detector or error code",
+  "error_retirement": "Quiescent matched error invalidates destination and drains accepted operations; stops new issue. Otherwise preserve ownership until coordinated reset. No autonomous retry/reset.",
+  "DMA_identity": "Vendor four-bit tag remains bank ID; internal acceptance FIFO binds exactly-once direction-ordered status to32-bit transaction. A late duplicate after tag reuse cannot be distinguished at vendor interface; never claim generation checking fixes that transport ambiguity.",
+  "verification_obligations": [
+    "stalled valid/payload stability",
+    "exactly one completion per acceptance",
+    "wrong/duplicate identity must not release bank",
+    "last memory response and output write precede completion",
+    "concurrent alternate-bank DMA and GEMM",
+    "END drain retains tensor/scale contents"
+  ]
+}

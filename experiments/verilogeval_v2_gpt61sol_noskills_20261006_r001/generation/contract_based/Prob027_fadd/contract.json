@@ -1,0 +1,38 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "cin": 1
+    },
+    "outputs": {
+      "cout": 1,
+      "sum": 1
+    }
+  },
+  "semantics": {
+    "function": "Combinational full adder: adds a, b, and carry-in cin; sum is the low bit and cout the high bit.",
+    "timing": "No clock or reset ports are specified; outputs respond combinationally with no cycle latency.",
+    "initialization": "No state or initialization behavior is specified or required.",
+    "evidence": "Original problem explicitly describes a full adder adding three bits and lists only a, b, cin, cout, sum."
+  },
+  "numeric": {
+    "input_domain": "Three one-bit unsigned binary operands.",
+    "result_range": [
+      0,
+      3
+    ],
+    "encoding": "2*cout + sum = a + b + cin; no truncation of carry."
+  },
+  "verification": {
+    "oracle": "Independent integer addition of the original three binary inputs compared with the two-bit output.",
+    "coverage": "All eight binary input combinations, repeated in reverse order to exercise combinational changes.",
+    "sampling": "Sample one nanosecond after each input change to allow combinational settling; no clock sampling applies.",
+    "failure": "$fatal on mismatch or bounded timeout; PASS only after all comparisons."
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z input values is unspecified; verification covers the full binary domain."
+  ]
+}

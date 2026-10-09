@@ -1,0 +1,54 @@
+{
+  "module_id": "isa_command_dispatcher",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "proof_scope": "Model-specific ISA control routing, coupled in XSIM to the existing bank_ownership_table and this revision's bank_tensor_state_tracker. DMA and compute completions are simulated; no tensor data ports or arithmetic are present.",
+  "source_sha256": {
+    "module_contract": "283b8872317a26d170ec6a753d2abdc855666eff0d01f5e0f5e6f9b425b2a31b",
+    "generator": "7dbcf7b173f0c669d961f6f5bf749cdc1383777417bee9fd545f4e36186521c1",
+    "rtl": "538851a144809e20cdf6640c798aa4e892cba7648e8740308a4f0b492f415fd3",
+    "testbench": "be36206ba6f8235aeede3d424c4aba5c7f1eb9f0a42f487667ce21065ea40685",
+    "xsim_script": "7f54b95bee03fdcffc430d9fb6b0562c7789c6c2be63a13ea34a77d9ed473d8f",
+    "ooc_script": "3dcf47689b1e412c5acd27cc97f6669d81c292c5e38a9a6b19735d2b2b81a9f1",
+    "clock_xdc": "5127d6af45d0824731a9420894371f0d7825842f4e10d80851efa06bd5a3bbde"
+  },
+  "checks": {
+    "template_extension": "generator asserts source identity outside USER markers and the module name",
+    "design_structure": "passed_structure_only with expected module SHA-256",
+    "verilator_lint": "PASS; only inherited unused bank_owner_port warning",
+    "xsim_self_check": "PASS isa_command_dispatcher integration, Vivado XSIM 2025.2",
+    "vivado_ooc_synthesis": "PASS, Vivado 2025.2, xczu7ev-ffvc1156-2-e, 5.000 ns constraint",
+    "post_synth_drc": "0 checks found in OOC design",
+    "board_execution": "not run"
+  },
+  "xsim_scenarios": [
+    "two embedding-row DMA_LOAD records make B0 valid only on the final completion",
+    "two GEMM N tiles make B4 valid only on the final completion",
+    "GEMM request and payload remain stable through three ready-backpressure cycles",
+    "FENCE waits for a delayed DDR S2MM response",
+    "END/DONE followed by a new BRAM chunk preserves valid B4 without reset",
+    "DMA_STORE from an invalid bank fails before request acceptance",
+    "RMSNORM, ROPE, ATTN_SCORE, SOFTMAX, ATTN_VALUE, ADD and SILU_MUL route to their compute channels",
+    "a mismatched DMA completion tag does not release its bank; a subsequent matching response drains to an error",
+    "a failed matched GEMM completion releases all owned banks and invalidates its destination"
+  ],
+  "post_synth_resources": {
+    "clb_luts": 3841,
+    "clb_registers": 399,
+    "bram_tiles": 0,
+    "uram": 0,
+    "dsps": 0
+  },
+  "post_synth_timing_ns": {
+    "clock_period": 5.0,
+    "setup_wns": 1.631,
+    "hold_whs": 0.078,
+    "pulse_width_wpws": 2.225
+  },
+  "limitations": [
+    "The testbench simulates DataMover and compute responses; it does not verify real DDR, bank data, numeric results or compute executors.",
+    "This tests representative legal records and error paths, not an exhaustive sweep of every encoded operand shape.",
+    "OOC timing has no HD.CLK_SRC, no placed or routed clock, and no full-chip timing evidence.",
+    "No BIT, HWH, XSA, Vitis application or physical-board execution is claimed."
+  ]
+}

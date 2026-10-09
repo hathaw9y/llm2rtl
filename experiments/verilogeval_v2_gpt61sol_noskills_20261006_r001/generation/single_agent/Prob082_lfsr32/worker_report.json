@@ -1,0 +1,38 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "simulation_failed",
+      "evidence": "development/01",
+      "reason": "Testbench inserted an extra falling-edge wait after a mid-sequence reset, skipping observation of the next rising edge."
+    },
+    {
+      "command": "python3 dev_check.py --label initial_tb_corrected",
+      "status": "passed",
+      "evidence": "development/02"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Simulation checks a finite 2048-cycle sequence with repeated synchronous resets and between-edge reset pulses; it does not exhaust the full LFSR period."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_original": "dev_tb_initial.sv",
+      "change": "Deassert mid-sequence reset after the checked rising edge without waiting an extra falling edge.",
+      "justification": "The original extra falling-edge wait caused the next iteration to skip a rising edge and compare stale expected state. All expected values and checks are retained."
+    }
+  ]
+}

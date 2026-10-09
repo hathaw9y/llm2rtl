@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "d": 1}, "outputs": {"q": 1}, "reset": "No reset port in original interface"},
+  "semantics": {"sampling": "Capture d on each rising and falling edge of clk; q holds the last captured value between edges", "latency": "Update after the edge within normal nonblocking-assignment settling, no extra clock latency", "implementation_constraint": "Separate legal single-edge sequential blocks; no always block sensitive to both clock edges", "initialization": "Original specifies no initialization or reset; initial q is unconstrained until first valid clock edge"},
+  "numeric": {"widths": "All ports and stored data are one bit", "arithmetic": "None", "clock_domain": "Known binary clock transitions in functional verification"},
+  "verification": {"oracle": "Independent last-edge sampled d model derived from original dual-edge flip-flop requirement", "checks": ["Both polarities of first clock edge", "Alternating and repeated data across edges", "Data changes between edges must not affect q", "Settled edge sampling", "Bounded timeout and fatal mismatches"], "tool": "Fixed dev_check.py with Icarus 12"},
+  "specification_ambiguities": ["No power-up value is specified: do not require a defined q before the first clock edge", "Setup/hold violations, unknown clock transitions, and physical glitches are unspecified; check known clock edges with stable data and settled simulator output"]
+}

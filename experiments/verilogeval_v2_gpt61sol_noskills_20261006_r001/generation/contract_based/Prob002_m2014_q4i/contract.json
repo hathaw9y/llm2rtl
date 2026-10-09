@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": [],
+    "outputs": {
+      "out": {
+        "width": 1
+      }
+    },
+    "evidence": "Original interface lists only output out; unspecified ports are one bit."
+  },
+  "semantics": {
+    "behavior": "Continuously drive out to logic low.",
+    "clock_and_cycles": "No clock or cycle-dependent behavior is specified.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "The requirement always drive 0 applies from simulation initialization after continuous-assignment settling; no initial unknown interval is specified.",
+    "evidence": "The module should always drive 0 (or logic low)."
+  },
+  "numeric": {
+    "output_value": "1'b0",
+    "width_bits": 1,
+    "arithmetic": "None"
+  },
+  "verification": {
+    "oracle": "Original problem requires out equal to one-bit zero at every settled observation.",
+    "sampling": "Check time zero after a delta settling delay, then repeated observations at 1 ns intervals.",
+    "unknown_handling": "Case inequality rejects X and Z.",
+    "termination": "Explicit PASS after all observations; fatal on mismatch and independent bounded timeout."
+  },
+  "specification_ambiguities": []
+}

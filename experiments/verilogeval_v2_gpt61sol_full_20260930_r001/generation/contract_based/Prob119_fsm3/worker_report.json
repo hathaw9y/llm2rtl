@@ -1,0 +1,46 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structural gate only)",
+      "exit_code": 0,
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "PASS by inspection",
+      "details": "Exact TopModule ports, all one bit; four complete transitions; Moore decode; posedge clock and active-high asynchronous reset; nonblocking sequential assignment; complete combinational defaults; no initial blocks or testbench constructs in DUT; one standalone synthesizable module."
+    },
+    {
+      "name": "initial_preservation",
+      "result": "PASS",
+      "details": "candidate_initial.sv copied immediately after initial RTL creation, before development checks; identical to delivered candidate.sv.",
+      "identical": true
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "FAIL tool execution",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "details": "Compiler exited with code 139 without diagnostics and produced no simulation executable."
+    },
+    {
+      "name": "development_simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "FAIL no executable",
+      "log": "dev_simulation.log",
+      "details": "vvp reported dev_sim: Unable to open input file. No testbench PASS observed."
+    }
+  ],
+  "development_outcome": "Delivered initial synthesizable RTL without revisions. Frozen contract validated structurally and RTL reviewed statically. Development simulation not established due to compiler execution failure.",
+  "limitations": [
+    "No successful compiler elaboration or development simulation.",
+    "Independent testbench authored but not executed successfully.",
+    "Power-up before reset and X/Z inputs are unspecified.",
+    "No synthesis, timing, board work or official evaluation performed; official evaluation results unavailable."
+  ]
+}

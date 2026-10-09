@@ -1,0 +1,119 @@
+{
+  "status": "module_simulation_throughput_at_routed200MHz_not_board_measurement",
+  "clock_MHz": 200,
+  "scope": "Fixed read3 bank model. Cycle counts exclude command publication, dispatcher/descriptors, bank write drain, external DDR, SD loading and host overhead. Cycles use existing TB wait-to-first-rsp measurement, not response hold.",
+  "cases": [
+    {
+      "case": "W4 GEMM ACCUM",
+      "cycles": 16640,
+      "work": 16384,
+      "unit": "MAC",
+      "time_us_at200MHz": 83.2,
+      "work_per_second_at200MHz": 196923076.92307693
+    },
+    {
+      "case": "QK GEMM L1024",
+      "cycles": 80640,
+      "work": 65536,
+      "unit": "MAC",
+      "time_us_at200MHz": 403.2,
+      "work_per_second_at200MHz": 162539682.53968254
+    },
+    {
+      "case": "PV GEMM L1024",
+      "cycles": 112688,
+      "work": 65536,
+      "unit": "MAC",
+      "time_us_at200MHz": 563.44,
+      "work_per_second_at200MHz": 116314070.7085049
+    },
+    {
+      "case": "RMSNorm H896",
+      "cycles": 36192,
+      "work": 896,
+      "unit": "element",
+      "time_us_at200MHz": 180.96,
+      "work_per_second_at200MHz": 4951370.468611848
+    },
+    {
+      "case": "RoPE Q14",
+      "cycles": 33264,
+      "work": 896,
+      "unit": "element",
+      "time_us_at200MHz": 166.32,
+      "work_per_second_at200MHz": 5387205.387205387
+    },
+    {
+      "case": "RoPE K2",
+      "cycles": 4752,
+      "work": 128,
+      "unit": "element",
+      "time_us_at200MHz": 23.759999999999998,
+      "work_per_second_at200MHz": 5387205.387205387
+    },
+    {
+      "case": "Softmax L1024",
+      "cycles": 168364,
+      "work": 1024,
+      "unit": "element",
+      "time_us_at200MHz": 841.8199999999999,
+      "work_per_second_at200MHz": 1216412.0595851846
+    },
+    {
+      "case": "Vector ADD M2 N896",
+      "cycles": 34497,
+      "work": 1792,
+      "unit": "element",
+      "time_us_at200MHz": 172.485,
+      "work_per_second_at200MHz": 10389309.215294084
+    },
+    {
+      "case": "Vector DEQUANT M2 N896",
+      "cycles": 34497,
+      "work": 1792,
+      "unit": "element",
+      "time_us_at200MHz": 172.485,
+      "work_per_second_at200MHz": 10389309.215294084
+    },
+    {
+      "case": "Vector CAST M2 N64",
+      "cycles": 929,
+      "work": 128,
+      "unit": "element",
+      "time_us_at200MHz": 4.6450000000000005,
+      "work_per_second_at200MHz": 27556512.378902044
+    },
+    {
+      "case": "Vector LAYOUT M2 N128",
+      "cycles": 1857,
+      "work": 256,
+      "unit": "element",
+      "time_us_at200MHz": 9.285,
+      "work_per_second_at200MHz": 27571351.642434034
+    },
+    {
+      "case": "Vector SILU_MUL M2 N128",
+      "cycles": 33911,
+      "work": 256,
+      "unit": "element",
+      "time_us_at200MHz": 169.555,
+      "work_per_second_at200MHz": 1509834.5669546754
+    }
+  ],
+  "source_logs_sha256": {
+    "/media/admin1/backup/llm2rtl-builds/qwen25_05b_w4_shared_zcu104_r1/gemm_fp6_xsim_run001/simulation.log": "1a700b67bbb16702ccc070d612daa849db59c5f0d5109f591652fd6d5c045853",
+    "/home/shmin/llm2rtl/designs/qwen25_05b_w4_shared_zcu104_r1/evidence/softmax_fp6_sim_run001/simulation.log": "a495646d176e7de304b2494b40656cde5479703fdef86efe5f77f8c0768ccf12",
+    "/home/shmin/llm2rtl/designs/qwen25_05b_w4_shared_zcu104_r1/evidence/executor_throughput_run001/rope/simulation.log": "4e14181c1e2b45a622469e004e9bf96717cdb4d923e68242862f19cdca4a9627",
+    "/home/shmin/llm2rtl/designs/qwen25_05b_w4_shared_zcu104_r1/evidence/executor_throughput_run001/rmsnorm/simulation.log": "410056a2297ffa165f08e1d5788b107d327459b692b01cc0f4383773c330853c",
+    "/home/shmin/llm2rtl/designs/qwen25_05b_w4_shared_zcu104_r1/evidence/executor_throughput_run001/vector/simulation.log": "5365147820a5b0e43650c5472e8fa3f54f4fa28ef649efd33c3f05c7fea2e6a5"
+  },
+  "dense_decode_only_estimate": {
+    "assumptions": "Batch1,24layers, full vocabulary logits. Full128x128 W4 groups; first group INIT, subsequent ACCUM. Excludes attention GEMM, nonlinear/vector and all transfer/control. Analytical schedule estimate, no full-model RTL benchmark.",
+    "MAC_per_token": 493961216,
+    "W4_tile_group_commands": 30149,
+    "dense_GEMM_cycles": 501337312,
+    "seconds_at200MHz": 2.50668656,
+    "compute_only_token_rate_ceiling": 0.398933004212541
+  },
+  "physical_board_throughput_measured": false
+}

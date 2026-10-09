@@ -1,0 +1,20 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed (expected)", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "evidence": "development/01", "self_check_count": 929, "compiler": "Icarus Verilog 12", "compile_diagnostics": "none"}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Only the four physically ordered sensor patterns are specified and tested. RTL holds the prior level on other patterns.",
+    "Behavior before the first synchronous reset is not specified and is not asserted by the testbench.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Clocked water-level history and retained supplemental-valve direction. Supplemental flow opens for a rise into an intermediate level, as stated in the original problem. Extremes force maximum or zero flow. Reset synchronously sets all four outputs high.",
+  "verification": "Independent integer level-history oracle covers every ordered level triplet, persistent unchanged levels, jumps, reversals, and repeated synchronous resets. Checks before and after clock edges verify absence of asynchronous input/reset effects.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv"},
+  "static_review": "Original ports and widths preserved; no extra latency or ports; nonblocking sequential assignments, fully assigned combinational level decoding, and no inferred combinational latches."
+}

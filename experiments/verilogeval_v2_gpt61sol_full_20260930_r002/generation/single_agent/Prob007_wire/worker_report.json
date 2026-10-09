@@ -1,0 +1,24 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "coverage": "Initial undriven X, binary transitions, X and Z propagation, bounded timeout",
+      "simulator": "Icarus Verilog 12 with matching vvp"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not occurred.", "No synthesis or board work performed."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "One-bit continuous assignment from in to out; original TopModule interface preserved with no added latency or ports.",
+  "static_review": "Direct wire connection; no state, arithmetic, inferred latch, or multiple drivers.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv"}
+}

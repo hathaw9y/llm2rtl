@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+design_dir=$(cd "$(dirname "$0")/.." && pwd)
+repo_dir=$(cd "$design_dir/../.." && pwd)
+run_dir=${1:-/tmp/smollm2_bank_memories_xsim}
+evidence_dir="$design_dir/evidence/smollm2_bank_memories/run_001"
+mkdir -p "$run_dir" "$evidence_dir"
+cd "$run_dir"
+
+xvlog -sv "$repo_dir/ip/infrastructure/datamover_engine/rtl/bram_bank.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/uram_bank.sv" \
+  "$design_dir/rtl/smollm2_bank_memories.sv" \
+  "$design_dir/tb/tb_smollm2_bank_memories.sv" \
+  > "$evidence_dir/xvlog.log" 2>&1
+xelab tb_smollm2_bank_memories -L xpm -s tb_smollm2_bank_memories_sim \
+  > "$evidence_dir/xelab.log" 2>&1
+python3 "$repo_dir/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
+  "$run_dir/xsim.dir/tb_smollm2_bank_memories_sim/xsimk" \
+  'PASS smollm2_bank_memories' \
+  > "$evidence_dir/xsim.log" 2>&1
+cat "$evidence_dir/xsim.log"

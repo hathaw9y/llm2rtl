@@ -1,0 +1,20 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "details": "Correct fixture passed; deliberately wrong fixture failed; repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "development/01 and dev_checks.jsonl", "details": "Icarus 12 compilation and simulation succeeded; PASS counter checks=412."}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Power-up and illegal-state behavior are unspecified by the original problem and are not asserted.",
+    "No synthesis or board work performed, as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "TopModule with exact ports; unsigned 4-bit counter, positive-edge updates, synchronous active-high reset to 1, wrap 10 to 1; no extra latency or ports.",
+  "preservation": "candidate_initial.sv preserved immediately after initial creation; no later RTL or testbench edits.",
+  "contract": "Frozen and structurally validated before RTL creation; original requirements remain authoritative.",
+  "static_review": "Single sequential driver, nonblocking assignments, explicitly sized arithmetic, exact reset and cycle semantics."
+}

@@ -1,0 +1,55 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "in": 1
+    },
+    "outputs": {
+      "disc": 1,
+      "flag": 1,
+      "err": 1
+    }
+  },
+  "semantics": {
+    "clock": "All state changes on positive clk edges. Moore outputs reflect the state entered immediately after sampling the completing bit and hold for the ensuing full cycle.",
+    "reset": "Active high synchronous; sampled reset sets state equivalent to previous input 0 and clears all outputs.",
+    "patterns": {
+      "disc": "Zero completing exactly five consecutive ones asserts disc for one cycle.",
+      "flag": "Zero completing exactly six consecutive ones asserts flag for one cycle.",
+      "err": "Seventh and each subsequent consecutive one asserts err; next zero clears err."
+    },
+    "overlap": "Completing zero also starts the next run; recognition continues on every bit.",
+    "initialization": "No initial state specified before the first sampled reset; no power-up initialization added.",
+    "evidence": "Original specifies 0111110, 01111110, 01111111..., Moore-type FSM, positive edges, active high synchronous reset, complete-cycle outputs."
+  },
+  "numeric": {
+    "ports": "All ports one bit.",
+    "run_length": "Track 0 through 7 consecutive ones, saturating at 7.",
+    "state_space": "Run states plus distinct discard and flag states."
+  },
+  "verification": {
+    "oracle": "Independent integer run-length model derived from original patterns.",
+    "sampling": "Drive at falling edges; verify unchanged outputs before rising edge and expected outputs after rising edge.",
+    "cases": [
+      "Synchronous reset between edges",
+      "All run lengths 0 through 20 followed by zero",
+      "Back-to-back flags and discards",
+      "Reset during partial runs and asserted outputs",
+      "Deterministic pseudorandom stream with reset interruptions"
+    ],
+    "success": "Fatal on mismatch; bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Phrase beginning on clock cycle after condition occurs",
+      "interpretation": "The completing bit is sampled on a rising edge; Moore output is asserted in the cycle immediately following that edge, with no additional pipeline cycle. This follows Moore recognition and no extra latency."
+    },
+    {
+      "issue": "Behavior before reset is unspecified",
+      "interpretation": "No guaranteed initial outputs are assumed; tests begin with synchronous reset."
+    }
+  ]
+}

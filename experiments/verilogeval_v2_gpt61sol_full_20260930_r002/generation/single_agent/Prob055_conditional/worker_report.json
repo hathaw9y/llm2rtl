@@ -1,0 +1,16 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "simulator": "Icarus Verilog 12", "checked_vectors": 142868, "evidence": "development/01", "check_record": "dev_checks.jsonl"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "The full four-input space was not exhaustively enumerated; directed, exhaustive pairwise sweeps and randomized vectors were checked.", "Unknown-input behavior is not specified by the problem and was not assigned additional requirements.", "No synthesis or board verification performed."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "interface": "TopModule: unsigned 8-bit inputs a, b, c, d and unsigned 8-bit output min; combinational with no clock, reset or added latency.",
+  "implementation": "Two pairwise unsigned minima followed by a final unsigned comparison; all intermediates are 8 bits.",
+  "static_review": "Complete continuous assignments, single drivers, no state or inferred latches. Initial snapshot preserved before development checks."
+}

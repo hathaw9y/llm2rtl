@@ -1,0 +1,37 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {"direction": "input", "width": 255, "range": "[254:0]", "signed": false},
+      "out": {"direction": "output", "width": 8, "range": "[7:0]", "signed": false}
+    }
+  },
+  "semantics": {
+    "function": "out equals the number of one bits in in",
+    "timing": "pure combinational response to current input after combinational settling; no clock or cycle latency",
+    "reset": "no reset port or reset behavior",
+    "initialization": "no state or initialization requirement",
+    "transactions": "all binary input vectors are legal; no handshake"
+  },
+  "numeric": {
+    "equation": "out = sum(in[i], i=0..254)",
+    "input_elements": "255 unsigned one-bit values",
+    "output_range": "0 through 255 inclusive",
+    "accumulator_width": 8,
+    "overflow": "none for legal binary inputs",
+    "rounding_saturation": "none; exact integer count",
+    "bit_order": "every bit counted equally"
+  },
+  "verification": {
+    "oracle": "independent testbench integer reference counts ones using a shift-and-test loop",
+    "directed": "all zeros, all ones, each single one, each single zero, alternating patterns, every population count from 0 to 255",
+    "random": "1000 deterministic pseudorandom full-width binary vectors",
+    "timing": "compare after combinational settling, with repeated input changes",
+    "tools": "Icarus -g2012 with explicit dev_tb top and finite compile/run timeouts",
+    "success": "every comparison matches and simulation emits PASS"
+  },
+  "specification_ambiguities": [
+    "X/Z input behavior is unspecified; functional verification covers binary inputs only."
+  ]
+}

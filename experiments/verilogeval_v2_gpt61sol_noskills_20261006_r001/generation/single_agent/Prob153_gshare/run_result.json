@@ -1,0 +1,200 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob153_gshare",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob153_gshare",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob153_gshare/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791272014.145663,
+    "ended_at_unix": 1791272074.5813656,
+    "seconds": 60.43570303916931,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 74761,
+      "cached_input_tokens": 65280,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2377,
+      "reasoning_output_tokens": 52
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "05a2bf4d18f7e76a0730803e562bb5a9a8a2359a5474147beeafd19f914021c3",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "smoke_environment",
+        "status": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed (expected)",
+          "repair": "passed"
+        }
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "cycles": 3530,
+        "coverage": [
+          "all 128 PHT entries",
+          "both saturating-counter boundaries",
+          "same-entry prediction and training with pre-edge prediction",
+          "misprediction recovery priority",
+          "invalid request gating",
+          "asynchronous reset",
+          "2500 deterministic randomized cycles"
+        ]
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "The supplied problem does not explicitly specify reset values. Implementation and development oracle assume history resets to zero and all PHT counters reset to weakly not taken (01).",
+      "No assertion is made about state before the first reset."
+    ],
+    "justified_RTL_TB_changes": [],
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "check_history": "dev_checks.jsonl"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "05a2bf4d18f7e76a0730803e562bb5a9a8a2359a5474147beeafd19f914021c3",
+      "Prob153_gshare_ref.sv": "12d54877b5d0a2e71bc084cbc79c8b68363d2a739b073969f7e2221da6b38a98",
+      "Prob153_gshare_test.sv": "180dacd01c7cf4666c7488d8683faa7e22ce2b130a98fb59660cc7ac3a16a8f2"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob153_gshare_test.sv",
+        "Prob153_gshare_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014900818467140198
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb153_gshare_test.sv:161: $finish called at 5416 (1ps)\nHint: Output 'predict_taken' has no mismatches.\nHint: Output 'predict_history' has no mismatches.\nHint: Total mismatched samples is 0 out of 1083 samples\n\nSimulation finished at 5416 ps\nMismatches: 0 in 1083 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01810467429459095
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "05a2bf4d18f7e76a0730803e562bb5a9a8a2359a5474147beeafd19f914021c3",
+      "Prob153_gshare_ref.sv": "12d54877b5d0a2e71bc084cbc79c8b68363d2a739b073969f7e2221da6b38a98",
+      "Prob153_gshare_test.sv": "180dacd01c7cf4666c7488d8683faa7e22ce2b130a98fb59660cc7ac3a16a8f2"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob153_gshare_test.sv",
+        "Prob153_gshare_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013559609651565552
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb153_gshare_test.sv:161: $finish called at 5416 (1ps)\nHint: Output 'predict_taken' has no mismatches.\nHint: Output 'predict_history' has no mismatches.\nHint: Total mismatched samples is 0 out of 1083 samples\n\nSimulation finished at 5416 ps\nMismatches: 0 in 1083 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.02090653870254755
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

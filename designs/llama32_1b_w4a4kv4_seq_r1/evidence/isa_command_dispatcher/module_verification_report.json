@@ -1,0 +1,206 @@
+{
+  "schema": "llm2rtl.module_verification_report.v1",
+  "status": "failed",
+  "verified_at": "2026-09-28T11:38:26+09:00",
+  "design_id": "llama32_1b_w4a4kv4_seq",
+  "revision": "r1",
+  "module_id": "isa_command_dispatcher",
+  "top": "isa_command_dispatcher",
+  "configuration": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "target_clock_ns": 5.0,
+    "target_clock_mhz": 200.0,
+    "command_bram_word_bits": 128,
+    "instruction_bits": 256,
+    "maximum_command_count": 1024,
+    "maximum_outstanding_commands": 1
+  },
+  "identity": {
+    "contract_sha256": "00bc8ef6dcacd9f7a6019672d4c8c9a275889cc50ef587c509a4bec9db406612",
+    "rtl_sha256": "c82eee841899d20f363131599ce7bea8a12f0759547060f3e15bc90a5a6cc502",
+    "testbench_sha256": "36ea1007f218e8dd55a38c4bb946d4feeaaa401b926bc9a707288186d2739461",
+    "vivado_tcl_sha256": "77457073f4edd14dcaceb7d665296c6b346ea9bb37b159ea83703e992a58325b",
+    "test_vector_sha256": "7692e7858880f9d22bd70200fe7e46a61b9b0dd95dc0e46f526e31a246b7dedc",
+    "claimed_source_manifest_sha256": "fd3e5c41bcce451f90258d1bda2fb93b80a4417b8ba94309d48912849979a752",
+    "identity_result": "The pinned contract and every constituent source hash match the implementation reports. The aggregate source_manifest_sha256 has no separately stored manifest or declared canonicalization rule, so the constituent hashes are the independently reproducible identity."
+  },
+  "findings": [
+    {
+      "id": "P1-READY-VALID-DEADLOCK",
+      "severity": "P1",
+      "requirement": "The executor request is declared ready/valid, must remain stable under backpressure, and must compose with a legal ready/valid consumer.",
+      "finding": "The source waits for executor ready in CHECK_READY before entering ISSUE and asserting valid. A consumer that legally waits to see valid before asserting ready can therefore deadlock forever. The existing backpressure test does not cover this case: it raises ready first, waits for valid, and only then lowers ready. The frozen contract is internally ambiguous because it names ready_valid while its issue_rule also requires executor ready before issue; the RTL follows the latter wording but is not safely composable under ordinary ready/valid semantics.",
+      "paths": [
+        "designs/llama32_1b_w4a4kv4_seq_r1/rtl/isa_command_dispatcher.sv:126",
+        "designs/llama32_1b_w4a4kv4_seq_r1/rtl/isa_command_dispatcher.sv:150",
+        "designs/llama32_1b_w4a4kv4_seq_r1/rtl/isa_command_dispatcher.sv:192",
+        "designs/llama32_1b_w4a4kv4_seq_r1/rtl/isa_command_dispatcher.sv:268",
+        "designs/llama32_1b_w4a4kv4_seq_r1/tb/tb_isa_command_dispatcher.sv:274"
+      ],
+      "raw_evidence": "Static cycle trace: with dma_cmd_ready/gemm_cmd_ready held low, state_r remains CHECK_READY and both request valids remain low. No handshake can occur if the consumer waits for valid.",
+      "promotion_effect": "blocking",
+      "retry_owner": "Parent contract owner and isa_command_dispatcher implementation owner"
+    },
+    {
+      "id": "P1-GEMM-BANK-ALIAS-LIVELOCK",
+      "severity": "P1",
+      "requirement": "Illegal operands enter ERROR; a GEMM requires ready source banks and a free destination bank; active banks cannot be overwritten.",
+      "finding": "GEMM does not reject dst_bank equal to src0_bank or src1_bank. Such an alias passes operands_legal_w but can never pass banks_ready_w because the same bank must be READY and FREE simultaneously. With a strict single PC and no external bank-state transition, the command remains busy forever instead of being rejected. src0_bank equal to src1_bank is executable and its duplicate release writes are benign, but destination/source alias is a permanent stall. The frozen contract does not explicitly state the bank-distinctness rule, so this is both a contract gap and an unsafe RTL liveness behavior.",
+      "paths": [
+        "designs/llama32_1b_w4a4kv4_seq_r1/rtl/isa_command_dispatcher.sv:135",
+        "designs/llama32_1b_w4a4kv4_seq_r1/rtl/isa_command_dispatcher.sv:145",
+        "designs/llama32_1b_w4a4kv4_seq_r1/rtl/isa_command_dispatcher.sv:253",
+        "contracts/common/local_bank_contract.json"
+      ],
+      "raw_evidence": "Static condition proof: for dst==src0 or dst==src1, banks_ready_w contains BANK_READY && BANK_FREE on one bank-state register, which is unsatisfiable.",
+      "promotion_effect": "blocking",
+      "retry_owner": "Parent ISA/module-contract owner and isa_command_dispatcher implementation owner"
+    },
+    {
+      "id": "P2-REGRESSION-COVERAGE-GAPS",
+      "severity": "P2",
+      "requirement": "Bind interface payload, boundaries, rollback/release, and reset behavior to self-checking dynamic evidence.",
+      "finding": "The self-checking testbench proves the main strict-order trace, one DMA backpressure trace, no-lookahead, zero/1025 count rejection, load failure, tag mismatch, selected reset phases, and repeated runs. It does not compare every 256-bit issued command against the corresponding BRAM instruction or independent model; does not run command_count=1024 through PC 1023/address 2047; does not test a consumer that withholds ready until valid; does not test GEMM backpressure or GEMM source-release flags; does not test DMA_STORE failure rollback or GEMM failure rollback; and does not explicitly reset in both fetch phases and CHECK_READY. The three-case Python model is not connected to RTL output comparison and does not cover those cases.",
+      "paths": [
+        "designs/llama32_1b_w4a4kv4_seq_r1/tb/tb_isa_command_dispatcher.sv",
+        "designs/llama32_1b_w4a4kv4_seq_r1/run_dispatcher_model.py",
+        "designs/llama32_1b_w4a4kv4_seq_r1/vectors/dispatcher_cases.json"
+      ],
+      "raw_evidence": "Independent XSIM rerun passes the existing suite, but source audit shows only tag checks for most requests and only a held-value stability check for the first DMA request.",
+      "promotion_effect": "blocking until P1 fixes are covered; thereafter required before integration promotion",
+      "retry_owner": "isa_command_dispatcher verification owner"
+    },
+    {
+      "id": "P2-VERILATOR-TOOL-IDENTITY",
+      "severity": "P2",
+      "requirement": "Tool evidence must identify the executable/version that produced the lint result.",
+      "finding": "kernel_report.json claims Verilator 5.020, while the retained implementation lint log is empty and contains no version record. The independent environment resolves Verilator 4.038; that binary reruns warning-clean with exit 0. The lint result is reproducible, but the claimed 5.020 identity is not supported by retained raw evidence.",
+      "paths": [
+        "designs/llama32_1b_w4a4kv4_seq_r1/evidence/isa_command_dispatcher/kernel_report.json",
+        "designs/llama32_1b_w4a4kv4_seq_r1/evidence/isa_command_dispatcher/verilator_lint.log",
+        "designs/llama32_1b_w4a4kv4_seq_r1/evidence/isa_command_dispatcher/independent_verification/verilator_version.log",
+        "designs/llama32_1b_w4a4kv4_seq_r1/evidence/isa_command_dispatcher/independent_verification/verilator_lint_rerun.log"
+      ],
+      "promotion_effect": "evidence repair required",
+      "retry_owner": "isa_command_dispatcher implementation/evidence owner"
+    },
+    {
+      "id": "P3-RUN-LEDGER-STALE",
+      "severity": "P3",
+      "requirement": "Parent/child work and status remain traceable.",
+      "finding": "run_ledger.json still marks the implementation child as running and does not record this independent verifier assignment/result.",
+      "paths": [
+        "designs/llama32_1b_w4a4kv4_seq_r1/run_ledger.json"
+      ],
+      "promotion_effect": "documentation cleanup",
+      "retry_owner": "Parent agent"
+    }
+  ],
+  "verified_behaviors": {
+    "synchronous_one_cycle_bram_fetch": "Source inspection and passing XSIM show lower-word then upper-word assembly with a one-cycle memory model. Each word is deliberately captured one cycle after the modeled BRAM updates cmd_mem_rdata; this is conservative but correct for the declared one-cycle synchronous read.",
+    "strict_next_fetch": "Verified by RTL transition audit and the dynamic outstanding/fetch monitor: the next FETCH_LO is entered only on a matching successful completion handshake.",
+    "pc_update": "PC increments once only on matching successful non-final completion; final completion retains the last command index and enters DONE.",
+    "one_outstanding": "Structurally enforced by ISSUE to WAIT_COMPLETION and dynamically checked by the testbench monitor.",
+    "bank_reservation": "Reservations occur on request valid-and-ready acceptance; load/GEMM destination failure becomes FAULT and DMA_STORE failure returns source to READY. Main-path DMA_STORE release is dynamically covered; other release/rollback combinations lack dynamic coverage as recorded above.",
+    "command_count_rejection": "0 and 1025 are dynamically rejected. The accepted upper boundary 1024 is structurally representable but not dynamically exercised.",
+    "reset": "Synchronous reset clears state, PC, captured command, terminal error, and all bank states. Existing dynamic coverage does not distinctly prove every active FSM state.",
+    "timing_exception_legitimacy": "Accepted for module-only post-synthesis OOC scope. The two false-hold constraints originate only at non-clock input ports or terminate only at output ports. Independent OOC rerun retains 324 internal register-to-register hold paths, with worst internal path pc_r_reg[4]/Q to pc_r_reg[4]/D and WHS 0.084 ns. No DUT reg-to-reg hold path is excluded by these endpoint-scoped exceptions. External I/O, placement, route, and board timing remain unproven."
+  },
+  "commands": [
+    {
+      "command": "python3 scripts/check_common_contracts.py",
+      "exit_status": 0,
+      "result": "passed_structure_only",
+      "log": "independent_verification/common_contracts.log"
+    },
+    {
+      "command": "python3 scripts/check_isa_design.py --design-dir designs/llama32_1b_w4a4kv4_seq_r1 --module isa_command_dispatcher --expected-module-sha256 00bc8ef6dcacd9f7a6019672d4c8c9a275889cc50ef587c509a4bec9db406612",
+      "exit_status": 0,
+      "result": "passed_structure_only",
+      "log": "independent_verification/pinned_design_gate.log"
+    },
+    {
+      "command": "python3 designs/llama32_1b_w4a4kv4_seq_r1/run_dispatcher_model.py",
+      "exit_status": 0,
+      "result": "3/3 control-model cases passed",
+      "log": "independent_verification/golden_model_rerun.log"
+    },
+    {
+      "command": "verilator --lint-only --Wall --Wno-fatal designs/llama32_1b_w4a4kv4_seq_r1/rtl/isa_command_dispatcher.sv",
+      "exit_status": 0,
+      "result": "warning-clean with independently available Verilator 4.038",
+      "log": "independent_verification/verilator_lint_rerun.log"
+    },
+    {
+      "command": "Vivado 2025.2 xvlog/xelab, then generated xsimk snapshot direct execution",
+      "exit_status": 0,
+      "result": "exact standalone PASS marker observed at 1040000 ps",
+      "logs": [
+        "independent_verification/xvlog_rerun.log",
+        "independent_verification/xelab_rerun.log",
+        "independent_verification/xsim_rerun.log",
+        "independent_verification/xsimk_direct_rerun.log"
+      ],
+      "note": "The xsim Tcl wrapper reproduced the retained environment-specific internal exception despite exit 0; the same freshly elaborated snapshot passed when driven directly."
+    },
+    {
+      "command": "Vivado 2025.2 independent in-memory OOC synthesis and timing rerun",
+      "exit_status": 0,
+      "result": "synthesis and constrained post-synthesis timing passed",
+      "log": "independent_verification/vivado_ooc_rerun.log",
+      "timing": {
+        "wns_ns": 3.06,
+        "tns_ns": 0.0,
+        "setup_failing_endpoints": 0,
+        "whs_ns": 0.084,
+        "ths_ns": 0.0,
+        "hold_failing_endpoints": 0,
+        "wpws_ns": 2.225,
+        "tpws_ns": 0.0,
+        "pulse_width_failing_endpoints": 0,
+        "internal_reg_to_reg_hold_path_count": 324
+      }
+    }
+  ],
+  "required_evidence": {
+    "module_contract": true,
+    "rtl": true,
+    "self_checking_testbench": true,
+    "golden_model_and_vectors": true,
+    "kernel_report_json": true,
+    "module_ooc_synthesis_report_json": true,
+    "subagent_result_json": true,
+    "raw_xsim_logs": true,
+    "raw_lint_log": true,
+    "raw_vivado_log": true,
+    "raw_timing_report": true,
+    "raw_utilization_report": true,
+    "raw_drc_and_methodology_reports": true
+  },
+  "promotion": {
+    "eligible": false,
+    "reason": "Two P1 liveness/composability defects remain and important P2 regressions are absent.",
+    "required_before_retry": [
+      "Resolve the frozen request protocol: either require executor ready to be proactive, or make request valid independent of ready and add a ready-low-from-entry deadlock regression.",
+      "Define GEMM bank alias legality and reject destination/source alias with a deterministic error instead of permanent CHECK_READY stall, unless an explicit in-place semantic is designed.",
+      "Add full 256-bit command payload comparison, accepted maximum command_count=1024 coverage, GEMM backpressure/release coverage, DMA_STORE and GEMM rollback coverage, and reset coverage for each active state.",
+      "Regenerate evidence with retained Verilator version identity and update the parent/child run ledger."
+    ]
+  },
+  "remaining_risks": [
+    "Post-synthesis OOC timing is not post-place, post-route, board-wrapper, or board timing.",
+    "The command BRAM, AXI BRAM Controller, DMA executor, GEMM executor, and response timing are external to this packet.",
+    "No tensor arithmetic, full-model execution, bitstream, or physical-board behavior is proven.",
+    "The XSIM wrapper itself remains unreliable in this environment even though its fresh compiled snapshot executes successfully."
+  ],
+  "forbidden_claims": [
+    "integration-ready dispatcher",
+    "deadlock-free composition with arbitrary ready/valid executors",
+    "all legal and illegal bank alias cases covered",
+    "post-route 200 MHz closure",
+    "board deployability or runtime validation",
+    "full LLM execution"
+  ],
+  "retry_owner": "Parent agent for contract clarification, then isa_command_dispatcher implementation and independent verification agents",
+  "skill_update_candidate": null
+}

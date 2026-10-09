@@ -1,0 +1,79 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "module_id": "isa_dispatcher",
+  "module_kind": "infrastructure",
+  "status": "frozen",
+  "agent_role": "infrastructure_command_dispatcher",
+  "scope": "Fill v2 exclusive dispatcher template fetch/PC/issue/drain with current opcode/scoreboard/identity interface; preserve common semantics, document adapted source regions.",
+  "binding": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/infrastructure_rtl_port_binding.json",
+    "sha256": "4a78a38ff3edd0889999be5ae44a9400d3a929cb05e72745fcfae8f256eb3397"
+  },
+  "refs": {
+    "engine_completion_contract.json": {
+      "path": "contracts/common/engine_completion_contract.json",
+      "sha256": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446"
+    },
+    "evidence_identity_contract.json": {
+      "path": "contracts/common/evidence_identity_contract.json",
+      "sha256": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda"
+    },
+    "local_bank_contract.json": {
+      "path": "contracts/common/local_bank_contract.json",
+      "sha256": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d"
+    },
+    "isa_command_contract.json": {
+      "path": "contracts/common/isa_command_contract.json",
+      "sha256": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15"
+    },
+    "isa_spec.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/isa_spec.json",
+      "sha256": "1b212ac05048122b4377581433052a91efa24c5c3bc3ce9bba3d0f7219cf630c"
+    },
+    "bank_layout.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/bank_layout.json",
+      "sha256": "dcd26383f787310d301cc6976d27fc76cf8ec44baed43fdf4258039f2441a6f2"
+    },
+    "compute_interface.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/compute_interface.json",
+      "sha256": "c2b579e39ac9b4cb7fbb6ca2fb751e7020d11d7b9a597a942ebb64550f772d06"
+    },
+    "isa_codec.py": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/scripts/isa_codec.py",
+      "sha256": "1d6647bd92987d92b5234316aae979dea435251fb8142235342c13c5fef4cfcd"
+    }
+  },
+  "target": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_ns": 5.0,
+    "vivado": "2025.2"
+  },
+  "immutable": [
+    "Existing compute RTL and goldens",
+    "Existing ISA/common/bank/numeric contracts",
+    "Shared infrastructure source files; copy pinned reusable sources into design RTL with explicit source identity"
+  ],
+  "verification": [
+    "strict Verilator lint with no new suppressions",
+    "self-checking handshake/payload stable stalls",
+    "atomic acquire, alias/generation errors no partial mutation",
+    "matched and wrong/duplicate completion releases",
+    "concurrent alternate-bank DMA-control and GEMM-control offers",
+    "END/FENCE and repeated START preserving descriptors",
+    "busy BANK_CONFIG, B7 independent component epochs, metadata stale/no-touch",
+    "coordinated reset and live stalls",
+    "fresh Vivado2025.2 5ns OOC including full setup/hold/pulse checks",
+    "independent read-only exact-source audit"
+  ],
+  "unsupported_claims": [
+    "bank physical memory/router",
+    "coverage service implementation",
+    "DMA data transport/vendor status binding",
+    "real GEMM/quant payload integration",
+    "nonlinear execution",
+    "full model/board deployment"
+  ],
+  "recursive_subagents": false
+}

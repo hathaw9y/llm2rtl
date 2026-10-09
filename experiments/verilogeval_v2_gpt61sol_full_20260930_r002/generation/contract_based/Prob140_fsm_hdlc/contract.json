@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "in": 1
+    },
+    "outputs": {
+      "disc": 1,
+      "flag": 1,
+      "err": 1
+    }
+  },
+  "semantics": {
+    "clock": "positive edge; input sampled every edge",
+    "reset": "active high synchronous, priority over input; behaves as previous input zero, all outputs low",
+    "recognition": "zero after exactly five consecutive ones asserts disc; zero after exactly six asserts flag; seventh and subsequent consecutive ones assert err",
+    "cycle": "Moore outputs reflect state entered at sampling edge and remain through the following complete cycle; no extra output register",
+    "restart": "any sampled zero restarts consecutive-one count, including discard/flag/error termination",
+    "initialization": "no pre-reset behavior specified; no initialization imposed",
+    "evidence": "problem.txt: sequences 0111110, 01111110, 01111111...; synchronous reset and complete-cycle Moore outputs"
+  },
+  "numeric": {
+    "ports": "one-bit unsigned",
+    "state": "ten states: zero, one through six ones, discard, flag, error",
+    "arithmetic": "no data arithmetic"
+  },
+  "verification": {
+    "oracle": "independent integer consecutive-one count saturated at seven, event outputs computed from sampled bit and prior count",
+    "sampling": "drive at falling edge; check prior outputs before rising edge and new outputs after NBA settles",
+    "coverage": "all binary streams of length ten; long error runs; adjacent flags/discards; reset in every run length and event; synchronous reset stability",
+    "tool": "python3 dev_check.py --label initial",
+    "timeout": "bounded testbench timeout"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "before reset",
+      "resolution": "unspecified; tests establish reset before functional comparisons"
+    },
+    {
+      "topic": "cycle wording",
+      "resolution": "Moore state entered on edge sampling final pattern bit asserts output in following inter-edge cycle, consistent with no extra latency"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence_directory": "development/01",
+      "check_count": 42,
+      "compile_returncode": 0,
+      "simulation_returncode": 0
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not occurred.", "No synthesis or board verification performed."],
+  "justified_rtl_changes": ["Initial implementation uses a continuous assignment to propagate the one-bit input combinationally with no ports or latency added. No RTL revisions."],
+  "justified_tb_changes": ["Initial independent testbench checks initial X propagation, all four logic values, and repeated binary transitions using case inequality after combinational settling. Includes fatal mismatches, bounded timeout, and final PASS. No testbench revisions."],
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv"},
+  "interface_cycle_contract": "TopModule(input in, output out); out continuously equals in; no clock or reset.",
+  "numeric_width_decisions": "Both ports are one bit.",
+  "static_review": "Single continuous driver; no state, latch, or extra latency."
+}

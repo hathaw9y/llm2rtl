@@ -1,0 +1,54 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790749224.5754352,
+      "source_sha256": "ffd59d5d4d0a7e8f151d771dcfbc2d4ac372bb773f3c9da566e0b4f6c7318d81",
+      "testbench_sha256": "c3152dfe322b53283c20c6e0de997c46f8e0479d03d614db5f424f148a8fb33d",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob138_2012_q2fsm/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011100600473582745
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: exhaustive sequences, all transitions, reset from all states, and edge sampling\ndev_tb.sv:79: $finish called at 112676000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.09757904149591923
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Six-state Moore FSM with separate combinational state table and positive-edge state register, synchronous active-high reset to A, and combinational z decode for E/F.",
+  "verification": "Environment smoke passed correct/fault/repair cases. Initial Icarus 12 development check passed exhaustive 10-bit sequences, all 12 transitions, reset from every state, and output checks before and after rising edges.",
+  "static_review": "One-bit ports preserved; three-bit state enum; no added ports or latency; explicit if/else state selection; complete combinational assignments; no RTL initialization."
+}

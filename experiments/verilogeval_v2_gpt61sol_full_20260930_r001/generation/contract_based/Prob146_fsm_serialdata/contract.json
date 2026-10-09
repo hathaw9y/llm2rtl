@@ -1,0 +1,28 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": "input 1 bit", "in": "input 1 bit", "reset": "input 1 bit", "out_byte": "output 8 bits [7:0]", "done": "output 1 bit"}
+  },
+  "semantics": {
+    "clock": "All sequential logic samples at rising clk edges; one serial bit per edge.",
+    "reset": "Active-high synchronous reset overrides reception, returns to idle and clears done. No power-up initialization is required before reset. out_byte is unspecified unless done=1.",
+    "framing": "Idle high samples are ignored. Idle low is a start bit. The next eight edges sample data bits 0 through 7, least significant first. The ninth edge after start samples stop.",
+    "completion": "An expected stop sample of 1 makes done high immediately after that edge for one cycle and makes out_byte equal the eight captured bits. The next edge can accept a new low start bit; idle highs never assert done.",
+    "error": "An expected stop sample of 0 discards the frame without done. Ignore subsequent lows until a high sample restores idle; this recovery high does not assert done. Reception can start on the following edge.",
+    "reset_during_frame": "Reset aborts any partial frame or recovery wait; reception begins again after reset is released."
+  },
+  "numeric": {
+    "payload": "Unsigned 8-bit bit pattern, received bit k maps to out_byte[k].",
+    "counter": "An unsigned 3-bit counter selects indices 0 through 7; no payload arithmetic, rounding, saturation, or overflow behavior is needed."
+  },
+  "verification": {
+    "oracle": "Independent bit-stream scoreboard counts samples since a start; reconstructs byte by bit index and rejects malformed stop bits, comparing done on every edge and byte only when done.",
+    "directed": "Idle; all 256 byte values; consecutive frames; invalid stop with extended low recovery; recovery high; reset in each reception phase and error recovery; synchronous reset between edges.",
+    "random": "Deterministic pseudo-random serial bits and resets checked by the same protocol oracle.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top, followed by matching vvp; finite timeout for each compile and simulation. No official tests or synthesis."
+  },
+  "specification_ambiguities": [
+    {"text": "Assert done each time it finds a stop bit could include a late recovery high.", "resolution": "Only correctly received bytes assert done, consistent with the byte validity requirement; recovery high resynchronizes without completion."}
+  ]
+}

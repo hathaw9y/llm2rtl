@@ -1,0 +1,12 @@
+{
+  "status": "agreed_dtype_boundaries_implementation_pending",
+  "source": "modeling_qwen2.py, pinned Transformers 4.46.3 eager BF16 reference",
+  "rounding": "BF16 conversions round to nearest ties to even; no arithmetic fusion across listed rounding boundaries.",
+  "RMSNorm": "BF16 input -> FP32 square, mean, epsilon addition, rsqrt and normalization -> BF16 intermediate -> multiply BF16 gamma -> BF16 output. Reduction order and rsqrt implementation pending.",
+  "RoPE": "BF16 Q/K and BF16 cos/sin table; each of two products rounds to BF16, then their sum rounds to BF16. rotate_half uses [-second_half, first_half], with head dimension 64.",
+  "SOFTMAX_MASKED": "FP32 QK scratch -> BF16 score -> scale by 1/8 -> BF16 scaled score -> causal mask -> FP32 stable softmax -> BF16 probabilities. Mask construction, reduction order, exp and reciprocal implementation pending.",
+  "SILU_MUL": "BF16 gate -> SiLU -> BF16 intermediate -> multiply BF16 up -> BF16 output. SiLU approximation pending.",
+  "residual_add": "BF16 operands -> addition -> BF16 output.",
+  "limitations": "Specifies dtype boundaries only; no nonlinear approximation, exceptional/subnormal policy or numerical quality tolerance is frozen. No ISA/interpreter/RTL evidence.",
+  "user_selection": "어"
+}

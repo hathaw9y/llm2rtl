@@ -1,0 +1,40 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structural validation only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial_preservation",
+      "result": "PASS: candidate_initial.sv is byte-identical to candidate.sv"
+    },
+    {
+      "name": "static_review",
+      "result": "PASS: exact TopModule ports, seven single-bit continuous gate assignments, no state, delays, clock, reset, or dependencies"
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "FAILED",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "exit_record": "dev_compile.exit",
+      "diagnostics": "Compiler produced no diagnostic text."
+    },
+    {
+      "name": "development_simulation",
+      "result": "NOT RUN: compile failed",
+      "planned_command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim"
+    }
+  ],
+  "development_outcome": "Initial synthesizable gate RTL delivered unchanged; independent exhaustive binary truth-table testbench created but not executed because Icarus compilation failed.",
+  "limitations": [
+    "No successful development compilation or simulation.",
+    "Binary truth table is covered by the authored testbench; X/Z behavior is not tested.",
+    "No synthesis, board access, or official evaluation performed."
+  ]
+}

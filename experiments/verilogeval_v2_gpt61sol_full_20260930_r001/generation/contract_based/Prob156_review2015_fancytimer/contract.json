@@ -1,0 +1,46 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "data": 1,
+      "ack": 1
+    },
+    "outputs": {
+      "count": 4,
+      "counting": 1,
+      "done": 1
+    }
+  },
+  "semantics": {
+    "clock": "All sequential updates on positive clk edges.",
+    "reset": "Active-high synchronous reset has priority in every state, clears prefix, delay capture and counters, returns to searching; no power-up behavior promised before reset.",
+    "search": "Consume one data bit per edge while searching for 1101, retaining overlapping prefix matches. Detection edge completes pattern; following four edges capture delay MSB first.",
+    "counting": "Immediately after fourth delay capture edge E, counting=1 and count=delay. For post-edge indices E+k with 0 <= k < 1000*(delay+1), counting=1 and count=delay-floor(k/1000). At E+1000*(delay+1), counting=0 and done=1.",
+    "done": "done=0 during search/capture/counting. After timeout done stays high until an edge in done state samples ack=1, then search resumes with empty prefix. Data on acknowledgment edge is not searched. Ack is ignored before done.",
+    "data_ignored": "Ignore data during counting and done. Count is unconstrained when not counting."
+  },
+  "numeric": {
+    "delay": "Unsigned 4-bit value 0..15, MSB-first serial assembly.",
+    "remaining": "Unsigned 4-bit countdown, decrement only when nonzero at 1000-cycle boundary.",
+    "subcounter": "Unsigned 10-bit elapsed counter 0..999, resets each 1000 cycles; maximum timer duration 16000 cycles.",
+    "arithmetic": "Exact integer timing, no rounding or saturation, no observable wraparound while counting."
+  },
+  "verification": {
+    "method": "Independent public-port self-checking simulation with expected cycle formula rather than DUT internal state.",
+    "coverage": [
+      "All 16 delays and each cycle of each countdown",
+      "Prefix overlap and misleading serial sequences",
+      "Data changes and ack during counting ignored",
+      "Done holds until acknowledgment and repeated transactions",
+      "Synchronous reset during search, capture, counting and done"
+    ],
+    "tools": "Icarus v12, -g2012, explicit dev_tb top, finite compile and simulation timeouts; preserve logs."
+  },
+  "specification_ambiguities": [
+    "Count outside counting is explicitly dont-care; choose retained register value.",
+    "Search begins on the edge after acknowledgment; acknowledgment edge clears prior pattern history."
+  ]
+}

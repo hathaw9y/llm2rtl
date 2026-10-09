@@ -1,0 +1,197 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob139_2013_q2bfsm",
+  "official_status": "functional_failure",
+  "official_analyzer_code": "R",
+  "workflow_status": "failed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob139_2013_q2bfsm",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob139_2013_q2bfsm/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791271165.134306,
+    "ended_at_unix": 1791271250.9760811,
+    "seconds": 85.84177565574646,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 81724,
+      "cached_input_tokens": 70400,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3162,
+      "reasoning_output_tokens": 64
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "262de566a1b12e4843fb27ff56fc3a39dfb104eead0ff1c235e32e404a06fcd8",
+  "contract_sha256": "741b1206188276951539c5def740c9ff85f596cd4b37cc65c664fc07b121b8dd",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json"
+      },
+      {
+        "name": "contract_structure",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "compile_returncode": 0,
+        "simulation_returncode": 0,
+        "comparisons": 17445
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not been run or accessed.",
+      "The original prose expresses cycle timing without a waveform. Contract records the interpretation that g rises in the cycle after the third x sample and y is sampled at the next two rising edges.",
+      "Power-up state is unspecified; verification begins with a synchronous reset edge."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "history": "dev_checks.jsonl"
+    }
+  },
+  "final": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "262de566a1b12e4843fb27ff56fc3a39dfb104eead0ff1c235e32e404a06fcd8",
+      "Prob139_2013_q2bfsm_ref.sv": "402d30bac3c3565f2b88cf78d76f8a80f0469df5594ffd2e8fac39f4008e0806",
+      "Prob139_2013_q2bfsm_test.sv": "526bf9a0f7806389fbad89837515512a65bd628033563f7d6b077c277f0a68af"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob139_2013_q2bfsm_test.sv",
+        "Prob139_2013_q2bfsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.016066231764853
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb139_2013_q2bfsm_test.sv:24: $finish called at 5011 (1ps)\nHint: Output 'f' has no mismatches.\nHint: Output 'g' has 198 mismatches. First mismatch occurred at time 3330.\nHint: Total mismatched samples is 198 out of 1002 samples\n\nSimulation finished at 5011 ps\nMismatches: 198 in 1002 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01300530880689621
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 198,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "262de566a1b12e4843fb27ff56fc3a39dfb104eead0ff1c235e32e404a06fcd8",
+      "Prob139_2013_q2bfsm_ref.sv": "402d30bac3c3565f2b88cf78d76f8a80f0469df5594ffd2e8fac39f4008e0806",
+      "Prob139_2013_q2bfsm_test.sv": "526bf9a0f7806389fbad89837515512a65bd628033563f7d6b077c277f0a68af"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob139_2013_q2bfsm_test.sv",
+        "Prob139_2013_q2bfsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014565365388989449
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb139_2013_q2bfsm_test.sv:24: $finish called at 5011 (1ps)\nHint: Output 'f' has no mismatches.\nHint: Output 'g' has 198 mismatches. First mismatch occurred at time 3330.\nHint: Total mismatched samples is 198 out of 1002 samples\n\nSimulation finished at 5011 ps\nMismatches: 198 in 1002 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012902933172881603
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 198,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

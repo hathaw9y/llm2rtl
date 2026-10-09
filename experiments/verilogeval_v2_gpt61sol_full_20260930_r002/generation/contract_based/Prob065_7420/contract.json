@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"p1a": 1, "p1b": 1, "p1c": 1, "p1d": 1, "p2a": 1, "p2b": 1, "p2c": 1, "p2d": 1},
+    "outputs": {"p1y": 1, "p2y": 1},
+    "evidence": "problem.txt explicitly lists eight one-bit inputs and two one-bit outputs."
+  },
+  "semantics": {
+    "p1y": "NOT (p1a AND p1b AND p1c AND p1d)",
+    "p2y": "NOT (p2a AND p2b AND p2c AND p2d)",
+    "timing": "Combinational with no added latency; observe after simulation settling.",
+    "clock_reset_initialization": "No clock or reset ports, no stored state or specified initialization.",
+    "independence": "Each output depends only on its own four inputs.",
+    "evidence": "problem.txt states the 7420 contains two 4-input NAND gates."
+  },
+  "numeric": {
+    "width": "All signals are one bit.",
+    "interpretation": "Boolean gate values; no arithmetic, rounding, saturation or overflow.",
+    "simulation_unknowns": "Standard four-state NAND: any zero input forces one; all ones yield zero; otherwise X or Z yields X."
+  },
+  "verification": {
+    "oracle": "Independent truth table: output zero only for four ones; output one for any known zero; otherwise unknown.",
+    "coverage": "Exhaust all 256 combined binary input vectors, then all 65536 combined four-state vectors.",
+    "sampling": "Drive inputs then wait #1 before comparing outputs using case inequality.",
+    "failure_success": "$fatal on mismatch or bounded timeout; print a line beginning PASS only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "The original describes Boolean gates without explicit X/Z rules. Standard SystemVerilog four-state gate semantics are used; these supplemental checks do not change the binary specification."
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": {
+        "width": 1,
+        "type": "unsigned bit"
+      },
+      "b": {
+        "width": 1,
+        "type": "unsigned bit"
+      },
+      "c": {
+        "width": 1,
+        "type": "unsigned bit"
+      },
+      "d": {
+        "width": 1,
+        "type": "unsigned bit"
+      }
+    },
+    "outputs": {
+      "q": {
+        "width": 1,
+        "type": "unsigned bit"
+      }
+    },
+    "clock": null,
+    "reset": null
+  },
+  "semantics": {
+    "kind": "combinational",
+    "function": "q = b OR c; independent of a and d",
+    "timing": "Continuous combinational response; no clock, cycles, stored state or specified propagation delay",
+    "initialization": "No initialization or reset required; output determined by current inputs",
+    "truth_table_abcd_order": "0000:0,0001:0,0010:1,0011:1,0100:1,0101:1,0110:1,0111:1,1000:0,1001:0,1010:1,1011:1,1100:1,1101:1,1110:1,1111:1"
+  },
+  "numeric": {
+    "operation": "one-bit Boolean OR",
+    "arithmetic": "No arithmetic, signed interpretation, overflow, rounding, truncation or saturation",
+    "legal_inputs": "All 16 binary input combinations"
+  },
+  "verification": {
+    "oracle": "Literal 16-entry truth table transcribed from original waveform, indexed by {a,b,c,d}; not computed from implementation expression",
+    "coverage": "Exhaustively check all 16 binary combinations forward and reverse to check changes and absence of retained state",
+    "comparison": "Case inequality after testbench settling delay; fatal on mismatch",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top, matching vvp; finite shell and testbench timeouts",
+    "gate": "python3 validate_contract.py must PASS before RTL creation"
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z input values and physical propagation delays is unspecified; binary waveform defines every binary input combination."
+  ]
+}

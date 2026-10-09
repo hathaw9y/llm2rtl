@@ -1,0 +1,181 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob132_always_if2",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob132_always_if2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob132_always_if2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790747357.418704,
+    "ended_at_unix": 1790747444.5797844,
+    "seconds": 87.16108059883118,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 75150,
+      "cached_input_tokens": 63744,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1503,
+      "reasoning_output_tokens": 8
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "352598f67f5475bb547096a5c9c9b9dcc77c2dfe8171acddcbaa6a02b950d89c",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "observations": "Correct sequential fixture passed; deliberately wrong fixture failed; repaired fixture passed."
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "evidence_directory": "development/01",
+        "observations": "Icarus 12 compilation and matching vvp simulation passed with 133 self-checking samples, including all binary combinations and ordered transitions."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official evaluation; official correctness feedback is unavailable.",
+      "The original problem specifies no unknown-input behavior; the oracle checks binary inputs.",
+      "No synthesis or board work was performed."
+    ],
+    "justified_rtl_changes": [
+      "Initial implementation adds explicit zero-valued else branches to both combinational processes to eliminate unintended retained outputs.",
+      "Original TopModule name, ports, widths, and combinational behavior are preserved. Output reg declarations are retained for interface fidelity; always_comb provides complete combinational assignments without additional latency."
+    ],
+    "justified_tb_changes": [],
+    "files": {
+      "rtl": "candidate.sv",
+      "unchanged_initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "development_records": "dev_checks.jsonl"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "352598f67f5475bb547096a5c9c9b9dcc77c2dfe8171acddcbaa6a02b950d89c",
+      "Prob132_always_if2_ref.sv": "5d7b5e97e5f038c0c13d3f06634095f23b50b946223ee7ec398483e0a74dc36e",
+      "Prob132_always_if2_test.sv": "ba6be33c005273b938774d09e0c9f089539d15edc6ffd3dab09f34c0f37e6946"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob132_always_if2_test.sv",
+        "Prob132_always_if2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012557679787278175
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb132_always_if2_test.sv:45: $finish called at 605 (1ps)\nHint: Output 'shut_off_computer' has no mismatches.\nHint: Output 'keep_driving' has no mismatches.\nHint: Total mismatched samples is 0 out of 121 samples\n\nSimulation finished at 605 ps\nMismatches: 0 in 121 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007312295958399773
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "352598f67f5475bb547096a5c9c9b9dcc77c2dfe8171acddcbaa6a02b950d89c",
+      "Prob132_always_if2_ref.sv": "5d7b5e97e5f038c0c13d3f06634095f23b50b946223ee7ec398483e0a74dc36e",
+      "Prob132_always_if2_test.sv": "ba6be33c005273b938774d09e0c9f089539d15edc6ffd3dab09f34c0f37e6946"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob132_always_if2_test.sv",
+        "Prob132_always_if2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010532011277973652
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb132_always_if2_test.sv:45: $finish called at 605 (1ps)\nHint: Output 'shut_off_computer' has no mismatches.\nHint: Output 'keep_driving' has no mismatches.\nHint: Total mismatched samples is 0 out of 121 samples\n\nSimulation finished at 605 ps\nMismatches: 0 in 121 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.006675994023680687
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

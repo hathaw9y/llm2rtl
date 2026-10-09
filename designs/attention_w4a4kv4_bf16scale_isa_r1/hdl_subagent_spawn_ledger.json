@@ -1,0 +1,55 @@
+{
+  "dispatches": [
+    {
+      "agent": "/root/native_tests",
+      "role": "math_implementation",
+      "contract": {
+        "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_fp32_math.json",
+        "sha256": "5b24dfa7f8dd8db519cf807b40df0b5e830c22be8379d23e30b072007a934421"
+      }
+    },
+    {
+      "agent": "/root/native_core",
+      "role": "control_implementation",
+      "contract": {
+        "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_control.json",
+        "sha256": "53fe7ef380ce28536cd9c48be01b1957230f7263bbf5c65bc8eb872cc6a38ec2"
+      }
+    },
+    {
+      "agent": "/root/native_review",
+      "role": "tensor_executor_implementation",
+      "contract": {
+        "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_executor.json",
+        "sha256": "0023e5d80df0b358aadc30431dc9ca38279cf6e51d8d9fc534333453ee7c0292"
+      }
+    }
+  ],
+  "followup_waves": [
+    {
+      "agent": "/root/native_core",
+      "role": "independent_math_review",
+      "packet": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_fp32_math_review.json",
+      "packet_sha256": "d166040c3cc01340359f41a08b32f56691c960b72efc8178c5c86eb6e2c050a9"
+    },
+    {
+      "agent": "/root/native_tests",
+      "role": "independent_executor_review_and_fullISA_validation",
+      "packet": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_isa_validation.json",
+      "packet_sha256": "74a112af3ddb22996ddfa16759f373b54c61c7f2ab9af326fd52ee2e2b277531"
+    },
+    {
+      "agent": "/root/native_review",
+      "role": "independent_correctedcontrol_review",
+      "packet": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_control_review_final005.json",
+      "packet_sha256": "b401f84a5da9ffe0f14cb75d1069e7a14898e185f030dc7344b707542642ff90"
+    },
+    {
+      "agent": "/root/native_core",
+      "role": "integration_evidence_crosscheck_with_controller_authorship_disclosed",
+      "packet": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_isa_review.json",
+      "packet_sha256": "f8d7b34beda161ba1db4624e41e93dc0c33cfa5494b5a94e78df82a1a3872a04"
+    }
+  ],
+  "parent_role": "contract/numericgolden generation and final independent audit; no handwrittenRTL"
+}

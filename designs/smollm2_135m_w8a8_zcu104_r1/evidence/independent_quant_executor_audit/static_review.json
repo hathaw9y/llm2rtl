@@ -1,0 +1,80 @@
+{
+  "scope": "Independent read-only static audit of frozen standalone quantization executor; no edits/synthesis",
+  "source_sha256": "fa02a045c836090049818f765484d5f7be0f9f95f35d1edf4b60e976fb01d411",
+  "findings": [],
+  "checks": [
+    {
+      "topic": "Native FIFO credits",
+      "result": "accepted-minus-consumed <=4 includes outstanding, queued and partially decoded beat; returned data always captured; BF16 head frees after second bundle and DQ after fourth bundle",
+      "lines": [
+        149,
+        181,
+        199,
+        250
+      ]
+    },
+    {
+      "topic": "Streaming errors with held writes",
+      "result": "Queued C valid independent of error. Native and child held offers captured/restored in ERROR_DRAIN. Existing partial pack flushed, arithmetic and responses drained before invalidation. No new good-output append after error_r set.",
+      "lines": [
+        185,
+        216,
+        223,
+        236,
+        291,
+        348
+      ]
+    },
+    {
+      "topic": "Reducer phase guard",
+      "result": "Only REDUCE evaluates BF16 reduction inputs. Quantization streaming group_for and selected_p still evaluated normally; child numeric error drives 05. No reducer-output-to-input combinational feedback found. Precise original simulator delta-stall mechanism unproven.",
+      "lines": [
+        189,
+        192,
+        211,
+        229,
+        353
+      ]
+    },
+    {
+      "topic": "Group and scale ordering",
+      "result": "A groups relative selected rows; Q/P head-major index; static K3/V12 selected scales; dynamic max/127 uses accepted raw FP32 quotient same quant4 divider, zero max chooses1. Masked P neither reduced nor numerically validated; output forced zero.",
+      "lines": [
+        192,
+        211,
+        232,
+        278
+      ]
+    },
+    {
+      "topic": "Producer/identity",
+      "result": "Captured descriptors, selectors, B7static flag and command identity. All modes begin before native activity. Old C shape/profile ignored; generation old+1. Error invalidation acknowledges active producer generation or old generation on rejection. Active role outputs require controller incoming ISA acquisition decode.",
+      "lines": [
+        300,
+        319,
+        348
+      ]
+    },
+    {
+      "topic": "DQ memory schedule",
+      "result": "Selected FP32 scale row read before row INT8 stream; selected lane only; 36 native source beats per576-feature row. Full row drain before next selected scale; no32-row scale cache.",
+      "lines": [
+        272,
+        339,
+        344
+      ]
+    }
+  ],
+  "integration_obligations": [
+    "Native provider supplies exactly one in-order latency3 response per accepted request with no response ready; whole-system reset also flushes provider pipeline",
+    "Controller atomically acquires incoming ISA-derived roles and validates descriptor ownership/generation; active executor outputs are accepted-job routing",
+    "Producer and invalidation acknowledgements update bank metadata/coverage before matched completion consumption"
+  ],
+  "excluded": [
+    "OOC synthesis",
+    "200MHz timing/resource fit",
+    "actual DMA/local-bank routing",
+    "full-token/model execution",
+    "physical board validation"
+  ]
+}

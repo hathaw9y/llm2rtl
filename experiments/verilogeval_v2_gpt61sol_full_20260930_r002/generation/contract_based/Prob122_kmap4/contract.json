@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"a": 1, "b": 1, "c": 1, "d": 1},
+    "outputs": {"out": 1},
+    "evidence": "Original problem lists exactly four one-bit inputs and one one-bit output."
+  },
+  "semantics": {
+    "behavior": "Combinational odd parity: out = a XOR b XOR c XOR d.",
+    "map_columns_ab": ["00", "01", "11", "10"],
+    "map_rows_cd": ["00", "01", "11", "10"],
+    "map_cells": [[0,1,0,1], [1,0,1,0], [0,1,0,1], [1,0,1,0]],
+    "cycle_reset_initialization": "Original specifies only a Karnaugh map and no clock/reset ports or state; output follows current inputs without cycle latency. No initialization requirement exists."
+  },
+  "numeric": {
+    "width": "All operands and output are one bit.",
+    "domain": "All 16 binary input combinations are specified; no arithmetic overflow, rounding, or signedness applies."
+  },
+  "verification": {
+    "oracle": "Literal original map indexed by independently decoded Gray-code row cd and column ab, not the RTL parity equation.",
+    "coverage": "Exhaust all 16 input combinations forward and reverse, including all-zero and all-one boundaries.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling before case-inequality comparison.",
+    "failure_and_completion": "Use fatal mismatches, a bounded timeout, and PASS only after all checks.",
+    "commands": ["python3 smoke_environment.py", "python3 validate_contract.py", "python3 dev_check.py --label initial"]
+  },
+  "specification_ambiguities": [
+    "X/Z input behavior is unspecified by the binary Karnaugh map; no extra X/Z requirements are imposed."
+  ]
+}

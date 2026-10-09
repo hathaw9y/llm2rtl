@@ -1,0 +1,69 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "areset": {
+        "direction": "input",
+        "width": 1
+      },
+      "bump_left": {
+        "direction": "input",
+        "width": 1
+      },
+      "bump_right": {
+        "direction": "input",
+        "width": 1
+      },
+      "ground": {
+        "direction": "input",
+        "width": 1
+      },
+      "dig": {
+        "direction": "input",
+        "width": 1
+      },
+      "walk_left": {
+        "direction": "output",
+        "width": 1
+      },
+      "walk_right": {
+        "direction": "output",
+        "width": 1
+      },
+      "aaah": {
+        "direction": "output",
+        "width": 1
+      },
+      "digging": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "All state transitions on rising clk edge. Inputs are sampled at that edge.",
+    "reset": "Active-high asynchronous reset on rising areset; while asserted reset dominates clock and selects walking left, regardless of inputs.",
+    "initialization": "No power-up state specified before reset.",
+    "outputs": "Moore outputs: walking left => 1000; walking right => 0100; falling either direction => 0010; digging either direction => 0001, in walk_left,walk_right,aaah,digging order. Outputs reflect registered state.",
+    "walking": "If ground=0 enter falling preserving direction; else if dig=1 enter digging preserving direction; else left walker switches on bump_left, right walker switches on bump_right. Both bumps switch current direction. Opposite-only bump has no effect.",
+    "digging": "Remain digging while ground=1 independent of dig and bumps. On ground=0 enter falling preserving direction.",
+    "falling": "Remain falling while ground=0. On ground=1 resume walking in saved direction, ignoring dig and bumps on landing edge.",
+    "input_changes": "Input changes between clock edges do not alter outputs, except asynchronous reset."
+  },
+  "numeric": {
+    "signals": "All external ports are unsigned one-bit logic.",
+    "arithmetic": "No arithmetic, counters, overflow, rounding or saturation. Six logical states represent mode and remembered direction."
+  },
+  "verification": {
+    "oracle": "Independent mode (walk/fall/dig) plus direction software-style model in self-checking testbench; compare all four outputs after every sampled edge.",
+    "coverage": "Exhaust all six reachable states times 16 combinations of bump_left,bump_right,ground,dig. Include simultaneous triggers, both bumps, digging persistence, landing ignoring controls, and direction retention.",
+    "reset": "Assert asynchronous reset away from clk edge from each mode/direction; check immediately and while held across clock.",
+    "timing": "Check Moore output stability when controls change before next rising clk edge. Finite compile and simulation timeouts; explicit dev_tb top with -g2012."
+  },
+  "specification_ambiguities": []
+}

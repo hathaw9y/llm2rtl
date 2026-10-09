@@ -1,0 +1,50 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 5,
+      "b": 5,
+      "c": 5,
+      "d": 5,
+      "e": 5,
+      "f": 5
+    },
+    "outputs": {
+      "w": 8,
+      "x": 8,
+      "y": 8,
+      "z": 8
+    },
+    "clock_reset": "None in original interface; no added ports"
+  },
+  "semantics": {
+    "equation": "{w,x,y,z} = {a,b,c,d,e,f,2'b11}",
+    "ordering": "a most significant, f least significant input, two constant ones at output bits 1:0; w most significant output and z least significant",
+    "timing": "Pure combinational propagation; no clock, latency cycles, handshake or retained state",
+    "initialization": "No initial state specified; unknown input bits propagate through wiring; constant LSBs remain ones",
+    "evidence": "Original problem lists six 5-bit inputs, four 8-bit outputs and requires concatenation followed by two 1 bits in LSB positions"
+  },
+  "numeric": {
+    "input_bits": 30,
+    "output_bits": 32,
+    "type": "Unsigned packed bit vectors; no arithmetic",
+    "padding": "2'b11",
+    "rounding_overflow": "Not applicable; every input bit preserved"
+  },
+  "verification": {
+    "oracle": "Independent per-input-bit mapping to output position 2 + 5*(5-input_index) + bit_index",
+    "sampling": "Check after combinational settling using #1; no clock edges",
+    "cases": [
+      "all zero",
+      "all one",
+      "walking ones and walking zeros across all 30 bits",
+      "each input all 32 values with other inputs zero",
+      "deterministic pseudo-random patterns",
+      "unknown and high-impedance propagation"
+    ],
+    "failure": "$fatal on mismatch or bounded timeout",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,38 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "in",
+        "direction": "input",
+        "width_bits": 1
+      },
+      {
+        "name": "out",
+        "direction": "output",
+        "width_bits": 1
+      }
+    ]
+  },
+  "semantics": {
+    "function": "out = in",
+    "timing": "Continuous combinational connection, no clock cycles or registered latency; observe after simulator settling.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization required; output follows input.",
+    "handshake": "None; all input changes propagate."
+  },
+  "numeric": {
+    "representation": "One-bit signal",
+    "arithmetic": "None",
+    "conversion": "No rounding, truncation, saturation, extension or overflow.",
+    "four_state": "Direct wire connection preserves 0, 1, X and Z in SystemVerilog simulation."
+  },
+  "verification": {
+    "method": "Independent self-checking testbench drives each of 0, 1, X and Z and compares output using case inequality after settling.",
+    "transitions": "Repeat binary transitions and include transitions from X and Z.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; compile and simulation each bounded by timeout.",
+    "pass_condition": "Every driven value matches and simulation emits PASS with successful exit."
+  },
+  "specification_ambiguities": []
+}

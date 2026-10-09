@@ -1,0 +1,33 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {"clk": "input, one bit", "d": "input, one bit", "q": "output, one bit"},
+    "source": "problem.txt interface list; harness requires TopModule"
+  },
+  "semantics": {
+    "capture": "On each rising and falling edge of clk, q takes the d value sampled at that edge, with no extra cycle latency.",
+    "hold": "q holds the last edge-sampled value between clock edges despite changes to d.",
+    "reset": "No reset port or reset behavior is specified; none is added.",
+    "initialization": "No power-up value is specified; registers are left uninitialized. Output before the first edge is unconstrained.",
+    "implementation_constraint": "Do not use one always block sensitive to both posedge clk and negedge clk.",
+    "evidence": "Original problem defines a dual-edge triggered flip-flop and explicitly prohibits the combined edge sensitivity list."
+  },
+  "numeric": {
+    "data_width": 1,
+    "interpretation": "single logic bit; no arithmetic, signedness, rounding, or overflow",
+    "unknown_data": "Four-state simulation may propagate an unknown sampled d; no hardware behavior for unknown clock values is specified."
+  },
+  "verification": {
+    "oracle": "Independent behavioral last-edge-sample model derived from the original dual-edge flip-flop definition.",
+    "sampling": "Drive d away from edges; compare after NBA updates settle and at mid-cycle data changes.",
+    "coverage": "Both edge polarities, first capture, alternating and repeated values, irregular clock spacing, data changes between edges, and sampled unknown followed by recovery.",
+    "required_checks": "Environment smoke, structural contract gate, then python3 dev_check.py --label initial",
+    "success": "Self-checking dev_tb with fatal mismatches, bounded timeout, and final PASS marker; development only."
+  },
+  "specification_ambiguities": [
+    "Power-up output is unspecified; verification imposes no known value before the first genuine clock edge.",
+    "Setup/hold violations and coincident d/clk changes are unspecified; stimulus avoids such races.",
+    "Unknown clock transitions are unspecified; verification uses only binary clock edges."
+  ]
+}

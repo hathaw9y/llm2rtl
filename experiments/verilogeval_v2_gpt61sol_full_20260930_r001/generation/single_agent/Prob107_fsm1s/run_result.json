@@ -1,0 +1,175 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob107_fsm1s",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob107_fsm1s",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob107_fsm1s/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790734085.2250657,
+    "ended_at_unix": 1790734153.8486662,
+    "seconds": 68.62360095977783,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 71452,
+      "cached_input_tokens": 47360,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1644,
+      "reasoning_output_tokens": 35
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "0c42feea2f4ff61f6a599aec57586038ec9bec91351d2633ee47e158153e2d20",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "pass",
+        "details": "One-bit state encodes A=0 and B=1. Rising-edge synchronous active-high reset selects B; input 0 toggles state and input 1 holds state. Output depends only on the registered state."
+      },
+      {
+        "name": "Icarus development compilation",
+        "result": "tool_failure",
+        "exit_code": 139,
+        "timeout_seconds": 20,
+        "command": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "logs": [
+          "compile.log",
+          "development_status.log"
+        ]
+      },
+      {
+        "name": "independent self-checking development simulation",
+        "result": "not_run",
+        "details": "Compilation failed. dev_tb.sv checks all 256 eight-bit input sequences, hold/toggle transitions, reset priority, and output stability between rising edges."
+      }
+    ],
+    "development_outcome": "Initial synthesizable candidate delivered unchanged; static review passed, but development simulation could not be executed due to compiler failure.",
+    "limitations": [
+      "No successful compilation or simulation result is claimed.",
+      "Official evaluation was not accessed and its results are unavailable.",
+      "No synthesis, timing analysis, or board testing was performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "0c42feea2f4ff61f6a599aec57586038ec9bec91351d2633ee47e158153e2d20",
+      "Prob107_fsm1s_test.sv": "22536f340d4972cb797cabb252b6c8845c43b78e24b68db2540901d8a0b6752e",
+      "Prob107_fsm1s_ref.sv": "1d8b86049ccf6097e33d0b8f9aefb0c387e8e6eb5405c00e380ab10ece0fab0d"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob107_fsm1s_test.sv",
+        "Prob107_fsm1s_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014678326435387135
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb107_fsm1s_test.sv:70: $finish called at 1151 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 230 samples\n\nSimulation finished at 1151 ps\nMismatches: 0 in 230 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007303856313228607
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "0c42feea2f4ff61f6a599aec57586038ec9bec91351d2633ee47e158153e2d20",
+      "Prob107_fsm1s_test.sv": "22536f340d4972cb797cabb252b6c8845c43b78e24b68db2540901d8a0b6752e",
+      "Prob107_fsm1s_ref.sv": "1d8b86049ccf6097e33d0b8f9aefb0c387e8e6eb5405c00e380ab10ece0fab0d"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob107_fsm1s_test.sv",
+        "Prob107_fsm1s_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013224966824054718
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb107_fsm1s_test.sv:70: $finish called at 1151 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 230 samples\n\nSimulation finished at 1151 ps\nMismatches: 0 in 230 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007856030017137527
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

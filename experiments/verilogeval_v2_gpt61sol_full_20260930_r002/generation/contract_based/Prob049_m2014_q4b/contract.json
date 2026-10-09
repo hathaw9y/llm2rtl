@@ -1,0 +1,48 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "ar": 1,
+      "d": 1
+    },
+    "outputs": {
+      "q": 1
+    },
+    "source": "problem.txt port list"
+  },
+  "semantics": {
+    "capture": "q takes d at each positive edge of clk when ar is low",
+    "reset": "ar is interpreted as active-high asynchronous clear; q becomes zero on assertion and stays zero at clock edges while asserted",
+    "reset_release": "deassertion alone does not capture d",
+    "initialization": "No initialization is specified; RTL has no initial assignment and verification does not require a defined power-up value",
+    "evidence": "Original: D flip flop, positive edge triggered, with an asynchronous reset ar."
+  },
+  "numeric": {
+    "width": 1,
+    "values": "single-bit logic",
+    "arithmetic": "none"
+  },
+  "verification": {
+    "oracle": "Directed expected values derived from D flip flop capture and asynchronous clear interpretation of original problem",
+    "sampling": "Check one time unit after event, after nonblocking updates",
+    "cases": [
+      "both data values",
+      "hold on data changes",
+      "hold on falling clock edge",
+      "asynchronous assertion with clock held low and high",
+      "reset dominance at rising edge",
+      "reset release holds until rising edge",
+      "repeated reset"
+    ],
+    "timeout": "bounded simulation timeout",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Reset polarity and reset value are not explicit",
+      "resolution": "Interpret ar as active-high asynchronous reset to q=0, the conventional unqualified reset behavior for this one-bit D flip flop."
+    }
+  ]
+}

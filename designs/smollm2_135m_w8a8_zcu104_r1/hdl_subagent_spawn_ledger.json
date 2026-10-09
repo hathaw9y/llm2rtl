@@ -1,0 +1,104 @@
+{
+  "schema": "llm2rtl.subagent_spawn_ledger.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "module_id": "int8_gemm_executor",
+  "module_contract": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/modules/int8_gemm_executor.json",
+    "sha256": "5a21d45e1461bedc5dad49348c25d142a07f13a8c3e6125abbd9f5d7f0ccb19c"
+  },
+  "manifest": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/gemm_module_manifest.json",
+    "sha256": "ac38583b214a2374a6cd8df71174676cfc4e51715a7c6f68c06a454eb48cb781"
+  },
+  "rtl_binding": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/rtl_port_binding.json",
+    "sha256": "ea033a7269285571057582d32e193dc17c115a84911d4f1646bb4cd096b78504"
+  },
+  "workflow": "current README/contracts/common/docs/framework_workflow.md; user explicitly prioritizes these over legacy skill CLI/graph gates",
+  "agents": [
+    {
+      "id": "/root/int8_core_rtl",
+      "role": "implementation",
+      "packets": [
+        "int8_dot_core",
+        "int8_gemm_executor"
+      ]
+    },
+    {
+      "id": "/root/fp32_epilogue_rtl",
+      "role": "implementation",
+      "packets": [
+        "fp32_bf16_epilogue",
+        "w8a8_fp32_mul"
+      ]
+    },
+    {
+      "id": "/root/executor_contract_audit",
+      "role": "independent_read_only_verification",
+      "packets": [
+        "architectural_boundary_audit",
+        "independent_datapath_audit",
+        "executor_audit_pending"
+      ]
+    }
+  ],
+  "no_subagents_spawned_by_workers": true,
+  "quantization_wave": {
+    "manifest": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_module_manifest.json",
+      "sha256": "29f8048bd6dbc761a4c1c73b1f5acebc3401200368a99f376962b9664d689fb8"
+    },
+    "agents": [
+      "/root/fp32_epilogue_rtl",
+      "/root/int8_core_rtl",
+      "/root/executor_contract_audit"
+    ],
+    "dispatch": "existing agents followup_task, no recursive HDL delegation",
+    "status": "completed_standalone_functional_scope",
+    "report": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/evidence/quantization_rtl_generation_report.json",
+      "sha256": "aa397545f50401640ffb7e70512e9a1c3097ce2703588a43ee66cccce727e0e8"
+    }
+  },
+  "timing_repair_wave": {
+    "packet": "evidence/timing_retries/20261009T044944Z/packet.json",
+    "user_request": "\ud0c0\uc774\ubc0d \uac1c\uc120\ud574\ubd10",
+    "dispatch": "existing agents followup_task",
+    "owners": {
+      "GEMM": "/root/int8_core_rtl",
+      "quantization": "/root/fp32_epilogue_rtl",
+      "independent_audit": "/root/executor_contract_audit"
+    },
+    "status": "completed_post_synth_internal_timing_PASS",
+    "report": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/evidence/timing_improvement_report.json",
+      "sha256": "31c748dd16ef5c0d9509df851b3cbd15355646c2971f814a6f7486033eb1fc0f"
+    }
+  },
+  "infrastructure_wave": {
+    "status": "completed_control_scope_PASS",
+    "authorization": "\uad6c\ud604 \uc2dc\uc791\ud574",
+    "binding": "contracts/infrastructure_rtl_port_binding.json",
+    "agents": [
+      "/root/int8_core_rtl",
+      "/root/fp32_epilogue_rtl",
+      "/root/executor_contract_audit"
+    ],
+    "dispatch": "existing agents followup_task; no recursive delegation",
+    "report": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/evidence/infrastructure_generation_report.json",
+      "sha256": "f374f3a7c037714e19fbe72fca64a4a2acd2a58ad8b763a2f6d290ce7e3a604d"
+    }
+  },
+  "data_path_wave": {
+    "request": "\uc5f0\uacb0\ud574",
+    "owners": {
+      "native_bank_pool": "/root/fp32_epilogue_rtl",
+      "DMAbridge/executionfabric": "/root/int8_core_rtl",
+      "independent_audit": "/root/executor_contract_audit"
+    },
+    "status": "leafimplementation; independentDMAbridgepacketpreparation",
+    "recursive_delegation": false
+  }
+}

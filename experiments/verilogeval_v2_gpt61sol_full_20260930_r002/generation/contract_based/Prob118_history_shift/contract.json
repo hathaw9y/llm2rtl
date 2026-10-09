@@ -1,0 +1,33 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"clk": 1, "areset": 1, "predict_valid": 1, "predict_taken": 1, "train_mispredicted": 1, "train_taken": 1, "train_history": 32},
+    "outputs": {"predict_history": 32},
+    "source": "problem.txt interface list"
+  },
+  "semantics": {
+    "clock": "Update on posedge clk, as explicitly specified in the final sentence.",
+    "reset": "posedge areset asynchronously clears all 32 bits; reset has priority while asserted.",
+    "priority": "reset, then train_mispredicted, then predict_valid, then hold; simultaneous prediction and rollback uses rollback as explicitly specified.",
+    "prediction": "Append predict_taken as youngest bit 0, shifting older bits toward bit 31.",
+    "rollback": "Append train_taken to train_history and retain the youngest 32 bits.",
+    "visibility": "predict_history is the history register itself, with no extra latency.",
+    "initialization": "No power-up value specified; no RTL initialization added. Verification establishes state through asynchronous reset."
+  },
+  "numeric": {
+    "representation": "32-bit unsigned bit history, no arithmetic rounding or saturation",
+    "discard": "Each append discards the previous oldest bit 31 and retains bits 30:0 in bits 31:1.",
+    "youngest": "bit 0, explicitly identified in problem.txt"
+  },
+  "verification": {
+    "oracle": "Independent bit-by-bit history model derived from original prose; input sampling at rising clk and output comparison after NBA settling.",
+    "directed": "Asynchronous reset between clock edges, reset held through active inputs, hold, both predicted directions, 32-bit overflow, patterned rollback, simultaneous rollback/prediction, reset during activity.",
+    "additional": "Deterministic pseudorandom controls and train history, off-edge output stability, reset deassertion stability.",
+    "execution": "python3 dev_check.py --label initial; fatal mismatches, bounded timeout and final PASS marker."
+  },
+  "specification_ambiguities": [
+    {"topic": "33-bit conceptual concatenation", "resolution": "A 32-bit history stores train_history[30:0] followed by train_taken; the oldest bit is discarded as for a 32-bit shift register."},
+    {"topic": "Power-up state", "resolution": "Unspecified before reset; do not impose an initial value or check a particular pre-reset value."}
+  ]
+}

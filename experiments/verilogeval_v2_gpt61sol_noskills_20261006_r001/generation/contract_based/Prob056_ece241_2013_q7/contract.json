@@ -1,0 +1,22 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "j": 1, "k": 1}, "outputs": {"Q": 1}},
+  "semantics": {
+    "clock": "Update Q on each positive clk edge, as explicitly stated by the Qold definition.",
+    "transition": {"00": "Qold", "01": "0", "10": "1", "11": "~Qold"},
+    "between_edges": "Retain Q between positive clock edges.",
+    "reset": "No reset port or reset behavior is specified; none is added.",
+    "initialization": "No initial Q value is specified; no initialization is added. Simulation Q is initially unknown until a set or clear edge."
+  },
+  "numeric": {"width": "All ports and stored state are one bit", "inversion": "Single-bit bitwise inversion for J=K=1"},
+  "verification": {
+    "oracle": "Original JK truth table applied to independently tracked pre-edge state",
+    "sampling": "Check retention before edges and on falling edges; sample updates after the positive-edge nonblocking assignment phase",
+    "cases": "Initial unknown hold/toggle, clear and set recovery, all four input combinations from both known states, repeated toggle and hold, input changes without positive edges",
+    "completion": "Bounded timeout, fatal mismatches, PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    "Power-up Q is unspecified; RTL has no initialization, and development checks use four-state simulation unknown before the first set or clear.",
+    "Behavior for unknown or high-impedance j/k inputs is unspecified; functional checks use binary j/k."
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "shift_ena": {
+        "direction": "input",
+        "width": 1
+      },
+      "count_ena": {
+        "direction": "input",
+        "width": 1
+      },
+      "data": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 4
+      }
+    }
+  },
+  "semantics": {
+    "clock": "All state updates on positive edge of clk; q is the stored state visible after that edge.",
+    "shift": "When shift_ena=1 and count_ena=0, next q={q[2:0],data}. A four-bit word is transmitted bit 3 first, then bits 2,1,0.",
+    "count": "When count_ena=1 and shift_ena=0, next q=q-1 modulo 16.",
+    "hold": "When both enables are zero, retain q.",
+    "simultaneous_enables": "Behavior unspecified by problem; implementation chooses shift priority; verification imposes no result for this case.",
+    "reset_initialization": "No reset port and no specified initialization. Initial q is unspecified; four enabled shifts fully establish known state."
+  },
+  "numeric": {
+    "state": "Unsigned 4-bit vector representing 0 through 15.",
+    "decrement": "Subtract four-bit one, retain four result bits; zero wraps to 15.",
+    "shift": "Discard previous bit 3, move bits 2:0 upward, insert serial data into bit 0.",
+    "rounding_saturation": "No rounding or saturation."
+  },
+  "verification": {
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp; finite shell and testbench timeouts.",
+    "oracle": "Independent integer state model: shift=(2*state+data)%16; count=(state+15)%16.",
+    "coverage": "Initialize only via four serial shifts; load every possible four-bit word MSB first; check intermediate known states, all decrement inputs including zero wrap, idle retention, mixed enable sequences, and output stability before positive edges.",
+    "unspecified_cases": "No assertion on initial q or simultaneous enables; no reset assumptions."
+  },
+  "specification_ambiguities": [
+    "Simultaneous shift_ena and count_ena behavior explicitly unspecified.",
+    "Power-up state unspecified; no reset interface provided."
+  ]
+}

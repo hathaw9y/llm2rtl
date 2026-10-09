@@ -1,0 +1,72 @@
+{
+  "module_id": "int8_dot_core",
+  "status": "PASS_LOCAL_SIMULATION_AND_LINT_ONLY",
+  "source_sha256": "9825be03f1f6021cab761a4ae15a238f81e02f43e15685abb65c8789e47b589e",
+  "contract_sha256": "68a0eee518d475d0df3fd2e6052150ca9c9bd59b79f400eb74ee3eb48324ecff",
+  "parent_contract_sha256": "5a21d45e1461bedc5dad49348c25d142a07f13a8c3e6125abbd9f5d7f0ccb19c",
+  "changed_files": [
+    "rtl/int8_dot_core.sv",
+    "tb/tb_int8_dot_core.sv",
+    "scripts/core_vectors.py",
+    "scripts/run_core_sim.py",
+    "scripts/core_ooc.tcl",
+    "evidence/int8_dot_core/"
+  ],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/scripts/core_vectors.py"
+      ],
+      "exit_code": 0,
+      "log": "sim_stage_0.log"
+    },
+    {
+      "command": [
+        "iverilog",
+        "-g2012",
+        "-s",
+        "tb_int8_dot_core",
+        "-o",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/int8_dot_core/sim",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/int8_dot_core.sv",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/tb_int8_dot_core.sv"
+      ],
+      "exit_code": 0,
+      "log": "sim_stage_1.log"
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/int8_dot_core/sim"
+      ],
+      "exit_code": 0,
+      "log": "sim_stage_2.log"
+    },
+    {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--unroll-count",
+        "2048",
+        "-Wall",
+        "--top-module",
+        "int8_dot_core",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/int8_dot_core.sv"
+      ],
+      "exit_code": 0,
+      "log": "sim_stage_3.log"
+    }
+  ],
+  "remaining_risks": [
+    "Vivado synthesis and DSP48E2 mapping unmeasured",
+    "5ns setup/hold/pulse-width not verified",
+    "96x16 signed32 resettable context sums may use substantial FF/LUT resources",
+    "global pipeline enable fanout requires timing evidence",
+    "legal row indices, K tails, -128 exclusion and first/last sequencing supplied by parent"
+  ],
+  "skill_update_candidate": {
+    "issue": "legacy hdl-module-implementation gate references deleted scripts/design_contracts.py",
+    "resolution": "User-authorized current contracts/README.md and check_gemm_module_proposal.py gate used; no deleted tool recreated"
+  }
+}

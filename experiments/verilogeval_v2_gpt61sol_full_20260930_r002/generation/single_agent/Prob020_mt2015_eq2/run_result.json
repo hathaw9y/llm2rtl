@@ -1,0 +1,174 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob020_mt2015_eq2",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob020_mt2015_eq2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob020_mt2015_eq2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790752543.4428692,
+    "ended_at_unix": 1790752617.8658237,
+    "seconds": 74.42295503616333,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 93004,
+      "cached_input_tokens": 73088,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1107,
+      "reasoning_output_tokens": 13
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "be57e910bcd473f9be78445b90aff8cbac6c649b7588ed95ca5e522e8b75a28d",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "initial",
+        "status": "passed",
+        "compile_returncode": 0,
+        "simulation_returncode": 0
+      }
+    ],
+    "development_outcome": "passed",
+    "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "Unknown/high-impedance input behavior is not specified by the problem and was not assigned additional requirements.",
+      "No synthesis or board work performed."
+    ],
+    "justified_rtl_changes": [
+      "Initial implementation uses combinational two-bit equality with the exact TopModule interface; no revisions."
+    ],
+    "justified_tb_changes": [
+      "Initial independent truth-table oracle exhaustively checks all 16 binary input pairs after combinational settling, with fatal mismatches and a bounded timeout; no revisions."
+    ],
+    "interface": "A[1:0], B[1:0], z; combinational, no clock/reset or added latency",
+    "static_review": "Widths and port names preserved; continuous assignment has no storage or inferred latch."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "be57e910bcd473f9be78445b90aff8cbac6c649b7588ed95ca5e522e8b75a28d",
+      "Prob020_mt2015_eq2_ref.sv": "3a6624ece9483f19d94f1b361e7d648cb359cf1b17b91e4836e9a72c7b6144ae",
+      "Prob020_mt2015_eq2_test.sv": "b27e2225b77c163bec94e4bbf19c7fb5f110f8cb56bc7b7471720982ad3a2212"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob020_mt2015_eq2_test.sv",
+        "Prob020_mt2015_eq2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011961852200329304
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb020_mt2015_eq2_test.sv:20: $finish called at 10001 (1ps)\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 2000 samples\n\nSimulation finished at 10001 ps\nMismatches: 0 in 2000 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.016469755209982395
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "be57e910bcd473f9be78445b90aff8cbac6c649b7588ed95ca5e522e8b75a28d",
+      "Prob020_mt2015_eq2_ref.sv": "3a6624ece9483f19d94f1b361e7d648cb359cf1b17b91e4836e9a72c7b6144ae",
+      "Prob020_mt2015_eq2_test.sv": "b27e2225b77c163bec94e4bbf19c7fb5f110f8cb56bc7b7471720982ad3a2212"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob020_mt2015_eq2_test.sv",
+        "Prob020_mt2015_eq2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009488800540566444
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb020_mt2015_eq2_test.sv:20: $finish called at 10001 (1ps)\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 2000 samples\n\nSimulation finished at 10001 ps\nMismatches: 0 in 2000 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011629294604063034
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790744377.9272418,
+      "source_sha256": "c88c67a226cb91b5958bf84982c243a34a30956c1a7610e2a8bf411736e91ec7",
+      "testbench_sha256": "c43d9ed5be1f3906721d0eefe9c07e1f1039006607f6fcf830a4ae534bf19ea0",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob055_conditional/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011314207687973976
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS minimum checks=12576\ndev_tb.sv:59: $finish called at 12576000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.27868485916405916
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "X/Z input behavior is unspecified by the original problem and not verified.",
+    "No synthesis or board work performed as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "summary": {
+    "rtl": "candidate.sv implements unsigned 8-bit minimum using a balanced combinational comparison network.",
+    "initial_snapshot": "candidate_initial.sv preserved immediately after initial RTL creation and unchanged.",
+    "testbench": "dev_tb.sv uses an independent integer scan oracle, 1 ns settling, fatal mismatch checks, timeout, and explicit PASS.",
+    "interface_cycle_contract": "TopModule; four unsigned 8-bit inputs and one unsigned 8-bit output; combinational with no clock, reset, state, or additional latency.",
+    "numeric_widths": "All DUT operands and results are unsigned 8-bit; comparison and selection need no arithmetic widening.",
+    "static_review": "Complete continuously driven output, no latches, no extra ports, no dependencies.",
+    "coverage_cases": 12576,
+    "environment_smoke": "passed: correct passes, deliberately wrong fails, repaired passes",
+    "contract_validation": "passed_structure_only"
+  }
+}

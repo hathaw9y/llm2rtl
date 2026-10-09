@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "coverage": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "coverage": "All 12 legal one-hot state/input transitions; Icarus 12 compilation and simulation passed.",
+      "evidence": "development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Illegal one-hot encodings and unknown inputs are unspecified and were not assigned additional behavior.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "interface_interpretation": "Preserved TopModule ports y[5:0], w, Y1, Y3. Despite corrupted prose naming Y2/Y4, specified outputs represent next-state y[1] (B) and y[3] (D). Pure combinational equations with no additional ports or latency.",
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  },
+  "static_review": "One-bit bitwise equations, continuous assignments, no storage, no latches, no added clock/reset; initial RTL unchanged."
+}

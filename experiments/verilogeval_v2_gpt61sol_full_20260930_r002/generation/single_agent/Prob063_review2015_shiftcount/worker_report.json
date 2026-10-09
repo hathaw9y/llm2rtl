@@ -1,0 +1,64 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790752151.242308,
+      "source_sha256": "e098e9239fe59a0f2e37694cbda9e928d8859ba100d4ec3337e03d742e45476d",
+      "testbench_sha256": "5f7c769749addcd9b800b21fdc7f4c28b1db6b5092a886651e6462eda42e611c",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob063_review2015_shiftcount/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011596081778407097
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: 484 sequential checks\ndev_tb.sv:61: $finish called at 4846000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.007231471128761768
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Simultaneous shift_ena and count_ena behavior is unspecified; implementation gives shift priority.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Four-bit positive-edge register; MSB-first serial loading by left shift, modulo-16 decrement, hold when both enables are low; no reset or extra latency.",
+  "verification": "Environment smoke passed correct/fault/repair cases. Icarus 12 initial development check passed 484 sequential checks covering all 16 loads, hold, edge sampling, wraparound, and interleaved operations.",
+  "static_review": "Single nonblocking sequential driver, explicit four-bit arithmetic, original ports preserved.",
+  "files": {
+    "rtl": [
+      "candidate.sv",
+      "candidate_initial.sv"
+    ],
+    "testbench": [
+      "dev_tb.sv"
+    ]
+  }
+}

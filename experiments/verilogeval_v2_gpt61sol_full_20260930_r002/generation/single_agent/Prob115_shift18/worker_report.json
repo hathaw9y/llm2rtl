@@ -1,0 +1,59 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790747167.2239122,
+      "source_sha256": "e2bc06bf25801c816772ff37d94d4086634f7cc038d3573d37f4c54c531f5d35",
+      "testbench_sha256": "4f78b69373041a10ea96b25c29c6fecf4722dee6adc2b39d7a0d008ca72bd2de",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob115_shift18/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.014059662818908691
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS 2609 development checks\ndev_tb.sv:73: $finish called at 26096000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.27017149422317743
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation: synchronous load has priority over enable; disabled cycles hold q; 64-bit left shifts and signed arithmetic right shifts implement all four amounts. No reset, initialization, extra ports, or latency added."
+  ],
+  "justified_tb_changes": [
+    "Initial independent bit-by-bit oracle checks pre-edge stability and post-edge results, initial unknown hold, boundary patterns, repeated shifts, load priority, disabled hold, and randomized controls. No testbench revisions."
+  ],
+  "interface_cycle_contract": "TopModule with original ports; updates on rising clk only; load overrides ena.",
+  "numeric_width_decisions": "64-bit storage and results; left shift truncates overflow and fills zero; right shift replicates bit 63.",
+  "static_review": "Single sequential driver, nonblocking assignments, explicit signed right-shift cast; interface and cycle behavior match original specification.",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repair passed"
+}

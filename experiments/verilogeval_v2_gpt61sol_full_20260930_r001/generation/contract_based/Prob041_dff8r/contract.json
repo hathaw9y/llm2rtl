@@ -1,0 +1,34 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "reset": {"direction": "input", "width": 1},
+      "d": {"direction": "input", "width": 8, "range": "7:0"},
+      "q": {"direction": "output", "width": 8, "range": "7:0"}
+    }
+  },
+  "semantics": {
+    "storage": "Eight D flip-flops sharing clk and reset",
+    "update": "At each positive edge of clk, q becomes 8'b00000000 if reset is high, otherwise q becomes the sampled d",
+    "reset": "Active-high synchronous reset, with priority over data capture",
+    "hold": "q retains its value between positive clock edges, including on negative edges and reset transitions",
+    "initialization": "No power-up value specified; no initialization added",
+    "throughput": "One eight-bit capture at every positive edge when reset is low"
+  },
+  "numeric": {
+    "representation": "Eight independent bits with exact bit-for-bit transfer d[7:0] to q[7:0]",
+    "reset_value": "8'h00",
+    "arithmetic": "None; no rounding, saturation, overflow, or signed arithmetic"
+  },
+  "verification": {
+    "oracle": "Independently track expected q from reset and d sampled at each rising edge; compare after sequential updates settle",
+    "data_coverage": "Exhaust all 256 eight-bit input patterns with reset low",
+    "reset_coverage": "Check reset priority for all 256 d patterns, sustained reset, and return to capture after reset deassertion",
+    "timing_coverage": "Change d and assert/deassert reset between rising edges, verifying hold before the next rising edge and across falling edges",
+    "initial_state": "Do not require a known value before the first capture/reset edge",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp, finite external timeouts and testbench watchdog"
+  },
+  "specification_ambiguities": []
+}

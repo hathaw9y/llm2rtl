@@ -1,0 +1,44 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract structural gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial candidate preserved",
+      "result": "PASS: candidate.sv and candidate_initial.sv identical"
+    },
+    {
+      "name": "static RTL review",
+      "result": "Combinational continuous assignment, exact TopModule ports, single driver, no storage or delays; three row expressions match frozen map."
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "FAILED: exit code 139, no diagnostics",
+      "logs": [
+        "compile.log",
+        "compile_status.log"
+      ]
+    },
+    {
+      "name": "compiler startup probe",
+      "command": "timeout 10s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -V",
+      "result": "See tool_version.log"
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT RUN: compile failed"
+    }
+  ],
+  "development_outcome": "Best RTL delivered with initial snapshot; independent exhaustive self-checking testbench provided but simulation success is unverified due to compiler failure.",
+  "limitations": [
+    "No successful development elaboration or simulation.",
+    "X/Z behavior unspecified by original problem.",
+    "No synthesis, board access, official evaluation, or official reference/testbench access."
+  ]
+}

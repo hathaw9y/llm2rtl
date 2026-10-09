@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "manual RTL review",
+      "outcome": "passed",
+      "details": "Checked exact TopModule interface, positive-edge synchronous active-high reset, four 4-bit decimal digits, modulo-10000 rollover, and combinational carry enables for the upper digits. Sequential assignments are nonblocking and constants are explicitly sized."
+    },
+    {
+      "name": "Icarus development compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "outcome": "tool_failed",
+      "exit_code": 139,
+      "log": "compile.log"
+    },
+    {
+      "name": "Icarus version diagnostic",
+      "command": "timeout 10s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -V",
+      "outcome": "frontend reports version 12.0; backend version retrieval failed",
+      "exit_code": 0,
+      "log": "tool_version.log"
+    },
+    {
+      "name": "development simulation",
+      "outcome": "not_run",
+      "details": "Compilation failed, so no executable was available for matching vvp. Independent dev_tb.sv checks carry enables, two complete decimal rollovers, held reset, and reset assertions between clock edges."
+    }
+  ],
+  "development_outcome": "Initial candidate retained after manual review. Development compilation failed with exit code 139; no simulation success is claimed.",
+  "limitations": [
+    "Functional behavior has not been verified by executable simulation due to the development tool failure.",
+    "No synthesis, timing, board checks, or official evaluation were performed."
+  ],
+  "artifacts": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "compile.log", "tool_version.log"]
+}

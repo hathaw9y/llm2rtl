@@ -1,0 +1,55 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "result": "PASS structure only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS",
+      "details": "Exact one-bit interface; four-state Moore FSM; positive-edge clock and active-high asynchronous reset; ground priority; fall direction retained; no arithmetic, latches or additional source dependencies."
+    },
+    {
+      "name": "initial development simulation",
+      "result": "FAIL testbench sequencing",
+      "compile_log": "compile.log",
+      "simulation_log": "simulation.log",
+      "resolution": "Testbench now establishes neutral inputs during reset to avoid an unmodeled transition after reset release."
+    },
+    {
+      "name": "development retry 1",
+      "result": "FAIL testbench watchdog",
+      "compile_log": "compile_retry1.log",
+      "simulation_log": "simulation_retry1.log",
+      "resolution": "Extended finite watchdog from 20000 to 100000 simulation units to cover planned full trace."
+    },
+    {
+      "name": "development retry 2",
+      "result": "PASS",
+      "compile_log": "compile_retry2.log",
+      "simulation_log": "simulation_retry2.log",
+      "output_checks": 4560,
+      "coverage": "All eight input combinations in all four states; all two-step input sequences in all four states; reset from every state asynchronously and held across clock edge; between-edge Moore stability; 1000 pseudorandom steps."
+    }
+  ],
+  "development_outcome": "Initial candidate unchanged; final independent self-checking development simulation passed with Icarus -g2012 -Wall -s dev_tb and matching vvp. Every compile and simulation used a 30-second shell timeout. Both earlier failed logs and testbench versions preserved.",
+  "limitations": [
+    "Contract gate checks structure only.",
+    "Official evaluation was not accessed and its outcome is unknown.",
+    "No synthesis, timing or board testing performed.",
+    "Power-up before reset and unknown-valued inputs are unspecified and were not tested."
+  ],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  },
+  "tools": {
+    "iverilog": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+    "vvp": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp"
+  }
+}

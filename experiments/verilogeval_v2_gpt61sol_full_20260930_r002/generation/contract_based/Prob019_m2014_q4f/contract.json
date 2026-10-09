@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "in1": 1,
+      "in2": 1
+    },
+    "outputs": {
+      "out": 1
+    },
+    "evidence": "Original problem explicitly lists TopModule and three one-bit ports."
+  },
+  "semantics": {
+    "function": "out = in1 AND (NOT in2)",
+    "timing": "Pure combinational gate; no clock or cycle latency.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or initialization specified; output follows current inputs.",
+    "evidence": "Original problem describes an AND gate with a bubble on its in2 input."
+  },
+  "numeric": {
+    "width": "All ports are one bit.",
+    "interpretation": "Boolean gate operations; no arithmetic, overflow, rounding, or signed quantities."
+  },
+  "verification": {
+    "oracle": "Explicit truth table from original gate description, independent of RTL expression.",
+    "cases": "All four binary input combinations, repeated transitions, supplementary four-state gate propagation.",
+    "sampling": "Sample after a 1 ns combinational settling interval, with no invented clock.",
+    "failure": "$fatal on mismatch or bounded timeout; PASS only upon completion."
+  },
+  "specification_ambiguities": []
+}

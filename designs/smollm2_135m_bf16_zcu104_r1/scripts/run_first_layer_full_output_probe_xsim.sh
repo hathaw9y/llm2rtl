@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -euo pipefail
+design_dir=$(cd "$(dirname "$0")/.." && pwd)
+repo_dir=$(cd "$design_dir/../.." && pwd)
+run_dir=${1:-/tmp/smollm2_first_layer_full_output_probe_xsim}
+mkdir -p "$run_dir"
+cd "$run_dir"
+mkdir -p vectors
+cp "$design_dir"/golden/attention_checkpoint/*.hex vectors/
+cp "$design_dir"/golden/add_checkpoint/*residual_expected_words.hex vectors/
+cp "$design_dir"/golden/first_layer_attention_output/*.hex vectors/
+cp "$design_dir"/golden/rmsnorm_checkpoint/{prefill,decode}_input_words.hex vectors/
+cp "$design_dir"/golden/rmsnorm_checkpoint/gamma_words.hex vectors/
+cp "$design_dir"/golden/rope_checkpoint/prefill/coeff_words.hex vectors/prefill_coeff_words.hex
+cp "$design_dir"/golden/rope_checkpoint/decode/coeff_words.hex vectors/decode_coeff_words.hex
+cp "$design_dir"/golden/rope_checkpoint/prefill/k_input_words.hex vectors/prefill_k_input_words.hex
+cp "$design_dir"/golden/rope_checkpoint/decode/k_input_words.hex vectors/decode_k_input_words.hex
+cp "$design_dir"/golden/rope_checkpoint/prefill/k_expected_words.hex vectors/prefill_k_rope_words.hex
+cp "$design_dir"/golden/rope_checkpoint/decode/k_expected_words.hex vectors/decode_k_rope_words.hex
+cp "$design_dir"/golden/first_layer_no_kv_isa_candidate/decode1_add_b0_probe_words.hex vectors/decode_add_b0_words.hex
+cp "$design_dir"/golden/rope_checkpoint/prefill/q_expected_words.hex vectors/prefill_q_expected_words.hex
+cp "$design_dir"/golden/rope_checkpoint/decode/q_expected_words.hex vectors/decode_q_expected_words.hex
+xvlog -d FULL_OUTPUT_TAP_TEST -sv -i "$design_dir/rtl" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/datamover_engine_pkg.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/fifo.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/pipeline.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/axis_width_up_converter.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/axis_width_down_converter.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/axis_width_converter.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/datamover_command_queue.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/mm2s_channel.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/s2mm_channel.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/datamover_engine.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/bram_bank.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/uram_bank.sv" \
+  "$repo_dir/ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv" \
+  "$design_dir/rtl/smollm2_bank_port_router_wide.sv" \
+  "$design_dir/rtl/smollm2_bank_memories_wide.sv" \
+  "$design_dir/rtl/smollm2_bank_subsystem_wide.sv" \
+  "$design_dir/rtl/smollm2_dma_bank_bridge.sv" \
+  "$design_dir/rtl/smollm2_dma_engine_link.sv" \
+  "$design_dir/rtl/bank_tensor_state_tracker.sv" \
+  "$design_dir/rtl/isa_command_dispatcher.sv" \
+  "$design_dir/rtl/smollm2_dma_control_fabric_wide.sv" \
+  "$design_dir/rtl/smollm2_gemm_systolic_wide_executor.sv" \
+  "$design_dir/rtl/smollm2_rmsnorm_executor.sv" \
+  "$design_dir/rtl/smollm2_rope_executor.sv" \
+  "$design_dir/rtl/smollm2_softmax_executor.sv" \
+  "$design_dir/rtl/smollm2_add_executor.sv" \
+  "$design_dir/rtl/smollm2_gemm_dma_fabric_wide.sv" \
+  "$design_dir/rtl/smollm2_dma_gemm_board_probe.sv" \
+  "$design_dir/tb/tb_smollm2_first_layer_attention_output_probe.sv" \
+  > xvlog.log 2>&1
+xelab tb_smollm2_first_layer_attention_output_probe -L xpm --timescale 1ns/1ps \
+  -s tb_smollm2_first_layer_attention_output_probe_sim > xelab.log 2>&1
+python3 "${XSIM_RUNNER:-$repo_dir/ip/infrastructure/datamover_engine/scripts/run_xsimk.py}" \
+  "$run_dir/xsim.dir/tb_smollm2_first_layer_attention_output_probe_sim/xsimk" \
+  'PASS smollm2_first_layer_attention_output_probe' > xsim.log 2>&1
+evidence_dir="$design_dir/evidence/smollm2_first_layer_full_output_probe/run_001"
+mkdir -p "$evidence_dir"
+cp xvlog.log xelab.log xsim.log "$evidence_dir/"
+tail -35 xsim.log

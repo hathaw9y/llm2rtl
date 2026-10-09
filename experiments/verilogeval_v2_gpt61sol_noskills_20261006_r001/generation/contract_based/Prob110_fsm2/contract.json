@@ -1,0 +1,53 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "areset": 1,
+      "j": 1,
+      "k": 1
+    },
+    "outputs": {
+      "out": 1
+    }
+  },
+  "semantics": {
+    "type": "two-state Moore FSM",
+    "states": {
+      "OFF": 0,
+      "ON": 1
+    },
+    "reset": "Active-high asynchronous areset forces OFF, as explicitly specified. Reset dominates clock transitions.",
+    "transitions": {
+      "OFF": "j=0 holds OFF; j=1 enters ON; k irrelevant",
+      "ON": "k=0 holds ON; k=1 enters OFF; j irrelevant"
+    },
+    "clock": "Sample transitions on rising clk edges; edge polarity is implicit in the clocked FSM statement, assumed positive edge.",
+    "output": "out equals 0 in OFF and 1 in ON, without an additional output register.",
+    "initialization": "No power-up state specified; no initial assignment, tests assert reset before functional expectations."
+  },
+  "numeric": {
+    "state_width_bits": 1,
+    "port_width_bits": 1,
+    "signed_arithmetic": "none"
+  },
+  "verification": {
+    "oracle": "Original transition diagram, with a separate expected-state variable and explicit conditional updates.",
+    "sampling": "Check after NBA settling at rising edges, falling edges, and asynchronous reset assertion between edges.",
+    "cases": [
+      "all four input combinations in each state",
+      "ignored input changes",
+      "reset from ON between clock edges",
+      "reset held across rising edges",
+      "reset deassertion without clock",
+      "multiple repeated cycles"
+    ],
+    "completion": "Fatal on mismatch or bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "Clock edge polarity is not explicitly stated; rising edge assumed.",
+    "Power-up state before reset is unspecified; no deterministic output requirement before reset.",
+    "Behavior for X/Z inputs is unspecified; functional checks use binary inputs."
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob143_fsm_onehot",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob143_fsm_onehot",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob143_fsm_onehot/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791270490.7661138,
+    "ended_at_unix": 1791270570.269782,
+    "seconds": 79.50366878509521,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 80966,
+      "cached_input_tokens": 70400,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2199,
+      "reasoning_output_tokens": 20
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "91e00e40b8a44637746b399e3bf9317a5fbf209f9026ed243bd62f86c7d67c3b",
+  "contract_sha256": "e45abda60e8f55cf8277ccaacfab37cf8bda0d13af3985ff45d1409de9bd3c7b",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "check": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "observations": "Correct fixture passed, injected fault failed, repaired fixture passed."
+      },
+      {
+        "check": "contract_structure",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "check": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "compile": "Icarus 12 compilation passed with no warnings.",
+        "simulation": "PASS: 2048 exhaustive combinational cases"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official evaluation; official correctness remains unmeasured.",
+      "Original specification does not define X/Z input behavior; exhaustive coverage applies to binary inputs."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "implementation": "Combinational Boolean equations OR transitions and Moore outputs from all active state bits, following the original transition table.",
+    "preserved_initial_snapshot": "candidate_initial.sv"
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "91e00e40b8a44637746b399e3bf9317a5fbf209f9026ed243bd62f86c7d67c3b",
+      "Prob143_fsm_onehot_ref.sv": "713dafd41effad29c326f7e3592115be3394a9de809f5849cbe349add87219f1",
+      "Prob143_fsm_onehot_test.sv": "b3f86936ea281b3a5e95e4fefdd2354b27fb5b3472b4207ef592555fc861cbba"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob143_fsm_onehot_test.sv",
+        "Prob143_fsm_onehot_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012673827819526196
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nHint: next_state[0] is   correct.\nHint: next_state[1] is   correct.\nHint: next_state[2] is   correct.\nHint: next_state[3] is   correct.\nHint: next_state[4] is   correct.\nHint: next_state[5] is   correct.\nHint: next_state[6] is   correct.\nHint: next_state[7] is   correct.\nHint: next_state[8] is   correct.\nHint: next_state[9] is   correct.\nProb143_fsm_onehot_test.sv:62: $finish called at 1121 (1ps)\nHint: Output 'next_state' has no mismatches.\nHint: Output 'out1' has no mismatches.\nHint: Output 'out2' has no mismatches.\nHint: Total mismatched samples is 0 out of 224 samples\n\nSimulation finished at 1121 ps\nMismatches: 0 in 224 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009196551516652107
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "91e00e40b8a44637746b399e3bf9317a5fbf209f9026ed243bd62f86c7d67c3b",
+      "Prob143_fsm_onehot_ref.sv": "713dafd41effad29c326f7e3592115be3394a9de809f5849cbe349add87219f1",
+      "Prob143_fsm_onehot_test.sv": "b3f86936ea281b3a5e95e4fefdd2354b27fb5b3472b4207ef592555fc861cbba"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob143_fsm_onehot_test.sv",
+        "Prob143_fsm_onehot_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011062778532505035
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nHint: next_state[0] is   correct.\nHint: next_state[1] is   correct.\nHint: next_state[2] is   correct.\nHint: next_state[3] is   correct.\nHint: next_state[4] is   correct.\nHint: next_state[5] is   correct.\nHint: next_state[6] is   correct.\nHint: next_state[7] is   correct.\nHint: next_state[8] is   correct.\nHint: next_state[9] is   correct.\nProb143_fsm_onehot_test.sv:62: $finish called at 1121 (1ps)\nHint: Output 'next_state' has no mismatches.\nHint: Output 'out1' has no mismatches.\nHint: Output 'out2' has no mismatches.\nHint: Total mismatched samples is 0 out of 224 samples\n\nSimulation finished at 1121 ps\nMismatches: 0 in 224 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010467207990586758
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

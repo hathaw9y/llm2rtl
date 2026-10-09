@@ -1,0 +1,69 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "qwen25_05b_w4_shared_zcu104",
+  "revision": "r1",
+  "module_id": "gemm_executor",
+  "module_kind": "opcode_executor",
+  "opcode": "GEMM",
+  "status": "frozen",
+  "authorization": "Remaining implementation decisions delegated by user; no historical skill approval rules.",
+  "interface": {
+    "request": [
+      "cmd_valid",
+      "cmd_ready",
+      "cmd_id[9:0]",
+      "mode",
+      "bank IDs",
+      "semantic dimensions/selectors",
+      "flags"
+    ],
+    "response": [
+      "rsp_valid",
+      "rsp_ready",
+      "rsp_cmd_id[9:0]",
+      "rsp_error",
+      "rsp_error_code"
+    ],
+    "response_rule": "One stable ready/valid response per accepted command; capacity one active command per executor.",
+    "bank_ports": "Role-routed128-bit native reads with latency3 and byte-masked128-bit writes. Module computes memory word addresses internally; commands have no raw offsets.",
+    "target_clock_MHz": 200,
+    "reset": "Cancels active work and invalidates affected state; normal END/DONE is not reset."
+  },
+  "numeric": {
+    "contract": {
+      "path": "designs/qwen25_05b_w4_shared_zcu104_r1/numeric_contract.json",
+      "sha256": "c47c1cd15afdedcb178df704e1ee9c9488d7f234c1b3f192cb489e6581386227"
+    },
+    "operation": "GEMM",
+    "parallelism": {
+      "K": 16,
+      "outputs": 8,
+      "rows": 1
+    },
+    "architecture": "FP32 product/reduction pipelines and serial group accumulation, M1/N8/K16 (128 products). W4 caches BF16 group128 per row and eight packed W4 words per K32/eight-output group with tagged consecutive native read3 bursts. QK traverses eight BF16 output rows; PV uses all eight BF16 lanes per native128 word. Eight FP32 results use two native128 writes; short QK N tails write only covered words. Per-output numeric order unchanged; one dot in flight.",
+    "FP32_core": "Custom six-stage FP32 RNE/FTZ add/multiply, unfused; exponent preparation and alignment are separate stages, with whole-pipeline response backpressure. Exact source/ROM simulation and OOC identities must match the implementation."
+  },
+  "verification": {
+    "golden": "Fresh command_golden.safetensors and independent scalar arithmetic tests; exact numeric words plus descriptor changes.",
+    "RTL": [
+      "reset/backpressure",
+      "one response",
+      "source preservation on error",
+      "tail/shape coverage",
+      "all supported modes"
+    ],
+    "synthesis": "Fresh200MHz OOC plus resource evidence for this exact module and later full integration.",
+    "board": "Not verified; user-run after full integration artifacts."
+  },
+  "operand_supply": {
+    "activation_cache_bytes": 256,
+    "packed_weight_cache_bytes": 128,
+    "selected_activation_register_bytes": 32,
+    "native_read_latency_cycles": 3,
+    "W4_activation_words_per_row": 16,
+    "W4_weight_words_per_row": 512,
+    "cache_lifetime": "Refilled every accepted W4 command/row; packed words replaced for every K32/output group. Reset cancels all return tags and requires full refill.",
+    "numeric_order_changed": false,
+    "ISA_or_bank_layout_changed": false
+  }
+}

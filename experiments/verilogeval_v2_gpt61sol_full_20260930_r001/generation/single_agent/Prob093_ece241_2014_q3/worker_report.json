@@ -1,0 +1,27 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "Icarus SystemVerilog compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "passed",
+      "log": "compile.log"
+    },
+    {
+      "name": "Independent exhaustive K-map simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "passed all 16 binary K-map entries",
+      "log": "simulation.log"
+    },
+    {
+      "name": "Static RTL review",
+      "result": "Combinational continuous assignments, exact benchmark ports and widths, three ternary 2-to-1 muxes and one constant output; no other logic operators, storage, clocks or resets. Each of the three distinct nonconstant output functions requires a mux, so three muxes are minimal."
+    }
+  ],
+  "development_outcome": "Initial candidate passed independent exhaustive development simulation without RTL revisions. candidate_initial.sv was preserved before development checks. RTL: candidate.sv; testbench: dev_tb.sv. Outputs are combinational with no pipeline or sequential latency; constants and data operands are one bit.",
+  "limitations": [
+    "Official evaluation was not accessed and its results are unknown.",
+    "No synthesis, Vivado timing/resource evidence or board testing was performed.",
+    "Development simulation covers binary input combinations."
+  ]
+}

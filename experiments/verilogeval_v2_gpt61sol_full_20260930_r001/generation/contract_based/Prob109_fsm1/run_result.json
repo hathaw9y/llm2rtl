@@ -1,0 +1,191 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob109_fsm1",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob109_fsm1",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob109_fsm1/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790731807.1025956,
+    "ended_at_unix": 1790731903.8514044,
+    "seconds": 96.74880933761597,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 101450,
+      "cached_input_tokens": 87552,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2526,
+      "reasoning_output_tokens": 51
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "a49bb4de9a824e67d30057305134ac3fa95dbd75cff62018a97a4dabc89bb26a",
+  "contract_sha256": "e6f61569b1d08ca6fef772a080e365ec0808f0e1e553ffb6a0435ce339499555",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract_gate",
+        "command": "python3 validate_contract.py",
+        "result": "PASS (structural validation only)",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "static_review",
+        "result": "PASS by inspection: exact one-bit ports, rising-edge state update, active-high asynchronous reset priority, Moore output, no initialization or extra cycle latency, no submodule dependencies"
+      },
+      {
+        "name": "development_compile",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim.vvp candidate.sv dev_tb.sv",
+        "result": "FAILED",
+        "exit_code": 139,
+        "log": "development_compile.log",
+        "details": "Compiler exited with code 139 and no diagnostic output; status preserved in development_status.log"
+      },
+      {
+        "name": "development_simulation",
+        "result": "NOT RUN because compilation failed",
+        "planned_command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim.vvp"
+      }
+    ],
+    "development_outcome": "Frozen-contract RTL implemented and initial candidate preserved; independent self-checking testbench prepared, but development compiler failure prevented simulation. No RTL revisions were made.",
+    "limitations": [
+      "No successful development compilation or simulation; functional correctness supported only by static inspection",
+      "Official evaluation results are unavailable and were not accessed",
+      "No synthesis, timing analysis, or board access performed",
+      "Rising-edge clock operation is the conventional interpretation of the otherwise unspecified clock edge",
+      "Power-up output before reset is unspecified"
+    ],
+    "artifacts": [
+      "contract.json",
+      "contract_gate.json",
+      "contract_gate_history.jsonl",
+      "contract_validation.log",
+      "candidate.sv",
+      "candidate_initial.sv",
+      "dev_tb.sv",
+      "development_compile.log",
+      "development_status.log"
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a49bb4de9a824e67d30057305134ac3fa95dbd75cff62018a97a4dabc89bb26a",
+      "Prob109_fsm1_ref.sv": "ce88cef46ddad703f97411a5528fc3515a7fd6a008b06b485dda6cb4cd9f59b5",
+      "Prob109_fsm1_test.sv": "9c27bd4445342e5e81068f678e491fb6853268c3cf1335aa69f2363d62029ab7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob109_fsm1_test.sv",
+        "Prob109_fsm1_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011599317193031311
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb109_fsm1_test.sv:71: $finish called at 1141 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 228 samples\n\nSimulation finished at 1141 ps\nMismatches: 0 in 228 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008076777681708336
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a49bb4de9a824e67d30057305134ac3fa95dbd75cff62018a97a4dabc89bb26a",
+      "Prob109_fsm1_ref.sv": "ce88cef46ddad703f97411a5528fc3515a7fd6a008b06b485dda6cb4cd9f59b5",
+      "Prob109_fsm1_test.sv": "9c27bd4445342e5e81068f678e491fb6853268c3cf1335aa69f2363d62029ab7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob109_fsm1_test.sv",
+        "Prob109_fsm1_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010609172284603119
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb109_fsm1_test.sv:71: $finish called at 1141 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 228 samples\n\nSimulation finished at 1141 ps\nMismatches: 0 in 228 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.00750293955206871
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

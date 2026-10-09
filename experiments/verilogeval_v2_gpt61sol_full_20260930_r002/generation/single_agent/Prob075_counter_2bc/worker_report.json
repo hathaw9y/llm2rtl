@@ -1,0 +1,40 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": [
+        "correct fixture passed",
+        "deliberately wrong fixture failed",
+        "repaired fixture passed"
+      ]
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "simulator": "Icarus Verilog 12 with matching vvp",
+      "comparisons": 244,
+      "evidence": "development/01",
+      "check_record": "dev_checks.jsonl"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation uses a two-bit unsigned counter, positive-edge clock, positive-edge asynchronous reset to 01, training enable, and endpoint saturation. No RTL revisions."
+  ],
+  "justified_tb_changes": [
+    "Initial independent transition-table oracle checks all four states and all training input combinations, both saturation endpoints, non-training holds, off-edge asynchronous reset, reset release, held-reset priority, and falling-edge stability. No testbench revisions."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  },
+  "interface_cycle_contract": "Original ports preserved; state updates at rising clock edges or asynchronous reset assertion, with no added latency.",
+  "static_review": "Single sequential driver, nonblocking updates, explicitly sized two-bit arithmetic; reset and saturation match original problem."
+}

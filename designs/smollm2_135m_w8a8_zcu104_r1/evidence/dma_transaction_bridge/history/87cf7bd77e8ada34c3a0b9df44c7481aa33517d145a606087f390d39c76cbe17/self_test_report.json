@@ -1,0 +1,85 @@
+{
+  "status": "PASS_REAL_PINNED_DATAMOVER_AND_ADAPTERS_WITH_EXTERNAL_CONTRACT_BFMS",
+  "source_sha256": "87cf7bd77e8ada34c3a0b9df44c7481aa33517d145a606087f390d39c76cbe17",
+  "testbench_sha256": "5a2f9f51624019b8ec0b7196a12066e5c1d741a0731b6ce52b69f8299a2cc83a",
+  "run": "self_009_final",
+  "commands": [
+    {
+      "stage": "compile",
+      "argv": [
+        "/media/admin1/backup/tools/Xilinx/2025.2/Vivado/bin/xvlog",
+        "-sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/datamover_engine_pkg.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/datamover_engine.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/mm2s_channel.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/s2mm_channel.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/datamover_command_queue.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/status_decoder.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/fifo.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/axis_width_converter.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/axis_width_up_converter.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/axis_width_down_converter.sv",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/pipeline.sv",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/smollm2_dma_transaction_bridge.sv",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/dma_bridge_tb.sv"
+      ],
+      "exit_code": 0
+    },
+    {
+      "stage": "elaborate",
+      "argv": [
+        "/media/admin1/backup/tools/Xilinx/2025.2/Vivado/bin/xelab",
+        "dma_bridge_tb",
+        "-s",
+        "dma_bridge_tb",
+        "--timescale",
+        "1ns/1ps"
+      ],
+      "exit_code": 0
+    },
+    {
+      "stage": "simulation",
+      "argv": [
+        "/home/eunji/anaconda3/bin/python3",
+        "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/scripts/run_xsimk.py",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/dma_transaction_bridge/self_009_final/xsim.dir/dma_bridge_tb/xsimk",
+        "DMA_BRIDGE_PASS"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "tests": 80,
+  "vendor_commands": 62,
+  "native_writes": 102,
+  "native_reads": 93,
+  "store_beats": 90,
+  "cycles": 2952,
+  "passed_marker": "DMA_BRIDGE_PASS tests=80 commands=62 writes=102 reads=93 stores=90 cycles=2952",
+  "coverage": [
+    "LOAD+STORE all16logicalbanks",
+    "captured full txn32/mask001/count1/3bankids/3generations with unused slots0; poisoned live inputs independently replayed",
+    "immutable real72-bitcommand/128bitdata/8bitstatus native role snapshot",
+    "vendorbanktag remap to sequential inner tag; wrong bank/framing/status errors preserve raw bytes",
+    "normal repeatedjobs with deterministic command/data/response stalls and simultaneous directions",
+    "coverage pending + embedding ACK barriers before response",
+    "exact3cycle S2MM accepted requests/read response association; held output through abort",
+    "malformedKEEP/earlyTLAST/missingTLAST never writes badbeat",
+    "native missingcommit fault61; metadatareject62",
+    "clean02/03/04/07runtime rejects never issue vendor/native",
+    "B7aggregatecompletion vs selectedcomponent native generation, static-only/rope-only independentvalidity",
+    "malformed B7static crossing invalidates onlystatic epoch11, including absentRoPE",
+    "selected embedding row31/lane3 authenticated heldmeta ACK",
+    "heldvendorcommand remainsstable across earlytransportfault + newcommanddisable",
+    "late duplicate not accepted after capturedsuccess while heldouterresponse",
+    "first60/61/62diagnostic remainssticky through schedulerabort50; exactlyone LOADinvalidate; rejectedinvalidate never retried",
+    "coordinated reset + exact nextjob retry"
+  ],
+  "assumptions": [
+    "Externalnativecontract provides admitted wr_ready1/commit1 and admitted rd_ready1",
+    "Actualmemory/coverage/controller BFMs; real nativepool and bankcontroller not instantiated in this standalonechild",
+    "Configureddescriptor profile shapes and acquisition eligibility supplied by controller/fabric",
+    "Counters maximum allocation proven<=589824B; maximum extent profiles tested with partial transfers; full maximum-span realfabric transfer remains integration scope"
+  ]
+}

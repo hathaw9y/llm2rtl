@@ -1,0 +1,39 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "check": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json",
+      "description": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+    },
+    {
+      "check": "contract_structure",
+      "status": "passed_structure_only",
+      "evidence": "contract_gate.json"
+    },
+    {
+      "check": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "coverage": "95 checks: directed traversal plus all 80 legal one-hot state/binary-input combinations. Icarus 12 compilation and matching vvp simulation passed."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development PASS is not official correctness; official evaluation was not accessed.",
+    "Original specification does not define illegal zero-hot/multi-hot states or unknown inputs. Oracle covers legal one-hot states and binary inputs.",
+    "Contract gate verifies structure only."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": "Direct combinational one-hot incoming-transition equations and Moore output equations. No clock/reset ports or stored state, as specified.",
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json",
+    "check_history": "dev_checks.jsonl"
+  }
+}

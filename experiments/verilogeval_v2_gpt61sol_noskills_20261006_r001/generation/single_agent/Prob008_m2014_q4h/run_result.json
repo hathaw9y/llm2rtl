@@ -1,0 +1,187 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob008_m2014_q4h",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob008_m2014_q4h",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob008_m2014_q4h/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791270449.1220822,
+    "ended_at_unix": 1791270479.2141562,
+    "seconds": 30.092074394226074,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 63679,
+      "cached_input_tokens": 49152,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 821,
+      "reasoning_output_tokens": 0
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "78be13f47e76b5c1761ea0c8f0752e940283d5061d22702efa8356b04ebe6e9e",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed as expected",
+          "repair": "passed"
+        }
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "compile_returncode": 0,
+        "simulation_returncode": 0,
+        "coverage": "Combinational identity checked for 0, 1, X, Z and repeated transitions with case-inequality assertions and bounded timeout."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not been run."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "TopModule uses a continuous assignment from its one-bit input in to its one-bit output out.",
+    "initial_snapshot": "candidate_initial.sv"
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "78be13f47e76b5c1761ea0c8f0752e940283d5061d22702efa8356b04ebe6e9e",
+      "Prob008_m2014_q4h_test.sv": "aeb7795dd1ba3f9fe0e54660f003d7e4a1d6d6a0dbe501c181c4f4d8709293c0",
+      "Prob008_m2014_q4h_ref.sv": "46917be81598f8050958f924ea23056f5c06350d76d0c5dd6a625cd65986f735"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob008_m2014_q4h_test.sv",
+        "Prob008_m2014_q4h_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01260208711028099
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb008_m2014_q4h_test.sv:16: $finish called at 501 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 100 samples\n\nSimulation finished at 501 ps\nMismatches: 0 in 100 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.006453182548284531
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "78be13f47e76b5c1761ea0c8f0752e940283d5061d22702efa8356b04ebe6e9e",
+      "Prob008_m2014_q4h_test.sv": "aeb7795dd1ba3f9fe0e54660f003d7e4a1d6d6a0dbe501c181c4f4d8709293c0",
+      "Prob008_m2014_q4h_ref.sv": "46917be81598f8050958f924ea23056f5c06350d76d0c5dd6a625cd65986f735"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob008_m2014_q4h_test.sv",
+        "Prob008_m2014_q4h_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011961430311203003
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb008_m2014_q4h_test.sv:16: $finish called at 501 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 100 samples\n\nSimulation finished at 501 ps\nMismatches: 0 in 100 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.006591398268938065
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

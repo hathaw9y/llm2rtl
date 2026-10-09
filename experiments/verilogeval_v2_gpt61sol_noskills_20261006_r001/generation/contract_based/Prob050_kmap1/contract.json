@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1
+    },
+    "outputs": {
+      "out": 1
+    }
+  },
+  "semantics": {
+    "kind": "combinational",
+    "original_evidence": "Karnaugh map columns a=0,1 and rows bc=00,01,11,10; only a=0 bc=00 has output 0.",
+    "truth_table_abc": {
+      "000": 0,
+      "001": 1,
+      "010": 1,
+      "011": 1,
+      "100": 1,
+      "101": 1,
+      "110": 1,
+      "111": 1
+    },
+    "cycles": "No clock or latency specified; output follows inputs combinationally.",
+    "reset_initialization": "No reset or state specified; no initialization requirement."
+  },
+  "numeric": {
+    "widths": "All inputs and output are one bit.",
+    "operation": "Boolean inclusive OR of a, b, c; no arithmetic or signed interpretation."
+  },
+  "verification": {
+    "oracle": "Explicit truth table transcribed from original Karnaugh map, indexed by abc.",
+    "coverage": "All eight binary inputs in ascending and descending order, sampling after combinational settling.",
+    "failure": "$fatal on mismatch or bounded timeout.",
+    "success": "Print line beginning PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z inputs is not specified by the binary Karnaugh map; development oracle checks binary inputs only."
+  ]
+}

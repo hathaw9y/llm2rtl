@@ -1,0 +1,42 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "a": 1
+    },
+    "outputs": {
+      "q": 3
+    }
+  },
+  "semantics": {
+    "clock": "positive edge; q stays unchanged on falling edges and between rising edges",
+    "a_high": "Synchronously set q to 4, evidenced at 5,15,25,35 ns",
+    "a_low": "Advance q by one modulo 7; 4 -> 5 -> 6 -> 0 -> 1 at 55,65,75,85 ns",
+    "initialization": "No reset port or initialization: q unknown at 0 ns until first high-a rising edge",
+    "45ns_sampling": "a falls at the 45 ns rising-edge timestamp after the edge samples its previous high value; q remains 4. First edge sampling low a is 55 ns."
+  },
+  "numeric": {
+    "width": 3,
+    "values": "Unsigned states 0 through 6",
+    "wrap": "6 advances to 0; modulus is 7, not 8",
+    "arithmetic": "3-bit increment outside wrap"
+  },
+  "verification": {
+    "oracle": "Original table replayed at all timestamps 0 through 90 ns, checked after edge updates",
+    "timing": "clk toggles every 5 ns; a changes at 45 ns after rising-edge sampling, in NBA phase",
+    "directed": "Continue through all seven states and another wrap; synchronous load at nonzero states; check no asynchronous changes and no falling-edge updates",
+    "timeout": "Bounded simulation with fatal on any mismatch and PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "The tabular waveform does not specify delta-cycle ordering of simultaneous clk/a changes at 45 ns",
+      "resolution": "Replay a fall in NBA after the clock edge, consistent with observed q=4 at45 and q=5 at55; use synchronous load/count behavior."
+    },
+    {
+      "issue": "Transitions from states 1,2,3 and state7 are not directly shown",
+      "resolution": "Infer modulo-7 counting from 4,5,6,0,1; state7 is unreachable after the shown load and is not assigned special recovery behavior."
+    }
+  ]
+}

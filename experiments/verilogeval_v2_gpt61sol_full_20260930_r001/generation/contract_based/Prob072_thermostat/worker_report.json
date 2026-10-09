@@ -1,0 +1,39 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract structural gate",
+      "command": "python3 validate_contract.py",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "compile and warning check",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "pass",
+      "exit_code": 0,
+      "log": "development_compile.log"
+    },
+    {
+      "name": "exhaustive independent simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "pass",
+      "exit_code": 0,
+      "cases": 16,
+      "log": "development_simulation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Exact seven one-bit ports; continuous Boolean assignments; no state, latches, reset, arithmetic, or external module dependencies."
+    }
+  ],
+  "development_outcome": "Initial candidate passed all 16 binary input combinations; no RTL revisions required. candidate_initial.sv preserved before development checks.",
+  "limitations": [
+    "Contract gate validates structure only.",
+    "X/Z input behavior is unspecified and not tested.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing analysis, or board testing performed."
+  ]
+}

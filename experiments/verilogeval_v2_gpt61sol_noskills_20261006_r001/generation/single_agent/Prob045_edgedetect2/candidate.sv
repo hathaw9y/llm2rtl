@@ -1,0 +1,12 @@
+module TopModule (
+    input wire clk,
+    input wire [7:0] in,
+    output reg [7:0] anyedge
+);
+    reg [7:0] previous_in;
+
+    always @(posedge clk) begin
+        previous_in <= in;
+        anyedge <= in ^ previous_in;
+    end
+endmodule

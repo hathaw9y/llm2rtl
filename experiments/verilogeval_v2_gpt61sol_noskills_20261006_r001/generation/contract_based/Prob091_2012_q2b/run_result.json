@@ -1,0 +1,197 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob091_2012_q2b",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob091_2012_q2b",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob091_2012_q2b/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791271925.4302387,
+    "ended_at_unix": 1791271980.461061,
+    "seconds": 55.03082275390625,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 83839,
+      "cached_input_tokens": 61824,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2031,
+      "reasoning_output_tokens": 11
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "90af645360e9463b03292561e4a2fd90c5ea5e08d32fd7feeb3ea762d8908fce",
+  "contract_sha256": "f9aa78cabb97624ea1e262039f22a1eebc02543c84eae0c0b1ff4f153e5d76b9",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "check": "python3 smoke_environment.py",
+        "status": "passed",
+        "details": "Correct fixture passed, injected fault failed, repaired fixture passed."
+      },
+      {
+        "check": "python3 validate_contract.py",
+        "status": "passed_structure_only"
+      },
+      {
+        "check": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "details": "Icarus 12 compilation and simulation succeeded; 24 checks cover all 12 legal state/input pairs in forward and reverse order.",
+        "evidence": "dev_checks.jsonl and development/01"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official evaluation; no official feedback was accessed.",
+      "The original specification assumes one-hot states and does not specify invalid encodings or unknown inputs. The implementation uses direct incoming-transition equations."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "artifacts": [
+      "candidate.sv",
+      "candidate_initial.sv",
+      "dev_tb.sv",
+      "contract.json",
+      "contract_gate.json",
+      "contract_gate_history.jsonl",
+      "dev_checks.jsonl",
+      "development/01",
+      "worker_report.json"
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "90af645360e9463b03292561e4a2fd90c5ea5e08d32fd7feeb3ea762d8908fce",
+      "Prob091_2012_q2b_test.sv": "682f88f9fd806d44b91ccdaa43202204ff143bb1b02a521752b3e2bdc3e28841",
+      "Prob091_2012_q2b_ref.sv": "e860212c593a717f8517c2141034dace45baa3bd0c3f0d7e553b54f7200bcb7f"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob091_2012_q2b_test.sv",
+        "Prob091_2012_q2b_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013513855636119843
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb091_2012_q2b_test.sv:45: $finish called at 3001 (1ps)\nHint: Output 'Y1' has no mismatches.\nHint: Output 'Y3' has no mismatches.\nHint: Total mismatched samples is 0 out of 600 samples\n\nSimulation finished at 3001 ps\nMismatches: 0 in 600 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011929024010896683
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "90af645360e9463b03292561e4a2fd90c5ea5e08d32fd7feeb3ea762d8908fce",
+      "Prob091_2012_q2b_test.sv": "682f88f9fd806d44b91ccdaa43202204ff143bb1b02a521752b3e2bdc3e28841",
+      "Prob091_2012_q2b_ref.sv": "e860212c593a717f8517c2141034dace45baa3bd0c3f0d7e553b54f7200bcb7f"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob091_2012_q2b_test.sv",
+        "Prob091_2012_q2b_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010343756526708603
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb091_2012_q2b_test.sv:45: $finish called at 3001 (1ps)\nHint: Output 'Y1' has no mismatches.\nHint: Output 'Y3' has no mismatches.\nHint: Total mismatched samples is 0 out of 600 samples\n\nSimulation finished at 3001 ps\nMismatches: 0 in 600 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011722391471266747
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

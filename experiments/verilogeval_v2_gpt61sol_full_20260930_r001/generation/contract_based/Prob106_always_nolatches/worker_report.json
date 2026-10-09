@@ -1,0 +1,48 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "outcome": "PASS (structure only)",
+      "command": "python3 validate_contract.py",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "outcome": "PASS",
+      "details": "Exact TopModule interface; combinational blocking assignments default every output to zero; four exact 16-bit case matches; no state, clocks, resets, arithmetic or module dependencies."
+    },
+    {
+      "name": "development_compile",
+      "outcome": "FAIL_TOOL",
+      "exit_code": 139,
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim.vvp candidate.sv dev_tb.sv",
+      "log": "development_compile.log",
+      "details": "Compiler exited with code 139 and emitted no diagnostics; exit status preserved in development_compile.exit."
+    },
+    {
+      "name": "development_simulation",
+      "outcome": "NOT_RUN",
+      "details": "Compilation did not succeed."
+    }
+  ],
+  "development_outcome": "Contract gate passed and RTL statically reviewed. Independent exhaustive testbench created, but development compilation failed with exit code 139; no simulation success claimed.",
+  "limitations": [
+    "Binary-input functional behavior has not been confirmed by simulation because the compiler failed.",
+    "X/Z input behavior is unspecified by the problem.",
+    "No synthesis, timing or board checks performed.",
+    "Official evaluation is external and its results are unavailable."
+  ],
+  "artifacts": [
+    "contract.json",
+    "contract_gate.json",
+    "contract_gate_history.jsonl",
+    "contract_validation.log",
+    "candidate.sv",
+    "candidate_initial.sv",
+    "dev_tb.sv",
+    "development_compile.log",
+    "development_compile.exit"
+  ]
+}

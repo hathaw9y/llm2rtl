@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "passed",
+      "evidence": "development/01"
+    },
+    {
+      "label": "smoke_environment",
+      "status": "passed",
+      "cases": [
+        "correct fixture passes",
+        "injected fault fails",
+        "repaired fixture passes"
+      ]
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "The problem describes an 8-bit mux but declares scalar out. The explicit harness instruction to preserve original widths is followed: out is the selected input LSB.",
+    "Exhaustive development checks cover binary inputs; no additional unknown-selector behavior is specified or checked."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation replaces the incorrectly extended scalar bitwise selection masks with a conditional selection. Original port names and widths are preserved; no latency or ports added."
+  ],
+  "justified_tb_changes": [],
+  "verification": "Icarus 12 compilation and simulation via dev_check.py; exhaustive 131072 binary input combinations with mismatch fatal and bounded timeout.",
+  "initial_snapshot": "candidate_initial.sv"
+}

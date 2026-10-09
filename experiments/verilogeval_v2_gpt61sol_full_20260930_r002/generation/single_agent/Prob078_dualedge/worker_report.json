@@ -1,0 +1,57 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790743054.7082455,
+      "source_sha256": "854a3b2ed2d95a54de7de7842cd23b08b991fd848e5407caf353d45289919200",
+      "testbench_sha256": "9fbfbdc96a0f547b467eeb530d0f5b7137d73b451a7d0a051d7e4b81eb8844b9",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob078_dualedge/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.014316018670797348
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS dual-edge capture: 73 edge checks and 216 hold checks\ndev_tb.sv:64: $finish called at 646000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.006515149027109146
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed.",
+    "No reset or initialization was added; pre-edge state is unspecified. Output is checked after simulation settling at each edge."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation uses one register per clock edge and a clock-controlled output multiplexer. No RTL revisions."
+  ],
+  "justified_tb_changes": [],
+  "interface_cycle_contract": "TopModule(clk, d, q), all one bit; captures d on each rising and falling edge, holds between edges; no added cycle latency.",
+  "static_review": "Each register has one single-edge always_ff driver with nonblocking assignment; continuous output selection; no extra ports, reset, or initialization.",
+  "verification_summary": "Environment smoke passed correct/fault/repair cases. Initial Icarus 12 development check passed 73 edge checks and 216 hold checks."
+}

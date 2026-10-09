@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"in": "4-bit [3:0]"}, "outputs": {"out_and": "1-bit", "out_or": "1-bit", "out_xor": "1-bit"}},
+  "semantics": {"behavior": "Combinational four-input AND, OR, and XOR gates", "timing": "Outputs respond to current input without clock or added latency; original explicitly specifies a combinational circuit", "reset": "No reset port or reset behavior specified", "initialization": "No stored state or initial value specified; outputs are gate functions of current input"},
+  "numeric": {"and": "1 exactly when all four binary inputs are 1", "or": "1 when any binary input is 1", "xor": "1 when the number of binary 1 inputs is odd", "width": "Four single-bit operands and single-bit results"},
+  "verification": {"oracle": "Original gate definitions, checked using count of asserted input bits", "coverage": "All 16 binary input combinations and reverse traversal for transitions", "sampling": "Sample after 1 ns combinational settling following each stimulus", "failure": "Fatal on mismatch and bounded timeout; PASS only after all cases"},
+  "specification_ambiguities": ["X/Z input behavior is not explicitly specified; implement standard Verilog four-state gate reductions, while required oracle coverage checks binary gate truth tables."]
+}

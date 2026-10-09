@@ -1,0 +1,40 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed_as_expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "name": "initial",
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "dev_checks.jsonl",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "checked_cases": 24
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "The specification assumes one-hot states; the testbench asserts only the four specified states with binary inputs.",
+    "No synthesis or board work performed."
+  ],
+  "justified_changes": {
+    "rtl": [],
+    "testbench": []
+  },
+  "implementation": "Direct one-hot incoming-transition equations with Moore output state[3]. Original ports and widths preserved; combinational with no clock, reset, or added latency.",
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  },
+  "static_review": "Complete continuous assignments; no storage, latches, enum casts, or additional ports. All signals have explicit one-bit or four-bit widths."
+}

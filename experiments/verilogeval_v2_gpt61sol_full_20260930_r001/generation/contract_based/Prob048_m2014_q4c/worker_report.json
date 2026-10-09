@@ -1,0 +1,46 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen contract structural gate",
+      "result": "PASS",
+      "log": "contract_validation_retry.log",
+      "note": "Structural validation only; initial wrapper used a zsh read-only variable and was rerun successfully."
+    },
+    {
+      "name": "manual RTL contract review",
+      "result": "PASS",
+      "coverage": "Exact scalar ports and TopModule name; always_ff rising edge; nonblocking assignments; synchronous high reset priority; no initialization or asynchronous sensitivity; no arithmetic."
+    },
+    {
+      "name": "Icarus development compile",
+      "result": "FAILED_TOOL",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "details": "No compiler diagnostics emitted; finite 20-second timeout; -g2012 -Wall and explicit dev_tb top."
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT_RUN",
+      "details": "Compilation failed; no simulation success claimed."
+    },
+    {
+      "name": "initial candidate preservation",
+      "result": "PASS",
+      "details": "candidate_initial.sv copied immediately after writing candidate.sv, before development checks; no RTL revisions."
+    }
+  ],
+  "development_outcome": "Synthesizable flip-flop RTL delivered after static review. Independent self-checking testbench prepared, but compiler failure prevented dynamic verification.",
+  "limitations": [
+    "No successful compilation or simulation due to Icarus exit code 139.",
+    "Power-up state unspecified; rising edge follows conventional D flip-flop interpretation.",
+    "No synthesis, board work, or official evaluation performed. Official evaluation results are unavailable."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "w": 1,
+      "R": 1,
+      "E": 1,
+      "L": 1
+    },
+    "outputs": {
+      "Q": 1
+    }
+  },
+  "semantics": {
+    "edge": "positive edge of clk, explicitly required by problem",
+    "transition": "L=1: Q takes R; otherwise E=1: Q takes w; otherwise Q holds",
+    "priority": "Load precedes shift, inferred from L asserted when it should load",
+    "reset": "No reset port or reset behavior specified; R is load data",
+    "initialization": "No initialization specified; leave storage uninitialized",
+    "sampling": "Inputs sampled at rising edge; Q updates in nonblocking assignment phase; no asynchronous updates"
+  },
+  "numeric": {
+    "width": 1,
+    "type": "single-bit logic",
+    "arithmetic": "none"
+  },
+  "verification": {
+    "oracle": "Original problem load/shift/hold semantics",
+    "coverage": "All binary input combinations from both stored states, load/shift conflict, disabled hold, and between-edge stability",
+    "sampling": "Check before edge, after NBA settling, and falling edge",
+    "timeout": "Bounded simulation with fatal mismatches"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Simultaneous L and E priority is not explicitly stated",
+      "resolution": "L has priority because L is asserted when it should load; E enables shifting only without load"
+    },
+    {
+      "issue": "Power-up value unspecified",
+      "resolution": "Do not initialize RTL; functional tests establish Q with a load before checking known values"
+    }
+  ]
+}

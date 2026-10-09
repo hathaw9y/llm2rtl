@@ -1,0 +1,39 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_structure",
+      "command": "python3 validate_contract.py",
+      "exit_code": 0,
+      "outcome": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_rtl_review",
+      "outcome": "passed",
+      "details": "Exact TopModule interface with four scalar ports; one positive-edge always_ff driver; nonblocking assignments implement hold, clear, set and toggle; no reset or initialization added; no dependencies."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "outcome": "tool_failed_without_diagnostic",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development_simulation_attempt",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "exit_code": 255,
+      "outcome": "failed_no_compiled_executable",
+      "log": "dev_simulation.log"
+    }
+  ],
+  "development_outcome": "Initial candidate delivered unchanged. Contract validation and static review passed. Development simulation was not verified because compilation exited with code 139 and vvp could not open the missing executable.",
+  "limitations": [
+    "No successful development compilation or simulation; cause of tool failure was not determined.",
+    "Initial state and X/Z input behavior are not specified by the problem; tests assert only binary truth-table behavior after a set/clear edge.",
+    "No synthesis, board access, official reference or official evaluation performed."
+  ],
+  "artifacts": ["contract.json", "contract_gate.json", "contract_gate_history.jsonl", "contract_validation.log", "candidate.sv", "candidate_initial.sv", "dev_tb.sv", "dev_compile.log", "dev_simulation.log"]
+}

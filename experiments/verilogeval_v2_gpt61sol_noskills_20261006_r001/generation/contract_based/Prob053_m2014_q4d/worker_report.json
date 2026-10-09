@@ -1,0 +1,45 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json",
+      "cases": [
+        "correct passes",
+        "injected fault fails",
+        "repair passes"
+      ]
+    },
+    {
+      "name": "contract_structure",
+      "status": "passed_structure_only",
+      "evidence": "contract_gate.json"
+    },
+    {
+      "name": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "assertion_checks": 205
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Power-up value is unspecified. RTL leaves storage uninitialized; binary-state testing uses testbench-only hierarchical deposits.",
+    "Contract validation checks structure only."
+  ],
+  "justified_RTL_TB_changes": [],
+  "implementation": "Positive-edge flip-flop stores in XOR previous out, with no reset or initialization.",
+  "artifacts": [
+    "candidate.sv",
+    "candidate_initial.sv",
+    "contract.json",
+    "dev_tb.sv",
+    "dev_checks.jsonl",
+    "development/01/compile.log",
+    "development/01/simulation.log"
+  ]
+}

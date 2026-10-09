@@ -1,0 +1,14 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "reset": 1}, "outputs": {"q": 32}},
+  "semantics": {
+    "clock": "All state changes occur on posedge clk, as explicitly required.",
+    "reset": "Active-high synchronous reset has priority and sets q to 32'h00000001 on each rising edge with reset high.",
+    "transition": "Otherwise shift old q right by one, inserting zero at bit 31, and XOR old q[0] into indices 31,21,1,0 (one-based tap positions 32,22,2,1).",
+    "initialization": "No power-on value is specified; no DUT initialization is added. Defined sequence starts at a sampled reset.",
+    "latency": "q is the state updated on each rising edge; no extra ports or pipeline stages."
+  },
+  "numeric": {"width": 32, "representation": "Unsigned bit vector", "feedback_mask": "32'h80200003", "arithmetic": "Bitwise XOR and logical right shift; no rounding or saturation."},
+  "verification": {"oracle": "Per-bit recurrence independently implementing the original one-based taps", "sampling": "Check after rising-edge nonblocking updates and between edges", "coverage": "Reset seed, held reset, first transitions, long sequence with both feedback values and all bits, midstream reset, reset pulses without a rising edge, falling-edge stability", "failure": "$fatal on mismatch; bounded timeout; PASS only at completion", "evaluator": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": [{"topic": "Power-on state", "evidence": "Original problem only specifies synchronous reset value", "resolution": "Do not constrain the initial value before sampled reset."}, {"topic": "Tap numbering", "evidence": "32-bit register with tap position 32", "resolution": "Positions are one-based: position p maps to q[p-1]."}]
+}

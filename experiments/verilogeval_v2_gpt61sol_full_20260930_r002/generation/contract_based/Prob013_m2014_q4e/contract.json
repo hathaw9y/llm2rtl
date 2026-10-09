@@ -1,0 +1,48 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "in1": {
+        "direction": "input",
+        "width": 1
+      },
+      "in2": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    },
+    "evidence": "problem.txt explicitly names TopModule and the three one-bit ports"
+  },
+  "semantics": {
+    "function": "out is 1 exactly when both inputs are 0; otherwise out is 0 for binary inputs",
+    "timing": "combinational, no clocked latency or state",
+    "reset": "No reset port or reset behavior specified",
+    "initialization": "No stored state or initialization required; output follows current inputs after combinational settling",
+    "evidence": "problem.txt requires a 2-input NOR gate and lists no clock or reset"
+  },
+  "numeric": {
+    "widths": "one bit on every port",
+    "operation": "Boolean NOR",
+    "signedness": "unsigned logic",
+    "arithmetic": "No rounding, saturation, or overflow applies"
+  },
+  "verification": {
+    "oracle": "Explicit truth table from the original NOR requirement, independent of DUT expression",
+    "cases": "All four binary input combinations plus repeated transitions of each input",
+    "sampling": "Drive inputs then wait 1 ns to settle combinational simulation events",
+    "failure": "Case-inequality comparison and $fatal on mismatch; independent bounded timeout",
+    "success": "PASS line only after all checks"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Four-state inputs",
+      "evidence": "Original problem specifies a NOR gate but does not explicitly specify X/Z behavior",
+      "resolution": "Use native SystemVerilog bitwise NOR semantics; required development oracle covers all binary combinations"
+    }
+  ]
+}

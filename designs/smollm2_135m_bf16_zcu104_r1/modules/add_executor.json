@@ -1,0 +1,39 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "add_executor",
+  "module_kind": "opcode_executor",
+  "opcode": "ADD",
+  "status": "frozen",
+  "target": {
+    "board": "ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 100
+  },
+  "interface": {
+    "rtl_module": "smollm2_add_executor",
+    "compute_channel": 6,
+    "request": "opcode 9, distinct left/right/output banks, payload [5:0] row count 1..32, [111:6] zero",
+    "response": "held done_valid/done_ready, tag equals left bank, bank_count=3, all three bank IDs returned with error flag",
+    "bank_roles": [
+      18,
+      19,
+      20
+    ],
+    "bank_word_bits": 128,
+    "layout": "576 BF16 elements per row, 72 words per row, up to 32 rows",
+    "completion_order": "after the last output word write handshake"
+  },
+  "numeric": {
+    "input": "finite BF16 operands; nonfinite operand reports executor error",
+    "addition": "signed significands align to common exponent with sticky bit; one lane per cycle",
+    "output": "BF16 round-to-nearest-even; overflow produces signed infinity, gradual underflow supported"
+  },
+  "verification": {
+    "standalone": "XSIM prefill32 18432/18432, decode1 576/576, directed edge 576/576 exact BF16 comparisons and invalid row response pass; placed OOC 100 MHz setup WNS +5.151 ns, LUT 2326, BRAM 0, DSP 0",
+    "integration": "cumulative ISA command-stream XSIM PASS: prefill32 identity GEMM then ADD B0+B1->B5, first 16 residual values per row 512/512 within 16 BF16 ULP; decode1 16/16 within 16 ULP; bank control and completion checked",
+    "physical_board": "user-reported ZCU104 PASS: prefill32 ADD 512/512 and decode1 ADD 16/16 with zero mismatches; first 16 values per row after synthetic identity projection; report in dma_rms_gemm_rope_attention_add_board_probe/board_run_user_report.json",
+    "routed_board": "Vivado 2025.2 ZCU104 100 MHz: WNS +0.866 ns, WHS +0.010 ns, WPWS +3.500 ns; BIT/XSA/HWH/ELF artifact verification PASS"
+  }
+}

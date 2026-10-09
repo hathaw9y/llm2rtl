@@ -1,0 +1,63 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790752529.7066598,
+      "source_sha256": "65090e5149a14fddeaf1106eb754ecaa2529f62c248bb1037d2a525959e61a4e",
+      "testbench_sha256": "ffac680c1c0b2879d54e943c88b5c511dbd570dba53573da141c1fac76340145",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob097_mux9to1v/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011274823918938637
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS 1906 mux checks\ndev_tb.sv:52: $finish called at 1906000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011876213364303112
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development simulation is not official evaluation; official correctness remains unevaluated.",
+    "X/Z selector behavior is unspecified in the original problem.",
+    "No synthesis or board work performed, as required."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation uses a fully assigned combinational case mapping selectors 0..8 to a..i and all remaining selectors to 16'hffff. No subsequent RTL revisions."
+  ],
+  "justified_tb_changes": [
+    "Initial independent indexed-array oracle follows original selection mapping. No testbench corrections."
+  ],
+  "contract_validation": "passed_structure_only",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repair passed",
+  "interface_cycle_review": "Original TopModule ports and widths retained; combinational with no state, reset, extra ports, or latency.",
+  "numeric_review": "16-bit data preserved; 4-bit selector and explicitly sized constants.",
+  "static_review": "All case paths assign out; no inferred latch or source dependencies.",
+  "coverage": "1906 checks across all selectors, distinct lanes, walking-bit patterns, zero/ones, randomized input changes and selected unknown data passthrough.",
+  "initial_snapshot_unchanged": true
+}

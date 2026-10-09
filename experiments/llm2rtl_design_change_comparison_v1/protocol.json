@@ -1,0 +1,183 @@
+{
+  "version": 1,
+  "status": "DRAFT: semantic baseline qualification completed; evaluator preparation and hardware-arithmetic qualification pending; no participant comparison trials executed",
+  "research_question": "Does an explicit LLM2RTL contract and staged verification procedure improve existing-design modification completion and reduce user intervention?",
+  "baseline": {
+    "design": "designs/smollm2_135m_bf16_zcu104_r1",
+    "checkpoint": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 100,
+    "tools": "Vivado/Vitis 2025.2",
+    "model_tensor_execution": "PL only; PS command/address/control/transport and test observation",
+    "snapshot_status": "Runnable content-verified baseline created on backup storage; verify manifest before each independent copy"
+  },
+  "accuracy": {
+    "proposal_status": "thresholds are proposed in advance; qualification required, not a claim of current full-model PASS",
+    "normalized_rmse_definition": "sqrt(mean((actual-reference)^2)) / max(sqrt(mean(reference^2)), 1e-6), calculated separately per tensor; near-zero reference tensors require a separately preregistered absolute bound",
+    "local_kernel_and_layer0_reference": {
+      "nrmse_max": 0.01,
+      "cosine_min": 0.999,
+      "max_abs_error_div_reference_rms_max": 0.25,
+      "notes": "All conditions required for non-near-zero tensors; maximum-error guard is supplementary, not sufficient alone."
+    },
+    "full_model_final_hidden_and_logits_reference": {
+      "nrmse_max": 0.02,
+      "cosine_min": 0.999,
+      "max_abs_error_div_reference_rms_max": 0.25,
+      "scope": "per input, per decode step; all layer checkpoints are recorded but are not assigned the isolated-kernel 1% cap"
+    },
+    "softmax_invariants": {
+      "masked_values_exact_zero": true,
+      "probabilities_nonnegative": true,
+      "row_sum_abs_error_max": 0.01
+    },
+    "non_numeric_invariants": "Zero tolerated errors in opcode/operand decoding, addresses, packing invertibility, bounds, KV indices/lengths, bank ownership, completion count/tag/bank/error, chunk state, and writes outside destinations; no unexpected nonfinite values.",
+    "change_task_equivalence": "All three tasks preserve operand bits and per-output K arithmetic order. Final BF16 outputs, untouched bank data and DDR/KV bytes must match qualified baseline bit-for-bit. Cycle counts may differ. Representation fields are decoded to semantic quantities before trace comparison.",
+    "ranking": "Report top1, top5 overlap and reference top1-top2 margin; top1 mismatch is not waived as quality-equivalent. A reference gap greater than twice the max absolute logit error implies a stable top1 and therefore requires a match.",
+    "generation_quality": "If claiming preserved language quality, run a fixed teacher-forced held-out corpus and propose relative perplexity degradation <=5%; not yet evaluated, distinct from hardware execution correctness.",
+    "existing_evidence": {
+      "layer0_prefill32_nrmse": 0.0033781461150757287,
+      "layer0_cold_token_nrmse": 0.00151190178563163,
+      "scope": "first-layer output only; does not qualify full 30-layer or cached continuous decode"
+    }
+  },
+  "baseline_qualification": {
+    "initial_inputs": {
+      "public_prompt_count": 8,
+      "held_out_prompt_count": 8,
+      "token_lengths": [
+        1,
+        7,
+        16,
+        31,
+        32,
+        33,
+        63,
+        64
+      ]
+    },
+    "decode": "16 teacher-forced consecutive steps using identical reference token IDs; exact same inputs on all compared paths. Free-running generation is a separate quality test.",
+    "comparisons": [
+      "HF reference vs semantic ISA interpreter",
+      "hardware-arithmetic golden vs RTL/FPGA",
+      "one-shot vs command-chunked execution with identical arithmetic order"
+    ],
+    "tensor_coverage": "full channels for selected layers 0,14,29, final normalization and all 49152 logits; full layer-local diagnostic cases; cache append and prior-entry preservation at every decode step",
+    "chunk_boundaries": "at least two legal chunk partitions for identical commands; END drains before next load; no implicit bank/KV reset",
+    "context_1024": "software/address-bound tests at positions 991,992,1023; only claim numerical/board 1024 support after a separate full numerical/board run",
+    "qualification_policy": "Apply proposed thresholds to development inputs, then preregister and freeze before comparison runs. If baseline fails, repair it or explicitly narrow the supported scope. Do not loosen limits after seeing comparison outcomes.",
+    "semantic_evidence": "semantic_baseline_summary.json; software semantic scope only, not FPGA arithmetic qualification"
+  },
+  "tasks": [
+    {
+      "id": "T01",
+      "name": "Executor array rows 16 to 8",
+      "requirement": "Change physical GEMM array from 16x16 to 8x16; retain ISA M<=32, N tiling=192, K input values/order, BF16 packing and arithmetic rules, step/commit semantics, three shared GEMM modes.",
+      "mandatory_changes": [
+        "physical row dimension and skew",
+        "M scheduling and row tails",
+        "buffers/index widths and drain logic",
+        "dense GEMM and attention integration"
+      ],
+      "evaluation": [
+        "shape tests M=1,7,8,9,16,17,31,32 with legal bank capacities",
+        "N=1,7,16,17,191,192 and K=16,64,576,1536 selected capacity-valid combinations",
+        "dense output offsets and byte strobes",
+        "QK/PV grouped heads and causal behavior",
+        "prefill32 plus cached decode integration",
+        "bit-exact numerical equivalence and matched completion"
+      ],
+      "resource_check": "exactly 8x16 instantiated PEs, one shared dense/score/value array, no retained hidden 16x16 array; record routed-independent synth LUT/FF/DSP and cycle change; performance improvement is not a pass requirement"
+    },
+    {
+      "id": "T02",
+      "name": "Dense weight tile K16-block packing",
+      "requirement": "For each dense N tile, replace old element address n*K+k with ((k//16)*N_tile+n)*16+(k%16). Support K multiples of 16, including 16,64,576,1536. No element padding or weight-value change is required for this scope.",
+      "mandatory_changes": [
+        "offline host weight asset packing and manifest/hash",
+        "Python interpreter physical layout interpretation",
+        "dense RTL weight address generation",
+        "PS DMA weight offsets/byte counts and GEMM_TILES assumptions reviewed",
+        "retain row-major token embedding reads even though LM head shares its original weight table; provide separate correctly packed LM-head representation or a proven equivalent transfer path, with address map and asset consistency"
+      ],
+      "unchanged": "Q/K/V attention runtime layouts, activation layout, numerical format, ISA semantic operation, KV format; no PS tensor computation",
+      "evaluation": [
+        "all BF16 weight bits recover exactly by unpacking",
+        "diagnostic non-symmetric and lane-unique packing vectors",
+        "N tails and K-block transitions 15->16 and 31->32",
+        "dense projection types including down_proj and LM head tiles",
+        "unpacked weights, output bits and semantic tensor states equal baseline",
+        "attention modes retain their original layouts",
+        "embedding lookup bits and packed LM-head tile values are both correct; no corruption from shared storage; DDR allocation remains within reserved bounds"
+      ],
+      "compatibility": "modified MODEL.BIN has a new hash and declared layout identifier; both conditions receive the same original assets and tooling"
+    },
+    {
+      "id": "T03",
+      "name": "Dense GEMM row-count count-minus-one encoding",
+      "requirement": "GEMM opcode3 payload[24:19] and GEMM_TILES opcode12 payload[46:41] encode logical M_count-1, valid raw values 0..31. Logical M_count remains 1..32; all other fields and non-dense opcode formats remain unchanged.",
+      "mandatory_changes": [
+        "PS C generator and Python lowering/encoder/decoder",
+        "semantic interpreter decoding",
+        "dispatcher validation and GEMM_TILES expansion",
+        "GEMM executor decode/validation",
+        "ISA schema, fixtures, ABI manifest and handoff"
+      ],
+      "evaluation": [
+        "M_count=1,2,8,16,31,32 maps to raw=0,1,7,15,30,31",
+        "all raw values 32..63 rejected without output writes",
+        "m_start+logical_M_count>32 rejected",
+        "compressed descriptor and direct GEMM expand to equal semantic commands",
+        "wire pack/decode roundtrip",
+        "numerical and completion equivalence through multiple chunks",
+        "RMS/ROPE/attention/ADD/SILU count formats unchanged"
+      ],
+      "compatibility": "declare new experiment command ABI; old/new low field values are ambiguous, so do not claim automatic old-binary rejection without a separate version mechanism. Use matched generator/dispatcher/executor assets."
+    }
+  ],
+  "common_completion_gates": [
+    "Evaluator-owned fixtures and golden are immutable and independent of participant edits.",
+    "Changed PS/interpreter/RTL components build and agree semantically; bit-exact comparison and structural invariants pass.",
+    "Self-checking module tests and integrated command/bank/completion tests pass, including all affected modes.",
+    "Changed datapath OOC synthesis targets xczu7ev at 100MHz, has no errors, fits capacity and meets constrained setup; full board-top synthesis passes. Record warnings and resource reports.",
+    "End-to-end software lowering/interpreter executes all 30 layers with the fixed validation inputs.",
+    "Primary design-change endpoint is through synthesis, as proposed. Routed BIT and user-run FPGA validation are separate endpoints with identical policy for both conditions; synthesis does not imply board PASS."
+  ],
+  "conditions": {
+    "general_agent": "baseline, model/ISA contracts, interpreter, requirements, tools and public pass criteria; free workflow, voluntary contract/interpreter use allowed",
+    "llm2rtl": "same resources plus explicit contract review -> lowering/interpreter check -> module verification -> cumulative integration procedure"
+  },
+  "controls": {
+    "model_and_reasoning": "must be pinned identically before trials",
+    "budget": "same time/token/API limits for both; determine from pilot and freeze before main trials",
+    "independence": "fresh immutable baseline copy and new agent context for every run; no patches/logs from previous trials",
+    "interventions": "Primary endpoint: no post-start human design guidance, bug diagnosis, source edits, repeated proceed prompts or evaluator explanation. Agent may use public tests and raw automated tool errors. Clarifications require no new technical facts beyond fixed initial materials; unresolved specification questions are recorded and the agent chooses an explicit assumption. Infrastructure permission events are recorded separately. A human rescue changes the run to assisted; autonomous outcome stays FAIL.",
+    "timing": "record wall time, model processing, tool execution and queue/environment wait separately; no successful-run-only averages",
+    "continuation": "Automatic evaluator feedback and predetermined continuation are allowed equally in both conditions. Never supply evaluator-owned hidden vectors/golden or solution-specific hints. Hidden tests run only after participant completion or budget exhaustion."
+  },
+  "design": {
+    "pilot": "one run per task/condition =6, excluded from main results; evaluator fixes allowed only before freeze",
+    "main": "3 tasks x 2 conditions x 3 repeats =18 independent runs; all failures included",
+    "ablation": "remove interpreter pre-RTL check only, keep final evaluator/interpreter/gates and all other rules; preregister task/repeat count separately",
+    "primary_endpoint": "Unassisted all-gates completion within fixed budget.",
+    "rescue": "Optional separate recovery evaluation after autonomous endpoint recorded; preserve original autonomous failure and measure expert guidance/direct edits/active minutes separately."
+  },
+  "metrics": [
+    "unassisted completion status; assisted recovery never replaces an autonomous failure",
+    "all-gates completion within budget",
+    "extra instruction count and active intervention minutes",
+    "direct user edits",
+    "elapsed and token/API cost",
+    "tool invocations and failed expensive builds",
+    "ISA/layout/numeric/completion/state errors and first detection stage",
+    "error-to-fix time"
+  ],
+  "remaining_before_freeze": [
+    "immutable reproducible baseline snapshot",
+    "qualified full-model accuracy across multiple inputs and consecutive decode",
+    "hardware-arithmetic golden coverage check",
+    "executable evaluator/public and hidden fixtures",
+    "same model/reasoning/tool permissions and budgets",
+    "pilot review followed by explicit preregistration"
+  ]
+}

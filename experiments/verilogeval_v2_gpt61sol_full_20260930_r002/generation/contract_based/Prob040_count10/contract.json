@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {"clk": "input 1 bit", "reset": "input 1 bit", "q": "output 4 bits"},
+    "evidence": "Original problem interface explicitly names clk, reset, q (4 bits)."
+  },
+  "semantics": {
+    "clock": "All sequential updates on positive edge of clk, per original problem.",
+    "reset": "Active high synchronous: reset sampled high at a positive edge sets q to 0, overriding counting.",
+    "count": "At each positive edge with reset low, legal state q advances through 0..9 and wraps from 9 to 0; period 10.",
+    "between_edges": "q holds between positive edges, including reset transitions.",
+    "initialization": "Original problem does not prescribe a power-up value; no initializer and no assertion of a particular pre-reset value."
+  },
+  "numeric": {
+    "representation": "Unsigned four-bit count",
+    "legal_range": [0, 9],
+    "wrap": "Modulo ten on legal states; explicit 9-to-0 transition",
+    "constants": "Four-bit sized literals; no rounding or saturation required"
+  },
+  "verification": {
+    "oracle": "Independent integer model derived from original decade sequence, advanced modulo 10 after sampled reset.",
+    "sampling": "Check after positive edge NBA updates and at negative edges; drive reset away from positive edge.",
+    "coverage": "Repeated complete decades; reset at each legal count including nine; held reset; reset pulse wholly between rising edges; no output changes at reset transitions.",
+    "failure": "$fatal on mismatch and bounded timeout; explicit PASS only at successful completion.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {"topic": "Power-up value", "evidence": "No initial value specified", "resolution": "Do not constrain q before first sampled synchronous reset."},
+    {"topic": "Illegal states 10 through 15", "evidence": "Only decade sequence 0 through 9 is specified", "resolution": "No recovery requirement inferred or tested."}
+  ]
+}

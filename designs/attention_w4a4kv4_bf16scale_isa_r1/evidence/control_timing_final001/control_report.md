@@ -1,0 +1,3 @@
+Control timing-fix self-verification PASS. The active RTL in control_alias008 matches control_timing007 exactly; only four additional alias tests changed the TB. Latest simulation covers38 cases at each command latency1 and2, including all prior latefault regressions and rightful-owner read/write high-address aliases.
+
+Control-only strict lint and5ns OOC from timing007 pass: WNS0.070ns, WHS0.073ns, WPWS1.958ns, no failing endpoints;6996 LUT/3119 FF/38 RAMB36. Arithmetic peers are mocked here; actual-top integration/timing and independent timing-fix review remain separate. Old evidence is unchanged.

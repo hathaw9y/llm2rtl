@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "reset": 1, "data": 1, "ack": 1}, "outputs": {"count": 4, "counting": 1, "done": 1}},
+  "semantics": {
+    "clock": "All sequential logic samples positive edges, per original final paragraph.",
+    "reset": "Active-high synchronous reset has priority, cancels any phase, and begins searching; counting and done low after the reset edge.",
+    "search": "Recognize contiguous 1101, including overlapping prefixes. Detection edge consumes the final pattern bit; next four edges capture duration MSB first.",
+    "counting": "After fourth duration bit edge, counting is high and count equals delay. The next (delay+1)*1000 edges consume timer cycles; after the last edge counting is low and done high. Each count value occupies exactly 1000 clock intervals.",
+    "completion": "done is held until an edge with ack high; that edge returns to fresh search. data ignored during duration-independent timer and done phases; ack ignored until done.",
+    "initialization": "Original specifies reset state, not power-up values. No required outputs before first reset edge.",
+    "evidence": "Original: next 4 bits most-significant-bit first; exactly (delay+1)*1000 cycles; equal to delay for 1000 cycles; waits until ack is 1; active high synchronous reset."
+  },
+  "numeric": {"delay": "Unsigned four-bit integer 0..15", "subcounter": "10 bits hold 0..999, explicit rollover", "remaining": "Four bits decrement only when nonzero; count outside counting is don't-care", "duration": "1000..16000 clock intervals; no arithmetic overflow"},
+  "verification": {"oracle": "Independent sliding four-bit search window and integer total remaining cycles from original text; sampled after NBA settlement", "coverage": "All 16 delays, overlapping search prefixes, ignored data and ack during counting, held done, repeated transactions, reset during search/capture/count/done, synchronous reset", "failure": "$fatal mismatches, bounded timeout, PASS only at completion", "commands": ["python3 smoke_environment.py", "python3 validate_contract.py", "python3 dev_check.py --label initial"]},
+  "specification_ambiguities": ["No power-up behavior is specified; tests begin with synchronous reset.", "count is explicitly don't-care outside counting and will not be compared there.", "The text does not name the first counting edge; interpret 'After that' as assertion immediately after sampling the fourth delay bit, with 1000 full clock intervals for each value."]
+}

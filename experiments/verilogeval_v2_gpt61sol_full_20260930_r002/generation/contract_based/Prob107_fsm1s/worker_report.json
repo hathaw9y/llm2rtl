@@ -1,0 +1,63 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790747981.2391887,
+      "source_sha256": "a508c2c4fc0a6ec8469c6549c048cdf18c4a00de23b52d9dd69eba8a0c6ca5d1",
+      "testbench_sha256": "fd0b1536500f9dc33517673d7f989275007adfb5f19e1e2ad019696ff3d83bf6",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob107_fsm1s/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.013808904215693474
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checked 426 output samples\ndev_tb.sv:86: $finish called at 851000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.006997917778789997
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": {
+    "status": "passed",
+    "correct_fixture": "passed",
+    "injected_fault": "simulation_failed as expected",
+    "repaired_fixture": "passed"
+  },
+  "contract_validation": "passed_structure_only; see contract_gate.json",
+  "limitations": [
+    "Development simulation only; official evaluation has not run.",
+    "Pre-reset state and unknown-valued inputs are unspecified by the original problem.",
+    "Rising-edge clocking follows the conventional interpretation of the synchronous FSM."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "One-bit two-state Moore FSM with explicit enum if/else transitions and synchronous active-high reset to B. No added ports or latency.",
+  "verification_coverage": "All four transition arrows, both reset input values, repeated reset, reset priority in A, between-edge reset pulse, between-edge input changes, deterministic extended sequence; 426 scored samples.",
+  "static_review": "Original ports and one-bit widths preserved; sequential nonblocking assignments; complete combinational assignments; no submodules or extra latency.",
+  "initial_snapshot_preserved": true
+}

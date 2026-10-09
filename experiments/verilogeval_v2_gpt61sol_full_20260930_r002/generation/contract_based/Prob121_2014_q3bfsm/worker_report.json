@@ -1,0 +1,62 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790744249.041815,
+      "source_sha256": "d748052cadda2f6fe174eb6308ee54a0257573c1f9effda0a47da8faec7a602c",
+      "testbench_sha256": "f816dd9e5d5190ee8d80be1a13fae267bae017640b6d73e5f38184b330b5e16a",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob121_2014_q3bfsm/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.01130574382841587
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS all legal transitions, synchronous resets, Moore sampling, and exhaustive 8-bit histories\ndev_tb.sv:89: $finish called at 23866000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.02327938098460436
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Original specification does not define startup before reset or states 101, 110, 111; those behaviors are not claimed as verified requirements.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface_cycle_contract": "Original TopModule one-bit ports; posedge clock, synchronous active-high reset to 000; combinational Moore output with no added latency.",
+    "numeric_width_decisions": "Unsigned three-bit state with exact table encodings; one-bit ports.",
+    "static_review": "Single sequential state driver, complete combinational next-state cases, no inferred latch, exact legal transitions and output table.",
+    "coverage": "All ten legal transitions; reset from all five states for both x values; pre-edge output stability; exhaustive eight-bit input sequences."
+  }
+}

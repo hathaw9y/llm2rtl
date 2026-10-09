@@ -1,0 +1,53 @@
+{
+  "task": "T03",
+  "baseline_mode": true,
+  "phase": "all",
+  "candidate_root": "/home/shmin/llm2rtl",
+  "gates": {
+    "python": {
+      "status": "PASS",
+      "details": {
+        "roundtrips": 64,
+        "all_30_layers_generated": true,
+        "unrelated_count_formats": true,
+        "scope": "actual codec and semantic generator; numerical interpreter checked separately"
+      }
+    },
+    "numeric_interpreter": {
+      "status": "PASS",
+      "details": {
+        "dense_numeric_cases": 24,
+        "chunk_partitions": 2,
+        "bf16_exact": true,
+        "untouched_banks": true
+      }
+    },
+    "ps_c": {
+      "status": "PASS",
+      "details": {
+        "c_direct": {
+          "dense_records_checked": 6394
+        },
+        "c_macro": {
+          "dense_records_checked": 1265
+        }
+      }
+    },
+    "rtl": {
+      "status": "FAIL",
+      "error": "AssertionError()"
+    }
+  },
+  "passed": false,
+  "limits": [
+    "No board or synthesis signoff.",
+    "Full-model numerical interpreter qualification is supplied by common evaluator, not this isolated ISA evaluator.",
+    "Dispatcher uses an independent completion responder; executor is simulated separately."
+  ],
+  "source_sha256": {
+    "verification/prototypes/smollm2_135m_isa_feasibility.py": "7c64e28686cc75f303335bf64f26994ebed0907a6c2cd06c5206960dce85c4a5",
+    "designs/smollm2_135m_bf16_zcu104_r1/full_model_board_probe/program.c": "018581ab7245054db21d75a9e0bb293167c987bde59789a45646f4f7e48346d4",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/isa_command_dispatcher.sv": "c769a5743c79de7efbdba0abb649dbebc5b365b06b405083a3050ed706e75876",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_gemm_systolic_wide_executor.sv": "e7f3689489b2fdb30d55654df15e3161a95c890fd85726858e09bcc140ed60d3"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "enable": 1, "S": 1, "A": 1, "B": 1, "C": 1}, "outputs": {"Z": 1}},
+  "semantics": {
+    "state": "Eight D flip-flop outputs Q[0] through Q[7], with no reset port or initialization specified.",
+    "transition": "On each positive clock edge, if enable is high, Q[0] receives S and each Q[i] for i=1..7 receives the prior Q[i-1]. Otherwise all bits hold.",
+    "read": "Combinational Z = Q[index], where index is ABC with A most significant and C least significant; no read latency.",
+    "evidence": "Original states S feeds Q[0], synchronous active-high enable, all sequential logic positive-edge triggered, and ABC=000 selects Q[0], ABC=001 selects Q[1], and so on.",
+    "structure": "Only an eight-bit shift register and multiplexers."
+  },
+  "numeric": {"state_width": 8, "address_width": 3, "address_range": [0, 7], "bit_order": "Serial MSB first yields first bit in Q[7] after eight enabled edges."},
+  "verification": {"oracle": "Independent per-bit historical state model based on original text", "cases": ["Uninitialized state before writes", "All eight read addresses", "Partial fill and propagation of unknown bits", "Disabled positive edges", "No change on negative edges or S changes", "MSB-first full-word loading", "Mixed enabled and disabled shifts"], "sampling": "Check after settling following positive edges and asynchronous address changes", "termination": "Fatal on mismatch, bounded timeout, PASS only on completion"},
+  "specification_ambiguities": ["No reset or power-up values are specified; RTL leaves flip-flops uninitialized and simulation tests expect unknown bits until written. Inputs with unknown enable or address are not assigned additional behavioral requirements."]
+}

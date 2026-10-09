@@ -1,0 +1,45 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "compile and exact testbench-top elaboration",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "PASS, exit 0, no diagnostics",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "independent self-checking development simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "PASS, exit 0; 1604 vectors, 300 output bits checked per vector",
+      "log": "dev_simulation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "Exact four-port interface; fully driven combinational outputs; correct AND/OR boundaries and XOR wrap; no state, latches, clocks, resets or external modules"
+    },
+    {
+      "name": "initial candidate preservation",
+      "result": "candidate_initial.sv copied immediately after initial implementation, before development checks; candidate.sv remains unchanged"
+    }
+  ],
+  "development_outcome": "PASS: frozen contract implemented with three continuous assignments; no RTL revisions required.",
+  "limitations": [
+    "Development simulation is not official benchmark evaluation; official results unavailable.",
+    "Binary input coverage is directed and randomized rather than exhaustive over all 2^100 vectors.",
+    "Original problem does not specify unknown/high-impedance input semantics; development vectors use binary inputs.",
+    "No synthesis, timing analysis or board access performed."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

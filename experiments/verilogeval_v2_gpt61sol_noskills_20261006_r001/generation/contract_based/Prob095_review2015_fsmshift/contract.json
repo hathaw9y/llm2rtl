@@ -1,0 +1,21 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1}, "outputs": {"shift_ena": 1}},
+  "semantics": {
+    "clock": "All sequential updates occur on the positive edge, as explicitly specified.",
+    "reset": "Active high synchronous reset: each rising edge with reset high restarts the four-cycle enable interval.",
+    "cycles": "Immediately after a reset rising edge shift_ena is high; it remains high after the next three non-reset rising edges, then becomes low at the fourth non-reset rising edge and stays low until another sampled reset.",
+    "initialization": "The original problem specifies no power-up state; behavior before the first sampled reset is unconstrained. No initial block is introduced."
+  },
+  "numeric": {"enabled_intervals": 4, "remaining_count_width": 3, "count_range": "0 through 4; saturates at zero"},
+  "verification": {
+    "oracle": "Independent elapsed-cycle model grounded in the original four-cycle requirement, checking after NBA updates.",
+    "directed_cases": ["single reset", "long idle", "reset held high", "restart during enable", "reset between edges has no effect", "restart from idle"],
+    "failure_behavior": "$fatal on mismatch, bounded timeout, PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    "Power-up behavior before reset is unspecified and is not tested as a defined output.",
+    "Four cycles are interpreted as four full clock intervals starting immediately after the sampled reset edge. Holding reset high restarts the interval at each sampled edge.",
+    "The introductory bit-pattern detection context supplies no detector input; only reset starts the requested interval."
+  ]
+}

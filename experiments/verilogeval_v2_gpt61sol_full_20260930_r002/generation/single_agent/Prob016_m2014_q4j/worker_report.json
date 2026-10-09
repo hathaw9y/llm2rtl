@@ -1,0 +1,36 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "name": "initial",
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence_directory": "development/01",
+      "coverage": "All 256 unsigned four-bit input pairs checked against independent five-bit arithmetic addition",
+      "simulator": "Icarus Verilog 12 with matching vvp",
+      "compile_diagnostics": "none"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis, timing, or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "interface_cycle_semantics": "TopModule with x[3:0], y[3:0], sum[4:0]; combinational, no clock or reset, no added latency",
+  "numeric_widths": "Four one-bit full-adder stages with initial carry zero; sum[4] is final overflow carry",
+  "static_review": "Full-adder XOR sum and majority carry equations; all outputs continuously driven; no inferred state"
+}

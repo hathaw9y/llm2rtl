@@ -1,0 +1,185 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob039_always_if",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob039_always_if",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob039_always_if/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790747473.0463648,
+    "ended_at_unix": 1790747576.8346062,
+    "seconds": 103.78824210166931,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 124604,
+      "cached_input_tokens": 110336,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1789,
+      "reasoning_output_tokens": 12
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "326041ee70c7bb737934e66491f1abd8399dc40ac70d4c031fdb9044d69090df",
+  "contract_sha256": "af2c9ff842990d27fe9d71eade9a4561e281a3c0f04fc88d0a99d7844b6150a5",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "outcome": "passed",
+        "detail": "Correct fixture passed, injected fault failed, repaired fixture passed."
+      },
+      {
+        "command": "python3 validate_contract.py",
+        "outcome": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "outcome": "passed",
+        "evidence": "dev_checks.jsonl",
+        "detail": "Icarus 12 compile and simulation passed; 32 checks cover all 16 binary combinations in forward and reverse order."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "Original problem does not specify X/Z input behavior; binary truth table was exhaustively tested.",
+      "No synthesis or board work performed, as required."
+    ],
+    "justified_rtl_tb_changes": [],
+    "contract_changes": [],
+    "implementation": {
+      "rtl": "candidate.sv",
+      "unchanged_initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "interface_cycle_contract": "Original six one-bit ports; combinational selection; no clock, reset, state, or added latency.",
+      "numeric_widths": "All signals are one bit; no arithmetic.",
+      "static_review": "Continuous assignment and complete procedural if/else implement the required mux; no latch or extra source dependencies."
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "326041ee70c7bb737934e66491f1abd8399dc40ac70d4c031fdb9044d69090df",
+      "Prob039_always_if_ref.sv": "5df164fd820436852f95bc1ee0067a09412148acea85b288cb7c0a8bcb0ac630",
+      "Prob039_always_if_test.sv": "9cdd8401da34627672ac19bb19bf73a9d96e3d88f1444224738b23fe920e46b1"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob039_always_if_test.sv",
+        "Prob039_always_if_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015083109959959984
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb039_always_if_test.sv:45: $finish called at 570 (1ps)\nHint: Output 'out_assign' has no mismatches.\nHint: Output 'out_always' has no mismatches.\nHint: Total mismatched samples is 0 out of 114 samples\n\nSimulation finished at 570 ps\nMismatches: 0 in 114 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008863097988069057
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "326041ee70c7bb737934e66491f1abd8399dc40ac70d4c031fdb9044d69090df",
+      "Prob039_always_if_ref.sv": "5df164fd820436852f95bc1ee0067a09412148acea85b288cb7c0a8bcb0ac630",
+      "Prob039_always_if_test.sv": "9cdd8401da34627672ac19bb19bf73a9d96e3d88f1444224738b23fe920e46b1"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob039_always_if_test.sv",
+        "Prob039_always_if_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014959252439439297
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb039_always_if_test.sv:45: $finish called at 570 (1ps)\nHint: Output 'out_assign' has no mismatches.\nHint: Output 'out_always' has no mismatches.\nHint: Total mismatched samples is 0 out of 114 samples\n\nSimulation finished at 570 ps\nMismatches: 0 in 114 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008600547909736633
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

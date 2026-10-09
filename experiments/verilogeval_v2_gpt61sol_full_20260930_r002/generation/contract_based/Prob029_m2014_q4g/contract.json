@@ -1,0 +1,36 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "in1": 1,
+      "in2": 1,
+      "in3": 1
+    },
+    "outputs": {
+      "out": 1
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "evidence": "Original problem connects XNOR(in1,in2) to XOR with in3, whose output is out.",
+    "function": "out = (~(in1 ^ in2)) ^ in3",
+    "timing": "Pure combinational propagation; no clock or cycle latency specified.",
+    "reset": "No reset port or reset behavior in original problem.",
+    "initialization": "No stored state or initialization specified; output follows inputs."
+  },
+  "numeric": {
+    "width_bits": 1,
+    "domain": "Boolean gates with standard SystemVerilog four-state propagation",
+    "signed_arithmetic": "none",
+    "rounding_overflow": "not applicable"
+  },
+  "verification": {
+    "oracle": "Explicit truth table derived from original XNOR followed by XOR description, independent of DUT expression.",
+    "coverage": "All eight binary combinations in ascending and descending order; supplementary X/Z propagation cases.",
+    "sampling": "Check after 1 ns combinational settling on each stimulus.",
+    "failure": "Case inequality comparison and $fatal; bounded timeout.",
+    "pass": "PASS printed only after all comparisons succeed."
+  },
+  "specification_ambiguities": []
+}

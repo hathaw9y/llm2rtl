@@ -1,0 +1,75 @@
+{
+  "revision_count": 0,
+  "checks": {
+    "environment_smoke": {
+      "status": "passed",
+      "correct_fixture": "passed",
+      "wrong_fixture": "simulation_failed_as_expected",
+      "repaired_fixture": "passed"
+    },
+    "contract_gate": {
+      "status": "passed_structure_only",
+      "checked_at_unix": 1790748709.0517924,
+      "contract_sha256": "929753e65db52a41a3c8ef50dbb0d6c1442c172d3f8bff58e5db6098c5180f33"
+    },
+    "development": [
+      {
+        "label": "initial",
+        "check_index": 1,
+        "checked_at_unix": 1790748758.5297163,
+        "source_sha256": "da9437af676a89427db995aa8be5a7749e7c39fcf8e337c88b3718ec5c8608e0",
+        "testbench_sha256": "dd3675510de602610b71ab0431c43d80d75a9b435b67c2763d527d576f85d307",
+        "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob084_ece241_2013_q12/development/01",
+        "compile": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+            "-g2012",
+            "-Wall",
+            "-Wno-timescale",
+            "-s",
+            "dev_tb",
+            "-o",
+            "dev.vvp",
+            "candidate.sv",
+            "dev_tb.sv"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.016635583713650703
+        },
+        "simulation": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+            "dev.vvp"
+          ],
+          "returncode": 0,
+          "stdout": "PASS: 92232 checks of shift, hold, edge timing and all addresses\ndev_tb.sv:74: $finish called at 100687000 (1ps)\n",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.20036661252379417
+        },
+        "status": "passed"
+      }
+    ]
+  },
+  "development_outcome": "passed",
+  "limitations": [
+    "Development simulation only; official evaluation has not occurred.",
+    "No synthesis or board verification performed as required.",
+    "Initial hardware storage values are unspecified by the original problem; RTL has no reset or initialization."
+  ],
+  "justified_RTL_changes": [],
+  "justified_TB_changes": [],
+  "contract_changes": [],
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface_cycle": "Original one-bit ports; enabled positive-edge shift; asynchronous combinational address read; no added latency or reset",
+    "numeric": "8 one-bit storage elements, unsigned 3-bit ABC index",
+    "static_review": "Eight-bit register with nonblocking shift assignment and continuous mux output; no extra state or source dependencies"
+  },
+  "verification_coverage": "92232 comparisons: initial unknowns, partial loads, all 256 patterns at all 8 addresses, disabled hold, pre-edge and post-edge sampling, falling-edge and high-phase input mutation"
+}

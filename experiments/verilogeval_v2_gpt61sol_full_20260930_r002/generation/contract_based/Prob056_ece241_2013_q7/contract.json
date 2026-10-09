@@ -1,0 +1,60 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "j": 1,
+      "k": 1
+    },
+    "outputs": {
+      "Q": 1
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "sampling": "j and k sampled at positive clk edge; Qold is Q before that edge, as stated in problem.txt",
+    "truth_table": {
+      "00": "hold Qold",
+      "01": "0",
+      "10": "1",
+      "11": "bitwise complement of Qold"
+    },
+    "reset": "No reset port or reset behavior specified; none added",
+    "initialization": "No initial value specified; no RTL initialization; simulation state begins unknown",
+    "between_edges": "Q remains stable, including falling clock edges",
+    "latency": "Q updates at the sampling edge via nonblocking assignment, no additional clock latency"
+  },
+  "numeric": {
+    "width_bits": 1,
+    "signed": false,
+    "toggle": "one-bit complement",
+    "rounding_overflow": "not applicable"
+  },
+  "verification": {
+    "oracle_source": "Original problem.txt JK truth table, independent procedural model",
+    "cases": [
+      "initial unknown hold and toggle",
+      "set/reset resolve unknown",
+      "all four input pairs from Q=0 and Q=1",
+      "repeated toggle and hold",
+      "input changes between positive edges",
+      "falling-edge stability"
+    ],
+    "comparison": "four-state case inequality after NBA settling",
+    "timeout": "bounded simulation timeout",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "power-up state",
+      "evidence": "Original problem supplies no reset or initial Q value",
+      "resolution": "Do not assign a power-up value; test simulation unknown until set or reset"
+    },
+    {
+      "topic": "unknown j/k inputs",
+      "evidence": "Truth table specifies only binary J and K",
+      "resolution": "Development functional checks use binary inputs; no additional X/Z input behavior claimed"
+    }
+  ]
+}

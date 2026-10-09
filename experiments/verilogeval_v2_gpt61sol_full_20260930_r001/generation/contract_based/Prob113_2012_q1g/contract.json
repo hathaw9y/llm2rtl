@@ -1,0 +1,71 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "x": {
+        "direction": "input",
+        "width": 4,
+        "range": "[3:0]"
+      },
+      "f": {
+        "direction": "output",
+        "width": 1
+      }
+    },
+    "clock": "none",
+    "reset": "none"
+  },
+  "semantics": {
+    "function": "Karnaugh map with column pair {x[0],x[1]} and row pair {x[2],x[3]}",
+    "gray_order": [
+      "00",
+      "01",
+      "11",
+      "10"
+    ],
+    "map_rows": {
+      "00": [
+        1,
+        0,
+        0,
+        1
+      ],
+      "01": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "11": [
+        1,
+        1,
+        1,
+        0
+      ],
+      "10": [
+        1,
+        1,
+        0,
+        1
+      ]
+    },
+    "timing": "Pure combinational function of current x; no cycle latency, state, clock, handshake or reset.",
+    "initialization": "No initialized state; output determined by current binary inputs."
+  },
+  "numeric": {
+    "input": "Four independent Boolean bits; unsigned packed vector x[3:0].",
+    "output": "One Boolean bit.",
+    "arithmetic": "Boolean logic only; no arithmetic, rounding, saturation or overflow.",
+    "binary_domain": "All 16 input combinations are specified.",
+    "unknown_inputs": "X/Z input behavior is unspecified by the problem."
+  },
+  "verification": {
+    "oracle": "Independent literal 4-by-4 table transcribed from the problem; index by row and column bit pairs in stated Gray order.",
+    "coverage": "Exhaustively check all 16 binary vectors in ascending and descending orders to exercise changing input and lack of retained state.",
+    "comparison": "Wait for combinational settling and compare f using case inequality; fail on mismatch or unknown output.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts.",
+    "scope": "Development only; no official testbench, synthesis or board access."
+  },
+  "specification_ambiguities": []
+}

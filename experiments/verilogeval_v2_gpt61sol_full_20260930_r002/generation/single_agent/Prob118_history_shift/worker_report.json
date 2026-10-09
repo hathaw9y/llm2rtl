@@ -1,0 +1,17 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "simulator": "Icarus 12", "comparisons": 556, "evidence": "development/01"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "No synthesis or board verification performed."],
+  "justified_changes": {
+    "initial_rtl": "32-bit history updates on rising clock edges; positive-edge asynchronous reset clears it. Rollback has priority and shifts the actual branch result into bit zero. Prediction shifts its result into bit zero; otherwise history holds. No extra latency or ports.",
+    "rtl_revisions": [],
+    "testbench_revisions": [],
+    "testbench": "Independent arithmetic oracle checks rising-edge updates and stability before the edge, asynchronous reset and reset priority, holds, overflow after more than 32 predictions, rollback inputs and simultaneous prediction/rollback, plus randomized transactions. Bounded timeout and fatal comparisons included. No initial value is assumed before reset."
+  },
+  "static_review": "Interface, 32-bit truncation, nonblocking sequential assignments, asynchronous reset sensitivity and priority match the original specification.",
+  "artifacts": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "dev_checks.jsonl", "development/01"]
+}

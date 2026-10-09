@@ -1,0 +1,21 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "details": "Correct fixture passed, injected fault failed simulation, repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence_directory": "development/01", "comparisons": 1233, "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; exit 0, no diagnostics", "simulation": "Matching vvp; exit 0; explicit PASS"}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development simulation is not official benchmark correctness; official evaluation has not occurred.",
+    "Referenced state diagram was absent; timing interpretation is grounded in supplied prose.",
+    "No pre-reset physical initialization behavior is specified or claimed; synchronous reset establishes A.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": "Four control states A/B/C/D, two-bit unsigned sample count, and registered one-cycle z. Entry edge excludes w; successive windows have no gaps. Original ports and synchronous active-high reset preserved.",
+  "verification": "Independent integer window oracle. All eight patterns and all 64 adjacent pattern pairs, entry-edge exclusion, active-state s independence, output stability between rising edges, reset during idle and each partial/completed window phase, and a 600-cycle deterministic stream.",
+  "artifacts": ["contract.json", "candidate.sv", "candidate_initial.sv", "dev_tb.sv", "dev_checks.jsonl", "development/01", "worker_report.json"]
+}

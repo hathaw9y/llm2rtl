@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "label": "initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "simulation_result": "PASS arbiter checks=436",
+      "evidence_directory": "development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation is performed externally after submission.",
+    "The textual diagram duplicates the no-request condition for A-to-D and omits D transitions. The explicit prose resolves these: grant device 2 only when it alone requests in A, retain its grant while r[2] is high, and return to A on release."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Four-state Moore arbiter with separate combinational state table and positive-edge state register, active-low synchronous reset, and priority 0 then 1 then 2.",
+  "verification": "Independent grant-vector oracle checks all idle request combinations, all request combinations under each grant, hold/release behavior and subsequent arbitration, output stability before rising edges, resets during grants, and longer deterministic mixed sequences. Initial outputs are checked only after synchronous reset because pre-reset behavior is unspecified.",
+  "artifacts": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "worker_report.json", "dev_checks.jsonl", "development/01"]
+}

@@ -1,0 +1,66 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "x": {
+        "direction": "input",
+        "width": 1
+      },
+      "y": {
+        "direction": "input",
+        "width": 1
+      },
+      "z": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "z is 1 exactly when binary x and y are equal",
+    "truth_table": [
+      {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      {
+        "x": 1,
+        "y": 0,
+        "z": 0
+      },
+      {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    ],
+    "timing": "Pure combinational logic; output follows current inputs with no clocked latency or explicit delay. Waveform times are stimulus observation times.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization required; output determined by inputs.",
+    "handshake": "None"
+  },
+  "numeric": {
+    "type": "Single-bit Boolean inputs and output",
+    "operation": "XNOR",
+    "arithmetic": "No arithmetic, rounding, truncation, saturation or overflow applies."
+  },
+  "verification": {
+    "oracle": "Literal truth table independently transcribed from the original waveform, rather than the RTL expression.",
+    "tests": [
+      "Replay all 19 original waveform samples at their specified times, allowing combinational settling.",
+      "Exercise all 16 ordered transitions between the four binary input combinations, checking destination output."
+    ],
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, followed by matching vvp; finite external timeouts and a testbench watchdog.",
+    "pass_criterion": "Every observed z matches the literal expected value; compile and simulation exit successfully with PASS."
+  },
+  "specification_ambiguities": [
+    "Behavior for X or Z inputs is not specified by the binary waveform; verification is limited to binary inputs."
+  ]
+}

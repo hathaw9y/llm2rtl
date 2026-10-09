@@ -1,0 +1,45 @@
+{
+  "schema": "llm2rtl.subagent_result.v1",
+  "status": "passed",
+  "design_id": "llama32_1b_w4a4kv4_issue",
+  "revision": "r3",
+  "module_id": "isa_command_dispatcher",
+  "contract_sha256": "919ac6231abad1fb7557ba8c5334364fe8be0c06d0339b5cc70cb4ec550a092b",
+  "source_sha256": "47e0d2d53c92e5df607df11959771215359990ce5370ebebc1f14f458b1ca805",
+  "source_manifest_sha256": "248806b35651a1f03abaf9ef675dd554f93eb3177e7040c80a7edf74bc201cff",
+  "test_vector_sha256": "1bcec8a8e48ac6827b6fc925e51bf117440bed8b7ee788239cf8ef99ee122b5d",
+  "verification_report_sha256": "639671d9d3c78aac4880ec84df434f9dc701bdf57dd0c2b853305df9c0b01548",
+  "changed_files": [
+    "designs/llama32_1b_w4a4kv4_issue_r3/rtl/isa_command_dispatcher.sv",
+    "designs/llama32_1b_w4a4kv4_issue_r3/tb/tb_isa_command_dispatcher.sv",
+    "designs/llama32_1b_w4a4kv4_issue_r3/scripts/run_dispatcher_verification.tcl",
+    "designs/llama32_1b_w4a4kv4_issue_r3/evidence/isa_command_dispatcher/kernel_report.json",
+    "designs/llama32_1b_w4a4kv4_issue_r3/evidence/isa_command_dispatcher/module_ooc_synthesis_report.json",
+    "designs/llama32_1b_w4a4kv4_issue_r3/evidence/isa_command_dispatcher/subagent_result.json"
+  ],
+  "commands": [
+    "python3 scripts/check_common_contracts.py",
+    "python3 scripts/check_isa_design.py --design-dir designs/llama32_1b_w4a4kv4_issue_r3 --module isa_command_dispatcher --expected-module-sha256 919ac6231abad1fb7557ba8c5334364fe8be0c06d0339b5cc70cb4ec550a092b",
+    "python3 designs/llama32_1b_w4a4kv4_issue_r3/run_dispatcher_model.py",
+    "/usr/bin/verilator --version",
+    "/usr/bin/verilator --lint-only --Wall --Wno-fatal designs/llama32_1b_w4a4kv4_issue_r3/rtl/isa_command_dispatcher.sv",
+    "xvlog --sv <r3-rtl> <r3-tb>; xelab tb_isa_command_dispatcher -s tb_dispatcher_r3_sim; execute exact generated xsimk snapshot and require exact PASS marker",
+    "/media/admin1/backup/tools/Xilinx/2025.2/Vivado/bin/vivado -mode batch -source designs/llama32_1b_w4a4kv4_issue_r3/scripts/run_dispatcher_verification.tcl"
+  ],
+  "evidence": {
+    "golden_model": "golden_model.log",
+    "simulation": "xsim_direct.log",
+    "verilator_version": "verilator_version.log",
+    "verilator_executable": "verilator_executable.log",
+    "verilator_lint": "verilator_lint.log",
+    "vivado": "vivado_ooc.log",
+    "kernel_report": "kernel_report.json",
+    "ooc_report": "module_ooc_synthesis_report.json"
+  },
+  "remaining_risks": [
+    "Icarus Verilog 11.0 is not signoff evidence because it loops in delta cycles on the dynamic unpacked-array release output; required XSIM 2025.2 passes.",
+    "OOC external-port hold exceptions do not represent integrated board paths; fresh in-context timing is required.",
+    "Command BRAM, DMA/GEMM executors, bank payload data, tensor arithmetic, full model and board behavior are outside this packet."
+  ],
+  "skill_update_candidate": "fpga-systemverilog could document Icarus 11.0 delta-loop behavior for dynamically indexed unpacked-array output writes and recommend XSIM signoff for this interface shape."
+}

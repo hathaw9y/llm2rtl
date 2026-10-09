@@ -1,0 +1,44 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed_as_expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "name": "contract_gate",
+      "status": "passed_structure_only",
+      "evidence": "contract_gate.json"
+    },
+    {
+      "name": "initial",
+      "status": "passed",
+      "evidence": "dev_checks.jsonl",
+      "logs_directory": "development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis or board work performed, as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface": "TopModule with one-bit output out only",
+    "behavior": "Continuous assignment of 1'b0; no state, clock, reset, or latency",
+    "numeric": "Explicit one-bit zero constant",
+    "static_review": "Single driver; no dependencies, state, latches, or simulation-only RTL"
+  },
+  "verification_coverage": "Independent literal-zero oracle checks initial settled time, 1 ps, 1 ns, and 100 subsequent samples; rejects X/Z and later nonzero transitions; fatal timeout at 200 ns.",
+  "initial_snapshot_unchanged": true
+}

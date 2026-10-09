@@ -1,0 +1,56 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "d": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 1
+      }
+    },
+    "evidence": "Original names clk, d, q; single D flip-flop requires q to expose stored data."
+  },
+  "semantics": {
+    "capture": "At every positive edge of clk, q takes d sampled at that edge, using nonblocking assignment.",
+    "hold": "q holds between positive edges, including falling edges.",
+    "reset": "No reset port or reset behavior specified; none added.",
+    "initialization": "No initial value specified; leave register uninitialized. Simulation begins unknown until first capture.",
+    "latency": "One flip-flop; captured value visible after the positive-edge NBA update; no additional stages.",
+    "evidence": "The module should implement a single D flip-flop. Assume all sequential logic is triggered on the positive edge of the clock."
+  },
+  "numeric": {
+    "data_width": 1,
+    "clock_width": 1,
+    "arithmetic": "None; preserve sampled four-state simulation value."
+  },
+  "verification": {
+    "top": "dev_tb",
+    "oracle": "Independent expected stored value derived from original D flip-flop semantics.",
+    "sampling": "Drive d away from positive edges; check after NBA settling; check hold before edges and after falling edges.",
+    "cases": [
+      "0 and 1 capture",
+      "repeated values",
+      "d changes with clock low and high",
+      "falling-edge hold",
+      "unknown and high-impedance capture and recovery"
+    ],
+    "initial_state": "No specified power-up value; no requirement asserted before first edge.",
+    "timeout": "Bounded simulation watchdog with fatal; PASS only after all comparisons.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Original interface says input q although a single D flip-flop requires an output.",
+      "resolution": "Interpret q as output, retaining its name and one-bit width, to implement the explicit requested flip-flop functionality.",
+      "limitation": "Literal all-input interface would provide no observable flip-flop output; direction interpretation is necessary."
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "areset": {
+        "direction": "input",
+        "width": 1
+      },
+      "x": {
+        "direction": "input",
+        "width": 1
+      },
+      "z": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "encoding": {
+      "type": "one-hot",
+      "A": "01",
+      "B": "10"
+    },
+    "clock": "positive edge",
+    "reset": "asynchronous active-high; selects A immediately and holds A while asserted",
+    "initialization": "No power-up state specified; verification applies after reset",
+    "transitions": {
+      "A,x=0": "A",
+      "A,x=1": "B",
+      "B,x=0": "B",
+      "B,x=1": "B"
+    },
+    "output": "Combinational Mealy output: in A z=x; in B z=~x. After reset settles z=x, including while reset is asserted. No registered output or additional latency."
+  },
+  "numeric": {
+    "data": "single binary bit per cycle",
+    "behavior": "copy bits through first 1 inclusive, then complement subsequent bits; FSM implements serial two's complement",
+    "arithmetic": "Boolean operations only; no signed arithmetic, rounding, saturation or overflow",
+    "state_width": 2
+  },
+  "verification": {
+    "oracle": "Independent single Boolean seen_one flag, cleared by asynchronous reset and set on rising edge with x=1; expected z is x XOR seen_one",
+    "coverage": [
+      "All four state/input transitions",
+      "Input changes between clock edges to verify Mealy response",
+      "Reset assertion between edges from B, reset held over edges, release without state change",
+      "Exhaust all 256 eight-bit serial words; compare pre-edge output to modulo-256 negation bit and post-edge output to updated oracle",
+      "Check one-hot state after reset and each clock"
+    ],
+    "tools": "Icarus Verilog v12, explicit dev_tb top, -g2012; finite compile and simulation timeouts"
+  },
+  "specification_ambiguities": [
+    "Power-up state before reset and behavior of illegal one-hot encodings are unspecified; no tests demand either."
+  ]
+}

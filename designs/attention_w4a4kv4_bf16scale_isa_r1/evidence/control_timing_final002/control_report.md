@@ -1,0 +1,3 @@
+Control timing-fix self-verification PASS. Current control_timing009 binds active RTL and TB; RELEASE intent directly rejects every raw completion valid, with full identity/fault-first checks and wrapper atomic owner legality retained. Both command latencies1 and2 pass38 cases, including the prior latefault cases and four rightful-owner high-address read/write aliases.
+
+Control-only strict lint is empty and5ns OOC passes WNS0.219ns/WHS0.071ns/WPWS1.958ns with no failing endpoints. Resources are6978LUT/3119FF/38RAMB36. Arithmetic peers are mocked in this control-only proof. Actualtop integration/timing and independent control review remain separate; historical evidence is untouched.

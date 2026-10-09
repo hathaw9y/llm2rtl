@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "in": "8 bits [7:0]"
+    },
+    "outputs": {
+      "out": "8 bits [7:0]"
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "mapping": "For each i from 0 through 7, out[i] = in[7-i].",
+    "timing": "Combinational continuous mapping; no clock, reset, or added latency. Evidence: original interface contains only in and out and requests bit reversal.",
+    "initialization": "No stored state or specified initialization; output follows input, including unknown bits."
+  },
+  "numeric": {
+    "width": 8,
+    "operation": "Bit permutation only; no arithmetic or signed interpretation.",
+    "four_state": "Preserve each input bit value, including X and Z, at its reversed position."
+  },
+  "verification": {
+    "oracle": "Derived from original bit reversal requirement using indexed expected bits.",
+    "coverage": "Exhaust all 256 binary inputs; directed endpoints, alternating patterns, one-hot patterns, and mixed X/Z values.",
+    "sampling": "Drive input then wait 1 ns for combinational settling before case-inequality checks.",
+    "failure": "$fatal on mismatch or bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": []
+}

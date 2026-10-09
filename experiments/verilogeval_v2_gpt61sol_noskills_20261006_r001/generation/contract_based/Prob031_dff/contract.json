@@ -1,0 +1,26 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": "one-bit input", "d": "one-bit input", "q": "one-bit output reg"},
+    "evidence": "Original names clk, d, q and all ports one bit; q direction resolved from single D flip-flop requirement."
+  },
+  "semantics": {
+    "edge": "On each positive edge of clk, q takes the sampled d value using a nonblocking assignment.",
+    "hold": "q retains its sampled value between positive edges, including negative edges.",
+    "reset": "No reset port or reset behavior appears in the original specification; none is added.",
+    "initialization": "No initial value is specified; RTL has no initialization and simulation q is unknown until its first capture.",
+    "latency": "q updates in the nonblocking update phase of the same positive clock edge."
+  },
+  "numeric": {"width": 1, "representation": "single four-state logic bit; no arithmetic or signed interpretation"},
+  "verification": {
+    "oracle": "Derived from the original single D flip-flop and positive-edge statements.",
+    "sampling": "Check after nonblocking updates, using a one-nanosecond settling delay.",
+    "cases": ["initial uninitialized simulation state", "capture zero and one", "hold on d changes", "hold on falling edges", "repeated captures", "capture four-state unknown"],
+    "completion": "Self-checking dev_tb with fatal mismatches, bounded timeout and explicit PASS; fixed dev_check.py initial evaluation."
+  },
+  "specification_ambiguities": [
+    {"issue": "Original interface lists input q, inconsistent with implementing a single D flip-flop with observable state.", "resolution": "Use output reg q as the flip-flop state, retaining original port names and one-bit widths.", "limitation": "Literal input-q direction cannot simultaneously provide the requested flip-flop output."},
+    {"issue": "Initial state is unspecified.", "resolution": "Do not add initialization; pre-edge unknown check verifies simulation behavior of the uninitialized implementation, not a promised hardware power-up state."}
+  ]
+}

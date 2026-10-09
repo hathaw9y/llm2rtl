@@ -1,0 +1,17 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "reset": 1, "data": 1, "done_counting": 1, "ack": 1}, "outputs": {"shift_ena": 1, "counting": 1, "done": 1}},
+  "semantics": {
+    "clock": "All sequential logic updates on positive clk edges, as explicitly specified.",
+    "reset": "Active-high synchronous reset has priority and enters empty pattern search; outputs become zero after reset edge.",
+    "search": "Sample data each search edge; recognize contiguous 1101 with overlapping prefixes, including extra leading ones.",
+    "shift": "The edge accepting the final 1 of 1101 enters shifting. shift_ena is high for exactly four full clock intervals; the next four edges accept the four additional bits. Then enter counting.",
+    "count": "counting remains high until a positive edge samples done_counting high, then done becomes high.",
+    "acknowledge": "done remains high until a positive edge samples ack high, then empty search resumes. Inputs irrelevant to current phase are ignored; ack edge does not consume data.",
+    "outputs": "Moore outputs: shift_ena only during shifting, counting only during counting, done only during notification. Mutually exclusive.",
+    "initialization": "Original problem specifies synchronous reset but no power-up state; no pre-reset output value is required."
+  },
+  "numeric": {"ports": "All ports are one bit", "state": "Ten states fit in four unsigned bits", "arithmetic": "No datapath arithmetic or counters are included"},
+  "verification": {"oracle": "Independent behavioral model based on original prose: sliding four-bit search history, four-cycle shift budget, counting and acknowledgment phases", "sampling": "Drive on negative edges, compare after positive-edge updates and before edges to check synchronous behavior", "cases": "Overlapping prefixes, four shift cycles, irrelevant control inputs, held completion/ack, immediate and delayed completion, reset in every phase, exhaustive short streams and deterministic random trials", "runner": "python3 dev_check.py --label initial; bounded timeout and fatal mismatches"},
+  "specification_ambiguities": ["No power-up behavior is specified; verification starts with a sampled synchronous reset.", "Prose does not explicitly describe overlap fallback; continuous search for occurrence of 1101 requires retaining valid suffix prefixes."]
+}

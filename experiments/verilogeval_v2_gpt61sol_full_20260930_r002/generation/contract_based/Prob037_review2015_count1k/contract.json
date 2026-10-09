@@ -1,0 +1,55 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "clk": "input 1 bit",
+      "reset": "input 1 bit",
+      "q": "output unsigned 10 bits"
+    }
+  },
+  "semantics": {
+    "clock": "All sequential logic triggered on positive clock edge (problem.txt).",
+    "reset": "Active-high synchronous: q becomes 0 at a positive edge with reset high; priority over increment (problem.txt).",
+    "count": "After reset, each positive edge with reset low advances modulo 1000: 0 through 999 inclusive (problem.txt).",
+    "between_edges": "q holds between positive edges.",
+    "initialization": "No power-up value specified; no DUT initializer and no oracle requirement before the first reset edge."
+  },
+  "numeric": {
+    "width": 10,
+    "range": [
+      0,
+      999
+    ],
+    "period_cycles": 1000,
+    "wrap": "999 advances to 0, rather than natural 10-bit overflow.",
+    "increment": "Unsigned 10-bit increment by one."
+  },
+  "verification": {
+    "oracle": "Independent integer elapsed-cycle model modulo 1000 derived from original problem.",
+    "sampling": "Drive reset away from rising edges; compare q after NBA updates, and check stability at falling edges and off-edge reset changes.",
+    "cases": [
+      "initial synchronous reset",
+      "held reset",
+      "multiple full 1000-cycle periods",
+      "999 to 0 boundary",
+      "mid-count reset",
+      "reset at terminal value",
+      "reset pulse wholly between rising edges"
+    ],
+    "failure": "$fatal on mismatch; bounded timeout; final PASS only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Power-up q",
+      "evidence": "Original problem specifies synchronous reset but no initial value.",
+      "resolution": "Do not require a value before a reset edge."
+    },
+    {
+      "topic": "Unreachable values 1000 through 1023",
+      "evidence": "Original sequence is 0 through 999; no illegal-state recovery specified.",
+      "resolution": "Do not inject or impose recovery behavior for unreachable states."
+    }
+  ]
+}

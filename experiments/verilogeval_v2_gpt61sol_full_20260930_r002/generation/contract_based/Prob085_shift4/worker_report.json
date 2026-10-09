@@ -1,0 +1,62 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790749729.8571165,
+      "source_sha256": "1e2c3d40639d8549e25179c352f2b6d38670813eb266e3f89ab9db2765afab1f",
+      "testbench_sha256": "277eb957450103a244c48cb061771451928a0c099c2cb7f6ba9f848a9a6da13f",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob085_shift4/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.010646559298038483
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS dev_tb checks=625\ndev_tb.sv:87: $finish called at 3126000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.007847484201192856
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_gate": "passed_structure_only",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Power-up contents are unspecified by the original problem; testbench establishes known state by reset.",
+    "No synthesis or board work performed as instructed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation_summary": "Four-bit unsigned register; positive-edge clock; asynchronous active-high reset; load then logical right-shift priority; implicit hold; no extra latency or ports.",
+  "verification_summary": "625 assertions including all 16 starting values and four control combinations, zero-fill and shift-out boundaries, off-edge asynchronous reset, held reset priority, deassertion and between-edge stability.",
+  "skills_applied": [
+    "fpga-systemverilog",
+    "hdl-generation-verification contract practices"
+  ],
+  "skill_overrides": "Original TopModule ports, asynchronous positive reset and single-agent benchmark flow override generic naming, reset, reuse, integration and synthesis conventions."
+}

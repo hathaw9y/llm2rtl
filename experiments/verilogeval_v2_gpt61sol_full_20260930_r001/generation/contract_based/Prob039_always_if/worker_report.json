@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structural gate only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS",
+      "details": "Exact six one-bit ports and module name; continuous mux assignment and complete combinational if/else; no state, latches, arithmetic, or DUT simulation constructs."
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "result": "FAIL: compiler process crashed",
+      "log": "development_compile.log"
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT RUN: compilation failed"
+    }
+  ],
+  "development_outcome": "Initial RTL delivered without revisions. Frozen contract passed structural validation. Independent self-checking testbench prepared, but compiler crashed; simulation success is not claimed.",
+  "limitations": [
+    "No successful development simulation because Icarus compilation exited 139.",
+    "X/Z behavior unspecified and not tested.",
+    "No synthesis or board work performed.",
+    "Official evaluation is external and its results are unavailable."
+  ],
+  "contract_corrections": []
+}

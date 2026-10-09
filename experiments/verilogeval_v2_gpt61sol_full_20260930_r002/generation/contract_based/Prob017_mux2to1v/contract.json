@@ -1,0 +1,46 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "a": "input [99:0]",
+      "b": "input [99:0]",
+      "sel": "input scalar",
+      "out": "output [99:0]"
+    },
+    "evidence": "Original interface explicitly lists two 100-bit inputs, one select bit, and a 100-bit output."
+  },
+  "semantics": {
+    "function": "sel=0 selects a; sel=1 selects b, preserving every bit.",
+    "timing": "Combinational, no clock or added latency; observe after delta-cycle settling.",
+    "reset": "None: original interface has no reset.",
+    "initialization": "No stored state or specified initial output; output follows current inputs.",
+    "evidence": "Original states 2-1 multiplexer and gives both select cases; no sequential behavior or clock ports."
+  },
+  "numeric": {
+    "width": 100,
+    "interpretation": "Opaque bit vectors, no arithmetic or signed extension.",
+    "bit_mapping": "out[i] equals selected input[i] for i=0..99.",
+    "rounding_overflow": "Not applicable."
+  },
+  "verification": {
+    "oracle": "From original: independent explicit if/else selection for known sel.",
+    "sampling": "Drive inputs then wait #1 for combinational settling; no clock/reset stimulus.",
+    "coverage": [
+      "zero and all-one operands",
+      "complementary alternating patterns",
+      "every single bit in both inputs",
+      "selected and unselected operand changes",
+      "selector toggles",
+      "random full-width inputs",
+      "selected X/Z data with known selector"
+    ],
+    "failure": "Case-inequality mismatches trigger $fatal; bounded timeout; PASS only after all cases."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "sel X/Z behavior is not specified.",
+      "resolution": "Use standard conditional-operator mux semantics; do not assert unspecified selector behavior in development oracle."
+    }
+  ]
+}

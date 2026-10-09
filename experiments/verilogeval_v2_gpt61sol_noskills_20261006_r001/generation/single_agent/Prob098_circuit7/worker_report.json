@@ -1,0 +1,16 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "evidence": "development/01", "compile_returncode": 0, "simulation_returncode": 0}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "The waveform is interpreted as input changes at rising-edge timestamps occurring after sampling the preceding input value."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Positive-edge register of the inverse of a, with no initialization or reset.",
+  "verification": "Replays every original waveform timestamp with same-edge input transitions after sampling, then checks off-edge changes, rising-edge sampling, falling-edge stability, and unknown propagation/recovery."
+}

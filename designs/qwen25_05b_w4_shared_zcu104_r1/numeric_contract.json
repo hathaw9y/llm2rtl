@@ -1,0 +1,27 @@
+{
+  "status": "selected_by_agent_under_user_delegation",
+  "FP32": "RNE, no FMA; input/output subnormals flushed to signed zero. Finite arithmetic overflow/nonfinite input produces identified error, no valid destination commit.",
+  "BF16": "RNE conversion and arithmetic boundaries per agreed nonlinear_rounding_decision; BF16 subnormals flushed to signed zero.",
+  "GEMM": "Adjacent tree16 followed by sequential K16 step accumulation; group128 FP32 scale then sequential group output accumulation. Zero K-tail lanes.",
+  "RMSNorm": "FP32 tree16/serial sum, multiply FP32(1/896), add FP32(1e-6); rsqrt normalized256 midpoint LUT,3 unfused Newton steps and exponent adjustment. BF16 before gamma.",
+  "Softmax": "BF16 QK and score/8; causal masked entries excluded from exp and denominator, probability0. Stable exp2: FP32(x*log2e),256 segments linear interpolation, exponent scale; FTZ below FP32 normal range. FP32 tree16/serial sum; reciprocal256 seed LUT with2 Newton steps. BF16 probabilities.",
+  "SiLU": "Stable sigmoid via exp(-abs(x)) and reciprocal(1+exp); sign selection; BF16 SiLU before up multiply.",
+  "RoPE": "Pinned default table; BF16 products independently rounded, then BF16 sum. No fused product/add.",
+  "nonlinear_unit_test_bounds": {
+    "rsqrt_relative": 3e-07,
+    "reciprocal_relative": 3e-07,
+    "exp_relative_on_minus80_to0": 6e-06
+  },
+  "ISA_vs_quantized_reference": {
+    "logits_relative_l2_max": 0.05,
+    "logits_cosine_min": 0.995,
+    "KV_relative_l2_max": 0.05,
+    "current_small_observation": "bit-identical logits and all-layer KV; see fresh report"
+  },
+  "original_BF16_quality_probe": {
+    "relative_l2_max": 0.35,
+    "cosine_min": 0.9,
+    "status": "failed_small_probe; no original-model quality acceptance claim"
+  },
+  "hardware_golden": "RTL must exactly match selected arithmetic and golden words; quality tolerances never excuse RTL/interpreter mismatch."
+}

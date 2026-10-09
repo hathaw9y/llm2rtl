@@ -1,0 +1,67 @@
+{
+  "schema": "llm2rtl.subagent_result.v1",
+  "status": "passed",
+  "design_id": "llama32_1b_w4a4kv4_seq",
+  "revision": "r1",
+  "module_id": "isa_command_dispatcher",
+  "contract_sha256": "00bc8ef6dcacd9f7a6019672d4c8c9a275889cc50ef587c509a4bec9db406612",
+  "source_sha256": "c82eee841899d20f363131599ce7bea8a12f0759547060f3e15bc90a5a6cc502",
+  "source_manifest_sha256": "fd3e5c41bcce451f90258d1bda2fb93b80a4417b8ba94309d48912849979a752",
+  "test_vector_sha256": "7692e7858880f9d22bd70200fe7e46a61b9b0dd95dc0e46f526e31a246b7dedc",
+  "verification_report_sha256": "65e55846d5bcdee11ee96c45043b2669dfffa116fbc35d38189ca78258527314",
+  "changed_files": [
+    "designs/llama32_1b_w4a4kv4_seq_r1/rtl/isa_command_dispatcher.sv",
+    "designs/llama32_1b_w4a4kv4_seq_r1/tb/tb_isa_command_dispatcher.sv",
+    "designs/llama32_1b_w4a4kv4_seq_r1/scripts/run_dispatcher_verification.tcl",
+    "designs/llama32_1b_w4a4kv4_seq_r1/evidence/isa_command_dispatcher/kernel_report.json",
+    "designs/llama32_1b_w4a4kv4_seq_r1/evidence/isa_command_dispatcher/module_ooc_synthesis_report.json",
+    "designs/llama32_1b_w4a4kv4_seq_r1/evidence/isa_command_dispatcher/subagent_result.json"
+  ],
+  "generated_evidence_files": [
+    "drc_post_synth.rpt",
+    "golden_model.log",
+    "isa_command_dispatcher_post_synth.dcp",
+    "iverilog_sim.log",
+    "methodology_post_synth.rpt",
+    "timing_external_io_hold_failure.rpt",
+    "timing_post_synth.rpt",
+    "utilization_post_synth.rpt",
+    "verilator_lint.log",
+    "vivado_ooc.log",
+    "vivado_ooc_external_io_hold_failure.log",
+    "vivado_ooc_first_failure_invalid_clk_src.log",
+    "vivado_ooc_pass_before_io_constraints.log",
+    "vivado_ooc_second_failure_invalid_clk_src.log",
+    "vivado_ooc_third_failure_tcl_collection.log",
+    "vivado_version.log",
+    "xelab.log",
+    "xsim.log",
+    "xsim_direct.log",
+    "xvlog.log",
+    "vivado_ooc_work/project/dispatcher_ooc.cache/wt/project.wpc",
+    "vivado_ooc_work/project/dispatcher_ooc.cache/wt/synthesis.wdf",
+    "vivado_ooc_work/project/dispatcher_ooc.hw/dispatcher_ooc.lpr",
+    "vivado_ooc_work/project/dispatcher_ooc.xpr"
+  ],
+  "commands": [
+    "python3 scripts/check_common_contracts.py",
+    "python3 scripts/check_isa_design.py --design-dir designs/llama32_1b_w4a4kv4_seq_r1 --module isa_command_dispatcher --expected-module-sha256 00bc8ef6dcacd9f7a6019672d4c8c9a275889cc50ef587c509a4bec9db406612",
+    "python3 designs/llama32_1b_w4a4kv4_seq_r1/run_dispatcher_model.py",
+    "verilator --lint-only --Wall --Wno-fatal designs/llama32_1b_w4a4kv4_seq_r1/rtl/isa_command_dispatcher.sv",
+    "xvlog --sv <rtl> <tb>; xelab tb_isa_command_dispatcher -s tb_dispatcher_sim; execute generated xsimk snapshot and require exact PASS marker",
+    "vivado -mode batch -source designs/llama32_1b_w4a4kv4_seq_r1/scripts/run_dispatcher_verification.tcl"
+  ],
+  "evidence": {
+    "simulation": "xsim_direct.log",
+    "verilator": "verilator_lint.log",
+    "vivado": "vivado_ooc.log",
+    "kernel_report": "kernel_report.json",
+    "ooc_report": "module_ooc_synthesis_report.json"
+  },
+  "remaining_risks": [
+    "The XSIM wrapper launcher failed with an internal Tcl exception; direct execution of its generated xsimk snapshot passed and the wrapper failure was retained.",
+    "OOC external-port hold paths are not physical board paths and are explicitly excluded; fresh in-context timing is required after integration.",
+    "DMA/GEMM executors, command BRAM wrapper, tensor arithmetic, full model, and board behavior remain outside this packet."
+  ],
+  "skill_update_candidate": null
+}

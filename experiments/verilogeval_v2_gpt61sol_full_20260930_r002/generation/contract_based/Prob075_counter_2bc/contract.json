@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "areset": 1, "train_valid": 1, "train_taken": 1}, "outputs": {"state": 2}},
+  "semantics": {"clock": "posedge clk, per original final sentence", "reset": "posedge areset asynchronous, active high; resets to 2'b01 per original reset sentence; reset has priority while asserted", "training": "On each rising clock edge with reset low and train_valid high, increment if train_taken high, otherwise decrement", "hold": "train_valid low leaves state unchanged", "latency": "state updates at the triggering edge with no additional pipeline cycles", "initialization": "No power-up initialization specified; no initial value is imposed"},
+  "numeric": {"representation": "unsigned 2-bit counter", "range": [0, 3], "increment": "min(state + 1, 3)", "decrement": "max(state - 1, 0)", "reset_value": 1},
+  "verification": {"oracle": "Independent integer bounded-step model derived from original problem", "sampling": "Drive training before rising edge and inspect after nonblocking assignments; check asynchronous reset away from clock edges", "coverage": "All four states and training input combinations; saturation, disabled hold, reset priority, reset release, falling-edge and between-edge stability", "evaluator": "python3 dev_check.py --label initial", "timeout": "Bounded simulation timeout with fatal mismatches and final PASS marker"},
+  "specification_ambiguities": ["Power-up value before the first reset is unspecified; verification does not require a particular initial value."]
+}

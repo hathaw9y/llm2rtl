@@ -1,0 +1,62 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790746574.0926154,
+      "source_sha256": "4ccb950c13bb719a007365c38175793cb22ca24b7e7578afcaa1283f6713ade1",
+      "testbench_sha256": "bcf2198241b2db09648cd0f5af7e3f7f5de860de612a92543c154b58725bed0e",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob052_gates100/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.010764243081212044
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: 1310 combinational gate checks\ndev_tb.sv:75: $finish called at 1310000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.3434249619022012
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation was not accessed and remains pending.",
+    "Exhaustive enumeration of all 2^100 binary inputs was not performed.",
+    "X/Z behavior is unspecified by the original problem; supplemental tests use standard SystemVerilog gate semantics.",
+    "No synthesis or board work performed, as required."
+  ],
+  "justified_changes": {
+    "rtl": [],
+    "testbench": [],
+    "contract": []
+  },
+  "implementation": "Three continuous reduction assignments implementing 100-input AND, OR, and XOR, with exact original ports and no state or added latency.",
+  "verification": "Independent population-count binary oracle; all-zero/all-one, every single-one/single-zero position, population counts 0..100, alternating patterns, 1000 randomized inputs, and five supplemental four-state cases. 1310 checks passed.",
+  "contract_gate": "passed_structure_only",
+  "environment_smoke": "passed: correct fixture passed, deliberate fault failed, repaired fixture passed",
+  "initial_snapshot": "candidate_initial.sv is byte-identical to candidate.sv",
+  "static_review": "Exact TopModule ports; 100-bit unsigned input and one-bit outputs; combinational only; no latches, registers, dependencies, or testbench constructs in RTL."
+}

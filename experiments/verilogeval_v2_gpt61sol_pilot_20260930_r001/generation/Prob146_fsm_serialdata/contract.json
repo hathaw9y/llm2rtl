@@ -1,0 +1,28 @@
+{
+  "status": "frozen",
+  "module": "TopModule",
+  "interface": {
+    "clk": "input 1 bit",
+    "in": "input 1 bit",
+    "reset": "input 1 bit",
+    "out_byte": "output 8 bits",
+    "done": "output 1 bit"
+  },
+  "semantics": "Sample in on every rising edge. Idle zero begins frame; next eight samples fill bits 0 through 7. A one at the ninth sample validates frame and pulses done. A zero at expected stop enters recovery; first later one returns to idle without reporting an invalid byte. Next sample may start a new frame.",
+  "numeric_widths": {
+    "data": 8,
+    "bit_index": 3,
+    "state": 2
+  },
+  "latency_reset": "done asserted immediately after valid stop sampling edge for one cycle; active-high synchronous reset aborts reception and clears done. out_byte meaningful only with done.",
+  "ambiguities": [
+    "Interpret assert done each time it finds a stop bit as valid expected stop only, consistent with correctly received byte requirement; recovery delimiter does not validate malformed frame."
+  ],
+  "verification_plan": [
+    "All 256 byte values with back-to-back frames",
+    "Idle ones",
+    "Invalid stop with prolonged zeros then recovery one",
+    "Reset during data and recovery",
+    "Cycle-specific done and data checks"
+  ]
+}

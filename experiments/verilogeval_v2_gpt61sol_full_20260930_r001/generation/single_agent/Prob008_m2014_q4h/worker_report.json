@@ -1,0 +1,32 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "TopModule has the specified one-bit ports and a continuous assign out = in; no state, clock, reset, or latch."
+    },
+    {
+      "name": "Icarus development compile",
+      "result": "failed",
+      "exit_code": 139,
+      "details": "Used the specified Icarus path with -g2012 -Wall -s dev_tb and a 20-second timeout. No diagnostic output or executable was produced.",
+      "log": "compile.log",
+      "exit_code_file": "compile.exitcode"
+    },
+    {
+      "name": "vvp development simulation",
+      "result": "failed",
+      "exit_code": 255,
+      "details": "The matching vvp was invoked with a 20-second timeout; it could not open the missing dev_sim executable.",
+      "log": "simulation.log",
+      "exit_code_file": "simulation.exitcode"
+    }
+  ],
+  "development_outcome": "Initial synthesizable RTL delivered unchanged. candidate_initial.sv was preserved before development checks. Independent self-checking dev_tb.sv covers propagation of 0, 1, X, and Z, but simulation did not complete because compilation failed.",
+  "limitations": [
+    "No successful development simulation; compile tool exited with code 139.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing, or board validation performed."
+  ]
+}

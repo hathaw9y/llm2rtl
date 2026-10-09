@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "passed",
+      "details": "TopModule has exact 256-bit in, 8-bit sel, and 1-bit out ports. Continuous assignment out = in[sel] implements combinational selection for all 256 selector values without state or latches."
+    },
+    {
+      "name": "Icarus development compilation",
+      "result": "tool_failed",
+      "exit_status": 139,
+      "timeout_seconds": 20,
+      "details": "Used specified Icarus binary with -g2012 -Wall and explicit top dev_tb. No executable was produced.",
+      "log": "compile.log"
+    },
+    {
+      "name": "development simulation",
+      "result": "could_not_run",
+      "timeout_seconds": 20,
+      "details": "Matching vvp reported dev_sim: Unable to open input file. Independent testbench contains 131072 one-hot and one-cold selection comparisons and an internal timeout, but these checks did not execute.",
+      "log": "simulation.log"
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate delivered unchanged; candidate_initial.sv preserved before development checks. Static review passed, but development simulation was unavailable due to compiler failure.",
+  "limitations": [
+    "No successful development simulation.",
+    "No synthesis, timing analysis, or board validation performed.",
+    "Official evaluation results are unavailable."
+  ]
+}

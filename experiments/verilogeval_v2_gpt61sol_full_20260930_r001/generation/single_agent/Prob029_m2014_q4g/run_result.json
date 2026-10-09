@@ -1,0 +1,175 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob029_m2014_q4g",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob029_m2014_q4g",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob029_m2014_q4g/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790730323.1048272,
+    "ended_at_unix": 1790730372.8788054,
+    "seconds": 49.77397894859314,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 70466,
+      "cached_input_tokens": 52224,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1092,
+      "reasoning_output_tokens": 10
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "e2b2d738f60e3912e14c13ef8e43a8290c6a37461ae70f01550c62f3129c95a0",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "pass",
+        "details": "Exact TopModule scalar interface; continuous XNOR then XOR; no state, latch, clock, reset, or added latency."
+      },
+      {
+        "name": "Icarus development compile",
+        "result": "pass",
+        "flags": "-g2012 -Wall -s dev_tb",
+        "timeout_seconds": 20,
+        "exit_code": 0,
+        "log": "compile.log"
+      },
+      {
+        "name": "Independent exhaustive binary simulation",
+        "result": "pass",
+        "cases": 8,
+        "timeout_seconds": 20,
+        "exit_code": 0,
+        "log": "simulation.log"
+      }
+    ],
+    "development_outcome": "Initial candidate passed all eight binary input combinations; no RTL revisions were needed. candidate_initial.sv was preserved before development checks.",
+    "limitations": [
+      "Official evaluation was not accessed or run; its result is unknown.",
+      "Development simulation covered binary inputs only.",
+      "No synthesis, timing analysis, or board validation was performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "e2b2d738f60e3912e14c13ef8e43a8290c6a37461ae70f01550c62f3129c95a0",
+      "Prob029_m2014_q4g_ref.sv": "46c5adb0e545bcbeba7d3041aca7f51df223640e7dab8c8d6baa3a45d8181228",
+      "Prob029_m2014_q4g_test.sv": "7de0c3687b27a0e7d167da37689c3c2559c9fac00d861dc1c995929c16921738"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob029_m2014_q4g_test.sv",
+        "Prob029_m2014_q4g_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013872806914150715
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb029_m2014_q4g_test.sv:16: $finish called at 501 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 100 samples\n\nSimulation finished at 501 ps\nMismatches: 0 in 100 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007571769878268242
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "e2b2d738f60e3912e14c13ef8e43a8290c6a37461ae70f01550c62f3129c95a0",
+      "Prob029_m2014_q4g_ref.sv": "46c5adb0e545bcbeba7d3041aca7f51df223640e7dab8c8d6baa3a45d8181228",
+      "Prob029_m2014_q4g_test.sv": "7de0c3687b27a0e7d167da37689c3c2559c9fac00d861dc1c995929c16921738"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob029_m2014_q4g_test.sv",
+        "Prob029_m2014_q4g_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01253619883209467
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb029_m2014_q4g_test.sv:16: $finish called at 501 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 100 samples\n\nSimulation finished at 501 ps\nMismatches: 0 in 100 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.00733557902276516
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

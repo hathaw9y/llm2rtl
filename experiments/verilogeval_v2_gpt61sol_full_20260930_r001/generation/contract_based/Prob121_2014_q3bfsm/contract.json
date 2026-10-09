@@ -1,0 +1,70 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "x": {
+        "direction": "input",
+        "width": 1
+      },
+      "z": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "All sequential updates occur at the positive edge of clk.",
+    "reset": "Synchronous active-high reset has priority over x and sets state to 000 on a rising edge. No asynchronous output reset.",
+    "initialization": "No specified power-up state; functional checks begin after a reset edge.",
+    "state_width": 3,
+    "transitions": {
+      "000": {
+        "0": "000",
+        "1": "001"
+      },
+      "001": {
+        "0": "001",
+        "1": "100"
+      },
+      "010": {
+        "0": "010",
+        "1": "001"
+      },
+      "011": {
+        "0": "001",
+        "1": "010"
+      },
+      "100": {
+        "0": "011",
+        "1": "100"
+      }
+    },
+    "output": "Combinational Moore output: z=1 in states 011 and 100; z=0 in states 000, 001, 010. After an edge z reflects the updated state. Input x alone does not change z between edges."
+  },
+  "numeric": {
+    "state_encoding": "Exact unsigned three-bit encodings from the supplied table.",
+    "arithmetic": "No arithmetic, rounding, saturation or overflow operations.",
+    "inputs": "Transition specification applies to binary x and reset."
+  },
+  "verification": {
+    "oracle": "Independent integer-state transition lookup derived solely from the problem table; compare externally observable z.",
+    "coverage": "Enumerate all 1024 binary input sequences of length 10 starting from reset; require each of the ten legal state/input transitions to be visited.",
+    "reset": "Test reset dominance for x=0 and x=1 from every reachable legal state; test assertion and deassertion between edges do not asynchronously change z.",
+    "timing": "Check z before and after rising edges and after x changes between edges.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top, matching vvp; finite external timeouts and testbench watchdog."
+  },
+  "specification_ambiguities": [
+    "Power-up state before a sampled reset is unspecified.",
+    "Transitions and outputs for unused encodings 101, 110, 111 are unspecified; implementation may recover to 000 and decode z as 0, with no verification claim for those encodings.",
+    "Unknown or high-impedance inputs are unspecified."
+  ]
+}

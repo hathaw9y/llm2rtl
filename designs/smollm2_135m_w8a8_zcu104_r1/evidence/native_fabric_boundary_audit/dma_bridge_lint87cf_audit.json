@@ -1,0 +1,96 @@
+{
+  "source_sha256": "87cf7bd77e8ada34c3a0b9df44c7481aa33517d145a606087f390d39c76cbe17",
+  "argv": [
+    "verilator",
+    "--lint-only",
+    "-Wall",
+    "--top-module",
+    "smollm2_dma_transaction_bridge",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/scripts/dma_bridge_legacy_lint.vlt",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/datamover_engine_pkg.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/datamover_engine.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/mm2s_channel.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/s2mm_channel.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/datamover_command_queue.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/status_decoder.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/fifo.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/axis_width_converter.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/axis_width_up_converter.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/axis_width_down_converter.sv",
+    "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/pipeline.sv",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/native_fabric_boundary_audit/dma_bridge_replay06/src/smollm2_dma_transaction_bridge.sv"
+  ],
+  "actual_exit_code": 0,
+  "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "raw_log_bytes": 0,
+  "scope": "Newtop strictWall; exactlegacy sites only approved prior; immutable15source replay06",
+  "legacy_WIDTH_sites_verified": [
+    {
+      "file": "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv",
+      "sha256": "0606d2b72a34765c067cbbc9ca9962e98002c24c5bb7999d482be96837b16f00",
+      "line": 101,
+      "rule": "WIDTH",
+      "source_line": "      base_addr_r <= s_ctrl_mm2s_adapter_offset * 8 / BANK_DINA_WIDTH;",
+      "reason": "Bridge preflight bounds offset+BTT by native allocation<=589824; offset*8<=4718592 and BTT+15<=589839 fit32bits, word index<36864 fits19bits. Constant128 bit division/16byte mod exact. FIFO count/outstanding are unsigned credit<=4; 32bit implicit extension prevents narrow addition overflow.",
+      "parent_approved": true
+    },
+    {
+      "file": "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv",
+      "sha256": "59bc18e6c8a61f163423a22664a970e28ee853e6d4cf013657a4feda171368fa",
+      "line": 138,
+      "rule": "WIDTH",
+      "source_line": "      base_addr_r <= s_ctrl_s2mm_adapter_offset * 8 / BANK_DOUTB_WIDTH;",
+      "reason": "Bridge preflight bounds offset+BTT by native allocation<=589824; offset*8<=4718592 and BTT+15<=589839 fit32bits, word index<36864 fits19bits. Constant128 bit division/16byte mod exact. FIFO count/outstanding are unsigned credit<=4; 32bit implicit extension prevents narrow addition overflow.",
+      "parent_approved": true
+    },
+    {
+      "file": "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv",
+      "sha256": "59bc18e6c8a61f163423a22664a970e28ee853e6d4cf013657a4feda171368fa",
+      "line": 139,
+      "rule": "WIDTH",
+      "source_line": "      last_addr_r <= (s_ctrl_s2mm_adapter_btt + BYTES_PER_BEAT - 1) / BYTES_PER_BEAT - 1'b1;",
+      "reason": "Bridge preflight bounds offset+BTT by native allocation<=589824; offset*8<=4718592 and BTT+15<=589839 fit32bits, word index<36864 fits19bits. Constant128 bit division/16byte mod exact. FIFO count/outstanding are unsigned credit<=4; 32bit implicit extension prevents narrow addition overflow.",
+      "parent_approved": true
+    },
+    {
+      "file": "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv",
+      "sha256": "59bc18e6c8a61f163423a22664a970e28ee853e6d4cf013657a4feda171368fa",
+      "line": 140,
+      "rule": "WIDTH",
+      "source_line": "      if ((s_ctrl_s2mm_adapter_btt % BYTES_PER_BEAT) == 0) begin",
+      "reason": "Bridge preflight bounds offset+BTT by native allocation<=589824; offset*8<=4718592 and BTT+15<=589839 fit32bits, word index<36864 fits19bits. Constant128 bit division/16byte mod exact. FIFO count/outstanding are unsigned credit<=4; 32bit implicit extension prevents narrow addition overflow.",
+      "parent_approved": true
+    },
+    {
+      "file": "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv",
+      "sha256": "59bc18e6c8a61f163423a22664a970e28ee853e6d4cf013657a4feda171368fa",
+      "line": 143,
+      "rule": "WIDTH",
+      "source_line": "        last_keep_r <= {BANK_WEB_WIDTH{1'b1}} >> (BYTES_PER_BEAT - (s_ctrl_s2mm_adapter_btt % BYTES_PER_BEAT));",
+      "reason": "Bridge preflight bounds offset+BTT by native allocation<=589824; offset*8<=4718592 and BTT+15<=589839 fit32bits, word index<36864 fits19bits. Constant128 bit division/16byte mod exact. FIFO count/outstanding are unsigned credit<=4; 32bit implicit extension prevents narrow addition overflow.",
+      "parent_approved": true
+    },
+    {
+      "file": "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv",
+      "sha256": "59bc18e6c8a61f163423a22664a970e28ee853e6d4cf013657a4feda171368fa",
+      "line": 149,
+      "rule": "WIDTH",
+      "source_line": "                          && !enb_done_r && ((fifo_cnt_w + outstanding_cnt_r) < BANK_FIFO_DEPTH);",
+      "reason": "Bridge preflight bounds offset+BTT by native allocation<=589824; offset*8<=4718592 and BTT+15<=589839 fit32bits, word index<36864 fits19bits. Constant128 bit division/16byte mod exact. FIFO count/outstanding are unsigned credit<=4; 32bit implicit extension prevents narrow addition overflow.",
+      "parent_approved": true
+    }
+  ],
+  "range_proof": {
+    "max_allocation_bytes": 589824,
+    "max_offset_times8": 4718592,
+    "max_word_index": 36863,
+    "native_address_bits": 19,
+    "BTT_plus15_max": 589839,
+    "unsigned_credit_max": 4,
+    "constant_width_divisor": 128,
+    "bytes_per_native_beat": 16
+  },
+  "DUT_data_paths": "128bit passthrough mover/native with fullffffKEEP; actual load72+store8 andB7offsettransfers independentlyreplayed"
+}

@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract structural gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "PASS (passed_structure_only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "outcome": "FAIL: process exited 139; no diagnostic output",
+      "exit_code": 139,
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "outcome": "FAIL: executable unavailable after compile failure",
+      "exit_code": 255,
+      "log": "dev_simulation.log"
+    },
+    {
+      "name": "manual RTL review",
+      "outcome": "Reviewed eight data-edge count, valid stop pulse, delayed stop recovery, consecutive frames, synchronous reset priority, explicit counter widths, and synthesizable single-driver sequential logic."
+    }
+  ],
+  "development_outcome": "Contract structural validation passed. Initial candidate retained without RTL revisions. Development compile failed with exit 139; simulation success is not claimed.",
+  "limitations": [
+    "Independent self-checking testbench was written but could not execute because the requested compiler failed.",
+    "No official evaluation results available.",
+    "No synthesis, timing, or board checks performed.",
+    "Done pulse timing is the interpretation recorded in the frozen contract."
+  ],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

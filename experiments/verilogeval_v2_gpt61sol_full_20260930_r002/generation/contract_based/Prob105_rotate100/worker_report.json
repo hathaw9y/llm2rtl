@@ -1,0 +1,16 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "details": "Correct sequential fixture passed; deliberately wrong fixture failed; repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "details": "Icarus 12 compilation and matching vvp simulation succeeded; PASS 1023 rotator checks", "evidence_directory": "development/01"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification does not establish official correctness; official evaluation has not run.", "No synthesis or board work performed.", "Initial register value and unknown control behavior are unspecified; no defined initial value was imposed.", "Rising-edge sampling follows the conventional synchronous-register interpretation of the original description."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": "TopModule preserves all original ports and widths. At each rising edge, synchronous load takes priority; ena 01 rotates right, ena 10 rotates left, and 00/11 hold. No extra latency or reset.",
+  "verification": "Independent per-bit oracle grounded in the original problem. Drives controls on falling edges, checks no asynchronous q changes, and compares after rising-edge nonblocking updates. Covers load priority, hold, every one-hot bit, wraparound, full 100-step rotations, zero, ones, alternating data, and randomized payloads. Includes fatal mismatches and bounded timeout.",
+  "artifacts": ["contract.json", "candidate.sv", "candidate_initial.sv", "dev_tb.sv", "dev_checks.jsonl", "development/01"]
+}

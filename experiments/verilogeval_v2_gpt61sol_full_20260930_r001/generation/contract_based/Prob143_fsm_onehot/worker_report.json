@@ -1,0 +1,48 @@
+{
+  "revision_count": 0,
+  "contract_corrections": 0,
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (passed_structure_only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "compile_and_warning_check",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "PASS; exit 0, no diagnostics",
+      "log": "development_compile.log"
+    },
+    {
+      "name": "exhaustive_independent_table_simulation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "PASS; exit 0; 2048 binary cases",
+      "log": "development_simulation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "All 10 next-state bits and both outputs continuously assigned; no storage, clock/reset, latches, arithmetic, or dependencies. Multi-hot contributions OR together."
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "result": "PASS; candidate.sv and candidate_initial.sv are byte-identical"
+    }
+  ],
+  "development_outcome": "PASS: synthesizable combinational candidate follows frozen contract and exhaustive binary development oracle; no revisions required.",
+  "limitations": [
+    "X/Z behavior unspecified and not verified.",
+    "Contract gate validates structure only; behavioral evidence comes from independent development simulation.",
+    "Official evaluation not accessed or run; its results are unavailable.",
+    "No synthesis, timing analysis, or board validation performed."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  },
+  "interface_cycle_contract": "TopModule: in[0], state[9:0] inputs; next_state[9:0], out1, out2 outputs. Pure combinational logic; no reset or initialization; bit i denotes Si.",
+  "numeric_width_decisions": "Unsigned bitsets and 1-bit Boolean gates; no arithmetic or overflow.",
+  "pipeline_latency_and_ii": "No pipeline or transaction protocol; outputs follow combinational settling."
+}

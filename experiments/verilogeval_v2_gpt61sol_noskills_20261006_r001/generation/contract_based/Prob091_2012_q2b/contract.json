@@ -1,0 +1,28 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"y": "6-bit state vector [5:0]", "w": "1-bit transition input"},
+    "outputs": {"Y1": "1-bit next-state input for y[1]", "Y3": "1-bit next-state input for y[3]"}
+  },
+  "semantics": {
+    "encoding": {"A": "000001", "B": "000010", "C": "000100", "D": "001000", "E": "010000", "F": "100000"},
+    "Y1": "A transitions to B only when w=1: y[0] & w",
+    "Y3": "B, C, E, F transition to D when w=0: (y[1] | y[2] | y[4] | y[5]) & ~w",
+    "timing": "Combinational next-state logic; specification provides state y as an input and no clock port.",
+    "reset_initialization": "No reset or stored state is specified; no clock, reset, initialization, or latency is added."
+  },
+  "numeric": {
+    "widths": "All scalar ports one bit; y six bits.",
+    "operations": "One-bit Boolean bitwise logic, no arithmetic or signed interpretation."
+  },
+  "verification": {
+    "oracle": "Independent transition-table lookup for all six original one-hot states and both w values; expected outputs are bits 1 and 3 of destination state.",
+    "sampling": "Drive inputs and allow 1 ns combinational settling before checking.",
+    "coverage": "All 12 legal state/input pairs in both forward and reverse order.",
+    "failure": "Case inequality triggers $fatal; bounded watchdog; PASS printed only after all checks."
+  },
+  "specification_ambiguities": [
+    "Behavior for zero-hot, multi-hot, or X/Z state/input values is not specified by the assumed one-hot state encoding; implement direct incoming-transition Boolean equations without additional invalid-state handling."
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "y": {
+        "direction": "input",
+        "width": 6,
+        "range": "[5:0]"
+      },
+      "w": {
+        "direction": "input",
+        "width": 1
+      },
+      "Y1": {
+        "direction": "output",
+        "width": 1
+      },
+      "Y3": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "combinational next-state bit logic",
+    "state_encoding": {
+      "A": "000001",
+      "B": "000010",
+      "C": "000100",
+      "D": "001000",
+      "E": "010000",
+      "F": "100000"
+    },
+    "Y1": "Assert when current state is A and w=1; y[0] & w",
+    "Y3": "Assert when current state is B, C, E, or F and w=0; (y[1] | y[2] | y[4] | y[5]) & ~w",
+    "timing": "Outputs continuously follow current inputs; no clock or cycle latency, registers, reset, or initialization. External state flip-flops are not implemented.",
+    "legal_inputs": "One-hot y encodes one of the six states, w is binary.",
+    "invalid_inputs": "Zero-hot, multi-hot, and unknown-valued inputs are not specified by the original problem; no recovery logic is required."
+  },
+  "numeric": {
+    "representation": "Unsigned six-bit state vector and one-bit Boolean input and outputs",
+    "operations": "One-bit bitwise AND, OR, NOT only",
+    "arithmetic": "No arithmetic, rounding, truncation, saturation, or overflow applies."
+  },
+  "verification": {
+    "oracle": "Independent explicit transition table for all six states and both binary values of w. Compare whether destination is B (Y1) or D (Y3).",
+    "coverage": "All 12 legal state/input pairs in repeated forward and reverse traversal to exercise input changes.",
+    "tool": "Icarus v12 and matching vvp with -g2012 and explicit dev_tb top",
+    "timeout": "Each compile and simulation command limited to 20 seconds; testbench also has finite simulation watchdog.",
+    "review": "Check exact module/ports, complete combinational driving, no sequential elements and no extra behavior."
+  },
+  "specification_ambiguities": [
+    "Behavior for non-one-hot or X/Z-valued state/input signals is unspecified; verification covers the stated one-hot binary domain."
+  ]
+}

@@ -1,0 +1,453 @@
+{
+  "schema": "llm2rtl.isa_validation.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "status": "passed",
+  "scope": "functional Python interpreter and HF eager intermediate comparison for observed workloads only",
+  "model_trace": {
+    "path": "designs/smollm2_135m_bf16_zcu104_r1/model_trace.json",
+    "sha256": "f225ed2b98079c3de6b763789eb63951861c2b753921a64b58d19c5795e65030"
+  },
+  "isa_spec": {
+    "path": "designs/smollm2_135m_bf16_zcu104_r1/isa_spec.json",
+    "sha256": "656aa00c7b028fb419d6e4a4c791963c726b9dc8dea91f62cf0a689007800007"
+  },
+  "bank_layout": {
+    "path": "designs/smollm2_135m_bf16_zcu104_r1/bank_layout.json",
+    "sha256": "92997ab594e51b320e69677ad350db7b16bda56b1e6028dfb51eb1c0f4d53d62"
+  },
+  "model_source_sha256": "13e65b752a9c9d8a5c22b83df73009a8940c0eefdc58c101df3eb910e3efc2f9",
+  "interpreter": {
+    "path": "verification/prototypes/smollm2_135m_isa_feasibility.py",
+    "sha256": "dabfff412f726fd9ae3a1b4f5d95541f9bc36cf8cf158fed60cd50280a71dcbd"
+  },
+  "golden_results": {
+    "path": "verification/prototypes/smollm2_135m_isa_feasibility_result.json",
+    "sha256": "eebc860cd2870a355f895984233d5653df064c1bd560a9a18fa7bdeaf86c04a3"
+  },
+  "no_host_tensor_compute": true,
+  "host_role": "runtime builder uses token IDs, dimensions, static DDR addresses and instruction scheduling only; static weight and RoPE packing is an offline artifact-generation step",
+  "lowerings": [
+    {
+      "operation_id": "embedding",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B0"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "input_norm",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B3"
+          ]
+        },
+        {
+          "opcode": "RMSNORM",
+          "banks": [
+            "B0",
+            "B3",
+            "B2"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "qkv",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B3"
+          ]
+        },
+        {
+          "opcode": "GEMM",
+          "banks": [
+            "B2",
+            "B3",
+            "B4"
+          ]
+        },
+        {
+          "opcode": "GEMM",
+          "banks": [
+            "B2",
+            "B3",
+            "B5"
+          ]
+        },
+        {
+          "opcode": "GEMM",
+          "banks": [
+            "B2",
+            "B3",
+            "B6"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "rope",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B7"
+          ]
+        },
+        {
+          "opcode": "ROPE",
+          "banks": [
+            "B4",
+            "B7"
+          ]
+        },
+        {
+          "opcode": "ROPE",
+          "banks": [
+            "B5",
+            "B7"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "kv_update",
+      "instructions": [
+        {
+          "opcode": "DMA_STORE",
+          "banks": [
+            "B5"
+          ]
+        },
+        {
+          "opcode": "DMA_STORE",
+          "banks": [
+            "B6"
+          ]
+        },
+        {
+          "opcode": "FENCE",
+          "banks": []
+        },
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B8"
+          ]
+        },
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B9"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "score",
+      "instructions": [
+        {
+          "opcode": "ATTN_SCORE",
+          "banks": [
+            "B4",
+            "B8",
+            "B10"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "softmax",
+      "instructions": [
+        {
+          "opcode": "SOFTMAX",
+          "banks": [
+            "B10"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "value",
+      "instructions": [
+        {
+          "opcode": "ATTN_VALUE",
+          "banks": [
+            "B10",
+            "B9",
+            "B11"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "o_proj",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B3"
+          ]
+        },
+        {
+          "opcode": "GEMM",
+          "banks": [
+            "B11",
+            "B3",
+            "B1"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "attention_residual",
+      "instructions": [
+        {
+          "opcode": "ADD",
+          "banks": [
+            "B0",
+            "B1",
+            "B5"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "ffn_norm",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B3"
+          ]
+        },
+        {
+          "opcode": "RMSNORM",
+          "banks": [
+            "B5",
+            "B3",
+            "B2"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "gate_up",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B3"
+          ]
+        },
+        {
+          "opcode": "GEMM",
+          "banks": [
+            "B2",
+            "B3",
+            "B8"
+          ]
+        },
+        {
+          "opcode": "GEMM",
+          "banks": [
+            "B2",
+            "B3",
+            "B9"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "silu_mul",
+      "instructions": [
+        {
+          "opcode": "SILU_MUL",
+          "banks": [
+            "B8",
+            "B9",
+            "B10"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "down_proj",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B3"
+          ]
+        },
+        {
+          "opcode": "GEMM",
+          "banks": [
+            "B10",
+            "B3",
+            "B1"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "ffn_residual",
+      "instructions": [
+        {
+          "opcode": "ADD",
+          "banks": [
+            "B5",
+            "B1",
+            "B0"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "final_norm",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B3"
+          ]
+        },
+        {
+          "opcode": "RMSNORM",
+          "banks": [
+            "B0",
+            "B3",
+            "B2"
+          ]
+        }
+      ]
+    },
+    {
+      "operation_id": "logits",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": [
+            "B3"
+          ]
+        },
+        {
+          "opcode": "GEMM",
+          "banks": [
+            "B2",
+            "B3",
+            "B12"
+          ]
+        },
+        {
+          "opcode": "DMA_STORE",
+          "banks": [
+            "B12"
+          ]
+        }
+      ]
+    }
+  ],
+  "workload_results": [
+    {
+      "workload_id": "prefill32_decode1",
+      "status": "passed",
+      "vector_sha256": "ac5cdf99ba042a4373c707c6366da27fa6038f4ed21bc3f120710fa77857e3e3",
+      "observed_logits_lengths": [
+        32,
+        33
+      ],
+      "full_logits_exact": true,
+      "kv_all_30_layers_exact": true
+    },
+    {
+      "workload_id": "prefill32_prefill32",
+      "status": "passed",
+      "vector_sha256": "ac5cdf99ba042a4373c707c6366da27fa6038f4ed21bc3f120710fa77857e3e3",
+      "observed_logits_lengths": [
+        32,
+        64
+      ],
+      "full_logits_exact": true,
+      "kv_all_30_layers_exact": true
+    }
+  ],
+  "command_golden": {
+    "sample_count": 19,
+    "content": "128-bit record, BF16 input/output samples and full tensor SHA-256, bank valid/progress state per opcode case",
+    "reference_internal_checks": "RMSNORM, all projection GEMMs, K RoPE, softmax, attention value, both residuals, SiLU_MUL, final norm and LM head exactly equal observed HF tensors"
+  },
+  "boundary_1024": {
+    "status": "wire_shape_address_bounds_only",
+    "max_chunk_records": 744,
+    "full_model_numeric_test": false
+  },
+  "numeric_reference": {
+    "weights": "BF16",
+    "activations": "BF16",
+    "kv": "BF16",
+    "quantization_scale": "none",
+    "gemm": "PyTorch CPU BF16 F.linear is the exact software oracle for the observed workloads; RTL reduction order and numerical acceptance are unresolved",
+    "rmsnorm": "FP32 variance and rsqrt; BF16 cast before gamma multiplication",
+    "softmax": "Python semantic oracle: FP32 stable softmax then BF16 cast; RTL uses finite BF16 scores, Q16.16 conversion, interpolated Q0.30 exp and reciprocal, BF16 round-to-nearest-even",
+    "ro_pe": "BF16 coefficient table and BF16 tensor operations as HF eager",
+    "saturation": "BF16 IEEE-style infinities; no clipping or integer saturation"
+  },
+  "fp32_accumulation_experiment": {
+    "candidate": "convert BF16 operands to FP32, use CPU FP32 F.linear, round output to BF16",
+    "prefill_32_logits_max_abs": 0.375,
+    "prefill_32_top1_equal": true,
+    "decode_33_logits_max_abs": 0.25,
+    "decode_33_top1_equal": false,
+    "decode_33_reference_top1_margin": 0.125,
+    "decode_33_candidate_top_ties": 2,
+    "conclusion": "Candidate differs from installed Transformers BF16 eager reference; no RTL arithmetic policy approved yet"
+  },
+  "numeric_sweep": {
+    "script": {
+      "path": "verification/prototypes/smollm2_135m_numeric_sweep.py",
+      "sha256": "e2c98cef00acd5b355b65db649acbaf494739da0d1de1fdfbe249e0612df4ae5"
+    },
+    "result": {
+      "path": "verification/prototypes/smollm2_135m_numeric_sweep_result.json",
+      "sha256": "95b5abca926019770a430322b30b252bff81fd1e3e71d91d4680d17253cc2c69"
+    },
+    "input_sequences": 5,
+    "evaluated_points": 10,
+    "max_logit_absolute_difference": 0.5,
+    "top1_mismatch_points": 2,
+    "mismatch_reference_margins": [
+      0.125,
+      0.25
+    ],
+    "status": "evidence_for_numeric_policy_discussion_not_final_acceptance"
+  },
+  "numeric_acceptance": {
+    "decision": "user_accepts_bounded_error_and_near_tie_top1_difference",
+    "status": "provisional_until_larger_reference_suite_and_RTL_arithmetic_verification",
+    "storage": "BF16 weights, activations and KV",
+    "gemm_candidate": "FP32 accumulation of BF16 operands with BF16 round-to-nearest-even output; freeze the RTL reduction tree in the GEMM module contract",
+    "logit_max_absolute_error_limit": 0.75,
+    "logit_mean_absolute_error_limit": 0.25,
+    "top1_must_match_when_reference_margin_at_least": 0.5,
+    "near_tie_policy": "top1 may differ when reference top1/top2 margin is below 0.5 if both logit error limits pass",
+    "saturation": "none; BF16 overflow and nonfinite behavior need module tests"
+  },
+  "limitations": [
+    "Full-model numerical RTL execution is not yet verified; GEMM, RMSNorm and RoPE have separate bounded RTL evidence",
+    "Routed physical ZCU104 results cover bounded DMA_LOAD+GEMM and DMA_LOAD+RMSNORM+GEMM probes, not the new RoPE channel or full-model inference",
+    "No full 1024-context numerical reference run; RoPE standalone RTL was compared at positions 992..1023",
+    "Selected command samples are generated by the interpreter; independent HF internal hooks compare complete semantic results at 17 boundary kinds",
+    "GEMM numerical acceptance remains provisional until full-model RTL arithmetic verification; FP32 F.linear then BF16 rounding did not preserve decode top1 in the observed 33-token case",
+    "GEMM_TILES is checked by exact expansion to the prior C wire traces and dispatcher XSIM; this interpreter validation record predates the macro and the new board result is pending"
+  ],
+  "implementation_note": "The numerical reference for expanded DMA_LOAD/GEMM commands is unchanged. GEMM_TILES is a model-specific ISA compression extension, with exact wire-trace expansion checked separately in full_model_board_probe/gemm_tiles_verification.json. Its dispatcher XSIM and routed build are separate evidence; physical board execution is pending."
+}

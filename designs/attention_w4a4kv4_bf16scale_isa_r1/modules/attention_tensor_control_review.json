@@ -1,0 +1,37 @@
+{
+  "schema": "llm2rtl.verification_packet.v1",
+  "module_id": "attention_tensor_control_review",
+  "status": "frozen",
+  "agent_role": "independent_read_only_controller_verifier",
+  "implementation_agent": "/root/native_core",
+  "review_agent": "/root/native_review",
+  "contract": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_control.json",
+    "sha256": "53fe7ef380ce28536cd9c48be01b1957230f7263bbf5c65bc8eb872cc6a38ec2"
+  },
+  "manifest": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_final002/manifest.json",
+    "sha256": "7b948da716dc7e88dc8bafe18d82299205e5c712a9b78b75012e564649ef83ce"
+  },
+  "report": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_final002/control_report.json",
+    "sha256": "3ca984072da9ac07f20f5a44ae2b98120e3783defa532f96f7abed5b104513f8"
+  },
+  "write_scope": [
+    "evidence/control_review.md",
+    "evidence/control_review.json"
+  ],
+  "read_only": [
+    "allRTL,existingtests,scripts,control_final002"
+  ],
+  "verification": [
+    "recheckcurrent/snapshot/source andcommoncontractidentity",
+    "exactraw8bitbankand32bitdescvalidationbeforenarrowing; DMA32bitextentguard",
+    "acquire on requesthandshake, exclusiveatomic roles, matchedcompletion/allrolesrelease, invaliddstno commit onerror",
+    "state/context/protocolfaultretainownershipuntilreset, no bank readpending counter",
+    "actualXPM/data route+capacityguard andascendingarray mapping",
+    "verify actual29cases eachcmdlat1/2, strict scopedlint,5ns OOC zero fails; controlmockscope retained",
+    "stateindependentread-only scoped acceptance or actionableblockers"
+  ],
+  "recursive_subagents": false
+}

@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "dev_checks.jsonl",
+      "simulation_checks": 4641
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation uses exactly three states tracking no prefix, 1, and 10; detection is combinational on state 10 and x=1. The transition after detection retains prefix 1 to support overlap. Active-low reset asynchronously returns to the no-prefix state. No RTL revisions."
+  ],
+  "justified_tb_changes": [
+    "Initial independent oracle compares the two previously sampled bits and current input, checking before and after clock edges. Exhaustively tests all 256 eight-bit streams plus input changes without clock edges and asynchronous reset while clock is low and high. No testbench revisions."
+  ],
+  "interface_cycle_contract": "Original clk, aresetn, x, z ports; positive-edge state updates, negative-edge asynchronous reset, combinational Mealy output; no added latency.",
+  "static_review": "Three enum states, complete combinational assignments, nonblocking sequential state update, explicit if/else next-state selection; two-bit state storage."
+}

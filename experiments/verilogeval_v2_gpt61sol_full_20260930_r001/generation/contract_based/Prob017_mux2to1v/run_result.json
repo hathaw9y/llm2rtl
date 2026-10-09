@@ -1,0 +1,186 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob017_mux2to1v",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob017_mux2to1v",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob017_mux2to1v/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790737975.0929708,
+    "ended_at_unix": 1790738118.8390672,
+    "seconds": 143.7460970878601,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 119920,
+      "cached_input_tokens": 87040,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2205,
+      "reasoning_output_tokens": 25
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "b01dea24ac2f99102e91b82f1486c2311ccf4cc4b8dfdb8f0ff32b5e303dd784",
+  "contract_sha256": "abf4a6e0b6b9fa38e1b69a335349749fed7eaad7811e61b0a74b3f4becfc8582",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract_gate",
+        "command": "python3 validate_contract.py",
+        "outcome": "PASS: passed_structure_only",
+        "exit_code": 0,
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "static_review",
+        "outcome": "PASS by inspection: exact module and ports, 100-bit combinational selection, no storage, reset, arithmetic or extra interface"
+      },
+      {
+        "name": "development_compile",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "outcome": "FAILED: compiler exited 139; empty diagnostic log; no executable produced",
+        "exit_code": 139,
+        "log": "dev_compile.log"
+      },
+      {
+        "name": "development_simulation",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+        "outcome": "FAILED: dev_sim: Unable to open input file.",
+        "log": "dev_simulation.log"
+      }
+    ],
+    "development_outcome": "Initial candidate delivered unchanged. Contract structure passed and RTL inspected. Development simulation success is not established because compiler failed.",
+    "limitations": [
+      "Official evaluation has not been run or accessed.",
+      "No successful development compile or simulation; intended test coverage is unexecuted.",
+      "Unknown/high-impedance selection behavior is unspecified by the problem.",
+      "No synthesis, timing analysis or board work performed."
+    ],
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "b01dea24ac2f99102e91b82f1486c2311ccf4cc4b8dfdb8f0ff32b5e303dd784",
+      "Prob017_mux2to1v_test.sv": "a6edd3a92e7fa15b4a023c3a2176fa893a3caa89c2cb9ec1222378d3b55e5b36",
+      "Prob017_mux2to1v_ref.sv": "1e45bcb124de9c52b905bf1fd7c13e67648a3730c693fd3f86974c6a219f7505"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob017_mux2to1v_test.sv",
+        "Prob017_mux2to1v_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015078570693731308
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb017_mux2to1v_test.sv:39: $finish called at 570 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 114 samples\n\nSimulation finished at 570 ps\nMismatches: 0 in 114 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010414967313408852
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "b01dea24ac2f99102e91b82f1486c2311ccf4cc4b8dfdb8f0ff32b5e303dd784",
+      "Prob017_mux2to1v_test.sv": "a6edd3a92e7fa15b4a023c3a2176fa893a3caa89c2cb9ec1222378d3b55e5b36",
+      "Prob017_mux2to1v_ref.sv": "1e45bcb124de9c52b905bf1fd7c13e67648a3730c693fd3f86974c6a219f7505"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob017_mux2to1v_test.sv",
+        "Prob017_mux2to1v_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013003856875002384
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb017_mux2to1v_test.sv:39: $finish called at 570 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 114 samples\n\nSimulation finished at 570 ps\nMismatches: 0 in 114 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010408326983451843
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

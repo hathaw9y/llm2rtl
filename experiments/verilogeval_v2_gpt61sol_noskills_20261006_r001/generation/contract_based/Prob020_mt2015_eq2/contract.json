@@ -1,0 +1,34 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "A": 2,
+      "B": 2
+    },
+    "outputs": {
+      "z": 1
+    },
+    "evidence": "Original interface specifies two 2-bit inputs and one-bit output."
+  },
+  "semantics": {
+    "behavior": "Combinational z equals 1 exactly when A and B have the same binary value; otherwise 0.",
+    "cycles": "No clock or latency: original asks for an equality circuit.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or specified initial output; z follows inputs combinationally."
+  },
+  "numeric": {
+    "input_domain": "Each input is an unsigned 2-bit vector with binary values 0 through 3.",
+    "output_domain": "One-bit Boolean equality result.",
+    "arithmetic": "No arithmetic or width extension required."
+  },
+  "verification": {
+    "oracle": "For each of the 16 binary input pairs, expected z is 1 only for the four diagonal pairs.",
+    "sampling": "Apply each pair and sample after 1 ns for combinational settling; no clock sampling is specified.",
+    "failure": "Use case inequality to detect wrong or unknown outputs, $fatal for mismatches and bounded timeout.",
+    "coverage": "All 16 input pairs, including both endpoints and every equal and unequal combination."
+  },
+  "specification_ambiguities": [
+    "Behavior for X or Z input bits is unspecified; use standard Verilog logical equality and verify the fully specified binary input domain."
+  ]
+}

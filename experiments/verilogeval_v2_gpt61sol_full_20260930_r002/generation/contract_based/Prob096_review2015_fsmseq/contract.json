@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "reset": 1, "data": 1}, "outputs": {"start_shifting": 1}, "source": "problem.txt port list"},
+  "semantics": {
+    "clock": "All sequential logic samples on positive clk edges, as explicitly specified.",
+    "reset": "Active-high synchronous reset takes priority at a positive edge, clears search history and start_shifting.",
+    "sequence": "Consume one data bit at each positive edge with reset low; recognize contiguous 1101, retaining matching suffixes during unsuccessful searches.",
+    "output": "After sampling the fourth bit of 1101, start_shifting is 1 and remains 1 until a positive edge with reset high.",
+    "initialization": "No power-up initialization is specified; behavior is checked after a sampled reset.",
+    "evidence": "problem.txt: searches for sequence 1101; set start_shifting to 1 forever until reset; active high synchronous; positive edge."
+  },
+  "numeric": {"data": "One-bit unsigned serial input", "output": "One-bit boolean sticky detection", "state": "Five FSM states; no arithmetic, rounding or overflow"},
+  "verification": {"oracle": "Independent four-bit rolling input history plus valid-bit count and sticky flag, derived from original sequence requirement", "sampling": "Drive at falling edges, compare after rising-edge nonblocking updates and before next rising edge", "coverage": "All 256 eight-bit streams with reset between streams; long runs of ones, partial matches, sticky persistence, reset during matches and after detection, reset pulse without rising edge", "failure": "$fatal on mismatch, bounded timeout, explicit PASS only upon completion", "evaluator": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": [{"topic": "Power-up state", "evidence": "Original problem specifies reset but no initial state", "resolution": "Do not prescribe or test a value before first sampled reset; no RTL initial block"}]
+}

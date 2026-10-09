@@ -1,0 +1,34 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "sel": 1
+    },
+    "outputs": {
+      "out": 1
+    },
+    "evidence": "problem.txt explicitly lists module name and four one-bit ports."
+  },
+  "semantics": {
+    "function": "sel=0 selects a; sel=1 selects b.",
+    "timing": "Combinational output follows current inputs; no clock, reset, storage, or added latency.",
+    "initialization": "No initialization requirement or state in original problem.",
+    "evidence": "problem.txt calls this a one-bit wide 2-to-1 multiplexer and specifies both selector values; interface has no clock or reset."
+  },
+  "numeric": {
+    "width": "All ports are one bit.",
+    "arithmetic": "No arithmetic, rounding, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Use explicit selector case and expected selected input from original specification.",
+    "coverage": "All eight binary input combinations, repeated transitions, selected X/Z with known selector, unselected X/Z isolation.",
+    "sampling": "Check after a 1 ns combinational settling interval, without introducing a DUT cycle.",
+    "failure": "$fatal on any mismatch; independent bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "Behavior when sel is X or Z is unspecified; implementation uses standard SystemVerilog conditional merge semantics and tests make no requirement for unknown selectors."
+  ]
+}

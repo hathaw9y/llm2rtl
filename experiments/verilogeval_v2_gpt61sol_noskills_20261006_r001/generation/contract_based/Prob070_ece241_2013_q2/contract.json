@@ -1,0 +1,34 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"a": 1, "b": 1, "c": 1, "d": 1},
+    "outputs": {"out_sop": 1, "out_pos": 1}
+  },
+  "semantics": {
+    "type": "Combinational Boolean logic with no state or latency",
+    "required_ones": [2, 7, 15],
+    "required_zeros": [0, 1, 4, 5, 6, 9, 10, 13, 14],
+    "dont_cares": [3, 8, 11, 12],
+    "forms": {"out_sop": "Minimum sum of products", "out_pos": "Minimum product of sums"},
+    "timing_evidence": "Original specification lists only a,b,c,d and Boolean outputs; there is no clock, reset, or state.",
+    "initialization": "No initialization is specified. Outputs are combinational functions of the current inputs; no added reset or startup value."
+  },
+  "numeric": {
+    "encoding": "Unsigned index {a,b,c,d}, a most significant; original example 7 = 0,1,1,1",
+    "domain": "Four single-bit inputs, 16 binary combinations",
+    "arithmetic": "Boolean operations only"
+  },
+  "verification": {
+    "oracle": "Independent case table from original required ones and zeros",
+    "coverage": "Apply all 16 input combinations in ascending and descending order; check both outputs for every specified combination",
+    "sampling": "Sample after a 1 ns combinational settling interval; no sequential edges exist",
+    "dont_cares": "Apply never-occurring combinations but impose no output value on them",
+    "failure_handling": "$fatal on any mismatch or bounded timeout; PASS only after all checks",
+    "tool": "Supplied dev_check.py, initial label, Icarus 12"
+  },
+  "specification_ambiguities": [
+    "Outputs for 3,8,11,12 are unconstrained because the original says these inputs never occur; the two minimum forms need not agree there.",
+    "Behavior for X/Z inputs is unspecified; no additional four-state behavior is required."
+  ]
+}

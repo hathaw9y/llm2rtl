@@ -1,0 +1,52 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_rtl_review",
+      "result": "passed",
+      "details": "Exact TopModule ports; two separate single-edge always_ff blocks with nonblocking assignments; one continuous q driver; no reset, initialization, arithmetic, or combined-edge sensitivity list."
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "result": "passed"
+    },
+    {
+      "name": "icarus_development_compile",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "timeout_seconds": 30,
+      "log": "dev_compile.log",
+      "status_log": "dev_status.log"
+    },
+    {
+      "name": "icarus_version_diagnostic",
+      "result": "version_12_reported_but_backend_version_failed",
+      "log": "tool_version.log"
+    },
+    {
+      "name": "icarus_compile_explicit_backend_retry",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "timeout_seconds": 30,
+      "log": "dev_compile_retry.log",
+      "status_log": "dev_retry_status.log"
+    },
+    {
+      "name": "development_simulation",
+      "result": "not_run_compile_failed"
+    }
+  ],
+  "development_outcome": "Frozen contract passed structural validation. Initial RTL retained without revisions. Development compilation failed in the supplied Icarus tool with exit 139, including an explicit backend-path retry; no simulation success is claimed.",
+  "limitations": [
+    "Self-checking dev_tb.sv was created but could not be executed because compilation failed.",
+    "Initial output is unspecified; no reset or initialization is added.",
+    "The clock-selected output may exhibit physical edge transients; physical glitch behavior is unspecified by the problem.",
+    "No synthesis, board validation, official testbench, or official evaluation was performed."
+  ]
+}

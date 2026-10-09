@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": "correct fixture passed; deliberately wrong fixture failed; repaired fixture passed"
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "coverage": "Original 0-90 ns waveform, initial unknown, rising-edge updates, falling-edge holds, repeated modulo-7 wraps, synchronous load and between-edge input changes"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "The finite waveform is interpreted as a synchronous load of 4 when a is high and a modulo-7 count when a is low.",
+    "The simultaneous a fall and clock rise at 45 ns is replayed with a nonblocking input update so the edge samples the preceding high value, matching the displayed q=4.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  },
+  "interface_cycle_semantics": "Original clk, a, and 3-bit q ports; rising-edge synchronous load/count; no initialization, extra ports, or latency.",
+  "numeric_width_decisions": "3-bit unsigned output; explicit 3-bit constants; terminal count 6 wraps to 0.",
+  "static_review": "Single sequential driver with nonblocking assignments; no added reset or handshake."
+}

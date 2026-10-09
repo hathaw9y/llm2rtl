@@ -1,0 +1,25 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "evidence_directory": "development/01",
+      "coverage": "One-bit output checked using case inequality at settled time zero, 1 ps, 1 ns, and every nanosecond through 101 ns; bounded timeout."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "No synthesis or board work performed."],
+  "justified_rtl_changes": ["Initial implementation continuously assigns the specified one-bit zero output to 1'b0. No RTL revisions."],
+  "justified_tb_changes": ["Initial independent testbench expects LOW at all sampled times and rejects X/Z. No testbench revisions."],
+  "interface_cycle_contract": "TopModule has only output zero; constant LOW without clock, reset, or latency.",
+  "static_review": "Explicit one-bit constant, single continuous driver, no state or additional ports.",
+  "initial_snapshot": "candidate_initial.sv"
+}

@@ -1,0 +1,13 @@
+# Executor implementation acceptance candidate
+
+The frozen real scalar executor passed nine source-bound XSIM profiles with243 cases and117 golden-compared program compute commands. All thirteen intermediate tensor banks per profile compare byte-for-byte against the approximation-aware golden, including odd row/head packing, paired BF16 scales, and zero padding. Exact current RTL hash is recorded in kernel_report.json.
+
+Current independent-review inputs are executor_sim010 and executor_timing009. Source manifests, immutable snapshots, raw logs, decoded stdout and exit codes are retained. Strict RTL Wall logs are empty. OOC5ns WNS0.725ns, WHS0.063ns, WPWS1.958ns; all failing endpoint counts0. Utilization12228LUT,4691FF,8DSP,1RAMB18,0RAMB36/URAM. Eighteen DSP pipeline DRC recommendations and one quantizer RAM methodology warning remain; no errors/critical warnings.
+
+The implementation is one accepted command at a time, explicit scalar native memory responses, staged descriptor validation before destination clearing, saved command ID, and response after all accepted data/scale/padding writes. Descriptor rows/context are checked at full width before bounded internal counter/index casts. INT32 products preserve group/key order and FP32 arithmetic is unfused. Nonfinite QUANTIZE inputs drain through the unchanged row child; PV validates visited V/scales even for zero probabilities and skips their arithmetic.
+
+Errors invalidate rather than roll back physical destination words. Caller/controller must keep a destination uncommitted until a successful matching response. Only visited payload is validated: there is no global numeric preflight of unselected Q rows or masked scores. Wrong-bank/unsolicited memory responses cannot certify quiescence and hold without completion until coordinated reset.
+
+The nine profiles cover prefill,last-token,odd-head,noncausal query reorder/duplicate,padding/all-masked,zero,gentle dynamic ranges,max32tokens and max256row/head-width. Twenty-seven tests/profile include13real operations and descriptor/row257/context33/opcode/INT4/scale/mask errors, invalidV/scales hidden underzeroP, nonfinite drain and same-engine recovery, wrong response bank, reset with an actual outstanding read, and reset at a blocked actual payload write. Stable request and response backpressure monitors are active.
+
+This is self-verification awaiting independent executor review and the separate real ISA/XPM integration. Arithmetic child acceptance/review remains separate. No full Attention/board/routed/vendor DataMover/model-quality claim follows. OOC is synthesized/unplaced with explicit external hold exclusions; all internal setup/hold/pulse checks pass.

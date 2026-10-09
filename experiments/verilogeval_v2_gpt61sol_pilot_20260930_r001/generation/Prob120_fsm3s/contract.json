@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "module": "TopModule",
+  "interface": {
+    "clk": "input 1 bit",
+    "reset": "input 1 bit",
+    "in": "input 1 bit",
+    "out": "output 1 bit"
+  },
+  "sequential_semantics": "At every positive clk edge, reset=1 sets A; otherwise apply transition table using sampled in.",
+  "transition_table": {
+    "A": [
+      "A",
+      "B"
+    ],
+    "B": [
+      "C",
+      "B"
+    ],
+    "C": [
+      "A",
+      "D"
+    ],
+    "D": [
+      "C",
+      "B"
+    ]
+  },
+  "combinational_semantics": "Moore out equals 1 exactly in D, else 0; no direct dependence on in/reset.",
+  "numeric_widths": {
+    "state": 2,
+    "ports": 1
+  },
+  "latency_reset_behavior": "State and decoded out update after each positive edge. Synchronous active-high reset has priority. No specified initial state before reset.",
+  "specification_ambiguities": [
+    "Initial state before a reset clock edge is unspecified."
+  ],
+  "verification_plan": [
+    "All 256 eight-bit input sequences from reset with independent integer reference FSM",
+    "Coverage assertion for all eight state/input transition pairs",
+    "Midcycle input stability and synchronous reset assertion from D",
+    "Reset priority for both input values"
+  ],
+  "skill_exceptions": "Benchmark names and reset override defaults; no reuse search or synthesis allowed by policy."
+}

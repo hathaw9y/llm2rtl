@@ -1,0 +1,20 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"name": "environment_smoke", "status": "passed", "evidence": "environment_smoke.json", "observations": "Correct fixture passed, deliberately wrong fixture failed, repaired fixture passed"},
+    {"name": "contract_validation", "status": "passed_structure_only", "evidence": "contract_gate.json"},
+    {"name": "initial", "status": "passed", "evidence": "development/01/result.json", "output_checks": 134, "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; no warnings", "simulation": "Matching vvp completed with explicit PASS"}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation; official correctness feedback was unavailable.",
+    "Power-up state, illegal one-hot states, and unknown-input behavior are unspecified by the original problem and are not assigned oracle expectations.",
+    "Contract validation establishes structural completeness only."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": "Two-bit one-hot state encoding A=01 and B=10, asynchronous active-high reset to A, positive-edge state transitions, combinational Mealy output.",
+  "verification_basis": "Original transition table and reset/clock statements. Independent history oracle checks output before and after clock edges, both inputs in both states, reset held over edges, off-edge reset assertion with clock low and high, reset release, and input changes without clock edges.",
+  "artifacts": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json", "development_history": "dev_checks.jsonl"}
+}

@@ -1,0 +1,262 @@
+{
+  "schema": "llm2rtl.infrastructure_template.v1",
+  "template_id": "cmd_dispatcher_template",
+  "version": 4,
+  "status": "frozen_for_implementation",
+  "purpose": "Generate controller-style command fetch/verify/acquire/execute with fixed MM2S/S2MM and Agent-generated compute extensions; native split bank ownership",
+  "fixed_architecture": {
+    "command_source": "PS writes a separate command BRAM through AXI BRAM Controller Port A",
+    "dispatcher_command_port": "native synchronous BRAM Port B signals cmd_enb cmd_addrb cmd_doutb",
+    "command_bram_is_not_a_data_bank": true,
+    "data_bank_indices": "0 through BANK_NUM-1",
+    "bank_ownership": "independent read/write module-port owners through bank_native_ownership; valid/role plus exact-edge accepted signals",
+    "port_owner_ids": {
+      "NONE": 0,
+      "MM2S_ARBITER": 1,
+      "S2MM_ARBITER": 2
+    },
+    "fixed_opcodes": {
+      "END": 0,
+      "MM2S": 1,
+      "S2MM": 2
+    },
+    "user_opcode_range": "3 through 2^OPCODE_WIDTH-1",
+    "issue_policy": "strict current-PC; fetch then verify, acquire atomic operand banks before engine valid; advance PC only after engine handshake",
+    "outstanding_policy": "multiple nonconflicting commands tracked per direction/bank; DMA waits both bank directions free",
+    "completion_policy": "Engine issues completion resp_valid only after all required memory resp_valid responses are received and processed and final writes are accepted. Controller stores matched completion until matching-role release is accepted; no bank read-pending tracking.",
+    "terminal_policy": "END drains tracked commands, buffered completions and both bank busy vectors before DONE."
+  },
+  "parameters": [
+    "AXI_ADDR_WIDTH",
+    "BTT_WIDTH",
+    "BANK_NUM",
+    "BANK_NUM_WIDTH",
+    "TAG_WIDTH",
+    "BANK_ADDR_WIDTH",
+    "CMD_ADDR_WIDTH",
+    "CMD_READ_LATENCY",
+    "CMD_DATA_WIDTH",
+    "MAX_COMMANDS",
+    "OPCODE_WIDTH",
+    "PORT_ROLE_WIDTH",
+    "MM2S_BANK_MASK",
+    "S2MM_BANK_MASK"
+  ],
+  "parameter_legality": [
+    "BANK_NUM is at least 1",
+    "BANK_NUM is no greater than 2^BANK_NUM_WIDTH",
+    "TAG_WIDTH is at least BANK_NUM_WIDTH",
+    "CMD_READ_LATENCY is at least 1",
+    "PORT_ROLE_WIDTH is at least 3",
+    "MAX_COMMANDS is at least 1 and no greater than 2^CMD_ADDR_WIDTH",
+    "CMD_DATA_WIDTH is at least OPCODE_WIDTH + 3*BANK_NUM_WIDTH + BANK_ADDR_WIDTH + BTT_WIDTH + AXI_ADDR_WIDTH",
+    "MM2S_BANK_MASK and S2MM_BANK_MASK name design-approved logical DMA banks"
+  ],
+  "instruction_record": {
+    "packing": "contiguous from CMD_DATA_WIDTH-1 downward; any remaining least-significant bits are reserved",
+    "fields_msb_first": [
+      {
+        "name": "opcode",
+        "width": "OPCODE_WIDTH"
+      },
+      {
+        "name": "operand0_bank",
+        "width": "BANK_NUM_WIDTH"
+      },
+      {
+        "name": "operand1_bank",
+        "width": "BANK_NUM_WIDTH"
+      },
+      {
+        "name": "operand2_bank",
+        "width": "BANK_NUM_WIDTH"
+      },
+      {
+        "name": "local_offset",
+        "width": "BANK_ADDR_WIDTH"
+      },
+      {
+        "name": "byte_count",
+        "width": "BTT_WIDTH"
+      },
+      {
+        "name": "axi_address",
+        "width": "AXI_ADDR_WIDTH"
+      }
+    ],
+    "fixed_opcode_semantics": {
+      "END": "has no operand bank and begins drain without an executor request",
+      "MM2S": "operand0_bank is destination data bank; AXI address is DDR source; tag is zero-extended operand0_bank",
+      "S2MM": "operand0_bank is source data bank; AXI address is DDR destination; tag is zero-extended operand0_bank"
+    },
+    "fixed_legality": [
+      "MM2S and S2MM require operand0_bank less than BANK_NUM",
+      "data bank zero is legal",
+      "MM2S and S2MM require nonzero byte_count",
+      "MM2S/S2MM require the matching DMA capability mask bit to be set before any bank acquisition"
+    ]
+  },
+  "fixed_ports": {
+    "program": [
+      "aclk",
+      "aresetn",
+      "cmd_dispatcher_start",
+      "cmd_dispatcher_busy",
+      "cmd_dispatcher_done",
+      "cmd_dispatcher_error",
+      "cmd_dispatcher_error_code",
+      "current_pc"
+    ],
+    "command_bram_port_b": [
+      "cmd_enb",
+      "cmd_addrb",
+      "cmd_doutb"
+    ],
+    "mm2s": [
+      "m_ctrl_mm2s_cmd_valid",
+      "m_ctrl_mm2s_cmd_ready",
+      "m_ctrl_mm2s_cmd_addr",
+      "m_ctrl_mm2s_cmd_btt",
+      "m_ctrl_mm2s_cmd_offset",
+      "m_ctrl_mm2s_cmd_bank",
+      "m_ctrl_mm2s_cmd_tag",
+      "s_ctrl_mm2s_sts_valid",
+      "m_ctrl_mm2s_sts_ready",
+      "s_ctrl_mm2s_sts_tag",
+      "s_ctrl_mm2s_sts_error"
+    ],
+    "s2mm": [
+      "m_ctrl_s2mm_cmd_valid",
+      "m_ctrl_s2mm_cmd_ready",
+      "m_ctrl_s2mm_cmd_addr",
+      "m_ctrl_s2mm_cmd_btt",
+      "m_ctrl_s2mm_cmd_offset",
+      "m_ctrl_s2mm_cmd_bank",
+      "m_ctrl_s2mm_cmd_tag",
+      "s_ctrl_s2mm_sts_valid",
+      "m_ctrl_s2mm_sts_ready",
+      "s_ctrl_s2mm_sts_tag",
+      "s_ctrl_s2mm_sts_error"
+    ],
+    "bank_ownership": [
+      "bank_wr_acquire_valid[BANK_NUM-1:0]",
+      "bank_wr_acquire_port[BANK_NUM-1:0][PORT_ROLE_WIDTH-1:0]",
+      "bank_wr_release_valid[BANK_NUM-1:0]",
+      "bank_wr_release_port[BANK_NUM-1:0][PORT_ROLE_WIDTH-1:0]",
+      "bank_wr_busy[BANK_NUM-1:0]",
+      "bank_wr_owner_port[BANK_NUM-1:0][PORT_ROLE_WIDTH-1:0]",
+      "bank_wr_acquire_accepted[BANK_NUM-1:0]",
+      "bank_wr_release_accepted[BANK_NUM-1:0]",
+      "bank_rd_acquire_valid[BANK_NUM-1:0]",
+      "bank_rd_acquire_port[BANK_NUM-1:0][PORT_ROLE_WIDTH-1:0]",
+      "bank_rd_release_valid[BANK_NUM-1:0]",
+      "bank_rd_release_port[BANK_NUM-1:0][PORT_ROLE_WIDTH-1:0]",
+      "bank_rd_busy[BANK_NUM-1:0]",
+      "bank_rd_owner_port[BANK_NUM-1:0][PORT_ROLE_WIDTH-1:0]",
+      "bank_rd_acquire_accepted[BANK_NUM-1:0]",
+      "bank_rd_release_accepted[BANK_NUM-1:0]",
+      "bank_subsystem_error"
+    ]
+  },
+  "required_user_markers": [
+    "USER_PORTS_BEGIN",
+    "USER_PORTS_END",
+    "USER_PARAMETERS_BEGIN",
+    "USER_PARAMETERS_END",
+    "USER_OPCODES_BEGIN",
+    "USER_OPCODES_END",
+    "USER_DECLARATIONS_BEGIN",
+    "USER_DECLARATIONS_END",
+    "USER_DECODE_BEGIN",
+    "USER_DECODE_END",
+    "USER_ISSUE_BEGIN",
+    "USER_ISSUE_END",
+    "USER_COMPLETION_BEGIN",
+    "USER_COMPLETION_END"
+  ],
+  "extension_rules": [
+    "Agents copy the template into a design revision and edit only between matching USER markers.",
+    "User executor operands are logical bank IDs and never local raw addresses.",
+    "Every user request valid is independent of executor ready and stable until acceptance.",
+    "All operand read/write banks are acquired atomically before the user engine request is asserted.",
+    "Each acquire identifies the executor's module-port role selected by operand position, not its opcode or whole-module identity.",
+    "Every acquired bank is released exactly once with the matching module-port role by completion or shared reset.",
+    "Extensions must add self-checking simulation and fresh synthesis evidence; template evidence does not transfer to generated modules.",
+    "USER decode/issue hooks describe wr/rd bank request masks and module-port roles. Acquire before user request valid; user engine valid held until ready even upon asynchronous error.",
+    "Generated completion hooks store command-specific bank/tag/role until release accepted, rely on engine completion after all read responses and writes, and expose user_pending_any.",
+    "Unknown/mismatched completions must not release ownership; physical transport recovery resets all affected modules.",
+    "Base names only MM2S/S2MM; arbitrary compute role IDs/opcodes are generated per design.",
+    "Memory resp_valid is a read response; engine completion resp_valid authorizes release only after all required read responses have been received and processed and all writes accepted. No requests for that command follow completion."
+  ],
+  "verification": {
+    "default_configuration": {
+      "BANK_NUM": 16,
+      "CMD_DATA_WIDTH": 128,
+      "CMD_READ_LATENCY": 2,
+      "MAX_COMMANDS": 1024
+    },
+    "required_cases": [
+      "command BRAM address zero is independent of data bank zero",
+      "data bank zero may be acquired released and reused",
+      "fixed DMA acquire and release carry the matching DMA module-port role",
+      "two MM2S commands to distinct banks issue before completion",
+      "MM2S and S2MM to distinct banks may both remain pending",
+      "same-bank command stalls without lookahead",
+      "valid and typed payload remain stable under ready backpressure",
+      "completion releases during later fetch or stall",
+      "spurious or mismatched status never releases a bank",
+      "END waits for pending entries and bank_busy to clear",
+      "missing END reaches bounded error",
+      "reset clears pending state and pulses",
+      "all required USER markers occur exactly once and in begin/end order",
+      "engine never issues before all directional bank acquires accepted",
+      "asynchronous response error during stalled engine valid preserves payload and valid",
+      "engine completion follows final read response and is retained until matching release accepted exactly once",
+      "bank+tag/role checks reject distinguishable stale/duplicate/outofrange completion; document bank-only tag reuse assumption",
+      "atomic multi-bank generated arbitrary-role extension with native bank children",
+      "END drains both owner directions and buffered completions; engines complete after all reads",
+      "reject acquire ack failure and require coordinated reset",
+      "native bank subsystem connected XPM payload MM2S-to-S2MM roundtrip",
+      "DMA capability masks reject unsupported bank with no acquisition or engine request"
+    ],
+    "target_part": "xczu7ev-ffvc1156-2-e",
+    "target_clock_ns": 5.0,
+    "vivado": "2025.2"
+  },
+  "does_not_claim": [
+    "AXI BRAM Controller instantiation or address assignment",
+    "data-bank memory implementation",
+    "user compute executor ports or behavior",
+    "board integration bitstream or physical-board validation"
+  ],
+  "native_bank_contract": {
+    "path": "ip/infrastructure/bank_subsystem/contracts/native_v3.json",
+    "sha256": "631c393c53cd56a9c916c91fe5b685be572569fa8c19bb3bb22aebd802e70d1f",
+    "scope": "Explicit opt-in replacement for common exclusive ownership at this template boundary; existing model revisions unchanged"
+  },
+  "controller_reference_sha256": "162856d54c6d78d4c0237bfd176aef3d4555f7844892064ba8b13a94c8dd07f2",
+  "behavior": {
+    "states": [
+      "IDLE",
+      "CMD_READ",
+      "CMD_WAIT",
+      "OP_VERIFY",
+      "BANK_ACQUIRE",
+      "EXECUTE",
+      "END_DRAIN",
+      "ERROR_DRAIN",
+      "DONE",
+      "ERROR"
+    ],
+    "acquire": "DMA both directions free; atomic pulse only when eligible; sample accepted at same edge; no engine request until acquired; missing/partial ack faults and retains safely until reset",
+    "completion": "DMA valid&&ready completed entry latch; use role constant from tracked DMA direction, not bank current owner; distinguishable duplicate/spurious/outofrange responses fault without releasing new owner; consume matching same-engine-handshake completion if allowed or explicitly fault+retain new outstanding Engine owns read completion qualification; controller has no bank read-pending input.",
+    "errors": "sticky first code visible in any active state. Do not withdraw engine valid under stall on async error. Matching engine error completions retire/release after engine has received and processed all read responses and writes are accepted. Bank subsystem or acquisition/release ack protocol failure fail-stops with retained ownership requiring coordinated reset. No arbitrary release on invalid response.",
+    "reset": "synchronous active-low reset clears tracking; controller and banks must reset together",
+    "instruction_layout": "keep existing typed MM2S/S2MM AXI addr/BTT/offset/tag DataMover interface and existing command record; extension Agents decode model payload, no hardcoded RMSNorm/GEMV/weight-DMA",
+    "transport_assumption": "DMA tags remain zeroextended bank IDs. Status delivery must be exactly once; a delayed old status after same bank/direction reissue with identical tag is not distinguishable without transaction generation bits. Reject duplicates while buffered/before reuse and mismatches; no universal post-reuse stale detection claim."
+  },
+  "engine_completion_contract": {
+    "path": "contracts/common/engine_completion_contract.json",
+    "sha256": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446"
+  }
+}

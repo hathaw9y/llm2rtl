@@ -1,0 +1,24 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": "input, 1 bit", "d": "input, 8 bits [7:0]", "q": "output, 8 bits [7:0]"},
+    "evidence": "Original interface explicitly names clk, d (8 bits), and q (8 bits)."
+  },
+  "semantics": {
+    "capture": "Each positive clock edge captures all eight d bits into q using sequential nonblocking assignment.",
+    "hold": "q retains its captured value between positive edges, including negative edges.",
+    "reset": "No reset port or reset behavior is specified; implement none.",
+    "initialization": "No initial value is specified; no initialization is added. Simulation storage starts unknown until captured.",
+    "latency": "q reflects d sampled at the current positive edge after the nonblocking update, with no additional pipeline stage.",
+    "evidence": "Original says include 8 D flip-flops, all triggered by the positive edge of clock."
+  },
+  "numeric": {"width": 8, "interpretation": "Independent bit storage, no arithmetic or signed interpretation."},
+  "verification": {
+    "oracle": "Expected q is the original problem's eight-bit d value sampled at each explicit positive edge; check after NBA settlement.",
+    "cases": "Check hold before the first edge without imposing an initial value, zeros, ones, alternating patterns, walking ones/zeros, all 256 binary words, and four-state bit capture.",
+    "phases": "Change d away from positive edges; check retention during low/high clock phases and after negative edges.",
+    "completion": "Fatal mismatches, bounded timeout, PASS only after every directed check."
+  },
+  "specification_ambiguities": ["Power-up q is unspecified. Implementation has no initialization; verification does not require a particular initial value."]
+}

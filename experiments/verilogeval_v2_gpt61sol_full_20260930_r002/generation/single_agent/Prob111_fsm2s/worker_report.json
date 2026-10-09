@@ -1,0 +1,63 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790753215.763367,
+      "source_sha256": "501ce61472ba2c791abda51f558914b40f612a75b9baa9b0b2e27f197ee86ecc",
+      "testbench_sha256": "7286abb40fac87623e2e75212e67bb51f7eadb33834e4541cd8a7157ff80f0fb",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob111_fsm2s/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011790435761213303
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: 398 FSM output checks\ndev_tb.sv:91: $finish called at 536000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.006074906326830387
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Pre-reset behavior is unspecified and is not asserted by the testbench.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  },
+  "interface_cycle_contract": "Original one-bit ports; Moore output from registered state; active-high synchronous reset to OFF; transitions on rising clk edges.",
+  "numeric_width_decisions": "One-bit state encoding and ports.",
+  "pipeline_latency": "No extra latency; output reflects state after each rising edge.",
+  "static_review": "Complete combinational assignments, explicit enum if/else transitions, nonblocking sequential updates, single drivers.",
+  "test_coverage": "398 checks covering both states and all binary reset/j/k combinations, ignored inputs, synchronous reset priority and off-edge pulses, Moore output stability, repeated toggling and holds.",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repair passed"
+}

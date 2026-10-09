@@ -1,6 +1,7 @@
 import datamover_engine_pkg::*;
 
 module s2mm_channel #(
+    parameter int DMA_DATA_WIDTH = 64,
     parameter int BANK_NUM   = 4,
     parameter logic [BANK_NUM*32-1:0] BANK_WORD_BYTES={BANK_NUM{32'd8}},
     parameter logic [BANK_NUM*32-1:0] BANK_CAPACITY_BYTES={BANK_NUM{32'd4096}},
@@ -29,8 +30,8 @@ module s2mm_channel #(
     output logic [ CMD_DATA_WIDTH-1:0] m_axis_s2mm_cmd_tdata,
     output logic                       m_axis_s2mm_cmd_tvalid,
     input  logic                       m_axis_s2mm_cmd_tready,
-    output logic [S2MM_DATA_WIDTH-1:0] m_axis_s2mm_tdata,
-    output logic [S2MM_KEEP_WIDTH-1:0] m_axis_s2mm_tkeep,
+    output logic [DMA_DATA_WIDTH-1:0] m_axis_s2mm_tdata,
+    output logic [DMA_DATA_WIDTH/8-1:0] m_axis_s2mm_tkeep,
     output logic                       m_axis_s2mm_tvalid,
     input  logic                       m_axis_s2mm_tready,
     output logic                       m_axis_s2mm_tlast,
@@ -47,8 +48,8 @@ module s2mm_channel #(
     output logic [      BTT_WIDTH-1:0] m_ctrl_s2mm_adapter_btt   [BANK_NUM],
     output logic [      BTT_WIDTH-1:0] m_ctrl_s2mm_adapter_offset[BANK_NUM],
     output logic                       m_ctrl_s2mm_adapter_abort [BANK_NUM],
-    input  logic [S2MM_DATA_WIDTH-1:0] s_axis_s2mm_tdata         [BANK_NUM],
-    input  logic [S2MM_KEEP_WIDTH-1:0] s_axis_s2mm_tkeep         [BANK_NUM],
+    input  logic [DMA_DATA_WIDTH-1:0] s_axis_s2mm_tdata         [BANK_NUM],
+    input  logic [DMA_DATA_WIDTH/8-1:0] s_axis_s2mm_tkeep         [BANK_NUM],
     input  logic                       s_axis_s2mm_tvalid        [BANK_NUM],
     output logic                       s_axis_s2mm_tready        [BANK_NUM],
     input  logic                       s_axis_s2mm_tlast         [BANK_NUM]
@@ -63,7 +64,7 @@ module s2mm_channel #(
   end
   assign m_ctrl_s2mm_sts_error = (m_ctrl_s2mm_sts_error_code != 0);
   datamover_command_queue #(.BANK_NUM(BANK_NUM),.BANK_WIDTH(BANK_WIDTH),
-    .DEPTH(FIFO_DEPTH),.DDR_ALIGN_BYTES(S2MM_KEEP_WIDTH),
+    .DEPTH(FIFO_DEPTH),.DDR_ALIGN_BYTES(DMA_DATA_WIDTH/8),
     .BANK_WORD_BYTES(BANK_WORD_BYTES),.BANK_CAPACITY_BYTES(BANK_CAPACITY_BYTES)) control (
     .aclk(aclk),.aresetn(aresetn),.pause(s_ctrl_s2mm_pause),.scheduler_abort(s_ctrl_s2mm_abort),
     .cmd_valid(s_ctrl_s2mm_cmd_valid),.cmd_ready(s_ctrl_s2mm_cmd_ready),

@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": {"direction": "input", "width": 1}, "reset": {"direction": "input", "width": 1}, "q": {"direction": "output", "width": 5, "range": "[4:0]"}}
+  },
+  "semantics": {
+    "clock": "All state updates occur on the positive edge of clk only.",
+    "reset": "Active-high synchronous reset takes priority and loads q=5'b00001 on each rising edge with reset=1.",
+    "initialization": "No power-up value is specified before a sampled reset; no initial block or autonomous recovery is required.",
+    "transition": "With reset=0: next q[4]=old q[0], next q[3]=old q[4], next q[2]=old q[3] XOR old q[0], next q[1]=old q[2], next q[0]=old q[1].",
+    "tap_numbering": "Positions 5 and 3 are one-based and correspond to vector indices 4 and 2.",
+    "period": "From reset seed 1, traverse all 31 nonzero 5-bit states and then return to 1.",
+    "between_edges": "q holds its state, including across reset transitions without a positive clock edge."
+  },
+  "numeric": {
+    "state": "Unsigned 5-bit bit vector.",
+    "arithmetic": "Bitwise XOR over GF(2); logical right shift with zero insertion before feedback XOR at indices 4 and 2.",
+    "feedback_mask": "5'b10100",
+    "rounding_overflow": "Not applicable: all transitions are exact bit operations within 5 bits."
+  },
+  "verification": {
+    "oracle": "Independent shift-then-conditional-XOR reference: (state >> 1) XOR (state[0] ? 5'b10100 : 5'b00000).",
+    "sequence": "Check every rising-edge state over two full 31-cycle periods; independently require all 31 nonzero states distinct and return to seed at exactly step 31.",
+    "reset": "Check synchronous-only reset changes, priority at positive edges, repeated held reset, and reset during sequence followed by restart.",
+    "stability": "Check falling-edge and between-edge state stability.",
+    "tools": "Icarus SystemVerilog compile with -g2012 and explicit dev_tb top, matching vvp, finite external and testbench timeouts."
+  },
+  "specification_ambiguities": []
+}

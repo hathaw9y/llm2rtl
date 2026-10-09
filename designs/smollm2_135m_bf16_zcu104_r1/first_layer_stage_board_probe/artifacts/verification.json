@@ -1,0 +1,114 @@
+{
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "scope": "first-layer no-KV, prefill32 and cold single-token, accepted PL writes B5/B1/B0",
+  "golden": {
+    "stage_header": "stage_vectors.h",
+    "full_final_header": "../first_layer_full_output_board_probe/full_output_vectors.h",
+    "bf16_residual_plus_down_matches_final": true
+  },
+  "rtl": {
+    "full_gemm_tap_test": "PASS 18432 partial-lane writes, 2304 reads, 8 overwrites",
+    "a53_syntax": "PASS -Wall -Wextra -Werror"
+  },
+  "routed": {
+    "tool": "Vivado 2025.2",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 100,
+    "setup_wns_ns": 0.546,
+    "setup_tns_ns": 0.0,
+    "hold_whs_ns": 0.009,
+    "hold_ths_ns": 0.0,
+    "pulse_width_wpws_ns": 3.5,
+    "drc_errors": 0,
+    "unrouted_nets": 0,
+    "lut": 207107,
+    "bram_tiles": 174.5,
+    "uram": 64,
+    "dsp": 282
+  },
+  "artifacts": {
+    "bit": "986bf26608e594129491e2892557058b29f721503c8df073fa7a1e41a38726c1",
+    "xsa": "8b4f03f0b4a361c991d2fda9073f0efed2d2751c169d6bf2a5a9ea42f472dd7d",
+    "hwh": "de2f51cba6d899cc7533bbc1a4320d8ea1c16eb8b15533484e58a9ffaa9dcc7e",
+    "elf": "2eddf6bef2c28ab17c2b44eb4e0ed83751d886fc63c5d71f1338d486756f0842"
+  },
+  "xsa_bit_matches_external_bit": true,
+  "xsa_hwh_matches_external_hwh": true,
+  "board": {
+    "status": "physical_board_numerical_fail_legacy_gate",
+    "source": "user-provided ZCU104 UART run",
+    "uart_log": "board_uart_layer1.txt",
+    "uart_sha256": "4e7461e07228d2c7afbe2af02f7c4bf310b51f13040ac4ffad5504b49e6c0cce",
+    "analysis": "board_stage_analysis.json",
+    "prefill32": {
+      "attention_residual": {
+        "values": 18432,
+        "rmse": 0.00026438415388531817,
+        "normalized_rmse": 0.001926067357647203,
+        "max_abs": 0.015625,
+        "legacy_failures": 0
+      },
+      "down_projection": {
+        "values": 18432,
+        "rmse": 0.007050563889853125,
+        "normalized_rmse": 0.0033152289204217435,
+        "max_abs": 0.125,
+        "legacy_failures": 281
+      },
+      "final_output": {
+        "values": 18432,
+        "rmse": 0.0071873626983796285,
+        "normalized_rmse": 0.0033781461150757287,
+        "max_abs": 0.125,
+        "legacy_failures": 282
+      }
+    },
+    "single_token_cold": {
+      "attention_residual": {
+        "values": 576,
+        "rmse": 3.8884568635331126e-05,
+        "normalized_rmse": 0.0003500143566180943,
+        "max_abs": 0.00048828125,
+        "legacy_failures": 0
+      },
+      "down_projection": {
+        "values": 576,
+        "rmse": 0.005626430039031172,
+        "normalized_rmse": 0.0014775432479648496,
+        "max_abs": 0.03125,
+        "legacy_failures": 2
+      },
+      "final_output": {
+        "values": 576,
+        "rmse": 0.005763218571344178,
+        "normalized_rmse": 0.00151190178563163,
+        "max_abs": 0.03125,
+        "legacy_failures": 4
+      }
+    },
+    "final_add_identity": {
+      "prefill32_exact_matches": 18432,
+      "single_token_cold_exact_matches": 576
+    },
+    "offline_hf_replay_on_board_B5": {
+      "prefill32": {
+        "board_B1_vs_replay_rmse": 0.0031002387404441833,
+        "board_B1_vs_original_golden_rmse": 0.007050564046949148,
+        "sse_ratio_after_B5_injection": 0.19334928691387177,
+        "error_correlation": 0.9017382860183716,
+        "legacy_fail_overlap": 236,
+        "board_legacy_failures": 281
+      },
+      "single_token_cold": {
+        "board_B1_vs_replay_rmse": 0.002141105243936181,
+        "board_B1_vs_original_golden_rmse": 0.00562643026933074,
+        "sse_ratio_after_B5_injection": 0.1448138803243637,
+        "error_correlation": 0.9276701807975769,
+        "legacy_fail_overlap": 2,
+        "board_legacy_failures": 2
+      },
+      "note": "Offline CPU diagnostic reruns checkpoint layer-0 post-attention RMSNorm and MLP on captured PL B5; not PS model execution and not a bit-exact PL FFN oracle."
+    },
+    "note": "B5 and B1 are accepted PL write taps, not independent bank storage readback; first-layer no KV cache only."
+  }
+}

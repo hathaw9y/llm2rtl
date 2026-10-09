@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "areset": 1, "in": 1}, "outputs": {"out": 1}},
+  "semantics": {
+    "evidence": "problem.txt: Moore FSM transition table; positive edge triggered asynchronous reset to A; sequential logic on positive clock edge",
+    "transitions": {"A": {"0": "A", "1": "B"}, "B": {"0": "C", "1": "B"}, "C": {"0": "A", "1": "D"}, "D": {"0": "C", "1": "B"}},
+    "outputs": {"A": 0, "B": 0, "C": 0, "D": 1},
+    "reset": "Active-high asynchronous assertion sets A; while asserted positive clock edges retain A; deassertion does not advance state",
+    "sampling": "Input sampled on each rising clock edge when reset is low; out decodes current state without added latency",
+    "initialization": "No specified power-up state before reset; no initial assignment required"
+  },
+  "numeric": {"ports": "All ports are unsigned single bits", "state_storage": "Four states encoded in two bits", "arithmetic": "None"},
+  "verification": {"oracle": "Independent integer model of original transition table and Moore outputs", "coverage": "All 8 transitions via exhaustive 8-bit input sequences; input changes between edges; asynchronous reset from every state; reset held across clocks; deassertion without a clock", "sampling": "Check after NBA settling and between rising edges", "success": "Fatal on mismatch, bounded timeout, final PASS line", "evaluator": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": ["Power-up state and behavior with unknown input/reset are unspecified; verification begins with reset and uses binary inputs."]
+}

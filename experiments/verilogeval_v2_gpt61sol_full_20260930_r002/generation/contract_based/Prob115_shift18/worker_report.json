@@ -1,0 +1,53 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "outcome": "passed",
+      "details": "Correct fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+    },
+    {
+      "command": "python3 validate_contract.py",
+      "outcome": "passed_structure_only"
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "outcome": "simulation_failed",
+      "evidence": "development/01",
+      "reason": "TB timeout 20000 was shorter than the planned 2685-cycle stimulus."
+    },
+    {
+      "command": "python3 dev_check.py --label initial_tb_timeout_fixed",
+      "outcome": "passed",
+      "evidence": "development/02",
+      "details": "PASS 2685 shift-register checks; Icarus 12 compilation and simulation succeeded."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Original specification does not explicitly name a clock edge; rising edge is assumed and recorded in contract.",
+    "Original power-up value is unspecified; no initialization or reset added.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_old_version": "dev_tb_before_timeout_fix.sv",
+      "change": "Increased bounded timeout from 20000 to 40000 time units.",
+      "reason": "2685 checks at a 10-unit clock period require about 26850 time units; the old bound prematurely terminated the test. Oracle, stimulus, sampling phases and mismatch checks are unchanged."
+    }
+  ],
+  "contract_changes": [],
+  "static_review": "Exact interface preserved; load priority; hold when disabled; 64-bit left truncation and signed arithmetic right shift; no extra latency or reset.",
+  "artifacts": [
+    "candidate.sv",
+    "candidate_initial.sv",
+    "contract.json",
+    "dev_tb.sv",
+    "dev_tb_before_timeout_fix.sv",
+    "dev_checks.jsonl",
+    "development/01",
+    "development/02"
+  ]
+}

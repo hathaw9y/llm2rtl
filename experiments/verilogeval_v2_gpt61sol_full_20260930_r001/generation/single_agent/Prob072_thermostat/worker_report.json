@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Exact one-bit TopModule interface; combinational continuous assignments; heater only in heating mode, aircon only in cooling mode, fan asserted for either active unit or fan_on; no registers or latches."
+    },
+    {
+      "name": "Icarus development compile",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "timeout_seconds": 20,
+      "log": "compile.log",
+      "details": "Used requested Icarus binary with -g2012 -Wall and explicit dev_tb top. Compiler returned 139 with no diagnostic output."
+    },
+    {
+      "name": "development simulation",
+      "result": "not_run_successfully",
+      "timeout_seconds": 20,
+      "log": "simulation.log",
+      "details": "Matching vvp could not open dev_sim because compilation failed. Testbench independently checks all 16 binary input combinations."
+    }
+  ],
+  "development_outcome": "Initial candidate retained without RTL revisions. Static review passed; development simulation unverified due to compiler failure. Initial snapshot is candidate_initial.sv; tool failure details are preserved in development_status.log.",
+  "limitations": [
+    "No successful development simulation.",
+    "Official evaluation results unavailable during this turn.",
+    "No synthesis, timing, or board validation performed."
+  ]
+}

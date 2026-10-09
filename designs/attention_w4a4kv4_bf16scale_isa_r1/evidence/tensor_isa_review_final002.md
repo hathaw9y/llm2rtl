@@ -1,0 +1,9 @@
+Current-source real fixture crosscheck PASS. The reviewer authored control/wrapper/top; this report audits the different-author full fixture, runner, golden/source closure and evidence. Independent control acceptance is separately pinned; root performs final independent whole-integration acceptance. No new blocker was found.
+
+All nine profiles pass 52 cases, with exact exports of all 13 computed banks through native S2MM, including packed INT4, BF16 scales, continuous tensor packing and zero padding. Canonical 21 and diagnostic 34 programs execute consecutively. Separate command-latency2 prefill passes 36 cases. Monitors cover saved identities, atomic ownership, read/write drain, accepted releases, END and no requests after retirement. Five late bank faults retain owners and invalid destination with no physical access; the range injection is also unauthorized and is scoped accordingly. Compute ready stalls remain covered by the separate executor BFM.
+
+All four components use identical current common RTL and prefill configuration. All 9 strict lint logs are empty, but lint elaborates defaults 10/1024/latency 1; simulation/OOC use 6/64/latency 1 and supplemental simulation 6/64/latency 2. No separate latency2 lint or timing is claimed.
+
+Actual prefill top 5 ns OOC passes WNS +0.149ns, WHS +0.061ns and WPWS +1.958ns with zero failing endpoints and no black boxes. Resources are 16992 LUT, 7004 FF, 38 RAMB36, 1 RAMB18 and 8 DSP. Check-timing categories are zero. DSP register optimization warnings and one RAM methodology warning are disclosed. External boundary hold is excluded; this is unplaced OOC, not routed/board signoff. Small positive margin and general model quality remain outside acceptance.
+
+All raw logs, component/merged manifests, child reviews and current/snapshot identities are hash-bound in the JSON. Historical failed/trial evidence and all implementation sources remain unchanged.

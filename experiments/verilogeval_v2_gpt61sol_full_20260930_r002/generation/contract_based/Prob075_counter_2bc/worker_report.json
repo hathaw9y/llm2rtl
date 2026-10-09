@@ -1,0 +1,36 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob075_counter_2bc/development/01"
+    },
+    {
+      "label": "tb_revision_1",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob075_counter_2bc/development/02"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Power-up state before reset is unspecified and is not asserted by the testbench.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "snapshot": "dev_tb_initial.sv",
+      "reason": "The initial reset task released reset with stale training enabled, allowing an unmodeled clock-edge update before the next step. Disable training before reset release so intervening rising edges hold the counter. Expected counter rules and all checks remain intact."
+    }
+  ],
+  "contract": {
+    "status": "frozen",
+    "structural_gate": "passed_structure_only",
+    "changes": []
+  },
+  "environment_smoke": "passed: correct fixture passes, injected fault fails, repaired fixture passes",
+  "verification_summary": "Icarus 12 compile and simulation passed with 231 comparisons covering every state/input combination, endpoint saturation, hold, asynchronous reset, reset priority and post-reset training.",
+  "static_review": "Exact original interface; unsigned two-bit arithmetic; reset prioritized; no extra latency, ports, initialization, or dependencies. Initial RTL snapshot unchanged."
+}

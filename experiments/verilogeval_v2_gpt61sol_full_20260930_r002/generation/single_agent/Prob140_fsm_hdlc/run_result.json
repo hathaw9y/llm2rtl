@@ -1,0 +1,183 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob140_fsm_hdlc",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob140_fsm_hdlc",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob140_fsm_hdlc/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790745239.0644848,
+    "ended_at_unix": 1790745357.7825518,
+    "seconds": 118.71806740760803,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 77666,
+      "cached_input_tokens": 65280,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2144,
+      "reasoning_output_tokens": 88
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "8e474eac431cbcbd45f445b51111225bfafc8af8d51dc1ba4fbf4de583cefdb0",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "cases": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "evidence_directory": "development/01",
+        "coverage": "12744 cycles; run lengths 0 through 20, discard and flag boundaries, sustained errors, consecutive sequences, reset during run lengths 0 through 9, exhaustive 10-bit streams, pre-edge and post-edge Moore output stability.",
+        "compile": "Icarus 12 with -g2012 -Wall -Wno-timescale; no diagnostics",
+        "simulation": "Matching vvp completed with explicit PASS"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "No synthesis or board work performed.",
+      "Pre-reset state is unspecified by the problem and is not checked."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "Moore FSM with run states for zero through six ones, separate discard and flag states, and a persistent error state for seven or more ones. Active-high synchronous reset treats prior input as zero. Outputs decode only registered state, with no additional latency or ports.",
+    "static_review": "Complete combinational next-state assignment, explicit enum if/else transitions, nonblocking sequential assignment, original ports and reset retained. Four-bit enum accommodates ten states.",
+    "artifacts": [
+      "candidate.sv",
+      "candidate_initial.sv",
+      "dev_tb.sv",
+      "dev_checks.jsonl",
+      "development/01"
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "8e474eac431cbcbd45f445b51111225bfafc8af8d51dc1ba4fbf4de583cefdb0",
+      "Prob140_fsm_hdlc_test.sv": "382792d3e904af5f5189988368b299ea04604313a0325a70f0b442927a8a4dd9",
+      "Prob140_fsm_hdlc_ref.sv": "3479ed45a237f4997354f47f7ac7fabd149346dcea6da5be7e6bfb9fd0c3453c"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob140_fsm_hdlc_test.sv",
+        "Prob140_fsm_hdlc_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015270989388227463
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb140_fsm_hdlc_test.sv:20: $finish called at 4006 (1ps)\nHint: Output 'disc' has no mismatches.\nHint: Output 'flag' has no mismatches.\nHint: Output 'err' has no mismatches.\nHint: Total mismatched samples is 0 out of 801 samples\n\nSimulation finished at 4006 ps\nMismatches: 0 in 801 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012957590632140636
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "8e474eac431cbcbd45f445b51111225bfafc8af8d51dc1ba4fbf4de583cefdb0",
+      "Prob140_fsm_hdlc_test.sv": "382792d3e904af5f5189988368b299ea04604313a0325a70f0b442927a8a4dd9",
+      "Prob140_fsm_hdlc_ref.sv": "3479ed45a237f4997354f47f7ac7fabd149346dcea6da5be7e6bfb9fd0c3453c"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob140_fsm_hdlc_test.sv",
+        "Prob140_fsm_hdlc_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01485452800989151
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb140_fsm_hdlc_test.sv:20: $finish called at 4006 (1ps)\nHint: Output 'disc' has no mismatches.\nHint: Output 'flag' has no mismatches.\nHint: Output 'err' has no mismatches.\nHint: Total mismatched samples is 0 out of 801 samples\n\nSimulation finished at 4006 ps\nMismatches: 0 in 801 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013459947891533375
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

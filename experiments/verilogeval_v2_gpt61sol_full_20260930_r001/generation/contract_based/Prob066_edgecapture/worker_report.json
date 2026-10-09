@@ -1,0 +1,49 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structural validation only)",
+      "log": "contract_validation_retry.log"
+    },
+    {
+      "name": "compile and warnings",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "PASS",
+      "exit_code": 0,
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "independent development simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "PASS: 1170 checked samples plus between-edge checks",
+      "exit_code": 0,
+      "log": "dev_simulation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "Single sequential driver; nonblocking state updates; exact module and ports; 32-bit bitwise operations; synchronous active-high reset priority; no simulation-only DUT constructs"
+    },
+    {
+      "name": "initial candidate preservation",
+      "result": "candidate_initial.sv preserved immediately after initial implementation, before development checks; final candidate identical",
+      "identical": true
+    }
+  ],
+  "development_outcome": "Initial candidate passed independent development checks without RTL changes.",
+  "limitations": [
+    "Official evaluation not accessed or run; its result is unknown.",
+    "No synthesis, timing analysis or board work performed.",
+    "Power-up behavior is unspecified; development checks initialize via synchronous reset.",
+    "Input-history reset behavior was not explicit in the original problem; frozen contract samples input on every edge including reset.",
+    "Finite directed/random simulation is not exhaustive."
+  ],
+  "tool_errors": [
+    {
+      "log": "contract_wrapper_error.log",
+      "description": "First shell wrapper used the zsh read-only variable status. Contract validator rerun with contract_rc passed; no RTL existed before successful gate."
+    }
+  ]
+}

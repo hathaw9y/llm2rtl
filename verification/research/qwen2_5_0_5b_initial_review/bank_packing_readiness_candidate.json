@@ -1,0 +1,19 @@
+{
+  "status": "agreed_layout_and_state_basis_exact_encoding_pending",
+  "native_word_bytes": 16,
+  "endianness": "little-endian; earliest element occupies lowest bits/bytes",
+  "BF16_FP32_rows": "Row-major; each row begins on a 16-byte boundary; logical dimensions and physical row stride are separate descriptor fields.",
+  "padding": "Padding elements are zero initialized and never included in mathematical reductions. BF16 row stride rounds up to 8 elements; FP32 row stride rounds up to 4 elements.",
+  "W4_projection": "Output-major rows, K increasing; 128 K codes per row=64 bytes; first code in low nibble, second in high nibble; signed two-complement nibble; -8 rejected.",
+  "projection_scales": "One FP32 scale per output for the resident K128 group, output order matching weight rows.",
+  "embedding_scales": "7 FP32 scales per hidden896 row, padded to 8 entries=32 bytes; padding is not a scale. Up to16 rows=512 bytes.",
+  "attention_score_probability": "Physical row width1024 elements for SCORE/PROB; actual context L defines valid columns; padded columns are excluded from softmax/GEMM.",
+  "partial_assembly": "Descriptor tracks tensor identity/shape/layout and covered semantic tiles. New outputs are invalid until successful completion; assembly destinations become valid only after all required tiles complete.",
+  "partial_sum": "GEMM INIT starts from +0; ACCUM requires matching valid FP32 partial sum with expected next K group. Final tensor availability is distinct from valid partial-sum availability.",
+  "failed_commands": "Invalidate any destination affected by a failed write; preserve source liveness; do not advance assembly coverage or expected K. No rollback of physical partial writes is assumed.",
+  "chunk_END": "Preserve descriptors, coverage and partial sums on normal END/DONE.",
+  "ownership": "Unchanged atomic exclusive bank acquisition, release by matching completion; legal partial assembly never bypasses ownership.",
+  "offset_rule": "Compute commands use logical bank handles; LAYOUT may specify semantic row/column/head selection, not a raw byte offset. DMA addresses remain explicit.",
+  "limitations": "Exact command bit fields, per-layout capability matrix and the full workload schedule remain pending. No HDL implemented.",
+  "user_selection": "어"
+}

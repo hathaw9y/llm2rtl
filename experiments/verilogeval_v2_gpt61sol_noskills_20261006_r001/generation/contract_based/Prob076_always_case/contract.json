@@ -1,0 +1,28 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"sel": 3, "data0": 4, "data1": 4, "data2": 4, "data3": 4, "data4": 4, "data5": 4},
+    "outputs": {"out": 4}
+  },
+  "semantics": {
+    "function": "For sel 0 through 5, out equals the corresponding data input; for sel 6 or 7, out is zero.",
+    "timing": "Combinational 6-to-1 multiplexer, with no clock or added latency, grounded in the original multiplexer requirement and port list.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or initial output requirement specified; output follows current inputs after combinational settling."
+  },
+  "numeric": {
+    "selector": "3-bit unsigned selection encoding 0 through 7",
+    "data": "4-bit vectors copied without arithmetic or sign conversion",
+    "default": "4'b0000"
+  },
+  "verification": {
+    "oracle": "Independent indexed data array for known selectors 0 through 5, zero for 6 and 7, based on the original problem.",
+    "coverage": "Every selector and every value of each data input, distinct directed patterns, and input changes while selector remains fixed.",
+    "sampling": "Check after a one-nanosecond combinational settling interval; no clock/reset phases exist.",
+    "completion": "Fatal on mismatch or bounded timeout; print PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z selector bits is not explicitly specified; plain case default produces zero, while mandatory oracle checks cover all binary selectors."
+  ]
+}

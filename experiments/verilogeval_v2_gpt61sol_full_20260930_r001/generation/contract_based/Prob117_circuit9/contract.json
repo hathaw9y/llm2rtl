@@ -1,0 +1,61 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 3
+      }
+    },
+    "additional_ports": false
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "transition": "At each rising edge, if sampled a is 1 set q to 4; otherwise increment q, wrapping 6 to 0.",
+    "reset": "No dedicated reset; a is a synchronous load-to-4 control.",
+    "initialization": "No initialization; q is unknown until an edge with a=1.",
+    "between_edges": "q holds, including falling edges and changes of a.",
+    "waveform_sampling": "At 45ns a changes coincident with the rising edge; the displayed q=4 is interpreted as sampling the previous a=1. Subsequent edges sample a=0."
+  },
+  "numeric": {
+    "q_type": "unsigned 3-bit register",
+    "legal_sequence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "increment": "q + 3-bit unsigned 1 when q is not 6",
+    "wrap": "6 -> 0, modulo 7 for legal initialized states",
+    "state_7": "Unspecified by original waveform; ordinary 3-bit increment produces 0.",
+    "unknown_state": "No guaranteed counting behavior until synchronous load."
+  },
+  "verification": {
+    "oracle": "Independent integer model: load 4 on sampled a=1, else (expected+1)%7.",
+    "directed": "Replay edge outputs 4,4,4,4,4,4,5,6,0,1 with input changes driven away from sampling races; verify initial unknown.",
+    "coverage": "Multiple full modulo-7 cycles, synchronous reload from every legal state, repeated loads, input toggles between edges, falling-edge hold.",
+    "execution": "Icarus -g2012 with explicit dev_tb top and finite compile and simulation timeouts; internal testbench watchdog."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Input a transition coincides with rising edge at 45ns.",
+      "resolution": "Treat displayed input as post-edge and sampled input as previous value; no extra pipeline is inferred."
+    },
+    {
+      "issue": "Short waveform does not uniquely define all possible sequential circuits or state 7.",
+      "resolution": "Use simplest synchronous loadable modulo-7 counter consistent with shown sequence; no reset or initial value added."
+    }
+  ]
+}

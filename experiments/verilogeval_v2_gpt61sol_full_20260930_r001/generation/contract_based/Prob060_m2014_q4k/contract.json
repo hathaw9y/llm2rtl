@@ -1,0 +1,36 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "resetn": {"direction": "input", "width": 1},
+      "in": {"direction": "input", "width": 1},
+      "out": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "clock": "All state changes occur on the positive edge of clk.",
+    "reset": "Active-low synchronous reset: when resetn is 0 at a positive edge, all four stages become 0. Reset changes between positive edges do not change state.",
+    "transition": "When resetn is 1 at a positive edge: stage0_next=in, stage1_next=stage0, stage2_next=stage1, stage3_next=stage2, using pre-edge values.",
+    "output": "out continuously equals stage3. An input sampled at edge k reaches out immediately after edge k+3, traversing four D flops.",
+    "initialization": "No specified power-up initialization; state is unspecified until a synchronous reset or sufficient input shifts.",
+    "throughput": "One bit sampled on each non-reset positive edge; no enable or handshake."
+  },
+  "numeric": {
+    "data": "One-bit unsigned bit values, preserved without arithmetic.",
+    "storage": "Exactly four one-bit stages.",
+    "arithmetic": "No rounding, saturation, overflow, or signed arithmetic applies."
+  },
+  "verification": {
+    "oracle": "Independent four-entry history model updated at each positive edge; compare out to the oldest stored bit after nonblocking assignments settle.",
+    "directed": "Check reset clearing, isolated impulse four-stage propagation, all-zero/all-one runs and alternating inputs.",
+    "exhaustive": "For every possible four-bit input pattern, reset then shift each bit and flush zeros while checking each edge.",
+    "reset_timing": "Assert and deassert reset between edges while out is high, verify no immediate change, then verify clearing at a positive edge. Test reset during activity and consecutive reset edges.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts; preserve logs."
+  },
+  "specification_ambiguities": [
+    "Reset value is not explicitly stated; interpret resettable D flops as clearing all stages to zero.",
+    "Power-up values are unspecified and no initialization is added."
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_structure",
+      "result": "PASS",
+      "log": "contract_validation.log",
+      "scope": "Structural validation only"
+    },
+    {
+      "name": "static_rtl_review",
+      "result": "PASS",
+      "scope": "Exact one-bit ports; four table transitions for each input; out high only in D; positive-edge synchronous active-high reset; complete combinational assignments; no arithmetic or initialization added"
+    },
+    {
+      "name": "development_compile",
+      "result": "TOOL_FAILURE",
+      "exit_code": 139,
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "log": "development_compile.log",
+      "detail": "Process exited with code 139 and empty diagnostic log; no executable generated."
+    },
+    {
+      "name": "development_simulation",
+      "result": "NOT_RUN",
+      "reason": "Compilation did not produce dev_sim"
+    },
+    {
+      "name": "tool_version_probe",
+      "exit_code": 0,
+      "log": "development_tool_version.log"
+    }
+  ],
+  "development_outcome": "Initial candidate delivered after contract validation and static review. Development compilation failed at the tool level; no simulation success claimed.",
+  "limitations": [
+    "Behavioral tests were written but could not run because the compiler exited with code 139.",
+    "Power-up state is unspecified until a synchronous reset edge.",
+    "No synthesis, board access, official tests, or official evaluation results."
+  ],
+  "artifacts": [
+    "contract.json",
+    "contract_gate.json",
+    "contract_validation.log",
+    "candidate.sv",
+    "candidate_initial.sv",
+    "dev_tb.sv",
+    "development_compile.log",
+    "development_execution.json",
+    "development_tool_version.log"
+  ]
+}

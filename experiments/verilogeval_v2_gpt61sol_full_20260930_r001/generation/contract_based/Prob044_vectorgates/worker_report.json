@@ -1,0 +1,38 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "passed_structure_only",
+      "exit_code": 0,
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "passed",
+      "details": "Exact module and port widths; combinational continuous assignments; bitwise and logical OR distinguished; inverse b above inverse a; no state, clock, reset, inferred latch, or child modules."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim.vvp candidate.sv dev_tb.sv",
+      "result": "tool_failed",
+      "exit_code": 139,
+      "logs": ["dev_compile.log", "dev_status.log"],
+      "details": "Compiler returned exit code 139 with an empty diagnostic log."
+    },
+    {
+      "name": "development_simulation",
+      "result": "not_run",
+      "details": "Compilation failed; no simulation success is claimed."
+    }
+  ],
+  "development_outcome": "Frozen contract passed the structural gate. Initial RTL preserved as candidate_initial.sv; candidate.sv is unchanged. Independent exhaustive 64-pair testbench prepared, but compile tool failure prevented dynamic verification.",
+  "limitations": [
+    "Development simulation could not run because the Icarus compile process exited with code 139.",
+    "The independent testbench covers binary inputs; X/Z behavior is not dynamically checked.",
+    "No synthesis, timing analysis, or board access performed.",
+    "Official evaluation is external and its results are unavailable."
+  ]
+}

@@ -1,0 +1,511 @@
+{
+  "schema": "llm2rtl.memory_isa_proposal.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104_r1",
+  "status": "historical_proposal_use_frozen_contracts",
+  "recommendations": {
+    "bank_count": 16,
+    "bank_id_bits": 4,
+    "ISA_record_bits": 128,
+    "command_BRAM_records": 16,
+    "max_work_records_per_fragment": 15,
+    "scale_storage": "INT8 tensor sidecars; static KV table in B7 bytes4096..6015",
+    "ownership": "single exclusive lock protects data, scale and descriptor; new native directional ownership is an alternative, not silently adopted",
+    "compute_address_rule": "Only logical bank IDs, dimensions, profiles and indices; wrapper derives physical data/scale addresses",
+    "weight_pingpong": "agreed explicit ISA sequence using B3/B15"
+  },
+  "banks": [
+    {
+      "bank_id": 0,
+      "name": "hidden_BF16",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "hidden"
+      ]
+    },
+    {
+      "bank_id": 1,
+      "name": "projection_output_BF16",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "projection_output"
+      ]
+    },
+    {
+      "bank_id": 2,
+      "name": "norm_output_BF16",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "norm_output"
+      ]
+    },
+    {
+      "bank_id": 3,
+      "name": "weight_ping_or_gamma_or_embedding",
+      "payload_capacity_bytes": 294912,
+      "scale_region_byte_offset": 294912,
+      "scale_region_capacity_bytes": 512,
+      "capacity_bytes": 295424,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "weight_INT8",
+        "gamma_BF16",
+        "embedding_rows_INT8"
+      ]
+    },
+    {
+      "bank_id": 4,
+      "name": "Q_BF16",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "Q_BF16"
+      ]
+    },
+    {
+      "bank_id": 5,
+      "name": "K_BF16_or_residual",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "K_BF16",
+        "attention_residual_BF16"
+      ]
+    },
+    {
+      "bank_id": 6,
+      "name": "V_BF16",
+      "payload_capacity_bytes": 12288,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 12288,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "V_BF16"
+      ]
+    },
+    {
+      "bank_id": 7,
+      "name": "RoPE_and_static_KV_scales",
+      "payload_capacity_bytes": 6016,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 6016,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "RoPE_and_static_KV_scales"
+      ],
+      "components": {
+        "RoPE_window": {
+          "byte_offset": 0,
+          "capacity_bytes": 4096,
+          "lifetime": "updated for each processing block"
+        },
+        "static_KV_scales": {
+          "byte_offset": 4096,
+          "capacity_bytes": 1920,
+          "lifetime": "loaded once, retained across fragments and prefill/decode"
+        }
+      }
+    },
+    {
+      "bank_id": 8,
+      "name": "K_INT8_or_gate_BF16",
+      "payload_capacity_bytes": 196608,
+      "scale_region_byte_offset": 196608,
+      "scale_region_capacity_bytes": 32,
+      "capacity_bytes": 196640,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "K_current_or_cache_INT8",
+        "gate_BF16"
+      ]
+    },
+    {
+      "bank_id": 9,
+      "name": "V_INT8_or_up_BF16",
+      "payload_capacity_bytes": 196608,
+      "scale_region_byte_offset": 196608,
+      "scale_region_capacity_bytes": 64,
+      "capacity_bytes": 196672,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "V_current_or_cache_INT8",
+        "up_BF16"
+      ]
+    },
+    {
+      "bank_id": 10,
+      "name": "score_probability_or_SiLU_BF16",
+      "payload_capacity_bytes": 589824,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 589824,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "score_BF16",
+        "probability_BF16",
+        "SiLU_BF16"
+      ]
+    },
+    {
+      "bank_id": 11,
+      "name": "attention_context_BF16",
+      "payload_capacity_bytes": 36864,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 36864,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "context_BF16"
+      ]
+    },
+    {
+      "bank_id": 12,
+      "name": "logits_BF16",
+      "payload_capacity_bytes": 98304,
+      "scale_region_byte_offset": null,
+      "scale_region_capacity_bytes": 0,
+      "capacity_bytes": 98304,
+      "write_word_bytes": 16,
+      "scale_endianness": null,
+      "allowed_profiles": [
+        "last_token_logits"
+      ]
+    },
+    {
+      "bank_id": 13,
+      "name": "A_or_probability_INT8",
+      "payload_capacity_bytes": 294912,
+      "scale_region_byte_offset": 294912,
+      "scale_region_capacity_bytes": 96,
+      "capacity_bytes": 295008,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "A_INT8",
+        "probability_INT8"
+      ]
+    },
+    {
+      "bank_id": 14,
+      "name": "Q_INT8",
+      "payload_capacity_bytes": 18432,
+      "scale_region_byte_offset": 18432,
+      "scale_region_capacity_bytes": 96,
+      "capacity_bytes": 18528,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "Q_INT8"
+      ]
+    },
+    {
+      "bank_id": 15,
+      "name": "weight_pong",
+      "payload_capacity_bytes": 294912,
+      "scale_region_byte_offset": 294912,
+      "scale_region_capacity_bytes": 128,
+      "capacity_bytes": 295040,
+      "write_word_bytes": 16,
+      "scale_endianness": "little",
+      "allowed_profiles": [
+        "weight_INT8"
+      ]
+    }
+  ],
+  "profiles": {
+    "weight_INT8": {
+      "data_shape": "[N_tile,K]",
+      "row_stride_bytes": "align(K,16)",
+      "scale_shape": "[ceil(N_tile/16)]",
+      "scale_index": "floor(local_output_channel/16)",
+      "max_scale_bytes": 48
+    },
+    "embedding_rows_INT8": {
+      "data_shape": "[rows,576]",
+      "row_stride_bytes": 576,
+      "scale_shape": "[rows,4] FP32 blocks",
+      "scale_index": "row*4+descriptor.embedding_scale_lane[row]",
+      "max_scale_bytes": 512,
+      "scale_row_stride_bytes": 16,
+      "lane_selector_storage": "two-bit descriptor field per row, written by validated DMA aux; not CPU tensor processing"
+    },
+    "A_INT8": {
+      "data_shape": "[rows,K]",
+      "row_stride_bytes": "align(K,16)",
+      "scale_shape": "[ceil(rows/16)]",
+      "scale_index": "floor(row/16)",
+      "max_scale_bytes": 8
+    },
+    "Q_INT8": {
+      "data_shape": "[rows,9,64]",
+      "row_stride_bytes": 576,
+      "scale_shape": "[9,ceil(rows/16)]",
+      "scale_index": "head*ceil(rows/16)+floor(row/16)",
+      "max_scale_bytes": 72
+    },
+    "K_current_or_cache_INT8": {
+      "data_shape": "[tokens,3,64]",
+      "row_stride_bytes": 192,
+      "scale_shape": [
+        3
+      ],
+      "scale_index": "KV_head",
+      "max_scale_bytes": 12
+    },
+    "V_current_or_cache_INT8": {
+      "data_shape": "[tokens,3,64]",
+      "row_stride_bytes": 192,
+      "scale_shape": [
+        3,
+        4
+      ],
+      "scale_index": "KV_head*4+floor(feature/16)",
+      "max_scale_bytes": 48
+    },
+    "probability_INT8": {
+      "data_shape": "[rows,9,S_pad]",
+      "row_stride_bytes": "9*align(valid_context,16)",
+      "scale_shape": "[9,ceil(rows/16)]",
+      "scale_index": "head*ceil(rows/16)+floor(row/16)",
+      "max_scale_bytes": 72
+    },
+    "score_probability_BF16": {
+      "data_shape": "[rows,9,S_pad]",
+      "S_pad": "align(valid_context,16)",
+      "row_stride_bytes": "18*align(valid_context,16)"
+    },
+    "static_KV_scales": {
+      "data_shape": [
+        30,
+        64
+      ],
+      "entry_stride_bytes": 64,
+      "K_scale_byte_offset": "4096 + layer*64 + head*4",
+      "V_scale_byte_offset": "4096 + layer*64 + 16 + (head*4+floor(feature/16))*4",
+      "padding": "entry bytes 12..15 zero; entries contain 3 K FP32 scales and 12 V FP32 scales",
+      "bank": 7,
+      "bank_table_byte_offset": 4096
+    }
+  },
+  "physical_memory": "Capacity calculations are logical byte requirements; BRAM/URAM rounding, striping, port routing and timing require separate implementation evidence.",
+  "port_candidates": {
+    "all_write_bits": 128,
+    "INT8_lanes_per_write": 16,
+    "GEMM_source_read_bits": 256,
+    "INT8_lanes_per_wide_read": 32,
+    "wide_alignment_bytes": 32,
+    "DMA_stream_bits": 128,
+    "DMA_alignment_bytes": 16,
+    "native_address_unit": "128-bit words; wide request uses an even word address"
+  },
+  "DMA_rules": {
+    "BTT": "nonzero, multiple of 16, below 2^23",
+    "DDR_and_bank_offset": "16-byte aligned",
+    "data_and_scale": "separate explicit transfers or macro-expanded typed DMA; padding initialized to zero",
+    "sidecar": "fixed offset from bank descriptor, never supplied to GEMM as raw offset",
+    "partial_data_validity": "Track expected data and scale intervals separately; a successful partial transfer does not make the entire tensor ready"
+  },
+  "descriptor_lifecycle": {
+    "BANK_CONFIG_candidate": "Only while free; sets a validated profile, dimensions, generation and expected data/scale intervals; invalidates the previous tensor. Contains no tensor arithmetic or DDR address. Encoding pending.",
+    "quantization_destination": "Profile/dimensions established from accepted command; commits only after all output data and scale writes accepted.",
+    "DMA_destination": "Configured expected byte intervals must all complete successfully; pending segments remain invalid. A DMA-load command can target the configured invalid bank.",
+    "failure": "Destination invalid; no stale descriptor or scale reuse. Error/completion identity rules retained.",
+    "completion": "Release only matched accepted bank roles after all memory responses processed and final data/scale writes accepted.",
+    "END_and_FENCE": "Drain without clearing data, metadata or DDR cache state.",
+    "B7_components": "One bank lock; independently track RoPE-window and static-table validity. Reconfiguring/loading the RoPE window must preserve static scales. A command checks only the required component. Neither data nor scale is cleared by END/START."
+  },
+  "opcode_candidates": [
+    {
+      "encoding": 0,
+      "name": "END",
+      "status": "proposal"
+    },
+    {
+      "encoding": 1,
+      "name": "DMA_LOAD",
+      "status": "proposal"
+    },
+    {
+      "encoding": 2,
+      "name": "DMA_STORE",
+      "status": "proposal"
+    },
+    {
+      "encoding": 3,
+      "name": "GEMM_INT8",
+      "status": "proposal"
+    },
+    {
+      "encoding": 4,
+      "name": "RMSNORM",
+      "status": "proposal"
+    },
+    {
+      "encoding": 5,
+      "name": "ROPE",
+      "status": "proposal"
+    },
+    {
+      "encoding": 6,
+      "name": "ATTN_SCORE_INT8",
+      "status": "proposal"
+    },
+    {
+      "encoding": 7,
+      "name": "SOFTMAX",
+      "status": "proposal"
+    },
+    {
+      "encoding": 8,
+      "name": "ATTN_VALUE_INT8",
+      "status": "proposal"
+    },
+    {
+      "encoding": 9,
+      "name": "ADD",
+      "status": "proposal"
+    },
+    {
+      "encoding": 10,
+      "name": "SILU_MUL",
+      "status": "proposal"
+    },
+    {
+      "encoding": 11,
+      "name": "FENCE",
+      "status": "proposal"
+    },
+    {
+      "encoding": 12,
+      "name": "GEMM_TILES_INT8",
+      "status": "proposal"
+    },
+    {
+      "encoding": 13,
+      "name": "QUANTIZE",
+      "status": "proposal"
+    },
+    {
+      "encoding": 14,
+      "name": "DEQUANTIZE",
+      "status": "proposal"
+    },
+    {
+      "encoding": 15,
+      "name": "BANK_CONFIG",
+      "status": "proposal"
+    }
+  ],
+  "compute_operands": {
+    "GEMM_INT8": "A8 bank, B8 bank, BF16 destination; shapes and logical output tile indices; A/B scales reside in their respective banks",
+    "ATTN_SCORE_INT8": "B14 Q8, B8 K8, B10 BF16 score; rows/position/context; adapter selects GQA head and scale",
+    "ATTN_VALUE_INT8": "B13 P8, B9 V8, B11 BF16 context; rows/context; adapter transposes V tile and selects scale",
+    "QUANTIZE": "BF16 source, B7 static-scale table bank when required, INT8 destination; dynamic A/Q/P or static K/V profile; ignores unused scale-table operand rather than acquiring bank 0",
+    "DEQUANTIZE": "INT8 source with row scales, BF16 destination; embedding row conversion; scale and tensor are read under the same source ownership"
+  },
+  "GEMM_TILES_INT8_candidate": {
+    "class": "explicit model-specific compound_dma_compute extension; not an ordinary compute DDR operand",
+    "PS_ownership": "PS supplies both DDR bases, all matrix dimensions and N residency tile width; PL expands the specified sequence only",
+    "sequence": [
+      "configure weight bank expected data/scale ranges",
+      "DMA_LOAD weight bytes",
+      "DMA_LOAD FP32 scale bytes with zero padding",
+      "GEMM_INT8",
+      "repeat specified N tiles"
+    ],
+    "payload_candidate_bits": {
+      "weight_DDR_base": 32,
+      "scale_DDR_base": 32,
+      "N_total": 16,
+      "K": 11,
+      "M_start": 6,
+      "M_count": 6,
+      "N_tile": 8,
+      "reserved": 1
+    },
+    "initial_N_tile": 192,
+    "N_tile_constraint_candidate": "multiple of 64, up to 192, for 16-byte aligned FP32 scale transfers; all model projection widths are multiples of 192",
+    "weight_stride": "K bytes for this model, not BF16 K*2",
+    "scale_stride": "4 bytes per 16 output channels",
+    "common_contract_note": "Requires discussion of the explicit compound extension; alternative is PS-issued DMA_LOAD/DMA_LOAD/GEMM sequence",
+    "status": "deferred; not used for the agreed explicit-ISA ping-pong path"
+  },
+  "prefill_decode_schedule_candidate": [
+    "At initialization DMA-load B7 static subregion once.",
+    "Gather embedding rows and corresponding tied-weight scales into B3, then PL dequantize to B0.",
+    "Norm B0 -> B2; quantize B2 -> B13 once; reuse B13 for Q/K/V projections.",
+    "Project Q/K/V -> B4/B5/B6; RoPE Q/K; quantize Q -> B14, K -> B8, V -> B9 using B7 for K/V.",
+    "DMA-store current K/V payload only to their position offsets, then FENCE.",
+    "Restore full K/V INT8 prefix and layer scales to B8/B9; run QK -> B10.",
+    "Softmax produces BF16 P in B10; quantize -> B13; run PV -> B11.",
+    "Quantize context -> B13; O projection -> B1; residual -> B5.",
+    "Norm B5 -> B2; quantize -> B13 once; gate/up reuse A13 and replace B8/B9 only after attention completion.",
+    "SiLU -> B10; quantize -> B13; down -> B1; residual -> B0.",
+    "Final norm -> B2; quantize only selected last row into B13; lm_head -> B12; DMA-store BF16 logits."
+  ],
+  "limits": [
+    "Full-K A/P scale groups prohibit splitting the reduction axis into separately scaled residency tiles.",
+    "This proposal does not claim decode M=1 PE utilization has been solved.",
+    "Static scale validation and nonlinear numerical algorithms remain pending.",
+    "All 16 IDs occupied, including two weight banks; further staging needs another allocation review."
+  ],
+  "needs_user_agreement": [
+    "fixed scale sidecar and 16-bank allocation",
+    "BANK_CONFIG/QUANTIZE/DEQUANTIZE opcode candidates",
+    "record layout, format profile transitions and physical port widths"
+  ],
+  "ISA_weight_schedule": {
+    "status": "explicit-ISA policy agreed; bit encoding and BANK_CONFIG contract still draft",
+    "per_tile": [
+      "BANK_CONFIG inactive weight bank",
+      "DMA_LOAD INT8 weight payload",
+      "DMA_LOAD FP32 scale sidecar",
+      "GEMM_INT8 A, selected weight bank, BF16 destination"
+    ],
+    "bank_selection": "tile index even -> B3; odd -> B15",
+    "overlap": "After GEMM(tile i) acceptance, the next record may configure/load tile i+1 into the other bank while GEMM i is outstanding. GEMM i+1 stalls at current PC until A/output ownership and the shared core are available.",
+    "no_lookahead": "Only current PC issues; PS orders all preload and GEMM records.",
+    "no_hidden_DDR": "Ordinary compute receives only local bank IDs; all DDR reads are DMA_LOAD records.",
+    "release": "Weight bank reusable only after matched GEMM completion following final BF16 output write; not merely the last weight read.",
+    "fragment_rule": "At most15 work records plus END; END drains accepted operations but preserves ready or partially filled tensor/scale descriptors. PS upload gaps are counted separately.",
+    "A_reuse": "Same A8 bank retained as valid data across all N tiles and across Q/K/V or gate/up projections; its ownership releases per matched GEMM completion.",
+    "scope": "Projection and lm_head weight residency; attention operands remain K/V cache banks."
+  },
+  "superseded_by_frozen_contracts": [
+    "isa_spec.json",
+    "bank_layout.json",
+    "contracts/numeric_contract.json",
+    "contracts/compute_interface.json"
+  ]
+}

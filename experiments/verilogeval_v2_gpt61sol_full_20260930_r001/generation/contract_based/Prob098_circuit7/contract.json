@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "positive edge of clk only",
+    "state": "one stored input sample and registered output",
+    "transition": "At rising edge n: stored_sample := a sampled at edge n; q := complement of stored_sample from before edge n. Thus q[n] = ~a[n-1] after nonblocking updates.",
+    "between_edges": "q holds unchanged",
+    "reset": "No reset port or reset behavior",
+    "initialization": "No explicit initialization; stored sample and q initially unknown in four-state simulation. First rising edge leaves q unknown; second edge resolves q if first sample was known.",
+    "waveform": "Samples 0 at 5ns give q=1 at 15ns; sample 1 at 35ns gives q=0 at 45ns."
+  },
+  "numeric": {
+    "type": "single-bit four-state logic",
+    "operation": "one-bit bitwise complement",
+    "unknowns": "Complement of x or z produces x",
+    "arithmetic": "No arithmetic, overflow, rounding, truncation or signed interpretation"
+  },
+  "verification": {
+    "oracle": "Maintain a history of driven rising-edge input samples; expected q is complement of preceding sample, with initial expected x. Compare after NBA settling using case inequality.",
+    "directed": "Reproduce supplied waveform with inputs stable before sampling edges; check initial unknown, first edge unknown, subsequent ones then zeros.",
+    "additional": "Exercise alternating bits, consecutive equal bits, all length-four binary sequences, x/z samples, and input changes away from rising edges. Check q holds on falling edges and between edges.",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top, finite compile and simulation timeouts"
+  },
+  "specification_ambiguities": [
+    "The finite waveform cannot uniquely specify every possible sequential circuit. Adopt the minimal two-register delayed-inversion circuit consistent with the first-edge unknown and one-cycle delayed response.",
+    "Input changes are listed at clock rising-edge timestamps; development tests establish inputs before those edges to avoid simulator scheduling races."
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract structural gate",
+      "result": "PASS",
+      "logs": [
+        "contract_validation.log",
+        "contract_validation_retry.log",
+        "contract_gate.json"
+      ],
+      "note": "First shell wrapper failed because status is read-only in zsh after validator execution; rerun completed successfully."
+    },
+    {
+      "name": "initial candidate preservation",
+      "result": "PASS",
+      "note": "candidate.sv and candidate_initial.sv are byte-identical."
+    },
+    {
+      "name": "manual RTL review",
+      "result": "completed",
+      "note": "Exact interface; two-bit four-state FSM; synchronous active-high reset; no payload arithmetic, latches, submodule dependencies, or simulation constructs; completion state searches for next first byte."
+    },
+    {
+      "name": "Icarus development compile",
+      "result": "tool failure",
+      "exit_code": 139,
+      "timeout_seconds": 30,
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "logs": [
+        "dev_compile.log",
+        "dev_compile_status.log"
+      ]
+    },
+    {
+      "name": "tool version diagnostic",
+      "result": "driver reports version 12.0; backend version query failed",
+      "log": "dev_tool_version.log"
+    },
+    {
+      "name": "development simulation",
+      "result": "not run",
+      "note": "Compilation failed; no executable available for matching vvp."
+    }
+  ],
+  "development_outcome": "Frozen contract passed structural validation. Initial synthesizable RTL delivered unchanged. Independent self-checking testbench written, but compilation failed in specified tool; simulation success is not claimed.",
+  "limitations": [
+    "Contract gate checks structure only, not functional correctness.",
+    "Tool exit 139 prevents development elaboration and simulation evidence.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing, or board validation performed."
+  ]
+}

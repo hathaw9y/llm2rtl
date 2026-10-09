@@ -1,0 +1,54 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json",
+      "cases": [
+        {
+          "case": "correct",
+          "expected_pass": true,
+          "observed": "passed"
+        },
+        {
+          "case": "injected_fault",
+          "expected_pass": false,
+          "observed": "simulation_failed"
+        },
+        {
+          "case": "repair",
+          "expected_pass": true,
+          "observed": "passed"
+        }
+      ]
+    },
+    {
+      "name": "contract_structure",
+      "status": "passed_structure_only",
+      "evidence": "contract_gate.json"
+    },
+    {
+      "name": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "coverage": "All 16 binary combinations applied twice; both outputs checked on all 12 specified combinations each sweep."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation is not available during this turn.",
+    "Original specification leaves inputs 3,8,11,12 and X/Z input behavior unconstrained."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": {
+    "out_sop": "(~a & ~b & c) | (c & d)",
+    "out_pos": "c & (~a | d) & (~b | d)",
+    "minimization": "SOP groups 2,3 and 3,7,11,15 using the allowed don't-cares. A product covering 2 needs at least three literals, and a product covering 15 needs at least two; no one product can cover both. POS groups zeros with don't-cares: all c=0 inputs, a=1/d=0 inputs, and b=1/d=0 inputs. Zeros 0,6,10 require distinct zero groups, with at least one, two, and two literals respectively. Both forms therefore use five literals with minimum term/clause counts.",
+    "initial_snapshot": "candidate_initial.sv preserved immediately after initial creation; no RTL edits occurred."
+  }
+}

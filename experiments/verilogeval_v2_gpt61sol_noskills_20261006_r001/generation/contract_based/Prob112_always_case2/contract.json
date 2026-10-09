@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"in": "4-bit vector [3:0]"}, "outputs": {"pos": "2-bit vector [1:0]"}, "extra_ports": false},
+  "semantics": {"function": "Return the index of the least significant asserted input bit; return zero for input zero.", "priority_evidence": "Original example 8'b10010000 returns 4 despite bit 7 also being high, establishing ascending bit-index priority.", "timing": "Combinational circuit as explicitly stated; no clock, reset, storage, or added cycle latency.", "initialization": "No initialization or initial unknown behavior specified; output is determined by a settled binary input."},
+  "numeric": {"input_range": "Unsigned 0 through 15", "output_range": "Unsigned 0 through 3", "zero_input": 0, "priority_order": [0, 1, 2, 3]},
+  "verification": {"oracle": "Explicit expected position table independently derived from the original example and priority rule.", "coverage": "All 16 binary inputs, including zero, single asserted bits and competing asserted bits; repeated reverse-order transitions.", "sampling": "Drive inputs and sample after a short combinational settling delay.", "failure": "$fatal on mismatch and bounded timeout; print PASS only after all checks."},
+  "specification_ambiguities": ["Behavior for input bits containing X or Z is not specified; development checks cover every specified binary input."]
+}

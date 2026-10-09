@@ -1,0 +1,62 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 4
+      }
+    }
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "reset": "active-high synchronous; reset has priority and sets q to 0 on a rising edge",
+    "transition": "On each rising edge with reset low, advance 0,1,2,3,4,5,6,7,8,9,0; period 10",
+    "between_edges": "q holds, including when reset changes without a rising edge",
+    "initialization": "No specified power-up value; establish known state through synchronous reset"
+  },
+  "numeric": {
+    "representation": "4-bit unsigned binary counter",
+    "legal_values": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "increment": "Add one for legal values 0 through 8; wrap 9 to 0",
+    "overflow": "Modulo 10 in reachable legal states",
+    "invalid_states": "Values 10 through 15 and unknown initial state have no specified recovery requirement"
+  },
+  "verification": {
+    "oracle": "Independent integer count updated with modulo 10 after each non-reset rising edge",
+    "checks": [
+      "reset establishes zero",
+      "multiple complete ten-cycle periods",
+      "reset at each reachable count",
+      "reset held across multiple edges",
+      "reset pulse entirely between rising edges does not alter count",
+      "output stable at falling edges and between rising edges"
+    ],
+    "observation": "Compare after nonblocking updates settle; drive reset away from rising edges",
+    "tools": "Icarus Verilog 12 with -g2012 and explicit dev_tb top; compile and simulation each bounded by timeout; testbench watchdog"
+  },
+  "specification_ambiguities": [
+    "Power-up counter state is unspecified.",
+    "Behavior from unreachable binary states 10 through 15 is unspecified."
+  ]
+}

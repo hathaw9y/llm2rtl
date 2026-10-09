@@ -1,0 +1,19 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {"name": "contract_gate", "command": "python3 validate_contract.py", "result": "PASS (structural validation only)", "log": "contract_validation.log"},
+    {"name": "initial_preservation", "result": "candidate_initial.sv copied immediately after writing candidate.sv, before development checks; no RTL edits followed"},
+    {"name": "static_review", "result": "Exact benchmark ports, positive-edge synchronous active-high reset, overlap-preserving prefix transitions, absorbing FOUND state, complete combinational assignments, single sequential driver, and synthesizable constructs reviewed"},
+    {"name": "development_compile", "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv", "result": "PASS, exit 0, no warnings", "log": "development_compile.log"},
+    {"name": "development_simulation", "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim", "result": "PASS, exit 0, 53297 oracle comparisons", "log": "development_simulation.log", "coverage": "All 4096 length-12 streams; reset between streams; reset during partial match; data ignored during reset; sticky output; reset asserted between edges; detection after reset"}
+  ],
+  "development_outcome": "Initial candidate passed independent self-checking development simulation without RTL revisions.",
+  "preserved_errors": [{"log": "contract_gate_shell_error.log", "description": "First wrapper used zsh read-only variable status after validator execution. Original output preserved in contract_validation_attempt1.log; validator rerun passed. No contract or RTL change."}],
+  "limitations": [
+    "Official evaluation was not accessed and its result is unknown.",
+    "No synthesis, timing analysis, or board access performed.",
+    "Power-up behavior before synchronous reset is unspecified by the problem and untested.",
+    "Contract gate validates structure, not functional correctness; development simulation covers finite binary streams."
+  ]
+}

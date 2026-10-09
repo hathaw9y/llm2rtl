@@ -1,0 +1,42 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "d": 8
+    },
+    "outputs": {
+      "q": 8
+    }
+  },
+  "semantics": {
+    "clock": "Update on positive edge of clk, as explicitly specified for all DFFs.",
+    "reset": "Active high synchronous reset: at each positive edge, reset=1 sets q to zero, with priority over d.",
+    "capture": "At each positive edge with reset=0, q captures d with no additional latency.",
+    "hold": "q holds between positive edges; reset changes alone do not update q.",
+    "initialization": "Original problem provides no initialization requirement; no initializer is added and verification starts functional expectations after a clock edge."
+  },
+  "numeric": {
+    "width": 8,
+    "reset_value": 0,
+    "data": "All eight bits copied without arithmetic or signed interpretation."
+  },
+  "verification": {
+    "oracle": "Derived directly from original positive-edge DFF and synchronous reset requirements.",
+    "sampling": "Drive away from rising edges and sample after nonblocking assignments settle.",
+    "cases": [
+      "reset priority with nonzero d",
+      "reset assertion and release between edges",
+      "falling edge hold",
+      "all 256 data values",
+      "repeated resets"
+    ],
+    "timeout": "Bounded simulation with fatal on mismatches and PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "Power-up q is unspecified; no defined initial value is assumed.",
+    "Behavior for X/Z inputs is unspecified; functional stimulus uses binary values."
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob104_mt2015_muxdff",
+  "official_status": "functional_failure",
+  "official_analyzer_code": "R",
+  "workflow_status": "failed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob104_mt2015_muxdff",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob104_mt2015_muxdff/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791275712.7804174,
+    "ended_at_unix": 1791275763.876739,
+    "seconds": 51.09632205963135,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 68127,
+      "cached_input_tokens": 56704,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1565,
+      "reasoning_output_tokens": 112
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "115dc7834c459a157ff4a35ca23dae01447d33bae4f17533a1f83b4de2ac6946",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed",
+          "repair": "passed"
+        }
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "compile_returncode": 0,
+        "simulation_returncode": 0,
+        "simulation_result": "PASS: 93 mux/flip-flop checks",
+        "evidence_directory": "development/01"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not occurred."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "One rising-edge flip-flop loads r_in when L is true and q_in otherwise, with no reset or initialization.",
+    "verification": "Initial unknown output, exhaustive binary input combinations in both orders, selected and unselected unknown data, unknown selector procedural-if behavior, and output stability before rising edges, while high, and after falling edges."
+  },
+  "final": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "Prob104_mt2015_muxdff_test.sv": "82f72a64b7516b4734b15e1679749cd6a1cdbd335b454d5990861157a75685ba",
+      "candidate.sv": "115dc7834c459a157ff4a35ca23dae01447d33bae4f17533a1f83b4de2ac6946",
+      "Prob104_mt2015_muxdff_ref.sv": "257c3835380c39315cefe2325abc26ac916c4a47423ce2eacb32569add966f1c"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob104_mt2015_muxdff_test.sv",
+        "Prob104_mt2015_muxdff_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013190236873924732
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb104_mt2015_muxdff_test.sv:21: $finish called at 996 (1ps)\nHint: Output 'Q' has 1 mismatches. First mismatch occurred at time 5.\nHint: Total mismatched samples is 1 out of 199 samples\n\nSimulation finished at 996 ps\nMismatches: 1 in 199 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007452201098203659
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "Prob104_mt2015_muxdff_test.sv": "82f72a64b7516b4734b15e1679749cd6a1cdbd335b454d5990861157a75685ba",
+      "candidate.sv": "115dc7834c459a157ff4a35ca23dae01447d33bae4f17533a1f83b4de2ac6946",
+      "Prob104_mt2015_muxdff_ref.sv": "257c3835380c39315cefe2325abc26ac916c4a47423ce2eacb32569add966f1c"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob104_mt2015_muxdff_test.sv",
+        "Prob104_mt2015_muxdff_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009752150624990463
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb104_mt2015_muxdff_test.sv:21: $finish called at 996 (1ps)\nHint: Output 'Q' has 1 mismatches. First mismatch occurred at time 5.\nHint: Total mismatched samples is 1 out of 199 samples\n\nSimulation finished at 996 ps\nMismatches: 1 in 199 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.006869546137750149
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "in": "8-bit vector [7:0]"
+    },
+    "outputs": {
+      "pos": "3-bit index [2:0]"
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "function": "pos = minimum index i in [0,7] for which in[i] is 1; pos = 0 if in is zero",
+    "evidence": "Original problem: first (least significant) bit ... that is 1; Report zero if ... no bits ... high; 10010000 gives 4.",
+    "timing": "Combinational response after input changes; no registered latency.",
+    "timing_evidence": "Original interface has only in and pos; describes vector-to-index encoding without clock or edge conditions.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No state or initialization requirements; binary inputs determine output."
+  },
+  "numeric": {
+    "input_width": 8,
+    "output_width": 3,
+    "index_range": [
+      0,
+      7
+    ],
+    "signedness": "unsigned",
+    "zero_encoding": 0,
+    "rounding_overflow": "Not applicable; all indices fit exactly."
+  },
+  "verification": {
+    "oracle": "Independent integer oracle scans from index 7 down to 0 and overwrites expected index on each high bit, grounded in original least-significant-bit requirement.",
+    "coverage": "All 256 binary input vectors ascending and descending, plus directed zero, each one-hot, all-high, and original example.",
+    "sampling": "Drive input, wait 1 ns for combinational settling, compare with case inequality.",
+    "failure": "$fatal for any mismatch and bounded timeout; PASS printed only after every check.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "Original problem does not define X/Z input behavior; binary input vectors are the verification domain. No additional four-state behavior is asserted."
+  ]
+}

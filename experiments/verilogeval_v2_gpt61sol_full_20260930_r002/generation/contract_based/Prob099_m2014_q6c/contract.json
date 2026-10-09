@@ -1,0 +1,38 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"y": "6-bit unsigned current one-hot state", "w": "1-bit transition input"},
+    "outputs": {"Y1": "1-bit next-state y[1], state B", "Y3": "1-bit next-state y[3], state D"}
+  },
+  "semantics": {
+    "encoding": {"A": "000001", "B": "000010", "C": "000100", "D": "001000", "E": "010000", "F": "100000"},
+    "Y1": "Assert for A with w=0; only A has an incoming transition to B.",
+    "Y3": "Assert for B, C, E or F with w=1; these are all incoming transitions to D.",
+    "timing": "Combinational outputs respond to current y and w with no register or added cycle.",
+    "reset": "Original machine resets to A, but this next-state fragment has no reset input or stored state. When y=A, follow A transitions.",
+    "initialization": "No internal state or specified initialization.",
+    "non_one_hot": "No recovery behavior specified. Implement incoming-transition Boolean equations by inspection."
+  },
+  "numeric": {
+    "widths": "y[5:0] and scalar w, Y1, Y3",
+    "arithmetic": "Boolean gates only; no signed arithmetic, overflow, rounding or saturation"
+  },
+  "verification": {
+    "oracle": "Original state-transition table, independently enumerated destination states.",
+    "coverage": "All six legal states with both w values, repeated transitions and zero/multi-hot Boolean superposition checks.",
+    "sampling": "Drive combinational inputs, wait one simulation time unit, compare with case inequality.",
+    "completion": "Fatal mismatch and bounded timeout; PASS emitted only after checks complete.",
+    "tool": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "evidence": "Declared outputs Y1 and Y3; corrupted prose calls next-state signals Y2 and Y4 but explicitly refers to y[1] and y[3].",
+      "resolution": "Preserve declared Y1/Y3 ports and implement next-state bits 1 and 3."
+    },
+    {
+      "evidence": "One-hot assumption does not define illegal-state recovery.",
+      "resolution": "Use direct gate equations without adding recovery. Non-one-hot testing validates gate superposition only."
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "shift_ena": 1,
+      "count_ena": 1,
+      "data": 1
+    },
+    "outputs": {
+      "q": 4
+    }
+  },
+  "semantics": {
+    "clock": "All sequential logic updates at positive clk edges, explicitly required by original problem.",
+    "shift": "When shift_ena is 1, shift q toward the MSB and insert data at bit 0: four serial bits supplied MSB first form the desired word.",
+    "count": "When only count_ena is 1, decrement current q.",
+    "hold": "When both enables are 0, retain q.",
+    "simultaneous": "Original problem permits any behavior with both enables 1; implementation chooses shift priority.",
+    "reset_initialization": "No reset or initial value is specified or provided as a port; no initialization is added. Simulation begins unknown until four known bits have been shifted."
+  },
+  "numeric": {
+    "width": 4,
+    "interpretation": "Unsigned four-bit binary word",
+    "decrement": "Modulo 16, including 0 to 15 wraparound, from four-bit register arithmetic."
+  },
+  "verification": {
+    "oracle": "Original problem serial MSB-first loading and mathematical modulo-16 decrement.",
+    "sampling": "Drive at negative edges; check before positive edges for hold and after positive edges after NBA updates.",
+    "coverage": "All 16 serially loaded words, all countdown values and wraparound, hold cycles, falling-edge inactivity, and partial shifts.",
+    "initial": "Observe uninitialized q as unknown before first clock; establish known state through four shifts.",
+    "termination": "Fatal on mismatch; bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Both enables high",
+      "evidence": "Original says behavior does not matter",
+      "resolution": "Shift priority; oracle excludes this unconstrained case."
+    },
+    {
+      "issue": "Initial value",
+      "evidence": "Original specifies no reset or initialization",
+      "resolution": "No hardware initialization; test obtains deterministic state by serial loading."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"ring": 1, "vibrate_mode": 1},
+    "outputs": {"ringer": 1, "motor": 1}
+  },
+  "semantics": {
+    "behavior": "Combinational incoming-call selection: when ring is asserted, vibrate_mode selects motor instead of ringer; when ring is deasserted both outputs are off.",
+    "truth_table": [
+      {"ring": 0, "vibrate_mode": 0, "ringer": 0, "motor": 0},
+      {"ring": 0, "vibrate_mode": 1, "ringer": 0, "motor": 0},
+      {"ring": 1, "vibrate_mode": 0, "ringer": 1, "motor": 0},
+      {"ring": 1, "vibrate_mode": 1, "ringer": 0, "motor": 1}
+    ],
+    "cycle": "No clock port or cycle delay is specified; outputs follow inputs combinationally.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "No state or initial output values are specified; evaluate outputs after driven inputs settle."
+  },
+  "numeric": {"width": "All ports are one-bit logic signals.", "arithmetic": "Boolean selection only; no arithmetic or signedness."},
+  "verification": {
+    "oracle": "Explicit expected output pairs from the original incoming-call and mode requirements.",
+    "coverage": "Exercise all four binary input combinations and every ordered transition among combinations.",
+    "sampling": "Check one time unit after each input assignment for combinational settling, with no clock or reset.",
+    "failure": "Use fatal mismatches and bounded timeout; emit PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {"topic": "No incoming call", "resolution": "Both outputs off when ring=0, as implied by controlling the ringer and motor for an incoming call."},
+    {"topic": "Unknown input values", "resolution": "Original requirements specify binary behavior only; no additional X/Z oracle is imposed."}
+  ]
+}

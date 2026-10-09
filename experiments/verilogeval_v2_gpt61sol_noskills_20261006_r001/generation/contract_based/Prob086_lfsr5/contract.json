@@ -1,0 +1,52 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1
+    },
+    "outputs": {
+      "q": 5
+    }
+  },
+  "semantics": {
+    "clock": "Positive edge, as explicitly specified.",
+    "reset": "Active-high synchronous reset; at a rising edge with reset=1 q becomes 5-bit value 1.",
+    "transition": "Right-shifting Galois LFSR: q_next[4]=q[0], q_next[3]=q[4], q_next[2]=q[3] XOR q[0], q_next[1]=q[2], q_next[0]=q[1]. Tap positions 5 and 3 refer to one-based positions, corresponding to q[4] and q[2].",
+    "initialization": "Original problem does not specify power-up state; no initialization is added and functional sequence checks begin after synchronous reset.",
+    "hold": "No state change between rising clock edges, including reset assertions."
+  },
+  "numeric": {
+    "width": 5,
+    "seed": 1,
+    "tap_mask": "5'b10100",
+    "period": 31,
+    "zero_state": "Never reached in the reset-seeded sequence."
+  },
+  "verification": {
+    "oracle": "From original right-shifting Galois description: shift previous state right then XOR mask 10100 if previous LSB is 1.",
+    "sampling": "Check held output before rising edges and compare after a delay allowing nonblocking assignments to settle.",
+    "directed_cases": [
+      "Synchronous reset between edges",
+      "Held reset over multiple rising edges",
+      "First feedback transition from 1 to 20",
+      "Full 31-state nonzero unique cycle and return to seed",
+      "Repeated periods",
+      "Reset during sequence and restart"
+    ],
+    "timeout": "Bounded simulation timeout and fatal mismatches; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Power-up state",
+      "evidence": "Only synchronous reset value is specified.",
+      "resolution": "No guarantee before first reset edge; testbench does not require a particular power-up value."
+    },
+    {
+      "topic": "Tap indexing",
+      "evidence": "Five-bit register has taps at positions 5 and 3, so positions use one-based indexing.",
+      "resolution": "Use q[4] and q[2] as feedback destinations."
+    }
+  ]
+}

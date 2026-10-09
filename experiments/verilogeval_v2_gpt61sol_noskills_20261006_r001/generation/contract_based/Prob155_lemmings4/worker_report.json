@@ -1,0 +1,38 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json",
+      "cases": "Correct fixture passed, deliberately wrong fixture failed, repaired fixture passed"
+    },
+    {
+      "name": "contract_structure",
+      "status": "passed_structure_only",
+      "evidence": "contract_gate.json"
+    },
+    {
+      "name": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "compile": "Icarus 12 -g2012 -Wall -Wno-timescale; no diagnostics",
+      "simulation": "PASS: 9002 Moore, reset, priority, duration and randomized checks"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official correctness; official evaluation remains pending.",
+    "Fall duration is interpreted as complete falling intervals: N successive ground-low sampled edges followed by landing represent N cycles; original text supplies no waveform.",
+    "Pre-reset initialization is unspecified; no known state is assumed before asserting areset."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "unchanged_initial": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json",
+    "development_history": "dev_checks.jsonl"
+  }
+}

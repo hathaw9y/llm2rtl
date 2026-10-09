@@ -1,0 +1,64 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "in": 1,
+      "state": 2
+    },
+    "outputs": {
+      "next_state": 2,
+      "out": 1
+    }
+  },
+  "semantics": {
+    "kind": "pure combinational Moore state transition and output logic",
+    "evidence": "Original problem explicitly requests only the combinational portion, given current state. No clock or reset ports are specified.",
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "D"
+      },
+      "D": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "output": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 1
+    },
+    "timing": "Outputs reflect current inputs after combinational settling; no cycles, storage, reset, or initialization requirements."
+  },
+  "numeric": {
+    "encoding": {
+      "A": "00",
+      "B": "01",
+      "C": "10",
+      "D": "11"
+    },
+    "state_width": 2,
+    "next_state_width": 2,
+    "input_output_width": 1,
+    "arithmetic": "none"
+  },
+  "verification": {
+    "oracle": "Literal eight entries of original transition table, and output 1 only in D.",
+    "coverage": "Exhaust all four states and both binary inputs; repeat transitions in reverse order to check history independence; input-only and state-only changes.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling.",
+    "failure": "Case inequality mismatches call $fatal; bounded 100 ns timeout; PASS printed after all checks."
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z input or state is unspecified; no functional expectations are assigned to those combinations."
+  ]
+}

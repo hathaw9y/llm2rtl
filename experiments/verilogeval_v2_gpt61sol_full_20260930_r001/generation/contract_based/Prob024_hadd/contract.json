@@ -1,0 +1,70 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "sum": {
+        "direction": "output",
+        "width": 1
+      },
+      "cout": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "Combinational half adder with no carry-in. Outputs depend on current inputs.",
+    "timing": "No clock, no registered latency; outputs settle combinationally after input changes.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization required.",
+    "truth_table": [
+      {
+        "a": 0,
+        "b": 0,
+        "sum": 0,
+        "cout": 0
+      },
+      {
+        "a": 0,
+        "b": 1,
+        "sum": 1,
+        "cout": 0
+      },
+      {
+        "a": 1,
+        "b": 0,
+        "sum": 1,
+        "cout": 0
+      },
+      {
+        "a": 1,
+        "b": 1,
+        "sum": 0,
+        "cout": 1
+      }
+    ]
+  },
+  "numeric": {
+    "input_type": "Unsigned single bits",
+    "output_encoding": "Unsigned two-bit total encoded as {cout,sum}",
+    "arithmetic": "Exact a+b in range 0 through 2; sum is low bit, cout is high bit.",
+    "rounding_overflow": "No rounding, saturation, or loss of carry."
+  },
+  "verification": {
+    "method": "Independent explicit truth-table oracle, exhaustive over all four binary input combinations.",
+    "transitions": "Repeat all combinations in reverse order to check that outputs follow changing inputs without state.",
+    "comparison": "Case inequality against both output bits after a short testbench settling delay.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp; finite external timeouts and testbench watchdog.",
+    "scope": "Development checks only; no official evaluation, synthesis, or board claims."
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {"correct": "passed", "injected_fault": "simulation_failed", "repair": "passed"}
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "checks_completed": 795,
+      "compile_returncode": 0,
+      "simulation_returncode": 0
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation was not accessed and remains pending.",
+    "Power-up q is unspecified by the problem; the testbench establishes state with a synchronous reset before value comparisons.",
+    "No synthesis, Vivado, or board evidence was produced."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation uses an 8-bit register updated on negedge clk, with active-high synchronous reset taking priority and loading 8'h34. No subsequent RTL changes."
+  ],
+  "justified_tb_changes": [
+    "Initial independent testbench checks all 256 input values, reset priority and repetition, hold across rising edges, and reset pulses without falling edges. No subsequent testbench changes."
+  ],
+  "interface_cycle_contract": "TopModule(clk, reset, d[7:0], q[7:0]); q captures d or reset value on each falling edge without additional latency or ports.",
+  "static_review": "Explicit 8-bit reset constant, nonblocking sequential assignments, one output driver, and exact specified interface and reset semantics.",
+  "artifacts": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "dev_checks.jsonl", "development/01", "worker_report.json"]
+}

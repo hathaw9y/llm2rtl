@@ -1,0 +1,28 @@
+{
+  "status": "frozen",
+  "module": "TopModule",
+  "interface": {
+    "in": "input 1 bit",
+    "state": "input 4 bits unsigned",
+    "next_state": "output 4 bits unsigned",
+    "out": "output 1 bit"
+  },
+  "semantics": "Combinational Moore transition/output equations inspected from one-hot table. A=state[0], B=state[1], C=state[2], D=state[3].",
+  "equations": {
+    "next_state[0]": "(state[0] | state[2]) & ~in",
+    "next_state[1]": "(state[0] | state[1] | state[3]) & in",
+    "next_state[2]": "(state[1] | state[3]) & ~in",
+    "next_state[3]": "state[2] & in",
+    "out": "state[3]"
+  },
+  "numeric_widths": "All Boolean equation operands and results are 1 bit; state vectors are 4 bits. No arithmetic.",
+  "latency_reset": "Combinational settling only; no clock, reset or stored state.",
+  "specification_ambiguities": [
+    "Only one-hot states are specified as legal. For other encodings, implement the derived bit equations directly without recovery logic."
+  ],
+  "verification_plan": [
+    "Compile with explicit dev_tb top using Icarus -g2012 -Wall.",
+    "Check all 32 combinations of state and input with a table-based per-active-state reference, including all eight legal transitions.",
+    "Check output equals D bit and test input/state mutations for combinational response."
+  ]
+}

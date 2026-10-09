@@ -1,0 +1,25 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": {"direction": "input", "width": 1}, "reset": {"direction": "input", "width": 1}, "q": {"direction": "output", "width": 32}}
+  },
+  "semantics": {
+    "clock": "All state updates occur on the positive edge of clk.",
+    "reset": "Active-high synchronous reset has priority and sets q to 32'h00000001 at each rising edge with reset high. Reset changes between edges do not change q.",
+    "initialization": "No power-up state is specified; defined sequence begins after a reset clock edge.",
+    "transition": "On each rising edge with reset low, use the old q: next_q = (q >> 1) XOR (q[0] ? 32'h80200003 : 32'h00000000). Taps numbered 32,22,2,1 correspond to q indices 31,21,1,0. Thus next_q[31]=q[0], next_q[21]=q[22]^q[0], next_q[1]=q[2]^q[0], next_q[0]=q[1]^q[0]; all remaining bits shift right unchanged.",
+    "between_edges": "q retains its registered state; no enable or additional interface exists."
+  },
+  "numeric": {
+    "state": "32-bit unsigned bit vector",
+    "operations": "Logical right shift with zero fill and bitwise XOR over GF(2); no signed arithmetic, saturation, rounding, or arithmetic carries.",
+    "feedback": "All tapped bits use the same pre-edge least significant bit."
+  },
+  "verification": {
+    "oracle": "Independent per-bit reference recurrence: for indices 0 through 30 copy old bit i+1, XOR old bit 0 only for indices 21,1,0, and set index 31 to old bit 0.",
+    "checks": ["Reset seed and held reset across multiple edges", "Known first transition from 1 to 80200003", "Compare 4096 consecutive transitions against per-bit reference", "Assert reset between edges and confirm state is unchanged until next rising edge", "Mid-sequence reset and restart", "Check state remains unchanged between rising edges"],
+    "execution": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, finite compile and simulation timeouts, self-checking PASS/FAIL."
+  },
+  "specification_ambiguities": []
+}

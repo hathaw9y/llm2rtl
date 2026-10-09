@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": "input 1 bit", "load": "input 1 bit", "ena": "input [1:0]", "data": "input [99:0]", "q": "output [99:0]"}
+  },
+  "semantics": {
+    "clock": "Sample controls and data on each rising edge of clk; q updates after that edge with no extra pipeline stage.",
+    "priority": "load=1 loads data regardless of ena; otherwise ena=01 rotates right, ena=10 rotates left, ena=00 or 11 holds.",
+    "right": "new q[i]=old q[(i+1) modulo 100]",
+    "left": "new q[i]=old q[(i+99) modulo 100]",
+    "reset_initialization": "No reset port and no specified initial value. State becomes defined on a synchronous load.",
+    "between_edges": "q remains unchanged between rising clock edges."
+  },
+  "numeric": {
+    "representation": "100-bit unsigned bit vector; all 100 bits retained",
+    "arithmetic": "Bit permutation only; no arithmetic, rounding, saturation, sign extension or truncation."
+  },
+  "verification": {
+    "oracle": "Independent per-bit modular-index reference, compared after each rising edge following first load.",
+    "directed": "All four enables with and without load; boundary bits; all-zero and all-one patterns; 100 consecutive rotations in each direction; alternating directions; walking one through every bit.",
+    "random": "Deterministic random data, controls, and repeated loads with scoreboard checks.",
+    "timing": "Check q holds when inputs change before the active edge and at the falling edge; use finite simulation and external tool timeouts.",
+    "scope": "Local development simulation only; no official evaluation, synthesis or board testing."
+  },
+  "specification_ambiguities": [
+    "Clock edge is not explicitly stated; conventional rising-edge sequential behavior is assumed.",
+    "Initial state and unknown control behavior are unspecified; no initialization or extra unknown-control behavior is required."
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790748422.8864658,
+      "source_sha256": "172c96fd1b8e4b1d595fb7e7ace91fa1e118040de157af1faa678d73ebf80da0",
+      "testbench_sha256": "1756b85f33abc958c6dbdc15bf093a0cbe8cb59547e4144e4109591dced4d87a",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob009_popcount3/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.012186367996037006
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS exhaustive population count: all 8 inputs in both orders\ndev_tb.sv:30: $finish called at 16000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.005827523767948151
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Unknown/high-impedance input behavior is not specified by the problem.",
+    "No synthesis or board work performed."
+  ],
+  "justified_changes": {
+    "rtl": [
+      "Initial implementation adds three explicitly zero-extended two-bit input bits; no subsequent revisions."
+    ],
+    "testbench": [
+      "Independent bit-by-bit oracle checks every binary input in ascending and descending order after combinational settling; no subsequent edits."
+    ]
+  },
+  "rtl_files": [
+    "candidate.sv",
+    "candidate_initial.sv"
+  ],
+  "testbench_files": [
+    "dev_tb.sv"
+  ],
+  "interface_cycle_contract": "TopModule: 3-bit in, 2-bit out; combinational population count with no clock, reset, or extra latency.",
+  "numeric_width_decisions": "Unsigned two-bit additions cover counts 0 through 3 without overflow.",
+  "static_review": "Single continuous driver; no storage, latch, or added ports.",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed"
+}

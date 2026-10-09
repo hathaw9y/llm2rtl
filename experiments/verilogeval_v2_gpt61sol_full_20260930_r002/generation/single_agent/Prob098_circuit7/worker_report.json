@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "label": "initial",
+      "evidence_directory": "development/01",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "checked_cases": 27
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "The waveform has simultaneous input and clock changes at 5 ns and 35 ns. The testbench preserves these timestamps and schedules input changes after edge sampling, consistent with the displayed q values.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "One positive-edge register assigns q <= ~a. No reset or initialization; q begins unknown.",
+  "interface": "TopModule(input clk, input a, output q), all one bit.",
+  "static_review": "Single always_ff driver, nonblocking assignment, no extra ports, no additional pipeline stages.",
+  "initial_snapshot_preserved": true
+}

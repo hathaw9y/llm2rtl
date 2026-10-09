@@ -1,0 +1,210 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob007_wire",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob007_wire",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob007_wire/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790753048.5772464,
+    "ended_at_unix": 1790753141.6557314,
+    "seconds": 93.07848572731018,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 122202,
+      "cached_input_tokens": 96640,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1539,
+      "reasoning_output_tokens": 13
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "83e19bfe8888383130047c9e184f612629f551cde08edeabcaed7df59a0ffe33",
+  "contract_sha256": "9ab51bae762b15dc3bc9860ab3d0a5146d933eb6106b8559d975e73fa0b87a80",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "initial",
+        "check_index": 1,
+        "checked_at_unix": 1790753116.6335847,
+        "source_sha256": "83e19bfe8888383130047c9e184f612629f551cde08edeabcaed7df59a0ffe33",
+        "testbench_sha256": "bdf84b615c36adcb6b34c668b4a4459fd564f633a07c1de003701e61b29d7074",
+        "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob007_wire/development/01",
+        "compile": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+            "-g2012",
+            "-Wall",
+            "-Wno-timescale",
+            "-s",
+            "dev_tb",
+            "-o",
+            "dev.vvp",
+            "candidate.sv",
+            "dev_tb.sv"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.011282890103757381
+        },
+        "simulation": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+            "dev.vvp"
+          ],
+          "returncode": 0,
+          "stdout": "PASS wire identity: 65 checks\ndev_tb.sv:41: $finish called at 65000 (1ps)\n",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.00496086198836565
+        },
+        "status": "passed"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "No synthesis or board verification performed, as required."
+    ],
+    "justified_rtl_changes": [
+      "Initial implementation uses a continuous assignment to implement the original one-bit wire requirement. No subsequent RTL changes."
+    ],
+    "justified_tb_changes": [
+      "Initial independent testbench checks initial X, all ordered four-state transitions, and repeated binary toggles with case inequality, timeout, and PASS marker. No subsequent testbench changes."
+    ],
+    "contract": {
+      "validation": "passed_structure_only",
+      "corrections": []
+    },
+    "environment_smoke": "passed: correct fixture passed, injected fault failed, repair passed",
+    "static_review": "Exact TopModule interface; one-bit identity; no state, clock, reset, extra ports, delay, or latency.",
+    "initial_snapshot_preserved": true
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "83e19bfe8888383130047c9e184f612629f551cde08edeabcaed7df59a0ffe33",
+      "Prob007_wire_ref.sv": "46917be81598f8050958f924ea23056f5c06350d76d0c5dd6a625cd65986f735",
+      "Prob007_wire_test.sv": "f09d6cf21ef7adc105aca77b887ac17e38d36ece9807f0e58aa91b94d11c3c88"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob007_wire_test.sv",
+        "Prob007_wire_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014761164784431458
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb007_wire_test.sv:36: $finish called at 601 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 120 samples\n\nSimulation finished at 601 ps\nMismatches: 0 in 120 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007756456732749939
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "83e19bfe8888383130047c9e184f612629f551cde08edeabcaed7df59a0ffe33",
+      "Prob007_wire_ref.sv": "46917be81598f8050958f924ea23056f5c06350d76d0c5dd6a625cd65986f735",
+      "Prob007_wire_test.sv": "f09d6cf21ef7adc105aca77b887ac17e38d36ece9807f0e58aa91b94d11c3c88"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob007_wire_test.sv",
+        "Prob007_wire_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013354210183024406
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb007_wire_test.sv:36: $finish called at 601 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 120 samples\n\nSimulation finished at 601 ps\nMismatches: 0 in 120 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007496093399822712
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

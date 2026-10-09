@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "mode": 1,
+      "too_cold": 1,
+      "too_hot": 1,
+      "fan_on": 1
+    },
+    "outputs": {
+      "heater": 1,
+      "aircon": 1,
+      "fan": 1
+    },
+    "evidence": "problem.txt explicitly lists seven one-bit ports; no clock or reset."
+  },
+  "semantics": {
+    "heater": "mode AND too_cold",
+    "aircon": "(NOT mode) AND too_hot",
+    "fan": "heater OR aircon OR fan_on",
+    "timing": "Combinational, no cycles or added latency; observe after combinational settling.",
+    "reset": "None: original interface has no reset.",
+    "initialization": "No stored state or initialization requirement in original problem. Outputs follow current inputs.",
+    "evidence": "Original heating/cooling paragraphs specify mode-dependent activation and fan activation whenever either appliance or fan_on is on."
+  },
+  "numeric": {
+    "type": "One-bit Boolean unsigned signals",
+    "arithmetic": "No arithmetic, overflow, rounding, or saturation."
+  },
+  "verification": {
+    "oracle": "Independent procedural decisions based on original heating/cooling descriptions, then fan decision.",
+    "coverage": "All 16 binary input vectors in ascending and descending order, covering both simultaneous temperature flags and user fan override.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling; no clock edge exists.",
+    "failure": "Case-inequality comparison with $fatal, bounded timeout, PASS only after all checks.",
+    "tool": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z inputs",
+      "evidence": "Original describes binary 0/1 conditions only.",
+      "resolution": "No specified four-state behavior; functional development checks cover all binary inputs without imposing X/Z expectations."
+    }
+  ]
+}

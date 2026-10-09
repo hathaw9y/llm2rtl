@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "outcome": "passed",
+      "details": "Exact TopModule ports and 4-bit widths; combinational blocking assignments; all selector branches covered with default 4'hf; no storage, clock, reset, or pipeline."
+    },
+    {
+      "name": "Icarus development compilation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "outcome": "tool_failed",
+      "exit_code": 139,
+      "log": "compile.log",
+      "details": "Compiler produced no diagnostic output. Exit status preserved in check_status.log."
+    },
+    {
+      "name": "exhaustive development simulation",
+      "outcome": "not_run",
+      "details": "Compilation failed. Independent self-checking dev_tb.sv covers all 1048576 binary input combinations and includes a simulation timeout."
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate delivered unchanged and preserved in candidate_initial.sv. Static review passed; simulation success is not claimed.",
+  "limitations": [
+    "Icarus compilation failed with exit code 139, preventing dynamic verification.",
+    "Unknown selector behavior is unspecified by the supplied waveform; ordinary case default returns 4'hf.",
+    "Official evaluation results are unavailable. No synthesis, timing, or board checks were performed."
+  ]
+}

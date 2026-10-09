@@ -1,0 +1,29 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"x": "one-bit", "y": "one-bit"},
+    "outputs": {"z": "one-bit"},
+    "evidence": "Original problem names TopModule and specifies x, y, z as one-bit ports."
+  },
+  "semantics": {
+    "function": "z = (x ^ y) & x",
+    "timing": "Combinational; output follows current inputs after combinational settling, with no clock or additional latency.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "No state or initialization is specified; evaluate the stated bitwise expression on current inputs.",
+    "evidence": "Original problem supplies only x, y and z and an unqualified Boolean equation."
+  },
+  "numeric": {
+    "width": "Each operand and result is one bit.",
+    "operators": "Bitwise XOR followed by bitwise AND, preserving the original parentheses.",
+    "arithmetic": "No signed arithmetic, rounding, overflow or saturation applies."
+  },
+  "verification": {
+    "oracle": "Independent explicit truth table from the original equation: 00->0, 01->0, 10->1, 11->0.",
+    "coverage": "All four binary combinations, repeated transitions and supplementary four-state bitwise cases.",
+    "sampling": "Drive inputs then wait one testbench time unit for combinational settling before checking.",
+    "failure": "Case-inequality checks invoke $fatal; bounded timeout; PASS printed only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,186 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob072_thermostat",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob072_thermostat",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob072_thermostat/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790751966.4683204,
+    "ended_at_unix": 1790752043.2789357,
+    "seconds": 76.81061601638794,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 75617,
+      "cached_input_tokens": 64128,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1308,
+      "reasoning_output_tokens": 15
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "a589afe897990827ca331e168014683c19a0d6be1180178a964826a77d403a48",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed as expected",
+          "repair": "passed"
+        }
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "evidence": "dev_checks.jsonl",
+        "compile_returncode": 0,
+        "simulation_returncode": 0,
+        "checked_vectors": 512
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "Exhaustive binary input coverage; the problem specifies no unknown-input behavior.",
+      "No synthesis or board verification performed."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "One-bit combinational thermostat outputs; original TopModule interface retained without clock, reset, or added latency.",
+    "static_review": "Continuous assignments drive every output; no storage, latch, or width ambiguity.",
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv"
+    },
+    "test_coverage": "All 16 binary inputs and all 256 ordered input transitions, with independent procedural oracle and bounded timeout."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a589afe897990827ca331e168014683c19a0d6be1180178a964826a77d403a48",
+      "Prob072_thermostat_test.sv": "ff9b235a01aaabd6b13e085ef001b552de63dcb64a38e1f618672d740923ede3",
+      "Prob072_thermostat_ref.sv": "11ab9eccf4df5719e600eca68d15eafd612aecec668a0ff97951f5637d56fd1b"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob072_thermostat_test.sv",
+        "Prob072_thermostat_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01489403285086155
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb072_thermostat_test.sv:63: $finish called at 1241 (1ps)\nHint: Output 'heater' has no mismatches.\nHint: Output 'aircon' has no mismatches.\nHint: Output 'fan' has no mismatches.\nHint: Total mismatched samples is 0 out of 248 samples\n\nSimulation finished at 1241 ps\nMismatches: 0 in 248 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009210923686623573
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a589afe897990827ca331e168014683c19a0d6be1180178a964826a77d403a48",
+      "Prob072_thermostat_test.sv": "ff9b235a01aaabd6b13e085ef001b552de63dcb64a38e1f618672d740923ede3",
+      "Prob072_thermostat_ref.sv": "11ab9eccf4df5719e600eca68d15eafd612aecec668a0ff97951f5637d56fd1b"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob072_thermostat_test.sv",
+        "Prob072_thermostat_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013082074001431465
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb072_thermostat_test.sv:63: $finish called at 1241 (1ps)\nHint: Output 'heater' has no mismatches.\nHint: Output 'aircon' has no mismatches.\nHint: Output 'fan' has no mismatches.\nHint: Total mismatched samples is 0 out of 248 samples\n\nSimulation finished at 1241 ps\nMismatches: 0 in 248 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.00839134119451046
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

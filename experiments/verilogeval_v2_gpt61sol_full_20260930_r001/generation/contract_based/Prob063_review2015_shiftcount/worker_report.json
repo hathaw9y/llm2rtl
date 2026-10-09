@@ -1,0 +1,47 @@
+{
+  "revision_count": 0,
+  "contract_corrections": 0,
+  "checks": [
+    {
+      "name": "contract gate",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Exact ports; positive-edge always_ff; nonblocking assignments; unsigned four-bit subtraction; hold via absent assignment; no reset or initialization; no instantiated dependencies."
+    },
+    {
+      "name": "initial Icarus compile with -g2012 -Wall -s dev_tb, 20s timeout",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "status_log": "dev_status.log"
+    },
+    {
+      "name": "Icarus v12 retry compile with -g2012 -s dev_tb, 20s timeout",
+      "result": "pass",
+      "exit_code": 0,
+      "log": "dev_compile_retry.log"
+    },
+    {
+      "name": "matching vvp retry simulation, 20s timeout",
+      "result": "pass",
+      "exit_code": 0,
+      "checked_cycles": 653,
+      "log": "dev_simulation_retry.log"
+    },
+    {
+      "name": "initial candidate preservation",
+      "result": "pass"
+    }
+  ],
+  "development_outcome": "Unchanged initial RTL passes independent self-checking simulation after a successful compile retry without -Wall. Initial compile exit 139 and version diagnostic preserved.",
+  "limitations": [
+    "Official evaluation not run or accessed.",
+    "No synthesis, timing, or board validation.",
+    "Initial q and simultaneous enables are unspecified by the original problem; tests make no assertions for these cases.",
+    "Initial -Wall compile failed with exit 139; warning-enabled lint success is not claimed."
+  ]
+}

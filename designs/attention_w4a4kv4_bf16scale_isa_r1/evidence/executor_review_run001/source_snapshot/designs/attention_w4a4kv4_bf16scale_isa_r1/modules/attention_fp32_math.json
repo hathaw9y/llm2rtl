@@ -1,0 +1,60 @@
+{
+  "schema": "llm2rtl.module_packet.v1",
+  "module_id": "attention_fp32_math",
+  "status": "frozen",
+  "authorization": "User: \uacc4\uc18d \uc9c4\ud589\ud574 following completed full Attention ISA program",
+  "agent_role": "arithmetic_kernel",
+  "scope": "Finite FP32 unfused RNE ALU and negative-domain exp hardware primitive; no DDR ports",
+  "common_contracts": {
+    "contracts/common/engine_completion_contract.json": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446",
+    "contracts/common/evidence_identity_contract.json": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda",
+    "contracts/common/isa_command_contract.json": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15",
+    "contracts/common/local_bank_contract.json": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d"
+  },
+  "hardware": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_ns": 5.0,
+    "vivado": "2025.2"
+  },
+  "write_scope": [
+    "rtl/attention_fp32_*.sv",
+    "rtl/attention_exp_neg.sv",
+    "reference/fp32_*",
+    "reference/exp_*",
+    "scripts/run_math*",
+    "scripts/math_*",
+    "tb/tb_attention_math.sv",
+    "evidence/math*"
+  ],
+  "protected": [
+    "all other revisions and shared infrastructure",
+    "isa_program.py and existing program artifacts",
+    "modules/*.json"
+  ],
+  "interface": {
+    "clock_reset": "aclk/aresetn synchronous active-low",
+    "alu": "attention_fp32_alu: cmd_valid/ready, cmd_id[15:0], cmd_op[2:0] ADD0 MUL1 DIV2 I32_TO_FP323 SUB4, cmd_a/b[31:0]; resp_valid/ready,resp_id[15:0],resp_data[31:0],resp_error",
+    "exp": "attention_exp_neg: cmd_valid/ready,cmd_id[15:0],cmd_x[31:0]; resp_valid/ready,resp_id[15:0],resp_data[31:0],resp_error",
+    "protocol": "one outstanding; response stable during stall; reset discards work; no spontaneous completion"
+  },
+  "numerics": {
+    "alu": "exact finite binary32 RNE including gradual underflow (not Qwen DAZ/FTZ); add/mul/div unfused; integer conversion signed32 RNE; signed zero per IEEE; reject NaN/Inf operands, DIV zero denominator and overflow through error response",
+    "quantizer_exception": "Unchanged standalone row quantizer intentionally FTZ inputs as already accepted; do not propagate FTZ to all FP32 math",
+    "exp": "Synthesizable exp(x<=0) range reduction and ROM interpolation, exp(+/-0)=1; x<-80 may return zero, absolute tail error <=exp(-80); over [-80,0] relative error <=1e-5; reject positive finite and nonfinite input",
+    "exp_architecture": "257-entry FP32 exp2 ROM plus exact FP32 add/mul arithmetic and exact power-of-two exponent scaling. Existing Qwen implementation can be newly adapted but no old PASS inheritance",
+    "scale_and_probability": "scale metadata is BF16 minnormal positive; probability can be zero/subnormal and must not be validated as scale"
+  },
+  "verification": [
+    "Fraction/integer independent exact rounding oracle for ADD/MUL/DIV/I32_TO_FP32/SUB across normal/subnormal/cancellation/tie/overflow/div0",
+    "self-checking handshake stalls, response identity, reset and exhaustive small directed sets plus seeded random",
+    "exp dense input/domain/cutoff/index boundary sweep enforcing stated bound versus mathematical exp",
+    "strict lint, XSIM or Verilator and OOC synthesis/timing resource reports with exact source hashes and no blackboxes"
+  ],
+  "tuning": "scalar sequential correctness-first; iterative division and staged normalization permitted; no throughput claims",
+  "forbidden_claims": [
+    "full Attention RTL PASS",
+    "board/routed timing/model accuracy",
+    "use of real/shortreal/DPI arithmetic as synthesis datapath"
+  ],
+  "recursive_subagents": false
+}

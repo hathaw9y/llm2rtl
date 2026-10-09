@@ -1,0 +1,36 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structural validation only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "compile_and_warning_check",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "PASS; exit 0, no compiler warnings",
+      "log": "development_compile.log"
+    },
+    {
+      "name": "independent_simulation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "PASS; exit 0, 1770 comparisons",
+      "log": "development_simulation.log",
+      "coverage": "zero/full, 255 single-one and 255 single-zero vectors, two alternating vectors, all 256 possible counts, 1000 deterministic pseudorandom vectors"
+    },
+    {
+      "name": "static_review",
+      "result": "Complete combinational assignment, single output driver, fixed synthesizable loop, explicit unsigned 8-bit addition, no state or added ports; count maximum 255 fits exactly"
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate passed all development checks; candidate_initial.sv preserved immediately after implementation and before checks. Final candidate is unchanged.",
+  "limitations": [
+    "Official evaluation was not accessed and results are unknown.",
+    "Simulation covers directed and sampled binary vectors, not all 2^255 inputs.",
+    "X/Z behavior is unspecified by the problem and was not tested.",
+    "No synthesis, physical timing, resource, or board evidence was produced."
+  ]
+}

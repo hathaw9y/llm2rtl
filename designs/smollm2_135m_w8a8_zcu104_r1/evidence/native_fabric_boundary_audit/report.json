@@ -1,0 +1,104 @@
+{
+  "status": "PRE_FREEZE_BOUNDARY_AUDIT",
+  "rtl_acceptance": false,
+  "source_pins": {
+    "contracts/common/engine_completion_contract.json": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446",
+    "contracts/common/local_bank_contract.json": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d",
+    "designs/smollm2_135m_w8a8_zcu104_r1/bank_layout.json": "dcd26383f787310d301cc6976d27fc76cf8ec44baed43fdf4258039f2441a6f2",
+    "designs/smollm2_135m_w8a8_zcu104_r1/contracts/compute_interface.json": "c2b579e39ac9b4cb7fbb6ca2fb751e7020d11d7b9a597a942ebb64550f772d06",
+    "designs/smollm2_135m_w8a8_zcu104_r1/contracts/rtl_port_binding.json": "ea033a7269285571057582d32e193dc17c115a84911d4f1646bb4cd096b78504",
+    "designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_rtl_port_binding.json": "b671bd31a3fcff17a0fcd955c0df2a63f802ee963df48b3636c4ccc808acd7dd",
+    "ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv": "0606d2b72a34765c067cbbc9ca9962e98002c24c5bb7999d482be96837b16f00",
+    "ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv": "59bc18e6c8a61f163423a22664a970e28ee853e6d4cf013657a4feda171368fa",
+    "ip/infrastructure/datamover_engine/rtl/datamover_command_queue.sv": "100b21a26a76baf436e67fdd8389cb020df5470cc4b19624ab6db96bee96d17c"
+  },
+  "notes": [
+    {
+      "id": "N1",
+      "priority": "P1",
+      "actual": "MM2S adapter exposes bank_ena/wea without native write ready; accepts/advances irrevocably.",
+      "packet_requirement": "Guarantee write+coverage commit on each pulse or add lossless ready-aware buffering ahead of native leaf; epochclear cannot drop beats."
+    },
+    {
+      "id": "N2",
+      "priority": "P1",
+      "actual": "S2MM adapter abort waits held AXIS output, not pending native reads; DONE resets read-valid/FIFO pipeline.",
+      "packet_requirement": "Wrapper independently counts/drains all accepted native responses and held offers before matched error completion/release/reuse. Never equate adapter DONE with native quiescence."
+    },
+    {
+      "id": "N3",
+      "priority": "P1",
+      "actual": "S2MM bank_enb remains high for outstanding reads; bank_read_issue is the actual request pulse. Adapter lacks native read ready.",
+      "packet_requirement": "Route bank_read_issue only; guarantee acceptance or bridge. Exact3cycle data pairing, responses captured unconditionally even during errors/stalls."
+    },
+    {
+      "id": "N4",
+      "priority": "P1",
+      "actual": "Reusable queue vendor tag is sequential next_tag, frozen compute_interface requires bankID. Bad status completion is immediate diagnostic and queue head retained/faulted.",
+      "packet_requirement": "Explicit validated command/status remap or approved design-specific refinement. Error response to dispatcher requires independent quiescence. No hidden queue reset/retry; reusedtag late-duplicate ambiguity remains."
+    },
+    {
+      "id": "N5",
+      "priority": "P1",
+      "actual": "MM2S adapter has no BTT check, finishes solely on TLAST.",
+      "packet_requirement": "Check exact span/KEEP/TLAST and prevent all writes beyond declared DMA extent. Early or missing final TLAST, extra beats, malformed status cannot be success."
+    },
+    {
+      "id": "N6",
+      "priority": "P1",
+      "actual": "Frozen compute wide requests cross configured tails while staying allocated bounds: A16-byte scale read32, B48 read64, Q/P80 read96, PVL1 last16 data read32.",
+      "packet_requirement": "Read validation uses owner/evenword/allocated-pair bounds, not whole-read configured extent. Ignore unused upper physical lanes; writes remain configuredextent bounded."
+    },
+    {
+      "id": "N7",
+      "priority": "P1",
+      "actual": "Coverage duplicate strobes and gaps cannot be represented by total-write counts. Total exactmask storage2,224,928bits additional to payload.",
+      "packet_requirement": "Per16byteword16bit mask or proven equivalent; update missingbytes by newlycovered bits. Real memory leaf and actual hardware mapping required."
+    },
+    {
+      "id": "N8",
+      "priority": "P1",
+      "actual": "Current controller config/producer may reject; accepted producer changes live destination epoch while acquisition identity remains original.",
+      "packet_requirement": "Only successful epoch event clears coverage; retain old RAM bytes. Clear/init atomic or block/buffer transfers until active. Pending old coverage events never publish into new epoch."
+    },
+    {
+      "id": "N9",
+      "priority": "P1",
+      "actual": "Controller has one coverage publication port while several physical banks may complete simultaneously.",
+      "packet_requirement": "Lossless events tagged bank/txn/role/componentepoch; gate engine completion until relevant coverage published before release. Invalidation dominates/cancels sameepoch pending valid events."
+    },
+    {
+      "id": "N10",
+      "priority": "P2",
+      "actual": "DMA_STORE interpreter requires whole non-B7 configured tensor ready, including scale/embedding selectors; B7 only selectedcomponent.",
+      "packet_requirement": "Reject incomplete source before vendor/native access; explicit zero-scale-length semantics. LOAD must fit one configuredcomponent, not merely allocation."
+    }
+  ],
+  "required_leaf_independent_tests": [
+    "True physical memory DUT, no replacement stub/behavioral bank model",
+    "16byte strobes preserving disabled lanes; duplicate/new-mask merge and unfilled holes",
+    "First/last legal word, wideevenpair order and odd/out-of-allocation rejection",
+    "Sparse/continuous reads exactly3cycles, no phantomresponses from pending-enable, unconditionalreadcapture",
+    "Config/producer rejection no-touch; newepoch masks invalid but RAM retained; START persistence",
+    "B7 RoPE/static unequal epochs and target-only reset/invalidation",
+    "Data versus paddedscale readiness and embedding eachrowselectedlane metadata",
+    "Configuredtail overread canaries ignored; physicalupperbytes not altered",
+    "OOC native mapping and coverage RAM resourceclosure on5ns constraint before synth"
+  ],
+  "required_real_integration_tests": [
+    "Real dispatcher/controller/nativeleaf/mover/adapters/GEMM/quant instances; DDR AXIS environment is testbench only",
+    "ISA+DMA inputgoldens then real quant/GEMM/QK/PV/DQ then STORE byteexact DDRcomparison",
+    "Projection multichunk partialNtiles, gaps/duplicates and STORE04 before complete",
+    "Pingpong bank15load overlapsbank3GEMM, crossbank native concurrency and lat3 attribution",
+    "Minimum/tail/maxcontexts inclQK/PVL1,L33,L1024, quantP32/L1024, GEMMK1536/N192",
+    "Early/late/missingTLAST, partialKEEP, bad/wrong/duplicate status, statusbeforelastnativecommit, stalledcommand/status",
+    "Held S2MMbeat+late transportfault withnative reads pending; no release untilreal drain",
+    "Reset while live native response/queuedwrite/AXISheld; staleepoch publication cannotrestoredata",
+    "Existing source identities unchanged; integration-level synthesis required beyond leaf/childOOC"
+  ],
+  "scope_exclusions": [
+    "No new RTL written or simulated in boundary review",
+    "No vendor AXI memory-mapped DataMover IP/board/routed/fullmodel claim from external AXIS DDR model",
+    "Childfunctional gate before finalfabric consumption; exactsourcepin freshintegration evidence"
+  ]
+}

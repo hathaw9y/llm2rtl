@@ -1,0 +1,64 @@
+{
+  "schema": "llm2rtl.subagent_result.v1",
+  "status": "passed",
+  "design_id": "llama32_1b_w4a4kv4_seq",
+  "revision": "r2",
+  "module_id": "isa_command_dispatcher",
+  "contract_sha256": "91dc7aa4d20d9378fdb2357492b7c4650d49fe9de81cde587661061b26addf1f",
+  "source_sha256": "c41b0e4b188f1f9dd8ab3549af8560dc55cc6bdcd56e6a471f77584c92a3d603",
+  "source_manifest_sha256": "95df1c05474e3dce53f5193138b782c466ec11388845ca487fcc27880122ddb2",
+  "test_vector_sha256": "be200fb398a7e2a1485d2256d2acea914b741a0a9db2f134b5476fbb0fdb14e3",
+  "verification_report_sha256": "42dfd435712cc5ac0c9ea2b27efa550bf7ca8c8de7fe4cd90de86b5fabb7e583",
+  "changed_files": [
+    "designs/llama32_1b_w4a4kv4_seq_r2/rtl/isa_command_dispatcher.sv",
+    "designs/llama32_1b_w4a4kv4_seq_r2/tb/tb_isa_command_dispatcher.sv",
+    "designs/llama32_1b_w4a4kv4_seq_r2/scripts/run_dispatcher_verification.tcl",
+    "designs/llama32_1b_w4a4kv4_seq_r2/evidence/isa_command_dispatcher/kernel_report.json",
+    "designs/llama32_1b_w4a4kv4_seq_r2/evidence/isa_command_dispatcher/module_ooc_synthesis_report.json",
+    "designs/llama32_1b_w4a4kv4_seq_r2/evidence/isa_command_dispatcher/subagent_result.json"
+  ],
+  "generated_evidence_files": [
+    "drc_post_synth.rpt",
+    "golden_model.log",
+    "isa_command_dispatcher_post_synth.dcp",
+    "iverilog_sim.log",
+    "methodology_post_synth.rpt",
+    "timing_post_synth.rpt",
+    "utilization_post_synth.rpt",
+    "verilator_executable.log",
+    "verilator_lint.log",
+    "verilator_version.log",
+    "vivado_ooc.log",
+    "vivado_version.log",
+    "xelab.log",
+    "xsim_direct.log",
+    "xvlog.log",
+    "vivado_ooc_work/project/dispatcher_r2_ooc.cache/wt/project.wpc",
+    "vivado_ooc_work/project/dispatcher_r2_ooc.cache/wt/synthesis.wdf",
+    "vivado_ooc_work/project/dispatcher_r2_ooc.hw/dispatcher_r2_ooc.lpr",
+    "vivado_ooc_work/project/dispatcher_r2_ooc.xpr"
+  ],
+  "commands": [
+    "python3 scripts/check_common_contracts.py",
+    "python3 scripts/check_isa_design.py --design-dir designs/llama32_1b_w4a4kv4_seq_r2 --module isa_command_dispatcher --expected-module-sha256 91dc7aa4d20d9378fdb2357492b7c4650d49fe9de81cde587661061b26addf1f",
+    "python3 designs/llama32_1b_w4a4kv4_seq_r2/run_dispatcher_model.py",
+    "/usr/bin/verilator --version",
+    "/usr/bin/verilator --lint-only --Wall --Wno-fatal designs/llama32_1b_w4a4kv4_seq_r2/rtl/isa_command_dispatcher.sv",
+    "xvlog --sv <r2-rtl> <r2-tb>; xelab tb_isa_command_dispatcher -s tb_dispatcher_r2_sim; execute exact generated xsimk snapshot and require exact PASS marker",
+    "vivado -mode batch -source designs/llama32_1b_w4a4kv4_seq_r2/scripts/run_dispatcher_verification.tcl"
+  ],
+  "evidence": {
+    "simulation": "xsim_direct.log",
+    "verilator_version": "verilator_version.log",
+    "verilator_executable": "verilator_executable.log",
+    "verilator_lint": "verilator_lint.log",
+    "vivado": "vivado_ooc.log",
+    "kernel_report": "kernel_report.json",
+    "ooc_report": "module_ooc_synthesis_report.json"
+  },
+  "remaining_risks": [
+    "OOC external-port hold paths are not physical board paths and are explicitly excluded; fresh in-context timing is required after integration.",
+    "DMA/GEMM executors, command BRAM wrapper, tensor arithmetic, full model, and board behavior remain outside this packet."
+  ],
+  "skill_update_candidate": null
+}

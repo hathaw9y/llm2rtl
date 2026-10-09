@@ -1,0 +1,59 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "s": {
+        "direction": "input",
+        "width": 1
+      },
+      "w": {
+        "direction": "input",
+        "width": 1
+      },
+      "z": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "All sequential updates on rising clk edge",
+    "reset": "Active-high synchronous reset overrides inputs and returns to A, clears partial group and z",
+    "initialization": "FSM assumed in A; implementation requires synchronous reset to establish hardware state; no power-up initial construct",
+    "state_A": "Remain while s=0; when s=1 enter sampling mode. w on that transition edge is not sampled. z=0 in A",
+    "sampling": "After leaving A sample w on each of next three rising edges. Continue disjoint three-edge groups indefinitely; ignore s outside A",
+    "output": "After third sample edge z equals 1 iff that group contains exactly two ones, held for following clock cycle. At next edge z clears while first sample of next group is accepted. No idle gap between groups"
+  },
+  "numeric": {
+    "inputs": "Unsigned binary single-bit values",
+    "count": "Number of ones in group ranges 0..3, exact integer arithmetic with two-bit storage; no rounding or saturation",
+    "phase": "Three sampling positions plus reset/idle state; no extra protocol"
+  },
+  "verification": {
+    "oracle": "Independent behavioral list of three sampled w bits, count ones and check output after every edge; model activation separately",
+    "directed": [
+      "idle s=0 with varying w",
+      "entry edge w excluded",
+      "all eight possible three-bit groups",
+      "all 64 consecutive pairs of groups",
+      "s changes ignored after entry",
+      "reset at each sample position and when z=1",
+      "reset assertion between edges leaves outputs unchanged until rising edge"
+    ],
+    "random": "Seeded binary inputs and synchronous resets; compare every cycle",
+    "tools": "Icarus v12 -g2012 explicit dev_tb top; finite compile and run timeouts"
+  },
+  "specification_ambiguities": [
+    "Diagram mentioned in text is absent. Timing interpreted from next three clock cycles and following clock cycle: result visible immediately after third sampling edge for the ensuing cycle.",
+    "No physical power-up mechanism specified; synchronous reset establishes assumed A state."
+  ]
+}

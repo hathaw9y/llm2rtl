@@ -1,0 +1,22 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "d": 1, "r": 1}, "outputs": {"q": 1}},
+  "semantics": {
+    "evidence": "Original problem: simple D flip flop with active high synchronous reset (reset output to 0).",
+    "clock": "Capture on rising clk edge, using the standard positive-edge interpretation of a D flip flop.",
+    "transition": "At each rising edge, r=1 sets q to 0 regardless of d; otherwise q captures d. Update uses nonblocking assignment.",
+    "hold": "q holds between rising edges, including when r changes or at falling edges.",
+    "initialization": "No initial value is specified. Do not add initialization; functional checks begin after the first capture or synchronous reset."
+  },
+  "numeric": {"widths": "All ports are one bit as explicitly specified.", "arithmetic": "No arithmetic, signedness, or overflow applies."},
+  "verification": {
+    "oracle": "Original problem dictates reset priority and same-edge capture, with sampling after nonblocking updates.",
+    "directed": "Both d values under both r values; reset assertion and deassertion between edges; falling-edge hold; repeated reset; consecutive captures.",
+    "initial": "No required power-up q value is asserted.",
+    "completion": "Bounded timeout, fatal on every mismatch, PASS only after all checks; run fixed dev_check.py."
+  },
+  "specification_ambiguities": [
+    {"issue": "Clock edge polarity is not explicitly stated.", "resolution": "Use the conventional rising-edge D flip flop interpretation."},
+    {"issue": "Power-up value and unknown-valued reset behavior are unspecified.", "resolution": "No explicit initialization or extra X-handling behavior; test specified binary transitions after first clock edge."}
+  ]
+}

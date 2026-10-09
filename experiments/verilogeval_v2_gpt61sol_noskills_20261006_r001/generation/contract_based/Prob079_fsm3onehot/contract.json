@@ -1,0 +1,64 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "in": 1,
+      "state": 4
+    },
+    "outputs": {
+      "next_state": 4,
+      "out": 1
+    },
+    "clock_reset": "None in original interface"
+  },
+  "semantics": {
+    "kind": "Pure combinational Moore transition and output logic, as explicitly requested; no storage, reset, initialization or cycle latency.",
+    "encoding": {
+      "A": "0001",
+      "B": "0010",
+      "C": "0100",
+      "D": "1000"
+    },
+    "table": {
+      "A": {
+        "0": "A",
+        "1": "B",
+        "out": 0
+      },
+      "B": {
+        "0": "C",
+        "1": "B",
+        "out": 0
+      },
+      "C": {
+        "0": "A",
+        "1": "D",
+        "out": 0
+      },
+      "D": {
+        "0": "C",
+        "1": "B",
+        "out": 1
+      }
+    },
+    "equations": "next_state[0]=~in & (state[0]|state[2]); next_state[1]=in & (state[0]|state[1]|state[3]); next_state[2]=~in & (state[1]|state[3]); next_state[3]=in & state[2]; out=state[3]"
+  },
+  "numeric": {
+    "widths": "All scalar except 4-bit state and next_state",
+    "bit_mapping": "A=bit0, B=bit1, C=bit2, D=bit3",
+    "arithmetic": "Only bitwise Boolean equations; no arithmetic or signed values"
+  },
+  "verification": {
+    "oracle": "Original transition table checked independently using explicit per-state expected values",
+    "coverage": "All eight legal state/input pairs in forward and reverse order, toggling inputs and states; output independent of in",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling; original has no clock or timing waveform",
+    "failure": "Case inequality, fatal mismatch and bounded timeout; PASS only on completion"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Zero-hot, multi-hot and X/Z state or input behavior unspecified; original assumes one-hot state encoding",
+      "resolution": "Use directly derived one-hot Boolean equations without illegal-state recovery; normative table verification limited to legal binary states and inputs"
+    }
+  ]
+}

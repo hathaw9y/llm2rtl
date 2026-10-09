@@ -1,0 +1,1746 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
+| Date              : Fri Oct  9 19:59:45 2026
+| Host              : admin1-SYS-521C-NR running 64-bit Ubuntu 22.04.5 LTS
+| Command           : report_timing -delay_type max -max_paths 20 -file setup_paths.rpt
+| Design            : smollm2_dma_transaction_bridge
+| Device            : xczu7ev-ffvc1156
+| Speed File        : -2  PRODUCTION 1.30 05-15-2022
+| Design State      : Synthesized
+| Temperature Grade : E
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             0.777ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][7]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.174ns  (logic 3.316ns (79.444%)  route 0.858ns (20.556%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT5=1 LUT6=2)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[3])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[3]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<3>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[3]_A2A1[3])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[3]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<3>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[3]_U[4])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[4]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<4>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[4]_U_DATA[4])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[4]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<4>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[4]_ALU_OUT[4])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[4]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<4>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[4]_P[4])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[4]
+                         net (fo=1, unplaced)         0.220     1.836    p_2_out/B[4]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[4]_B2_DATA[4])
+                                                      0.151     1.987 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[4]
+                         net (fo=1, unplaced)         0.000     1.987    p_2_out/DSP_A_B_DATA.B2_DATA<4>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[4]_B2B1[4])
+                                                      0.073     2.060 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[4]
+                         net (fo=1, unplaced)         0.000     2.060    p_2_out/DSP_PREADD_DATA.B2B1<4>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[4]_V[7])
+                                                      0.609     2.669 f  p_2_out/DSP_MULTIPLIER_INST/V[7]
+                         net (fo=1, unplaced)         0.000     2.669    p_2_out/DSP_MULTIPLIER.V<7>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[7]_V_DATA[7])
+                                                      0.046     2.715 r  p_2_out/DSP_M_DATA_INST/V_DATA[7]
+                         net (fo=1, unplaced)         0.000     2.715    p_2_out/DSP_M_DATA.V_DATA<7>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[7]_ALU_OUT[7])
+                                                      0.571     3.286 f  p_2_out/DSP_ALU_INST/ALU_OUT[7]
+                         net (fo=1, unplaced)         0.000     3.286    p_2_out/DSP_ALU.ALU_OUT<7>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[7]_P[7])
+                                                      0.109     3.395 r  p_2_out/DSP_OUTPUT_INST/P[7]
+                         net (fo=1, unplaced)         0.218     3.613    p_2_out_n_98
+                         LUT6 (Prop_LUT6_I3_O)        0.125     3.738 r  data_bytes[0][7]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.924    data_bytes[0][7]_i_4_n_0
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.962 r  data_bytes[0][7]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.148    data_bytes[0][7]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.186 r  data_bytes[0][7]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.234    data_bytes_calc[7]
+                         FDRE                                         r  data_bytes_reg[0][7]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][7]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][7]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.234    
+  -------------------------------------------------------------------
+                         slack                                  0.777    
+
+Slack (MET) :             0.778ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][15]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.173ns  (logic 3.316ns (79.463%)  route 0.857ns (20.537%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT5=1 LUT6=2)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[14])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[14]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<14>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[14]_A2A1[14])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[14]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<14>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[14]_U[15])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[15]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<15>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[15]_U_DATA[15])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[15]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<15>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[15]_ALU_OUT[15])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[15]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<15>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[15]_P[15])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[15]
+                         net (fo=1, unplaced)         0.222     1.838    p_2_out/B[15]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[15]_B2_DATA[15])
+                                                      0.151     1.989 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[15]
+                         net (fo=1, unplaced)         0.000     1.989    p_2_out/DSP_A_B_DATA.B2_DATA<15>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[15]_B2B1[15])
+                                                      0.073     2.062 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[15]
+                         net (fo=1, unplaced)         0.000     2.062    p_2_out/DSP_PREADD_DATA.B2B1<15>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[15]_V[15])
+                                                      0.609     2.671 f  p_2_out/DSP_MULTIPLIER_INST/V[15]
+                         net (fo=1, unplaced)         0.000     2.671    p_2_out/DSP_MULTIPLIER.V<15>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[15]_V_DATA[15])
+                                                      0.046     2.717 r  p_2_out/DSP_M_DATA_INST/V_DATA[15]
+                         net (fo=1, unplaced)         0.000     2.717    p_2_out/DSP_M_DATA.V_DATA<15>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[15]_ALU_OUT[15])
+                                                      0.571     3.288 f  p_2_out/DSP_ALU_INST/ALU_OUT[15]
+                         net (fo=1, unplaced)         0.000     3.288    p_2_out/DSP_ALU.ALU_OUT<15>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[15]_P[15])
+                                                      0.109     3.397 r  p_2_out/DSP_OUTPUT_INST/P[15]
+                         net (fo=1, unplaced)         0.215     3.612    p_2_out_n_90
+                         LUT6 (Prop_LUT6_I3_O)        0.125     3.737 r  data_bytes[0][15]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.923    data_bytes[0][15]_i_4_n_0
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.961 r  data_bytes[0][15]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.147    data_bytes[0][15]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.185 r  data_bytes[0][15]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.233    data_bytes_calc[15]
+                         FDRE                                         r  data_bytes_reg[0][15]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][15]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][15]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.233    
+  -------------------------------------------------------------------
+                         slack                                  0.778    
+
+Slack (MET) :             0.780ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][16]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.171ns  (logic 3.316ns (79.501%)  route 0.855ns (20.499%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT5=1 LUT6=2)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[14])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[14]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<14>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[14]_A2A1[14])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[14]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<14>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[14]_U[15])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[15]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<15>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[15]_U_DATA[15])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[15]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<15>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[15]_ALU_OUT[15])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[15]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<15>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[15]_P[15])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[15]
+                         net (fo=1, unplaced)         0.222     1.838    p_2_out/B[15]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[15]_B2_DATA[15])
+                                                      0.151     1.989 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[15]
+                         net (fo=1, unplaced)         0.000     1.989    p_2_out/DSP_A_B_DATA.B2_DATA<15>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[15]_B2B1[15])
+                                                      0.073     2.062 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[15]
+                         net (fo=1, unplaced)         0.000     2.062    p_2_out/DSP_PREADD_DATA.B2B1<15>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[15]_V[16])
+                                                      0.609     2.671 f  p_2_out/DSP_MULTIPLIER_INST/V[16]
+                         net (fo=1, unplaced)         0.000     2.671    p_2_out/DSP_MULTIPLIER.V<16>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[16]_V_DATA[16])
+                                                      0.046     2.717 r  p_2_out/DSP_M_DATA_INST/V_DATA[16]
+                         net (fo=1, unplaced)         0.000     2.717    p_2_out/DSP_M_DATA.V_DATA<16>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[16]_ALU_OUT[16])
+                                                      0.571     3.288 f  p_2_out/DSP_ALU_INST/ALU_OUT[16]
+                         net (fo=1, unplaced)         0.000     3.288    p_2_out/DSP_ALU.ALU_OUT<16>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[16]_P[16])
+                                                      0.109     3.397 r  p_2_out/DSP_OUTPUT_INST/P[16]
+                         net (fo=1, unplaced)         0.213     3.610    p_2_out_n_89
+                         LUT6 (Prop_LUT6_I3_O)        0.125     3.735 r  data_bytes[0][16]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.921    data_bytes[0][16]_i_4_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     3.959 r  data_bytes[0][16]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.145    data_bytes[0][16]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.183 r  data_bytes[0][16]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.231    data_bytes_calc[16]
+                         FDRE                                         r  data_bytes_reg[0][16]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][16]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][16]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.231    
+  -------------------------------------------------------------------
+                         slack                                  0.780    
+
+Slack (MET) :             0.820ns  (required time - arrival time)
+  Source:                 p_0_out__9/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[1][5]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.131ns  (logic 3.281ns (79.424%)  route 0.850ns (20.576%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__9/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__9/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[3])
+                                                      0.234     0.294 r  p_0_out__9/DSP_A_B_DATA_INST/A2_DATA[3]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__9/DSP_A_B_DATA.A2_DATA<3>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[3]_A2A1[3])
+                                                      0.076     0.370 r  p_0_out__9/DSP_PREADD_DATA_INST/A2A1[3]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__9/DSP_PREADD_DATA.A2A1<3>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[3]_U[4])
+                                                      0.505     0.875 f  p_0_out__9/DSP_MULTIPLIER_INST/U[4]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__9/DSP_MULTIPLIER.U<4>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[4]_U_DATA[4])
+                                                      0.047     0.922 r  p_0_out__9/DSP_M_DATA_INST/U_DATA[4]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__9/DSP_M_DATA.U_DATA<4>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[4]_ALU_OUT[4])
+                                                      0.585     1.507 r  p_0_out__9/DSP_ALU_INST/ALU_OUT[4]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__9/DSP_ALU.ALU_OUT<4>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[4]_P[4])
+                                                      0.109     1.616 f  p_0_out__9/DSP_OUTPUT_INST/P[4]
+                         net (fo=1, unplaced)         0.220     1.836    p_2_out__1/B[4]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[4]_B2_DATA[4])
+                                                      0.151     1.987 r  p_2_out__1/DSP_A_B_DATA_INST/B2_DATA[4]
+                         net (fo=1, unplaced)         0.000     1.987    p_2_out__1/DSP_A_B_DATA.B2_DATA<4>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[4]_B2B1[4])
+                                                      0.073     2.060 r  p_2_out__1/DSP_PREADD_DATA_INST/B2B1[4]
+                         net (fo=1, unplaced)         0.000     2.060    p_2_out__1/DSP_PREADD_DATA.B2B1<4>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[4]_V[5])
+                                                      0.609     2.669 f  p_2_out__1/DSP_MULTIPLIER_INST/V[5]
+                         net (fo=1, unplaced)         0.000     2.669    p_2_out__1/DSP_MULTIPLIER.V<5>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[5]_V_DATA[5])
+                                                      0.046     2.715 r  p_2_out__1/DSP_M_DATA_INST/V_DATA[5]
+                         net (fo=1, unplaced)         0.000     2.715    p_2_out__1/DSP_M_DATA.V_DATA<5>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[5]_ALU_OUT[5])
+                                                      0.571     3.286 f  p_2_out__1/DSP_ALU_INST/ALU_OUT[5]
+                         net (fo=1, unplaced)         0.000     3.286    p_2_out__1/DSP_ALU.ALU_OUT<5>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[5]_P[5])
+                                                      0.109     3.395 r  p_2_out__1/DSP_OUTPUT_INST/P[5]
+                         net (fo=1, unplaced)         0.210     3.605    p_2_out__1_n_100
+                         LUT4 (Prop_LUT4_I3_O)        0.090     3.695 r  data_bytes[1][5]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.881    data_bytes[1][5]_i_4_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     3.919 r  data_bytes[1][5]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.105    data_bytes[1][5]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.143 r  data_bytes[1][5]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.191    data_bytes[1][5]_i_1_n_0
+                         FDRE                                         r  data_bytes_reg[1][5]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[1][5]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[1][5]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.191    
+  -------------------------------------------------------------------
+                         slack                                  0.820    
+
+Slack (MET) :             0.821ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][17]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.130ns  (logic 3.316ns (80.291%)  route 0.814ns (19.709%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT5=1 LUT6=2)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[14])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[14]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<14>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[14]_A2A1[14])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[14]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<14>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[14]_U[15])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[15]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<15>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[15]_U_DATA[15])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[15]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<15>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[15]_ALU_OUT[15])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[15]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<15>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[15]_P[15])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[15]
+                         net (fo=1, unplaced)         0.222     1.838    p_2_out/B[15]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[15]_B2_DATA[15])
+                                                      0.151     1.989 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[15]
+                         net (fo=1, unplaced)         0.000     1.989    p_2_out/DSP_A_B_DATA.B2_DATA<15>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[15]_B2B1[15])
+                                                      0.073     2.062 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[15]
+                         net (fo=1, unplaced)         0.000     2.062    p_2_out/DSP_PREADD_DATA.B2B1<15>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[15]_V[17])
+                                                      0.609     2.671 f  p_2_out/DSP_MULTIPLIER_INST/V[17]
+                         net (fo=1, unplaced)         0.000     2.671    p_2_out/DSP_MULTIPLIER.V<17>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[17]_V_DATA[17])
+                                                      0.046     2.717 r  p_2_out/DSP_M_DATA_INST/V_DATA[17]
+                         net (fo=1, unplaced)         0.000     2.717    p_2_out/DSP_M_DATA.V_DATA<17>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[17]_ALU_OUT[17])
+                                                      0.571     3.288 f  p_2_out/DSP_ALU_INST/ALU_OUT[17]
+                         net (fo=1, unplaced)         0.000     3.288    p_2_out/DSP_ALU.ALU_OUT<17>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[17]_P[17])
+                                                      0.109     3.397 r  p_2_out/DSP_OUTPUT_INST/P[17]
+                         net (fo=1, unplaced)         0.172     3.569    p_2_out_n_88
+                         LUT6 (Prop_LUT6_I2_O)        0.125     3.694 r  data_bytes[0][17]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.880    data_bytes[0][17]_i_4_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     3.918 r  data_bytes[0][17]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.104    data_bytes[0][17]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.142 r  data_bytes[0][17]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.190    data_bytes_calc[17]
+                         FDRE                                         r  data_bytes_reg[0][17]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][17]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][17]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.190    
+  -------------------------------------------------------------------
+                         slack                                  0.821    
+
+Slack (MET) :             0.828ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][10]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.123ns  (logic 3.316ns (80.427%)  route 0.807ns (19.573%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT5=1 LUT6=2)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[10])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[10]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<10>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[10]_A2A1[10])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[10]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<10>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[10]_U[11])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[11]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<11>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[11]_U_DATA[11])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[11]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<11>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[11]_ALU_OUT[11])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[11]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<11>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[11]_P[11])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[11]
+                         net (fo=1, unplaced)         0.221     1.837    p_2_out/B[11]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[11]_B2_DATA[11])
+                                                      0.151     1.988 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[11]
+                         net (fo=1, unplaced)         0.000     1.988    p_2_out/DSP_A_B_DATA.B2_DATA<11>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[11]_B2B1[11])
+                                                      0.073     2.061 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[11]
+                         net (fo=1, unplaced)         0.000     2.061    p_2_out/DSP_PREADD_DATA.B2B1<11>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[11]_V[10])
+                                                      0.609     2.670 f  p_2_out/DSP_MULTIPLIER_INST/V[10]
+                         net (fo=1, unplaced)         0.000     2.670    p_2_out/DSP_MULTIPLIER.V<10>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[10]_V_DATA[10])
+                                                      0.046     2.716 r  p_2_out/DSP_M_DATA_INST/V_DATA[10]
+                         net (fo=1, unplaced)         0.000     2.716    p_2_out/DSP_M_DATA.V_DATA<10>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[10]_ALU_OUT[10])
+                                                      0.571     3.287 f  p_2_out/DSP_ALU_INST/ALU_OUT[10]
+                         net (fo=1, unplaced)         0.000     3.287    p_2_out/DSP_ALU.ALU_OUT<10>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[10]_P[10])
+                                                      0.109     3.396 r  p_2_out/DSP_OUTPUT_INST/P[10]
+                         net (fo=1, unplaced)         0.166     3.562    p_2_out_n_95
+                         LUT6 (Prop_LUT6_I3_O)        0.125     3.687 r  data_bytes[0][10]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.873    data_bytes[0][10]_i_4_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     3.911 r  data_bytes[0][10]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.097    data_bytes[0][10]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.135 r  data_bytes[0][10]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.183    data_bytes_calc[10]
+                         FDRE                                         r  data_bytes_reg[0][10]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][10]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][10]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.183    
+  -------------------------------------------------------------------
+                         slack                                  0.828    
+
+Slack (MET) :             0.828ns  (required time - arrival time)
+  Source:                 p_0_out__9/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[1][10]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.123ns  (logic 3.316ns (80.427%)  route 0.807ns (19.573%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT5=1 LUT6=2)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__9/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__9/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[10])
+                                                      0.234     0.294 r  p_0_out__9/DSP_A_B_DATA_INST/A2_DATA[10]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__9/DSP_A_B_DATA.A2_DATA<10>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[10]_A2A1[10])
+                                                      0.076     0.370 r  p_0_out__9/DSP_PREADD_DATA_INST/A2A1[10]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__9/DSP_PREADD_DATA.A2A1<10>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[10]_U[11])
+                                                      0.505     0.875 f  p_0_out__9/DSP_MULTIPLIER_INST/U[11]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__9/DSP_MULTIPLIER.U<11>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[11]_U_DATA[11])
+                                                      0.047     0.922 r  p_0_out__9/DSP_M_DATA_INST/U_DATA[11]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__9/DSP_M_DATA.U_DATA<11>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[11]_ALU_OUT[11])
+                                                      0.585     1.507 r  p_0_out__9/DSP_ALU_INST/ALU_OUT[11]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__9/DSP_ALU.ALU_OUT<11>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[11]_P[11])
+                                                      0.109     1.616 f  p_0_out__9/DSP_OUTPUT_INST/P[11]
+                         net (fo=1, unplaced)         0.221     1.837    p_2_out__1/B[11]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[11]_B2_DATA[11])
+                                                      0.151     1.988 r  p_2_out__1/DSP_A_B_DATA_INST/B2_DATA[11]
+                         net (fo=1, unplaced)         0.000     1.988    p_2_out__1/DSP_A_B_DATA.B2_DATA<11>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[11]_B2B1[11])
+                                                      0.073     2.061 r  p_2_out__1/DSP_PREADD_DATA_INST/B2B1[11]
+                         net (fo=1, unplaced)         0.000     2.061    p_2_out__1/DSP_PREADD_DATA.B2B1<11>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[11]_V[10])
+                                                      0.609     2.670 f  p_2_out__1/DSP_MULTIPLIER_INST/V[10]
+                         net (fo=1, unplaced)         0.000     2.670    p_2_out__1/DSP_MULTIPLIER.V<10>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[10]_V_DATA[10])
+                                                      0.046     2.716 r  p_2_out__1/DSP_M_DATA_INST/V_DATA[10]
+                         net (fo=1, unplaced)         0.000     2.716    p_2_out__1/DSP_M_DATA.V_DATA<10>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[10]_ALU_OUT[10])
+                                                      0.571     3.287 f  p_2_out__1/DSP_ALU_INST/ALU_OUT[10]
+                         net (fo=1, unplaced)         0.000     3.287    p_2_out__1/DSP_ALU.ALU_OUT<10>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[10]_P[10])
+                                                      0.109     3.396 r  p_2_out__1/DSP_OUTPUT_INST/P[10]
+                         net (fo=1, unplaced)         0.166     3.562    p_2_out__1_n_95
+                         LUT6 (Prop_LUT6_I3_O)        0.125     3.687 r  data_bytes[1][10]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.873    data_bytes[1][10]_i_4_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     3.911 r  data_bytes[1][10]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.097    data_bytes[1][10]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.135 r  data_bytes[1][10]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.183    data_bytes[1][10]_i_1_n_0
+                         FDRE                                         r  data_bytes_reg[1][10]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[1][10]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[1][10]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.183    
+  -------------------------------------------------------------------
+                         slack                                  0.828    
+
+Slack (MET) :             0.840ns  (required time - arrival time)
+  Source:                 p_0_out__9/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[1][0]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.111ns  (logic 3.291ns (80.054%)  route 0.820ns (19.946%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__9/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__9/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[1])
+                                                      0.234     0.294 r  p_0_out__9/DSP_A_B_DATA_INST/A2_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__9/DSP_A_B_DATA.A2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[1]_A2A1[1])
+                                                      0.076     0.370 r  p_0_out__9/DSP_PREADD_DATA_INST/A2A1[1]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__9/DSP_PREADD_DATA.A2A1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[1]_U[1])
+                                                      0.505     0.875 f  p_0_out__9/DSP_MULTIPLIER_INST/U[1]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__9/DSP_MULTIPLIER.U<1>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[1]_U_DATA[1])
+                                                      0.047     0.922 r  p_0_out__9/DSP_M_DATA_INST/U_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__9/DSP_M_DATA.U_DATA<1>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[1]_ALU_OUT[1])
+                                                      0.585     1.507 r  p_0_out__9/DSP_ALU_INST/ALU_OUT[1]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__9/DSP_ALU.ALU_OUT<1>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[1]_P[1])
+                                                      0.109     1.616 f  p_0_out__9/DSP_OUTPUT_INST/P[1]
+                         net (fo=1, unplaced)         0.202     1.818    p_2_out__1/B[1]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[1]_B2_DATA[1])
+                                                      0.151     1.969 r  p_2_out__1/DSP_A_B_DATA_INST/B2_DATA[1]
+                         net (fo=1, unplaced)         0.000     1.969    p_2_out__1/DSP_A_B_DATA.B2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[1]_B2B1[1])
+                                                      0.073     2.042 r  p_2_out__1/DSP_PREADD_DATA_INST/B2B1[1]
+                         net (fo=1, unplaced)         0.000     2.042    p_2_out__1/DSP_PREADD_DATA.B2B1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[1]_V[0])
+                                                      0.609     2.651 f  p_2_out__1/DSP_MULTIPLIER_INST/V[0]
+                         net (fo=1, unplaced)         0.000     2.651    p_2_out__1/DSP_MULTIPLIER.V<0>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[0]_V_DATA[0])
+                                                      0.046     2.697 r  p_2_out__1/DSP_M_DATA_INST/V_DATA[0]
+                         net (fo=1, unplaced)         0.000     2.697    p_2_out__1/DSP_M_DATA.V_DATA<0>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[0]_ALU_OUT[0])
+                                                      0.571     3.268 f  p_2_out__1/DSP_ALU_INST/ALU_OUT[0]
+                         net (fo=1, unplaced)         0.000     3.268    p_2_out__1/DSP_ALU.ALU_OUT<0>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[0]_P[0])
+                                                      0.109     3.377 r  p_2_out__1/DSP_OUTPUT_INST/P[0]
+                         net (fo=1, unplaced)         0.198     3.575    p_2_out__1_n_105
+                         LUT4 (Prop_LUT4_I1_O)        0.100     3.675 r  data_bytes[1][0]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.861    data_bytes[1][0]_i_4_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     3.899 r  data_bytes[1][0]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.085    data_bytes[1][0]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.123 r  data_bytes[1][0]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.171    data_bytes[1][0]_i_1_n_0
+                         FDRE                                         r  data_bytes_reg[1][0]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[1][0]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[1][0]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.171    
+  -------------------------------------------------------------------
+                         slack                                  0.840    
+
+Slack (MET) :             0.861ns  (required time - arrival time)
+  Source:                 p_0_out__9/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[1][4]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.090ns  (logic 3.291ns (80.465%)  route 0.799ns (19.535%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__9/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__9/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[3])
+                                                      0.234     0.294 r  p_0_out__9/DSP_A_B_DATA_INST/A2_DATA[3]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__9/DSP_A_B_DATA.A2_DATA<3>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[3]_A2A1[3])
+                                                      0.076     0.370 r  p_0_out__9/DSP_PREADD_DATA_INST/A2A1[3]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__9/DSP_PREADD_DATA.A2A1<3>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[3]_U[4])
+                                                      0.505     0.875 f  p_0_out__9/DSP_MULTIPLIER_INST/U[4]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__9/DSP_MULTIPLIER.U<4>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[4]_U_DATA[4])
+                                                      0.047     0.922 r  p_0_out__9/DSP_M_DATA_INST/U_DATA[4]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__9/DSP_M_DATA.U_DATA<4>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[4]_ALU_OUT[4])
+                                                      0.585     1.507 r  p_0_out__9/DSP_ALU_INST/ALU_OUT[4]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__9/DSP_ALU.ALU_OUT<4>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[4]_P[4])
+                                                      0.109     1.616 f  p_0_out__9/DSP_OUTPUT_INST/P[4]
+                         net (fo=1, unplaced)         0.220     1.836    p_2_out__1/B[4]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[4]_B2_DATA[4])
+                                                      0.151     1.987 r  p_2_out__1/DSP_A_B_DATA_INST/B2_DATA[4]
+                         net (fo=1, unplaced)         0.000     1.987    p_2_out__1/DSP_A_B_DATA.B2_DATA<4>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[4]_B2B1[4])
+                                                      0.073     2.060 r  p_2_out__1/DSP_PREADD_DATA_INST/B2B1[4]
+                         net (fo=1, unplaced)         0.000     2.060    p_2_out__1/DSP_PREADD_DATA.B2B1<4>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[4]_V[4])
+                                                      0.609     2.669 f  p_2_out__1/DSP_MULTIPLIER_INST/V[4]
+                         net (fo=1, unplaced)         0.000     2.669    p_2_out__1/DSP_MULTIPLIER.V<4>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[4]_V_DATA[4])
+                                                      0.046     2.715 r  p_2_out__1/DSP_M_DATA_INST/V_DATA[4]
+                         net (fo=1, unplaced)         0.000     2.715    p_2_out__1/DSP_M_DATA.V_DATA<4>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[4]_ALU_OUT[4])
+                                                      0.571     3.286 f  p_2_out__1/DSP_ALU_INST/ALU_OUT[4]
+                         net (fo=1, unplaced)         0.000     3.286    p_2_out__1/DSP_ALU.ALU_OUT<4>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[4]_P[4])
+                                                      0.109     3.395 r  p_2_out__1/DSP_OUTPUT_INST/P[4]
+                         net (fo=1, unplaced)         0.159     3.554    p_2_out__1_n_101
+                         LUT4 (Prop_LUT4_I1_O)        0.100     3.654 r  data_bytes[1][4]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.840    data_bytes[1][4]_i_4_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     3.878 r  data_bytes[1][4]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.064    data_bytes[1][4]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.102 r  data_bytes[1][4]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.150    data_bytes[1][4]_i_1_n_0
+                         FDRE                                         r  data_bytes_reg[1][4]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[1][4]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[1][4]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.150    
+  -------------------------------------------------------------------
+                         slack                                  0.861    
+
+Slack (MET) :             0.869ns  (required time - arrival time)
+  Source:                 p_0_out__9/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[1][8]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.082ns  (logic 3.281ns (80.377%)  route 0.801ns (19.623%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT4=1 LUT6=2)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__9/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__9/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[3])
+                                                      0.234     0.294 r  p_0_out__9/DSP_A_B_DATA_INST/A2_DATA[3]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__9/DSP_A_B_DATA.A2_DATA<3>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[3]_A2A1[3])
+                                                      0.076     0.370 r  p_0_out__9/DSP_PREADD_DATA_INST/A2A1[3]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__9/DSP_PREADD_DATA.A2A1<3>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[3]_U[4])
+                                                      0.505     0.875 f  p_0_out__9/DSP_MULTIPLIER_INST/U[4]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__9/DSP_MULTIPLIER.U<4>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[4]_U_DATA[4])
+                                                      0.047     0.922 r  p_0_out__9/DSP_M_DATA_INST/U_DATA[4]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__9/DSP_M_DATA.U_DATA<4>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[4]_ALU_OUT[4])
+                                                      0.585     1.507 r  p_0_out__9/DSP_ALU_INST/ALU_OUT[4]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__9/DSP_ALU.ALU_OUT<4>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[4]_P[4])
+                                                      0.109     1.616 f  p_0_out__9/DSP_OUTPUT_INST/P[4]
+                         net (fo=1, unplaced)         0.220     1.836    p_2_out__1/B[4]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[4]_B2_DATA[4])
+                                                      0.151     1.987 r  p_2_out__1/DSP_A_B_DATA_INST/B2_DATA[4]
+                         net (fo=1, unplaced)         0.000     1.987    p_2_out__1/DSP_A_B_DATA.B2_DATA<4>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[4]_B2B1[4])
+                                                      0.073     2.060 r  p_2_out__1/DSP_PREADD_DATA_INST/B2B1[4]
+                         net (fo=1, unplaced)         0.000     2.060    p_2_out__1/DSP_PREADD_DATA.B2B1<4>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[4]_V[8])
+                                                      0.609     2.669 f  p_2_out__1/DSP_MULTIPLIER_INST/V[8]
+                         net (fo=1, unplaced)         0.000     2.669    p_2_out__1/DSP_MULTIPLIER.V<8>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[8]_V_DATA[8])
+                                                      0.046     2.715 r  p_2_out__1/DSP_M_DATA_INST/V_DATA[8]
+                         net (fo=1, unplaced)         0.000     2.715    p_2_out__1/DSP_M_DATA.V_DATA<8>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[8]_ALU_OUT[8])
+                                                      0.571     3.286 f  p_2_out__1/DSP_ALU_INST/ALU_OUT[8]
+                         net (fo=1, unplaced)         0.000     3.286    p_2_out__1/DSP_ALU.ALU_OUT<8>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[8]_P[8])
+                                                      0.109     3.395 r  p_2_out__1/DSP_OUTPUT_INST/P[8]
+                         net (fo=1, unplaced)         0.161     3.556    p_2_out__1_n_97
+                         LUT4 (Prop_LUT4_I3_O)        0.090     3.646 r  data_bytes[1][8]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.832    data_bytes[1][8]_i_4_n_0
+                         LUT6 (Prop_LUT6_I2_O)        0.038     3.870 r  data_bytes[1][8]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.056    data_bytes[1][8]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.094 r  data_bytes[1][8]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.142    data_bytes[1][8]_i_1_n_0
+                         FDRE                                         r  data_bytes_reg[1][8]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[1][8]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[1][8]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.142    
+  -------------------------------------------------------------------
+                         slack                                  0.869    
+
+Slack (MET) :             0.872ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][4]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.079ns  (logic 3.281ns (80.436%)  route 0.798ns (19.564%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[3])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[3]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<3>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[3]_A2A1[3])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[3]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<3>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[3]_U[4])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[4]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<4>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[4]_U_DATA[4])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[4]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<4>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[4]_ALU_OUT[4])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[4]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<4>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[4]_P[4])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[4]
+                         net (fo=1, unplaced)         0.220     1.836    p_2_out/B[4]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[4]_B2_DATA[4])
+                                                      0.151     1.987 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[4]
+                         net (fo=1, unplaced)         0.000     1.987    p_2_out/DSP_A_B_DATA.B2_DATA<4>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[4]_B2B1[4])
+                                                      0.073     2.060 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[4]
+                         net (fo=1, unplaced)         0.000     2.060    p_2_out/DSP_PREADD_DATA.B2B1<4>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[4]_V[4])
+                                                      0.609     2.669 f  p_2_out/DSP_MULTIPLIER_INST/V[4]
+                         net (fo=1, unplaced)         0.000     2.669    p_2_out/DSP_MULTIPLIER.V<4>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[4]_V_DATA[4])
+                                                      0.046     2.715 r  p_2_out/DSP_M_DATA_INST/V_DATA[4]
+                         net (fo=1, unplaced)         0.000     2.715    p_2_out/DSP_M_DATA.V_DATA<4>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[4]_ALU_OUT[4])
+                                                      0.571     3.286 f  p_2_out/DSP_ALU_INST/ALU_OUT[4]
+                         net (fo=1, unplaced)         0.000     3.286    p_2_out/DSP_ALU.ALU_OUT<4>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[4]_P[4])
+                                                      0.109     3.395 r  p_2_out/DSP_OUTPUT_INST/P[4]
+                         net (fo=1, unplaced)         0.158     3.553    p_2_out_n_101
+                         LUT4 (Prop_LUT4_I3_O)        0.090     3.643 r  data_bytes[0][4]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.829    data_bytes[0][4]_i_4_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     3.867 r  data_bytes[0][4]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.053    data_bytes[0][4]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.091 r  data_bytes[0][4]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.139    data_bytes_calc[4]
+                         FDRE                                         r  data_bytes_reg[0][4]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][4]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][4]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.139    
+  -------------------------------------------------------------------
+                         slack                                  0.872    
+
+Slack (MET) :             0.877ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][3]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.074ns  (logic 3.291ns (80.781%)  route 0.783ns (19.219%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[1])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[1]_A2A1[1])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[1]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[1]_U[1])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[1]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<1>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[1]_U_DATA[1])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<1>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[1]_ALU_OUT[1])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[1]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<1>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[1]_P[1])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[1]
+                         net (fo=1, unplaced)         0.202     1.818    p_2_out/B[1]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[1]_B2_DATA[1])
+                                                      0.151     1.969 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[1]
+                         net (fo=1, unplaced)         0.000     1.969    p_2_out/DSP_A_B_DATA.B2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[1]_B2B1[1])
+                                                      0.073     2.042 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[1]
+                         net (fo=1, unplaced)         0.000     2.042    p_2_out/DSP_PREADD_DATA.B2B1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[1]_V[0])
+                                                      0.609     2.651 f  p_2_out/DSP_MULTIPLIER_INST/V[0]
+                         net (fo=1, unplaced)         0.000     2.651    p_2_out/DSP_MULTIPLIER.V<0>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[0]_V_DATA[0])
+                                                      0.046     2.697 r  p_2_out/DSP_M_DATA_INST/V_DATA[0]
+                         net (fo=1, unplaced)         0.000     2.697    p_2_out/DSP_M_DATA.V_DATA<0>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[0]_ALU_OUT[3])
+                                                      0.571     3.268 f  p_2_out/DSP_ALU_INST/ALU_OUT[3]
+                         net (fo=1, unplaced)         0.000     3.268    p_2_out/DSP_ALU.ALU_OUT<3>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[3]_P[3])
+                                                      0.109     3.377 r  p_2_out/DSP_OUTPUT_INST/P[3]
+                         net (fo=1, unplaced)         0.161     3.538    p_2_out_n_102
+                         LUT4 (Prop_LUT4_I1_O)        0.100     3.638 r  data_bytes[0][3]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.824    data_bytes[0][3]_i_4_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     3.862 r  data_bytes[0][3]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.048    data_bytes[0][3]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.086 r  data_bytes[0][3]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.134    data_bytes_calc[3]
+                         FDRE                                         r  data_bytes_reg[0][3]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][3]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][3]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.134    
+  -------------------------------------------------------------------
+                         slack                                  0.877    
+
+Slack (MET) :             0.878ns  (required time - arrival time)
+  Source:                 p_0_out__9/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[1][1]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.073ns  (logic 3.291ns (80.800%)  route 0.782ns (19.200%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__9/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__9/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[1])
+                                                      0.234     0.294 r  p_0_out__9/DSP_A_B_DATA_INST/A2_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__9/DSP_A_B_DATA.A2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[1]_A2A1[1])
+                                                      0.076     0.370 r  p_0_out__9/DSP_PREADD_DATA_INST/A2A1[1]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__9/DSP_PREADD_DATA.A2A1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[1]_U[1])
+                                                      0.505     0.875 f  p_0_out__9/DSP_MULTIPLIER_INST/U[1]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__9/DSP_MULTIPLIER.U<1>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[1]_U_DATA[1])
+                                                      0.047     0.922 r  p_0_out__9/DSP_M_DATA_INST/U_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__9/DSP_M_DATA.U_DATA<1>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[1]_ALU_OUT[1])
+                                                      0.585     1.507 r  p_0_out__9/DSP_ALU_INST/ALU_OUT[1]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__9/DSP_ALU.ALU_OUT<1>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[1]_P[1])
+                                                      0.109     1.616 f  p_0_out__9/DSP_OUTPUT_INST/P[1]
+                         net (fo=1, unplaced)         0.202     1.818    p_2_out__1/B[1]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[1]_B2_DATA[1])
+                                                      0.151     1.969 r  p_2_out__1/DSP_A_B_DATA_INST/B2_DATA[1]
+                         net (fo=1, unplaced)         0.000     1.969    p_2_out__1/DSP_A_B_DATA.B2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[1]_B2B1[1])
+                                                      0.073     2.042 r  p_2_out__1/DSP_PREADD_DATA_INST/B2B1[1]
+                         net (fo=1, unplaced)         0.000     2.042    p_2_out__1/DSP_PREADD_DATA.B2B1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[1]_V[0])
+                                                      0.609     2.651 f  p_2_out__1/DSP_MULTIPLIER_INST/V[0]
+                         net (fo=1, unplaced)         0.000     2.651    p_2_out__1/DSP_MULTIPLIER.V<0>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[0]_V_DATA[0])
+                                                      0.046     2.697 r  p_2_out__1/DSP_M_DATA_INST/V_DATA[0]
+                         net (fo=1, unplaced)         0.000     2.697    p_2_out__1/DSP_M_DATA.V_DATA<0>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[0]_ALU_OUT[1])
+                                                      0.571     3.268 f  p_2_out__1/DSP_ALU_INST/ALU_OUT[1]
+                         net (fo=1, unplaced)         0.000     3.268    p_2_out__1/DSP_ALU.ALU_OUT<1>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[1]_P[1])
+                                                      0.109     3.377 r  p_2_out__1/DSP_OUTPUT_INST/P[1]
+                         net (fo=1, unplaced)         0.160     3.537    p_2_out__1_n_104
+                         LUT4 (Prop_LUT4_I1_O)        0.100     3.637 r  data_bytes[1][1]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.823    data_bytes[1][1]_i_4_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     3.861 r  data_bytes[1][1]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.047    data_bytes[1][1]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.085 r  data_bytes[1][1]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.133    data_bytes[1][1]_i_1_n_0
+                         FDRE                                         r  data_bytes_reg[1][1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[1][1]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[1][1]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.133    
+  -------------------------------------------------------------------
+                         slack                                  0.878    
+
+Slack (MET) :             0.891ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][0]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        4.060ns  (logic 3.281ns (80.813%)  route 0.779ns (19.187%))
+  Logic Levels:           14  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[1])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[1]_A2A1[1])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[1]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[1]_U[1])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[1]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<1>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[1]_U_DATA[1])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<1>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[1]_ALU_OUT[1])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[1]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<1>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[1]_P[1])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[1]
+                         net (fo=1, unplaced)         0.202     1.818    p_2_out/B[1]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[1]_B2_DATA[1])
+                                                      0.151     1.969 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[1]
+                         net (fo=1, unplaced)         0.000     1.969    p_2_out/DSP_A_B_DATA.B2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[1]_B2B1[1])
+                                                      0.073     2.042 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[1]
+                         net (fo=1, unplaced)         0.000     2.042    p_2_out/DSP_PREADD_DATA.B2B1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[1]_V[0])
+                                                      0.609     2.651 f  p_2_out/DSP_MULTIPLIER_INST/V[0]
+                         net (fo=1, unplaced)         0.000     2.651    p_2_out/DSP_MULTIPLIER.V<0>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[0]_V_DATA[0])
+                                                      0.046     2.697 r  p_2_out/DSP_M_DATA_INST/V_DATA[0]
+                         net (fo=1, unplaced)         0.000     2.697    p_2_out/DSP_M_DATA.V_DATA<0>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[0]_ALU_OUT[0])
+                                                      0.571     3.268 f  p_2_out/DSP_ALU_INST/ALU_OUT[0]
+                         net (fo=1, unplaced)         0.000     3.268    p_2_out/DSP_ALU.ALU_OUT<0>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[0]_P[0])
+                                                      0.109     3.377 r  p_2_out/DSP_OUTPUT_INST/P[0]
+                         net (fo=1, unplaced)         0.157     3.534    p_2_out_n_105
+                         LUT4 (Prop_LUT4_I3_O)        0.090     3.624 r  data_bytes[0][0]_i_4/O
+                         net (fo=1, unplaced)         0.186     3.810    data_bytes[0][0]_i_4_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     3.848 r  data_bytes[0][0]_i_3/O
+                         net (fo=1, unplaced)         0.186     4.034    data_bytes[0][0]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     4.072 r  data_bytes[0][0]_i_1/O
+                         net (fo=1, unplaced)         0.048     4.120    data_bytes_calc[0]
+                         FDRE                                         r  data_bytes_reg[0][0]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][0]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][0]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -4.120    
+  -------------------------------------------------------------------
+                         slack                                  0.891    
+
+Slack (MET) :             1.023ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][1]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        3.928ns  (logic 3.318ns (84.470%)  route 0.610ns (15.530%))
+  Logic Levels:           13  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT6=2)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[1])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[1]_A2A1[1])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[1]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[1]_U[1])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[1]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<1>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[1]_U_DATA[1])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<1>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[1]_ALU_OUT[1])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[1]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<1>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[1]_P[1])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[1]
+                         net (fo=1, unplaced)         0.202     1.818    p_2_out/B[1]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[1]_B2_DATA[1])
+                                                      0.151     1.969 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[1]
+                         net (fo=1, unplaced)         0.000     1.969    p_2_out/DSP_A_B_DATA.B2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[1]_B2B1[1])
+                                                      0.073     2.042 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[1]
+                         net (fo=1, unplaced)         0.000     2.042    p_2_out/DSP_PREADD_DATA.B2B1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[1]_V[0])
+                                                      0.609     2.651 f  p_2_out/DSP_MULTIPLIER_INST/V[0]
+                         net (fo=1, unplaced)         0.000     2.651    p_2_out/DSP_MULTIPLIER.V<0>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[0]_V_DATA[0])
+                                                      0.046     2.697 r  p_2_out/DSP_M_DATA_INST/V_DATA[0]
+                         net (fo=1, unplaced)         0.000     2.697    p_2_out/DSP_M_DATA.V_DATA<0>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[0]_ALU_OUT[1])
+                                                      0.571     3.268 f  p_2_out/DSP_ALU_INST/ALU_OUT[1]
+                         net (fo=1, unplaced)         0.000     3.268    p_2_out/DSP_ALU.ALU_OUT<1>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[1]_P[1])
+                                                      0.109     3.377 r  p_2_out/DSP_OUTPUT_INST/P[1]
+                         net (fo=1, unplaced)         0.223     3.600    p_2_out_n_104
+                         LUT6 (Prop_LUT6_I1_O)        0.150     3.750 r  data_bytes[0][1]_i_2/O
+                         net (fo=1, unplaced)         0.137     3.887    data_bytes[0][1]_i_2_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.053     3.940 r  data_bytes[0][1]_i_1/O
+                         net (fo=1, unplaced)         0.048     3.988    data_bytes_calc[1]
+                         FDRE                                         r  data_bytes_reg[0][1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][1]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][1]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -3.988    
+  -------------------------------------------------------------------
+                         slack                                  1.023    
+
+Slack (MET) :             1.024ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][2]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        3.927ns  (logic 3.318ns (84.492%)  route 0.609ns (15.508%))
+  Logic Levels:           13  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT6=2)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[1])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[1]_A2A1[1])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[1]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[1]_U[1])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[1]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<1>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[1]_U_DATA[1])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[1]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<1>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[1]_ALU_OUT[1])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[1]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<1>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[1]_P[1])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[1]
+                         net (fo=1, unplaced)         0.202     1.818    p_2_out/B[1]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[1]_B2_DATA[1])
+                                                      0.151     1.969 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[1]
+                         net (fo=1, unplaced)         0.000     1.969    p_2_out/DSP_A_B_DATA.B2_DATA<1>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[1]_B2B1[1])
+                                                      0.073     2.042 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[1]
+                         net (fo=1, unplaced)         0.000     2.042    p_2_out/DSP_PREADD_DATA.B2B1<1>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[1]_V[0])
+                                                      0.609     2.651 f  p_2_out/DSP_MULTIPLIER_INST/V[0]
+                         net (fo=1, unplaced)         0.000     2.651    p_2_out/DSP_MULTIPLIER.V<0>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[0]_V_DATA[0])
+                                                      0.046     2.697 r  p_2_out/DSP_M_DATA_INST/V_DATA[0]
+                         net (fo=1, unplaced)         0.000     2.697    p_2_out/DSP_M_DATA.V_DATA<0>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[0]_ALU_OUT[2])
+                                                      0.571     3.268 f  p_2_out/DSP_ALU_INST/ALU_OUT[2]
+                         net (fo=1, unplaced)         0.000     3.268    p_2_out/DSP_ALU.ALU_OUT<2>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[2]_P[2])
+                                                      0.109     3.377 r  p_2_out/DSP_OUTPUT_INST/P[2]
+                         net (fo=1, unplaced)         0.222     3.599    p_2_out_n_103
+                         LUT6 (Prop_LUT6_I1_O)        0.150     3.749 r  data_bytes[0][2]_i_2/O
+                         net (fo=1, unplaced)         0.137     3.886    data_bytes[0][2]_i_2_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.053     3.939 r  data_bytes[0][2]_i_1/O
+                         net (fo=1, unplaced)         0.048     3.987    data_bytes_calc[2]
+                         FDRE                                         r  data_bytes_reg[0][2]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][2]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][2]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -3.987    
+  -------------------------------------------------------------------
+                         slack                                  1.024    
+
+Slack (MET) :             1.028ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][21]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        3.923ns  (logic 3.253ns (82.921%)  route 0.670ns (17.079%))
+  Logic Levels:           13  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[14])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[14]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<14>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[14]_A2A1[14])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[14]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<14>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[14]_U[15])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[15]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<15>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[15]_U_DATA[15])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[15]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<15>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[15]_ALU_OUT[15])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[15]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<15>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[15]_P[15])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[15]
+                         net (fo=1, unplaced)         0.222     1.838    p_2_out/B[15]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[15]_B2_DATA[15])
+                                                      0.151     1.989 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[15]
+                         net (fo=1, unplaced)         0.000     1.989    p_2_out/DSP_A_B_DATA.B2_DATA<15>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[15]_B2B1[15])
+                                                      0.073     2.062 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[15]
+                         net (fo=1, unplaced)         0.000     2.062    p_2_out/DSP_PREADD_DATA.B2B1<15>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[15]_V[21])
+                                                      0.609     2.671 f  p_2_out/DSP_MULTIPLIER_INST/V[21]
+                         net (fo=1, unplaced)         0.000     2.671    p_2_out/DSP_MULTIPLIER.V<21>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[21]_V_DATA[21])
+                                                      0.046     2.717 r  p_2_out/DSP_M_DATA_INST/V_DATA[21]
+                         net (fo=1, unplaced)         0.000     2.717    p_2_out/DSP_M_DATA.V_DATA<21>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[21]_ALU_OUT[21])
+                                                      0.571     3.288 f  p_2_out/DSP_ALU_INST/ALU_OUT[21]
+                         net (fo=1, unplaced)         0.000     3.288    p_2_out/DSP_ALU.ALU_OUT<21>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[21]_P[21])
+                                                      0.109     3.397 r  p_2_out/DSP_OUTPUT_INST/P[21]
+                         net (fo=1, unplaced)         0.214     3.611    p_2_out_n_84
+                         LUT6 (Prop_LUT6_I4_O)        0.100     3.711 r  data_bytes[0][21]_i_2/O
+                         net (fo=1, unplaced)         0.186     3.897    data_bytes[0][21]_i_2_n_0
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.935 r  data_bytes[0][21]_i_1/O
+                         net (fo=1, unplaced)         0.048     3.983    data_bytes_calc[21]
+                         FDRE                                         r  data_bytes_reg[0][21]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][21]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][21]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -3.983    
+  -------------------------------------------------------------------
+                         slack                                  1.028    
+
+Slack (MET) :             1.029ns  (required time - arrival time)
+  Source:                 p_0_out__2/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[0][22]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        3.922ns  (logic 3.253ns (82.942%)  route 0.669ns (17.058%))
+  Logic Levels:           13  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT3=1 LUT6=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__2/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__2/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[14])
+                                                      0.234     0.294 r  p_0_out__2/DSP_A_B_DATA_INST/A2_DATA[14]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__2/DSP_A_B_DATA.A2_DATA<14>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[14]_A2A1[14])
+                                                      0.076     0.370 r  p_0_out__2/DSP_PREADD_DATA_INST/A2A1[14]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__2/DSP_PREADD_DATA.A2A1<14>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[14]_U[15])
+                                                      0.505     0.875 f  p_0_out__2/DSP_MULTIPLIER_INST/U[15]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__2/DSP_MULTIPLIER.U<15>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[15]_U_DATA[15])
+                                                      0.047     0.922 r  p_0_out__2/DSP_M_DATA_INST/U_DATA[15]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__2/DSP_M_DATA.U_DATA<15>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[15]_ALU_OUT[15])
+                                                      0.585     1.507 r  p_0_out__2/DSP_ALU_INST/ALU_OUT[15]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__2/DSP_ALU.ALU_OUT<15>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[15]_P[15])
+                                                      0.109     1.616 f  p_0_out__2/DSP_OUTPUT_INST/P[15]
+                         net (fo=1, unplaced)         0.222     1.838    p_2_out/B[15]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[15]_B2_DATA[15])
+                                                      0.151     1.989 r  p_2_out/DSP_A_B_DATA_INST/B2_DATA[15]
+                         net (fo=1, unplaced)         0.000     1.989    p_2_out/DSP_A_B_DATA.B2_DATA<15>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[15]_B2B1[15])
+                                                      0.073     2.062 r  p_2_out/DSP_PREADD_DATA_INST/B2B1[15]
+                         net (fo=1, unplaced)         0.000     2.062    p_2_out/DSP_PREADD_DATA.B2B1<15>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[15]_V[22])
+                                                      0.609     2.671 f  p_2_out/DSP_MULTIPLIER_INST/V[22]
+                         net (fo=1, unplaced)         0.000     2.671    p_2_out/DSP_MULTIPLIER.V<22>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[22]_V_DATA[22])
+                                                      0.046     2.717 r  p_2_out/DSP_M_DATA_INST/V_DATA[22]
+                         net (fo=1, unplaced)         0.000     2.717    p_2_out/DSP_M_DATA.V_DATA<22>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[22]_ALU_OUT[22])
+                                                      0.571     3.288 f  p_2_out/DSP_ALU_INST/ALU_OUT[22]
+                         net (fo=1, unplaced)         0.000     3.288    p_2_out/DSP_ALU.ALU_OUT<22>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[22]_P[22])
+                                                      0.109     3.397 r  p_2_out/DSP_OUTPUT_INST/P[22]
+                         net (fo=1, unplaced)         0.213     3.610    p_2_out_n_83
+                         LUT6 (Prop_LUT6_I4_O)        0.100     3.710 r  data_bytes[0][22]_i_3/O
+                         net (fo=1, unplaced)         0.186     3.896    data_bytes[0][22]_i_3_n_0
+                         LUT3 (Prop_LUT3_I2_O)        0.038     3.934 r  data_bytes[0][22]_i_1/O
+                         net (fo=1, unplaced)         0.048     3.982    data_bytes_calc[22]
+                         FDRE                                         r  data_bytes_reg[0][22]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[0][22]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[0][22]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -3.982    
+  -------------------------------------------------------------------
+                         slack                                  1.029    
+
+Slack (MET) :             1.032ns  (required time - arrival time)
+  Source:                 p_0_out__9/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[1][13]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        3.919ns  (logic 3.253ns (83.006%)  route 0.666ns (16.994%))
+  Logic Levels:           13  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__9/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__9/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[10])
+                                                      0.234     0.294 r  p_0_out__9/DSP_A_B_DATA_INST/A2_DATA[10]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__9/DSP_A_B_DATA.A2_DATA<10>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[10]_A2A1[10])
+                                                      0.076     0.370 r  p_0_out__9/DSP_PREADD_DATA_INST/A2A1[10]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__9/DSP_PREADD_DATA.A2A1<10>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[10]_U[11])
+                                                      0.505     0.875 f  p_0_out__9/DSP_MULTIPLIER_INST/U[11]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__9/DSP_MULTIPLIER.U<11>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[11]_U_DATA[11])
+                                                      0.047     0.922 r  p_0_out__9/DSP_M_DATA_INST/U_DATA[11]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__9/DSP_M_DATA.U_DATA<11>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[11]_ALU_OUT[11])
+                                                      0.585     1.507 r  p_0_out__9/DSP_ALU_INST/ALU_OUT[11]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__9/DSP_ALU.ALU_OUT<11>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[11]_P[11])
+                                                      0.109     1.616 f  p_0_out__9/DSP_OUTPUT_INST/P[11]
+                         net (fo=1, unplaced)         0.221     1.837    p_2_out__1/B[11]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[11]_B2_DATA[11])
+                                                      0.151     1.988 r  p_2_out__1/DSP_A_B_DATA_INST/B2_DATA[11]
+                         net (fo=1, unplaced)         0.000     1.988    p_2_out__1/DSP_A_B_DATA.B2_DATA<11>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[11]_B2B1[11])
+                                                      0.073     2.061 r  p_2_out__1/DSP_PREADD_DATA_INST/B2B1[11]
+                         net (fo=1, unplaced)         0.000     2.061    p_2_out__1/DSP_PREADD_DATA.B2B1<11>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[11]_V[13])
+                                                      0.609     2.670 f  p_2_out__1/DSP_MULTIPLIER_INST/V[13]
+                         net (fo=1, unplaced)         0.000     2.670    p_2_out__1/DSP_MULTIPLIER.V<13>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[13]_V_DATA[13])
+                                                      0.046     2.716 r  p_2_out__1/DSP_M_DATA_INST/V_DATA[13]
+                         net (fo=1, unplaced)         0.000     2.716    p_2_out__1/DSP_M_DATA.V_DATA<13>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[13]_ALU_OUT[13])
+                                                      0.571     3.287 f  p_2_out__1/DSP_ALU_INST/ALU_OUT[13]
+                         net (fo=1, unplaced)         0.000     3.287    p_2_out__1/DSP_ALU.ALU_OUT<13>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[13]_P[13])
+                                                      0.109     3.396 r  p_2_out__1/DSP_OUTPUT_INST/P[13]
+                         net (fo=1, unplaced)         0.211     3.607    p_2_out__1_n_92
+                         LUT5 (Prop_LUT5_I2_O)        0.100     3.707 r  data_bytes[1][13]_i_3/O
+                         net (fo=1, unplaced)         0.186     3.893    data_bytes[1][13]_i_3_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     3.931 r  data_bytes[1][13]_i_1/O
+                         net (fo=1, unplaced)         0.048     3.979    data_bytes[1][13]_i_1_n_0
+                         FDRE                                         r  data_bytes_reg[1][13]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[1][13]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[1][13]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -3.979    
+  -------------------------------------------------------------------
+                         slack                                  1.032    
+
+Slack (MET) :             1.035ns  (required time - arrival time)
+  Source:                 p_0_out__9/DSP_A_B_DATA_INST/CLK
+                            (rising edge-triggered cell DSP_A_B_DATA clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            data_bytes_reg[1][7]/D
+                            (rising edge-triggered cell FDRE clocked by core_clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (core_clk rise@5.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        3.916ns  (logic 3.293ns (84.091%)  route 0.623ns (15.909%))
+  Logic Levels:           13  (DSP_A_B_DATA=1 DSP_ALU=2 DSP_M_DATA=2 DSP_MULTIPLIER=2 DSP_OUTPUT=2 DSP_PREADD_DATA=2 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.060ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=1926, unset)         0.060     0.060    p_0_out__9/CLK
+                         DSP_A_B_DATA                                 r  p_0_out__9/DSP_A_B_DATA_INST/CLK
+  -------------------------------------------------------------------    -------------------
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_CLK_A2_DATA[3])
+                                                      0.234     0.294 r  p_0_out__9/DSP_A_B_DATA_INST/A2_DATA[3]
+                         net (fo=1, unplaced)         0.000     0.294    p_0_out__9/DSP_A_B_DATA.A2_DATA<3>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_A2_DATA[3]_A2A1[3])
+                                                      0.076     0.370 r  p_0_out__9/DSP_PREADD_DATA_INST/A2A1[3]
+                         net (fo=1, unplaced)         0.000     0.370    p_0_out__9/DSP_PREADD_DATA.A2A1<3>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_A2A1[3]_U[4])
+                                                      0.505     0.875 f  p_0_out__9/DSP_MULTIPLIER_INST/U[4]
+                         net (fo=1, unplaced)         0.000     0.875    p_0_out__9/DSP_MULTIPLIER.U<4>
+                         DSP_M_DATA (Prop_DSP_M_DATA_U[4]_U_DATA[4])
+                                                      0.047     0.922 r  p_0_out__9/DSP_M_DATA_INST/U_DATA[4]
+                         net (fo=1, unplaced)         0.000     0.922    p_0_out__9/DSP_M_DATA.U_DATA<4>
+                         DSP_ALU (Prop_DSP_ALU_U_DATA[4]_ALU_OUT[4])
+                                                      0.585     1.507 r  p_0_out__9/DSP_ALU_INST/ALU_OUT[4]
+                         net (fo=1, unplaced)         0.000     1.507    p_0_out__9/DSP_ALU.ALU_OUT<4>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[4]_P[4])
+                                                      0.109     1.616 f  p_0_out__9/DSP_OUTPUT_INST/P[4]
+                         net (fo=1, unplaced)         0.220     1.836    p_2_out__1/B[4]
+                         DSP_A_B_DATA (Prop_DSP_A_B_DATA_B[4]_B2_DATA[4])
+                                                      0.151     1.987 r  p_2_out__1/DSP_A_B_DATA_INST/B2_DATA[4]
+                         net (fo=1, unplaced)         0.000     1.987    p_2_out__1/DSP_A_B_DATA.B2_DATA<4>
+                         DSP_PREADD_DATA (Prop_DSP_PREADD_DATA_B2_DATA[4]_B2B1[4])
+                                                      0.073     2.060 r  p_2_out__1/DSP_PREADD_DATA_INST/B2B1[4]
+                         net (fo=1, unplaced)         0.000     2.060    p_2_out__1/DSP_PREADD_DATA.B2B1<4>
+                         DSP_MULTIPLIER (Prop_DSP_MULTIPLIER_B2B1[4]_V[7])
+                                                      0.609     2.669 f  p_2_out__1/DSP_MULTIPLIER_INST/V[7]
+                         net (fo=1, unplaced)         0.000     2.669    p_2_out__1/DSP_MULTIPLIER.V<7>
+                         DSP_M_DATA (Prop_DSP_M_DATA_V[7]_V_DATA[7])
+                                                      0.046     2.715 r  p_2_out__1/DSP_M_DATA_INST/V_DATA[7]
+                         net (fo=1, unplaced)         0.000     2.715    p_2_out__1/DSP_M_DATA.V_DATA<7>
+                         DSP_ALU (Prop_DSP_ALU_V_DATA[7]_ALU_OUT[7])
+                                                      0.571     3.286 f  p_2_out__1/DSP_ALU_INST/ALU_OUT[7]
+                         net (fo=1, unplaced)         0.000     3.286    p_2_out__1/DSP_ALU.ALU_OUT<7>
+                         DSP_OUTPUT (Prop_DSP_OUTPUT_ALU_OUT[7]_P[7])
+                                                      0.109     3.395 r  p_2_out__1/DSP_OUTPUT_INST/P[7]
+                         net (fo=1, unplaced)         0.218     3.613    p_2_out__1_n_98
+                         LUT5 (Prop_LUT5_I0_O)        0.125     3.738 r  data_bytes[1][7]_i_2/O
+                         net (fo=1, unplaced)         0.137     3.875    data_bytes[1][7]_i_2_n_0
+                         LUT6 (Prop_LUT6_I4_O)        0.053     3.928 r  data_bytes[1][7]_i_1/O
+                         net (fo=1, unplaced)         0.048     3.976    data_bytes[1][7]_i_1_n_0
+                         FDRE                                         r  data_bytes_reg[1][7]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                      5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=1926, unset)         0.021     5.021    clk
+                         FDRE                                         r  data_bytes_reg[1][7]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_D)        0.025     5.011    data_bytes_reg[1][7]
+  -------------------------------------------------------------------
+                         required time                          5.011    
+                         arrival time                          -3.976    
+  -------------------------------------------------------------------
+                         slack                                  1.035    
+
+
+
+

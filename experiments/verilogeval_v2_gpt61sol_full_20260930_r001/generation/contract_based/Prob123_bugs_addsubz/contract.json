@@ -1,0 +1,48 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "do_sub": {
+        "width": 1
+      },
+      "a": {
+        "width": 8,
+        "signed": false
+      },
+      "b": {
+        "width": 8,
+        "signed": false
+      }
+    },
+    "outputs": {
+      "out": {
+        "width": 8
+      },
+      "result_is_zero": {
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "operation": "Combinational: do_sub=0 selects addition; do_sub=1 selects subtraction.",
+    "zero_flag": "result_is_zero is 1 exactly when out equals 8'h00, otherwise 0.",
+    "timing": "No clock, cycles, registered latency, or handshake; outputs settle after input changes.",
+    "reset_initialization": "No reset or stored state; no initialization required for known inputs."
+  },
+  "numeric": {
+    "operands": "Unsigned 8-bit bit vectors.",
+    "result": "Low eight bits of sum or difference, modulo 256; overflow and borrow wrap.",
+    "flag_basis": "Zero test on truncated 8-bit result.",
+    "rounding_saturation": "Neither rounding nor saturation."
+  },
+  "verification": {
+    "oracle": "Compute integer addition/subtraction independently, reduce modulo 256, compare result and equality-to-zero flag.",
+    "coverage": "Exhaust all 2*256*256 known input combinations; include zero-to-nonzero transitions, sum wraparound, subtraction underflow and equal operands.",
+    "tools": "Icarus Verilog v12 with -g2012, explicit dev_tb top, finite compile and simulation timeouts.",
+    "static": "Review complete combinational assignments and exact interface."
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z inputs is unspecified; verification covers binary inputs only."
+  ]
+}

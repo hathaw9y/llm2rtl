@@ -1,0 +1,37 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "gemm_systolic_executor",
+  "module_kind": "opcode_executor",
+  "opcode": "GEMM",
+  "status": "frozen",
+  "target": {"board": "ZCU104", "part": "xczu7ev-ffvc1156-2-e", "clock_mhz": 200},
+  "interface": {
+    "rtl_module": "smollm2_gemm_systolic_executor",
+    "compute_channel": 0,
+    "request": "same approved GEMM opcode, three bank IDs and 112-bit payload as scalar reference",
+    "response": "held done_valid/done_ready, operand0 tag, bank_count=3, all accepted bank IDs and error",
+    "bank_roles": {"activation_read": 3, "weight_read": 4, "destination_write": 5},
+    "bank_word_bits": 128,
+    "layout": "activation [M,K] row-major; weight [n_tile,K] row-major; destination [m_count,n_total] row-major with n_start offset",
+    "completion_order": "after final destination write handshake"
+  },
+  "architecture": {
+    "array": "16x16 output-stationary BF16 systolic PEs; activation propagates right, weight down",
+    "dsp": "one explicitly attributed and registered 8x8 BF16 significand multiplier per PE; post-synthesis DSP mapping must be verified",
+    "tile": "up to 16 M x 16 N x 16 K; K tiled internally without ISA partial-sum commands",
+    "bank_feed": "one 128-bit activation read and one 128-bit weight read outstanding together; stage needed 8-element words into 16x16 tile buffers, then wavefront",
+    "tails": "M, N and K tails are masked, including unaligned row-major bank words"
+  },
+  "numeric": {
+    "input": "BF16 including zero/subnormal; nonfinite inputs return error before writes from the affected M/N tile, while prior tiles may have written",
+    "multiply": "exact BF16 significand product per PE",
+    "accumulate": "K ascending, signed 32-bit shared-exponent mantissa with 4 guard bits; alignment shifts truncate magnitude toward zero",
+    "output": "BF16 nearest-even; finite overflow yields infinity"
+  },
+  "verification": {
+    "proof_scope": "standalone XSIM and 200 MHz module OOC only; no fabric routing, placed/routed board, or Vitis execution",
+    "required_cases": ["same scalar GEMM golden cases", "real checkpoint BF16 q_proj prefill/decode values", "16x16 and edge-tile wavefronts", "K tails and full M32 N192 K576 command", "destination backpressure", "5 ns OOC timing"]
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "schema": "llm2rtl.kernel_report.v1",
+  "module_id": "quantization_executor",
+  "status": "SELF_FUNCTIONAL_AND_POST_SYNTH_TIMING_PASS_INDEPENDENT_FINAL_AUDIT_PENDING",
+  "agent_role": "compute_executor",
+  "memory_access_scope": "local_bank_only",
+  "module_manifest_sha256": "29f8048bd6dbc761a4c1c73b1f5acebc3401200368a99f376962b9664d689fb8",
+  "source_sha256": "27e9f0ae0928e7fc331f8f25fff31838a14d0003e81500851d9efdfb340f8be1",
+  "source_closure": {
+    "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+    "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+    "rtl/w8a8_fp32_div4.sv": "8f9c1884cc50e1c0e69c4101397ea1af18e6a0323e1fac0b97c9704e928667ce",
+    "rtl/w8a8_quant_lane4.sv": "d3a1459716e5ee22af9c40770be67998a0ebe5755e172cff11953bea06c9d5ad",
+    "rtl/w8a8_dequant_lane4.sv": "012c5a81dde04820412b906cb06f2279e6b358306649d6599eb45245f5fb03ee",
+    "rtl/smollm2_quantization_executor.sv": "27e9f0ae0928e7fc331f8f25fff31838a14d0003e81500851d9efdfb340f8be1",
+    "tb/quant_executor_tb.sv": "f4a8d0cb85e91eafbed5450365f0571296c88ddb0daf91cbea8fd329226a2775"
+  },
+  "implementation_change": {
+    "traversal": "relative row/head/feature counters replace variable integer division/modulo; advance only accepted fourlane source/child bundle",
+    "reduction": "one registered max/group/bad valid bundle, ordered maximum retirement; pendingempty REDUCEexit/quiescence; lastbad overridesstate before anyscaleoffer",
+    "integer_FP32_BF16_arithmetic": "unchanged pinned helpers",
+    "ports_bank_ownership_native_credit_write_error_protocol": "unchanged",
+    "internal_latency": "one additional unstalled REDUCE-draincycle for dynamic scale pass; child19/22/8 unchanged"
+  },
+  "verification": {
+    "functional_report": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/timing_retries/20261009T044944Z/quantization/functional02.json",
+    "normal_cases": 41,
+    "fault_cases": 18,
+    "repeat_reset_scenarios": 12,
+    "terminal_selected_source_NaN_last_group": "PASS_ZERO_SCALE_CHILD_AND_C_OFFERS_WRITES",
+    "exact_arithmetic_replay": "56000lanes PASS with unchangedchildsources",
+    "lint": "Verilator4.038 default warningsfatal no suppressions PASS",
+    "independent_final_source_audit": "pending_separate_auditor_report"
+  },
+  "ooc": {
+    "summary": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/timing_retries/20261009T044944Z/quantization/ooc02/summary.json",
+    "status": "PASS_POST_SYNTH_INTERNAL_CLOCK_PATHS_ONLY",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "tool": "Vivado2025.2 SWBuild6299465",
+    "clock_period_ns": 5,
+    "timing": {
+      "WNS_ns": 0.19,
+      "TNS_ns": 0.0,
+      "setup_failing_endpoints": 0,
+      "setup_total_endpoints": 18682,
+      "WHS_ns": 0.042,
+      "THS_ns": 0.0,
+      "hold_failing_endpoints": 0,
+      "hold_total_endpoints": 18682,
+      "WPWS_ns": 1.968,
+      "TPWS_ns": 0.0,
+      "pulse_failing_endpoints": 0,
+      "pulse_total_endpoints": 8862
+    },
+    "resources": {
+      "instance": "smollm2_quantization_executor",
+      "module": "(top)",
+      "LUT": 18500,
+      "logic_LUT": 17888,
+      "LUTRAM": 432,
+      "SRL": 180,
+      "FF": 8081,
+      "BRAM36": 0,
+      "BRAM18": 0,
+      "URAM": 0,
+      "DSP": 15
+    },
+    "DCP_sha256": "f5b89b0365f2a6990d3d312ab9b0d039a650d2b1a959f69849942ff2fe4b4b90",
+    "drc_warning_counts": {
+      "DPIP-2": 4,
+      "DPOP-3": 10,
+      "DPOP-4": 15
+    },
+    "methodology_warning_counts": {
+      "SYNTH-10": 3,
+      "TIMING-18": 1000
+    },
+    "io_timing": "797inputs515outputswithoutdelays; externalboundaryunproven",
+    "stage": "post_synthesis_OOC_unplaced_unrouted"
+  },
+  "measured_progress": [
+    {
+      "source": "fa02a045c836090049818f765484d5f7be0f9f95f35d1edf4b60e976fb01d411",
+      "WNS_ns": -44.329,
+      "LUT": 38495,
+      "report": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/ooc_runs/20261009T042510Z/quantization/summary.json"
+    },
+    {
+      "source": "321554bc499e20cfa66a5ad0f2c81ceb232a5a8b5ff246b9eddbe15b7f84a4c8",
+      "WNS_ns": -1.637,
+      "LUT": 18490,
+      "report": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/timing_retries/20261009T044944Z/quantization/ooc01/summary.json"
+    },
+    {
+      "source": "27e9f0ae0928e7fc331f8f25fff31838a14d0003e81500851d9efdfb340f8be1",
+      "WNS_ns": 0.19,
+      "LUT": 18500,
+      "report": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/timing_retries/20261009T044944Z/quantization/ooc02/summary.json"
+    }
+  ],
+  "resource_assessment": "underutilized",
+  "known_limits": [
+    "No routed timing or external source/sink interface constraints",
+    "Fresh in-context bank/fabric timing needed",
+    "Post-synth holdmargin0.042ns is a residualintegrationrisk"
+  ],
+  "does_not_claim": [
+    "routed200MHzboardpass",
+    "BIT_HWH_XSAdeployment",
+    "fullmodelaccuracy",
+    "legacyPASSinheritance"
+  ],
+  "evidence_sha256": {
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/timing_retries/20261009T044944Z/quantization/functional02.json": "cd3274a8102d0cc17b5fee11672fabd60d2f8f1d8534f771f412e14d6f6f8ab3",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/timing_retries/20261009T044944Z/quantization/ooc02/summary.json": "9f61b18a6eaf7991b2a99065b39ce89815376b8fa6d11b96cffc0f9939eaaea3",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/timing_retries/20261009T044944Z/quantization/tests03/terminal_nan_tb.sv": "4a14e6392c97f268bfbd38443152a459303fcd51442e60813bebf1051bffe841",
+    "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/timing_retries/20261009T044944Z/quantization/tests03/terminal_A17.log": "ebb1499a61bd3b2a7b7c49a0f14eccdf9694096708223d1e4919ddf3ad648a5f"
+  }
+}

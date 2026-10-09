@@ -1,0 +1,69 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790750034.660988,
+      "source_sha256": "605e7bcf3920422da069526d1220aa8e1dcbb2aad5f78d1450a10d3aa7ce6fe5",
+      "testbench_sha256": "5ea0f95a094f6759816d7059b204caebbd36be2cc52b45b67ed46d9bfc09ebc7",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob024_hadd/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.008720857091248035
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS half-adder: 32 arithmetic comparisons\ndev_tb.sv:32: $finish called at 32000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.005541452206671238
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "X/Z input behavior is unspecified by the original problem and is not asserted.",
+    "No synthesis or board work performed as instructed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract": {
+    "file": "contract.json",
+    "gate": "contract_gate.json",
+    "outcome": "passed_structure_only",
+    "revisions": 0
+  },
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface": "TopModule(a,b,sum,cout), all one-bit",
+    "behavior": "Combinational sum=a XOR b, cout=a AND b; no state, reset, clock, or added latency",
+    "numeric": "Unsigned one-bit inputs; exact two-bit result as {cout,sum}",
+    "static_review": "Single continuous driver per output; no latches, dependencies, or extra ports."
+  },
+  "coverage": "32 arithmetic comparisons covering all four binary pairs and all 16 ordered pair transitions including holds."
+}

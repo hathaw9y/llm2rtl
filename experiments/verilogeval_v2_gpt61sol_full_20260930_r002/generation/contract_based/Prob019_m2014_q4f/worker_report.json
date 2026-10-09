@@ -1,0 +1,61 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790750230.8029714,
+      "source_sha256": "1509d2052f34b6722283521503bd8e586e99708102fa0d1e115e7ac5c6aac0dd",
+      "testbench_sha256": "f6cf61a6aae164ab1444f153e7d6d5ce0e506b786ae3d8a123abc683edac28e4",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob019_m2014_q4f/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011366154998540878
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: 17 gate checks\ndev_tb.sv:40: $finish called at 17000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.005818493664264679
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board work performed, as required."
+  ],
+  "justified_RTL_TB_changes": {
+    "initial_RTL": "Continuous one-bit AND with complemented in2 implements the original gate description.",
+    "RTL_revisions": [],
+    "TB_changes": [],
+    "contract_changes": []
+  },
+  "coverage": "All four binary combinations, repeated combinational transitions, and supplementary four-state gate checks; 17 checks passed.",
+  "interface_cycle_contract": "TopModule with one-bit in1/in2 inputs and out output; combinational, no clock/reset/state or extra latency.",
+  "numeric_width_decisions": "One-bit gate operands and output; no arithmetic.",
+  "static_review": "Single continuous driver, no state, latch, submodule dependency, or simulation-only DUT constructs.",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_validation": "passed_structure_only"
+}

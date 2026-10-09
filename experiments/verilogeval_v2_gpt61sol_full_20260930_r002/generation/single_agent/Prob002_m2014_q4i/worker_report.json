@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "correct_fixture": "passed",
+      "deliberately_wrong_fixture": "simulation_failed",
+      "repaired_fixture": "passed"
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "label": "initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "evidence_directory": "development/01",
+      "coverage": "Case-inequality checks against zero after time-zero settling, at 1 ps, at 1 ns, and at each subsequent nanosecond through 101 ns; bounded timeout."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis, timing, or board verification performed."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation drives the sole one-bit output out continuously with 1'b0, matching the original specification without extra ports or latency. No subsequent RTL changes."
+  ],
+  "justified_tb_changes": [
+    "Initial independent testbench checks the specified constant-zero output using four-state case inequality and startup and elapsed-time samples. No testbench revisions."
+  ],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "static_review": "TopModule name and sole output preserved; sized constant; synthesizable continuous assignment; no clocks, resets, storage, or pipelines required."
+}

@@ -1,0 +1,51 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "passed",
+      "details": "Reviewed overlapping 1101 detection, four shift states, count/done waits, synchronous reset priority, complete combinational assignments, and illegal-state recovery."
+    },
+    {
+      "name": "development testbench compilation",
+      "tool": "Icarus Verilog v12",
+      "top": "dev_tb",
+      "flags": "-g2012 -Wall",
+      "timeout_seconds": 20,
+      "exit_code": 139,
+      "result": "failed",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "DUT-only compilation",
+      "tool": "Icarus Verilog v12",
+      "top": "TopModule",
+      "flags": "-g2012 -Wall",
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "result": "passed",
+      "log": "dev_dut_compile.log"
+    },
+    {
+      "name": "development testbench compilation retry",
+      "details": "Changed only testbench expected-output expression; initial testbench preserved in dev_tb_initial.sv.",
+      "top": "dev_tb",
+      "timeout_seconds": 20,
+      "exit_code": 139,
+      "result": "failed",
+      "log": "dev_compile_retry.log"
+    },
+    {
+      "name": "tool version query",
+      "timeout_seconds": 10,
+      "exit_code": 0,
+      "log": "dev_tool_version.log"
+    }
+  ],
+  "development_outcome": "Initial candidate retained unchanged. DUT-only compilation passed. Testbench compilation terminated with signal 139 twice, with empty diagnostic logs; no simulation was run.",
+  "limitations": [
+    "Dynamic behavior has not been verified by simulation because development testbench compilation failed.",
+    "No official evaluation results were accessed or received.",
+    "No synthesis, timing analysis, or board testing was performed."
+  ]
+}

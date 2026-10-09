@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static_review",
+      "outcome": "pass",
+      "details": "Specified TopModule ports and widths preserved. Continuous assignments copy vec to outv and connect each scalar output to its matching bit. No state, clock, reset, or pipeline."
+    },
+    {
+      "name": "development_compile",
+      "outcome": "tool_failure",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+      "arguments": "-g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "timeout_seconds": 20,
+      "exit_code": 139,
+      "log": "compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "outcome": "could_not_run",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+      "timeout_seconds": 20,
+      "log": "simulation.log",
+      "details": "No executable was produced; vvp reported dev_sim: Unable to open input file. Independent testbench checks all eight binary vectors."
+    }
+  ],
+  "development_outcome": "Initial RTL delivered unchanged; static review passed, simulation unverified because development compiler failed.",
+  "limitations": [
+    "No successful development simulation.",
+    "Official evaluation was not accessed and its result is unknown.",
+    "No synthesis, timing, or board evidence produced."
+  ]
+}

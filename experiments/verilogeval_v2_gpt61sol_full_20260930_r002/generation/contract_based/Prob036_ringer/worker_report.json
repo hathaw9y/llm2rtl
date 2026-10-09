@@ -1,0 +1,23 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "results": "Correct fixture passed, injected fault failed, repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "status": "passed_structure_only"},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "evidence_directory": "development/01", "coverage": "32 settled truth-table checks covering all four input combinations and all sixteen ordered transitions", "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; no warnings", "simulation": "Matching vvp; explicit PASS marker"}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Original specification does not define X/Z input behavior; tests cover binary inputs.",
+    "No synthesis or board verification performed, as required."
+  ],
+  "justified_changes": {"rtl": [], "testbench": [], "contract": []},
+  "implementation": {
+    "files": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "contract.json"],
+    "interface": "TopModule with original four one-bit ports",
+    "cycle_reset_contract": "Combinational; no clock, reset, state, or added latency",
+    "numeric": "One-bit unsigned Boolean logic",
+    "static_review": "Two continuous assignments; no latches, arithmetic, dependencies, or multiple drivers",
+    "initial_snapshot": "Preserved immediately after RTL creation, before development checks"
+  }
+}

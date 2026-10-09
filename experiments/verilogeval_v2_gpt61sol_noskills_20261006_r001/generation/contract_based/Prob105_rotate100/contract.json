@@ -1,0 +1,60 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "load": 1,
+      "ena": 2,
+      "data": 100
+    },
+    "outputs": {
+      "q": 100
+    }
+  },
+  "semantics": {
+    "clock": "Update at rising edge of clk; synchronous load and enables imply edge-triggered register, with rising edge chosen as conventional unspecified polarity.",
+    "priority": "Original (1): load loads data instead of rotating, regardless of ena.",
+    "transitions": {
+      "load=1": "q becomes data[99:0]",
+      "load=0,ena=01": "old bit 0 becomes bit 99; old bit i becomes bit i-1 for i=1..99",
+      "load=0,ena=10": "old bit 99 becomes bit 0; old bit i becomes bit i+1 for i=0..98",
+      "load=0,ena=00 or 11": "q holds"
+    },
+    "reset": "No reset port or reset behavior specified; none added.",
+    "initialization": "Original gives no initial contents; uninitialized register remains unknown until loaded; no initialization added.",
+    "latency": "q updates on the same active edge, with no added cycles"
+  },
+  "numeric": {
+    "width": 100,
+    "interpretation": "Bit vector; signedness does not affect permutation.",
+    "rotation_distance": 1,
+    "wrap": "Both endpoints wrap; no bit discarded."
+  },
+  "verification": {
+    "oracle": "Independent per-bit permutation based on original direction rules, not DUT concatenations.",
+    "sampling": "Drive with clock low; verify no changes before rising edge, then sample after NBA settling; verify falling edge holds.",
+    "cases": [
+      "Initial unknown hold",
+      "Load priority for all four ena codes",
+      "All-zero and all-one words",
+      "Both wrap boundaries",
+      "One-hot traversal for 100 cycles in each direction",
+      "Repeated hold for 00 and 11",
+      "Mixed deterministic data and controls"
+    ],
+    "failure": "Case-inequality mismatch triggers $fatal; bounded timeout; PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Clock polarity",
+      "evidence": "Original specifies synchronous behavior but no explicit edge polarity.",
+      "resolution": "Use rising edge of clk."
+    },
+    {
+      "topic": "Initial contents",
+      "evidence": "Original specifies no reset or initial value.",
+      "resolution": "No defined power-up value; do not initialize DUT. Development checks uninitialized four-state simulation and loads before defined-data checks."
+    }
+  ]
+}

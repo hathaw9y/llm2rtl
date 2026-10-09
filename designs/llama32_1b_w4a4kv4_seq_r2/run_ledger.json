@@ -1,0 +1,63 @@
+{
+  "schema": "llm2rtl.run_ledger.v1",
+  "design_id": "llama32_1b_w4a4kv4_seq",
+  "revision": "r2",
+  "status": "module_verified_promotion_eligible",
+  "supersedes_for_future_work": "r1",
+  "preserved_r1_verification_report": {
+    "path": "designs/llama32_1b_w4a4kv4_seq_r1/evidence/isa_command_dispatcher/module_verification_report.json",
+    "sha256": "1b43d078300e36de890e5549cb22cdd3343db5451a28758f63891831034cbb30",
+    "status": "failed"
+  },
+  "parent_work": [
+    "reviewed independent P1 ready-valid deadlock finding",
+    "reviewed independent P1 GEMM destination-source alias stall finding",
+    "created a new revision without modifying r1 results",
+    "required ready-independent valid, explicit GEMM alias rejection and expanded regressions"
+  ],
+  "parent_skills": ["multi-agent-hdl-generation", "parent-module-decomposition"],
+  "child_assignments": [
+    {
+      "task": "/root/dispatcher_impl",
+      "role": "r2 HDL implementation retry and self-verification",
+      "module_id": "isa_command_dispatcher",
+      "module_contract_sha256": "91dc7aa4d20d9378fdb2357492b7c4650d49fe9de81cde587661061b26addf1f",
+      "skills": [
+        "hdl-module-implementation",
+        "fpga-systemverilog",
+        "fpga-vivado",
+        "hdl-kernel-contract-gates"
+      ],
+      "source_sha256": "c41b0e4b188f1f9dd8ab3549af8560dc55cc6bdcd56e6a471f77584c92a3d603",
+      "status": "passed_self_verification"
+    },
+    {
+      "task": "/root/dispatcher_verify",
+      "role": "r2 independent source-read-only module verification",
+      "module_id": "isa_command_dispatcher",
+      "module_contract_sha256": "91dc7aa4d20d9378fdb2357492b7c4650d49fe9de81cde587661061b26addf1f",
+      "source_sha256": "c41b0e4b188f1f9dd8ab3549af8560dc55cc6bdcd56e6a471f77584c92a3d603",
+      "skills": [
+        "hdl-module-verification",
+        "hdl-kernel-contract-gates",
+        "fpga-systemverilog",
+        "fpga-vivado"
+      ],
+      "verification_report": "designs/llama32_1b_w4a4kv4_seq_r2/evidence/isa_command_dispatcher/module_verification_report.json",
+      "verification_report_sha256": "8a49bafe5d7728991cbfc448a1b9986e08bed480f7459232d67d45d007e5fa5d",
+      "status": "passed_no_findings"
+    }
+  ],
+  "claims": [
+    "isa_command_dispatcher r2 module simulation and lint passed",
+    "Vivado 2025.2 post-synthesis OOC timing passed at 5 ns",
+    "independent module verification passed and is eligible for later integration"
+  ],
+  "limitations": [
+    "command BRAM and AXI BRAM Controller are not integrated",
+    "DMA and GEMM executors are not integrated",
+    "post-place/post-route, bitstream and physical-board behavior are not proven",
+    "full Llama execution is not proven"
+  ],
+  "next_action": "define and approve the next single cumulative integration checkpoint before board work"
+}

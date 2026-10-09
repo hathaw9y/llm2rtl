@@ -3,18 +3,25 @@
   "hardware_profile_id": "zcu104",
   "board": "AMD ZCU104",
   "part": "xczu7ev-ffvc1156-2-e",
-  "target_clock_mhz": 200,
-  "target_clock_period_ns": 5.0,
   "memory_stream_width_bits": 128,
-  "ps_ddr_port": "S_AXI_HP0_FPD",
+  "available_ps_ddr_ports": [
+    "S_AXI_HP0_FPD",
+    "S_AXI_HP1_FPD",
+    "S_AXI_HP2_FPD",
+    "S_AXI_HP3_FPD",
+    "S_AXI_HPC0_FPD",
+    "S_AXI_HPC1_FPD"
+  ],
   "control_port": "M_AXI_HPM0_FPD",
-  "board_memory_map": "boards/zcu104/contracts/board_memory_map.json",
+  "default_runtime": "baremetal",
   "pl_ddr_region": {
-    "start_address": "0x57a00000",
-    "end_address_inclusive": "0x779fffff",
-    "size_bytes": 536870912,
+    "start_address": null,
+    "end_address_inclusive": null,
+    "size_bytes": 2147483648,
+    "capacity_basis": "2 GiB usable accelerator DDR under bare-metal; stack and heap excluded",
+    "address_assignment": "Resolve legal accelerator ranges from the bare-metal linker script and runtime memory allocation before execution; exclude application code/data, stack and heap",
     "owner": "PL accelerator",
-    "range_rule": "address >= start and address + byte_count - 1 <= end"
+    "range_rule": "Require resolved address ranges; every transfer must lie entirely within an accelerator range and not overlap reserved application, stack or heap memory"
   },
   "device_inventory": {
     "lut": 230400,
@@ -22,7 +29,5 @@
     "dsp": 1728,
     "bram_36k": 312,
     "uram": 96
-  },
-  "vivado_expected": "2024.1",
-  "vivado_last_verified": "2025.2"
+  }
 }

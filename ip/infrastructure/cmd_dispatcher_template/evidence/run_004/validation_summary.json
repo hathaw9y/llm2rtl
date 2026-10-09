@@ -1,0 +1,94 @@
+{
+  "schema": "llm2rtl.completion_revision_validation.v1",
+  "bank_revision": "native_v3",
+  "controller_version": 4,
+  "change": "Remove bank read-pending tracking; engines receive/process all memory responses and finish accepted writes before issuing completion that authorizes matched-role release.",
+  "source_sha256": {
+    "ip/infrastructure/bank_subsystem/rtl/bank_native_ownership.sv": "ef51179c257fc526e6baf84733fc9abc7598197fba1b085b618472ea07a5085f",
+    "ip/infrastructure/bank_subsystem/rtl/bank_native_router.sv": "a88e90da2826110bee28c8d3bddfab87adee774eb2f40cfb85ecad6daccee4bc",
+    "ip/infrastructure/bank_subsystem_template/rtl/bank_subsystem.sv.tpl": "c656addf5ee41dd8b0636332a2df00bc73860808b1f677b812fc94fbcff4dfa7",
+    "ip/infrastructure/bank_subsystem/contracts/native_v3.json": "631c393c53cd56a9c916c91fe5b685be572569fa8c19bb3bb22aebd802e70d1f",
+    "ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv": "867cc4d6b17383043d63444af202f637712a9e6391cf563a3c7d601585934223",
+    "ip/infrastructure/cmd_dispatcher_template/template_contract.json": "7657697438b595e983de27eb0fb03b046cbb493d0304548d2e1926ea1a66becc",
+    "ip/infrastructure/cmd_dispatcher_template/template_index.json": "1bd3a315cbda58d543610e23aaab2a091fdc704cfcc68e247dab199675c111dc",
+    "contracts/common/engine_completion_contract.json": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446"
+  },
+  "simulation": {
+    "bank": {
+      "path": "ip/infrastructure/bank_subsystem_template/evidence/native_v3_final002",
+      "cases": 13,
+      "responses": 25,
+      "reset_cancelled_reads": 1,
+      "custom_role_extension": "passed"
+    },
+    "controller": {
+      "path": "native_controller_final001",
+      "cases_per_latency": 17,
+      "command_latencies": [
+        1,
+        2
+      ],
+      "capability_negative_case": "passed"
+    },
+    "compute_extension": {
+      "path": "native_extension_final001",
+      "cases": 6
+    }
+  },
+  "lint": {
+    "path": "native_lint_final",
+    "status": "passed"
+  },
+  "framework": {
+    "run": 52,
+    "passed": 50,
+    "skipped": 2
+  },
+  "ooc_synthesis": {
+    "tool": "Vivado 2025.2",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_ns": 5.0,
+    "bank": {
+      "path": "ip/infrastructure/bank_subsystem_template/evidence/native_v3_ooc002",
+      "LUT": 123,
+      "FF": 416,
+      "RAMB36": 2,
+      "URAM288": 2,
+      "DSP": 0,
+      "WNS": 3.394,
+      "WHS": 0.065,
+      "WPWS": 1.8
+    },
+    "controller": {
+      "path": "native_ooc001",
+      "LUT": 552,
+      "FF": 212,
+      "BRAM": 0,
+      "URAM": 0,
+      "DSP": 0,
+      "WNS": 1.646,
+      "WHS": 0.079,
+      "WPWS": 2.225
+    },
+    "compute_extension": {
+      "path": "native_extension_ooc001",
+      "LUT": 788,
+      "FF": 227,
+      "BRAM": 0,
+      "URAM": 0,
+      "DSP": 0,
+      "WNS": 1.542,
+      "WHS": 0.079,
+      "WPWS": 2.225
+    }
+  },
+  "independent_review": "../native_v4_review.md",
+  "limitations": [
+    "Unplaced OOC estimates only; no placement/routing or board signoff.",
+    "Bank OOC lacks external I/O delay and HD.CLK_SRC context; no full timing closure claim.",
+    "Controller OOC excludes external boundary hold only; internal hold timed.",
+    "Controller resource figures exclude bank memories outside controller hierarchy.",
+    "Generated engines must independently verify the completion condition; premature completion is a protocol violation.",
+    "Historical revisions and their PASS evidence are unchanged and not inherited."
+  ]
+}

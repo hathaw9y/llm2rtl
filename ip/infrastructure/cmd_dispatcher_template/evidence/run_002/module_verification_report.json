@@ -1,0 +1,177 @@
+{
+  "findings": [],
+  "finding_summary": "No P0, P1 or P2 findings. No P3 findings.",
+  "schema": "llm2rtl.module_verification_report.v1",
+  "status": "passed",
+  "promotion_eligible": true,
+  "template_id": "cmd_dispatcher_template",
+  "module_top": "cmd_dispatcher_template",
+  "run_id": "run_002",
+  "audit_role": "independent_source_read_only_verification",
+  "identity": {
+    "template_index_sha256": "3034c654f045dfafa5a5a494e974685e97f4dad46687c90f6aeab60f09a898b0",
+    "template_contract_sha256": "afd9955d437995275304ffc4d0f04bf2a34e145b07c3137a3748edfd86b5400d",
+    "isa_command_contract_sha256": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15",
+    "local_bank_contract_sha256": "62ca366e24474c2ef0a751778b22d08a7a1ccb9f32e491cb1ddfb5159b18990d",
+    "rtl_sha256": "000d9c1e89f2aa4cfb6888f810d6273b3135084ee433ca31b66c27e029f6cf80",
+    "base_testbench_sha256": "3dc50bd5a83d790340312dbdf61c74e69f4a011db7047628cffab21489850ee2",
+    "extension_testbench_sha256": "69590be2397e4df89a66366156ce2e5ff783b24d221399acd98e97d064467822",
+    "generated_extension_rtl_sha256": "af6ece2a748caf5418723139cbf2fd8fd2c3e639d8c9c7f542b36370f9618d56",
+    "source_manifest_sha256": "22abec5bfac877a6fd6c4c05aa5ed847317ee49fbbe40093852ae0e0ef31f01a",
+    "source_manifest_check": "all 11 entries OK",
+    "implementation_evidence_manifest_check": "all 41 entries OK"
+  },
+  "run_001_preservation_and_negative_control": {
+    "snapshot_manifest_sha256": "40119aeff81f1068b852b9431a071bd59e60a1e9d24fd440cd454efda65f85fe",
+    "snapshot_manifest_check": "all 8 entries OK",
+    "snapshot_rtl_sha256": "2f7cef37c0910401811e0d60df0beb88c809ba0ff89b487c37cc89e934a83021",
+    "failed_independent_report_sha256": "0f13aff797662fe3a43699bd07402efa1bf405dfb4c5bccbc7901c06c1d4636d",
+    "negative_probe": "The same marker-only generator applied to the preserved run_001 RTL fails xvlog because the aggregate USER hook declarations and consumers are absent. This reproduces the run_001 P1 finding rather than retroactively invalidating it.",
+    "negative_probe_exit_code": 1,
+    "negative_probe_log": "independent_verification/run001_negative_xvlog.log"
+  },
+  "contract_and_structure": {
+    "common_contract_gate": "passed_structure_only",
+    "template_contract_gate": "passed_contract_identity",
+    "template_structure_gate": "passed_rtl_structure",
+    "required_user_markers": "14 of 14, exactly once and in frozen order",
+    "marker_only_generation": "passed; independent unified diff shows all changed hunks within USER marker bodies",
+    "fixed_gemm_ports": false,
+    "axi_slave_ports": false,
+    "axi_bram_controller_or_memory_ip_instantiated": false,
+    "command_bram_interface": "separate native Port B cmd_enb/cmd_addrb/cmd_doutb",
+    "data_bank_zero_legal": true,
+    "bank_ownership": "unified bank_acquire/bank_release/bank_busy [0:BANK_NUM-1], no read/write split"
+  },
+  "extension_path_audit": {
+    "opcode": 3,
+    "recognized_decode": "user_opcode_known_w feeds aggregate opcode_known_w consumed by CHECK_COMMAND",
+    "legality": "two in-range distinct logical bank operands are required before any array-indexed acquire",
+    "eligibility": "both operand banks must be not busy and the capacity-one user executor must not already be pending",
+    "request_protocol": "m_user_cmd_valid depends on ISSUE state/opcode/fault state and not on ready; both bank payload fields remain stable from registered command_r through backpressure",
+    "issue_commit": "user_request_fire_w is valid-and-ready; aggregate request_fire_w alone advances PC; both banks receive opcode 3 in user_bank_acquire_w in the same acceptance cycle",
+    "pending_and_end_drain": "user_pending_r sets on fire, feeds user_pending_any_w and aggregate pending_any_w, and therefore blocks END/error terminal state until completion",
+    "completion": "stored legal bank identities must both match; one accepted completion pulses release for exactly those two banks and clears pending",
+    "faults": "mismatched/spurious completion raises response fault without release; matching error completion releases both owned banks then reaches executor error; inconsistent user fire is guarded by the aggregate response-fault check",
+    "same_bank_behavior": "a busy operand stalls the current PC with no request valid or lookahead",
+    "fixed_coexistence": "a nonconflicting fixed MM2S remains independently pending while opcode 3 issues and completes",
+    "bounds_safety": "command bank indices are range-checked before busy/acquire indexing; completion releases only stored identities from a previously legal accepted command"
+  },
+  "base_fixed_path_regression": {
+    "status": "passed",
+    "testbench_identity_unchanged_from_run_001": true,
+    "fixed_opcodes": {"END": 0, "MM2S": 1, "S2MM": 2},
+    "cases": 12,
+    "coverage": [
+      "synchronous two-cycle command BRAM fetch",
+      "bank 0 acquire/release/reuse",
+      "two distinct-bank MM2S outstanding",
+      "mixed MM2S/S2MM outstanding",
+      "valid independent of ready and typed payload stability",
+      "same-bank stall without lookahead",
+      "completion during later fetch and stall",
+      "spurious, wrong-type and mismatched response rejection",
+      "executor-error release then drain",
+      "END waits external busy",
+      "illegal opcode and zero byte count",
+      "active reset recovery and 1024-command missing-END bound"
+    ],
+    "pass_marker": "PASS: cmd_dispatcher_template fixed infrastructure verification",
+    "pass_marker_count": 1,
+    "log": "independent_verification/xsim_direct.log"
+  },
+  "marker_only_extension_simulation": {
+    "status": "passed",
+    "pass_marker": "PASS: marker-only opcode-3 extension probe",
+    "pass_marker_count": 1,
+    "coverage": [
+      "opcode 3 decode/legal/eligibility",
+      "busy-bank strict-PC stall",
+      "valid and two-bank payload stability under ready-low backpressure",
+      "atomic two-bank acquire and PC advance on fire",
+      "fixed MM2S coexistence",
+      "matching exact two-bank release",
+      "END drain"
+    ],
+    "log": "independent_verification/extension_xsim_direct.log"
+  },
+  "independent_extension_fault_supplement": {
+    "status": "passed",
+    "testbench_sha256": "b3aefa98f53ccf7098f545e76a4b1d3d5c6f592908fa32ab0ed88f90941f9a77",
+    "cases": [
+      "same-source/destination alias is illegal and never issues/acquires",
+      "mismatched completion does not release, enters response-error drain, then matching completion releases exactly both pending banks",
+      "matching executor-error completion releases both banks then reports executor error",
+      "reset clears extension pending and ownership model"
+    ],
+    "pass_marker": "PASS: independent extension fault probe",
+    "log": "independent_verification/fault_r2_xsim_direct.log",
+    "verifier_harness_diagnostics": "The first supplemental elaboration attempt was preserved after a verifier-only loop-index multiple-driver error. A second compile/elaboration succeeded. The xsim -runall launcher then raised a tool Tcl exception; the exact successful snapshot was executed directly with xsimk, matching the repository runners. Neither diagnostic was a DUT failure."
+  },
+  "verilator": {
+    "executable": "/usr/bin/verilator",
+    "version": "Verilator 4.038 2020-07-11 rev v4.036-114-g0cd4a57ad",
+    "base_rtl": "passed, zero warnings",
+    "generated_extension_rtl": "passed with only DECLFILENAME caused by the generated temporary filename",
+    "base_log": "independent_verification/verilator_base.log",
+    "extension_log": "independent_verification/verilator_extension.log"
+  },
+  "vivado_ooc": {
+    "status": "passed_post_synthesis_ooc",
+    "tool": "Vivado 2025.2 build 6299465",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "top": "cmd_dispatcher_template",
+    "clock_period_ns": 5.0,
+    "clock_frequency_mhz": 200.0,
+    "setup": {"wns_ns": 2.796, "tns_ns": 0.0, "failing_endpoints": 0},
+    "hold": {"whs_ns": 0.079, "ths_ns": 0.0, "failing_endpoints": 0},
+    "pulse_width": {"wpws_ns": 2.225, "tpws_ns": 0.0, "failing_endpoints": 0},
+    "ooc_clock_source": "BUFGCE_HDIO_X0Y2",
+    "timing_exceptions": "Hold-only false paths cover unplaced external data input and output ports. Internal register-to-register hold remains timed; the reported worst hold path is pc_r_reg[5]/Q to pc_r_reg[5]/D.",
+    "unconstrained_internal_endpoints": 0,
+    "combinational_loops": 0,
+    "blackboxes": 0,
+    "drc_checks_found": 0,
+    "methodology_checks_found": 0,
+    "resources": {"clb_luts": 184, "clb_registers": 145, "dsp": 0, "bram_tiles": 0, "uram": 0},
+    "warnings": "Five defined-unused upper error-code bits are constant; empty blackbox query and OOC connectivity-coverage warnings are nonfunctional and accurately scoped.",
+    "log": "independent_verification/vivado_ooc.log",
+    "reports_directory": "independent_verification/ooc"
+  },
+  "commands_rerun": [
+    "python3 scripts/check_common_contracts.py",
+    "python3 scripts/check_infrastructure_template.py --contract-only --expected-index-sha256 3034c654f045dfafa5a5a494e974685e97f4dad46687c90f6aeab60f09a898b0",
+    "python3 scripts/check_infrastructure_template.py --expected-index-sha256 3034c654f045dfafa5a5a494e974685e97f4dad46687c90f6aeab60f09a898b0",
+    "/usr/bin/verilator --lint-only --Wall --Wno-fatal --top-module cmd_dispatcher_template ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv",
+    "python3 ip/infrastructure/cmd_dispatcher_template/scripts/run_xsim.py --work-dir /tmp/cmd_base_run002_independent_20260928 --evidence-dir ip/infrastructure/cmd_dispatcher_template/evidence/run_002/independent_verification",
+    "python3 ip/infrastructure/cmd_dispatcher_template/scripts/run_extension_probe.py --source ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv --work-dir /tmp/cmd_ext_run002_independent_20260928 --evidence-dir ip/infrastructure/cmd_dispatcher_template/evidence/run_002/independent_verification",
+    "/usr/bin/verilator --lint-only --Wall --Wno-fatal --top-module cmd_dispatcher_template /tmp/cmd_ext_run002_independent_20260928/cmd_dispatcher_template_extended.sv",
+    "/media/admin1/backup/tools/Xilinx/2025.2/Vivado/bin/vivado -mode batch -source ip/infrastructure/cmd_dispatcher_template/scripts/run_ooc_synthesis.tcl -tclargs ip/infrastructure/cmd_dispatcher_template/evidence/run_002/independent_verification/ooc /tmp/cmd_ooc_run002_independent_20260928"
+  ],
+  "scope_and_limitations": {
+    "validated": "Reusable control template, fixed END/MM2S/S2MM infrastructure, and one capacity-one two-bank marker-only opcode-3 extension fixture.",
+    "residual_risks": [
+      "Every real extension still needs its own contract, simulation, lint and OOC evidence.",
+      "The generated opcode-3 probe was compiled, linted and simulated but was not the netlist synthesized by the base-template OOC run.",
+      "The 0.079 ns OOC hold margin is positive but small and uses an unplaced external-clock context; integration timing must be rerun.",
+      "The extension probe supports one user command outstanding; richer executor capacity requires a bounded pending-identity implementation in USER regions."
+    ],
+    "not_validated": [
+      "AXI BRAM Controller or address assignment",
+      "command-BRAM or data-bank memory implementation",
+      "DMA payload correctness",
+      "GEMM datapath correctness",
+      "placed or routed timing",
+      "board integration",
+      "bitstream",
+      "physical-board behavior"
+    ]
+  },
+  "skills_used": [
+    "hdl-module-verification",
+    "hdl-kernel-contract-gates",
+    "fpga-systemverilog",
+    "fpga-vivado"
+  ],
+  "skill_update_candidate": null
+}

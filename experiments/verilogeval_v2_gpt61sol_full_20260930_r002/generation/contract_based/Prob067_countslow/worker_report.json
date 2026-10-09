@@ -1,0 +1,66 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790745273.8070054,
+      "source_sha256": "b0d07ea613cf7445e83c7eba3f8a92a2b0a40c2fb0bba945de06b4de635a92b9",
+      "testbench_sha256": "035814c8dea08dc632dc2e4fd6a382c5bf4e75cacedade953b96faf9da4afda4",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob067_countslow/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.014013995416462421
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS decade counter: 1788 comparisons across 359 rising edges\ndev_tb.sv:94: $finish called at 3587000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011251166462898254
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passes, injected fault fails, repair passes",
+  "contract_gate": "passed_structure_only",
+  "rtl_files": [
+    "candidate.sv",
+    "candidate_initial.sv"
+  ],
+  "testbench_files": [
+    "dev_tb.sv"
+  ],
+  "interface_cycle_contract": "TopModule(clk, reset, slowena, q[3:0]); active-high synchronous reset takes priority on rising edge; enabled modulo-10 increment, otherwise hold; no extra latency.",
+  "numeric_width_decisions": "Unsigned four-bit output and explicitly sized four-bit arithmetic constants; reachable state range 0..9.",
+  "static_review": "Single always_ff driver, nonblocking updates, synchronous reset, no initialization or extra ports; standalone DUT has no child dependencies.",
+  "coverage": "1788 comparisons over 359 rising edges; all legal states, repeated wraps, pauses at every value, resets from every value, reset/enable priority, between-edge stability, and synchronous reset pulse rejection.",
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Power-up state, illegal states, and unknown-valued control behavior are unspecified by the original problem and no requirements were added.",
+    "No synthesis or board work performed, as required."
+  ]
+}

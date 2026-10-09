@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "outcome": "pass",
+      "details": "Combinational indexed part-select; 10-bit base {sel, 2'b00} ranges from 0 to 1020, selecting four bits within the 1024-bit input. Exact specified ports; no state or latch."
+    },
+    {
+      "name": "Icarus development compile",
+      "outcome": "pass",
+      "flags": "-g2012 -Wall -s dev_tb",
+      "timeout_seconds": 30,
+      "log": "compile.log"
+    },
+    {
+      "name": "development simulation",
+      "outcome": "pass",
+      "details": "5120 self-checking comparisons: all 256 selectors for 20 input patterns, including all-zero, all-one and randomized vectors; expected output computed by right shift.",
+      "timeout_seconds": 30,
+      "log": "simulation.log"
+    }
+  ],
+  "development_outcome": "Initial candidate passed development checks with no RTL revisions. candidate_initial.sv was preserved before checks.",
+  "limitations": [
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing analysis or board validation performed."
+  ]
+}

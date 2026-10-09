@@ -1,0 +1,53 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "ar": {
+        "direction": "input",
+        "width": 1
+      },
+      "d": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "reset": "active-high asynchronous ar; assertion clears q to zero independently of clk; reset dominates data capture",
+    "capture": "At each rising clk edge with ar low, q takes d using a nonblocking assignment",
+    "hold": "q holds between rising clock edges unless reset is asserted; reset release alone does not capture d",
+    "initialization": "No explicit initialization; q is unspecified until reset assertion or first rising clock edge"
+  },
+  "numeric": {
+    "data": "Single bit copied exactly; no arithmetic, signedness conversion, rounding, saturation or overflow"
+  },
+  "verification": {
+    "method": "Independent directed self-checking testbench with observations after nonblocking updates",
+    "cases": [
+      "Asynchronous reset assertion while clk is static and q is one",
+      "Both zero and one data capture on rising edges",
+      "Data changes and falling edges do not change q",
+      "Reset held high overrides rising-edge data capture",
+      "Reset release does not capture data",
+      "Data capture resumes after reset release",
+      "Repeated reset assertion"
+    ],
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top, finite compile and simulation timeouts"
+  },
+  "specification_ambiguities": [
+    {
+      "detail": "Reset polarity and reset value are not explicitly stated",
+      "resolution": "Interpret ar as conventional active-high asynchronous clear to q=0"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Specified four-bit ports retained; fully driven combinational continuous assignments; no clock, reset, storage, or simulation-only DUT constructs. Unspecified out_both[3] and out_any[0] driven to zero."
+    },
+    {
+      "name": "Icarus SystemVerilog development compile",
+      "result": "pass",
+      "options": "-g2012 -Wall -s dev_tb",
+      "timeout_seconds": 20,
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "exhaustive independent development simulation",
+      "result": "pass",
+      "details": "All 16 binary inputs checked for every specified adjacent AND, OR, and wrapping XOR output bit.",
+      "timeout_seconds": 20,
+      "log": "dev_simulation.log"
+    }
+  ],
+  "development_outcome": "Initial candidate passed development checks without RTL revisions. candidate_initial.sv was preserved before development checks.",
+  "limitations": [
+    "Official evaluation was not accessed and its result is unknown.",
+    "The specification does not constrain out_both[3] or out_any[0]; these outputs are assigned zero.",
+    "Development simulation covers binary inputs only.",
+    "No synthesis, timing analysis, or board testing was performed."
+  ]
+}

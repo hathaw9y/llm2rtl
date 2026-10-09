@@ -1,0 +1,180 @@
+{
+  "findings": [],
+  "finding_summary": "No P0, P1, P2, or P3 findings.",
+  "schema": "llm2rtl.module_verification_report.v1",
+  "status": "passed",
+  "promotion_eligible": true,
+  "module_id": "bank_port_router",
+  "module_top": "bank_port_router",
+  "run_id": "run_001",
+  "audit_role": "independent_source_read_only_verification",
+  "identity": {
+    "module_index_sha256": "a826eb93907bf56338fdb133e02d087fad568c0ab1878f99dd0ae4e310ce1c50",
+    "module_contract_sha256": "07a6db2f40add17c5dc20a7b3ce004dcc311fc39be5c54db3e44a3b1f2dc0b7c",
+    "isa_command_contract_sha256": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15",
+    "local_bank_contract_sha256": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d",
+    "evidence_identity_contract_sha256": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda",
+    "dependencies": {
+      "bank_ownership_table_rtl_sha256": "28de9cc7ad4cb40c822dd3fe17b0a6f8eb8c69fbf5570e7de66a6729611a04ff",
+      "bram_bank_rtl_sha256": "7199594e43e1c9c951067882d31d0baaa1b1e626ab5d5cb14013af9a9de36221",
+      "uram_bank_rtl_sha256": "11520a8bb955d10c89ca6f699d42bcfccd5458e6abee1be67a044dbfdaa92bd1"
+    },
+    "rtl_sha256": "47ce9230a5fd124853df7226185769156110854e290aa6960122854e76a6490e",
+    "testbench_sha256": "bef495adcec84a4bb907e4892ab1dfa6f48013e300e2e1c54caa2f6e79660958",
+    "run_xsim_script_sha256": "cd75fbc1ded38a109277134654fdb646ec99020c6a7e098afd3bbdad90952c9e",
+    "run_verilator_lint_script_sha256": "fcebd2f7789542af6d4a516614fb4d7beefaf341b131225d5015e68a2dfab917",
+    "run_ooc_synthesis_tcl_sha256": "f7c33080ef9a62d1f5a2cdc70350baa5c3913f929c7023808fcb3f9533b42f74",
+    "source_manifest_sha256": "231050e13dfcee945afe60a05ee112ac91df2018579244475d24acd31dd6a94b",
+    "source_manifest_check": "all 13 entries OK",
+    "implementation_evidence_json_parse": "passed",
+    "implementation_evidence_hash_reproduction": "passed"
+  },
+  "contract_and_static_audit": {
+    "common_contract_gate": "passed_structure_only",
+    "frozen_index_identity": "passed_exact_expected_sha256",
+    "fixed_role_ports": {
+      "MM2S_write": 1,
+      "S2MM_read": 2,
+      "GEMM_ACT_read": 3,
+      "GEMM_WGT_read": 4,
+      "GEMM_PSUM_read_write": 5
+    },
+    "authorization": "Every request is bounds-checked before array indexing, then requires bank_busy and exact owner-role equality.",
+    "denied_access": "No bank_ena or bank_enb assertion occurs unless the corresponding valid-and-ready handshake succeeds.",
+    "collision_policy": "Same-bank MM2S/PSUM writes suppress both; any same-bank pair among S2MM, ACT, WGT, and PSUM reads suppresses every colliding reader; nonconflicting banks can proceed concurrently.",
+    "psum_dual_port": "Concurrent PSUM read and write to the same bank is intentionally accepted on separate native A/B ports.",
+    "sticky_fault": "The first fault is retained until reset. Combinational priority is owner 1, owner 2, owner 3, owner 4, then owner 5 write before owner 5 read.",
+    "parameter_legality": "BANK_NUM, BANK_NUM_WIDTH, PORT_ROLE_WIDTH, READ_LATENCY, address/data/byte widths, divisibility, nonzero role IDs, and pairwise-distinct role IDs are guarded; the default configuration is legal.",
+    "read_latency_pipeline": "Each accepted read shifts valid and bank identity through exactly READ_LATENCY stages; response data is selected with the delayed bank tag. Reset flushes every valid/tag pipeline and sticky fault metadata.",
+    "dependency_instantiation": "No bank_ownership_table, bram_bank, or uram_bank instance is present; these are frozen interface/dependency identities, not integration evidence.",
+    "static_audit_log": "independent_verification/static_audit.log"
+  },
+  "base_self_checking_simulation": {
+    "status": "passed",
+    "tool": "Vivado XSIM 2025.2",
+    "fresh_work_directory": "/tmp/bank_port_router_independent_xsim_20260928",
+    "cases": 11,
+    "coverage": [
+      "bank 0 MM2S write",
+      "S2MM response at READ_LATENCY=3 with no early valid",
+      "simultaneous ACT and WGT reads",
+      "same-bank PSUM read/write on separate ports",
+      "three distinct-bank ports and overlapping-read collision suppression",
+      "wrong-owner sticky fault",
+      "free-bank fault",
+      "out-of-range fault before indexing",
+      "write and read collisions with no physical enable",
+      "reset flush during active response pipeline and sticky fault",
+      "first-fault owner priority and owner-5 write-before-read priority"
+    ],
+    "assertion_depth": "The testbench checks ready, physical enables, addresses, write data/strobes, exact response-valid cycles, destination bank tags/data, early-response absence, consecutive overlap, fault metadata, and reset flushing.",
+    "pass_marker": "PASS: bank_port_router verification cases=11",
+    "pass_marker_count": 1,
+    "log": "independent_verification/xsim_direct.log",
+    "log_sha256": "61f7a7c090265deabc4237230b88375b5488f2a0105dc70d406bbe59b278e3d5"
+  },
+  "independent_latency_probe": {
+    "status": "passed",
+    "purpose": "Independent off-by-one and destination-routing check at READ_LATENCY=3.",
+    "testbench_location": "/tmp/tb_bank_port_router_latency3_probe.sv",
+    "testbench_sha256": "808c2b515e5283cf28fe32399dffbd6ccc6b9b911576b41b86f9fb7434f8a865",
+    "coverage": "Two consecutive cycles each issue simultaneous ACT/WGT reads to four distinct banks. The probe rejects early responses, checks the first pair exactly three cycles later, checks the second pair on the following cycle, and checks valid deassertion afterward.",
+    "pass_marker": "PASS: independent latency3 consecutive ACT/WGT probe",
+    "log": "independent_verification/probe_r3_xsim_direct.log",
+    "log_sha256": "3de333d766791d7b57a1cca9569d31c6cda0718bf552fb49a1dec70c7b950388",
+    "verifier_harness_diagnostics": "Two earlier xvlog attempts were preserved after syntax defects in the temporary verifier-only testbench. The corrected third compile/elaboration/simulation passed; the earlier diagnostics do not identify DUT failures."
+  },
+  "verilator": {
+    "status": "passed_with_nonfunctional_warnings",
+    "executable": "/usr/bin/verilator",
+    "version": "Verilator 4.038 2020-07-11 rev v4.036-114-g0cd4a57ad",
+    "warnings": "Nine LITENDIAN warnings arise from the contract-required ascending [0:BANK_NUM-1] bank arrays; no functional lint warning or error was reported.",
+    "log": "independent_verification/verilator_lint.log"
+  },
+  "vivado_ooc": {
+    "status": "passed_post_synthesis_ooc",
+    "tool": "Vivado 2025.2 build 6299465",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "top": "bank_port_router",
+    "clock_period_ns": 5.0,
+    "clock_frequency_mhz": 200.0,
+    "setup": {
+      "wns_ns": 2.2,
+      "tns_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 4104
+    },
+    "hold": {
+      "whs_ns": 0.088,
+      "ths_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 77
+    },
+    "pulse_width": {
+      "wpws_ns": 2.225,
+      "tpws_ns": 0.0,
+      "failing_endpoints": 0,
+      "total_endpoints": 95
+    },
+    "timing_exceptions": "Hold-only false paths cover unplaced external data input/output ports. Internal register-to-register hold remains timed; the reported worst hold path is act_bank_pipe_r_reg[0][0]/Q to act_bank_pipe_r_reg[1][0]/D.",
+    "unconstrained_internal_endpoints": 0,
+    "combinational_loops": 0,
+    "blackboxes": 0,
+    "drc_checks_found": 0,
+    "methodology_checks_found": 0,
+    "resources": {
+      "clb_luts": 7053,
+      "clb_registers": 95,
+      "dsp": 0,
+      "bram_tiles": 0,
+      "uram": 0
+    },
+    "warnings": "The flattened large primitive netlist warning, empty blackbox query warning, and OOC connectivity-coverage warnings are consistent with an unplaced standalone module and do not support board-level claims.",
+    "fresh_artifact_sha256": {
+      "vivado_log": "9103b7e9f3ebd3c8391b8f1bd22bda68047f8ff41362a1eb1ff74814e352f3d8",
+      "timing_report": "43eee397fc2206fd84335aa95ce50b9f4efad618c844cca82d380068c8ebe26a",
+      "utilization_report": "293fbc8df83079d58666deaf7e21656bebd817a1c7a9c2186f778031fd8238fb",
+      "drc_report": "a39daf685cf479535644dd661b3415e7ff507fe93b13f680431a0f6ef17bce4f",
+      "methodology_report": "5f7da1da21e55298fda85a90e1f277869f3759cf584ebf714f4f0dca079e9ea9",
+      "checkpoint": "0fbf176977e7d379e1ae4e7bbe58df7e9b382cb4de2fa9f14ba288a851a4809c"
+    },
+    "log": "independent_verification/vivado_ooc.log",
+    "reports_directory": "independent_verification/ooc"
+  },
+  "commands_rerun": [
+    "sha256sum ip/infrastructure/bank_port_router/module_index.json ip/infrastructure/bank_port_router/module_contract.json contracts/common/isa_command_contract.json contracts/common/local_bank_contract.json contracts/common/evidence_identity_contract.json ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv ip/infrastructure/datamover_engine/rtl/bram_bank.sv ip/infrastructure/datamover_engine/rtl/uram_bank.sv ip/infrastructure/bank_port_router/rtl/bank_port_router.sv",
+    "sha256sum -c ip/infrastructure/bank_port_router/evidence/run_001/source_manifest.sha256",
+    "python3 scripts/check_common_contracts.py",
+    "python3 ip/infrastructure/bank_port_router/scripts/run_xsim.py --work-dir /tmp/bank_port_router_independent_xsim_20260928 --evidence-dir ip/infrastructure/bank_port_router/evidence/run_001/independent_verification",
+    "python3 ip/infrastructure/bank_port_router/scripts/run_verilator_lint.py --evidence-dir ip/infrastructure/bank_port_router/evidence/run_001/independent_verification",
+    "/media/admin1/backup/tools/Xilinx/2025.2/Vivado/bin/xvlog --sv ip/infrastructure/bank_port_router/rtl/bank_port_router.sv /tmp/tb_bank_port_router_latency3_probe.sv",
+    "/media/admin1/backup/tools/Xilinx/2025.2/Vivado/bin/xelab tb_bank_port_router_latency3_probe -s bank_port_router_latency3_probe_sim",
+    "/tmp/bank_port_router_latency3_probe_r3/xsim.dir/bank_port_router_latency3_probe_sim/xsimk -runall",
+    "/media/admin1/backup/tools/Xilinx/2025.2/Vivado/bin/vivado -mode batch -log ip/infrastructure/bank_port_router/evidence/run_001/independent_verification/vivado_ooc.log -journal ip/infrastructure/bank_port_router/evidence/run_001/independent_verification/vivado_ooc.jou -source ip/infrastructure/bank_port_router/scripts/run_ooc_synthesis.tcl -tclargs ip/infrastructure/bank_port_router/evidence/run_001/independent_verification/ooc /tmp/bank_port_router_independent_ooc_20260928"
+  ],
+  "scope_and_limitations": {
+    "validated": "Reusable bank-port routing/control RTL with default parameters, contract identities, static safety properties, functional simulation, lint, and 200 MHz post-synthesis OOC timing.",
+    "residual_risks": [
+      "The actual bank_ownership_table and BRAM/URAM storage modules are not instantiated, so integrated ownership behavior, physical memory latency, read-during-write mode, and final data alignment remain unverified.",
+      "The 7053-LUT wide combinational routing cost must be remeasured after hierarchy integration, placement, and routing.",
+      "OOC external-port hold paths are intentionally excluded because ports are unplaced; only internal register-to-register hold timing is meaningful here.",
+      "Nondefault parameter combinations were guarded and statically audited but were not exhaustively simulated or synthesized."
+    ],
+    "not_validated": [
+      "physical BRAM or URAM integration",
+      "DMA payload correctness",
+      "GEMM datapath correctness",
+      "placed or routed timing",
+      "board wrapper or address map",
+      "bitstream",
+      "physical-board behavior"
+    ]
+  },
+  "skills_used": [
+    "hdl-module-verification",
+    "hdl-kernel-contract-gates",
+    "fpga-systemverilog",
+    "fpga-vivado"
+  ],
+  "skill_update_candidate": null
+}

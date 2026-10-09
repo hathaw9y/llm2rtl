@@ -1,0 +1,75 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "x": "4-bit vector [3:0]"
+    },
+    "outputs": {
+      "f": "1 bit"
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "function": "Original Karnaugh map, column pair {x[0],x[1]}, row pair {x[2],x[3]}, both ordered 00,01,11,10",
+    "map_rows": [
+      [
+        1,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        1,
+        0
+      ],
+      [
+        1,
+        1,
+        0,
+        1
+      ]
+    ],
+    "timing": "Combinational; no clock, state, or added latency",
+    "reset": "No reset port or reset behavior specified",
+    "initialization": "No stored state; output depends on current input after combinational settling",
+    "evidence": "problem.txt interface and Karnaugh map"
+  },
+  "numeric": {
+    "input": "Unsigned four binary bits, individually selected according to map labels",
+    "output": "Boolean",
+    "one_input_values": [
+      0,
+      1,
+      4,
+      5,
+      6,
+      12,
+      14,
+      15
+    ],
+    "arithmetic": "No rounding, overflow, saturation, or arithmetic"
+  },
+  "verification": {
+    "oracle": "Direct original map lookup using explicit Gray-order row/column decoding, independent of RTL Boolean equation",
+    "coverage": "All 16 binary inputs ascending and descending to check transitions and absence of retention",
+    "sampling": "Drive input then wait 1 ns for combinational settling",
+    "failure": "Case inequality and $fatal; bounded timeout; PASS only after all checks",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z inputs",
+      "evidence": "Original map specifies binary cells only",
+      "resolution": "No additional X/Z requirement inferred; exhaustive checks cover binary inputs"
+    }
+  ]
+}

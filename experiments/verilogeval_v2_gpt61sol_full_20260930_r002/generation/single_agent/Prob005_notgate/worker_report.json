@@ -1,0 +1,17 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "compile_returncode": 0, "simulation_returncode": 0, "evidence_directory": "development/01"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "No synthesis or board verification performed."],
+  "justified_rtl_changes": ["Initial implementation uses a continuous one-bit inversion with the exact TopModule ports; no reset, clock, or latency added."],
+  "justified_tb_changes": ["Initial independent testbench checks explicit NOT truth-table expectations, repeated input transitions, and four-state propagation with case inequality, fatal mismatches, bounded timeout, and a final PASS marker. No subsequent testbench edits."],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "interface_cycle_contract": "One-bit input in and output out; combinational inversion.",
+  "numeric_width_decisions": "Both ports are one bit.",
+  "pipeline": "No pipeline or added latency.",
+  "static_review": "Single continuous driver; no state or inferred latches."
+}

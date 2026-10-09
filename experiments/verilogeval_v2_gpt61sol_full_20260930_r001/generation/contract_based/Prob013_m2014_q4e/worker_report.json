@@ -1,0 +1,30 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract structural gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "PASS: passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static RTL review",
+      "outcome": "Exact TopModule interface; one-bit continuous bitwise NOR; no state, delays, clock, reset, or dependencies."
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "outcome": "Tool failed without diagnostics",
+      "log": "development_compile.log",
+      "status_record": "development_compile_status.json"
+    }
+  ],
+  "development_outcome": "Initial candidate delivered unchanged. Independent self-checking testbench created for all four binary combinations and repeated transitions. Compilation failed; simulation was not run and no simulation success is claimed.",
+  "limitations": [
+    "Development simulation unverified because compiler exited 139.",
+    "Contract gate checks structure only, not functional correctness.",
+    "Official evaluation results unavailable; no synthesis or board checks performed."
+  ]
+}

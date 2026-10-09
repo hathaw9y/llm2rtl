@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"a": "100 bits [99:0]", "b": "100 bits [99:0]", "sel": "1 bit"}, "outputs": {"out": "100 bits [99:0]"}},
+  "semantics": {"function": "When sel=0 out=a; when sel=1 out=b.", "timing": "Combinational selection with no added latency; original specifies a multiplexer and no clock port.", "reset": "No reset port or reset behavior specified.", "initialization": "No stored state or initialization specified; output follows selected input."},
+  "numeric": {"width": 100, "interpretation": "Bit-vector selection without arithmetic or signed conversion."},
+  "verification": {"oracle": "Original problem selection rules, checked with explicit if/else expected values for known sel.", "sampling": "Check after a 1 ns combinational settling interval following stimulus changes.", "cases": "Both select values, all-zero/all-one, alternating patterns, each bit walking one and walking zero, random vectors, selected X/Z data propagation.", "failure": "Case inequality mismatch invokes fatal; bounded timeout and PASS after all checks."},
+  "specification_ambiguities": ["Behavior for sel=X or sel=Z is unspecified; use standard Verilog conditional merge semantics without asserting a required oracle for those select values."]
+}

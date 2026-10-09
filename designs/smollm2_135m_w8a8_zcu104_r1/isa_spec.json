@@ -1,0 +1,936 @@
+{
+  "schema": "llm2rtl.isa_spec.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "status": "reviewed",
+  "contract_version": 1,
+  "scope": "ISA transport, encoding, operands and boundaries frozen; numerical interpreter validation and detailed compute implementations remain pending.",
+  "common_contracts": {
+    "contracts/common/engine_completion_contract.json": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446",
+    "contracts/common/evidence_identity_contract.json": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda",
+    "contracts/common/local_bank_contract.json": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d",
+    "contracts/common/isa_command_contract.json": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15"
+  },
+  "instruction_record": {
+    "width_bits": 128,
+    "words_per_instruction": 1,
+    "command_bram_word_bits": 128,
+    "field_layout_msb_first": {
+      "opcode": [
+        127,
+        124
+      ],
+      "bank0": [
+        123,
+        120
+      ],
+      "bank1": [
+        119,
+        116
+      ],
+      "bank2": [
+        115,
+        112
+      ],
+      "payload": [
+        111,
+        0
+      ]
+    },
+    "payload_formats": {
+      "empty": {},
+      "dma": {
+        "local_byte_offset": [
+          111,
+          80
+        ],
+        "byte_count": [
+          79,
+          57
+        ],
+        "ddr_address": [
+          56,
+          25
+        ],
+        "aux": [
+          24,
+          0
+        ]
+      },
+      "gemm": {
+        "n_start": [
+          62,
+          47
+        ],
+        "n_total": [
+          46,
+          31
+        ],
+        "m_start": [
+          30,
+          25
+        ],
+        "m_count": [
+          24,
+          19
+        ],
+        "k": [
+          18,
+          8
+        ],
+        "n_tile": [
+          7,
+          0
+        ]
+      },
+      "rows": {
+        "rows": [
+          5,
+          0
+        ]
+      },
+      "attention": {
+        "query_start": [
+          26,
+          17
+        ],
+        "rows": [
+          16,
+          11
+        ],
+        "kv_len": [
+          10,
+          0
+        ]
+      },
+      "quant": {
+        "mode": [
+          2,
+          0
+        ],
+        "m_start": [
+          8,
+          3
+        ],
+        "m_count": [
+          14,
+          9
+        ],
+        "k": [
+          25,
+          15
+        ],
+        "kv_len": [
+          36,
+          26
+        ],
+        "query_start": [
+          46,
+          37
+        ],
+        "layer": [
+          51,
+          47
+        ]
+      },
+      "bank_config": {
+        "profile": [
+          4,
+          0
+        ],
+        "rows": [
+          15,
+          5
+        ],
+        "cols": [
+          31,
+          16
+        ],
+        "position": [
+          41,
+          32
+        ],
+        "layer": [
+          46,
+          42
+        ],
+        "component": [
+          48,
+          47
+        ],
+        "generation": [
+          80,
+          49
+        ]
+      }
+    },
+    "word_order": "PS writes bits31:0 first, followed by63:32,95:64,127:96; serialized bytes little-endian",
+    "reserved_rule": "Every bit outside the opcode payload format must be zero; ignored bank fields zero; opcode12 rejected.",
+    "all_zero_record": "END"
+  },
+  "command_transport": {
+    "command_order_owner": "ps_software",
+    "residency_tiling_owner": "ps_software",
+    "recovery_policy_owner": "ps_software",
+    "pl_dispatcher_role": "route_execute_report_only",
+    "request_protocol": "ready_valid",
+    "response_protocol": "ready_valid",
+    "program_transport": "ps_preloaded_command_bram",
+    "queue_policy": "no_ring_queue",
+    "dispatch_policy": "strict_in_order_single_pc_scoreboard",
+    "execution_policy": "issue_on_request_handshake_with_scoreboard_completion",
+    "outstanding_policy": "bank_hazard_limited_multiple",
+    "pc_advance_event": "executor_command_acceptance",
+    "response_collection": "independent_of_current_pc",
+    "program_terminal_policy": "end_opcode_then_drain_outstanding",
+    "blocked_pc_policy": "stall_without_lookahead",
+    "program_publish_order": [
+      "instruction_records_ending_in_END",
+      "start"
+    ],
+    "mutation_while_busy": "forbidden",
+    "records_per_fragment": 16,
+    "max_work_records": 15,
+    "chunk_state": "START resets PC/program bookkeeping only; bank descriptors, generation, data, scales and DDR KV remain; coordinated reset separately invalidates descriptors."
+  },
+  "parameters": {
+    "bank_num": 16,
+    "bank_num_width": 4,
+    "tag_width": 32,
+    "port_role_width": 5,
+    "axi_addr_width": 32,
+    "btt_width": 23,
+    "command_bram_depth": 16
+  },
+  "opcodes": [
+    {
+      "opcode": "END",
+      "encoding": 0,
+      "module_id": "isa_command_dispatcher",
+      "opcode_class": "control",
+      "payload_format": "empty",
+      "bank_positions": [],
+      "conditional_bank_positions": {},
+      "operands": [],
+      "operand_semantics": "Terminal record; drain all outstanding, completions and ownership before DONE.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "DMA_LOAD",
+      "encoding": 1,
+      "module_id": "datamover_engine",
+      "opcode_class": "dma_load",
+      "payload_format": "dma",
+      "bank_positions": [
+        0
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "ddr_address",
+          "kind": "external_ddr_address"
+        },
+        {
+          "name": "byte_count",
+          "kind": "transfer_length"
+        },
+        {
+          "name": "local_byte_offset",
+          "kind": "dimension"
+        },
+        {
+          "name": "aux",
+          "kind": "flags"
+        }
+      ],
+      "operand_semantics": "DDR to configured local component. Data and scale byte coverage tracked separately.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "DMA_STORE",
+      "encoding": 2,
+      "module_id": "datamover_engine",
+      "opcode_class": "dma_store",
+      "payload_format": "dma",
+      "bank_positions": [
+        0
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "ddr_address",
+          "kind": "external_ddr_address"
+        },
+        {
+          "name": "byte_count",
+          "kind": "transfer_length"
+        },
+        {
+          "name": "local_byte_offset",
+          "kind": "dimension"
+        },
+        {
+          "name": "aux",
+          "kind": "flags"
+        }
+      ],
+      "operand_semantics": "Valid local component to DDR; write response and endpoint completion required.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "GEMM_INT8",
+      "encoding": 3,
+      "module_id": "int8_gemm_executor",
+      "opcode_class": "compute",
+      "payload_format": "gemm",
+      "bank_positions": [
+        0,
+        1,
+        2
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank1",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank2",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "n_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "n_total",
+          "kind": "dimension"
+        },
+        {
+          "name": "m_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "m_count",
+          "kind": "dimension"
+        },
+        {
+          "name": "k",
+          "kind": "dimension"
+        },
+        {
+          "name": "n_tile",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Full-K A8[M,K] times B8[Ntile,K]^T; BF16 output[Mcount,Ntotal]. Scales read from operand sidecars.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "RMSNORM",
+      "encoding": 4,
+      "module_id": "rmsnorm_executor",
+      "opcode_class": "compute",
+      "payload_format": "rows",
+      "bank_positions": [
+        0,
+        1,
+        2
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank1",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank2",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "BF16 boundary RMSNorm, width576, epsilon1e-5; nonlinear algorithm separately contracted.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "ROPE",
+      "encoding": 5,
+      "module_id": "rope_executor",
+      "opcode_class": "compute",
+      "payload_format": "rows",
+      "bank_positions": [
+        0,
+        1
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank1",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "In-place BF16 Q/K RoPE, coefficient window in B7; 64-wide noninterleaved heads.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "ATTN_SCORE_INT8",
+      "encoding": 6,
+      "module_id": "int8_gemm_executor",
+      "opcode_class": "compute",
+      "payload_format": "attention",
+      "bank_positions": [
+        0,
+        1,
+        2
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank1",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank2",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "query_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        },
+        {
+          "name": "kv_len",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "GQA Q8 times K8^T; query head h uses KV head floor(h/3), K64, BF16 score; scale factor1/8.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "SOFTMAX",
+      "encoding": 7,
+      "module_id": "softmax_executor",
+      "opcode_class": "compute",
+      "payload_format": "attention",
+      "bank_positions": [
+        0
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "query_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        },
+        {
+          "name": "kv_len",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Stable causal Softmax with BF16 boundaries; future and padded probabilities zero; internal algorithm separately contracted.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "ATTN_VALUE_INT8",
+      "encoding": 8,
+      "module_id": "int8_gemm_executor",
+      "opcode_class": "compute",
+      "payload_format": "attention",
+      "bank_positions": [
+        0,
+        1,
+        2
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank1",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank2",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "query_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        },
+        {
+          "name": "kv_len",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "P8 times V8, full valid context reduction; V transpose in PL, static per16-feature scale.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "ADD",
+      "encoding": 9,
+      "module_id": "vector_executor",
+      "opcode_class": "compute",
+      "payload_format": "rows",
+      "bank_positions": [
+        0,
+        1,
+        2
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank1",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank2",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "BF16 residual addition, width576; detailed arithmetic separately contracted.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "SILU_MUL",
+      "encoding": 10,
+      "module_id": "vector_executor",
+      "opcode_class": "compute",
+      "payload_format": "rows",
+      "bank_positions": [
+        0,
+        1,
+        2
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank1",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank2",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "BF16 SiLU(gate) times up, width1536; detailed arithmetic separately contracted.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "FENCE",
+      "encoding": 11,
+      "module_id": "isa_command_dispatcher",
+      "opcode_class": "control",
+      "payload_format": "empty",
+      "bank_positions": [],
+      "conditional_bank_positions": {},
+      "operands": [],
+      "operand_semantics": "Wait for every earlier accepted command and release; preserve tensor and KV state.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "QUANTIZE",
+      "encoding": 13,
+      "module_id": "quantization_executor",
+      "opcode_class": "compute",
+      "payload_format": "quant",
+      "bank_positions": [
+        0,
+        2
+      ],
+      "conditional_bank_positions": {
+        "mode_2_or_3": [
+          1
+        ]
+      },
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank2",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "mode",
+          "kind": "format"
+        },
+        {
+          "name": "m_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "m_count",
+          "kind": "dimension"
+        },
+        {
+          "name": "k",
+          "kind": "dimension"
+        },
+        {
+          "name": "kv_len",
+          "kind": "dimension"
+        },
+        {
+          "name": "query_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "layer",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Mode0 dynamic A;1 dynamic Q;2 static K;3 static V;4 dynamic P. Modes2/3 also acquire bank1=B7.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "DEQUANTIZE",
+      "encoding": 14,
+      "module_id": "quantization_executor",
+      "opcode_class": "compute",
+      "payload_format": "quant",
+      "bank_positions": [
+        0,
+        2
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bank2",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "mode",
+          "kind": "format"
+        },
+        {
+          "name": "m_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "m_count",
+          "kind": "dimension"
+        },
+        {
+          "name": "k",
+          "kind": "dimension"
+        },
+        {
+          "name": "kv_len",
+          "kind": "dimension"
+        },
+        {
+          "name": "query_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "layer",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Mode0 restores gathered embedding rows to BF16; scales and selected lanes come from source descriptor.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    },
+    {
+      "opcode": "BANK_CONFIG",
+      "encoding": 15,
+      "module_id": "bank_descriptor_controller",
+      "opcode_class": "control",
+      "payload_format": "bank_config",
+      "bank_positions": [
+        0
+      ],
+      "conditional_bank_positions": {},
+      "operands": [
+        {
+          "name": "bank0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "profile",
+          "kind": "format"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        },
+        {
+          "name": "cols",
+          "kind": "dimension"
+        },
+        {
+          "name": "position",
+          "kind": "dimension"
+        },
+        {
+          "name": "layer",
+          "kind": "dimension"
+        },
+        {
+          "name": "component",
+          "kind": "format"
+        },
+        {
+          "name": "generation",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Free-bank descriptor update only. Expected data/scale extents derived from validated profile/dimensions; no tensor arithmetic.",
+      "completion_semantics": "Exactly one matched ready/valid completion after all required reads processed and final writes accepted; controller commands complete internally.",
+      "failure_semantics": "No destination-valid commit; release only after memory quiescence and matched completion, otherwise coordinated reset."
+    }
+  ],
+  "reserved_opcodes": [
+    12
+  ],
+  "profile_encodings": {
+    "hidden": 1,
+    "projection_output": 2,
+    "norm_output": 3,
+    "weight_INT8": 4,
+    "gamma_BF16": 5,
+    "embedding_rows_INT8": 6,
+    "Q_BF16": 7,
+    "K_BF16": 8,
+    "attention_residual_BF16": 9,
+    "V_BF16": 10,
+    "RoPE_and_static_KV_scales": 11,
+    "K_current_or_cache_INT8": 12,
+    "gate_BF16": 13,
+    "V_current_or_cache_INT8": 14,
+    "up_BF16": 15,
+    "score_BF16": 16,
+    "probability_BF16": 17,
+    "SiLU_BF16": 18,
+    "context_BF16": 19,
+    "last_token_logits": 20,
+    "A_INT8": 21,
+    "probability_INT8": 22,
+    "Q_INT8": 23
+  },
+  "quantization_modes": {
+    "A_dynamic": 0,
+    "Q_dynamic": 1,
+    "K_static": 2,
+    "V_static": 3,
+    "P_dynamic": 4
+  },
+  "quant_field_rules": {
+    "A_dynamic": "m_start selects BF16 source rows; m_count1..32; k576 or1536; kv_len/query_start/layer zero; output rows renumbered from0.",
+    "Q_dynamic": "m_start0; m_count1..32; k64; kv_len/query_start/layer zero; nine heads.",
+    "K_V_static": "m_start0; m_count1..32; k64; layer0..29; other fields zero; bank1=B7 acquired.",
+    "P_dynamic": "m_start0; m_count1..32; k=kv_len1..1024; query_start+m_count<=kv_len; layer0; nine heads; causal/padding lanes excluded from scale reduction and quantized to0.",
+    "DEQUANTIZE": "mode0; m_start0; m_count1..32; k576; other fields zero."
+  },
+  "BANK_CONFIG_rules": {
+    "profile": "one of profile_encodings and allowed by the chosen bank",
+    "dimensions": "rows, cols interpreted by profile; profile-specific shape/byte extent checked before mutation",
+    "position": "RoPE/attention logical position; unused profiles require0",
+    "layer": "cache/static profiles layer0..29; unused profiles require0",
+    "component": "B7:0 full initialization,1 RoPE-window update preserving static table,2 static-table update preserving RoPE window; other banks require0",
+    "generation": "nonzero32-bit monotonically increasing within bank/component until coordinated reset; no wrap; no command may reconfigure a busy bank",
+    "validity": "configuration invalidates only targeted component; never marks data/scale valid without successful covered writes"
+  },
+  "DMA_rules": {
+    "alignment_bytes": 16,
+    "byte_count": "1..2^23-1, multiple16",
+    "address_range": "32-bit address plus byte count must not wrap; DDR map checked by PS/handoff",
+    "aux": "normally0; embedding scale-block load sets bit0=1 and bits2:1=selected FP32 lane0..3; all remaining bits0. Only bank3 profile embedding_rows_INT8 sidecar transfers permit this flag.",
+    "embedding_scale": "PS derives source block=floor(token_id/64)*16 and lane=floor(token_id/16)%4; transfer16 bytes per row to scale sidecar+row*16; PL reads selected lane.",
+    "scale_padding": "prepared source scale tail padded to16 bytes; no read past the declared padded image region"
+  },
+  "GEMM_rules": {
+    "shapes": "A rows1..32, k576 or1536; m_start+m_count<=A rows; n_tile1..192; Ntotal1..49152; n_start+n_tile<=Ntotal",
+    "N_alignment": "n_start multiple64 for aligned scale DMA; PS residency tile widths64/128/192, final tail permitted",
+    "destination": "configured BF16 profile rows=m_count, cols=Ntotal; each tile writes logical columns n_start..n_start+n_tile; destination ready only after all configured output cells covered",
+    "scales": "A scale floor(source_row/16); B scale floor(tile_local_channel/16); neither varies across K",
+    "shared_core": "GEMM, QK and PV collectively allow one in-flight core command",
+    "model_output_widths_by_bank": {
+      "B1": 576,
+      "B4": 576,
+      "B5": 192,
+      "B6": 192,
+      "B8": 1536,
+      "B9": 1536,
+      "B12": 49152
+    }
+  },
+  "attention_rules": {
+    "QK_banks": [
+      14,
+      8,
+      10
+    ],
+    "PV_banks": [
+      13,
+      9,
+      11
+    ],
+    "SOFTMAX_bank": 10,
+    "head_mapping": "query_head//3",
+    "causal": "key_index<=query_start+query_row; padded lanes0; Softmax uses explicit mask, not numeric zero score as validity",
+    "cache_layer_match": "cache descriptor layer must match its copied static scales; no stale cross-layer scale"
+  },
+  "weight_pingpong": {
+    "banks": [
+      3,
+      15
+    ],
+    "per_tile": [
+      "BANK_CONFIG",
+      "DMA_LOAD(weight)",
+      "DMA_LOAD(scale)",
+      "GEMM_INT8"
+    ],
+    "prefetch": "PS places next-bank loads after current GEMM acceptance; no implicit DMA or model scheduling",
+    "release": "matched completion after final BF16 output write; source A remains valid across releases",
+    "epochs": "BANK_CONFIG generations and dispatcher transaction identity are separate; both retained until matched release"
+  },
+  "executor_policy": {
+    "max_inflight_per_shared_GEMM_core": 1,
+    "max_inflight_per_quantization_core": 1,
+    "request": "cmd_valid/cmd_ready, opcode, bank IDs, payload, transaction ID and captured descriptor generations",
+    "response": "resp_valid/resp_ready, transaction ID, used-bank mask/count/IDs, captured generations, error code; echo accepted identity"
+  },
+  "unresolved_decisions": [],
+  "implementation_backlog": [
+    "quantized tensor interpreter and workload validation",
+    "per-executor algorithm, array size, cycle/resource contract",
+    "RTL, integration, synthesis and physical board evidence"
+  ],
+  "fixed_routes": {
+    "RMSNORM": [
+      [
+        0,
+        3,
+        2
+      ],
+      [
+        5,
+        3,
+        2
+      ]
+    ],
+    "ROPE": [
+      [
+        4,
+        7,
+        0
+      ],
+      [
+        5,
+        7,
+        0
+      ]
+    ],
+    "ADD": [
+      [
+        0,
+        1,
+        5
+      ],
+      [
+        5,
+        1,
+        0
+      ]
+    ],
+    "SILU_MUL": [
+      [
+        8,
+        9,
+        10
+      ]
+    ]
+  },
+  "cache_reload_sequence": [
+    "DMA_STORE current K/V payload to position*192 byte offsets",
+    "FENCE",
+    "BANK_CONFIG B8/B9 for full cache prefix, layer identity and fresh generation",
+    "DMA_LOAD full INT8 K/V payload prefix",
+    "DMA_LOAD K16/V48-byte padded scales from prepared static-KV DDR table to their sidecars",
+    "ATTN_SCORE_INT8 / ATTN_VALUE_INT8 only after both data and scale coverage valid"
+  ],
+  "cache_reload_note": "BANK_CONFIG invalidates cache scales along with data; explicitly reload scales, never assume old sidecar remains valid. B7 resident table is used by static QUANTIZE; DDR copies are transport only."
+}

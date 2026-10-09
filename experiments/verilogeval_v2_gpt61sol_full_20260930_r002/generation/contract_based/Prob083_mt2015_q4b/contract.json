@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"x": "one-bit logic", "y": "one-bit logic"},
+    "outputs": {"z": "one-bit logic"},
+    "clock_reset": "None: original interface includes only x, y, z."
+  },
+  "semantics": {
+    "function": "z is 1 for 00 and 11, and 0 for 01 and 10 (XNOR).",
+    "evidence": "Original rows at 0ns, 25ns, 35ns, and 45ns establish all four input combinations; all subsequent rows agree.",
+    "timing": "Combinational, no added latency or state; inputs change at original listed timestamps.",
+    "initialization": "At time 0ns, x=0 and y=0 imply z=1 after combinational delta settling. No state initialization or reset is specified."
+  },
+  "numeric": {
+    "width": "All ports are one bit.",
+    "representation": "Binary Boolean values; no arithmetic, rounding, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Hard-coded expected z values from every original waveform row, independent of RTL expression.",
+    "sampling": "Apply inputs at exactly 0,5,...,90ns and sample after a zero-time delta for combinational settling.",
+    "coverage": "Replay all 19 original rows, then test all 16 ordered binary input-pair transitions using the waveform-derived truth table.",
+    "failure": "$fatal for any mismatch; bounded timeout; PASS printed only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "X/Z input behavior is unspecified; it is not checked as an original requirement. Ordinary bitwise XNOR naturally propagates unknowns.",
+    "The table does not describe sub-delta propagation; testbench samples after combinational settling without moving any listed input timestamp."
+  ]
+}

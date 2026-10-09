@@ -1,0 +1,34 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {"direction": "input", "width": 100, "range": "99:0"},
+      "out_and": {"direction": "output", "width": 1},
+      "out_or": {"direction": "output", "width": 1},
+      "out_xor": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "behavior": "Combinational; outputs depend on the current entire input vector.",
+    "out_and": "1 exactly when all 100 input bits are 1",
+    "out_or": "1 exactly when at least one input bit is 1",
+    "out_xor": "1 exactly when the number of 1 input bits is odd",
+    "timing": "No clock or cycle latency; combinational settling only, no specified physical delay.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization required."
+  },
+  "numeric": {
+    "type": "100 independent Boolean input bits and three Boolean output bits",
+    "operations": "AND, OR, XOR over bits 0 through 99 inclusive",
+    "arithmetic": "No signed arithmetic, overflow, rounding, truncation, or saturation."
+  },
+  "verification": {
+    "oracle": "Count asserted input bits using a testbench loop; expect AND from count == 100, OR from count != 0, XOR from count modulo 2.",
+    "directed": "All zeros, all ones, every single-one position, every single-zero position, alternating patterns, and each population count 0 through 100.",
+    "random": "1000 reproducible pseudorandom binary vectors, checked after combinational settling.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; finite shell timeouts for compile and simulation.",
+    "scope": "Independent development checks only; no synthesis or official evaluation."
+  },
+  "specification_ambiguities": ["The original problem does not specify X/Z input behavior; required development verification covers binary inputs."]
+}

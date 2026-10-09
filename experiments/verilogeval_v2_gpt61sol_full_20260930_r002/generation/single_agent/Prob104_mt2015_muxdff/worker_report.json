@@ -1,0 +1,15 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"name": "smoke_environment", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed_as_expected", "repair": "passed"}},
+    {"name": "initial", "command": "python3 dev_check.py --label initial", "status": "passed", "simulator": "Icarus Verilog 12", "assertion_checks": 125, "evidence": "development/01"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "No synthesis or board verification performed."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "One-bit rising-edge register captures r_in when L is asserted and q_in otherwise. Original ports are preserved; no reset, initialization, extra ports, or extra latency.",
+  "testbench": "Independent directed oracle checks initial unknown output, all eight binary input combinations repeated three times, selected and unselected unknown/high-impedance data, changes between edges, and falling-edge stability. Includes fatal mismatch detection and bounded timeout.",
+  "static_review": "Single sequential driver, nonblocking assignments, one-bit widths, and original cycle semantics preserved.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv"}
+}

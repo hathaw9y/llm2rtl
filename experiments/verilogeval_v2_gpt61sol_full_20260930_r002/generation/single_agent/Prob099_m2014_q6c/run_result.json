@@ -1,0 +1,159 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob099_m2014_q6c",
+  "official_status": "compile_failure",
+  "official_analyzer_code": "R",
+  "workflow_status": "failed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob099_m2014_q6c",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob099_m2014_q6c/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790751157.6635067,
+    "ended_at_unix": 1790751241.9509778,
+    "seconds": 84.28747153282166,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 76349,
+      "cached_input_tokens": 64640,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1408,
+      "reasoning_output_tokens": 17
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "8c02dd35a7826a11f7ca936ae61df68d544e852660ff54d23463d452cc80e6a5",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "coverage": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "coverage": "All 12 legal one-hot state/input transitions; Icarus 12 compilation and simulation passed.",
+        "evidence": "development/01"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not occurred.",
+      "Illegal one-hot encodings and unknown inputs are unspecified and were not assigned additional behavior.",
+      "No synthesis or board verification performed."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "interface_interpretation": "Preserved TopModule ports y[5:0], w, Y1, Y3. Despite corrupted prose naming Y2/Y4, specified outputs represent next-state y[1] (B) and y[3] (D). Pure combinational equations with no additional ports or latency.",
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv"
+    },
+    "static_review": "One-bit bitwise equations, continuous assignments, no storage, no latches, no added clock/reset; initial RTL unchanged."
+  },
+  "final": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "candidate.sv": "8c02dd35a7826a11f7ca936ae61df68d544e852660ff54d23463d452cc80e6a5",
+      "Prob099_m2014_q6c_ref.sv": "ae1b704ee3babb1883baedc5632cfaaa2d696f27513435985abc534394e9d233",
+      "Prob099_m2014_q6c_test.sv": "f0646c83cf045e2b151dd54af1772e6b22666d2367ef1f91179309271d9c64a7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob099_m2014_q6c_test.sv",
+        "Prob099_m2014_q6c_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.13800807762891054
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "candidate.sv": "8c02dd35a7826a11f7ca936ae61df68d544e852660ff54d23463d452cc80e6a5",
+      "Prob099_m2014_q6c_ref.sv": "ae1b704ee3babb1883baedc5632cfaaa2d696f27513435985abc534394e9d233",
+      "Prob099_m2014_q6c_test.sv": "f0646c83cf045e2b151dd54af1772e6b22666d2367ef1f91179309271d9c64a7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob099_m2014_q6c_test.sv",
+        "Prob099_m2014_q6c_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.1382279172539711
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

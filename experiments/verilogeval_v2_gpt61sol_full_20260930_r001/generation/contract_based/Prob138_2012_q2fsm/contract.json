@@ -1,0 +1,26 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": {"direction": "input", "width": 1}, "reset": {"direction": "input", "width": 1}, "w": {"direction": "input", "width": 1}, "z": {"direction": "output", "width": 1}}
+  },
+  "semantics": {
+    "clock": "All sequential logic updates on the positive edge of clk.",
+    "reset": "Synchronous active-high reset takes priority over w and sets state A at a positive edge; asserting reset between edges does not change state or z.",
+    "initialization": "No power-up initialization specified; verification begins with a reset clock edge.",
+    "transitions_by_w_0_1": {"A": ["A", "B"], "B": ["D", "C"], "C": ["D", "E"], "D": ["A", "F"], "E": ["D", "E"], "F": ["D", "C"]},
+    "output": "Moore output z is 1 in E and F, and 0 in A, B, C, D; combinational decode of current state with no additional output register.",
+    "structure": "Separate combinational state-table and sequential state-flip-flop always blocks; continuous output assignment is permitted."
+  },
+  "numeric": {
+    "inputs_outputs": "One-bit unsigned Boolean signals; no arithmetic, rounding, saturation, or overflow.",
+    "state_encoding": "Implementation-selected three-bit codes for six states; unused state codes are outside specified operation."
+  },
+  "verification": {
+    "oracle": "Independent integer-state reference table derived directly from the six original transition rows and Moore outputs.",
+    "coverage": "Exhaust all 256 eight-bit input sequences from reset, check z after every edge, and cover all 12 transitions. Exercise reset from every reachable state with both w values. Check no state/output change when w or reset changes between clock edges.",
+    "tools": "Icarus v12 compilation with -g2012 and explicit dev_tb top and matching vvp, each under finite timeout; preserve logs.",
+    "scope": "Development simulation only; no official evaluation, synthesis or hardware claims."
+  },
+  "specification_ambiguities": ["Power-up state before a reset edge and unused state-code behavior are unspecified; tests do not constrain them."]
+}

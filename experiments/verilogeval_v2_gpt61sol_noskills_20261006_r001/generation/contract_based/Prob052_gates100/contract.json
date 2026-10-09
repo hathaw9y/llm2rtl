@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"in": "100-bit vector [99:0]"}, "outputs": {"out_and": "1 bit", "out_or": "1 bit", "out_xor": "1 bit"}},
+  "semantics": {"evidence": "Original problem explicitly requires a combinational circuit with 100 inputs and AND, OR, XOR outputs.", "out_and": "1 exactly when all 100 binary inputs are 1", "out_or": "1 exactly when at least one binary input is 1", "out_xor": "1 exactly when an odd number of binary inputs are 1", "timing": "Combinational, no clock or cycle latency", "reset": "No reset port or reset behavior specified", "initialization": "No stored state; outputs depend on current inputs"},
+  "numeric": {"input_width": 100, "output_width": 1, "arithmetic": "Boolean gates; XOR is parity, without signed arithmetic"},
+  "verification": {"oracle": "Independent per-bit counting for binary vectors derived from the original gate definitions", "sampling": "Sample after a 1 ns combinational settling delay", "directed": "All zeros, all ones, each single one, each single zero, low-bit masks with every population count from 0 through 100", "additional": "Deterministic randomized vectors and conventional four-state gate propagation checks", "failure": "$fatal on mismatch and bounded timeout; PASS printed only after all checks"},
+  "specification_ambiguities": ["The original problem does not explicitly define X/Z behavior. Use standard Verilog four-state gate semantics; supplementary X/Z checks are a language-semantics assumption, not a new binary-function requirement."]
+}

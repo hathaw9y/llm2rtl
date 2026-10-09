@@ -1,0 +1,186 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob078_dualedge",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob078_dualedge",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob078_dualedge/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791270736.8488402,
+    "ended_at_unix": 1791270779.2395191,
+    "seconds": 42.390679597854614,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 57198,
+      "cached_input_tokens": 49408,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1309,
+      "reasoning_output_tokens": 46
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "7ddd31055dbc343c8d54549bc6ae6121e637ea866913074cb218dddafe5a8901",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "cases": "Correct fixture passed, injected fault failed, repaired fixture passed."
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "compile": "Icarus 12 compilation succeeded without warnings.",
+        "simulation": "693 checks passed for both clock edges, repeated and varied data, between-edge hold, and unknown data sampling."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is independent and does not establish official evaluation correctness.",
+      "No reset or initialization was added because the specification provides neither.",
+      "Simulation checks observe settled output after each edge; physical clock-multiplexer timing was not evaluated."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "Separate rising-edge and falling-edge sample registers selected by the current clock level.",
+    "initial_snapshot": "candidate_initial.sv"
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "7ddd31055dbc343c8d54549bc6ae6121e637ea866913074cb218dddafe5a8901",
+      "Prob078_dualedge_ref.sv": "7c9a025f6e11670872f06fed927fb111485bc71f8c52d7fe579508db230460a1",
+      "Prob078_dualedge_test.sv": "6785dc69200c9f9bb87fdcb960cfe255600f38faec6fbcc46a868d265cabc06e"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob078_dualedge_test.sv",
+        "Prob078_dualedge_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011328324675559998
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb078_dualedge_test.sv:36: $finish called at 1121 (1ps)\nHint: Output 'q' has 93 mismatches. First mismatch occurred at time 10.\nHint: Total mismatched samples is 0 out of 224 samples\n\nSimulation finished at 1121 ps\nMismatches: 0 in 224 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007740049622952938
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "7ddd31055dbc343c8d54549bc6ae6121e637ea866913074cb218dddafe5a8901",
+      "Prob078_dualedge_ref.sv": "7c9a025f6e11670872f06fed927fb111485bc71f8c52d7fe579508db230460a1",
+      "Prob078_dualedge_test.sv": "6785dc69200c9f9bb87fdcb960cfe255600f38faec6fbcc46a868d265cabc06e"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob078_dualedge_test.sv",
+        "Prob078_dualedge_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01005834061652422
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb078_dualedge_test.sv:36: $finish called at 1121 (1ps)\nHint: Output 'q' has 93 mismatches. First mismatch occurred at time 10.\nHint: Total mismatched samples is 0 out of 224 samples\n\nSimulation finished at 1121 ps\nMismatches: 0 in 224 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.00687712337821722
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

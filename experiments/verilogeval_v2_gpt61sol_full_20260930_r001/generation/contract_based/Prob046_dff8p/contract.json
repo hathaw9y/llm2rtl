@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "ports": {"clk": {"direction": "input", "width": 1}, "reset": {"direction": "input", "width": 1}, "d": {"direction": "input", "width": 8}, "q": {"direction": "output", "width": 8}}},
+  "semantics": {"clock": "negative edge of clk", "transition": "At each falling edge, q becomes 8'h34 if reset is high; otherwise q becomes the sampled d.", "reset": "Active-high synchronous reset, with priority over data capture; changing reset alone does not update q.", "hold": "q holds between falling edges, including rising edges and input changes.", "initialization": "No power-up value specified; no initialization logic required. Only check known output after a falling edge.", "latency": "Registered update at the sampling falling edge, visible after nonblocking assignments; one update per falling edge."},
+  "numeric": {"representation": "8-bit bit vector", "reset_value": "8'h34", "arithmetic": "None; bit-exact copy without rounding, saturation, extension, or truncation."},
+  "verification": {"oracle": "Independent testbench expected value updated from reset and d only at falling edges, compared after NBA settling.", "cases": ["Reset sets 0x34 regardless of d", "All 256 data byte values", "All 256 data byte values with reset asserted", "Hold on rising edges", "Hold during off-edge data and reset changes", "Reset pulses that end before a falling edge do not alter q", "Reset release resumes data capture"], "tools": "Icarus Verilog 12, -g2012, explicit dev_tb top, finite shell timeouts and testbench watchdog"},
+  "specification_ambiguities": []
+}

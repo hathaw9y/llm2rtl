@@ -1,0 +1,68 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "w": 1
+    },
+    "outputs": {
+      "z": 1
+    }
+  },
+  "semantics": {
+    "evidence": "Original problem transition list and synchronous active-high reset, positive-edge sequential logic.",
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "D",
+        "1": "C"
+      },
+      "C": {
+        "0": "D",
+        "1": "E"
+      },
+      "D": {
+        "0": "A",
+        "1": "F"
+      },
+      "E": {
+        "0": "D",
+        "1": "E"
+      },
+      "F": {
+        "0": "D",
+        "1": "C"
+      }
+    },
+    "outputs": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 1,
+      "F": 1
+    },
+    "reset": "At rising clk with reset=1 enter A, overriding w. No asynchronous reset.",
+    "output_timing": "Moore output reflects current state without additional register or latency.",
+    "initialization": "No initial state specified; do not initialize RTL; functional checks start with a synchronous reset.",
+    "structure": "Separate combinational state table and positive-edge state flip-flop blocks."
+  },
+  "numeric": {
+    "state_encoding": "Six distinct 3-bit localparam codes A through F; encoding is freely chosen by original problem.",
+    "arithmetic": "None",
+    "input_domain": "Binary w and reset for specified transitions."
+  },
+  "verification": {
+    "oracle": "Independent integer-state model from original transition list; inspect output after NBA settles and between rising edges.",
+    "coverage": "All 12 transitions, reset from every reachable state with both input values, exhaustive 8-bit input sequences after reset, synchronous reset pulse between edges.",
+    "failure": "$fatal on mismatches and bounded timeout; PASS only after coverage checks."
+  },
+  "specification_ambiguities": [
+    "Power-up state, illegal-state behavior, and X/Z input behavior are unspecified; no functional expectation imposed before first reset or for illegal states/X/Z inputs."
+  ]
+}

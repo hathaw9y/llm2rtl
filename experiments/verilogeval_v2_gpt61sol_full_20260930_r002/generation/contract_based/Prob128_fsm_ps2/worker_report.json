@@ -1,0 +1,44 @@
+{
+  "revision_count": 2,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "compile_failed",
+      "evidence": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob128_fsm_ps2/development/01"
+    },
+    {
+      "label": "revision_1",
+      "status": "compile_failed",
+      "evidence": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob128_fsm_ps2/development/02"
+    },
+    {
+      "label": "revision_2",
+      "status": "passed",
+      "evidence": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob128_fsm_ps2/development/03"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis or board work performed.",
+    "Original specification leaves behavior before the first reset unspecified; testbench begins assertions after synchronous reset."
+  ],
+  "justified_rtl_changes": [
+    {
+      "revision": 1,
+      "reason": "Initial Icarus 12 compile crashed with return code 139; supplemental Icarus 11 compiled. Replaced enum state type with explicit two-bit localparams and logic registers to investigate simulator compatibility without changing transitions. Icarus 12 still crashed."
+    },
+    {
+      "revision": 2,
+      "reason": "Saved diagnostics implicated always_* processing of constant bit selects. Replaced always_comb with always @(*) as a simulator compatibility exception. Transition logic and latency are unchanged; required Icarus 12 compile and simulation passed."
+    }
+  ],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "interface_cycle_summary": "TopModule(clk, reset, in[7:0], done); synchronous active-high reset. One byte per rising edge. done high immediately after third-byte edge for one cycle; next edge accepts a possible new first byte.",
+  "numeric_width_decisions": "8-bit input, one-bit output, two-bit FSM; no arithmetic.",
+  "static_review": "Complete combinational assignments; nonblocking clocked state; no extra ports, initializers, or latency; standalone DUT has no child dependencies.",
+  "coverage": "Search discard, all 256 byte values, payload bit-3 combinations, back-to-back messages, resets at all framing phases, synchronous reset within done cycle, deterministic mixed input stream.",
+  "pass_marker": "PASS checks=3368 messages=769",
+  "snapshots": "candidate_initial.sv preserved unchanged; candidate_revision_1.sv and candidate_revision_2.sv preserved; helper snapshots and logs retained."
+}

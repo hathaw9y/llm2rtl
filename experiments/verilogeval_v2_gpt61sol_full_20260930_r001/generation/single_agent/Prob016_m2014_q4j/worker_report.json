@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Four full-adder equations form a combinational ripple-carry chain. Carry-in is zero; final carry drives sum[4]. Exact TopModule interface retained; no state or reset."
+    },
+    {
+      "name": "Icarus development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "result": "tool_failure",
+      "log": "compile.log",
+      "details": "Compiler exited with code 139 and emitted no diagnostic text. Status preserved in check_status.log."
+    },
+    {
+      "name": "exhaustive development simulation",
+      "result": "not_run",
+      "details": "Independent dev_tb.sv checks all 256 input combinations, but simulation was not run because compilation failed."
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate delivered unchanged; candidate_initial.sv preserved before development checks. Static review passed; simulation success is not established.",
+  "limitations": [
+    "Development compiler failure prevented dynamic verification.",
+    "No synthesis, timing, or board checks performed.",
+    "Official evaluation results are unavailable."
+  ]
+}

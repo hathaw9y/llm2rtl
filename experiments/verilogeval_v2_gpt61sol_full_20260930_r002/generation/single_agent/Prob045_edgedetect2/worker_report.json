@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence_directory": "development/01",
+      "sample_checks": 131106
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed.",
+    "No reset or initialization is specified; sequential state starts unknown in simulation."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation stores the previous sampled input and registers the per-bit XOR at each rising clock edge. No RTL revisions."
+  ],
+  "justified_tb_changes": [
+    "Initial independent per-bit sampled-value comparison, exhaustive 65536 ordered input pairs, isolated rising/falling bits, held values, inter-edge stability, unsampled transient, startup unknown checks, and bounded timeout. No testbench revisions."
+  ],
+  "interface_cycle_contract": "TopModule(clk, in[7:0], anyedge[7:0]); positive-edge sampling, registered edge indication for current versus previous sample; no reset or extra ports.",
+  "numeric_width_decisions": "Eight independent one-bit comparisons; eight-bit previous-sample register and output.",
+  "static_review": "Nonblocking sequential assignments, one driver per register, original interface preserved."
+}

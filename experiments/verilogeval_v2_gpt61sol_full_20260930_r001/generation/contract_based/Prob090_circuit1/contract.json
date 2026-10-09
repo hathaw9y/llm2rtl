@@ -1,0 +1,63 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "combinational",
+    "function": "q is 1 exactly when a and b are both 1",
+    "truth_table": [
+      {
+        "a": 0,
+        "b": 0,
+        "q": 0
+      },
+      {
+        "a": 0,
+        "b": 1,
+        "q": 0
+      },
+      {
+        "a": 1,
+        "b": 0,
+        "q": 0
+      },
+      {
+        "a": 1,
+        "b": 1,
+        "q": 1
+      }
+    ],
+    "timing": "Continuous combinational response; no clock cycles or specified propagation delay",
+    "reset": "No reset port or reset behavior",
+    "initialization": "No stored state or initialization required"
+  },
+  "numeric": {
+    "type": "one-bit unsigned logic",
+    "operation": "Boolean AND",
+    "arithmetic": "No arithmetic, rounding, truncation, saturation, or overflow"
+  },
+  "verification": {
+    "oracle": "Explicit expected truth-table values derived from the original waveform",
+    "coverage": "Exhaust all four binary input pairs and all sixteen transitions between pairs",
+    "method": "Independent self-checking testbench compares q using case inequality after settling",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top; finite compile and simulation timeouts"
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z inputs is unspecified by the binary waveform; no additional acceptance requirements are imposed."
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "result": "PASS_STRUCTURE_ONLY",
+      "log": "contract_validation_retry.log"
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "result": "PASS_IDENTICAL_BYTES",
+      "files": [
+        "candidate.sv",
+        "candidate_initial.sv"
+      ]
+    },
+    {
+      "name": "manual_static_review",
+      "result": "No issues found by inspection",
+      "log": "static_review.log"
+    },
+    {
+      "name": "icarus_development_compile",
+      "result": "FAILED_EXIT_139",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "icarus_compile_explicit_backend_retry",
+      "result": "FAILED_EXIT_139",
+      "log": "dev_compile_retry.log"
+    },
+    {
+      "name": "development_simulation",
+      "result": "NOT_RUN_COMPILE_FAILED"
+    }
+  ],
+  "development_outcome": "Initial candidate delivered unchanged. Frozen contract passed structural validation. Independent dev_tb.sv prepared, but Icarus compiler failed with exit 139 twice; no simulation success claimed.",
+  "limitations": [
+    "Original problem omits reset state values: assumed zero global history and weakly not-taken counters (01).",
+    "History shift convention assumed newest branch in bit 0.",
+    "Outputs continuously expose prediction/history while predict_valid is low, an unspecified case.",
+    "Contract validator establishes structure only, not functional correctness.",
+    "Development simulation coverage is planned but unexecuted because compilation failed.",
+    "No synthesis, board tests or official evaluation performed."
+  ],
+  "tool_errors": [
+    "First gate shell wrapper used zsh read-only variable status; preserved in contract_command_error.log and reran gate successfully before RTL generation.",
+    "Icarus compile exited 139 with empty diagnostics on both attempts."
+  ]
+}

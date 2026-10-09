@@ -1,0 +1,61 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "x": {
+        "direction": "input",
+        "width": 1
+      },
+      "y": {
+        "direction": "input",
+        "width": 1
+      },
+      "z": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "z = (x ^ y) & x",
+    "timing": "Pure combinational output; responds to current inputs without clock cycles or registered latency.",
+    "clock": null,
+    "reset": null,
+    "initialization": "No stored state or initialization requirement."
+  },
+  "numeric": {
+    "type": "One-bit unsigned Boolean signals",
+    "operators": "One-bit bitwise XOR followed by one-bit bitwise AND",
+    "arithmetic": "No addition, overflow, rounding, truncation or saturation.",
+    "truth_table": [
+      {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      {
+        "x": 1,
+        "y": 0,
+        "z": 1
+      },
+      {
+        "x": 1,
+        "y": 1,
+        "z": 0
+      }
+    ]
+  },
+  "verification": {
+    "compile": "Icarus v12, -g2012, explicit dev_tb top, finite timeout.",
+    "oracle": "Independent hard-coded truth table for all four binary combinations.",
+    "simulation": "Drive each binary combination and compare settled z using case inequality; repeat combinations in reverse order to detect state dependence; finite simulation watchdog and process timeout.",
+    "static_review": "Confirm exact ports and widths, combinational expression, no storage or simulation-only DUT constructs."
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,264 @@
+{
+  "schema": "llm2rtl.bank_candidate_note.v1",
+  "status": "capacity_and_tile_basis_agreed_exact_layout_and_ports_pending",
+  "prefill_query_tile_max": 16,
+  "decode_query_rows": 1,
+  "projection_residency_tile": {
+    "M_max": 16,
+    "N_max": 128,
+    "K": 128
+  },
+  "GEMM_internal_parallelism_already_agreed": {
+    "K_lanes": 16,
+    "output_columns": 4,
+    "input_rows": 1
+  },
+  "attention_schedule_candidate": "Process one Q head at a time; cache one KV head K/V locally and reuse it for seven Q heads; full context<=1024 fits the two context banks. Store new layer K/V explicitly before dependent cache reads.",
+  "bank_count": 23,
+  "bank_id_bits_required": 5,
+  "banks": [
+    {
+      "bank_id": 0,
+      "name": "H0",
+      "capacity_bytes": 32768,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "BRAM",
+      "role": "Reusable full hidden/residual/normalized/Q tensor slot; row tile at most 16 x 896; allocate by liveness, not fixed layer identity."
+    },
+    {
+      "bank_id": 1,
+      "name": "H1",
+      "capacity_bytes": 32768,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "BRAM",
+      "role": "Reusable full hidden/residual/normalized/Q tensor slot; row tile at most 16 x 896; allocate by liveness, not fixed layer identity."
+    },
+    {
+      "bank_id": 2,
+      "name": "H2",
+      "capacity_bytes": 32768,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "BRAM",
+      "role": "Reusable full hidden/residual/normalized/Q tensor slot; row tile at most 16 x 896; allocate by liveness, not fixed layer identity."
+    },
+    {
+      "bank_id": 3,
+      "name": "H3",
+      "capacity_bytes": 32768,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "BRAM",
+      "role": "Reusable full hidden/residual/normalized/Q tensor slot; row tile at most 16 x 896; allocate by liveness, not fixed layer identity."
+    },
+    {
+      "bank_id": 4,
+      "name": "K_NEW",
+      "capacity_bytes": 4096,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "BRAM",
+      "role": "New K for at most 16 query tokens and 2 KV heads; explicit DMA_STORE to layer KV cache."
+    },
+    {
+      "bank_id": 5,
+      "name": "V_NEW",
+      "capacity_bytes": 4096,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "BRAM",
+      "role": "New V for at most 16 query tokens and 2 KV heads; explicit DMA_STORE to layer KV cache."
+    },
+    {
+      "bank_id": 6,
+      "name": "ACT_TILE",
+      "capacity_bytes": 4096,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "BRAM",
+      "role": "Explicit vector-extracted GEMM activation tile up to 16 x 128, or one attention head Q tile 16 x 64."
+    },
+    {
+      "bank_id": 7,
+      "name": "WGT_TILE",
+      "capacity_bytes": 8192,
+      "word_bits_proposal": 128,
+      "format": "packed signed W4",
+      "memory_kind_proposal": "BRAM",
+      "role": "Projection B tile: 128 outputs x 128 input features. Also holds W4 embedding rows for at most 16 tokens (row packing pending)."
+    },
+    {
+      "bank_id": 8,
+      "name": "SCALE_TILE",
+      "capacity_bytes": 1024,
+      "word_bits_proposal": 128,
+      "format": "FP32",
+      "memory_kind_proposal": "BRAM",
+      "role": "128 projection group scales or at most 16 embedding rows of 7 scales; aligned packing pending."
+    },
+    {
+      "bank_id": 9,
+      "name": "K_CONTEXT",
+      "capacity_bytes": 131072,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "URAM",
+      "role": "One KV head at context<=1024 and head_dim64; explicit DMA_LOAD. Reused for its seven Q heads."
+    },
+    {
+      "bank_id": 10,
+      "name": "V_CONTEXT",
+      "capacity_bytes": 131072,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "URAM",
+      "role": "One KV head V at context<=1024 and head_dim64; explicit DMA_LOAD. Reused for its seven Q heads."
+    },
+    {
+      "bank_id": 11,
+      "name": "PSUM0",
+      "capacity_bytes": 8192,
+      "word_bits_proposal": 128,
+      "format": "FP32",
+      "memory_kind_proposal": "BRAM",
+      "role": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V."
+    },
+    {
+      "bank_id": 12,
+      "name": "PSUM1",
+      "capacity_bytes": 8192,
+      "word_bits_proposal": 128,
+      "format": "FP32",
+      "memory_kind_proposal": "BRAM",
+      "role": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V."
+    },
+    {
+      "bank_id": 13,
+      "name": "PSUM2",
+      "capacity_bytes": 8192,
+      "word_bits_proposal": 128,
+      "format": "FP32",
+      "memory_kind_proposal": "BRAM",
+      "role": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V."
+    },
+    {
+      "bank_id": 14,
+      "name": "PSUM3",
+      "capacity_bytes": 8192,
+      "word_bits_proposal": 128,
+      "format": "FP32",
+      "memory_kind_proposal": "BRAM",
+      "role": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V."
+    },
+    {
+      "bank_id": 15,
+      "name": "PSUM4",
+      "capacity_bytes": 8192,
+      "word_bits_proposal": 128,
+      "format": "FP32",
+      "memory_kind_proposal": "BRAM",
+      "role": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V."
+    },
+    {
+      "bank_id": 16,
+      "name": "PSUM5",
+      "capacity_bytes": 8192,
+      "word_bits_proposal": 128,
+      "format": "FP32",
+      "memory_kind_proposal": "BRAM",
+      "role": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V."
+    },
+    {
+      "bank_id": 17,
+      "name": "PSUM6",
+      "capacity_bytes": 8192,
+      "word_bits_proposal": 128,
+      "format": "FP32",
+      "memory_kind_proposal": "BRAM",
+      "role": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V."
+    },
+    {
+      "bank_id": 18,
+      "name": "SCORE",
+      "capacity_bytes": 65536,
+      "word_bits_proposal": 128,
+      "format": "FP32",
+      "memory_kind_proposal": "URAM",
+      "role": "Attention QK FP32 score up to16x1024; during FFN, reused as independent16x128 FP32 gate/up projection scratch. Mutually exclusive lifetimes, descriptor reinitialization required."
+    },
+    {
+      "bank_id": 19,
+      "name": "GATE_TILE",
+      "capacity_bytes": 4096,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "BRAM",
+      "role": "FFN gate tile 16 x 128; reusable BF16 result staging slot."
+    },
+    {
+      "bank_id": 20,
+      "name": "UP_TILE",
+      "capacity_bytes": 4096,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "BRAM",
+      "role": "FFN up tile 16 x 128; reusable BF16 result staging slot."
+    },
+    {
+      "bank_id": 21,
+      "name": "PROB",
+      "capacity_bytes": 32768,
+      "word_bits_proposal": 128,
+      "format": "BF16",
+      "memory_kind_proposal": "BRAM",
+      "role": "Softmax probabilities for one Q head: at most 16 x 1024; direct shared GEMM activation operand for P x V."
+    },
+    {
+      "bank_id": 22,
+      "name": "PARAM",
+      "capacity_bytes": 4096,
+      "word_bits_proposal": 128,
+      "format": "BF16 tables/parameters",
+      "memory_kind_proposal": "BRAM",
+      "role": "Explicitly loaded norm gamma, projection bias or query-tile RoPE cos/sin; mutually exclusive lifetimes and layouts."
+    }
+  ],
+  "data_capacity_bytes": 582656,
+  "command_memory_is_separate": true,
+  "command_capacity_bytes": 32768,
+  "physical_memory_candidate_bytes": {
+    "BRAM": 254976,
+    "URAM": 327680
+  },
+  "native_bank_word_bits": 128,
+  "DMA_stream_bits_in_pinned_engine": 64,
+  "memory_capacity_is_not_primitive_utilization": true,
+  "primitive_counts_and_timing": "not_synthesized; must obtain fresh evidence for new bank parameters and routes",
+  "common_engine_inspection": "BANK_NUM and BANK_WIDTH are parameterized; 4-bit vendor sequence tags are separate from completion_bank. A 23-bank/5-bit integration requires fresh simulation and synthesis, not inherited evidence.",
+  "score_format_status": "FP32 scratch; reference-compatible BF16 score/scaling boundaries agreed in nonlinear_rounding_decision",
+  "bank_read_latency_candidate": 3,
+  "packed_storage_notes": [
+    "Vector LAYOUT produces distinct logical tile bank operands; compute commands do not receive raw local bank offsets.",
+    "Pad/align DMA representations to legal bank and DDR word boundaries; tail masks and valid extents remain to be specified.",
+    "Retain seven independent FFN-down PSUM banks to avoid spilling all seven output tiles to DDR between K-residency tiles.",
+    "All-layer KV persists in DDR (BF16 payload at max context1024 is 12 MiB), not all in local banks."
+  ],
+  "pending": [
+    "user agreement",
+    "per-role producer/consumer capability matrix",
+    "exact row/head/weight packing and alignment",
+    "bank readiness and partial-tensor assembly contract",
+    "initialization and partial-sum modes",
+    "source manifest and actual synthesis resource/timing results"
+  ],
+  "RTL_implementation_authorized": false,
+  "user_selection": "dj",
+  "user_decision_interpretation": "어",
+  "bank_read_latency_cycles": 3,
+  "DMA_stream_bits": 64,
+  "interface_status": "agreed; exact packing/capabilities/descriptor transitions pending",
+  "packing_readiness_candidate": "bank_packing_readiness_candidate.json",
+  "SCORE_FFN_scratch_status": "agreed"
+}

@@ -1,0 +1,160 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob131_mt2015_q4",
+  "official_status": "compile_failure",
+  "workflow_status": "failed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob131_mt2015_q4",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob131_mt2015_q4/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790731973.4009013,
+    "ended_at_unix": 1790732074.43591,
+    "seconds": 101.0350091457367,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 103818,
+      "cached_input_tokens": 89600,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2641,
+      "reasoning_output_tokens": 49
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "02e76df06ad01ed5f8b4096de67910196bd46ba75b742303e4385213dc8b5f26",
+  "contract_sha256": "6c3222e3274386ecf544d921019c3a40af3564073d368d2ae8cb3dfcdf883672",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "frozen_contract_gate",
+        "result": "PASS (structure only)",
+        "evidence": "contract_validation.log and contract_gate.json"
+      },
+      {
+        "name": "manual_functional_review",
+        "result": "A implements (x XOR y) AND x; B implements waveform XNOR; all four instances share inputs and OR/AND outputs feed XOR. Top truth table matches frozen contract."
+      },
+      {
+        "name": "manual_synthesizability_review",
+        "result": "Continuous single-bit gate assignments; no storage, delays, initialization, clocks, resets, or missing child definitions in candidate.sv."
+      },
+      {
+        "name": "development_compile",
+        "result": "FAIL: Icarus exit code 139; no diagnostic or simulation executable",
+        "evidence": "development_compile.log and development_status.json"
+      },
+      {
+        "name": "development_simulation",
+        "result": "NOT RUN successfully: matching vvp could not open absent dev_sim",
+        "evidence": "development_simulation.log and development_status.json"
+      }
+    ],
+    "development_outcome": "Initial synthesizable RTL delivered unchanged and preserved as candidate_initial.sv. Independent self-checking dev_tb.sv created, but tool failure prevented execution. No simulation pass claimed.",
+    "limitations": [
+      "No successful tool elaboration or simulation due to compiler failure.",
+      "Official evaluation results are unavailable and were not accessed.",
+      "No synthesis, timing analysis or board validation performed.",
+      "Binary behavior only is specified; X/Z semantics use normal bitwise gates.",
+      "Top module name top_module follows the benchmark convention because original prose does not name it."
+    ]
+  },
+  "final": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "candidate.sv": "02e76df06ad01ed5f8b4096de67910196bd46ba75b742303e4385213dc8b5f26",
+      "Prob131_mt2015_q4_ref.sv": "66766f4d76de82a4304bb779e84e53a7410f1f9389abe32e4758a5200bccf2bd",
+      "Prob131_mt2015_q4_test.sv": "ee17f3cf7a46151647f84451e90feacc1ae957f2086829bc154327ab543af634"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob131_mt2015_q4_test.sv",
+        "Prob131_mt2015_q4_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.1379964593797922
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "candidate.sv": "02e76df06ad01ed5f8b4096de67910196bd46ba75b742303e4385213dc8b5f26",
+      "Prob131_mt2015_q4_ref.sv": "66766f4d76de82a4304bb779e84e53a7410f1f9389abe32e4758a5200bccf2bd",
+      "Prob131_mt2015_q4_test.sv": "ee17f3cf7a46151647f84451e90feacc1ae957f2086829bc154327ab543af634"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob131_mt2015_q4_test.sv",
+        "Prob131_mt2015_q4_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.13548179436475039
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "R"
+}

@@ -1,0 +1,179 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob113_2012_q1g",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob113_2012_q1g",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob113_2012_q1g/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790730982.277906,
+    "ended_at_unix": 1790731050.103299,
+    "seconds": 67.82539367675781,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 90970,
+      "cached_input_tokens": 80384,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1687,
+      "reasoning_output_tokens": 186
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "5c3f899c74fa3d1611e8bc2247380c4c4223414e23002636e54ab75699c5dd05",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static Karnaugh-map review",
+        "outcome": "passed",
+        "details": "Expression asserts f for numeric x values 0, 1, 4, 5, 6, 12, 14, 15, matching the supplied map. Interface is TopModule with input logic [3:0] x and output logic f; continuous combinational assignment, no state or latches."
+      },
+      {
+        "name": "Icarus development compilation",
+        "outcome": "failed",
+        "exit_code": 139,
+        "details": "Used requested Icarus path, -g2012 -Wall -s dev_tb, and timeout 20s. No executable produced; compile.log was empty.",
+        "logs": [
+          "compile.log",
+          "compile_status.txt"
+        ]
+      },
+      {
+        "name": "development simulation attempt",
+        "outcome": "failed",
+        "exit_code": 255,
+        "details": "Requested matching vvp was invoked with timeout 20s; it could not open dev_sim because compilation produced no executable. No simulation checks executed.",
+        "logs": [
+          "simulation.log",
+          "simulation_status.txt"
+        ]
+      }
+    ],
+    "development_outcome": "Initial synthesizable RTL delivered unchanged and preserved as candidate_initial.sv. Independent exhaustive 16-input self-checking dev_tb.sv created, but simulator tool failure prevented execution.",
+    "limitations": [
+      "No successful development simulation; correctness assessed by static map review only.",
+      "Official evaluation results are unavailable.",
+      "No synthesis, timing, or board validation performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "5c3f899c74fa3d1611e8bc2247380c4c4223414e23002636e54ab75699c5dd05",
+      "Prob113_2012_q1g_ref.sv": "239672bcaa22524d777b1fa180695033550e19a10990aaeb47319673cc318892",
+      "Prob113_2012_q1g_test.sv": "5cdd2e30a960e24c43b4c214db7f752a3c098b39dd17378035d59a234b6b7288"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob113_2012_q1g_test.sv",
+        "Prob113_2012_q1g_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012467931024730206
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb113_2012_q1g_test.sv:16: $finish called at 501 (1ps)\nHint: Output 'f' has no mismatches.\nHint: Total mismatched samples is 0 out of 100 samples\n\nSimulation finished at 501 ps\nMismatches: 0 in 100 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007667547091841698
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "5c3f899c74fa3d1611e8bc2247380c4c4223414e23002636e54ab75699c5dd05",
+      "Prob113_2012_q1g_ref.sv": "239672bcaa22524d777b1fa180695033550e19a10990aaeb47319673cc318892",
+      "Prob113_2012_q1g_test.sv": "5cdd2e30a960e24c43b4c214db7f752a3c098b39dd17378035d59a234b6b7288"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob113_2012_q1g_test.sv",
+        "Prob113_2012_q1g_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01137243676930666
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb113_2012_q1g_test.sv:16: $finish called at 501 (1ps)\nHint: Output 'f' has no mismatches.\nHint: Total mismatched samples is 0 out of 100 samples\n\nSimulation finished at 501 ps\nMismatches: 0 in 100 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.006756721995770931
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

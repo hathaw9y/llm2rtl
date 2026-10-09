@@ -1,0 +1,51 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "manual_RTL_contract_review",
+      "result": "PASS",
+      "details": "Exact TopModule ports; 32-bit unsigned history; positive-edge clock and active-high asynchronous reset; reset then misprediction then prediction priority; bit 31 eviction; implicit clocked hold; no submodules or simulation constructs."
+    },
+    {
+      "name": "development_compile",
+      "result": "FAILED",
+      "exit_code": 139,
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "log": "development_compile.log",
+      "details": "Compiler exited with code 139; diagnostic log is empty."
+    },
+    {
+      "name": "development_simulation",
+      "result": "NOT RUN",
+      "details": "Compile failed; no runnable development simulation produced."
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "result": "PASS",
+      "details": "candidate_initial.sv saved before development checks; identical to final candidate.sv."
+    }
+  ],
+  "development_outcome": "Initial synthesizable RTL delivered without revisions. Frozen contract gate passed; development compilation failed, so no simulation success is claimed. Independent self-checking testbench retained.",
+  "limitations": [
+    "Functional simulation and compiler elaboration remain unverified because the specified development compiler exited with code 139.",
+    "No synthesis, timing, or board checks performed, as required.",
+    "Official evaluation has not run during this turn and its results are unavailable."
+  ],
+  "artifacts": [
+    "contract.json",
+    "contract_gate.json",
+    "contract_gate_history.jsonl",
+    "contract_validation.log",
+    "candidate.sv",
+    "candidate_initial.sv",
+    "dev_tb.sv",
+    "development_compile.log",
+    "development_status.log"
+  ]
+}

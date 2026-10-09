@@ -1,0 +1,39 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "label": "initial",
+      "cycle_checks": 21582,
+      "evidence_directory": "development/01",
+      "compiler": "Icarus 12, -g2012 -Wall -Wno-timescale"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification was performed.",
+    "Pre-reset outputs are unspecified by the problem and are not checked."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "TopModule preserves the original one-bit ports and positive-edge synchronous active-low reset. Moore outputs implement the one-cycle f pulse, consecutive 101 detection, two y sampling opportunities, and permanent high/low outcomes until reset. No added ports or pipeline latency.",
+  "verification": "Independent three-bit sample-history oracle and response timer; exhaustive eight-bit x histories, directed first/second/late y response, repeated reset, bounded timeout, fatal mismatches, explicit PASS.",
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "check_records": "dev_checks.jsonl"
+  },
+  "static_review": "Complete combinational assignments, explicit enum if/else transitions, single sequential state driver, synchronous reset, one-bit outputs."
+}

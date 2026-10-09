@@ -1,0 +1,39 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "sel_b1": 1,
+      "sel_b2": 1
+    },
+    "outputs": {
+      "out_assign": 1,
+      "out_always": 1
+    }
+  },
+  "semantics": {
+    "function": "Both outputs choose b when sel_b1 and sel_b2 are both 1; otherwise choose a.",
+    "implementation": {
+      "out_assign": "continuous assign statement",
+      "out_always": "combinational procedural if/else"
+    },
+    "timing": "Combinational, no clock, extra latency, or retained state. Original specifies only a mux and lists no clock.",
+    "reset": "No reset port or reset behavior in original.",
+    "initialization": "No initial values specified; outputs follow combinational inputs once evaluated."
+  },
+  "numeric": {
+    "widths": "Every port is one bit, as explicitly stated.",
+    "domain": "Exhaustive binary input combinations define required truth table; no arithmetic or signedness."
+  },
+  "verification": {
+    "oracle": "Independent explicit selector truth table based on original choose-b-if-both-true rule.",
+    "cases": "All 16 binary combinations in ascending and descending order, exercising changes to data and selection.",
+    "sampling": "Apply inputs then wait 1 ns for combinational settling before checking both outputs.",
+    "failure": "Case-inequality comparison, fatal on mismatch, 100 ns timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z selectors is unspecified; development truth-table checks use binary inputs. Standard Verilog conditional and procedural-if semantics apply for unspecified four-state inputs."
+  ]
+}

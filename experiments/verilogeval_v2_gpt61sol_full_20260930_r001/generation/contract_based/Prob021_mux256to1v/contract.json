@@ -1,0 +1,52 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 1024,
+        "range": "[1023:0]"
+      },
+      "sel": {
+        "direction": "input",
+        "width": 8,
+        "range": "[7:0]"
+      },
+      "out": {
+        "direction": "output",
+        "width": 4,
+        "range": "[3:0]"
+      }
+    }
+  },
+  "semantics": {
+    "function": "For each b in 0..3, out[b] = in[4*sel+b].",
+    "timing": "Pure combinational selection; changes to either input update output without a clock or stored state.",
+    "clock": "none",
+    "reset": "none",
+    "initialization": "none required; output determined by current inputs",
+    "legal_selectors": "All binary values 0 through 255; last selects in[1023:1020]."
+  },
+  "numeric": {
+    "data": "Packed bits, no signed arithmetic interpretation.",
+    "selector": "Unsigned 8-bit index.",
+    "index": "4*sel ranges from 0 to 1020; selected four bits remain within the input.",
+    "arithmetic": "No data arithmetic, rounding, saturation, or overflow; exact bit copying.",
+    "packing": "Input number k occupies bits [4*k+3:4*k]."
+  },
+  "verification": {
+    "oracle": "Compute each expected output bit independently as in[4*integer(sel)+b].",
+    "coverage": [
+      "Sweep all 256 selectors for all-zero and all-one vectors.",
+      "Sweep selectors over deterministic random full input vectors.",
+      "For every selector, drive all 16 possible selected nibble values with background data.",
+      "Check every one-hot input bit at its matching selector and an adjacent nonmatching selector.",
+      "Change data with a fixed selector and change selector with fixed data."
+    ],
+    "execution": "Self-checking independent dev_tb top, Icarus -g2012, finite compile and simulation timeouts; fatal mismatch and explicit PASS."
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z selector bits is not specified by the problem; no additional functional requirement is imposed."
+  ]
+}

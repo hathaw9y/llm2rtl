@@ -1,0 +1,50 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "clk": "input 1 bit",
+      "d": "input 1 bit",
+      "r": "input 1 bit",
+      "q": "output 1 bit"
+    },
+    "evidence": "problem.txt interface list"
+  },
+  "semantics": {
+    "clock": "rising edge of clk (conventional D flip flop interpretation)",
+    "transition": "At each rising edge, q becomes 0 if r is high; otherwise q becomes sampled d.",
+    "reset": "Active high synchronous reset; reset takes priority over d.",
+    "between_edges": "q holds its prior state, including when r changes.",
+    "initialization": "No initial value specified; no initialization added and no required startup value asserted.",
+    "evidence": "problem.txt: simple D flip flop with active high synchronous reset (reset output to 0)"
+  },
+  "numeric": {
+    "widths": "All ports are one bit per original specification.",
+    "arithmetic": "None; single bit storage with reset constant 1'b0."
+  },
+  "verification": {
+    "oracle": "Original problem reset priority and D flip flop behavior; sample after nonblocking update.",
+    "directed_cases": [
+      "Both d values with reset low",
+      "Both d values with reset high",
+      "Reset assertion and deassertion between rising edges",
+      "Input changes and falling edges hold q",
+      "Repeated reset and consecutive data captures"
+    ],
+    "startup": "Start comparisons after first sampling edge; startup unspecified.",
+    "timeout": "Bounded simulation timeout with $fatal.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "clock polarity",
+      "evidence": "Problem says D flip flop without explicit clock edge.",
+      "resolution": "Use conventional positive-edge-triggered D flip flop."
+    },
+    {
+      "topic": "startup state",
+      "evidence": "No initial output state stated.",
+      "resolution": "No RTL initialization; verification does not require a value before the first rising edge."
+    }
+  ]
+}

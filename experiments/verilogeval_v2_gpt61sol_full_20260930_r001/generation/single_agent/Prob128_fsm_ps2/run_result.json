@@ -1,0 +1,176 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob128_fsm_ps2",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob128_fsm_ps2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob128_fsm_ps2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790738562.1598275,
+    "ended_at_unix": 1790738666.8737981,
+    "seconds": 104.71397113800049,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 72849,
+      "cached_input_tokens": 52736,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1858,
+      "reasoning_output_tokens": 111
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "a0759ba800fca602cf3fd6f4f673d4c8521afec665caf953d7b104ca3c5cfd5e",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "pass",
+        "details": "Exact TopModule ports; synchronous active-high reset; two-bit four-state FSM; nonblocking state assignments; complete case with recovery default; done decoded from COMPLETE. SECOND and THIRD ignore input marker, while SEARCH and COMPLETE examine in[3]."
+      },
+      {
+        "name": "independent development testbench compile",
+        "result": "tool_failure",
+        "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "options": "-g2012 -Wall -s dev_tb",
+        "timeout_seconds": 20,
+        "exit_code": 139,
+        "logs": [
+          "compile.log",
+          "development_status.log"
+        ]
+      },
+      {
+        "name": "development simulation",
+        "result": "not_run",
+        "details": "Compilation failed. No simulation success is claimed. dev_tb.sv includes a reference byte counter, directed messages and resets, back-to-back messages, deterministic pseudorandom bytes, and a finite simulation watchdog."
+      }
+    ],
+    "development_outcome": "Initial candidate preserved as candidate_initial.sv and delivered unchanged as candidate.sv. Static review passed; dynamic verification unavailable due to compiler exit 139.",
+    "limitations": [
+      "No successful development simulation.",
+      "Official evaluation was not accessed and its result is unknown.",
+      "No synthesis, timing, or board validation performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a0759ba800fca602cf3fd6f4f673d4c8521afec665caf953d7b104ca3c5cfd5e",
+      "Prob128_fsm_ps2_test.sv": "03461424196e1d977774f4e603118291e3cccf0cfce1e693b3119833b6cb84a6",
+      "Prob128_fsm_ps2_ref.sv": "88fd53ff936047b70a0407ec1c4eb55d74d05a80ef4fa45997a288daae8d4d6d"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob128_fsm_ps2_test.sv",
+        "Prob128_fsm_ps2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015343849547207355
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb128_fsm_ps2_test.sv:18: $finish called at 2001 (1ps)\nHint: Output 'done' has no mismatches.\nHint: Total mismatched samples is 0 out of 400 samples\n\nSimulation finished at 2001 ps\nMismatches: 0 in 400 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010063434951007366
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a0759ba800fca602cf3fd6f4f673d4c8521afec665caf953d7b104ca3c5cfd5e",
+      "Prob128_fsm_ps2_test.sv": "03461424196e1d977774f4e603118291e3cccf0cfce1e693b3119833b6cb84a6",
+      "Prob128_fsm_ps2_ref.sv": "88fd53ff936047b70a0407ec1c4eb55d74d05a80ef4fa45997a288daae8d4d6d"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob128_fsm_ps2_test.sv",
+        "Prob128_fsm_ps2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012095393612980843
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb128_fsm_ps2_test.sv:18: $finish called at 2001 (1ps)\nHint: Output 'done' has no mismatches.\nHint: Total mismatched samples is 0 out of 400 samples\n\nSimulation finished at 2001 ps\nMismatches: 0 in 400 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009560586884617805
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

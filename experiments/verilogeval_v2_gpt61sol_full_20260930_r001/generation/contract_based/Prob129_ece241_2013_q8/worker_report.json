@@ -1,0 +1,21 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {"name": "frozen_contract_gate", "result": "passed_structure_only", "log": "contract_validation.log"},
+    {"name": "initial_development_compile", "result": "failed", "exit_code": 139, "flags": "-g2012 -Wall -s dev_tb", "timeout_seconds": 30, "log": "development_compile.log"},
+    {"name": "dut_elaboration", "result": "passed", "exit_code": 0, "flags": "-g2012 -s TopModule -tnull", "timeout_seconds": 30, "log": "development_elaboration.log"},
+    {"name": "development_compile_retry", "result": "passed", "exit_code": 0, "flags": "-g2012 -s dev_tb", "timeout_seconds": 30, "log": "development_compile_retry.log"},
+    {"name": "development_simulation", "result": "passed", "exit_code": 0, "timeout_seconds": 30, "checks": 9273, "log": "development_simulation.log"},
+    {"name": "static_review", "result": "passed", "details": "Exact one-bit interface; three logical states; two-bit encoding; positive-edge state updates; negative-edge asynchronous active-low reset; complete combinational cases; unregistered Mealy output; overlap retained."}
+  ],
+  "development_outcome": "Candidate unchanged after initial implementation. DUT elaboration and independent self-checking simulation passed. All 256 eight-bit streams, between-edge input changes, overlapping detection, reset during detection, and partial-prefix reset checked.",
+  "limitations": [
+    "Initial compile with -Wall exited 139 without diagnostic output; retry without -Wall succeeded. Cause not established.",
+    "Contract gate validates structure only.",
+    "Simulation covers binary inputs after reset; power-up behavior and unknown input values are unspecified.",
+    "No synthesis, timing analysis, board access, or official evaluation performed. Official evaluation results are unavailable."
+  ],
+  "artifacts": {"rtl": "candidate.sv", "initial_rtl": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json"},
+  "tools": {"iverilog": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog", "vvp": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp"}
+}

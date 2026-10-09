@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "dev_checks.jsonl",
+      "coverage": "All eight original K-map entries and return to zero; nine comparisons",
+      "compiler": "Icarus Verilog 12, -g2012 -Wall -Wno-timescale"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Original specification defines binary input combinations; X/Z behavior is not specified or tested.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation uses a | b | c because the only zero in the original K-map is a=b=c=0. No RTL revisions."
+  ],
+  "justified_tb_changes": [
+    "Initial independent testbench explicitly enumerates original K-map entries, checks return to zero, uses case-inequality mismatch detection, and includes a bounded timeout. No TB revisions."
+  ],
+  "interface_cycle_contract": "TopModule with one-bit inputs a, b, c and one-bit output out; combinational, no added ports or latency.",
+  "numeric_width_decisions": "All signals and Boolean operations are one bit.",
+  "static_review": "Continuous assignment has no state, latches, or multiple drivers; original interface preserved.",
+  "artifacts": [
+    "candidate.sv",
+    "candidate_initial.sv",
+    "dev_tb.sv",
+    "development/01",
+    "dev_checks.jsonl"
+  ]
+}

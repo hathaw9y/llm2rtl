@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Exact TopModule interface; 8-bit unsigned XOR; positive-edge always_ff; nonblocking assignments; no reset or initialization added."
+    },
+    {
+      "name": "initial candidate preservation",
+      "result": "pass",
+      "details": "candidate_initial.sv copied immediately after implementation, before development checks; final RTL unchanged."
+    },
+    {
+      "name": "Icarus development compilation",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "timeout_seconds": 20,
+      "log": "dev_compile.log",
+      "status_log": "dev_compile_status.log"
+    },
+    {
+      "name": "development simulation",
+      "result": "not_run",
+      "details": "Compilation failed; no simulation success claimed."
+    }
+  ],
+  "development_outcome": "Synthesizable candidate delivered unchanged after static review. Required Icarus compilation failed with exit code 139 and no diagnostics.",
+  "limitations": [
+    "No successful development compile or simulation.",
+    "No reset specified; initial output depends on unknown prior sample until the second sampled clock edge.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing, or board validation performed."
+  ]
+}

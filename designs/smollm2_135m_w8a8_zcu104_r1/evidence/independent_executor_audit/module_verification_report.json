@@ -1,0 +1,242 @@
+{
+  "schema": "llm2rtl.independent_module_verification.v1",
+  "module_id": "int8_gemm_executor",
+  "rtl_top": "smollm2_int8_gemm_executor",
+  "status": "blocked",
+  "functional_status": "passed",
+  "functional_acceptance": "PASS_STANDALONE_EXECUTOR_FUNCTIONAL_SCOPE",
+  "full_promotion_eligible": false,
+  "scope": "Exact shared INT8 GEMM/QK/PV executor, standalone modeled native-bank ports; independent source-read-only audit and isolated recompilation/replay. No source or frozen-contract changes.",
+  "source_sha256": {
+    "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+    "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+    "rtl/fp32_bf16_epilogue.sv": "3fbf60151b57fe04f4aa1546f62735562b283a5499a0c18e6cf281e085e78611",
+    "rtl/int8_dot_core.sv": "9825be03f1f6021cab761a4ae15a238f81e02f43e15685abb65c8789e47b589e",
+    "rtl/smollm2_int8_gemm_executor.sv": "e773805dbf1860e2759057777f0f14534f821c4e1952fac310525c4cbf924335",
+    "tb/executor_tb.sv": "22400d20725133ecfe87167ff4be6b237cf66072ded1f70d497e637bb36930e0"
+  },
+  "contract_and_fixture_sha256": {
+    "modules/int8_gemm_executor.json": "5a21d45e1461bedc5dad49348c25d142a07f13a8c3e6125abbd9f5d7f0ccb19c",
+    "contracts/rtl_port_binding.json": "ea033a7269285571057582d32e193dc17c115a84911d4f1646bb4cd096b78504",
+    "tb/executor_vectors/manifest.json": "aeb623c6e4c1d2e60fa48922a5f017f4015c64587b5a31f3578b13cc17057a28"
+  },
+  "source_unchanged_before_after": true,
+  "child_source_identity": "Identical to independently accepted child packet; original child hashes unchanged",
+  "configuration": {
+    "array": "N16xK16,256products",
+    "local_response_latency": 3,
+    "per_role_credits": 4,
+    "max_logical_rows": 96,
+    "fifo_vectors": 128,
+    "FP32_BF16_lanes": 4,
+    "OOC_target_clock_ns": 5.0
+  },
+  "independent_replays": [
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/golden_prefill32_down_K1536"
+      ],
+      "exit": 0,
+      "log": "golden_prefill32_down_K1536.log"
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/direct_PV_L1024_INT32_max"
+      ],
+      "exit": 0,
+      "log": "direct_PV_L1024_INT32_max.log"
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/direct_QK_L1024_cache_end"
+      ],
+      "exit": 0,
+      "log": "direct_QK_L1024_cache_end.log"
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/direct_combined_scale_underflow_negzero"
+      ],
+      "exit": 0,
+      "log": "direct_combined_scale_underflow_negzero.log"
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/direct_QK_L1_padded16"
+      ],
+      "exit": 0,
+      "log": "direct_QK_L1_padded16.log"
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/direct_PV_L1_tail"
+      ],
+      "exit": 0,
+      "log": "direct_PV_L1_tail.log"
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/direct_M17_N17_K1536"
+      ],
+      "exit": 0,
+      "log": "direct_M17_N17_K1536.log"
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/direct_QK_M17_L33_scale_groups"
+      ],
+      "exit": 0,
+      "log": "direct_QK_M17_L33_scale_groups.log"
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/golden_warm_decode32_ATTN_SCORE_INT8",
+        "+OLD_C=1",
+        "+REPEATS=2",
+        "+RESET_PROBE=1"
+      ],
+      "exit": 0,
+      "log": "golden_warm_decode32_ATTN_SCORE_INT8.log"
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/direct_M17_N17_K1536",
+        "+FAULT=15"
+      ],
+      "exit": 0,
+      "log": "direct_M17_N17_K1536_fault15.log"
+    }
+  ],
+  "independent_stress_replays": [
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/stress_sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/direct_m_start31_N1",
+        "+FAULT=5"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/stress_sim",
+        "+CASE=/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/direct_M17_N17_K1536",
+        "+FAULT=15"
+      ],
+      "exit": 0
+    }
+  ],
+  "fixture_audit": {
+    "path": "fixture_audit.json",
+    "cases": 17,
+    "result": "PASS",
+    "checked": [
+      "wire opcode/bank IDs",
+      "fixture metadata hashes",
+      "exact initial bank capacities/hashes",
+      "captured generations",
+      "source-ready flags",
+      "GEMM C shape/profile and attention unconfigured C placeholder",
+      "entire expected allocation hash",
+      "exact selected byte write mask and0xa5 untouched bytes"
+    ]
+  },
+  "implementation_primary_evidence_reviewed": {
+    "normal_cases": 17,
+    "error_cases": 15,
+    "repeat_reset_scenarios": 3,
+    "stress_scenarios": 4,
+    "lint": "No width/latch/multidriver errors; unused-only allowances reported. No independent synthesis performed."
+  },
+  "static_requirement_review": [
+    {
+      "requirement": "Native no-ready responses and credits",
+      "result": "PASS_SCOPED",
+      "reason": "ai-ar andbi-br credits gate requests below4. Every role response incrementsprocessed counter unconditionally; normal states immediately scatter to privateA or inactiveB, errorstate discards. Phase changes only after final response processed. No queued response overwrite exists."
+    },
+    {
+      "requirement": "Held requests under error",
+      "result": "PASS_SCOPED",
+      "reason": "ahold/bhold capture stable offered address/wide; ERROR_DRAIN continues each stalled offer until accepted and all corresponding responses processed. HeldB plus operand05 independentstress replaypassed."
+    },
+    {
+      "requirement": "Internal panel pingpong and registered payload",
+      "result": "PASS_SCOPED",
+      "reason": "Panelready only after full finalB response; inactive fill requires freepanel. Last stagecapture copies B/A/tag/scale before activepanelrelease, so refill cannot corrupt held coreinput. Full K reduction and distinct96contexts preserved."
+    },
+    {
+      "requirement": "Result FIFO and four-lane epilogue",
+      "result": "PASS_SCOPED",
+      "reason": "Count includes held synchronousRAM output vector, pop onlyfourthbundle; push/pop count update associative. Payload/tag/scale registered and stable. Native selected byte strobes checked exactlyonce; numericalerrors drainaccepted arithmetic/FIFO/epi before invalidation."
+    },
+    {
+      "requirement": "Source row/head/group ordering",
+      "result": "PASS_SCOPED",
+      "reason": "Projection scale usesfloor((mstart+row)/16); localweight groupfloor(localN/16). Q/P headgroups mapstagedheadmajor back to rowmajor9head C. QKcausal/paddingexplicitzero; PVgathers token\u00d7feature panels and zero tails. M17,L1,L1024andlast lmhead ranges covered."
+    },
+    {
+      "requirement": "Implicit attention producer metadata",
+      "result": "PASS_SCOPED",
+      "reason": "BeginbeforememorypublishesacceptedCgen+1; oldCprofile/shape/positionignored. Source position/layer readiness retained. Independent OLD_C=17,pos32 plus live reset andtwoQK jobs passed; completion retains capturedoriginal generations."
+    },
+    {
+      "requirement": "Error quiescence/invalidation",
+      "result": "PASS_SCOPED",
+      "reason": "Drain checks stage,corequiet,heldreads,rolecredits,lastKpending,FIFO,epipending; invalidationack precedesstablematchedresponse. LateBF16errorindependentlyreplayed after64 acceptedwrites; partialphysicalbytesremain butdestinationinvalid."
+    },
+    {
+      "requirement": "Stalled write numericalerror concern",
+      "result": "RESOLVED_NO_LEGAL_COUNTEREXAMPLE",
+      "reason": "AllA responses processed beforecompute and finalBpanel fullyprocessed beforelastK results; nofutureBload until completeoutputdrain. Operand05 cannotcoexistheldCwrite. Orderedepilogue cannotreplaceheldgoodoutput witherror; whenerroroutputappears epi_mr=1 propagatesready soheldnextbundleacceptsatfaultedgebeforeerrorgate. Existingandindependentlatefault15+200cycleCstallpassedholdassertions."
+    }
+  ],
+  "functional_findings": [],
+  "no_P0_P1_P2_functional_findings": true,
+  "remaining_gates": [
+    {
+      "gate": "Vivado2025.2 OOC resource/timing",
+      "status": "blocked_waiting_user_designated_machine",
+      "required": "5ns setup/hold/pulse-width and actual memory/DSP inference; no200MHz/resource-fit claim"
+    },
+    {
+      "gate": "Actual native fabric/dispatcher ownership/DMA integration",
+      "status": "pending",
+      "required": "Controller derives acquisitionroles from incomingopcode, whileexecutor role outputs representcapturedactivejob. Exactly-once in-order3cycle response assumption, accepted-bytecoverage, producer/invalidate sidebands, matchedoriginalidentityrelease and concurrentalternatebankDMA need actualfabric tests."
+    }
+  ],
+  "residual_risks": [
+    "Variable shape address division/modulo, high fanout and resettablepsum resource/timing require synthesis evidence.",
+    "Logical capacities are approved maxima; directly processed response buffers and PVtranspose staging optimized away, physical packing unmeasured.",
+    "Standalone bankmemory model does not prove actualrouter/descriptorcontroller bank readiness or physicalDMA concurrency."
+  ],
+  "evidence_exclusions": [
+    "all30-layer/model accuracy",
+    "otherexecutor RTL",
+    "nativefabric integration PASS",
+    "200MHz timing/resources",
+    "routedboard artifacts",
+    "physicalhardware PASS"
+  ],
+  "skill_update_candidate": null
+}

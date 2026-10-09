@@ -1,0 +1,56 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 10
+      }
+    }
+  },
+  "semantics": {
+    "clock": "All state updates on positive edge of clk",
+    "reset": "Active-high synchronous reset; q becomes 0 on any positive edge with reset asserted, with priority over counting",
+    "transition": "At each positive edge without reset, q becomes 0 if previous q was 999, otherwise previous q plus 1",
+    "period": "1000 non-reset clock cycles, visiting 0 through 999 inclusive",
+    "between_edges": "q holds its value, including when reset changes between edges",
+    "initialization": "Power-up state is unspecified; valid count sequence is established by a sampled reset"
+  },
+  "numeric": {
+    "q": "Unsigned 10-bit integer",
+    "legal_sequence_range": [
+      0,
+      999
+    ],
+    "increment": 1,
+    "wrap": "Explicit modulo 1000, not modulo 1024",
+    "constants": "10-bit unsigned constants",
+    "rounding_saturation": "Not applicable",
+    "illegal_initial_state": "No additional recovery behavior required for states 1000 through 1023 before reset"
+  },
+  "verification": {
+    "oracle": "Independent integer count modulo 1000, updated at each rising edge after reset initializes it",
+    "checks": [
+      "Reset at clock edge sets zero",
+      "Reset held across multiple edges holds zero",
+      "Increment and exact wrap over at least three complete periods",
+      "Reset during counting and at terminal count takes priority",
+      "Reset assertion/deassertion between rising edges cannot change q",
+      "Check q after nonblocking updates and verify stable output between edges"
+    ],
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; compile and simulation each bounded by timeout",
+    "initial_state": "Do not assert any value before the first sampled reset"
+  },
+  "specification_ambiguities": [
+    "Power-up value before synchronous reset is not specified; no initialization is added."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"scancode": {"width": 16, "type": "unsigned packed bits", "range": "15:0"}},
+    "outputs": {"left": {"width": 1}, "down": {"width": 1}, "right": {"width": 1}, "up": {"width": 1}},
+    "clock": null,
+    "reset": null
+  },
+  "semantics": {
+    "kind": "pure combinational decoder",
+    "mapping": {"16'he06b": "left", "16'he072": "down", "16'he074": "right", "16'he075": "up"},
+    "output_rule": "Matching code asserts only its named output; all other outputs are zero. Every other binary scancode drives all outputs zero.",
+    "timing": "Outputs reflect current input after combinational settling, without a clock or cycle latency.",
+    "state_initialization": "No stored state, initialization, reset, or input history; last two received bytes are supplied externally as scancode."
+  },
+  "numeric": {
+    "comparison": "Exact full-width 16-bit code matching",
+    "outputs": "One-bit active-high flags",
+    "arithmetic": "None; no signed arithmetic, rounding, truncation, saturation or overflow"
+  },
+  "verification": {
+    "independent_oracle": "For every binary value from 0 through 65535, separately compare input against each of the four specified codes to form expected {left,down,right,up}.",
+    "coverage": "Exhaustive binary domain plus directed consecutive arrow-to-arrow and arrow-to-unrecognized transitions to detect retained outputs.",
+    "sampling": "Drive input then wait one simulation time unit for combinational settling.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts; self-checking fatal mismatch and final PASS marker."
+  },
+  "specification_ambiguities": ["X/Z input behavior is unspecified by the original problem; verification covers binary inputs only."]
+}

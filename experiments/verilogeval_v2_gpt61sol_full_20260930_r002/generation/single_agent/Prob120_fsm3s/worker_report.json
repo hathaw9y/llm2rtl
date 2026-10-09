@@ -1,0 +1,14 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "details": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "details": "Icarus 12 compilation and simulation passed with 4631 output checks; all eight transitions covered."}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification does not establish official evaluation correctness.", "No synthesis or board verification performed.", "Initial state before a synchronous reset is unspecified by the problem and was not constrained by the testbench."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Four-state Moore FSM; original one-bit ports preserved; synchronous active-high reset to A on positive clock edge; out is asserted only in D; no added latency.",
+  "verification": "Independent table-based oracle exhausts all 256 eight-bit input sequences from reset, checks every transition, output stability between clock edges, reset from each state, and repeated reset. Bounded timeout and fatal mismatch checks included.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "development_evidence": "dev_checks.jsonl"}
+}

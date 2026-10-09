@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "contract validation",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "passed",
+      "details": "Exact scalar ports, rising-edge sampling, nonblocking assignments, no added reset/initialization, no combinational output or internal XOR."
+    },
+    {
+      "name": "Icarus development compilation",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "options": "-g2012 -Wall -s dev_tb; timeout 20s",
+      "status_log": "dev_compile_status.log"
+    },
+    {
+      "name": "independent self-checking simulation",
+      "exit_code": null,
+      "log": "dev_simulation.log",
+      "timeout_seconds": 20,
+      "result": "not_run"
+    }
+  ],
+  "development_outcome": "tool_or_test_failure",
+  "limitations": [
+    "Official evaluation has not been run and results are unavailable.",
+    "No synthesis, timing analysis, or board validation performed.",
+    "No defined power-up value is required or supplied; binary selection behavior tested after establishing known state.",
+    "Icarus compilation exited with code 139 without diagnostics; development simulation success is not claimed."
+  ],
+  "contract_corrections": [],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  }
+}

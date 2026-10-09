@@ -1,0 +1,34 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "reset": {"direction": "input", "width": 1},
+      "j": {"direction": "input", "width": 1},
+      "k": {"direction": "input", "width": 1},
+      "out": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "machine": "Two-state Moore FSM: OFF outputs 0, ON outputs 1",
+    "clock": "State updates on rising clk edge",
+    "reset": "Active-high synchronous reset has priority and sets OFF on rising clk edge; reset changes between edges do not change state",
+    "transitions": {"OFF,j=0": "OFF", "OFF,j=1": "ON", "ON,k=0": "ON", "ON,k=1": "OFF"},
+    "irrelevant_inputs": "k is ignored in OFF; j is ignored in ON",
+    "output": "out reflects current state, with no combinational dependence on inputs",
+    "initialization": "Power-up state unspecified; no initial value imposed; tests establish state through synchronous reset"
+  },
+  "numeric": {
+    "state_width": 1,
+    "encoding": {"OFF": 0, "ON": 1},
+    "arithmetic": "Boolean state selection only; no signed arithmetic, overflow, rounding, or saturation"
+  },
+  "verification": {
+    "oracle": "Independent transition-table expected output updated at each rising edge, reset taking priority",
+    "coverage": "Exercise all four j/k combinations from both states, reset from each state for all input combinations, repeated reset and consecutive transitions",
+    "temporal": "Check output stability under input and reset changes between edges and after falling edges; sample after rising-edge NBA settles",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; matching vvp; finite shell and testbench timeouts"
+  },
+  "specification_ambiguities": ["Clock edge not explicitly stated; standard rising-edge synchronous FSM convention used.", "Power-up state before a sampled reset is unspecified."]
+}

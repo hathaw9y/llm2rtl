@@ -1,0 +1,38 @@
+{
+  "schema":"llm2rtl.infrastructure_module.v1",
+  "module_id":"stream_bank_adapters",
+  "version":1,
+  "status":"frozen_for_implementation",
+  "purpose":"bridge 64-bit DataMover payload streams to sparse-bank valid-ready memory ports without level-enable replay",
+  "public_interfaces": {
+    "common_control": ["aclk", "aresetn", "s_ctrl_start", "s_ctrl_done", "s_ctrl_abort", "s_ctrl_byte_offset[22:0]"],
+    "mm2s_control_extra": ["s_ctrl_bank[3:0] captured on start"],
+    "mm2s_axis_input": ["s_axis_tdata[63:0]", "s_axis_tkeep[7:0]", "s_axis_tvalid", "s_axis_tready", "s_axis_tlast"],
+    "mm2s_bank_output": ["bank_write_bank[3:0]", "bank_write_valid", "bank_write_ready", "bank_write_addr[31:0]", "bank_write_strb[15:0]", "bank_write_data[127:0]"],
+    "s2mm_control_extra": ["s_ctrl_byte_count[22:0]"],
+    "s2mm_bank_request_response": ["s2mm_read_valid", "s2mm_read_ready", "s2mm_read_addr[31:0]", "s2mm_rsp_valid", "s2mm_rsp_data[1023:0]"],
+    "s2mm_axis_output": ["m_axis_tdata[63:0]", "m_axis_tkeep[7:0]", "m_axis_tvalid", "m_axis_tready", "m_axis_tlast"]
+  },
+  "address_units": {"offset_and_count":"bytes", "bank_write_addr":"128-bit native words", "s2mm_read_addr":"1024-bit native words"},
+  "modules":{
+    "mm2s_stream_bank_adapter":{
+      "stream":"AXIS 64-bit input",
+      "bank":"128-bit valid-ready write output",
+      "control":["start","done","abort","byte_offset"],
+      "rules":["two accepted 64-bit beats pack into one 128-bit native write","bank write valid remains stable until ready","address increments only on bank write handshake","last and keep determine final partial write","done remains high until start deasserts"]
+    },
+    "s2mm_stream_bank_adapter":{
+      "bank":"1024-bit valid-ready read request and response-valid input with fixed latency supplied externally",
+      "stream":"AXIS 64-bit output",
+      "control":["start","done","abort","byte_offset","byte_count"],
+      "rules":["at most one bank read outstanding","read address increments only on request handshake","response is accepted only on rsp_valid","one 1024-bit word serializes to sixteen 64-bit beats","output valid payload keep last remain stable under backpressure","partial final word uses byte_count-derived keep and last","done remains high until start deasserts"]
+    }
+  },
+  "dependencies":{
+    "axis_width_converter":"ip/infrastructure/datamover_engine/rtl/axis_width_converter.sv",
+    "axis_width_down_converter":"ip/infrastructure/datamover_engine/rtl/axis_width_down_converter.sv",
+    "axis_width_up_converter":"ip/infrastructure/datamover_engine/rtl/axis_width_up_converter.sv"
+  },
+  "verification":{"part":"xczu7ev-ffvc1156-2-e","clock_ns":5.0,"vivado":"2025.2","required":["full and partial packets","bank ready stalls","response latency variation through rsp_valid","AXIS output backpressure","abort","reset","repeated transactions","no duplicate read request while outstanding"]},
+  "does_not_claim":["DDR DataMover command/status handling","bank ownership","memory implementation","board integration"]
+}

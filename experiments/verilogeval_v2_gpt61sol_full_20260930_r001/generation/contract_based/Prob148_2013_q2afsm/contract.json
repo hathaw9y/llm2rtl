@@ -1,0 +1,62 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "resetn": {
+        "direction": "input",
+        "width": 1
+      },
+      "r": {
+        "direction": "input",
+        "width": 3
+      },
+      "g": {
+        "direction": "output",
+        "width": 3
+      }
+    },
+    "bit_mapping": "r[i] requests device i; g[i] grants device i"
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "reset": "active-low synchronous; resetn=0 at a rising edge overrides requests and enters A",
+    "initialization": "No power-up state specified; defined behavior begins after a reset clock edge. No initial block.",
+    "states": {
+      "A": "g=000",
+      "B": "g=001",
+      "C": "g=010",
+      "D": "g=100"
+    },
+    "transitions": {
+      "A": "if r[0], B; else if r[1], C; else if r[2], D; else A",
+      "B": "B if r[0], otherwise A",
+      "C": "C if r[1], otherwise A",
+      "D": "D if r[2], otherwise A"
+    },
+    "timing": "Moore outputs decode current state and change following a rising edge. Request changes alone do not change grants. Releasing a grant enters A for one cycle before another grant is selected. Higher-priority requests do not preempt an active grant."
+  },
+  "numeric": {
+    "request_and_grant": "unsigned three-bit vectors; index 0 is highest priority",
+    "state_encoding": "four states encoded with two bits, freely assigned",
+    "arithmetic": "No arithmetic, rounding, saturation, or overflow applies",
+    "input_domain": "binary inputs; unknown input behavior unspecified"
+  },
+  "verification": {
+    "oracle": "Independent software-style grant model: idle chooses least-index asserted request; active grant remains until its own request drops; reset clears grant at rising edge",
+    "coverage": "Exercise all four states with every one of eight request vectors, all reset/request combinations, reset during each grant, retained grants under competing requests, release bubble, and repeated sequences",
+    "timing_checks": "Check g before and after clock edge to distinguish synchronous reset and Moore output behavior",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top, matching vvp, finite external timeouts and testbench watchdog",
+    "success": "All comparisons pass and explicit PASS printed; logs retained"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Diagram gives identical all-zero conditions for A to A and A to D, and omits D behavior.",
+      "resolution": "Use explicit prose: no requests stay in A; device 2 granted only for r=100 in A; D grants g[2] and holds while r[2], otherwise returns A, consistent with B/C."
+    }
+  ]
+}

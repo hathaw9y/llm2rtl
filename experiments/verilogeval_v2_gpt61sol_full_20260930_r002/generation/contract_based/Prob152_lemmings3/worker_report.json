@@ -1,0 +1,101 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790750547.1276898,
+      "source_sha256": "9ab8612f4ca22a61eca8df77f9d50d6152b413e5f01224d8e543b1811245ff44",
+      "testbench_sha256": "9d23d643e3b8084d444f5ca03eeffc89df25dcb7fc1dfc61e4c3ed436a5dc439",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob152_lemmings3/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.012392496690154076
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 1,
+        "stdout": "FATAL: dev_tb.sv:23: Mismatch t=2221000 activity=0 rightward=0 got=0100 expected=1000\n       Time: 2221000  Scope: dev_tb.check_outputs\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.007550443522632122
+      },
+      "status": "simulation_failed"
+    },
+    {
+      "label": "tb_reset_fix",
+      "check_index": 2,
+      "checked_at_unix": 1790750565.5403,
+      "source_sha256": "9ab8612f4ca22a61eca8df77f9d50d6152b413e5f01224d8e543b1811245ff44",
+      "testbench_sha256": "2afd9a3b617db2d3fac82c37e7d91e1f107aff58c25977f1d294556d577c8c58",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob152_lemmings3/development/02",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.012570158578455448
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: independent Lemmings oracle, 2533 checks\ndev_tb.sv:112: $finish called at 13216000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.01711330935359001
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Pre-reset state and unknown-valued inputs are unspecified and are not constrained by the oracle.",
+    "No synthesis or board work performed."
+  ],
+  "justified_RTL_changes": [],
+  "justified_TB_changes": [
+    {
+      "preserved_version": "dev_tb_before_reset_fix.sv",
+      "reason": "Reset helper left stale control inputs active across an intervening rising clock after deassertion. The DUT correctly transitioned but the oracle had not tracked that edge. Set bump inputs and dig low and ground high during reset so all intervening edges preserve walking left. All expected values and checks retained."
+    }
+  ],
+  "contract_changes": [],
+  "contract_gate": "contract_gate.json: passed_structure_only",
+  "smoke_environment": "passed: correct passes, injected fault fails, repair passes",
+  "verification_summary": "Icarus 12 helper compilation and simulation passed with 2533 checks; all 16 control combinations from six states, Moore output stability, direction retention, priorities and asynchronous reset.",
+  "initial_snapshot_unchanged": true
+}

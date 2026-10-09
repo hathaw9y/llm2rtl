@@ -1,0 +1,62 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "load": {
+        "direction": "input",
+        "width": 1
+      },
+      "data": {
+        "direction": "input",
+        "width": 10
+      },
+      "tc": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "state": "one 10-bit counter register",
+    "transition": "At every rising edge: if load is 1, counter becomes data; else if counter is nonzero, counter becomes counter minus 1; else counter stays zero.",
+    "load_priority": "Loading overrides countdown, including while counting and at zero. Consecutive load cycles reload each edge.",
+    "output": "tc is combinationally true exactly when the current counter is zero; no extra output register or clock latency.",
+    "duration": "After loading N, tc asserts after N subsequent rising edges with load=0; loading zero asserts tc immediately after that edge.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No initialization specified; state and tc are unspecified before a known load.",
+    "between_edges": "Input changes do not alter counter or tc until a rising edge."
+  },
+  "numeric": {
+    "data_type": "unsigned 10-bit integer, range 0 through 1023",
+    "counter_width": 10,
+    "arithmetic": "Exact subtraction of one only for nonzero counter; saturate at zero, no underflow wrap.",
+    "rounding": "Not applicable; integer countdown."
+  },
+  "verification": {
+    "oracle": "Independent integer remaining-cycle model observing only ports, initialized by a load; expected tc equals remaining==0.",
+    "directed": [
+      "load zero and hold zero",
+      "load one and check exact expiration edge",
+      "load maximum 1023 and full countdown",
+      "reload during active countdown",
+      "consecutive loads",
+      "reload at terminal count",
+      "change inputs between rising edges"
+    ],
+    "coverage": "Exhaustively load all 1024 data values and count each to zero, then check zero remains held; deterministic mixed load/decrement stimulus.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; finite shell timeouts for compile and simulation, plus testbench watchdog.",
+    "scope": "No official tests, reference RTL, synthesis or board access."
+  },
+  "specification_ambiguities": [
+    {
+      "text": "The module should implement a single D flip-flop.",
+      "resolution": "A literal one-bit flip-flop cannot store the specified 10-bit duration. Interpret as one clocked 10-bit counter register; prioritize the explicit timer transition and interface requirements."
+    }
+  ]
+}

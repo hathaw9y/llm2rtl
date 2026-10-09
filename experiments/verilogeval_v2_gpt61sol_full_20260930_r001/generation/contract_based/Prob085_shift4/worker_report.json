@@ -1,0 +1,42 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "PASS: passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial_preservation",
+      "outcome": "PASS",
+      "detail": "candidate_initial.sv copied immediately after implementation, before development checks; byte identical to final candidate.",
+      "identical": true
+    },
+    {
+      "name": "static_review",
+      "outcome": "PASS",
+      "detail": "Exact ports and widths; positive-edge clock; active-high asynchronous reset; reset > load > ena > hold; zero-fill right shift; nonblocking assignments; no initialization or simulation-only DUT constructs."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "outcome": "FAIL: process terminated with exit 139, consistent with segmentation fault; empty diagnostic log; no dev_sim produced.",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "outcome": "NOT RUN: compilation failed"
+    }
+  ],
+  "development_outcome": "Frozen contract validated structurally and synthesizable RTL implemented. Independent self-checking testbench created, but simulator compilation failed; no simulation success claimed.",
+  "limitations": [
+    "Official evaluation results unavailable.",
+    "Icarus development compile failed with exit 139; functional simulation unverified.",
+    "Contract gate validates structure, not correctness.",
+    "No synthesis, timing analysis or board validation performed.",
+    "Power-up contents before reset/load unspecified by original problem."
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "resetn": {
+        "direction": "input",
+        "width": 1
+      },
+      "byteena": {
+        "direction": "input",
+        "width": 2,
+        "range": "[1:0]"
+      },
+      "d": {
+        "direction": "input",
+        "width": 16,
+        "range": "[15:0]"
+      },
+      "q": {
+        "direction": "output",
+        "width": 16,
+        "range": "[15:0]"
+      }
+    }
+  },
+  "semantics": {
+    "state": "16 D flip-flops represented by q",
+    "clock": "Update only at positive edge of clk; inputs sampled at that edge",
+    "reset": "Synchronous active-low reset; resetn=0 clears all 16 bits to zero at a positive edge, overriding byteena",
+    "enabled_update": "With resetn=1, byteena[0] writes d[7:0] to q[7:0], and byteena[1] writes d[15:8] to q[15:8] independently",
+    "disabled_update": "Each disabled byte retains its preceding value",
+    "between_edges": "q holds, including when resetn changes without a positive clock edge",
+    "initialization": "No specified power-up value; no initialization added. Tests establish state using synchronous reset",
+    "latency": "Sampled input appears in q immediately following the same positive edge, after sequential update"
+  },
+  "numeric": {
+    "representation": "16 uninterpreted bits, two 8-bit bytes",
+    "arithmetic": "None; exact bit copying or retaining",
+    "reset_value": "16'h0000",
+    "rounding_overflow_saturation": "Not applicable"
+  },
+  "verification": {
+    "oracle": "Independent per-bit reference: reset clears each bit, otherwise copy d bit when byteena[bit_index/8] is high",
+    "directed": "All four byteena combinations, full-width patterns, each one-hot input bit, reset overriding every enable combination, repeated reset, hold cycles",
+    "timing": "Check q holds after input changes and falling edges; assert and deassert reset between rising edges and check synchronous behavior",
+    "random": "Deterministic pseudo-random input, byte-enable and reset sequences with per-bit scoreboard",
+    "execution": "Icarus SystemVerilog -g2012 with explicit dev_tb top, finite compile and simulation timeouts, fatal mismatch and final PASS"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Reset value not explicitly stated in prose",
+      "resolution": "Interpret reset of D flip-flops as clearing all q bits to zero."
+    }
+  ]
+}

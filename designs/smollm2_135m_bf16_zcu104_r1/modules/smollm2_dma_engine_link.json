@@ -1,0 +1,32 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "smollm2_dma_engine_link",
+  "module_kind": "infrastructure",
+  "status": "frozen",
+  "target": {"board": "ZCU104", "part": "xczu7ev-ffvc1156-2-e", "clock_mhz": 200},
+  "routed_opcodes": ["DMA_LOAD", "DMA_STORE"],
+  "interface": {
+    "dispatcher": "Separate MM2S and S2MM command ready/valid and completion valid/ready, bank-ID completion tags and error codes",
+    "vendor_datamover": "72-bit command, 64-bit data and 8-bit status AXI streams in each direction",
+    "local_bank": "smollm2_dma_bank_bridge role 1 write and role 2 read ports",
+    "bank_word_bytes": 16,
+    "bank_capacity_bytes_by_id": [36864, 36864, 36864, 589824, 36864, 36864, 12288, 8192, 393216, 393216, 589824, 36864, 98304],
+    "completion_tag": "Engine sequence tags are used only for status validation; dispatcher sees the corresponding bank ID"
+  },
+  "numeric": {"kind": "bit_exact_data_transport", "tensor_arithmetic": "none"},
+  "control_rules": {
+    "load_completion": "Requires DataMover matching success status and last local adapter write completion",
+    "store_completion": "Requires adapter read/stream completion and DataMover matching success status that represents DDR write completion",
+    "high_offset": "Any 32-bit ISA local offset with bits 31:23 set becomes aligned out-of-capacity descriptor 06 instead of truncating",
+    "bridge_fault": "Bridge load/store direction fault drives corresponding engine scheduler abort, which emits error code 50; separate bridge code and bank outputs identify the local cause. An already-offered response remains stable while READY is low",
+    "transport_fault": "Engine status fault produces error completion, holds metadata head and requires coordinated system reset",
+    "recovery": "recovery_required remains asserted until reset; board controller must reset this link, vendor DataMover IP and dispatcher together"
+  },
+  "verification": {
+    "required_cases": ["LOAD waits for local write and matching DataMover status", "STORE waits for DDR status after stream completion", "bank-ID response translation and engine sequence tag diagnostics", "high ISA offset rejected without DDR issue", "bad DataMover tag requires recovery", "bridge permission fault becomes command error", "200 MHz OOC resource and timing"],
+    "required_tools": ["self-checking XSIM with modeled DataMover streams", "Verilator lint", "Vivado out-of-context synthesis"],
+    "proof_scope": "model DMA control and stream/local-bank interface; no vendor AXI DataMover IP, DDR transaction model, board placement or Vitis execution"
+  }
+}

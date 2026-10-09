@@ -1,0 +1,53 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen contract structural validation",
+      "command": "python3 validate_contract.py",
+      "result": "PASS",
+      "logs": [
+        "contract_validation.log",
+        "contract_validation_retry.log"
+      ],
+      "note": "First shell wrapper used reserved zsh variable status and failed after validation; rerun gate passed."
+    },
+    {
+      "name": "initial RTL preservation",
+      "result": "PASS",
+      "detail": "candidate_initial.sv copied immediately after implementation, before development checks; cmp confirms identical final candidate."
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS",
+      "detail": "Exact TopModule ports; positive-edge always_ff; synchronous active-high reset dominates enable; explicit 4-bit constants; modulo-10 wrap; disabled hold; single driver; no initialization or simulation constructs."
+    },
+    {
+      "name": "development compilation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "FAILED",
+      "exit_code": 139,
+      "log": "compile.log",
+      "detail": "Exit 139; empty diagnostics; no simulator executable produced."
+    },
+    {
+      "name": "tool startup diagnostic",
+      "command": "timeout 10s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -V",
+      "exit_code": 0,
+      "log": "tool_version.log"
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT RUN",
+      "detail": "Compilation failed."
+    }
+  ],
+  "development_outcome": "Initial candidate delivered unchanged after static review. Development compilation failed; simulation success is not claimed.",
+  "limitations": [
+    "Icarus compilation failed with exit code 139 without diagnostics.",
+    "Self-checking dev_tb.sv was created but could not be executed.",
+    "Power-up and illegal-state behavior are unspecified by the original problem.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing analysis, or board work performed."
+  ]
+}

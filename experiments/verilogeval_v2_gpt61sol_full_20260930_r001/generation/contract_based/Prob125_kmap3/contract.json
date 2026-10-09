@@ -1,0 +1,88 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "c": {
+        "direction": "input",
+        "width": 1
+      },
+      "d": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "behavior": "Pure combinational Karnaugh-map function; output follows current inputs without stored state or cycle latency.",
+    "clock": "none",
+    "reset": "none",
+    "initialization": "none required; no state",
+    "map": {
+      "column_order_ab": [
+        "01",
+        "00",
+        "10",
+        "11"
+      ],
+      "row_order_cd": [
+        "00",
+        "01",
+        "11",
+        "10"
+      ],
+      "rows": [
+        [
+          "dc",
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          "dc",
+          "dc"
+        ],
+        [
+          0,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          1,
+          1,
+          1
+        ]
+      ]
+    },
+    "dont_care_policy": "Choose deterministic binary values for the three dc cells; candidate may implement a OR ((NOT b) AND c), selecting 0 for abcd=0100 and 1 for 1001 and 1101."
+  },
+  "numeric": {
+    "type": "One-bit Boolean signals",
+    "arithmetic": "Boolean only; no signed arithmetic, overflow, rounding, truncation, or saturation",
+    "input_domain": "All 16 binary combinations of a,b,c,d",
+    "unknown_inputs": "X/Z behavior unspecified by original problem"
+  },
+  "verification": {
+    "oracle": "Independent literal truth table transcribed from original map, indexed by {a,b,c,d}; do not derive expected values from RTL expression.",
+    "coverage": "Exhaustively drive all 16 binary combinations; compare 13 specified cells; require defined binary output on three dc cells without constraining their choice. Repeat in reverse order to check combinational updates.",
+    "tools": "Icarus v12 and matching vvp, -g2012, explicit dev_tb top, finite shell timeouts and simulation watchdog.",
+    "contract_gate": "Run python3 validate_contract.py successfully before candidate.sv creation; structural gate is not functional proof."
+  },
+  "specification_ambiguities": []
+}

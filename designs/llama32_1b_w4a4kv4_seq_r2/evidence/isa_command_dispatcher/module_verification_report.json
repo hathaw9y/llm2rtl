@@ -1,0 +1,223 @@
+{
+  "schema": "llm2rtl.module_verification_report.v1",
+  "status": "passed",
+  "verified_at": "2026-09-28T11:53:40+09:00",
+  "design_id": "llama32_1b_w4a4kv4_seq",
+  "revision": "r2",
+  "module_id": "isa_command_dispatcher",
+  "top": "isa_command_dispatcher",
+  "configuration": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "target_clock_ns": 5.0,
+    "target_clock_mhz": 200.0,
+    "command_bram_word_bits": 128,
+    "command_bram_depth_words": 2048,
+    "instruction_bits": 256,
+    "maximum_command_count": 1024,
+    "maximum_outstanding_commands": 1
+  },
+  "identity": {
+    "contract_sha256": "91dc7aa4d20d9378fdb2357492b7c4650d49fe9de81cde587661061b26addf1f",
+    "rtl_sha256": "c41b0e4b188f1f9dd8ab3549af8560dc55cc6bdcd56e6a471f77584c92a3d603",
+    "testbench_sha256": "0fb1ab28d66464dfcc6ef45c1e2decc199fb94bb974927eaa6702dc2ff5eda36",
+    "vivado_tcl_sha256": "13e93b56f1563d3bfd1c72e2909c900d6b687eac547006647806a57a9e4e0de4",
+    "test_vector_sha256": "be200fb398a7e2a1485d2256d2acea914b741a0a9db2f134b5476fbb0fdb14e3",
+    "claimed_source_manifest_sha256": "95df1c05474e3dce53f5193138b782c466ec11388845ca487fcc27880122ddb2",
+    "implementation_simulation_log_sha256": "42dfd435712cc5ac0c9ea2b27efa550bf7ca8c8de7fe4cd90de86b5fabb7e583",
+    "implementation_timing_report_sha256": "2236edd3d5dc96151984103d9796add8ae851b26209b8bd3fee1243458b2838d",
+    "identity_result": "Pinned contract and all independently recomputed RTL, testbench, Tcl, vector, retained simulation-log, and retained timing-report identities match the implementation reports."
+  },
+  "findings": [],
+  "finding_summary": {
+    "p0": 0,
+    "p1": 0,
+    "p2": 0,
+    "p3": 0,
+    "statement": "No P0, P1, P2, or P3 findings were identified within the frozen r2 module scope."
+  },
+  "r1_p1_resolution": {
+    "ready_valid_deadlock": {
+      "status": "resolved",
+      "rtl_evidence": "CHECK_READY enters ISSUE from command and bank eligibility alone; request valid is asserted throughout ISSUE without dependence on executor ready; bank reservation occurs only on valid-and-ready acceptance.",
+      "dynamic_evidence": "Both DMA and GEMM consumers hold ready low before valid appears, check all 256 payload bits, hold backpressure for multiple cycles, then accept. The fresh XSIM regression reaches PASS.",
+      "paths": [
+        "designs/llama32_1b_w4a4kv4_seq_r2/rtl/isa_command_dispatcher.sv:231",
+        "designs/llama32_1b_w4a4kv4_seq_r2/rtl/isa_command_dispatcher.sv:243",
+        "designs/llama32_1b_w4a4kv4_seq_r2/tb/tb_isa_command_dispatcher.sv:139",
+        "designs/llama32_1b_w4a4kv4_seq_r2/tb/tb_isa_command_dispatcher.sv:167"
+      ]
+    },
+    "gemm_destination_source_alias": {
+      "status": "resolved",
+      "rtl_evidence": "GEMM legality explicitly requires dst != src0 and dst != src1. A violated comparison reaches E_OPERAND before ISSUE. Equal src0/src1 remains legal when dst is distinct.",
+      "dynamic_evidence": "The alias command reaches error code 0x04 without issue or bank mutation; a subsequent equal-source/distinct-destination GEMM executes successfully under backpressure and applies its release flags.",
+      "paths": [
+        "designs/llama32_1b_w4a4kv4_seq_r2/rtl/isa_command_dispatcher.sv:121",
+        "designs/llama32_1b_w4a4kv4_seq_r2/rtl/isa_command_dispatcher.sv:235",
+        "designs/llama32_1b_w4a4kv4_seq_r2/tb/tb_isa_command_dispatcher.sv:332",
+        "designs/llama32_1b_w4a4kv4_seq_r2/tb/tb_isa_command_dispatcher.sv:342"
+      ]
+    }
+  },
+  "requirement_coverage": [
+    {
+      "requirement": "One-cycle synchronous BRAM fetch, lower word then upper word",
+      "status": "passed",
+      "evidence": "The BRAM model updates read data on enabled rising edges; RTL waits before capturing each word. Full 256-bit executor payload comparisons prove both word order and complete record assembly."
+    },
+    {
+      "requirement": "Never fetch the next command before current successful completion",
+      "status": "passed",
+      "evidence": "RTL returns to FETCH_LO only from a successful WAIT_COMPLETION response. The self-checking monitor fatals on fetch while outstanding, and the blocked-current test observes exactly two word fetches with no lookahead."
+    },
+    {
+      "requirement": "Valid before ready and stable payload through backpressure",
+      "status": "passed",
+      "evidence": "DMA and GEMM tasks hold ready low until valid, compare all 256 bits, retain ready low for multiple cycles while rechecking valid and payload, then handshake."
+    },
+    {
+      "requirement": "PC advances once only after matching successful completion; maximum one outstanding",
+      "status": "passed",
+      "evidence": "RTL transition audit and dynamic outstanding monitor confirm one outstanding. Error and tag-mismatch tests retain the current PC; successful non-final completion increments once."
+    },
+    {
+      "requirement": "Atomic bank reservation, rollback, and release",
+      "status": "passed",
+      "evidence": "Reservations update on request handshake. DMA_STORE failure restores READY. GEMM failure preserves both READY sources and faults the destination despite release flags. Equal-source GEMM success frees the source and readies the distinct destination."
+    },
+    {
+      "requirement": "GEMM alias legality",
+      "status": "passed",
+      "evidence": "Destination/source alias dynamically errors without issue; equal sources with a distinct destination dynamically succeed. Both destination comparison predicates are present in synthesized RTL source."
+    },
+    {
+      "requirement": "Reset in every active FSM state",
+      "status": "passed",
+      "evidence": "The testbench reaches FETCH_LO, FETCH_HI, CHECK_READY, ISSUE, and WAIT_COMPLETION individually, applies synchronous reset, and checks idle/free state plus absence of stale request/fetch activity."
+    },
+    {
+      "requirement": "Command-count limits and full BRAM extent",
+      "status": "passed",
+      "evidence": "0 and 1025 reject. A 1024-command alternating LOAD/STORE program executes to current_pc 1023; the address checker and final full-payload comparison cover the last instruction at BRAM words 2046 and 2047."
+    },
+    {
+      "requirement": "Repeated program execution",
+      "status": "passed",
+      "evidence": "Two complete releasable programs run successively without reset after all banks return FREE."
+    }
+  ],
+  "commands": [
+    {
+      "command": "python3 scripts/check_common_contracts.py",
+      "exit_status": 0,
+      "result": "passed_structure_only",
+      "log": "independent_verification/common_contracts.log"
+    },
+    {
+      "command": "python3 scripts/check_isa_design.py --design-dir designs/llama32_1b_w4a4kv4_seq_r2 --module isa_command_dispatcher --expected-module-sha256 91dc7aa4d20d9378fdb2357492b7c4650d49fe9de81cde587661061b26addf1f",
+      "exit_status": 0,
+      "result": "passed_structure_only",
+      "log": "independent_verification/pinned_design_gate.log"
+    },
+    {
+      "command": "python3 designs/llama32_1b_w4a4kv4_seq_r2/run_dispatcher_model.py",
+      "exit_status": 0,
+      "result": "4/4 control-model cases passed",
+      "log": "independent_verification/golden_model_rerun.log"
+    },
+    {
+      "command": "/usr/bin/verilator --version",
+      "exit_status": 0,
+      "result": "Verilator 4.038 2020-07-11 rev v4.036-114-g0cd4a57ad",
+      "log": "independent_verification/verilator_version.log"
+    },
+    {
+      "command": "/usr/bin/verilator --lint-only --Wall --Wno-fatal designs/llama32_1b_w4a4kv4_seq_r2/rtl/isa_command_dispatcher.sv",
+      "exit_status": 0,
+      "result": "warning-clean",
+      "log": "independent_verification/verilator_lint_rerun.log"
+    },
+    {
+      "command": "Vivado 2025.2 xvlog/xelab followed by direct execution of the exact generated xsimk snapshot",
+      "exit_status": 0,
+      "result": "PASS: isa_command_dispatcher r2 strict ready-valid verification at 47655000 ps",
+      "logs": [
+        "independent_verification/xvlog_rerun.log",
+        "independent_verification/xelab_rerun.log",
+        "independent_verification/xsimk_direct_rerun.log"
+      ]
+    },
+    {
+      "command": "Vivado 2025.2 independent in-memory OOC synthesis and constrained timing rerun",
+      "exit_status": 0,
+      "result": "passed",
+      "log": "independent_verification/vivado_ooc_rerun.log",
+      "timing": {
+        "wns_ns": 3.057,
+        "tns_ns": 0.0,
+        "setup_failing_endpoints": 0,
+        "whs_ns": 0.091,
+        "ths_ns": 0.0,
+        "hold_failing_endpoints": 0,
+        "wpws_ns": 2.225,
+        "tpws_ns": 0.0,
+        "pulse_width_failing_endpoints": 0,
+        "internal_reg_to_reg_hold_path_count": 324
+      }
+    }
+  ],
+  "timing_exception_audit": {
+    "status": "passed_for_module_only_post_synthesis_ooc",
+    "clock": "aclk",
+    "clock_source_context": "BUFGCE_HDIO_X0Y2 via HD.CLK_SRC",
+    "exceptions": [
+      "hold paths originating at non-clock external input ports",
+      "hold paths terminating at external output ports"
+    ],
+    "internal_paths_excluded": false,
+    "independent_internal_hold_path_count": 324,
+    "worst_internal_hold_path": "pc_r_reg[4]/Q to pc_r_reg[4]/D",
+    "worst_internal_hold_slack_ns": 0.091,
+    "limitations": "The OOC port exceptions do not establish external-I/O, post-place, post-route, wrapper, or board timing."
+  },
+  "required_evidence": {
+    "module_contract": true,
+    "rtl": true,
+    "self_checking_testbench": true,
+    "golden_model_and_vectors": true,
+    "kernel_report_json": true,
+    "module_ooc_synthesis_report_json": true,
+    "subagent_result_json": true,
+    "retained_verilator_version": true,
+    "raw_xsim_logs": true,
+    "raw_lint_log": true,
+    "raw_vivado_log": true,
+    "raw_timing_report": true,
+    "raw_utilization_report": true,
+    "raw_drc_and_methodology_reports": true
+  },
+  "promotion": {
+    "eligible": true,
+    "scope": "Eligible for composition as the frozen r2 module-level infrastructure dispatcher.",
+    "conditions": [
+      "Integration must retain the same ready/valid semantics and one-response-per-command rule.",
+      "Command BRAM integration must preserve the declared one-cycle synchronous read latency and 2048-word depth.",
+      "Fresh in-context timing and integration verification are required after connecting BRAM and executor modules."
+    ]
+  },
+  "remaining_risks": [
+    "Post-synthesis OOC timing is not post-place, post-route, board-wrapper, or board timing.",
+    "Command BRAM, AXI BRAM Controller, DMA executor, GEMM executor, and their response behavior remain external to this packet.",
+    "No tensor arithmetic, full-model execution, bitstream, or physical-board behavior is proven.",
+    "The 0.091 ns post-synthesis OOC internal hold margin is positive but must be rechecked in context."
+  ],
+  "forbidden_claims": [
+    "post-route 200 MHz closure",
+    "board deployability or runtime validation",
+    "DMA or GEMM executor correctness",
+    "tensor arithmetic correctness",
+    "full LLM execution"
+  ],
+  "retry_owner": null,
+  "skill_update_candidate": null
+}

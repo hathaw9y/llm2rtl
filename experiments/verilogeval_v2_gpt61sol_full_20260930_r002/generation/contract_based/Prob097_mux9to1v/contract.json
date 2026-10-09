@@ -1,0 +1,41 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 16,
+      "b": 16,
+      "c": 16,
+      "d": 16,
+      "e": 16,
+      "f": 16,
+      "g": 16,
+      "h": 16,
+      "i": 16,
+      "sel": 4
+    },
+    "outputs": {
+      "out": 16
+    }
+  },
+  "semantics": {
+    "function": "sel 0..8 selects a..i respectively; sel 9..15 produces 16'hffff",
+    "timing": "Combinational output follows current inputs; no clock or added latency. Evidence: original specifies a multiplexer and interface contains no clock.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or initialization specified; output is determined by current inputs."
+  },
+  "numeric": {
+    "data": "16-bit bit vectors, copied without arithmetic or signed interpretation",
+    "selector": "4-bit selector, valid selection range 0..8",
+    "unused_value": "All 16 output bits one for selectors 9..15"
+  },
+  "verification": {
+    "oracle": "Original problem mapping, independent indexed data array in testbench",
+    "coverage": "All 16 selector values, distinct lane patterns, zero/ones, walking bits, repeated input mutations and randomized data",
+    "sampling": "Sample after one simulation time unit of combinational settling",
+    "failure": "Case-inequality comparisons with $fatal; bounded timeout; PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    "Behavior for selector values containing X or Z is not specified; no correctness requirement is inferred for those selectors."
+  ]
+}

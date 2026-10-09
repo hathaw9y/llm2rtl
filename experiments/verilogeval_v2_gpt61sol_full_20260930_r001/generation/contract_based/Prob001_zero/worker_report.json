@@ -1,0 +1,37 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "result": "PASS_structure_only",
+      "command": "python3 validate_contract.py",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "PASS",
+      "log": "static_review.log"
+    },
+    {
+      "name": "development_compile",
+      "result": "TOOL_FAILURE",
+      "exit_code": 139,
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim.vvp candidate.sv dev_tb.sv",
+      "log": "dev_compile.log",
+      "diagnostics": "Compiler exited 139; captured log is empty."
+    },
+    {
+      "name": "development_simulation",
+      "result": "NOT_RUN",
+      "reason": "Compilation failed.",
+      "log": "dev_simulation.log"
+    }
+  ],
+  "development_outcome": "Best RTL delivered: constant-low continuous assignment matches frozen contract by static review. No simulation success claimed.",
+  "limitations": [
+    "Development compiler exited with code 139, preventing simulation.",
+    "Official evaluation has not been run or accessed.",
+    "No synthesis or board work performed."
+  ]
+}

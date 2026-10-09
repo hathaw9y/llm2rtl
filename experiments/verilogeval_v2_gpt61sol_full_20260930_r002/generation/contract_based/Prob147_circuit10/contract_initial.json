@@ -1,0 +1,37 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "a": 1,
+      "b": 1
+    },
+    "outputs": {
+      "q": 1,
+      "state": 1
+    }
+  },
+  "semantics": {
+    "state_update": "At each posedge clk, state captures a AND b sampled before coincident input changes.",
+    "q": "Combinational a XOR b XOR state",
+    "reset": "None in original interface; no reset added.",
+    "initialization": "state uninitialized X, matching 0ns,5ns,10ns. First known capture at 15ns.",
+    "evidence": "75ns state=1 after preceding a=b=1; 85ns state=0 after preceding a=b=0; q rows cover both states and all binary input pairs."
+  },
+  "numeric": {
+    "type": "Single-bit unsigned four-state logic",
+    "arithmetic": "Bitwise AND and XOR; no numeric overflow or rounding"
+  },
+  "verification": {
+    "environment": "Required smoke correct/fault/repair sequence",
+    "primary": "python3 dev_check.py --label initial",
+    "oracle": "Original waveform literal expected state/q at each 5ns timestamp through 190ns; supplementary binary truth-table checks and capture/hold tests",
+    "sampling": "Raise clock at original timestamp, let sequential sampling complete, then apply coincident changed inputs within same timestamp and check after settling.",
+    "timeout": "Bounded simulation timeout; fatal on mismatch; explicit PASS"
+  },
+  "specification_ambiguities": [
+    "Finite waveforms cannot uniquely determine arbitrary Boolean functions; choose simplest AND next-state and three-input parity consistent with every row.",
+    "Coincident input/clock rows do not specify delta ordering explicitly; state at 45ns,75ns,85ns requires capture of preceding inputs, so replay changes after sequential sampling within the same timestamp."
+  ]
+}

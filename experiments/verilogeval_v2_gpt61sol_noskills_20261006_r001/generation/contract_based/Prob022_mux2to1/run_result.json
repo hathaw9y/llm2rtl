@@ -1,0 +1,194 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob022_mux2to1",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob022_mux2to1",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob022_mux2to1/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791275217.082832,
+    "ended_at_unix": 1791275267.1466558,
+    "seconds": 50.06382441520691,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 85053,
+      "cached_input_tokens": 62208,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1519,
+      "reasoning_output_tokens": 0
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "c9247c8048bc4ca979bd33fc22695b155ba4cd6985ef03b2a6011621776daccf",
+  "contract_sha256": "83b00faa7da2ff050b51bf6ba770de9c4b5fdbadbcdac54a944ae694e970f130",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "check": "smoke_environment",
+        "status": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed as expected",
+          "repair": "passed"
+        }
+      },
+      {
+        "check": "validate_contract",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "check": "dev_check",
+        "label": "initial",
+        "status": "passed",
+        "assertion_checks": 24,
+        "evidence": "development/01/result.json"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official correctness evaluation.",
+      "Original specification does not define unknown or high-impedance selector behavior; no expected behavior was asserted for those selectors."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "Combinational one-bit mux selecting a for sel=0 and b for sel=1.",
+    "initial_snapshot": "candidate_initial.sv preserved immediately after initial RTL creation; no RTL edits followed.",
+    "verification": "Independent if/else oracle checks all eight binary combinations in both traversal directions plus eight selected/unselected X/Z data cases. Testbench has fatal mismatch checks and bounded timeout."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob022_mux2to1_test.sv": "1e40ee964c9647dadcd4c37c44954246879042cd071a4055c763866e0fbf7e03",
+      "candidate.sv": "c9247c8048bc4ca979bd33fc22695b155ba4cd6985ef03b2a6011621776daccf",
+      "Prob022_mux2to1_ref.sv": "7903c8758323f1f61f3aa91c96acdbcfe50df0e1f9af86dff8d744de865c3af0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob022_mux2to1_test.sv",
+        "Prob022_mux2to1_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.016059654764831066
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb022_mux2to1_test.sv:43: $finish called at 610 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 122 samples\n\nSimulation finished at 610 ps\nMismatches: 0 in 122 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008796483278274536
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob022_mux2to1_test.sv": "1e40ee964c9647dadcd4c37c44954246879042cd071a4055c763866e0fbf7e03",
+      "candidate.sv": "c9247c8048bc4ca979bd33fc22695b155ba4cd6985ef03b2a6011621776daccf",
+      "Prob022_mux2to1_ref.sv": "7903c8758323f1f61f3aa91c96acdbcfe50df0e1f9af86dff8d744de865c3af0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob022_mux2to1_test.sv",
+        "Prob022_mux2to1_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013551696203649044
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb022_mux2to1_test.sv:43: $finish called at 610 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 122 samples\n\nSimulation finished at 610 ps\nMismatches: 0 in 122 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0091049550101161
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "llm2rtl.feedback_packet.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "module_id": "int8_gemm_executor",
+  "module_contract": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/modules/int8_gemm_executor.json",
+    "sha256": "5a21d45e1461bedc5dad49348c25d142a07f13a8c3e6125abbd9f5d7f0ccb19c"
+  },
+  "manifest": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/gemm_module_manifest.json",
+    "sha256": "ac38583b214a2374a6cd8df71174676cfc4e51715a7c6f68c06a454eb48cb781"
+  },
+  "rtl_binding": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/rtl_port_binding.json",
+    "sha256": "ea033a7269285571057582d32e193dc17c115a84911d4f1646bb4cd096b78504"
+  },
+  "workflow": "current README/contracts/common/docs/framework_workflow.md; user explicitly prioritizes these over legacy skill CLI/graph gates",
+  "assignments": [
+    {
+      "agent": "/root/int8_core_rtl",
+      "scope": "initial INT8 core; now shared executor parent implementation using functionally verified children",
+      "writable": [
+        "rtl/smollm2_int8_gemm_executor.sv",
+        "rtl/w8a8_gemm_*",
+        "tb/executor*",
+        "scripts/run_executor*",
+        "evidence/int8_gemm_executor/"
+      ],
+      "fixtures": {
+        "path": "designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/manifest.json",
+        "sha256": "aeb623c6e4c1d2e60fa48922a5f017f4015c64587b5a31f3578b13cc17057a28"
+      },
+      "status": "RTL and standalone self-verification complete"
+    },
+    {
+      "agent": "/root/fp32_epilogue_rtl",
+      "scope": "FP32 arithmetic and four-lane BF16 epilogue",
+      "status": "functional self-verification complete; synthesis held"
+    },
+    {
+      "agent": "/root/executor_contract_audit",
+      "scope": "independent read-only architectural/function audit",
+      "status": "independent child and shared executor functional audits passed; OOC and actual fabric gates pending"
+    }
+  ],
+  "implementation_issues_resolved_in_binding": [
+    "source-vs-combined-scale zero distinction",
+    "credit reservation of all queued+outstanding reads",
+    "QK/PV output producer begin and captured completion generation",
+    "generation-bound destination invalidation acknowledgement",
+    "N mask encoded inside fixed16B result metadata"
+  ]
+}

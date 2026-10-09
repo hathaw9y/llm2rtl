@@ -1,0 +1,68 @@
+{
+  "schema": "llm2rtl.kernel_report.v1",
+  "status": "passed",
+  "module_id": "bank_subsystem",
+  "run_id": "run_001",
+  "coverage_level": "bounded_structural_bank_subsystem_integration",
+  "module_index_sha256": "e13b62631b2a041842441fb7d0812181586a8ce48fff35f9d0f99075cc46d4ef",
+  "module_contract_sha256": "6b92646818f4e7179689262811b25d4641d3e1226fbb73fdaf39be11559e7eab",
+  "rtl_sha256": "d5352d4676c81746284abbbb475bc25b11fd42a25a737eb2d924456f3185d522",
+  "testbench_sha256": "c30b986afb9cf3747be5a801a07a1bfd2e529e7d77b05c24fd1d81b40fc0cee4",
+  "structure": {
+    "ownership_table_instances": 1,
+    "sparse_router_instances": 1,
+    "bank0": "BRAM 128/128 depth2048 latency3, read disabled, DONT_TOUCH preserves write-only storage",
+    "bank1": "BRAM 128/256 depth4096 latency3",
+    "bank2": "URAM 128/128 depth65536 latency3",
+    "bank3": "BRAM 1024/1024 depth1024 latency3"
+  },
+  "simulation": {
+    "tool": "Vivado XSIM 2025.2 exact XPM-backed xsimk snapshot",
+    "status": "passed",
+    "cases": 11,
+    "pass_marker": "BANK_SUBSYSTEM_XSIM_PASS cases=11 asymmetric_word={addr1,addr0}",
+    "log_sha256": "75913f4eb1bea6e097c0e6fc4c9769fbbebd43cb8199b0b195b3a1301602fcd0",
+    "asymmetric_bank1_word_order": "read[255:128]=write_addr[2*n+1], read[127:0]=write_addr[2*n]",
+    "coverage": [
+      "reset clear", "atomic capability rejection", "bank1 asymmetric packing",
+      "bank2 URAM payload", "bank3 OUT to S2MM", "concurrent ACT and WGT latency3",
+      "bank3 same-address read-first", "wrong-owner release preserves ownership",
+      "bank0 write and ownership reuse", "router rejection suppresses memory enable",
+      "reset flushes response pipeline while memory contents persist"
+    ],
+    "behavioral_memory_substitute": false
+  },
+  "verilator": {
+    "version": "Verilator 4.038 2020-07-11 rev v4.036-114-g0cd4a57ad",
+    "status": "passed",
+    "scope": "integration/router/ownership RTL with interface-only lint stubs at frozen XPM wrapper boundary; XSIM and synthesis use real wrappers"
+  },
+  "vivado": {
+    "version": "2025.2 build 6299465",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "stage": "post_synth_ooc",
+    "clock_period_ns": 5.0,
+    "status": "passed",
+    "wns_ns": 2.158,
+    "tns_ns": 0.0,
+    "whs_ns": 0.082,
+    "ths_ns": 0.0,
+    "wpws_ns": 1.800,
+    "blackboxes": 0,
+    "drc_checks_found": 0,
+    "methodology_warning": "TIMING-18 missing I/O delays at OOC boundary; HD.CLK_SRC also unset"
+  },
+  "resources": {
+    "clb_luts": 297,
+    "clb_registers": 1576,
+    "dsp": 0,
+    "ramb36e2": 56,
+    "ramb18": 0,
+    "uram288": 32
+  },
+  "does_not_claim": [
+    "dispatcher integration", "DDR DataMover payload correctness", "GEMM arithmetic",
+    "post-place or post-route timing", "board wrapper", "bitstream", "physical-board behavior"
+  ]
+}
+

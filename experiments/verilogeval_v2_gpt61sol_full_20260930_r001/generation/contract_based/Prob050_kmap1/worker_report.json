@@ -1,0 +1,47 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial preservation",
+      "result": "PASS",
+      "detail": "candidate_initial.sv copied immediately after initial implementation, before development checks; identical to final candidate."
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS",
+      "detail": "Exact TopModule interface; one-bit combinational inclusive OR implements all eight specified truth-table entries; no state, latches, clock, reset, or dependencies."
+    },
+    {
+      "name": "development shell",
+      "result": "FAILED then recovered",
+      "log": "development_shell_error.log",
+      "detail": "Initial command used zsh read-only status variable; compile log preserved as dev_compile_initial.log."
+    },
+    {
+      "name": "development compilation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "FAILED",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "detail": "Compiler terminated without diagnostics."
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT RUN",
+      "detail": "Compilation failed; no simulation success claimed."
+    }
+  ],
+  "development_outcome": "Best RTL delivered unchanged after compiler failure. Independent self-checking development testbench created but not executed.",
+  "limitations": [
+    "No successful development compilation or simulation.",
+    "X/Z behavior unspecified by original problem.",
+    "No synthesis, timing, board validation or official evaluation performed."
+  ]
+}

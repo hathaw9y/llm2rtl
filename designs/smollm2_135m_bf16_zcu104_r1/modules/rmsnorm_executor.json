@@ -1,0 +1,52 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "rmsnorm_executor",
+  "module_kind": "opcode_executor",
+  "opcode": "RMSNORM",
+  "status": "frozen",
+  "target": {
+    "board": "ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 150
+  },
+  "interface": {
+    "rtl_module": "smollm2_rmsnorm_executor",
+    "compute_channel": 1,
+    "request": "opcode 4, input/gamma/output bank IDs, rows in payload bits [5:0], remaining payload zero",
+    "response": "held done_valid/done_ready, input-bank tag, bank_count=3, all accepted bank IDs and error",
+    "bank_roles": {
+      "input_read": 6,
+      "gamma_read": 7,
+      "destination_write": 8
+    },
+    "bank_word_bits": 128,
+    "layout": "input/output [rows,576] and gamma [576], all BF16 row-major with eight values per word",
+    "completion_order": "after final output word write handshake"
+  },
+  "architecture": {
+    "rows_per_command": "1..32",
+    "passes": "first pass computes per-row mean square; second pass reads input and gamma and writes normalized BF16 values",
+    "reduction": "one BF16 element per two cycles, signed Q16.16 square and Q32.32 sum",
+    "sqrt_and_reciprocal": "restoring integer algorithms, one bit per cycle; reciprocal is Q32 with 48-bit dividend",
+    "output": "BF16 significand/exponent multiply with round-to-nearest-even before gamma multiplication and after gamma multiplication"
+  },
+  "numeric": {
+    "epsilon": "1e-5 represented as round(1e-5*2^32)=42950",
+    "input_range": "finite BF16 magnitudes below 32768 subject to a checked 64-bit sum-of-squares bound; larger or nonfinite inputs return error; values below the Q16.16 reduction and BF16 normal ranges may underflow",
+    "reference": "x.float().pow(2).mean(-1) then rsqrt, BF16 cast of normalized x, BF16 gamma multiplication",
+    "observed_error": "maximum 2 BF16 ULP on deterministic and exact-checkpoint first-layer prefill/decode vectors; numerical sweep of all 120 RMSNorm calls (1,140,480 elements) had no value above 2 ULP; RTL also passed the 20,352 maximum-input case"
+  },
+  "verification": {
+    "proof_scope": "standalone BF16 golden, 150 MHz OOC and DDR DMA_LOAD→RMSNORM→GEMM XSIM passed; board route and physical execution pending",
+    "required_cases": [
+      "decode one row",
+      "prefill 32 rows",
+      "per-command bank release response",
+      "gamma bank reload before GEMM",
+      "150 MHz placed/routed board timing",
+      "physical board output comparison"
+    ]
+  }
+}

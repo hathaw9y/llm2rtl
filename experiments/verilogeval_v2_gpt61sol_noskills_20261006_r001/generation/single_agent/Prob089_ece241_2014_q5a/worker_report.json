@@ -1,0 +1,37 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob089_ece241_2014_q5a/development/01"
+    },
+    {
+      "label": "initial_tb_timing_fix",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob089_ece241_2014_q5a/development/02"
+    }
+  ],
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation is unavailable.",
+    "Finite tests cover all words of lengths 1 through 8 and one 1024-bit stream, not every arbitrary-length stream."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_original": "dev_tb_before_timing_fix.sv",
+      "reason": "The reset task left x=1 across a positive clock edge after reset release before the first scheduled bit, inadvertently advancing the conversion. Set x=0 before release so the intervening edge consumes a neutral leading zero. Arithmetic expected values and all checks remain unchanged."
+    }
+  ],
+  "verification_coverage": [
+    "Asynchronous assertion between clock edges",
+    "Reset held across a clock edge",
+    "Moore output stable when input changes between edges",
+    "Exhaustive 1-to-8-bit two\u2019s complement arithmetic",
+    "1024-bit serial addition oracle",
+    "Reset interrupt and restart"
+  ],
+  "initial_snapshot_unchanged": true
+}

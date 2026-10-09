@@ -1,0 +1,74 @@
+{
+  "schema": "llm2rtl.controller_template_validation.v1",
+  "module_id": "cmd_dispatcher_template",
+  "revision": "native_v3",
+  "contract_sha256": "028c96d11efe01cb5fd2f23b480ae9764af8f492f9588a2d5fd5a317cafa0dd4",
+  "template_index_sha256": "876f571ab44bccab52eecbc5c7b1e95203c12b82e3d9c960911348f5f431189f",
+  "rtl_sha256": "f1082b1bb413c53bec9f6295de395db72fb00d2917e86415bb293e7feba0cd08",
+  "sources_verified_current": true,
+  "tool": "Vivado2025.2",
+  "part": "xczu7ev-ffvc1156-2-e",
+  "clock_ns": 5.0,
+  "simulations": {
+    "base": {
+      "path": "native_controller_final001",
+      "cmd_latency1_cases": 17,
+      "cmd_latency2_cases": 17,
+      "capability_mask_negative": "passed",
+      "xpm_dma_roundtrip": "passed",
+      "manifest_sha256": "540421cf5e1b3f540243d624b2b1254800befb5f784e026cf290a2c951bd64a2"
+    },
+    "generated_compute": {
+      "path": "native_extension_final001",
+      "cases": 6,
+      "xpm_payload": "URAM source -> generic compute probe -> BRAM destination",
+      "manifest_sha256": "5bf6aecf97f492180559632babe56b12d4cfb4ef23b73b329394e689032b0a33"
+    }
+  },
+  "lint": {
+    "path": "native_lint_final",
+    "status": "passed strictWall; intentionalUnused waived"
+  },
+  "structural_checks": {
+    "template_gate": "passed",
+    "checker_regressions": 6,
+    "common_contracts": "unchanged/pass"
+  },
+  "independent_review": {
+    "path": "../native_v3_review.md",
+    "sha256": "4dcc5692580baf43997590364edc8d43fb2e236863b7bc96d2167a63442da7ac",
+    "result": "no blockers in scoped implementation"
+  },
+  "ooc": {
+    "path": "native_ooc_final001",
+    "top": "cmd_dispatcher_template",
+    "status": "synthpassed exit0 exactmarker",
+    "lut": 579,
+    "ff": 212,
+    "dsp": 0,
+    "bram": 0,
+    "uram": 0,
+    "wns_ns": 1.636,
+    "tns_ns": 0,
+    "whs_ns": 0.079,
+    "ths_ns": 0,
+    "wpws_ns": 2.225,
+    "tpws_ns": 0,
+    "failing_endpoints": 0,
+    "drc_report_issues": 0,
+    "methodology_report_issues": 0,
+    "clock_context": "HD.CLK_SRC=BUFGCE_HDIO_X0Y2",
+    "external_constraints": "setup max input/outputdelay0.5ns; min0ns; external input/outputhold exception, internalhold timed",
+    "scope": "controller-only unplaced synthesis/timing estimates; nativechildren read but outside synthesizedtop",
+    "route_or_board_verified": false,
+    "warnings": "constantDMAownerbits; OOC DRC partialscope. No complete externalhold/route/board timing claim.",
+    "source_manifest_sha256": "601705dd33e3b5b44e1ad7762dddeda3c283e4cba4c1741cfe7a2dccdd924b73"
+  },
+  "limitations": [
+    "DMA bankonlytags require exactly-once statuses acrossreuse; identicalpostreuse stale is indistinguishable",
+    "Defaultcontroller/MM2S/S2MM typedcommandpacking retained, supplied config/modelengine implementations absent",
+    "Customcompute fixture provesports/payload/control, not modelmathematics",
+    "Nativev3 doesnot migrate existingexclusive model fabric/dispatcher",
+    "No routedtiming or BIT/HWH/XSA/physicalboard evidence"
+  ]
+}

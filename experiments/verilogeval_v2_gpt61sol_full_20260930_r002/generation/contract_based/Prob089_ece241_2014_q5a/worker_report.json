@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob089_ece241_2014_q5a/development/01"
+    },
+    {
+      "label": "tb_correction_1",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob089_ece241_2014_q5a/development/02"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_validation": "passed_structure_only; contract unchanged",
+  "coverage": "27319 output comparisons; exhaustive words of lengths 1-8; 64-bit boundaries and 64 pseudorandom words; 257-bit sequence; asynchronous reset, held reset, mid-conversion reset, and Moore stability between clock edges",
+  "rtl_changes": [],
+  "tb_changes": [
+    {
+      "preserved_original": "dev_tb_initial.sv",
+      "reason": "Initial restart released reset after a falling edge and send_bit waited for the next falling edge, allowing an unintended rising edge to sample x before the first intended bit. Failure at 36 ns followed this unintended sample.",
+      "correction": "Release reset shortly after the held-reset positive edge, so send_bit drives the first intended bit at the following negative edge before the next sampling edge. All arithmetic expected values and stability checks remain unchanged."
+    }
+  ],
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Reset output is inferred as zero in the pre-first-one Moore state; original text does not separately specify reset z.",
+    "Original specification does not define power-up behavior before reset; testbench does not impose it.",
+    "No synthesis or board work performed."
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "ena": 1
+    },
+    "outputs": {
+      "pm": 1,
+      "hh": 8,
+      "mm": 8,
+      "ss": 8
+    }
+  },
+  "semantics": {
+    "clock": "All state updates on rising clk only",
+    "reset": "Active-high synchronous; priority over ena; sets pm=0, hh=0x12, mm=0x00, ss=0x00",
+    "enable": "Each rising edge with reset=0 and ena=1 advances one second; ena=0 holds all outputs",
+    "rollover": "59 seconds carries to minutes; 59 minutes carries to hours; hours advance 01 through 12 then 01; pm toggles only when hour advances 11 to 12",
+    "initialization": "No specified power-up values before first synchronous reset; no implicit initialization",
+    "output_timing": "Registered outputs update on the accepting rising edge, with no additional latency"
+  },
+  "numeric": {
+    "encoding": "Unsigned packed BCD: tens in bits [7:4], units in bits [3:0]",
+    "ranges": {
+      "hh": "01..12",
+      "mm": "00..59",
+      "ss": "00..59",
+      "pm": "0=AM, 1=PM"
+    },
+    "arithmetic": "Decimal increment with explicit decimal carry and clock wrap; no saturation or binary interpretation of BCD",
+    "invalid_state": "Behavior of invalid or uninitialized state is unspecified; legal state is established by reset"
+  },
+  "verification": {
+    "oracle": "Independent integer seconds-of-day reference modulo 86400, initialized to midnight; derive 12-hour display and BCD outputs",
+    "checks": [
+      "Synchronous reset does not change outputs between clock edges",
+      "Reset priority with ena both low and high",
+      "Hold on disabled cycles",
+      "Compare every second across two full days including noon, midnight, hour, minute, and decimal digit carries",
+      "Bursty enables and reset during running operation"
+    ],
+    "tools": "Icarus v12, -g2012, explicit dev_tb top, finite shell and simulation timeouts"
+  },
+  "specification_ambiguities": [
+    "Power-up state before reset and invalid BCD state behavior are not specified; no additional behavior is required."
+  ]
+}

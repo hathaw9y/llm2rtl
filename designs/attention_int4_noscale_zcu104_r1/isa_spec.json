@@ -1,0 +1,46 @@
+{
+  "schema": "llm2rtl.standalone_operator_isa.v1",
+  "design_id": "attention_int4_bf16_scale",
+  "revision": "quantizer_isa_r1",
+  "status": "frozen_for_quantizer_integration",
+  "scope": "Standalone QUANTIZE opcode and DMA transport. Full Attention opcode decomposition is pending separate arithmetic modules.",
+  "instruction_bits": 128,
+  "command_source": "PS-preloaded command BRAM, existing native controller fetch path",
+  "fields": {
+    "opcode": {"lsb": 124, "width": 4},
+    "operand0_bank": {"lsb": 122, "width": 2},
+    "operand1_bank": {"lsb": 120, "width": 2},
+    "operand2_bank": {"lsb": 118, "width": 2},
+    "local_offset_dma_only": {"lsb": 86, "width": 32},
+    "count": {"lsb": 63, "width": 23},
+    "axi_address_dma_only": {"lsb": 31, "width": 32},
+    "reserved_zero": {"lsb": 0, "width": 31}
+  },
+  "opcodes": {
+    "END": {"encoding": 0, "effect": "Drain tracked commands and owners, then DONE."},
+    "MM2S": {"encoding": 1, "operand0": "destination bank", "count": "bytes", "axi_address": "DDR source", "effect": "Transfer to local bank; status follows accepted writes."},
+    "S2MM": {"encoding": 2, "operand0": "source bank", "count": "bytes", "axi_address": "DDR destination", "effect": "Transfer from local bank; status follows received read responses and output acceptance."},
+    "QUANTIZE": {
+      "encoding": 3,
+      "operand0": "FP32 source logical bank ID",
+      "operand1": "INT4 output logical bank ID",
+      "operand2": "BF16 scale output logical bank ID",
+      "count": "element_count, 1 through 256",
+      "raw_address_fields": "zero and not passed to the compute executor",
+      "address_generation": "Executor starts at word0 and traverses logical row internally.",
+      "legality": "three distinct valid bank IDs",
+      "granularity": "one Activation token row, KV token/head row or Weight group of up to32",
+      "completion": "All source read responses processed, all INT4 packed output writes and BF16 scale write accepted before matching completion; role-specific release accepted before tracking retirement."
+    }
+  },
+  "example_program": [
+    "MM2S(source DDR, FP32 bank0, padded source bytes)",
+    "QUANTIZE(src bank0, data bank1, scale bank2, elements33)",
+    "S2MM(data bank1, output DDR, 32 padded bytes)",
+    "S2MM(scale bank2, scale DDR, 16 padded bytes)",
+    "END"
+  ],
+  "encoder": "reference/isa_encoder.py",
+  "implementation_packet": "modules/attention_quantizer_isa.json",
+  "validation_boundary": "BFM DMA peers plus real native XPM bank memory; vendor DataMover and physical board are separate."
+}

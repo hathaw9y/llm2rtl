@@ -1,0 +1,68 @@
+{
+  "module_id": "smollm2_dma_bank_bridge",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "proof_scope": "Common 64-bit DataMover stream adapters connected through legal model roles to real 128-bit XPM local banks; no vendor DDR/DataMover status or board",
+  "source_sha256": {
+    "ip/infrastructure/datamover_engine/rtl/pipeline.sv": "a898c37725e714a6b5ea7ebdc63d6b04db5263b6f591d9e7b15c13f1c6621ddd",
+    "ip/infrastructure/datamover_engine/rtl/fifo.sv": "08429e4fc6fc43d23248fbd2a3d85bab12e7a51bee033fbb4c7a95148cdc305f",
+    "ip/infrastructure/datamover_engine/rtl/axis_width_up_converter.sv": "fa71fed6c724ec92fea95bcc035f85a79c1a1107728c8ee1f0c172db273f81b2",
+    "ip/infrastructure/datamover_engine/rtl/axis_width_down_converter.sv": "d7e6da6402eb17db83d4a01b332327d87fd67d9303ec23bfd46b82407e3b036d",
+    "ip/infrastructure/datamover_engine/rtl/axis_width_converter.sv": "403dbd62f09c0ac98143576575aa1090e9884dafa5b5bf5ff305ba17f100c050",
+    "ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv": "0606d2b72a34765c067cbbc9ca9962e98002c24c5bb7999d482be96837b16f00",
+    "ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv": "59bc18e6c8a61f163423a22664a970e28ee853e6d4cf013657a4feda171368fa",
+    "ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv": "28de9cc7ad4cb40c822dd3fe17b0a6f8eb8c69fbf5570e7de66a6729611a04ff",
+    "ip/infrastructure/datamover_engine/rtl/bram_bank.sv": "7199594e43e1c9c951067882d31d0baaa1b1e626ab5d5cb14013af9a9de36221",
+    "ip/infrastructure/datamover_engine/rtl/uram_bank.sv": "11520a8bb955d10c89ca6f699d42bcfccd5458e6abee1be67a044dbfdaa92bd1",
+    "designs/smollm2_135m_bf16_zcu104_r1/modules/smollm2_dma_bank_bridge.json": "4f59e23125b0f20e07944a8c2f21527b234a9fdeb4dbb4d6a9236372fb7ba529",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_bank_port_router.sv": "5c701b91668aadad96e638f4fc7d820a5e02db392cd6f657307599bd5a3736f8",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_bank_memories.sv": "67ee289771f4dc7014f37a184b2c747b798aa2528332563dce7e0a03ee612cf4",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_bank_subsystem.sv": "e59a36df518f1ebbfd945131b1b9a25aa7b2531049c38b016164d045c4c5c57b",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_dma_bank_bridge.sv": "71402fb0bbcccf12b4653a806c91cc637a45ad2f103e4db75f3cbb332364ccdd",
+    "designs/smollm2_135m_bf16_zcu104_r1/tb/tb_smollm2_dma_bank_bridge.sv": "f463c64909606550b749cfd2cb8c78b6d23846ea6bbb5e40624f5bcfe200e0c8",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_dma_bank_bridge_xsim.sh": "9f6533f343083a2f88e823439460ed345f7580547437930bf5630e1c4f08f434",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_dma_bank_bridge_ooc.tcl": "f11b5c14c2536b800cec9a794ea9d1890d189fe50917b4af5e04c50d4d031d67",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/check_bank_role_pairs.py": "8318ee240c86e04cad4bbf62649232f24df35a15b21bae167d76ca8a846c5d75",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/bank_memories_clock.xdc": "5127d6af45d0824731a9420894371f0d7825842f4e10d80851efa06bd5a3bbde"
+  },
+  "checks": {
+    "design_structure": "passed_structure_only with expected module SHA-256",
+    "bank_pair_identity": "PASS actual prefill/decode role-bank sets match contract, router, dispatcher and bridge",
+    "verilator_lint": "PASS; existing common adapter WIDTH warnings waived",
+    "xsim_self_check": "PASS smollm2_dma_bank_bridge with XPM banks, Vivado XSIM 2025.2",
+    "common_adapter_regression": "PASS 32/64/128-bit local widths and 1/3-cycle reads, Icarus",
+    "common_engine_regression": "PASS four XSIM configurations 32/128-bit local banks and 1/3-cycle reads; separate common tests, not model-specific DDR proof",
+    "vivado_ooc_synthesis": "PASS, Vivado 2025.2, xczu7ev-ffvc1156-2-e, 5.000 ns clock",
+    "post_synth_drc": "0 checks found",
+    "board_execution": "not run"
+  },
+  "xsim_scenarios": [
+    "B0 DMA_LOAD stream to XPM then compute role 6 read",
+    "compute role 9 write B5 then DMA_STORE stream output",
+    "unowned DMA request reports bridge fault",
+    "missing STORE read response reports bridge fault"
+  ],
+  "post_synth_resources": {
+    "clb_luts": 3768,
+    "clb_registers": 717,
+    "bram_tiles": 0,
+    "uram": 0,
+    "dsps": 0
+  },
+  "post_synth_timing_ns": {
+    "clock_period": 5.0,
+    "setup_wns": 3.081,
+    "hold_whs": 0.048,
+    "pulse_width_wpws": 1.968
+  },
+  "optimization": {
+    "all_13_banks_both_directions_luts": 11381,
+    "legal_bank_adapters_only_luts": 3768
+  },
+  "limitations": [
+    "The bridge uses 5 LOAD and 3 STORE adapters; no vendor AXI DataMover IP or DDR is instantiated.",
+    "The common engine must accept a matching successful DataMover status in addition to adapter_done before dispatcher success.",
+    "The future fabric must convert bridge_fault to failed command completion and coordinate abort/reset.",
+    "OOC timing excludes placed/routed board effects."
+  ]
+}

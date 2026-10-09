@@ -1,0 +1,52 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "c": {
+        "direction": "input",
+        "width": 1
+      },
+      "d": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "combinational",
+    "function": "q = (a OR b) AND (c OR d)",
+    "truth_table_abcd_ascending": "0000011101110111",
+    "timing": "No clock or cycles; output follows current inputs after combinational settling, with no explicit delay.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization requirement; q determined by current inputs.",
+    "waveform_times": "Samples describe function, not delay requirements."
+  },
+  "numeric": {
+    "type": "Single-bit unsigned Boolean signals",
+    "operators": "bitwise OR and AND",
+    "arithmetic": "No addition, signed arithmetic, rounding, truncation, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Independent literal truth table transcribed from original waveform, indexed by {a,b,c,d}.",
+    "coverage": "Exhaustively check all 16 binary combinations in ascending and descending order, plus repeated unchanged input.",
+    "comparison": "Case inequality after 1 ns settling; mismatch is fatal.",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top; finite compile and simulation timeouts.",
+    "scope": "Development checks only; no official evaluation, synthesis, or board access."
+  },
+  "specification_ambiguities": [
+    "X/Z input behavior is not specified by the binary waveform; standard SystemVerilog bitwise four-state propagation is used without a separate acceptance requirement."
+  ]
+}

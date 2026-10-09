@@ -1,0 +1,16 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "evidence": "development/01", "comparison_count": 790, "compiler": "Icarus Verilog 12", "compile_diagnostics": "none"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not been run.", "No synthesis or board verification performed."],
+  "justified_rtl_tb_changes": [],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "interface_cycle_semantics": "Original ports preserved; asynchronous active-high reset dominates synchronous load, which dominates enabled right shift. Otherwise q holds. Updates occur on positive clock edges or reset assertion with no extra latency.",
+  "numeric_width_decisions": "Four-bit unsigned register; shift inserts zero at bit 3 and discards bit 0.",
+  "static_review": "Single always_ff driver, nonblocking assignments, explicit reset and load priority, no extra ports or initialization.",
+  "testbench_coverage": "All 16 data values across all four load/enable combinations; pre-edge and negative-edge stability; repeated shifts through zero; asynchronous reset between edges and reset priority; bounded timeout and fatal mismatch checks. No initial value assumed before reset."
+}

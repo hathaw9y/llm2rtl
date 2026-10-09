@@ -1,0 +1,31 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "reset": 1, "data": 1},
+    "outputs": {"start_shifting": 1}
+  },
+  "semantics": {
+    "evidence": "Original problem: searches for sequence 1101; output is 1 forever until reset; reset active high synchronous; sequential logic on positive clock edge.",
+    "sampling": "Consume one data bit at each positive edge with reset low.",
+    "reset": "At a positive edge with reset high, discard partial matches and clear output; reset has priority over data.",
+    "detection": "Output rises after the edge consuming the final 1 of contiguous sequence 1101, with no extra cycle.",
+    "overlap": "Retain the longest suffix that is a prefix of 1101 while searching.",
+    "sticky": "Once detected, hold output high on all subsequent edges until a synchronous reset.",
+    "initialization": "No power-up initialization is specified; verification establishes defined state using synchronous reset."
+  },
+  "numeric": {
+    "sequence": "1101 in chronological input order",
+    "ports": "All ports are single bits",
+    "states": "No match, prefix 1, prefix 11, prefix 110, found"
+  },
+  "verification": {
+    "oracle": "Independent rolling four-bit input window plus sticky flag, based on original sequence requirement",
+    "sampling": "Drive data away from positive edge; compare after nonblocking updates and between edges",
+    "cases": ["synchronous reset", "reset priority", "exact detection timing", "overlapping prefixes", "sticky output", "reset discards prefix", "exhaustive streams of length 10"],
+    "failure": "$fatal on mismatch, bounded timeout, PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    "Pre-reset power-up state is unspecified; no deterministic output is required before the first sampled reset."
+  ]
+}

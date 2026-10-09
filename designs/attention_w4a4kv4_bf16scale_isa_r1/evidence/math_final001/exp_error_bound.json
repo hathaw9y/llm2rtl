@@ -1,0 +1,18 @@
+{
+  "rom_entries": 257,
+  "decimal_crosscheck_precision": 100,
+  "rom_nearest_binary32_matches": true,
+  "range_reduction_base2_absolute_error_bound": 5.355467656897872e-06,
+  "fraction_base2_absolute_error_bound": 2.9802322387695312e-08,
+  "linear_interpolation_relative_error_bound": 9.188759883644723e-07,
+  "conservative_fp32_interpolation_rounding_relative_error_bound": 4.76837158203125e-07,
+  "combined_relative_error_bound": 5.128510464080804e-06,
+  "required_relative_error_bound": 1e-05,
+  "reasoning": [
+    "FP32 x*log2e error bounded by constant representation error at |x|<=80 plus half ULP at |z|<=116.",
+    "Fraction subtraction is exact by Sterbenz for z<=-0.5; for -0.5<z<0 its absolute rounding error <=2^-25.",
+    "Scaling fraction by 256 is exact; index subtraction is exact; exp2 linear interpolation uses segment width ln(2)/256.",
+    "Convex ROM interpolation and exact-power exponent scaling have conservatively allotted eight binary32 unit roundoffs."
+  ],
+  "tail_policy": "x<-80 returns0 with absolute mathematical error <=exp(-80)"
+}

@@ -1,0 +1,164 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob099_m2014_q6c",
+  "official_status": "compile_failure",
+  "workflow_status": "failed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob099_m2014_q6c",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob099_m2014_q6c/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790736747.1150968,
+    "ended_at_unix": 1790736879.0300317,
+    "seconds": 131.9149353504181,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 103437,
+      "cached_input_tokens": 77696,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2391,
+      "reasoning_output_tokens": 22
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "3b8696f1f1158d0edd667e832144c8741ecce84ead7a7856f587455835dee245",
+  "contract_sha256": "5bfa629b7fe0aaf66fcfda9c7f07ff9b8213888f790e78dd75fa74bd23c2eb25",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract_gate",
+        "command": "python3 validate_contract.py",
+        "outcome": "passed_structure_only",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "initial_snapshot",
+        "outcome": "candidate_initial.sv preserved immediately after initial implementation, before development checks"
+      },
+      {
+        "name": "static_review",
+        "outcome": "Exact TopModule ports and widths; combinational equations match frozen contract; no storage, latches, arithmetic, or dependencies"
+      },
+      {
+        "name": "development_compile",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "exit_code": 0,
+        "outcome": "passed without warnings",
+        "log": "compile.log"
+      },
+      {
+        "name": "development_simulation",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+        "exit_code": 0,
+        "outcome": "PASS: 24 checks covering all 12 legal transitions in both orders",
+        "log": "simulation.log"
+      }
+    ],
+    "development_outcome": "Passed independent exhaustive legal-state transition verification; final candidate equals initial implementation.",
+    "limitations": [
+      "Official evaluation was not accessed or run; results are unknown.",
+      "Malformed output names in prose resolved using exact interface Y1/Y3 for next-state bits 1/3.",
+      "No required invalid-state or unknown-input recovery; development tests cover legal one-hot states and binary inputs.",
+      "No synthesis, physical timing, or board validation performed."
+    ]
+  },
+  "final": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "candidate.sv": "3b8696f1f1158d0edd667e832144c8741ecce84ead7a7856f587455835dee245",
+      "Prob099_m2014_q6c_ref.sv": "ae1b704ee3babb1883baedc5632cfaaa2d696f27513435985abc534394e9d233",
+      "Prob099_m2014_q6c_test.sv": "f0646c83cf045e2b151dd54af1772e6b22666d2367ef1f91179309271d9c64a7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob099_m2014_q6c_test.sv",
+        "Prob099_m2014_q6c_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.13470727391541004
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "candidate.sv": "3b8696f1f1158d0edd667e832144c8741ecce84ead7a7856f587455835dee245",
+      "Prob099_m2014_q6c_ref.sv": "ae1b704ee3babb1883baedc5632cfaaa2d696f27513435985abc534394e9d233",
+      "Prob099_m2014_q6c_test.sv": "f0646c83cf045e2b151dd54af1772e6b22666d2367ef1f91179309271d9c64a7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob099_m2014_q6c_test.sv",
+        "Prob099_m2014_q6c_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.13673491403460503
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "R"
+}

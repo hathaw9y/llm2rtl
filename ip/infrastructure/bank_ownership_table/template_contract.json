@@ -1,0 +1,21 @@
+{
+  "schema": "llm2rtl.bank_ownership_template.v1",
+  "template_id": "bank_ownership_table",
+  "implementation": "ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv",
+  "implementation_sha256": "28de9cc7ad4cb40c822dd3fe17b0a6f8eb8c69fbf5570e7de66a6729611a04ff",
+  "top": "bank_ownership_table",
+  "parameters_from_binding": ["bank_count", "port_role_width"],
+  "fixed_rules": [
+    "role zero means no owner",
+    "one exclusive owner per data bank",
+    "all banks of one accepted command acquire atomically",
+    "release requires the matching owner role",
+    "command BRAM is outside the data-bank namespace"
+  ],
+  "model_specific_inputs": [
+    "bank inventory and capabilities",
+    "nonzero owner-role IDs for DMA and every executor operand port",
+    "dispatcher acquire and completion release wiring"
+  ],
+  "evidence_policy": "The existing RTL evidence applies only to its recorded source and parameters; each generated integration requires fresh verification."
+}

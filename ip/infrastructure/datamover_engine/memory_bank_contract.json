@@ -1,0 +1,75 @@
+{
+  "schema": "llm2rtl.infrastructure_memory_bank.v1",
+  "status": "frozen_for_implementation",
+  "module_ids": ["bram_bank", "uram_bank"],
+  "target": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_period_ns": 5.0,
+    "vivado": "2025.2"
+  },
+  "common_interface": {
+    "clock": "aclk",
+    "reset": "synchronous active-low aresetn resets only the read-output pipeline and never clears memory contents",
+    "port_a": "synchronous byte-write port",
+    "port_b": "synchronous read-only port",
+    "address_unit": "native words of the corresponding port, never byte addresses",
+    "external_address_width": "ADDR_WIDTH",
+    "out_of_range_policy": "suppress the physical enable in synthesized hardware and report an error in simulation",
+    "read_during_write": "read_first"
+  },
+  "bram_bank": {
+    "parameters": {
+      "WRITE_DATA_WIDTH": 128,
+      "WRITE_DEPTH": 4096,
+      "READ_DATA_WIDTH": 128,
+      "BYTE_WRITE_WIDTH": 8,
+      "READ_LATENCY": 3,
+      "ADDR_WIDTH": 32
+    },
+    "primitive": "xpm_memory_sdpram block",
+    "supports_asymmetric_widths": true,
+    "capacity_rule": "WRITE_DATA_WIDTH*WRITE_DEPTH must divide exactly by READ_DATA_WIDTH",
+    "width_ratio_rule": "one port width must be an integer multiple of the other"
+  },
+  "uram_bank": {
+    "parameters": {
+      "DATA_WIDTH": 128,
+      "DEPTH": 8192,
+      "READ_LATENCY": 3,
+      "ADDR_WIDTH": 32
+    },
+    "primitive": "xpm_memory_sdpram ultra",
+    "byte_write_width": 8,
+    "resource_rule": "each design must override DEPTH from bank_layout and verify aggregate URAM use"
+  },
+  "latency_policy": {
+    "default_read_latency": 3,
+    "rule": "BRAM and URAM expose the same cycle contract; a design may override it only as one shared bank-pool parameter and must reverify all consumers"
+  },
+  "replacement_scope": {
+    "existing_modules": [
+      "ip/infrastructure/datamover_engine/rtl/bram_bank.sv",
+      "ip/infrastructure/datamover_engine/rtl/uram_bank.sv"
+    ],
+    "integration_fixture": "ip/infrastructure/datamover_engine/tb/integration_bank.sv must instantiate bram_bank instead of a behavioral memory array for the default XSIM path",
+    "module_names_preserved": true
+  },
+  "required_verification": [
+    "parameter legality and invalid-address suppression",
+    "byte write enable isolation",
+    "first and last legal address",
+    "read latency and disabled hold",
+    "read-first collision behavior",
+    "BRAM symmetric and asymmetric port widths",
+    "URAM default mapping to URAM288",
+    "BRAM default mapping to RAMB primitives and zero URAM",
+    "updated DataMover integration XSIM regression",
+    "Vivado 2025.2 OOC synthesis for both default modules at 5 ns"
+  ],
+  "evidence_namespace": "ip/infrastructure/datamover_engine/evidence/memory_bank/run_001",
+  "does_not_claim": [
+    "full DataMover vendor-IP integration",
+    "post-route or board timing",
+    "bitstream or physical-board behavior"
+  ]
+}

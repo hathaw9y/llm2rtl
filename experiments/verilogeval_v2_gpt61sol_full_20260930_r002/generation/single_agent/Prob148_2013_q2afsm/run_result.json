@@ -1,0 +1,181 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob148_2013_q2afsm",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 2,
+  "development_failed_check_count": 1,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 1,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob148_2013_q2afsm",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob148_2013_q2afsm/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790750901.9748616,
+    "ended_at_unix": 1790751042.6936343,
+    "seconds": 140.71877336502075,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 147159,
+      "cached_input_tokens": 132480,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2439,
+      "reasoning_output_tokens": 174
+    },
+    "cli_errors": []
+  },
+  "revision_count": 1,
+  "final_source_sha256": "3639cc20696ec1ee4434d79385a9d4fd665ee25f7be921cd76a4fab325a499c6",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 1,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "outcome": "passed",
+        "cases": [
+          "correct fixture passed",
+          "injected fault failed",
+          "repaired fixture passed"
+        ]
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "outcome": "compile_failed",
+        "evidence": "development/01/result.json",
+        "detail": "Icarus 12 compiler return code 139; supplemental Icarus 11 compilation succeeded with always_* sensitivity warnings."
+      },
+      {
+        "command": "python3 dev_check.py --label revision_1",
+        "outcome": "passed",
+        "evidence": "development/02/result.json",
+        "cycle_checks": 1473
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "Original diagram duplicates the no-request condition for A-to-D and omits D transitions. Implemented the prose: device 2 receives a grant when it is the only requester and retains it while r[2] is asserted.",
+      "No synthesis or board verification performed."
+    ],
+    "justified_rtl_changes": [
+      {
+        "revision": 1,
+        "reason": "Compatibility correction after Icarus 12 compilation crash and inspection of supplemental diagnostics.",
+        "change": "Replaced enum state type with explicit two-bit localparam codes and always_comb with always @*. FSM transitions, synchronous reset, interface and output timing are preserved."
+      }
+    ],
+    "justified_tb_changes": [],
+    "interface_cycle_semantics": "TopModule(clk, resetn, r[2:0], g[2:0]); active-low synchronous reset to idle, positive-edge transitions, Moore grants, release enters idle before arbitration on a later edge.",
+    "static_review": "Separate combinational state table and sequential state register, nonblocking sequential assignment, complete combinational assignments, two-bit state and three-bit grant widths, no added ports or pipeline latency.",
+    "testbench_coverage": "All 64 pairs of request patterns from idle and each grant state; pre-edge output stability; grant priority, retention, release, repeated synchronous resets; bounded timeout."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob148_2013_q2afsm_test.sv": "df10a7f9f94e93223d460bc15ed6293990c35a7b91f11614676d0ee7fa5659e7",
+      "candidate.sv": "3639cc20696ec1ee4434d79385a9d4fd665ee25f7be921cd76a4fab325a499c6",
+      "Prob148_2013_q2afsm_ref.sv": "8d9517c9f3e10906de5849675419e92605b04ead1a1b74b0df6a7785ff5197d6"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob148_2013_q2afsm_test.sv",
+        "Prob148_2013_q2afsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.018150929361581802
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb148_2013_q2afsm_test.sv:93: $finish called at 5271 (1ps)\nHint: Output 'g' has no mismatches.\nHint: Total mismatched samples is 0 out of 1054 samples\n\nSimulation finished at 5271 ps\nMismatches: 0 in 1054 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013870637863874435
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "Prob148_2013_q2afsm_test.sv": "df10a7f9f94e93223d460bc15ed6293990c35a7b91f11614676d0ee7fa5659e7",
+      "candidate.sv": "59a20aed78989dae10bb5cf483d50b795a8b1301145c9cf5f360a167a525cc59",
+      "Prob148_2013_q2afsm_ref.sv": "8d9517c9f3e10906de5849675419e92605b04ead1a1b74b0df6a7785ff5197d6"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob148_2013_q2afsm_test.sv",
+        "Prob148_2013_q2afsm_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.14094840362668037
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

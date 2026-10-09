@@ -1,0 +1,38 @@
+{
+  "module": "int8_gemm_executor",
+  "functional_status": "PASS",
+  "overall_status": "OOC02_PENDING",
+  "source_sha256": {
+    "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+    "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+    "rtl/fp32_bf16_epilogue.sv": "3fbf60151b57fe04f4aa1546f62735562b283a5499a0c18e6cf281e085e78611",
+    "rtl/int8_dot_core.sv": "9825be03f1f6021cab761a4ae15a238f81e02f43e15685abb65c8789e47b589e",
+    "rtl/smollm2_int8_gemm_executor.sv": "dcfeba4288fd8f91aa3ba2ba23256229dca59e378fdcb9a8efa3ae08bece21d4",
+    "tb/executor_tb.sv": "22400d20725133ecfe87167ff4be6b237cf66072ded1f70d497e637bb36930e0",
+    "tb/executor_stress_tb.sv": "798058801dca513ca175e9565f0cecb94ccc3e08c9697275914cd7515086d805"
+  },
+  "source_unchanged_before_after": true,
+  "fresh_scenarios": 15,
+  "replay_results": [
+    "audit/gemm/candidate02/replay_results.json",
+    "audit/gemm/candidate02/audit_lmhead_lastN.json"
+  ],
+  "static_review": [
+    "Issue token/head counters advance only stagecapture; both wrap0 at complete logicalrow traversal, thus bothK16halves restart0",
+    "CHECK/SCALE_REQ/SCALE_Q_REQ resetissue counters beforeeveryNpanel/KV; RESET clearspendingstage and counters",
+    "Independent native request/response counters unaffected by stageoutputstalls",
+    "Bounded addresses preserve legalNtotal/Nstart<=49152,Npanel<=192,attentionpaddedK<=1024,stagewordindex<=3071",
+    "Tag reserved59bits unchanged0 and outputmetadata stillcapturedwithregisteredA word",
+    "Normal epiltoken follows FIFOvectorpop only, frozenpanel+KV throughdrain; error/quiescence unchanged"
+  ],
+  "functional_findings": [],
+  "historical_top_PASS_inherited": false,
+  "children_baseline_identity_unchanged": true,
+  "OOC02": "Fresh retry pending; post-synth timing not yet accepted",
+  "excluded": [
+    "routed200MHz",
+    "externalnative/controlI/O timing",
+    "combinedboardresourcefit",
+    "boardruntime"
+  ]
+}

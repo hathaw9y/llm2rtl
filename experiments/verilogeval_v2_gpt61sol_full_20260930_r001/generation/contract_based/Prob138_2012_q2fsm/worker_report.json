@@ -1,0 +1,18 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {"name": "frozen_contract_gate", "command": "python3 validate_contract.py", "result": "PASS (passed_structure_only)", "log": "contract_validation.log"},
+    {"name": "initial_candidate_preservation", "command": "cmp candidate.sv candidate_initial.sv", "result": "PASS; identical, no RTL revisions"},
+    {"name": "static_review", "result": "All six transition rows match the frozen contract; separate always_comb and always_ff blocks; synchronous active-high reset priority; Moore output decode; no inferred latch or arithmetic."},
+    {"name": "development_compile", "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv", "result": "FAILED", "exit_code": 139, "log": "development_compile.log", "status_log": "development_status.log"},
+    {"name": "development_simulation", "result": "NOT RUN due to compilation failure", "log": "development_simulation.log"}
+  ],
+  "development_outcome": "Delivered statically reviewed initial RTL unchanged. Frozen contract passed the structural gate. Development compilation failed with exit code 139 and no diagnostic output; no simulation success is claimed.",
+  "limitations": [
+    "Independent self-checking dev_tb.sv is provided but was not executed successfully.",
+    "Power-up state before synchronous reset and unused state encodings are unspecified by the problem.",
+    "No official testbench, reference RTL or evaluation results were accessed.",
+    "No synthesis, timing or board validation was performed."
+  ]
+}

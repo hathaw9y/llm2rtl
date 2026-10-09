@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"a": 8, "b": 8, "c": 8, "d": 8},
+    "outputs": {"min": 8},
+    "evidence": "Original interface lists four 8-bit inputs and one 8-bit output."
+  },
+  "semantics": {
+    "function": "min is the smallest of a, b, c, d for every fully known input tuple.",
+    "timing": "Combinational; no clock, reset, state, or added latency.",
+    "initialization": "No initial value or reset behavior specified; output follows input comparisons after combinational settling.",
+    "evidence": "Original asks to find the minimum of four input values and supplies no clock or reset ports."
+  },
+  "numeric": {
+    "representation": "Unsigned 8-bit values",
+    "range": [0, 255],
+    "ties": "Equal minima produce that same numeric value.",
+    "evidence": "Original explicitly describes unsigned comparison using a < b."
+  },
+  "verification": {
+    "oracle": "Independent integer scan of the four unsigned inputs, grounded in the original minimum requirement.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling before checking with case inequality.",
+    "cases": "Equal values across full range; every input position as minimum; exhaustive input pairs with other values at 255; boundary and deterministic random tuples.",
+    "failure": "$fatal on mismatch or bounded timeout; PASS printed only after all checks."
+  },
+  "specification_ambiguities": [
+    "Behavior for inputs containing X or Z is unspecified; verification covers fully known unsigned values."
+  ]
+}

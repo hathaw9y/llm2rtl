@@ -1,0 +1,42 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "d": {
+        "direction": "input",
+        "width": 8,
+        "range": "[7:0]"
+      },
+      "q": {
+        "direction": "output",
+        "width": 8,
+        "range": "[7:0]"
+      }
+    }
+  },
+  "semantics": {
+    "storage": "Eight independent D flip-flops",
+    "capture": "On every positive edge of clk, q captures the current d vector using nonblocking sequential assignment.",
+    "hold": "q holds its captured value between positive clock edges, including negative edges and input changes.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "Initial q is unspecified; no initialization is implemented.",
+    "throughput": "One vector captured at every rising edge; no enable or handshake."
+  },
+  "numeric": {
+    "representation": "Eight uninterpreted bits with bitwise identity q[i] = sampled d[i] for i=0..7.",
+    "arithmetic": "None; no rounding, truncation, extension, saturation or overflow."
+  },
+  "verification": {
+    "oracle": "Compare q after each rising edge against d sampled for that edge; check retained q after d changes and falling edges.",
+    "coverage": "All 256 binary input vectors, followed by representative X/Z vectors to check four-state bit storage in simulation.",
+    "initial_state": "Do not assert any initial q value before the first rising edge.",
+    "execution": "Independent self-checking dev_tb top, Icarus -g2012 with explicit top and finite compile/simulation timeouts.",
+    "static_review": "Exact ports and widths, single positive-edge sequential block, nonblocking assignment, no reset, enable or initialization."
+  },
+  "specification_ambiguities": []
+}

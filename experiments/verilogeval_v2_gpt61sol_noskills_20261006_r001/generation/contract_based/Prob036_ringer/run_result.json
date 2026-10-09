@@ -1,0 +1,188 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob036_ringer",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob036_ringer",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob036_ringer/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791274001.6073327,
+    "ended_at_unix": 1791274048.3046556,
+    "seconds": 46.69732308387756,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 67361,
+      "cached_input_tokens": 60416,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1615,
+      "reasoning_output_tokens": 0
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "a40ce4a6f3fdacf35945e1c21b32653d49d10398b318ad91b73407d51b650ed1",
+  "contract_sha256": "5972d41f70d67c8ae2c8823b95fe95ec3709754e839d7bf12871f56e46cc78cf",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "check": "smoke_environment",
+        "status": "passed",
+        "details": "Correct sequential fixture passed, injected fault failed simulation, repaired fixture passed."
+      },
+      {
+        "check": "validate_contract",
+        "status": "passed_structure_only"
+      },
+      {
+        "check": "dev_check",
+        "label": "initial",
+        "status": "passed",
+        "evidence": "dev_checks.jsonl",
+        "details": "Icarus 12 compile and simulation passed; 32 explicit truth-table and ordered-transition checks."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official evaluation; no official feedback was accessed.",
+      "The original specification does not define X/Z input behavior; the testbench checks binary inputs."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "implementation": "Combinational ring gating with vibrate_mode selecting the motor or ringer. Initial RTL snapshot preserved before development checks."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a40ce4a6f3fdacf35945e1c21b32653d49d10398b318ad91b73407d51b650ed1",
+      "Prob036_ringer_test.sv": "ca5bd969f5028c2ab049e8ae324ca11835703244817c17af011a3e18318fb7e1",
+      "Prob036_ringer_ref.sv": "8bd1d42c007b2b463cf8888fd8109197ab8ce53059206ce6cf1589dfc4ad0cc5"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob036_ringer_test.sv",
+        "Prob036_ringer_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011874481104314327
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb036_ringer_test.sv:35: $finish called at 97 (1ps)\nHint: Output 'ringer' has no mismatches.\nHint: Output 'motor' has no mismatches.\nHint: Total mismatched samples is 0 out of 19 samples\n\nSimulation finished at 97 ps\nMismatches: 0 in 19 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.006790482439100742
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a40ce4a6f3fdacf35945e1c21b32653d49d10398b318ad91b73407d51b650ed1",
+      "Prob036_ringer_test.sv": "ca5bd969f5028c2ab049e8ae324ca11835703244817c17af011a3e18318fb7e1",
+      "Prob036_ringer_ref.sv": "8bd1d42c007b2b463cf8888fd8109197ab8ce53059206ce6cf1589dfc4ad0cc5"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob036_ringer_test.sv",
+        "Prob036_ringer_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010926976799964905
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb036_ringer_test.sv:35: $finish called at 97 (1ps)\nHint: Output 'ringer' has no mismatches.\nHint: Output 'motor' has no mismatches.\nHint: Total mismatched samples is 0 out of 19 samples\n\nSimulation finished at 97 ps\nMismatches: 0 in 19 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.006786121986806393
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

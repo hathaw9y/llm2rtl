@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "reset": 1, "d": 8},
+    "outputs": {"q": 8}
+  },
+  "semantics": {
+    "clock": "On each negative edge of clk, update q using inputs sampled at that edge; original: All DFFs should be triggered by the negative edge of clk.",
+    "reset": "Active high synchronous reset: when reset is high at a negative edge, q becomes 0x34 regardless of d; original explicitly specifies active high synchronous reset and reset to 0x34.",
+    "data": "When reset is low at a negative edge, all eight D flip-flops capture corresponding d bits with no extra cycle latency.",
+    "hold": "Between negative edges q retains its previous value, including positive clock edges and reset changes.",
+    "initialization": "Original specifies no power-on value; do not initialize q. Verification establishes a known value via a negative edge before numerical comparisons."
+  },
+  "numeric": {
+    "width": "d and q are eight-bit vectors [7:0]",
+    "reset_constant": "8'h34 (binary 00110100)",
+    "arithmetic": "No arithmetic, signed interpretation, or overflow behavior is needed."
+  },
+  "verification": {
+    "oracle": "Independent expected register updated solely by the original negative-edge capture and synchronous reset rules.",
+    "sampling": "Compare q after a 1 ns delay from clock transitions to allow nonblocking updates; drive inputs away from clock edges.",
+    "directed": "Check reset assertion and deassertion between edges, positive-edge hold, reset priority, consecutive reset edges, and data hold between edges.",
+    "coverage": "Capture all 256 possible eight-bit data values, plus alternating patterns and boundary values.",
+    "completion": "Use fatal mismatches and bounded timeout; emit PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "Power-on q and behavior for X/Z clock, reset, or data inputs are not explicitly specified; no initial value is added and functional checks use binary inputs after establishing state."
+  ]
+}

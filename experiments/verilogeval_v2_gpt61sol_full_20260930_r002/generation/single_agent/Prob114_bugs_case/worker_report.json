@@ -1,0 +1,37 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "correct_fixture": "passed",
+      "deliberately_wrong_fixture": "simulation_failed",
+      "repaired_fixture": "passed"
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "label": "initial",
+      "evidence_directory": "development/01",
+      "checked_cases": 552,
+      "compiler": "Icarus Verilog 12",
+      "compile_diagnostics": "none"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Combinational exact scancode decoder; original TopModule ports preserved, no clock, reset, or additional latency.",
+  "verification": "Independent scancode-list oracle checks all 256 binary inputs ascending and descending plus recognized/unrecognized transitions. Case-inequality comparisons, fatal mismatches, and bounded timeout included.",
+  "static_review": "All branches assign 4-bit out and 1-bit valid; default clears both; no inferred storage.",
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "helper_records": "dev_checks.jsonl"
+  }
+}

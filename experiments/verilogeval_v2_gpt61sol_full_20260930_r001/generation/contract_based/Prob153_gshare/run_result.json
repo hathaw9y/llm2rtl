@@ -1,0 +1,194 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob153_gshare",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob153_gshare",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob153_gshare/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790732447.4869146,
+    "ended_at_unix": 1790732640.6656284,
+    "seconds": 193.1787145137787,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 202118,
+      "cached_input_tokens": 183936,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 4619,
+      "reasoning_output_tokens": 120
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "bcb66355e391636b29c54538e84fc5ca1f395e0c1e2eef3382656652cada9762",
+  "contract_sha256": "144aaa445818e3c4f009455922f8859f42c436f5c001c41a27fa7582a0b8374d",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "frozen_contract_gate",
+        "result": "PASS_STRUCTURE_ONLY",
+        "log": "contract_validation_retry.log"
+      },
+      {
+        "name": "initial_candidate_preservation",
+        "result": "PASS_IDENTICAL_BYTES",
+        "files": [
+          "candidate.sv",
+          "candidate_initial.sv"
+        ]
+      },
+      {
+        "name": "manual_static_review",
+        "result": "No issues found by inspection",
+        "log": "static_review.log"
+      },
+      {
+        "name": "icarus_development_compile",
+        "result": "FAILED_EXIT_139",
+        "log": "dev_compile.log"
+      },
+      {
+        "name": "icarus_compile_explicit_backend_retry",
+        "result": "FAILED_EXIT_139",
+        "log": "dev_compile_retry.log"
+      },
+      {
+        "name": "development_simulation",
+        "result": "NOT_RUN_COMPILE_FAILED"
+      }
+    ],
+    "development_outcome": "Initial candidate delivered unchanged. Frozen contract passed structural validation. Independent dev_tb.sv prepared, but Icarus compiler failed with exit 139 twice; no simulation success claimed.",
+    "limitations": [
+      "Original problem omits reset state values: assumed zero global history and weakly not-taken counters (01).",
+      "History shift convention assumed newest branch in bit 0.",
+      "Outputs continuously expose prediction/history while predict_valid is low, an unspecified case.",
+      "Contract validator establishes structure only, not functional correctness.",
+      "Development simulation coverage is planned but unexecuted because compilation failed.",
+      "No synthesis, board tests or official evaluation performed."
+    ],
+    "tool_errors": [
+      "First gate shell wrapper used zsh read-only variable status; preserved in contract_command_error.log and reran gate successfully before RTL generation.",
+      "Icarus compile exited 139 with empty diagnostics on both attempts."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "bcb66355e391636b29c54538e84fc5ca1f395e0c1e2eef3382656652cada9762",
+      "Prob153_gshare_ref.sv": "12d54877b5d0a2e71bc084cbc79c8b68363d2a739b073969f7e2221da6b38a98",
+      "Prob153_gshare_test.sv": "180dacd01c7cf4666c7488d8683faa7e22ce2b130a98fb59660cc7ac3a16a8f2"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob153_gshare_test.sv",
+        "Prob153_gshare_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015539577230811119
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb153_gshare_test.sv:161: $finish called at 5416 (1ps)\nHint: Output 'predict_taken' has no mismatches.\nHint: Output 'predict_history' has no mismatches.\nHint: Total mismatched samples is 0 out of 1083 samples\n\nSimulation finished at 5416 ps\nMismatches: 0 in 1083 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.021756132133305073
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "bcb66355e391636b29c54538e84fc5ca1f395e0c1e2eef3382656652cada9762",
+      "Prob153_gshare_ref.sv": "12d54877b5d0a2e71bc084cbc79c8b68363d2a739b073969f7e2221da6b38a98",
+      "Prob153_gshare_test.sv": "180dacd01c7cf4666c7488d8683faa7e22ce2b130a98fb59660cc7ac3a16a8f2"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob153_gshare_test.sv",
+        "Prob153_gshare_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01537457574158907
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb153_gshare_test.sv:161: $finish called at 5416 (1ps)\nHint: Output 'predict_taken' has no mismatches.\nHint: Output 'predict_history' has no mismatches.\nHint: Total mismatched samples is 0 out of 1083 samples\n\nSimulation finished at 5416 ps\nMismatches: 0 in 1083 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.021853161044418812
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

@@ -1,0 +1,23 @@
+{
+  "reported_on": "2026-10-01",
+  "source": "User-supplied physical ZCU104 UART output after the 150 MHz RMSNorm+GEMM+RoPE handoff",
+  "raw_user_message": "SmolLM2-135M BF16 ZCU104 DMA_LOAD+RMSNORM+GEMM+ROPE probe checkpoint 93efa2f097d58c2a74874c7e644dbc9b0cee75a2 prefill32 Q RoPE compare=512 mismatches=0 prefill32 K RoPE compare=512 mismatches=0 decode Q RoPE compare=16 mismatches=0 decode K RoPE compare=16 mismatches=0 BOARD DMA_LOAD RMSNORM GEMM ROPE PASS",
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "bundle_sha256_at_handoff": "a5b1f4f525261453ceddce115dfd653af6548035989185c8451b2ad1d46fe973",
+  "bit_sha256_at_handoff": "81ed236c1c94c59a7ce48f1665f24cd5bd40d5b039cb1393421309f833813bea",
+  "elf_sha256_at_handoff": "b9abf20c1a80bbf8f752d243c04867a200c0555b79645d11362e7f8a5234d102",
+  "host_hash_output_received": false,
+  "checks": {
+    "prefill_q_rope_compared": 512,
+    "prefill_q_rope_mismatches": 0,
+    "prefill_k_rope_compared": 512,
+    "prefill_k_rope_mismatches": 0,
+    "decode_q_rope_compared": 16,
+    "decode_q_rope_mismatches": 0,
+    "decode_k_rope_compared": 16,
+    "decode_k_rope_mismatches": 0,
+    "board_result": "PASS"
+  },
+  "scope": "DDR DMA_LOAD of input, gamma, synthetic one-hot projection and RoPE coefficients; PL RMSNorm, GEMM Q/K and in-place RoPE; first 16 B4/B5 accepted writes per row compared for prefill32 and decode1",
+  "limitation": "The UART text does not identify the programmed BIT or ELF hash; attribution to the handed-off 150 MHz package rests on run context. The board probe observes accepted B4/B5 write ports, not later bank readback. Q/K projection uses synthetic one-hot weights. It does not verify all output features on board, later layers, or full-model inference."
+}

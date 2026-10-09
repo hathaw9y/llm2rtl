@@ -1,0 +1,51 @@
+{
+  "revision_count": 0,
+  "checks": {
+    "environment_smoke": {
+      "status": "passed",
+      "checks": [
+        {
+          "case": "correct",
+          "expected_pass": true,
+          "observed": "passed"
+        },
+        {
+          "case": "injected_fault",
+          "expected_pass": false,
+          "observed": "simulation_failed"
+        },
+        {
+          "case": "repair",
+          "expected_pass": true,
+          "observed": "passed"
+        }
+      ]
+    },
+    "contract_gate": "passed_structure_only",
+    "development": [
+      {
+        "label": "initial",
+        "status": "passed",
+        "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob149_ece241_2013_q4/development/01"
+      }
+    ]
+  },
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Non-thermometer sensor combinations are unspecified and excluded from the oracle; implementation holds the prior level.",
+    "Power-up state is unspecified; tests establish state through synchronous reset.",
+    "No synthesis or board verification performed, as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation_summary": "Rising-edge water-level state with retained direction of last distinct sampled change. Intermediate dfr asserted on rising levels per original prose; extremes force all or no flow. Original ports and active-high synchronous reset preserved.",
+  "verification_summary": "Independent integer level/direction oracle checks 787 observations, all legal level triples, unchanged-level persistence, skipped-level transitions, before-edge stability, reset priority and repeated reset. Icarus 12 compile and simulation passed without diagnostics.",
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json",
+    "development_records": "dev_checks.jsonl"
+  }
+}

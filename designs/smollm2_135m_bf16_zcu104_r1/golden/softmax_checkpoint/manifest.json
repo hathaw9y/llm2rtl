@@ -1,0 +1,31 @@
+{
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "numeric": "BF16 score; FP32 stable causal softmax; BF16 round-to-nearest-even output",
+  "layout": "[row,9,ceil(kv_len/8)] 128-bit words, eight BF16 lanes per word",
+  "cases": {
+    "prefill32": {
+      "query_start": 0,
+      "m_count": 32,
+      "kv_len": 32,
+      "padded_len": 32,
+      "word_count": 1152,
+      "source": "checkpoint first-layer Q/K RoPE"
+    },
+    "decode1": {
+      "query_start": 32,
+      "m_count": 1,
+      "kv_len": 33,
+      "padded_len": 40,
+      "word_count": 45,
+      "source": "checkpoint first-layer Q/K RoPE"
+    },
+    "context1024": {
+      "query_start": 1023,
+      "m_count": 1,
+      "kv_len": 1024,
+      "padded_len": 1024,
+      "word_count": 1152,
+      "source": "synthetic maximum-context score"
+    }
+  }
+}

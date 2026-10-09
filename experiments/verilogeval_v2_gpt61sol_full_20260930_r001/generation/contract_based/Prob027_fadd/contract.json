@@ -1,0 +1,60 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "a",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "b",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "cin",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "cout",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "sum",
+        "direction": "output",
+        "width": 1
+      }
+    ]
+  },
+  "semantics": {
+    "behavior": "Combinational full adder; outputs follow current inputs after combinational settling.",
+    "clock": "None",
+    "reset": "None",
+    "initialization": "No stored state or initialization required.",
+    "latency": "No clock cycles or registered latency; no specified physical propagation delay."
+  },
+  "numeric": {
+    "inputs": "Unsigned one-bit binary operands",
+    "equation": "2*cout + sum = a + b + cin",
+    "sum": "Least significant bit of total",
+    "cout": "Most significant bit of two-bit total",
+    "range": [
+      0,
+      3
+    ],
+    "overflow": "Exact two-bit result; no overflow, rounding, or saturation"
+  },
+  "verification": {
+    "plan": "Exhaust all eight binary input combinations using independently calculated integer addition and compare both result bits after settling. Repeat in reverse order to check input changes.",
+    "oracle": "Integer total from separate unsigned input values; compare {cout,sum} to total.",
+    "tool": "Icarus Verilog v12, -g2012, explicit dev_tb top, finite compile and simulation timeouts",
+    "pass_condition": "All 16 comparisons pass, simulation exits successfully with PASS marker."
+  },
+  "specification_ambiguities": [
+    "Behavior for X or Z inputs is unspecified; development verification covers binary inputs only."
+  ]
+}

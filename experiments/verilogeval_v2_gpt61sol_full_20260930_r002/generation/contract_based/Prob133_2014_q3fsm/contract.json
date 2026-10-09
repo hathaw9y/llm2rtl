@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "reset": 1, "s": 1, "w": 1}, "outputs": {"z": 1}},
+  "semantics": {
+    "clock": "All sequential logic uses positive edges, per original final sentence.",
+    "reset": "Active-high synchronous reset returns to A, discards partial windows, and sets z to zero.",
+    "entry": "In A, s=0 holds A; s=1 enters B. The entry edge does not sample w: original says once in B, examine next three clock cycles.",
+    "windows": "After entry edge E, sample w at E+1,E+2,E+3; z is one during the cycle after E+3 iff exactly two samples equal one. Subsequent nonoverlapping windows sample E+4,E+5,E+6 and repeat without gaps.",
+    "output": "z defaults to zero on all other cycles; result lasts one cycle. s is ignored after leaving A until reset.",
+    "initialization": "Original assumes reset state A; implement synchronous reset without simulation-only initialization. Verification establishes A with a reset edge; pre-reset hardware power-up output is unspecified."
+  },
+  "numeric": {"sample_width": 1, "count_range": "0 through 3", "count_width": 2, "control": "A plus three sampling phases; no extra result phase", "arithmetic": "Unsigned count, no overflow for a three-sample window."},
+  "verification": {"oracle": "Independent integer window sum and sample index from original prose, updated only on rising edges.", "cases": "All eight three-bit patterns and all adjacent pattern pairs; entry w excluded; s ignored while active; synchronous reset between edges and at each partial-window boundary; deterministic longer stream.", "sampling": "Drive at falling edges, verify before rising edge and after NBA settling.", "failure": "$fatal on mismatch; bounded timeout; PASS only after all comparisons.", "evaluator": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": ["Referenced diagram is not supplied; prose defines transitions and timing.", "No physical power-up initialization mechanism specified; reset edge used to establish assumed A."]
+}

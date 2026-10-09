@@ -1,0 +1,18 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "resetn": 1, "r": 3}, "outputs": {"g": 3}},
+  "semantics": {
+    "clock": "State updates only on positive clk edges, as explicitly required.",
+    "reset": "Active-low synchronous reset selects A on a positive edge regardless of r.",
+    "initialization": "No initial state specified; verification establishes state by synchronous reset and does not require a power-up value.",
+    "A": "No grant. On the next edge select B if r[0], else C if r[1], else D if r[2], else A; prose explicitly defines priority 0 then 1 then 2.",
+    "B_C_D": "Grant only the owning device. Hold while its request is high; otherwise return to A on next edge, with no immediate reassignment. B/C return edges are explicit; prose states identical grant persistence for each device.",
+    "outputs": "Moore outputs: A=000, B=001, C=010, D=100. Separate combinational state table and sequential state register blocks."
+  },
+  "numeric": {"request_bit_mapping": "r[i] and g[i] identify device i", "state_encoding": "Four states, two-bit unsigned encoding; no arithmetic", "unknown_inputs": "No specified behavior for X/Z requests or state before reset"},
+  "verification": {"oracle": "Independent integer owner model derived from original priority and persistence prose", "sampling": "Check existing grant before rising edge and new grant after NBA updates; assert reset between edges to confirm synchrony", "coverage": "All four states crossed with all eight request patterns and both reset values; directed priority, retention, release bubble, reset, and deterministic randomized cycles", "success": "Fatal mismatch checks, bounded timeout, PASS line only after all checks"},
+  "specification_ambiguities": [
+    {"issue": "A-to-D text repeats r0=0,r1=0,r2=0, conflicting with A self-loop", "resolution": "Use explicit prose that A remains idle without requests and device 2 is granted only when it alone requests; A-to-D requires 001 in r0,r1,r2 order."},
+    {"issue": "D output and outgoing arrows omitted", "resolution": "Use prose describing grants for all three devices and retention while owner's request is high; D grants g[2], holds on r[2]=1 and returns A on r[2]=0."}
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "x": 1, "y": 3}, "outputs": {"Y0": 1, "z": 1}},
+  "semantics": {"type": "combinational next-state and output logic", "evidence": "Present state is input y; requested Y0 is next state Y[0], not a registered state. No reset or state register is specified.", "clock": "clk does not affect outputs", "table": {"000": {"x0": "000", "x1": "001", "z": 0}, "001": {"x0": "001", "x1": "100", "z": 0}, "010": {"x0": "010", "x1": "001", "z": 0}, "011": {"x0": "001", "x1": "010", "z": 1}, "100": {"x0": "011", "x1": "100", "z": 1}}, "initialization": "No initialization specified; combinational outputs follow defined inputs without a clock edge."},
+  "numeric": {"state_width": 3, "next_state_bit": 0, "encoding": "literal unsigned binary table encodings"},
+  "verification": {"oracle": "Explicit expected Y0 and z pairs transcribed independently from original table", "coverage": "All five specified states at both x values and both clock levels, repeated in differing orders; input changes with clk held fixed", "sampling": "Allow combinational settling before checking, no clock edge required", "failure": "$fatal on mismatch and bounded timeout; PASS only after all checks"},
+  "specification_ambiguities": [{"issue": "States 101, 110, 111 and X/Z inputs have no specified behavior", "resolution": "Use unknown default outputs for unspecified states; do not assert expected outputs for them in the development oracle."}]
+}

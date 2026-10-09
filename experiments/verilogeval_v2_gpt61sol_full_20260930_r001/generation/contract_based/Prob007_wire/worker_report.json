@@ -1,0 +1,42 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "status": "passed_structure_only",
+      "command": [
+        "python3",
+        "validate_contract.py"
+      ],
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "compile",
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-g2012",
+        "-Wall",
+        "-s",
+        "dev_tb",
+        "-o",
+        "dev_sim.vvp",
+        "candidate.sv",
+        "dev_tb.sv"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 139,
+      "status": "failed",
+      "log": "dev_compile.log"
+    }
+  ],
+  "development_outcome": "tool_failure_compile_exit_139; RTL delivered after static review",
+  "limitations": [
+    "Official benchmark evaluation has not been run; results are unavailable.",
+    "No synthesis or board validation performed.",
+    "Icarus development compile exited with code 139 and empty stdout/stderr; simulation was not run and no simulation success is claimed."
+  ],
+  "static_review": "Single continuous assignment implements frozen one-bit wire contract without state or arithmetic.",
+  "initial_candidate": "candidate_initial.sv",
+  "final_candidate": "candidate.sv"
+}

@@ -1,0 +1,25 @@
+{
+  "status": "agreed_arithmetic_order_implementation_verification_pending",
+  "purpose": "Deterministic GEMM arithmetic for interpreter and later RTL; no HDL implementation authorization.",
+  "lane_order": "K increasing; each output column has an independent reduction.",
+  "product": "FP32 multiplication, round-to-nearest ties-to-even; no fused multiply-add.",
+  "K16_reduction": "Adjacent balanced binary tree: 16 products -> 8 -> 4 -> 2 -> 1; every addition rounds to FP32 with ties-to-even.",
+  "W4_group": "Eight K16 tree results accumulated in increasing K order into FP32 group sum initialized to +0; then multiply by stored FP32 group scale with FP32 rounding.",
+  "W4_output": "Accumulate scaled group results in increasing group order into FP32 output partial sum initialized to +0; preserve across residency tiles and normal command chunks.",
+  "BF16_attention": "Accumulate K16 tree results in increasing K order in FP32, without group scaling.",
+  "tail": "Absent K lanes contribute +0 and perform no operand read.",
+  "output_rounding": "Previously agreed: bias in FP32 before final BF16 nearest-even for QKV; completed unbiased output casts only after full reduction.",
+  "FP32_exceptions_subnormals": "Pending separate specification and implementation feasibility review.",
+  "acceptance": "Interpreter and RTL must match this arithmetic contract; original BF16 reference and W4 model quality are separate comparisons, with tolerances still pending.",
+  "alternatives": [
+    {
+      "name": "sequential K accumulation",
+      "impact": "Different rounding order; longer dependence chain unless interleaved."
+    },
+    {
+      "name": "FMA accumulation",
+      "impact": "Different rounding semantics; requires its own golden reference and implementation/resource evaluation."
+    }
+  ],
+  "user_selection": "그래"
+}

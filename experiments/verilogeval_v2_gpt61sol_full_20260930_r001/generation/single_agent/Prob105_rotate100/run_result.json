@@ -1,0 +1,172 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob105_rotate100",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob105_rotate100",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob105_rotate100/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790730910.2883828,
+    "ended_at_unix": 1790730982.1342165,
+    "seconds": 71.8458342552185,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 92070,
+      "cached_input_tokens": 81024,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1847,
+      "reasoning_output_tokens": 32
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "d91ea7259127afb3cff489b1ae9b8d23742e748cdc01cbb1bdbe4860fab7a82a",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "outcome": "passed",
+        "details": "100-bit register; rising-edge synchronous load has priority; right rotation wraps bit 0 into bit 99; left rotation wraps bit 99 into bit 0; ena 00 and 11 hold state. No reset is specified or added."
+      },
+      {
+        "name": "Icarus development compile",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "outcome": "tool failure",
+        "exit_code": 139,
+        "log": "compile.log",
+        "details": "Compiler exited with code 139 without diagnostic output; status preserved in check_status.log."
+      },
+      {
+        "name": "development simulation",
+        "outcome": "not run",
+        "details": "Compile failed. Independent dev_tb.sv includes synchronous behavior, load priority, wraparound, both hold modes, full rotation cycles and randomized checks with an internal timeout."
+      }
+    ],
+    "development_outcome": "Initial synthesizable candidate delivered unchanged; candidate_initial.sv preserved before development checks. Static review passed, but simulation success is not established.",
+    "limitations": [
+      "Icarus compile failed with exit code 139; no development simulation results are available.",
+      "Initial register contents are unspecified until a synchronous load.",
+      "No synthesis, timing analysis, board access or official evaluation was performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "d91ea7259127afb3cff489b1ae9b8d23742e748cdc01cbb1bdbe4860fab7a82a",
+      "Prob105_rotate100_ref.sv": "20e49d5acbe2ec4a90074e17e9aabd0305bd4e32922df8f712c898a3e842a1b8",
+      "Prob105_rotate100_test.sv": "f2ed015d2b50e3b6161fa660758e2e32df2e31e49079c9feda4673c27dc6b0b0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob105_rotate100_test.sv",
+        "Prob105_rotate100_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015068710781633854
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb105_rotate100_test.sv:25: $finish called at 20026 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 4005 samples\n\nSimulation finished at 20026 ps\nMismatches: 0 in 4005 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.05175086297094822
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "d91ea7259127afb3cff489b1ae9b8d23742e748cdc01cbb1bdbe4860fab7a82a",
+      "Prob105_rotate100_ref.sv": "20e49d5acbe2ec4a90074e17e9aabd0305bd4e32922df8f712c898a3e842a1b8",
+      "Prob105_rotate100_test.sv": "f2ed015d2b50e3b6161fa660758e2e32df2e31e49079c9feda4673c27dc6b0b0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob105_rotate100_test.sv",
+        "Prob105_rotate100_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014534018002450466
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb105_rotate100_test.sv:25: $finish called at 20026 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 4005 samples\n\nSimulation finished at 20026 ps\nMismatches: 0 in 4005 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.051586637273430824
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "llm2rtl.interpreter_validation.v1",
+  "status": "PASS_SCOPED_INTERPRETER_CHECKS",
+  "scope": "exact quantization/GEMM arithmetic and synchronous ISA semantics; synthetic full-width one decoder block",
+  "unit_tests": {
+    "command": "python3 -m unittest discover -s designs/smollm2_135m_w8a8_zcu104_r1/tb -q",
+    "passed": 39,
+    "failed": 0,
+    "independent_binary32_oracle": "NumPy float32, 3000 seeded random finite candidate operand pairs; directed nearest-even, subnormal, signed-zero, saturation tests"
+  },
+  "artifact_check": {
+    "status": "PASS_ARTIFACT_INTEGRITY_ONLY",
+    "commands": 3875,
+    "vectors": 912,
+    "fragments": 265,
+    "opcodes": [
+      "ADD",
+      "ATTN_SCORE_INT8",
+      "ATTN_VALUE_INT8",
+      "BANK_CONFIG",
+      "DEQUANTIZE",
+      "DMA_LOAD",
+      "DMA_STORE",
+      "END",
+      "FENCE",
+      "GEMM_INT8",
+      "QUANTIZE",
+      "RMSNORM",
+      "ROPE",
+      "SILU_MUL",
+      "SOFTMAX"
+    ],
+    "workloads": [
+      {
+        "name": "prefill32",
+        "rows": 32,
+        "position": 0,
+        "kv_len": 32,
+        "commands": 1335,
+        "logits_sha256": "962c69b8ac45f45e3b331c7727dc1bb46b2f2d82c7edfecb3de53531b0f3cf78"
+      },
+      {
+        "name": "warm_decode32",
+        "rows": 1,
+        "position": 32,
+        "kv_len": 33,
+        "commands": 1269,
+        "logits_sha256": "d29889fb18a4f8743336cb8cade5326d962657a7a0c64f9d4123a73f3dbcd637"
+      },
+      {
+        "name": "warm_decode33",
+        "rows": 1,
+        "position": 33,
+        "kv_len": 34,
+        "commands": 1269,
+        "logits_sha256": "7e5e87dd0e9b89fcf42898b7c01b095ded06d4e30f063359cb75987085f6c25a"
+      }
+    ]
+  },
+  "reproducibility": "Three generator executions retained the same three final logits SHA256 values; final execution also stores per-command input banks and output coverage masks.",
+  "test_sha256": {
+    "test_exact_numeric.py": "c79cfeef79fc8d2679e0bbd80a6add859956df94da0d3810454be89037194332",
+    "test_isa_interpreter.py": "ec276bf187f9fab73aa65773bd9a4a185b59c40ad3f9851efdd3c1c09cdfa64e",
+    "test_isa_codec.py": "317696fa1cae6d7f28c50e34d475514d614a70da7f21826454a4c9e0d663aebd",
+    "test_pingpong_reference.py": "af57538f796c0f613ab2faad977498455a02c4611067ff1cb4bb7ce52f305fe8"
+  },
+  "manifest_sha256": "fe916c48afba868a28e0ad7ee86d92dbc0d98d0a20b13c9b50676815b4a33534",
+  "canonical_model_validation": "pending_tensor_interpreter (full checkpoint validation still pending)",
+  "excluded_claims": [
+    "actual calibrated checkpoint accuracy",
+    "30-layer model validation",
+    "RTL implementation or simulation",
+    "nonlinear RTL approximation equivalence",
+    "physical resource fit, timing, bandwidth, FPGA board pass"
+  ],
+  "next_module_boundary": "Freeze the W8A8 GEMM datapath and FP32-scale/BF16 epilogue implementation packet against these golden vectors before HDL generation."
+}

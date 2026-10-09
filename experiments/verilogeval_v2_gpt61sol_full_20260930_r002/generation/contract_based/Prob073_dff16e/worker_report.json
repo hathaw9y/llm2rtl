@@ -1,0 +1,73 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790747324.691952,
+      "source_sha256": "215744e1f5c4057bdb8c521b04ae0f8bceab5bb1a22c68f59ae79a2bd0be6ccf",
+      "testbench_sha256": "5f768e5151dbb6ec5003b53f8f4c25f567977616de948b1610a00a476b90345d",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob073_dff16e/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011837531812489033
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: 305 comparisons completed\ndev_tb.sv:77: $finish called at 381000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.007350756786763668
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": {
+    "status": "passed",
+    "correct_fixture": "passed",
+    "deliberately_wrong_fixture": "simulation_failed_as_expected",
+    "repaired_fixture": "passed"
+  },
+  "contract_gate": {
+    "status": "passed_structure_only",
+    "checked_at_unix": 1790747266.919017,
+    "contract_sha256": "1d8a0bb91cc57d0328fc7bcb4bbe0e9193b71cac5f89138a4af9490c12dc999d"
+  },
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Original text does not explicitly state reset value; reset interpreted as clearing all bits to zero.",
+    "Power-up state unspecified; RTL has no initialization, and the development test checks four-state unknown retention before defining writes.",
+    "No synthesis or board work performed, as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json",
+    "development_evidence": "development/01"
+  },
+  "review": "Exact original interface; rising-edge sequential logic only; nonblocking updates; independent 8-bit enables; reset priority; no added ports or cycle latency."
+}

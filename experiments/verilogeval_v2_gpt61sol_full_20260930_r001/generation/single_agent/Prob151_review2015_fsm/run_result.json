@@ -1,0 +1,194 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob151_review2015_fsm",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob151_review2015_fsm",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob151_review2015_fsm/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790734954.609801,
+    "ended_at_unix": 1790735074.5956466,
+    "seconds": 119.98584628105164,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 175656,
+      "cached_input_tokens": 142080,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2894,
+      "reasoning_output_tokens": 194
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "fe73d3b4c7eb051c4a6fce8232d3cf9be0746938dde547334ae9fad4fe2945ec",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "passed",
+        "details": "Reviewed overlapping 1101 detection, four shift states, count/done waits, synchronous reset priority, complete combinational assignments, and illegal-state recovery."
+      },
+      {
+        "name": "development testbench compilation",
+        "tool": "Icarus Verilog v12",
+        "top": "dev_tb",
+        "flags": "-g2012 -Wall",
+        "timeout_seconds": 20,
+        "exit_code": 139,
+        "result": "failed",
+        "log": "dev_compile.log"
+      },
+      {
+        "name": "DUT-only compilation",
+        "tool": "Icarus Verilog v12",
+        "top": "TopModule",
+        "flags": "-g2012 -Wall",
+        "timeout_seconds": 20,
+        "exit_code": 0,
+        "result": "passed",
+        "log": "dev_dut_compile.log"
+      },
+      {
+        "name": "development testbench compilation retry",
+        "details": "Changed only testbench expected-output expression; initial testbench preserved in dev_tb_initial.sv.",
+        "top": "dev_tb",
+        "timeout_seconds": 20,
+        "exit_code": 139,
+        "result": "failed",
+        "log": "dev_compile_retry.log"
+      },
+      {
+        "name": "tool version query",
+        "timeout_seconds": 10,
+        "exit_code": 0,
+        "log": "dev_tool_version.log"
+      }
+    ],
+    "development_outcome": "Initial candidate retained unchanged. DUT-only compilation passed. Testbench compilation terminated with signal 139 twice, with empty diagnostic logs; no simulation was run.",
+    "limitations": [
+      "Dynamic behavior has not been verified by simulation because development testbench compilation failed.",
+      "No official evaluation results were accessed or received.",
+      "No synthesis, timing analysis, or board testing was performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "fe73d3b4c7eb051c4a6fce8232d3cf9be0746938dde547334ae9fad4fe2945ec",
+      "Prob151_review2015_fsm_test.sv": "bf5adab8adf3965e03fb0650ccf785138eaa62e6b18e72379f4d25da10206d15",
+      "Prob151_review2015_fsm_ref.sv": "d3fc9c0014ed8345665a3b2b429e63ffd383ab7e3f9ae9096c122f78f1b2c00d"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob151_review2015_fsm_test.sv",
+        "Prob151_review2015_fsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.017602523788809776
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb151_review2015_fsm_test.sv:76: $finish called at 25346 (1ps)\nHint: Output 'shift_ena' has no mismatches.\nHint: Output 'counting' has no mismatches.\nHint: Output 'done' has no mismatches.\nHint: Total mismatched samples is 0 out of 5069 samples\n\nSimulation finished at 25346 ps\nMismatches: 0 in 5069 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.05063619930297136
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "fe73d3b4c7eb051c4a6fce8232d3cf9be0746938dde547334ae9fad4fe2945ec",
+      "Prob151_review2015_fsm_test.sv": "bf5adab8adf3965e03fb0650ccf785138eaa62e6b18e72379f4d25da10206d15",
+      "Prob151_review2015_fsm_ref.sv": "d3fc9c0014ed8345665a3b2b429e63ffd383ab7e3f9ae9096c122f78f1b2c00d"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob151_review2015_fsm_test.sv",
+        "Prob151_review2015_fsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015394664369523525
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb151_review2015_fsm_test.sv:76: $finish called at 25346 (1ps)\nHint: Output 'shift_ena' has no mismatches.\nHint: Output 'counting' has no mismatches.\nHint: Output 'done' has no mismatches.\nHint: Total mismatched samples is 0 out of 5069 samples\n\nSimulation finished at 25346 ps\nMismatches: 0 in 5069 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.05036800354719162
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

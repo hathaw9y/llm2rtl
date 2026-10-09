@@ -1,0 +1,20 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "s": 3}, "outputs": {"fr2": 1, "fr1": 1, "fr0": 1, "dfr": 1}},
+  "semantics": {
+    "clock": "State changes on rising clk edges; sensor values are sampled at those edges, as implied by the requested synchronous state machine.",
+    "reset": "Active-high synchronous reset takes priority and establishes lowest level with all four outputs asserted, explicitly required by original text.",
+    "levels": "000 lowest, 001 lower middle, 011 upper middle, 111 highest; nominal fr2:fr0 respectively 111, 011, 001, 000, from original table.",
+    "supplemental": "At an intermediate level, set dfr if previous distinct sampled level was lower; clear if it was higher; retain across repeated samples. Original text explicitly says previous lower than current opens the supplemental valve.",
+    "extremes": "Lowest level forces dfr=1; highest forces dfr=0 as maximum and zero flow require.",
+    "initialization": "No power-up value specified; state is uninitialized until reset or a determining sensor transition. Verification starts with a synchronous reset."
+  },
+  "numeric": {"level_rank": "unsigned 2-bit rank 0 through 3", "output_order": "fr2,fr1,fr0,dfr", "arithmetic": "Only ordinal comparisons; no overflow or signed operations"},
+  "verification": {"oracle": "Independent integer water-level history and table derived from original problem", "cases": "Synchronous reset priority and timing, all 16 ordered valid level transitions, repeated levels, rise/fall history, skipped levels, exhaustive length-four sequences", "sampling": "Inputs change on falling edges; check output stability before next rising edge and correctness after rising edge NBA updates", "completion": "Fatal mismatches, bounded timeout, PASS line only after all checks"},
+  "specification_ambiguities": [
+    {"issue": "Nonphysical sensor patterns are unspecified", "resolution": "Hold state on patterns other than 000,001,011,111; no correctness claims for invalid patterns"},
+    {"issue": "Clock edge not explicitly named", "resolution": "Use rising edge for the synchronous state machine"},
+    {"issue": "Power-up values not specified", "resolution": "Do not add initialization; verify only after synchronous reset"},
+    {"issue": "Skipped sensor levels not separately described", "resolution": "Compare previous distinct sampled rank with current rank, following the stated previous-level rule"}
+  ]
+}

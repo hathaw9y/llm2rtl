@@ -1,0 +1,65 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790749487.700892,
+      "source_sha256": "473c10403fe57948ae42320cc121f478c0edeed2e113c95ab809e24c952bc464",
+      "testbench_sha256": "be728aef36541f1b0a9e4d72d8642753fb59a58a8ad75b97508b9454809e6499",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob117_circuit9/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011201892048120499
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: original waveform and directed counter checks (52 comparisons)\ndev_tb.sv:89: $finish called at 250001 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.006269823759794235
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repair passed",
+  "contract_validation": "passed_structure_only; contract_gate.json",
+  "rtl_files": [
+    "candidate.sv",
+    "candidate_initial.sv"
+  ],
+  "testbench_files": [
+    "dev_tb.sv"
+  ],
+  "interface_cycle_contract": "TopModule(clk,a,q[2:0]); rising-edge synchronous load 4 on a, otherwise modulo-7 increment; no reset or added latency; output holds between edges; uninitialized q.",
+  "numeric_width_decisions": "Unsigned 3-bit output and sized arithmetic constants; explicit 6-to-0 wrap.",
+  "static_review": "Single sequential driver, nonblocking assignments, no initialization or extra ports; standalone source closure.",
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "limitations": [
+    "Development PASS is not official correctness; official evaluation has not run.",
+    "45 ns input and clock changes share a timestamp; testbench uses NBA input change to reproduce prior-value sampling and displayed q=4.",
+    "Modulo-7 behavior at unshown states 1,2,3 is inferred from the observed counting sequence; unreachable state 7 is unspecified.",
+    "No synthesis, timing, or board validation performed as required."
+  ]
+}

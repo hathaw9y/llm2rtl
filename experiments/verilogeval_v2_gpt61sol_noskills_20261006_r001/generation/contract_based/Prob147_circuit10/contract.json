@@ -1,0 +1,38 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "a": 1,
+      "b": 1
+    },
+    "outputs": {
+      "q": 1,
+      "state": 1
+    }
+  },
+  "semantics": {
+    "memory": "One uninitialized positive-edge flip-flop, exposed as state; no reset port or initialization.",
+    "transition": "state captures the majority of a, b, and previous state: (a & b) | (a & state) | (b & state).",
+    "output": "q = a XOR b XOR state, combinational.",
+    "evidence": "75 ns and 85 ns establish 11 -> 1 and 00 -> 0. At 125 ns previous inputs 10 retain state=1; at 135 ns previous inputs 01 also retain state=1. At 55/65 ns mixed inputs retain state=0. All eight state/input combinations match majority next-state and XOR output.",
+    "sampling": "Input changes listed at positive edges are interpreted as occurring after the flip-flop samples the preceding values; observations reflect new inputs and updated state after settling."
+  },
+  "numeric": {
+    "widths": "All signals one bit",
+    "operations": "Bitwise majority for D; three-input XOR for q",
+    "unknowns": "Four-state logic with uninitialized state X; two known zero majority inputs force 0, two known one inputs force 1; XOR with X is X."
+  },
+  "verification": {
+    "waveform": "Replay every original row at its original timestamp, checking outputs after delta/NBA settling; edge-coincident input changes scheduled by NBA to preserve preceding-value capture.",
+    "directed": "After waveform, exercise all eight known state/input combinations, off-edge combinational changes, state stability away from rising edges, and unknown-input masking/propagation.",
+    "success": "Fatal mismatch, bounded timeout, PASS line only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Table does not explicitly specify simulator scheduling for input changes coincident with rising edges.",
+      "resolution": "The changes at 75 and 85 ns show state sampling preceding inputs, so replay applies edge-coincident inputs after clock sampling."
+    }
+  ]
+}

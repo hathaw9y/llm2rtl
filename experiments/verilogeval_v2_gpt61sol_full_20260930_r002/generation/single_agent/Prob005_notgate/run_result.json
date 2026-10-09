@@ -1,0 +1,191 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob005_notgate",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob005_notgate",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob005_notgate/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790749961.5747921,
+    "ended_at_unix": 1790750023.9695,
+    "seconds": 62.39470887184143,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 73478,
+      "cached_input_tokens": 47616,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1003,
+      "reasoning_output_tokens": 8
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "d885e8399b2c84fe5c0aa5e1c2bcdee4675df3aacb40564aba95472fd403162c",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed",
+          "repair": "passed"
+        }
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "compile_returncode": 0,
+        "simulation_returncode": 0,
+        "evidence_directory": "development/01"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "No synthesis or board verification performed."
+    ],
+    "justified_rtl_changes": [
+      "Initial implementation uses a continuous one-bit inversion with the exact TopModule ports; no reset, clock, or latency added."
+    ],
+    "justified_tb_changes": [
+      "Initial independent testbench checks explicit NOT truth-table expectations, repeated input transitions, and four-state propagation with case inequality, fatal mismatches, bounded timeout, and a final PASS marker. No subsequent testbench edits."
+    ],
+    "rtl_files": [
+      "candidate.sv",
+      "candidate_initial.sv"
+    ],
+    "testbench_files": [
+      "dev_tb.sv"
+    ],
+    "interface_cycle_contract": "One-bit input in and output out; combinational inversion.",
+    "numeric_width_decisions": "Both ports are one bit.",
+    "pipeline": "No pipeline or added latency.",
+    "static_review": "Single continuous driver; no state or inferred latches."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "d885e8399b2c84fe5c0aa5e1c2bcdee4675df3aacb40564aba95472fd403162c",
+      "Prob005_notgate_test.sv": "8c24f1f7eaa0f30af7418607d59444a74a3f1fc81a65b586a90b389b6b3caeb7",
+      "Prob005_notgate_ref.sv": "b9c7af094411e46248398822c76728653300163f17595b16379f7e475d60cfcf"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob005_notgate_test.sv",
+        "Prob005_notgate_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011238045059144497
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb005_notgate_test.sv:37: $finish called at 1196 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 239 samples\n\nSimulation finished at 1196 ps\nMismatches: 0 in 239 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007475325837731361
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "d885e8399b2c84fe5c0aa5e1c2bcdee4675df3aacb40564aba95472fd403162c",
+      "Prob005_notgate_test.sv": "8c24f1f7eaa0f30af7418607d59444a74a3f1fc81a65b586a90b389b6b3caeb7",
+      "Prob005_notgate_ref.sv": "b9c7af094411e46248398822c76728653300163f17595b16379f7e475d60cfcf"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob005_notgate_test.sv",
+        "Prob005_notgate_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010219896212220192
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb005_notgate_test.sv:37: $finish called at 1196 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 239 samples\n\nSimulation finished at 1196 ps\nMismatches: 0 in 239 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007246251218020916
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "llm2rtl.datapath_contract.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "status": "frozen",
+  "module_id": "fp32_bf16_epilogue",
+  "parent": "int8_gemm_executor",
+  "interface": {
+    "input": "in_valid/in_ready; four INT32 values, four identical-or-distinct cached FP32 combined scales, four valid bits and output address/tag",
+    "output": "out_valid/out_ready; four BF16 values with same mask/address/tag; error flag for invalid numerical result, held on stalls",
+    "clock_reset": "same clk/resetn as parent; reset only under coordinated reset",
+    "latency": "elastic, implementation-reported and hash-pinned; nominal convert2 + multiply6 + BF16 rounding1 =9 cycles; II1 per four-lane bundle"
+  },
+  "architecture": {
+    "lanes": 4,
+    "outputs_per_unstalled_cycle": 4,
+    "scale_builder": "separate shared FP32 multiply pipeline; precompute combined scales per row-group/head/N16 panel before issuing tagged dots; never recompute with a different rounding sequence",
+    "packing": "four BF16 lanes per bundle, low lane at bits15:0; combine two bundles into128-bit stores when adjacent; use byte strobes for short tails and row-boundary splits"
+  },
+  "numeric": {
+    "reference": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/numeric_contract.json",
+      "sha256": "f5bb6dbf52528e9fe921867e465aca6c74768402be7860cedeadc950e9bf9261"
+    },
+    "scale_sequence": [
+      "sC=RNE32(sA*sB)",
+      "QK only: sC=RNE32(sC*0.125)"
+    ],
+    "output_sequence": [
+      "fC=RNE32(INT32sum)",
+      "y=RNE32(fC*sC)",
+      "C=RNE_BF16(y)"
+    ],
+    "rounding": "nearest-even at each listed boundary; no FMA, scale reassociation, approximate reciprocal or intermediate BF16 scales",
+    "subnormal": "gradual underflow for FP32 and BF16; preserve signed zero; do not silently substitute flush-to-zero floating-point IP",
+    "errors": "positive finite input scales required; nonfinite combined scale, FP32 result or stored BF16 result reports numerical error after quiescence; source numeric contract is authoritative; integer accumulator overflow has no detector/error"
+  },
+  "verification": {
+    "comparison": "bitwise equality to exact_numeric.py and golden outputs; zero tolerance",
+    "cases": [
+      "INT32 16777217/16777219 conversion ties",
+      "FP32 product ties",
+      "BF16 ties on both signs",
+      "normal/subnormal boundaries",
+      "signed zero",
+      "combined-scale underflow",
+      "invalid zero/negative/NaN/Inf scale",
+      "finite quotient/result overflow policy",
+      "QK scale ordering",
+      "four-lane stalls and masks",
+      "last write acceptance before parent response"
+    ]
+  }
+}

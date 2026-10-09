@@ -1,0 +1,11 @@
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_int4_noscale_zcu104_r1/rtl/attention_quantizer_bank_config_pkg.sv}
+read_verilog -sv {/home/shmin/llm2rtl/ip/infrastructure/bank_subsystem/rtl/bank_native_ownership.sv}
+read_verilog -sv {/home/shmin/llm2rtl/ip/infrastructure/bank_subsystem/rtl/bank_native_router.sv}
+read_verilog -sv {/home/shmin/llm2rtl/ip/infrastructure/bank_subsystem/rtl/bank_native_memories.sv}
+read_verilog -sv {/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/bram_bank.sv}
+read_verilog -sv {/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/uram_bank.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_int4_noscale_zcu104_r1/rtl/attention_int4_quantizer.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_int4_noscale_zcu104_r1/rtl/attention_quantizer_controller.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_int4_noscale_zcu104_r1/rtl/attention_quantizer_executor.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_int4_noscale_zcu104_r1/rtl/attention_quantizer_bank_subsystem.sv}
+read_verilog -sv {/home/shmin/llm2rtl/designs/attention_int4_noscale_zcu104_r1/rtl/attention_quantizer_isa_top.sv}

@@ -1,0 +1,48 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "smollm2_bank_port_router",
+  "module_kind": "infrastructure",
+  "status": "frozen",
+  "target": {"board": "ZCU104", "part": "xczu7ev-ffvc1156-2-e", "clock_mhz": 200},
+  "routed_opcodes": ["DMA_LOAD", "DMA_STORE", "GEMM", "RMSNORM", "ROPE", "ATTN_SCORE", "SOFTMAX", "ATTN_VALUE", "ADD", "SILU_MUL"],
+  "interface": {
+    "bank_count": 13,
+    "role_count": 21,
+    "roles": "0 unused; 1..20 are bank_layout.json owner_roles values",
+    "word_bits": 128,
+    "word_bytes": 16,
+    "address_unit": "physical 128-bit word index from adapter or executor; PS and ISA still use logical bank IDs",
+    "read_latency_cycles": 3,
+    "read_response": "fixed-latency valid, role-indexed data and bank ID; no response backpressure",
+    "write": "one 128-bit word with 16 byte strobes per accepted request",
+    "ownership_input": "bank_busy and bank_owner_port from common bank_ownership_table",
+    "memory_port": "one XPM-compatible synchronous read and byte-enabled write pair per bank",
+    "memory_implementation": "separate module; this router has no storage"
+  },
+  "numeric": {"kind": "data_routing_only", "tensor_arithmetic": "none"},
+  "capacity_words_by_bank": [2304, 2304, 2304, 36864, 2304, 2304, 768, 512, 24576, 24576, 36864, 2304, 6144],
+  "control_rules": {
+    "authorization": "Request role must equal the selected bank's current owner and the bank must be busy.",
+    "role_capability": "Read: 2,3,4,6,7,9,10,11,12,14,15,16,18,19. Write: 1,5,8,9,13,14,17,20.",
+    "role_bank_pairs": {
+      "1": [0, 3, 7, 8, 9], "2": [5, 6, 12], "3": [2, 10, 11],
+      "4": [3], "5": [1, 4, 5, 6, 8, 9, 12], "6": [0, 5],
+      "7": [3], "8": [2], "9": [4, 5], "10": [7],
+      "11": [4], "12": [8], "13": [10], "14": [10],
+      "15": [10], "16": [9], "17": [11], "18": [0, 5, 8],
+      "19": [1, 9], "20": [0, 5, 10]
+    },
+    "bank_pair_scope": "These pairs match build_block in verification/prototypes/smollm2_135m_isa_feasibility.py. A different bank allocation requires a new design revision and proof.",
+    "range": "Bank ID must be 0..12; address must be below its capacity in 128-bit words.",
+    "in_place": "Roles 9 and 14 may read port B and write port A of their owned bank in the same cycle; same-word read-during-write value is not guaranteed and must be avoided by executor scheduling.",
+    "response_lifetime": "Owner may release only after all accepted reads have returned and all writes have been accepted; executor or DMA adapter owns this rule.",
+    "error": "Unauthorized, out-of-range, unsupported-role or unsupported role-bank active request is not accepted; a per-role fault is captured on the request edge and sticky router_error is set on the following edge until reset."
+  },
+  "verification": {
+    "required_cases": ["all 13 capacity boundaries", "authorized DMA write and model-legal read", "GEMM three-bank concurrent access", "in-place read/write through both ports", "role mismatch, unsupported pair and out-of-range rejection", "three-cycle response alignment", "two different bank responses in the same cycle"],
+    "required_tools": ["self-checking XSIM", "Verilator lint", "Vivado out-of-context synthesis"],
+    "proof_scope": "bank-port routing only; no XPM storage, DDR transfer, tensor arithmetic, board execution or full-model inference"
+  }
+}

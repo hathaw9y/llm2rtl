@@ -1,0 +1,510 @@
+{
+  "schema": "llm2rtl.isa_spec.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "status": "reviewed",
+  "model_specific_macro_extension": "GEMM_TILES is one command BRAM record supplied by PS. PS supplies weight DDR base, total N, tile width, K, row range, and bank IDs. The PL dispatcher expands it in program order into DMA_LOAD and GEMM requests; each expanded request retains the common bank ownership and one-response rule. The PC advances after the final expanded request is accepted. END waits for every expanded response. This extension does not let PS perform tensor arithmetic or let PL select model tiling.",
+  "common_contracts": {
+    "contracts/common/isa_command_contract.json": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15",
+    "contracts/common/local_bank_contract.json": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d",
+    "contracts/common/evidence_identity_contract.json": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda"
+  },
+  "instruction_record": {
+    "width_bits": 128,
+    "command_bram_word_bits": 128,
+    "words_per_instruction": 1,
+    "field_layout_msb_first": {
+      "opcode": [
+        127,
+        124
+      ],
+      "bank0": [
+        123,
+        120
+      ],
+      "bank1": [
+        119,
+        116
+      ],
+      "bank2": [
+        115,
+        112
+      ],
+      "dma_local_offset": [
+        111,
+        80
+      ],
+      "dma_byte_count": [
+        79,
+        57
+      ],
+      "dma_ddr_address": [
+        56,
+        25
+      ],
+      "dma_aux": [
+        24,
+        0
+      ]
+    },
+    "compute_payload_bits": [
+      111,
+      0
+    ],
+    "gemm_payload_lsb": {
+      "n_start": [
+        62,
+        47
+      ],
+      "n_total": [
+        46,
+        31
+      ],
+      "m_start": [
+        30,
+        25
+      ],
+      "m_count": [
+        24,
+        19
+      ],
+      "k": [
+        18,
+        8
+      ],
+      "n_tile": [
+        7,
+        0
+      ]
+    },
+    "gemm_tiles_payload_lsb": {
+      "weight_ddr_base": [111, 80],
+      "n_total": [79, 64],
+      "k": [63, 53],
+      "m_start": [52, 47],
+      "m_count": [46, 41],
+      "n_tile": [40, 33],
+      "reserved_zero": [32, 0]
+    },
+    "attention_score_payload_lsb": {
+      "query_start": [
+        26,
+        17
+      ],
+      "m_count": [
+        16,
+        11
+      ],
+      "kv_len": [
+        10,
+        0
+      ]
+    },
+    "softmax_payload_lsb": {
+      "query_start": [
+        26,
+        17
+      ],
+      "m_count": [
+        16,
+        11
+      ],
+      "kv_len": [
+        10,
+        0
+      ]
+    },
+    "rope_payload_lsb": {
+      "rows": [
+        5,
+        0
+      ]
+    },
+    "embedding_dma_aux_lsb": {
+      "expected_rows": [
+        11,
+        6
+      ],
+      "row": [
+        5,
+        0
+      ]
+    }
+  },
+  "command_transport": {
+    "command_order_owner": "ps_software",
+    "residency_tiling_owner": "ps_software",
+    "recovery_policy_owner": "ps_software",
+    "pl_dispatcher_role": "route_execute_report_only",
+    "request_protocol": "ready_valid",
+    "response_protocol": "ready_valid",
+    "program_transport": "ps_preloaded_command_bram",
+    "queue_policy": "no_ring_queue",
+    "dispatch_policy": "strict_in_order_single_pc_scoreboard",
+    "execution_policy": "issue_on_request_handshake_with_scoreboard_completion",
+    "outstanding_policy": "bank_hazard_limited_multiple",
+    "pc_advance_event": "executor_command_acceptance",
+    "response_collection": "independent_of_current_pc",
+    "program_terminal_policy": "end_opcode_then_drain_outstanding",
+    "blocked_pc_policy": "stall_without_lookahead",
+    "program_publish_order": [
+      "instruction_records_ending_in_END",
+      "start"
+    ],
+    "mutation_while_busy": "forbidden",
+    "chunk_rule": "END/DONE drains then PS reloads single command BRAM; bank tensor state and DDR KV persist across chunks"
+  },
+  "parameters": {
+    "bank_num": 13,
+    "bank_num_width": 4,
+    "tag_width": 4,
+    "port_role_width": 5,
+    "max_commands": 1024,
+    "axi_addr_width": 32,
+    "btt_width": 23
+  },
+  "planned_compute_executors": [
+    "gemm_systolic_wide_executor",
+    "rmsnorm_executor",
+    "rope_executor",
+    "attention_score_executor",
+    "softmax_executor",
+    "attention_value_executor",
+    "add_executor",
+    "silu_mul_executor"
+  ],
+  "executor_policy": {
+    "max_inflight_per_compute_executor": 1,
+    "request": "cmd_valid/cmd_ready plus opcode-specific fields and logical bank IDs",
+    "response": "done_valid/done_ready plus tag,used_bank_count,three_bank_ids,error; all returned IDs must echo accepted operands, including unused fields",
+    "response_tag": "operand0 bank ID; unambiguous with one in-flight command per executor"
+  },
+  "opcodes": [
+    {
+      "opcode": "END",
+      "encoding": 0,
+      "module_id": "isa_command_dispatcher",
+      "opcode_class": "control",
+      "operands": [],
+      "operand_semantics": "terminal record for one preloaded chunk",
+      "completion_semantics": "DONE after all outstanding DMA and compute responses drain",
+      "failure_semantics": "error if missing or prior command failed"
+    },
+    {
+      "opcode": "DMA_LOAD",
+      "encoding": 1,
+      "module_id": "datamover_engine",
+      "opcode_class": "dma_load",
+      "operands": [
+        {
+          "name": "ddr_source",
+          "kind": "external_ddr_address"
+        },
+        {
+          "name": "destination",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "local_byte_offset",
+          "kind": "dimension"
+        },
+        {
+          "name": "byte_count",
+          "kind": "transfer_length"
+        },
+        {
+          "name": "aux",
+          "kind": "flags"
+        }
+      ],
+      "operand_semantics": "copies an embedding row, weight tile, RoPE window or full current KV prefix from DDR to a logical bank; aux carries embedding row and expected row count",
+      "completion_semantics": "bank busy releases only after MM2S completion and local adapter write completion",
+      "failure_semantics": "destination remains invalid on error"
+    },
+    {
+      "opcode": "DMA_STORE",
+      "encoding": 2,
+      "module_id": "datamover_engine",
+      "opcode_class": "dma_store",
+      "operands": [
+        {
+          "name": "source",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "ddr_destination",
+          "kind": "external_ddr_address"
+        },
+        {
+          "name": "local_byte_offset",
+          "kind": "dimension"
+        },
+        {
+          "name": "byte_count",
+          "kind": "transfer_length"
+        }
+      ],
+      "operand_semantics": "copies K, V or full last-token logits from a logical bank to DDR",
+      "completion_semantics": "bank busy releases after S2MM successful write response",
+      "failure_semantics": "no successful DDR commit or tensor completion on error"
+    },
+    {
+      "opcode": "GEMM",
+      "encoding": 3,
+      "module_id": "gemm_systolic_wide_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "activation",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "weight",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "n_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "n_total",
+          "kind": "dimension"
+        },
+        {
+          "name": "m_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "m_count",
+          "kind": "dimension"
+        },
+        {
+          "name": "k",
+          "kind": "dimension"
+        },
+        {
+          "name": "n_tile",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "full-K BF16 dot products for up to 32 rows and 192 output columns; n_start is a logical column index, not a raw local address",
+      "completion_semantics": "output tensor complete after its last N tile; one response per tile",
+      "failure_semantics": "failed tile leaves destination invalid"
+    },
+    {
+      "opcode": "GEMM_TILES",
+      "encoding": 12,
+      "module_id": "isa_command_dispatcher",
+      "opcode_class": "compound_dma_compute",
+      "operands": [
+        {"name": "activation", "kind": "local_bank_id"},
+        {"name": "weight", "kind": "local_bank_id"},
+        {"name": "output", "kind": "local_bank_id"},
+        {"name": "weight_ddr_base", "kind": "external_ddr_address"},
+        {"name": "n_total", "kind": "dimension"},
+        {"name": "k", "kind": "dimension"},
+        {"name": "m_start", "kind": "dimension"},
+        {"name": "m_count", "kind": "dimension"},
+        {"name": "n_tile", "kind": "dimension"}
+      ],
+      "operand_semantics": "dispatcher expands each N tile into DMA_LOAD(weight bank, weight_ddr_base + n_start*k*2, tile_width*k*2) then GEMM(activation,weight,output,n_start,n_total,m_start,m_count,k,tile_width); tile_width=min(n_tile,n_total-n_start); PS supplies all dimensions and the base address",
+      "completion_semantics": "PC advances after the final GEMM is accepted; bank ownership and output completion follow each expanded DMA_LOAD and GEMM, and END drains outstanding work",
+      "failure_semantics": "an invalid descriptor or failed expanded command aborts the chunk; no later tile is issued"
+    },
+    {
+      "opcode": "RMSNORM",
+      "encoding": 4,
+      "module_id": "rmsnorm_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "input",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "gamma",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "RMSNorm across hidden width 576 with epsilon 1e-5; rows 1..32 encoded in command bits [5:0], bits [111:6] zero",
+      "completion_semantics": "output bank complete after response",
+      "failure_semantics": "failed output invalid"
+    },
+    {
+      "opcode": "ROPE",
+      "encoding": 5,
+      "module_id": "rope_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "data_in_place",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "coefficient",
+          "kind": "local_bank_id"
+        }
+      ],
+      "operand_semantics": "BF16 RoPE on Q (B4, nine 64-wide heads) or K (B5 or B8, three 64-wide heads) using DDR-precomputed coefficient window in B7; cos[32] then sin[32] per row; rows 1..32 encoded in command bits [5:0], bits [111:6] zero",
+      "completion_semantics": "in-place data bank held through last write",
+      "failure_semantics": "failed data bank invalid"
+    },
+    {
+      "opcode": "ATTN_SCORE",
+      "encoding": 6,
+      "module_id": "attention_score_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "query",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "key_cache",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "score",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "query_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "m_count",
+          "kind": "dimension"
+        },
+        {
+          "name": "kv_len",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "B4 Q [m_count,9,64], B8 K [kv_len,3,64], B10 score [m_count,9,ceil(kv_len/8)] 128-bit words; nine query heads map to three KV heads in PL; contiguous causal positions; payload [26:17] query_start, [16:11] m_count, [10:0] kv_len; the shared 16x16 BF16 GEMM PE array processes each head and K-token N tile up to 192, scales scores by 1/8 and rounds to BF16 RNE; future and padded score lanes are zero",
+      "completion_semantics": "complete score tensor before response",
+      "failure_semantics": "failed score invalid"
+    },
+    {
+      "opcode": "SOFTMAX",
+      "encoding": 7,
+      "module_id": "softmax_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "score_probability_in_place",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "query_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "m_count",
+          "kind": "dimension"
+        },
+        {
+          "name": "kv_len",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "B10 layout [m_count,9,ceil(kv_len/8)] 128-bit words; query_start/m_count/kv_len payload matches ATTN_SCORE; causal mask for key index above query_start+row; stable max-subtract softmax with Q16.16 score conversion, interpolated Q0.30 exp and reciprocal, BF16 round-to-nearest-even output stored in place",
+      "completion_semantics": "in-place bank released after final probability write",
+      "failure_semantics": "failed probability invalid"
+    },
+    {
+      "opcode": "ATTN_VALUE",
+      "encoding": 8,
+      "module_id": "attention_value_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "probability",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "value_cache",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "context",
+          "kind": "local_bank_id"
+        }
+      ],
+      "operand_semantics": "B10 probability [m_count,9,ceil(kv_len/8)], B9 V cache [kv_len,3,64], B11 context [m_count,9,64]; grouped probability-times-V with nine query heads; payload [26:17] query_start, [16:11] m_count, [10:0] kv_len as in ATTN_SCORE; the shared 16x16 BF16 GEMM PE array reads V token-major and transposes each 16x16 tile before K accumulation, then rounds to BF16 RNE",
+      "completion_semantics": "context complete before response",
+      "failure_semantics": "failed context invalid"
+    },
+    {
+      "opcode": "ADD",
+      "encoding": 9,
+      "module_id": "add_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "left",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "right",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        }
+      ],
+      "operand_semantics": "BF16 residual addition, 576 elements per row, payload [5:0] row count 1..32 and [111:6] zero; finite BF16 inputs, round-to-nearest-even BF16 output, distinct input/output banks",
+      "completion_semantics": "output complete before response",
+      "failure_semantics": "failed output invalid"
+    },
+    {
+      "opcode": "SILU_MUL",
+      "encoding": 10,
+      "module_id": "silu_mul_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "gate",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "up",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        }
+      ],
+      "operand_semantics": "BF16 SiLU(gate) multiplied by BF16 up projection, 1536 elements per row, payload [5:0] row count 1..32 and [111:6] zero; finite BF16 inputs, BF16 SiLU lookup matching pinned eager checkpoint semantics, BF16 product round-to-nearest-even, distinct input/output banks",
+      "completion_semantics": "output complete before response",
+      "failure_semantics": "failed output invalid"
+    },
+    {
+      "opcode": "FENCE",
+      "encoding": 11,
+      "module_id": "isa_command_dispatcher",
+      "opcode_class": "control",
+      "operands": [],
+      "operand_semantics": "current PC waits for every earlier accepted command including S2MM response",
+      "completion_semantics": "internal completion then PC advances; bank contents retained",
+      "failure_semantics": "prior error enters error drain"
+    }
+  ],
+  "unresolved_decisions": [],
+  "executor_sharing": {
+    "GEMM_ATTN_SCORE_ATTN_VALUE": "one smollm2_gemm_systolic_wide_executor instance; logical compute channels 0, 3 and 5 retain distinct ISA roles, bank ownership and completion responses; each command runs exclusively"
+  }
+}

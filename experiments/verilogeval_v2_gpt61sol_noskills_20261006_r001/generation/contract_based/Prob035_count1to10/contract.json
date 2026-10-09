@@ -1,0 +1,21 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1}, "outputs": {"q": 4}},
+  "semantics": {
+    "edge": "All state updates occur on positive clock edges, as explicitly specified.",
+    "reset": "Active high synchronous reset: if reset is high at a positive edge, q becomes 1, overriding counting.",
+    "count": "On each positive edge without reset, advance through 1,2,3,4,5,6,7,8,9,10 and wrap from 10 to 1.",
+    "between_edges": "q retains its value between positive clock edges, including when reset changes.",
+    "initialization": "No power-up value is specified; no initialization is added. Functional counting checks begin after a synchronous reset."
+  },
+  "numeric": {"representation": "4-bit unsigned binary", "legal_sequence": [1,2,3,4,5,6,7,8,9,10], "increment": 1, "wrap": {"from": 10, "to": 1}},
+  "verification": {
+    "oracle_source": "Original problem text, independently modeled with an integer count modulo ten after reset.",
+    "sampling": "Check outputs after positive edges and nonblocking updates; also check stability at reset transitions and falling edges.",
+    "cases": ["first synchronous reset", "several complete counting periods", "reset from each legal count", "consecutive reset cycles", "reset pulse entirely between positive edges"],
+    "completion": "Bounded timeout, fatal mismatches, PASS line only after all checks succeed."
+  },
+  "specification_ambiguities": [
+    {"topic": "Power-up and illegal states", "evidence": "The problem specifies reset to 1 but no initial value or illegal-state recovery.", "resolution": "Do not assert an initial value or test recovery from injected illegal states; use reset to establish the legal sequence."}
+  ]
+}

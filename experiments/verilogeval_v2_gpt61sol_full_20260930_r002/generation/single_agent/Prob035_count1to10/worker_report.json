@@ -1,0 +1,17 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "label": "initial", "evidence": "development/01", "checked_cycles": 73, "compile_returncode": 0, "simulation_returncode": 0}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "Power-up state is unspecified and is not assigned an invented initial value.", "No synthesis or board verification performed."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "interface_cycle_contract": "TopModule(clk, reset, q[3:0]); positive-edge counter from 1 through 10 inclusive, wrapping to 1; synchronous active-high reset to 1.",
+  "numeric_width_decisions": "Four-bit unsigned output and explicitly sized four-bit constants.",
+  "pipeline": "Output updates on each rising clock edge; no extra latency.",
+  "static_review": "Single always_ff driver, nonblocking assignments, correct reset priority and wrap boundary."
+}

@@ -1,0 +1,21 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "details": "Correct fixture passed, injected fault failed simulation, repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only", "evidence": "contract_gate.json"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "development/01 and dev_checks.jsonl", "details": "Icarus 12 compile and simulation passed without diagnostics; 4138 positive-edge oracle comparisons."}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Original problem does not specify power-up state; testbench begins checking after a sampled reset.",
+    "No synthesis or board verification was performed, as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": "Five-state FSM recognizes contiguous 1101 with suffix retention and an absorbing FOUND state. Active-high synchronous reset returns to SEARCH. Output asserts immediately after the edge sampling the final sequence bit.",
+  "verification": "Independent rolling four-bit history oracle, exhaustive eight-bit input streams, directed long-one suffix case, sticky persistence, partial-match reset, reset priority, repeated reset, and inter-edge reset pulse. Bounded timeout and fatal mismatch checks.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json"},
+  "static_review": "Original one-bit ports and TopModule name preserved; explicit enum if/else transitions, complete combinational assignments, one sequential driver, no extra latency or ports."
+}

@@ -1,0 +1,17 @@
+# T02 public requirements
+
+Within each dense N tile, change physical BF16 element indexing from `n*K+k` to `((k//16)*N_tile+n)*16+k%16`. K is a multiple of 16, including 16, 64, 576, and 1536; N_tile is the actual tile width, 1 through 192. Preserve every operand bit and per-output K arithmetic order; no element padding or PS tensor computation. Preserve activation, attention Q/K/V runtime, KV, norm and RoPE layouts.
+
+Apply the layout consistently to offline assets, manifest/hash, interpreter physical dense loading, production RTL weight addressing, PS DMA bases/counts and GEMM_TILES expansion. Dense tile byte count remains `2*N_tile*K`. Keep token embedding lookup row-major and bit-exact while supplying correctly packed LM head tiles. Physical static-image/address-map changes are allowed within reserved DDR bounds. Update all consumers consistently.
+
+Completion requires bit-exact inverse packing and dense BF16 outputs, legal banks/addresses/byte strobes, untouched destination bytes, matched completion, and consistent declared layout/hash/asset offsets. Public coverage includes N tails and K block boundaries. Full generated static-image consistency, PS builds/command traces, attention integration, full-model interpreter and synthesis are common additional gates, tracked separately.
+
+For software observability provide `t02_adapter.py` at the candidate workspace root. It reads one JSON object from stdin and writes one JSON object to stdout; stderr is for diagnostics. Call actual production offline packing, interpreter loading and PS command-generation functions. The adapter must not substitute standalone evaluator-specific implementations.
+
+`dense_tile` requests contain `baseline_mode`, `n`, `k`, `rows` (logical rows of unsigned BF16 words), `physical_bits` (supplied flattened physical words), `probe_k`, `byte_base`, `tile_index`. Return `packed_bits` from the offline packer, `unpacked_rows` from asset inversion, `interpreted_rows` from loading the supplied physical bits, `layout_id`, little-endian packed-word `sha256`, `dma_offset_bytes`, `dma_btt`, `gemm_tiles_weight_step_bytes`. Normalize layout identifiers to `dense_nk_bf16` for baseline or `dense_k16_n_lane_bf16` for target. The equal-size probe's DMA offset is `byte_base + tile_index*n*k*2`; both byte count and step are `n*k*2`.
+
+`embedding_lm_head` requests contain `embedding_rows`, `baseline_mode`, `byte_base`, `reserved_end`. Return production `embedding_lookup_rows`, `lm_head_physical_bits`, `lm_head_interpreted_rows`, `embedding_byte_base`, `lm_head_byte_base`. Support tiny synthetic vocabularies for this probe, and preserve production vocabulary support.
+
+For actual image audit provide `t02_asset_map.json`: `image` (relative file path), `image_sha256`, `layout_id`, `ddr_base`, `reserved_end`, `regions`. Each region has stable logical `name`, `kind`, `offset_bytes`, `size_bytes`; dense regions add `n_tile`, `k`. Embedding, norm and RoPE regions use `kind: raw`; each dense tile uses `kind: dense`. The evaluator owns the matching original reference map.
+
+Evaluator invocation: `python scripts/t02_evaluate.py --candidate-root ROOT --out OUT --rtl`. The evaluator selects public or hidden splits privately. Results are written to `OUT/result.json`; `status: PASS` is the local packing/dense gate outcome. Actual image audit writes `OUT/asset_report.json` using a separately supplied frozen reference image/map. Gate results do not replace common completion requirements.

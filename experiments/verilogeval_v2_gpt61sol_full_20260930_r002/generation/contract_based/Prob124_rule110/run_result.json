@@ -1,0 +1,205 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob124_rule110",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob124_rule110",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob124_rule110/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790746927.5739088,
+    "ended_at_unix": 1790747091.093317,
+    "seconds": 163.51940894126892,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 128123,
+      "cached_input_tokens": 112640,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2731,
+      "reasoning_output_tokens": 16
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "a774415ad7322c3cb3515716661d2f1474d51bb1655bb09a089599c9ccc0f56a",
+  "contract_sha256": "7618cb13d064f133b0a5e383c3953f80c4242a2187d6102b3d0c6fb6efa791d5",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "outcome": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed as expected",
+          "repair": "passed"
+        }
+      },
+      {
+        "command": "python3 validate_contract.py",
+        "outcome": "passed_structure_only"
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "outcome": "passed",
+        "evidence_directory": "development/01",
+        "compile_returncode": 0,
+        "simulation_returncode": 0,
+        "pass_marker": "PASS Rule 110: 9285 complete-vector checks"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not occurred.",
+      "The original specifies no initial state or reset. Functional evolution comparisons begin after synchronous load.",
+      "Unknown-valued input behavior is not specified and is not independently verified.",
+      "No synthesis or board work performed, as required."
+    ],
+    "justified_changes": {
+      "rtl": [],
+      "testbench": [],
+      "contract": []
+    },
+    "implementation": {
+      "source": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "cycle_behavior": "Synchronous active-high load priority; otherwise one simultaneous Rule 110 step per rising edge",
+      "numeric": "512 one-bit cells, zero-valued exterior neighbors",
+      "static_review": "Exact original ports; nonblocking state updates; no initialization, reset, extra ports, or extra latency; Boolean equation checked against all eight table rows"
+    },
+    "verification_coverage": [
+      "Every original binary table row at all 510 interior positions",
+      "Zero and all-one states",
+      "Alternating patterns",
+      "Isolated endpoint cells",
+      "Repeated and consecutive loads",
+      "State stability between rising edges",
+      "40 random loads with 25 evolution steps each",
+      "Bounded timeout and fatal mismatch checks"
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a774415ad7322c3cb3515716661d2f1474d51bb1655bb09a089599c9ccc0f56a",
+      "Prob124_rule110_ref.sv": "c95a474c70bb071b1b8adc0c23a86822928a2c7cb20fde28b8e48cd6a19aad81",
+      "Prob124_rule110_test.sv": "4099c733852aa603ff4ff244eb49d0712edd2df0834d68d6f827700a5ad57f00"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob124_rule110_test.sv",
+        "Prob124_rule110_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014289729297161102
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb124_rule110_test.sv:73: $finish called at 31416 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 6283 samples\n\nSimulation finished at 31416 ps\nMismatches: 0 in 6283 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.2540498720481992
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a774415ad7322c3cb3515716661d2f1474d51bb1655bb09a089599c9ccc0f56a",
+      "Prob124_rule110_ref.sv": "c95a474c70bb071b1b8adc0c23a86822928a2c7cb20fde28b8e48cd6a19aad81",
+      "Prob124_rule110_test.sv": "4099c733852aa603ff4ff244eb49d0712edd2df0834d68d6f827700a5ad57f00"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob124_rule110_test.sv",
+        "Prob124_rule110_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013117115944623947
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb124_rule110_test.sv:73: $finish called at 31416 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 6283 samples\n\nSimulation finished at 31416 ps\nMismatches: 0 in 6283 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.2581030810251832
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

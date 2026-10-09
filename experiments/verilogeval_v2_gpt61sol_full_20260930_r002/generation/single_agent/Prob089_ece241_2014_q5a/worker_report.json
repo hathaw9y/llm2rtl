@@ -1,0 +1,32 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob089_ece241_2014_q5a/development/01"
+    },
+    {
+      "label": "tb_correction_1",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob089_ece241_2014_q5a/development/02"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "limitations": [
+    "Development verification only; official evaluation has not been run.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_version": "dev_tb_initial.sv",
+      "reason": "Initial send_bit waited for a falling edge after reset release, permitting an unintended rising edge with x=1 before the first intended bit. Drive each intended bit after the preceding sample/reset release and before the next rising edge; arithmetic expected values and all checks remain unchanged."
+    }
+  ],
+  "interface_cycle_semantics": "TopModule(clk, areset, x, z), all one bit. Active-high asynchronous reset sets Moore output to zero. Each rising clock edge consumes x and updates the Moore output for that bit.",
+  "static_review": "Three-state Moore FSM; complete next-state case; explicit enum if/else assignments; nonblocking state update; no added ports or latency.",
+  "verification_coverage": "Exhaustive numbers of lengths 1 through 10, 256-bit zero/ones/late-first-one/mixed patterns, asynchronous reset, reset during activity, release without an edge, and output independence from input changes. Final simulation performed 47134 comparisons.",
+  "initial_snapshot_preserved": true
+}

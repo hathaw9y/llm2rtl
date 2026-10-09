@@ -1,0 +1,171 @@
+Design and implement an FPGA accelerator for the model and hardware below using this repository's current framework.
+Use these inputs to prepare a model-specific work plan, ISA candidates, executor candidates, and verification plan.
+Do not select shapes, opcodes, precision, or clocks from a past implementation based only on a model or board name.
+
+[Task inputs]
+Repository: {{REPO_ROOT}}
+Model: {{MODEL_ID_OR_LOCAL_CHECKPOINT}}
+Checkpoint revision: {{CHECKPOINT_REVISION_OR_UNDECIDED}}
+Model runtime or source path: {{MODEL_RUNTIME_OR_UNDECIDED}}
+Hardware specification file or text: {{HARDWARE_SPEC_OR_UNDECIDED}}
+Design revision: {{NEW_DESIGN_REVISION_OR_PROPOSE}}
+Execution scope: {{EXECUTION_SCOPE_OR_UNDECIDED}}
+Numeric format and quantization: {{NUMERIC_POLICY_OR_UNDECIDED}}
+Performance, resource, and accuracy targets: {{TARGETS_OR_UNDECIDED}}
+Previously agreed decisions and constraints: {{USER_DECISIONS_OR_NONE}}
+Phase for this run: {{PHASE}}
+
+PHASE is inspect_and_propose or continue_agreed_work.
+Default to inspect_and_propose if unspecified. Empty inputs and UNDECIDED indicate unresolved decisions.
+Do not seek approval again for values the user supplied or already agreed to in this conversation.
+For conflicting inputs, explain the evidence and impact and ask only about the conflicting decision.
+
+[Objective and governing rules]
+Execute all tensor operations and state updates between the agreed model entry point and output boundary
+through PS-generated ISA command sequences and PL executors.
+PS owns command generation, DDR addresses and residency tiling, transfer preparation, execution control, and recovery.
+Do not move model tensor computation into PS, the board application, or undeclared libraries.
+The Python reference and ISA interpreter are verification tools; distinguish them from the actual board PS execution path.
+For tokenization, token selection/sampling, embedding lookup, position coefficient preparation, and calibration,
+identify online tensor computation, address selection, or offline preparation and agree on the execution boundary.
+
+First read README.md, docs/framework_workflow.md, docs/isa_model_lowering.md,
+docs/model_graph_bringup.md, docs/runtime_gemm_trace.md, and contracts/common/.
+Also inspect the dispatcher, ownership, and fabric templates under ip/infrastructure/;
+the contracts and actual DataMover, bank, router, and adapter sources; scripts/check_*.py; and verification/framework/.
+If the historical scheduler architecture in docs/architecture.md or src/README.md conflicts with current documents,
+report the difference and follow the current PS-issued ISA documents, common contracts, and this user's decisions.
+If new requirements conflict with a current contract, propose the change and affected boundaries before changing it.
+Do not use backed-up skills/, docs/skills/, or installed historical llm2rtl Skills as procedures or approval requirements.
+Do not introduce the historical module mapping approval, bringup stage, or contract index hierarchy into a new design.
+Existing Llama, SmolLM2, Qwen, and other designs/ revisions are reference examples only.
+Do not inherit their user decisions, numerical limits, or PASS results.
+Check the exact identity and capabilities of reusable sources and reverify them in the new configuration.
+
+1. Inspect the repository and inputs
+Check Git working state, input paths, active common contracts, template identities, and installed tools.
+Run the common contract check, infrastructure template contract-only check, binding template check,
+and framework regression tests. Report passes, failures, skips, and the scope each check proves.
+Run design-specific checks when the required files are available.
+If source and evidence hashes differ, record the affected files and identities.
+Do not merely update hashes or weaken checks to obtain PASS. Identify boundaries requiring reverification.
+During inspect_and_propose, do not modify existing sources/contracts or begin HDL implementation.
+Preserve user changes and existing revisions. Isolate the new design under designs/<new_revision>/.
+
+2. Investigate actual model execution and hardware
+Identify the exact checkpoint commit, config/tokenizer/weight identities, runtime library versions,
+actual Python sources invoked, and attention/cache implementations. Record their sources.
+Inspect local snapshots first and use official model repositories and code for necessary remote information.
+If no revision is supplied, propose a verifiable fixed commit and distinguish a candidate from a final selection.
+Actually execute the intended prefill and decode paths and trace tensor shapes, layouts, dtypes, and state updates.
+The runtime_gemm_trace.py factory mechanism is an observation tool. GEMM classification does not establish hardware support.
+Do not omit NON_GEMM regions. Identify all semantic operations using both execution traces and actual model sources.
+Include weight sharing, bias, normalization, position encoding, attention/masks, cache, FFN, and output heads
+only as they actually occur in this model. Separate unobserved paths from unsupported paths.
+One execution trace does not prove all branches.
+
+Investigate the hardware specification selected by the user. The presence of config/hardware/zcu104.json
+does not imply the user selected ZCU104. Check even a selected profile for missing or outdated values.
+Identify the board and FPGA part, LUT/FF/DSP/BRAM/URAM capacities, clocks, PS/runtime, DDR capacity and legal address ranges,
+AXI widths/connections/bandwidth, command BRAM, tool versions, and board execution procedure.
+Distinguish measurements, specifications, and estimates. Mark missing information as unresolved or requiring measurement.
+Treat available_ps_ddr_ports as candidate interfaces, not a requirement to connect or use every listed port.
+Propose the actual port subset, DataMover/channel count, traffic assignment, interconnect, and bandwidth/resource costs
+for this model; discuss them with the user before finalizing. Do not assume aggregate bandwidth scales with port count.
+A hardware profile need not prescribe a target clock, Vivado version, or board memory map file.
+Propose a target clock from the workload and implementation constraints, and identify the tool version actually available.
+Resolve legal DDR ranges from the selected runtime's linker script or memory allocation before board execution;
+do not require a board_memory_map file or invent addresses when none is supplied.
+If existing vendor IP is incompatible with the selected FPGA, propose alternatives and costs without claiming compatibility.
+
+3. Discuss execution scope, numerics, and performance candidates
+Discuss model/hardware selection first, execution scope next, and numeric/quality targets next.
+Execution scope includes batch, prefill length/chunks, decode steps, maximum total context,
+padding/mask/position support, cache policy, and the output boundary.
+Specify TTFT, decode tokens/s or latency targets together with measurement workloads and included costs.
+Compare the original model's numeric format with quantization candidates in accuracy, memory, DSP, and transfer costs.
+Address weight, activation, KV, intermediate, accumulator, and nonlinear precision and scale metadata costs separately.
+Use actual shapes to estimate packed bytes, on-chip banks and duplicated buffers, KV growth, DDR traffic,
+and computation. Explain whether array dimensions, tiles, and parallelism fit resource and bandwidth targets.
+Do not arbitrarily finalize all missing inputs. Ask about the next decision that affects the design,
+continue independent investigation and estimation, and record unanswered decisions in unresolved_decisions.
+
+4. Propose operation → ISA → executor and bank mappings
+For each semantic operation, show inputs, outputs, state, prefill/decode shapes, ISA command sequences,
+required executor or reused mode, banks and DMA, and PS/PL responsibilities in a table.
+Compare sharing/fusion candidates in numeric boundaries, buffer/port costs, and verification units.
+Do not create an opcode for every architectural component or low-level Python call.
+Share GEMM implementations where capabilities match. Distinguish embedding address selection from tensor computation.
+Present opcode and module lists as candidates and finalize them only after discussion with the user.
+
+The default transport is PS-preloaded command BRAM. PS writes the entire current program including terminal END,
+then publishes START; records cannot be modified while BUSY.
+The dispatcher examines only the current instruction at a single PC and never skips a blocked PC.
+Atomically acquire operand banks and advance the PC in the same cycle as executor command acceptance.
+Nonconflicting commands may remain outstanding; collect completions independently of the current PC.
+END stops new issue; DONE occurs after all outstanding commands complete and release their banks.
+Command BRAM is separate from the data-bank namespace; data bank 0 is legal.
+Use exclusive ownership per bank. The owner identifies a module operand port role, not an opcode.
+Specify busy/owner separately from tensor validity, progress, and logical lifetime.
+Failed commands do not commit a valid destination.
+Compute tensor operands are logical bank IDs: do not pass DDR addresses, raw local addresses, or bank offsets.
+PS owns DDR residency tiling; the agreed executor owns computation tiling within local banks.
+
+Assess whether FENCE, bank lifetime flags/control, LOOP/JUMP, or compound commands beyond END are needed
+using actual dependencies and command counts. Investigate ordering not captured by bank scoreboarding,
+including DDR STORE→LOAD dependencies through different banks.
+Do not copy dispatcher-internal DMA expansions such as the existing SmolLM2 GEMM_TILES as defaults.
+Compare them with explicit DMA/compute sequences; explain effects on PS scheduling, address boundaries,
+response identity, and conflicts with common contracts/checkers before deciding with the user.
+
+5. Assess command capacity and chunk execution
+Compute instruction record size and prefill/decode command counts including END and control records.
+If the program cannot fit in one command BRAM, evaluate execution in chunks using a single BRAM first.
+Each chunk drains through END. DONE means chunk completion, not full-model completion.
+Specify preservation of bank data/validity/progress and KV/DDR state between chunks, PC restart and reset scope,
+and the PS sequence: check DONE/errors → write the next records → END → START.
+Estimate command capacity, chunk boundaries, PS loading/start costs, and total latency.
+Compare double buffering and LOOP/JUMP with the single-BRAM approach in necessity, resources, control, and verification costs,
+then decide with the user. Do not introduce a command ring queue without justification.
+
+6. Validate the reference and ISA interpreter after agreement
+Save the agreed trace, ISA, and bank layout using the current checker schemas.
+Do not falsely mark candidates reviewed/frozen/passed or create empty contracts for unimplemented modules.
+The Python ISA interpreter must execute actual tensor values, cache, and bank state.
+Record golden inputs, outputs, and intermediate state per command, with complete tensors or reproducible files and hashes.
+Distinguish semantic-boundary comparisons against the reference from comparisons against the agreed hardware arithmetic oracle.
+Specify scales, zero points, accumulator widths/order, rounding, saturation, nonlinear approximations, and nonfinite behavior.
+Verify prefill followed by decode, multiple decode steps, chunk boundaries, tails, maximum supported lengths, and cache boundaries.
+Structural/address-boundary checks alone are not numerical validation at that length.
+Apply the user's agreed criteria for tensor errors, logits, tokens, and quality.
+Do not begin affected HDL while interpreter validation fails or implementation-relevant decisions remain unresolved.
+
+7. Implement and verify agreed modules incrementally
+For each current executor, first propose operation scope, algorithm, ports, bank access, numerics, parallelism,
+target clock/resources, and golden verification criteria; record the user's decisions in its module contract.
+The Parent owns the model, ISA, banks, and task decomposition. Use an implementation Child and a separate independent verification Child.
+Provide current contracts and that module's contract to each Child, without using historical Skills.
+Compute executors provide cmd_valid, cmd_ready, command information, and identifiable completion/error responses.
+Return exactly one response per accepted command. Connect bank data ports through the fabric/wrapper.
+Reuse the common dispatcher, DataMover, and ownership logic. Fill model-specific decode, routing, and completion tracking
+only in the template's permitted extension regions. Verify generated binding and RTL for the new revision.
+Distinguish golden comparisons, RTL simulation/lint, synthesis, routed timing/resources, integration, and physical hardware.
+Proceed to the next executor after the user's cumulative board checkpoint results are accepted.
+Do not repeat approval requests for decisions or stage progression already authorized in this conversation.
+
+8. Prepare board handoff and completion assessment
+Prepare BIT/HWH/XSA from the same build, the selected runtime application, model assets, and execution instructions.
+Link source, contract, vector, artifact, and user-result identities.
+The user runs the physical FPGA. Provide expected values, error limits, performance measurements, and diagnostics.
+Distinguish command execution completion, partial tensor/sample checks, full numerical/quality acceptance, and performance targets.
+Do not claim full-model accelerator completion before the agreed prefill/decode scope and outputs are validated on the board.
+
+[Deliverables for this run]
+For inspect_and_propose, present repository inspection results, verified model/hardware identities,
+execution traces and unobserved paths, resource/command-capacity estimates, operation→ISA→module candidates,
+prioritized unresolved decisions, and the next single question.
+Do not begin HDL implementation or finalize ISA/module boundaries.
+For continue_agreed_work, check existing decisions and evidence first and perform the next authorized work.
+Use inputs to specialize the task, but do not present unresolved values as user agreements.
+
+Explain findings and ask the user questions in English. Preserve code identifiers and contract field names.

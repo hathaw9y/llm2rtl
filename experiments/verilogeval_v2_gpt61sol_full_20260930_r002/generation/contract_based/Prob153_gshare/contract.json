@@ -1,0 +1,77 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "areset": 1,
+      "predict_valid": 1,
+      "predict_pc": 7,
+      "train_valid": 1,
+      "train_taken": 1,
+      "train_mispredicted": 1,
+      "train_history": 7,
+      "train_pc": 7
+    },
+    "outputs": {
+      "predict_taken": 1,
+      "predict_history": 7
+    }
+  },
+  "semantics": {
+    "prediction": "Combinational: history is current global history; taken is MSB of PHT[predict_pc XOR history]. Original says prediction uses state before next positive-edge training.",
+    "history_update": "At positive edge, train_valid AND train_mispredicted has priority: append train_taken to train_history. Otherwise predict_valid appends pre-edge predict_taken to current history. Otherwise hold.",
+    "training": "At positive edge when train_valid, increment/decrement PHT[train_pc XOR train_history] with saturation according to train_taken; independent of history update.",
+    "reset": "Original explicitly requires asynchronous active-high reset. Assumed reset history=0 and all PHT counters=01. No specified power-up state; RTL remains unknown until reset.",
+    "invalid_prediction": "Outputs remain combinational even when predict_valid=0; specification only requires valid predictions. Invalid requests never advance history.",
+    "timing": "No added ports or latency. Shift toward MSB, newest branch in bit 0."
+  },
+  "numeric": {
+    "history_width": 7,
+    "index_width": 7,
+    "hash": "bitwise XOR",
+    "pht_entries": 128,
+    "counter_width": 2,
+    "counter_encoding": "00 strongly not taken, 01 weakly not taken, 10 weakly taken, 11 strongly taken",
+    "overflow": "saturate at 0 and 3",
+    "history_truncation": "retain lower six previous bits and append outcome"
+  },
+  "verification": {
+    "oracle": "Independent integer counters and arithmetic history update derived from original behavioral requirements; compare only valid prediction direction and always history.",
+    "phases": "Drive at falling edge; check before rising edge for old training state; update model from pre-edge prediction; check after rising-edge NBA settle.",
+    "coverage": [
+      "asynchronous reset away from clock edge",
+      "all 128 entries",
+      "both saturation boundaries",
+      "same-entry simultaneous prediction/training",
+      "history rollback priority",
+      "invalid train/misprediction hold",
+      "normal simultaneous training/prediction",
+      "deterministic random mixed cycles",
+      "reset during activity"
+    ],
+    "evaluator": "python3 dev_check.py --label initial; fatal mismatches, bounded timeout, explicit PASS"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "reset contents",
+      "evidence": "Original specifies reset polarity and asynchronous behavior but no history or PHT reset values.",
+      "assumption": "History zero; each counter weakly not taken (01)."
+    },
+    {
+      "topic": "history order",
+      "evidence": "Original says update history and recover immediately after branch; bit insertion direction is unstated.",
+      "assumption": "Newest outcome is bit 0; history shifts left."
+    },
+    {
+      "topic": "invalid prediction outputs",
+      "evidence": "Outputs required when predict_valid=1; invalid-cycle values unspecified.",
+      "assumption": "Expose combinational values continuously; TB checks direction only on valid cycles."
+    },
+    {
+      "topic": "timing diagram",
+      "evidence": "Text describes cycles 4 and 5 but no actual diagram is present in problem.txt.",
+      "assumption": "Use stated pre-positive-edge read and positive-edge write semantics."
+    }
+  ]
+}

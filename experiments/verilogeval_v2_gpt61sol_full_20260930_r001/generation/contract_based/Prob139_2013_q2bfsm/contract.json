@@ -1,0 +1,37 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "resetn": {"direction": "input", "width": 1},
+      "x": {"direction": "input", "width": 1},
+      "y": {"direction": "input", "width": 1},
+      "f": {"direction": "output", "width": 1},
+      "g": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "clock": "All state updates occur on positive edges of clk.",
+    "reset": "Synchronous active-low resetn. Every edge with resetn=0 enters A, with f=0 and g=0. Reset has priority in all states. No asynchronous response.",
+    "initialization": "No power-up initialization is specified; behavior is guaranteed after a sampled reset.",
+    "startup": "The first positive edge with resetn=1 while in A starts a one-cycle f=1 pulse. At the next edge f returns to 0 and the FSM begins monitoring x; x during the f pulse is not accepted.",
+    "pattern": "Sample x on each positive edge while monitoring. Detect the contiguous sequence 101, retaining the most recent 1 when repeated 1s occur. g becomes 1 in the clock interval immediately following the edge sampling the final 1.",
+    "y_window": "After g first becomes 1, sample y at the next two positive edges. y=1 at either edge latches g=1 until reset. If both are 0, g becomes 0 immediately after the second edge and remains 0 until reset. y sampled on the pattern-completion edge is ignored.",
+    "outputs": "f and g are Moore outputs, stable for the state interval; f is otherwise 0. No further pattern detection occurs after g has asserted or reached its permanent decision."
+  },
+  "numeric": {
+    "type": "One-bit Boolean inputs and outputs, no arithmetic datapath.",
+    "state": "Finite state encoding is internal and does not change interface behavior.",
+    "overflow_rounding": "Not applicable. No numeric scaling, rounding, saturation or wraparound."
+  },
+  "verification": {
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp, finite shell timeouts.",
+    "oracle": "Independent procedural monitor using startup phase, a rolling three-bit x history with sample count, a two-sample y deadline and a permanent outcome flag; compare outputs after each edge.",
+    "coverage": "Exhaust all eight-cycle x/y combinations after startup, directed first/second/late y decisions, repeated ones and failed partial patterns, reset at every reachable phase, reset assertion between edges, and deterministic random sequences.",
+    "limits": "Development simulation only; no official testbench, reference RTL, synthesis or board access."
+  },
+  "specification_ambiguities": [
+    {"topic": "Clock-cycle wording", "resolution": "The interval after the final sampled x=1 is the following clock cycle where g=1. The two y observations occur on the subsequent two edges, and x monitoring starts after the f pulse."}
+  ]
+}

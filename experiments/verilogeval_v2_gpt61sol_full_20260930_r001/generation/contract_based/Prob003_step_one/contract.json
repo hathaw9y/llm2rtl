@@ -1,0 +1,38 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "one",
+        "direction": "output",
+        "width": 1
+      }
+    ],
+    "inputs": [],
+    "parameters": []
+  },
+  "semantics": {
+    "behavior": "one is continuously driven to logic high.",
+    "clock": "None",
+    "reset": "None",
+    "initialization": "No state or initialization sequence; constant continuous drive applies from simulation settling at time zero onward.",
+    "cycle_timing": "Combinational constant output; no clock cycles or transaction latency."
+  },
+  "numeric": {
+    "output_value": "1'b1",
+    "width_bits": 1,
+    "signedness": "unsigned",
+    "arithmetic": "None; rounding, truncation, saturation and overflow do not apply."
+  },
+  "verification": {
+    "independent_oracle": "Original specification requires one === 1'b1 at every observation.",
+    "plan": [
+      "Compile candidate.sv with an independently written dev_tb using Icarus -g2012 and explicit top dev_tb.",
+      "Check one with four-state case inequality after time-zero settling and repeatedly over time.",
+      "Use finite external compile and simulation timeouts and preserve logs."
+    ],
+    "scope": "Development simulation only; no official evaluation or synthesis."
+  },
+  "specification_ambiguities": []
+}

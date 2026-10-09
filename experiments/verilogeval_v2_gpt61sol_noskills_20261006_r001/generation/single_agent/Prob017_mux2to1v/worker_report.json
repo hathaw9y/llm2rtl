@@ -1,0 +1,14 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"name": "environment_smoke", "status": "passed", "evidence": "environment_smoke.json", "cases": ["correct fixture passed", "injected fault failed", "repaired fixture passed"]},
+    {"name": "initial", "status": "passed", "evidence": "development/01/result.json", "compile": "Icarus 12 with -g2012 -Wall -Wno-timescale", "simulation_checks": 1212}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "The original specification defines selection for sel=0 and sel=1; no oracle requirements were added for unknown select values."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Combinational 100-bit 2-to-1 mux selecting a for sel=0 and b for sel=1, with no extra ports or latency.",
+  "testbench": "Independent if/else oracle checks both selections, all-zero/all-one vectors, every bit position, randomized input changes, and four-state data with known select; includes fatal mismatches and a bounded timeout.",
+  "initial_snapshot": "candidate_initial.sv preserved immediately after creation and unchanged."
+}

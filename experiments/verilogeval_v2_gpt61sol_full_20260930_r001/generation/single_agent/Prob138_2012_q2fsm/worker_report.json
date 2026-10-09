@@ -1,0 +1,30 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "outcome": "passed",
+      "details": "All 12 specified state transitions match; z is high only in E and F; synchronous active-high reset selects A on the rising edge; separate always_comb and always_ff blocks; complete default state recovery and no inferred latch."
+    },
+    {
+      "name": "Icarus development compilation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "outcome": "failed",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "exit_status_file": "dev_compile.exit",
+      "details": "Compiler exited with status 139 without diagnostic output."
+    },
+    {
+      "name": "development simulation",
+      "outcome": "not run",
+      "details": "Compilation failed. Independent dev_tb.sv is retained and includes exhaustive length-eight input sequences, transition coverage, synchronous-reset checks, and finite timeout protection."
+    }
+  ],
+  "development_outcome": "Initial candidate delivered unchanged after static review; development compilation failed and simulation success is not claimed.",
+  "limitations": [
+    "RTL has not been dynamically validated because the development compiler failed.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing analysis, or board validation performed."
+  ]
+}

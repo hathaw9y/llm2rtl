@@ -1,0 +1,40 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": [
+      "p1a",
+      "p1b",
+      "p1c",
+      "p1d",
+      "p2a",
+      "p2b",
+      "p2c",
+      "p2d"
+    ],
+    "outputs": [
+      "p1y",
+      "p2y"
+    ],
+    "widths": "All ports are one bit as explicitly specified."
+  },
+  "semantics": {
+    "p1y": "NAND of p1a, p1b, p1c, p1d",
+    "p2y": "NAND of p2a, p2b, p2c, p2d",
+    "timing": "Combinational: the original specifies two 4-input NAND gates and no clock or latency.",
+    "reset_initialization": "No reset, state, or initialization is specified or needed for combinational gates."
+  },
+  "numeric": {
+    "domain": "One-bit logical inputs and outputs; no arithmetic or signedness.",
+    "truth_table": "Each output is 0 exactly when all four corresponding binary inputs are 1; otherwise it is 1."
+  },
+  "verification": {
+    "oracle": "Independent truth-table predicate per gate from the original two 4-input NAND gate specification.",
+    "coverage": "All 256 combinations of eight binary inputs, including all-high, all-low, and each single-low gate input.",
+    "sampling": "Wait 1 ns after each input change for combinational settling.",
+    "failure_success": "$fatal on any mismatch, bounded timeout, PASS only after all vectors."
+  },
+  "specification_ambiguities": [
+    "Four-state X/Z behavior is not explicitly specified; use normal Verilog bitwise NAND semantics. Binary truth-table behavior is fully specified."
+  ]
+}

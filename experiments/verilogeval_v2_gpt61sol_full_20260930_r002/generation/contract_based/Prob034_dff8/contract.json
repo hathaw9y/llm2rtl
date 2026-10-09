@@ -1,0 +1,29 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {"clk": "input scalar", "d": "input [7:0]", "q": "output [7:0]"},
+    "evidence": "Original interface lists clk, 8-bit d, and 8-bit q only."
+  },
+  "semantics": {
+    "capture": "At each positive edge of clk, q becomes the sampled d after the sequential update.",
+    "hold": "q holds its last sampled value between positive edges, including falling edges and input changes.",
+    "reset": "No reset port or reset behavior is specified; none is added.",
+    "initialization": "No initial value is specified; RTL has no initialization. Tests do not demand a defined value before first capture.",
+    "evidence": "Original states: include 8 D flip-flops; all DFFs triggered by positive edge of clock."
+  },
+  "numeric": {
+    "width": 8,
+    "mapping": "q[i] captures d[i] for i=0 through 7",
+    "arithmetic": "None; exact bitwise storage without truncation or conversion."
+  },
+  "verification": {
+    "oracle": "Original positive-edge DFF requirement, sampled after NBA settling.",
+    "coverage": "All 256 binary values, walking bit patterns, hold during high/low clock, falling-edge hold, repeated captures and four-state bit copying.",
+    "timeout": "Bounded testbench timeout with fatal failures and PASS only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {"topic": "Power-up state", "evidence": "Original gives no initialization or reset.", "resolution": "Leave uninitialized; no pre-first-edge defined-value requirement."}
+  ]
+}

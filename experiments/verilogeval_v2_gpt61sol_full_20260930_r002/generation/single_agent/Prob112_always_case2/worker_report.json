@@ -1,0 +1,51 @@
+{
+  "revision_count": 1,
+  "checks": [
+    {
+      "label": "smoke_environment",
+      "status": "passed",
+      "cases": [
+        "correct fixture passes",
+        "injected fault fails",
+        "repaired fixture passes"
+      ]
+    },
+    {
+      "label": "initial",
+      "status": "compile_failed",
+      "evidence": "development/01/result.json",
+      "reason": "Icarus 12 compiler exited with code 139; supplemental Icarus 11 compilation succeeded with constant-select always_* diagnostics."
+    },
+    {
+      "label": "revision_1",
+      "status": "passed",
+      "evidence": "development/02/result.json",
+      "coverage": "All 16 binary inputs in ascending and descending order, 32 comparisons."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Unknown/high-impedance input behavior is unspecified and was not tested.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [
+    {
+      "revision": 1,
+      "change": "Replace always_comb with always @*.",
+      "justification": "Simulator compatibility after inspecting compiler crash logs and supplemental constant-select diagnostics; priority and combinational behavior unchanged."
+    }
+  ],
+  "justified_tb_changes": [],
+  "interface_cycle_contract": "TopModule: 4-bit in, 2-bit pos; combinational least-significant asserted bit index; zero input yields zero; no clocks, reset, extra ports, or added latency.",
+  "static_review": "All paths assign pos, constants explicitly sized, blocking assignments, single output driver.",
+  "artifacts": [
+    "candidate.sv",
+    "candidate_initial.sv",
+    "candidate_revision_1.sv",
+    "dev_tb.sv",
+    "dev_checks.jsonl",
+    "development/01",
+    "development/02"
+  ]
+}

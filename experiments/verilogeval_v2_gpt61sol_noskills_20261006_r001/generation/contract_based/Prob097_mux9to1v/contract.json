@@ -1,0 +1,58 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 16,
+      "b": 16,
+      "c": 16,
+      "d": 16,
+      "e": 16,
+      "f": 16,
+      "g": 16,
+      "h": 16,
+      "i": 16,
+      "sel": 4
+    },
+    "outputs": {
+      "out": 16
+    }
+  },
+  "semantics": {
+    "kind": "combinational multiplexer",
+    "selection": {
+      "0": "a",
+      "1": "b",
+      "2": "c",
+      "3": "d",
+      "4": "e",
+      "5": "f",
+      "6": "g",
+      "7": "h",
+      "8": "i"
+    },
+    "unused_selectors": "sel 9 through 15 produce all ones",
+    "timing_evidence": "Original specifies a multiplexer without clock or cycle behavior; output follows current inputs without added latency.",
+    "reset_initialization_evidence": "Original interface has no reset or clock; no state or initialization requirement is specified."
+  },
+  "numeric": {
+    "data_width": 16,
+    "selector_width": 4,
+    "unused_output": "16'hffff",
+    "operation": "Bit-preserving selection, with no arithmetic or signed interpretation."
+  },
+  "verification": {
+    "oracle": "Independent indexed input array derived from original sel=0 chooses a, sel=1 chooses b, etc.; sel >= 9 expects 65535.",
+    "cases": [
+      "Every selector 0 through 15",
+      "Zero, all-one, alternating, and per-bit walking patterns on every data input",
+      "Deterministic varied data with every selector",
+      "Selected input changes with selector held fixed"
+    ],
+    "sampling": "Drive inputs then sample after 1 ns combinational settling; no clock/reset phases exist.",
+    "failure": "$fatal on mismatch or bounded timeout; PASS only after all cases succeed."
+  },
+  "specification_ambiguities": [
+    "Behavior for selector containing X or Z is unspecified; verification constrains selector to binary values."
+  ]
+}

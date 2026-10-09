@@ -1,0 +1,213 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob072_thermostat",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob072_thermostat",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob072_thermostat/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790751911.7418716,
+    "ended_at_unix": 1790752023.858228,
+    "seconds": 112.11635684967041,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 126447,
+      "cached_input_tokens": 98560,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1960,
+      "reasoning_output_tokens": 34
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "a589afe897990827ca331e168014683c19a0d6be1180178a964826a77d403a48",
+  "contract_sha256": "f563901731113be9fafca09c825cbd40098276874e9abdbce7aa9ee9fe14a87c",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "initial",
+        "check_index": 1,
+        "checked_at_unix": 1790751993.946025,
+        "source_sha256": "a589afe897990827ca331e168014683c19a0d6be1180178a964826a77d403a48",
+        "testbench_sha256": "a003b9d84812ad799e8a102a076ed54e13ac3206f7ef73846852ee9e50db7a2a",
+        "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob072_thermostat/development/01",
+        "compile": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+            "-g2012",
+            "-Wall",
+            "-Wno-timescale",
+            "-s",
+            "dev_tb",
+            "-o",
+            "dev.vvp",
+            "candidate.sv",
+            "dev_tb.sv"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.013192407786846161
+        },
+        "simulation": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+            "dev.vvp"
+          ],
+          "returncode": 0,
+          "stdout": "PASS thermostat: 32 checks, all 16 binary combinations\ndev_tb.sv:50: $finish called at 32000 (1ps)\n",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.006019760854542255
+        },
+        "status": "passed"
+      }
+    ],
+    "development_outcome": "passed",
+    "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+    "contract_gate": "passed_structure_only; see contract_gate.json",
+    "limitations": [
+      "Development verification only; official evaluation has not occurred.",
+      "Original specification does not define X/Z input behavior; oracle covers binary inputs.",
+      "No synthesis or board work performed, as required."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "implementation_summary": "Combinational one-bit heater, aircon, and fan controls; original TopModule interface preserved with no clock, reset, state, or added latency.",
+    "verification_summary": "Independent procedural oracle based on original problem; 32 checks cover all 16 binary combinations in ascending and descending sequences; fatal mismatch and bounded timeout included.",
+    "static_review": "Single continuous driver per output, no latches or registers, all ports one bit, no arithmetic sizing concerns.",
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "development_evidence": "dev_checks.jsonl and development/01"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a589afe897990827ca331e168014683c19a0d6be1180178a964826a77d403a48",
+      "Prob072_thermostat_test.sv": "ff9b235a01aaabd6b13e085ef001b552de63dcb64a38e1f618672d740923ede3",
+      "Prob072_thermostat_ref.sv": "11ab9eccf4df5719e600eca68d15eafd612aecec668a0ff97951f5637d56fd1b"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob072_thermostat_test.sv",
+        "Prob072_thermostat_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014269152656197548
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb072_thermostat_test.sv:63: $finish called at 1241 (1ps)\nHint: Output 'heater' has no mismatches.\nHint: Output 'aircon' has no mismatches.\nHint: Output 'fan' has no mismatches.\nHint: Total mismatched samples is 0 out of 248 samples\n\nSimulation finished at 1241 ps\nMismatches: 0 in 248 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009726804681122303
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "a589afe897990827ca331e168014683c19a0d6be1180178a964826a77d403a48",
+      "Prob072_thermostat_test.sv": "ff9b235a01aaabd6b13e085ef001b552de63dcb64a38e1f618672d740923ede3",
+      "Prob072_thermostat_ref.sv": "11ab9eccf4df5719e600eca68d15eafd612aecec668a0ff97951f5637d56fd1b"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob072_thermostat_test.sv",
+        "Prob072_thermostat_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014964986592531204
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb072_thermostat_test.sv:63: $finish called at 1241 (1ps)\nHint: Output 'heater' has no mismatches.\nHint: Output 'aircon' has no mismatches.\nHint: Output 'fan' has no mismatches.\nHint: Total mismatched samples is 0 out of 248 samples\n\nSimulation finished at 1241 ps\nMismatches: 0 in 248 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009636202827095985
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

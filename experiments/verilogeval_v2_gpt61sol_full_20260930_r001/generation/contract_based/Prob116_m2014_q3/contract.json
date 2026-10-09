@@ -1,0 +1,90 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "x": {
+        "direction": "input",
+        "width": 4,
+        "range": "[4:1]"
+      },
+      "f": {
+        "direction": "output",
+        "width": 1
+      }
+    },
+    "clock": null,
+    "reset": null
+  },
+  "semantics": {
+    "type": "combinational",
+    "timing": "f responds to current x without clock or registered latency; allow combinational settling in tests",
+    "initialization": "No state or initialization required",
+    "map_columns": [
+      "00",
+      "01",
+      "11",
+      "10"
+    ],
+    "column_bits": [
+      "x[1]",
+      "x[2]"
+    ],
+    "map_rows": [
+      "00",
+      "01",
+      "11",
+      "10"
+    ],
+    "row_bits": [
+      "x[3]",
+      "x[4]"
+    ],
+    "map_values": [
+      [
+        "d",
+        0,
+        "d",
+        "d"
+      ],
+      [
+        0,
+        "d",
+        1,
+        0
+      ],
+      [
+        1,
+        1,
+        "d",
+        "d"
+      ],
+      [
+        1,
+        1,
+        0,
+        "d"
+      ]
+    ],
+    "dont_care": "Either binary output is permitted for each d cell",
+    "unknown_inputs": "Unspecified by original problem"
+  },
+  "numeric": {
+    "input": "Four independent unsigned Boolean bits",
+    "output": "One Boolean bit",
+    "arithmetic": "Boolean function only; no rounding, saturation, accumulation, or overflow"
+  },
+  "verification": {
+    "oracle": "Original map stored as a row/column table, independent of RTL equation",
+    "coverage": "Exhaust all 16 binary input combinations in ascending and descending order; compare all nine specified cells and require binary output on seven d cells",
+    "settling": "Wait one simulation time unit after each input change",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top, finite external timeouts",
+    "success": "No mismatches and explicit PASS marker"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Port list gives width but no vector range",
+      "resolution": "Use [4:1] because the map explicitly names x[1], x[2], x[3], x[4]"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "c": {
+        "direction": "input",
+        "width": 1
+      },
+      "d": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "combinational",
+    "function": "q = ~(a ^ b ^ c ^ d); even parity",
+    "truth_table_in_abcd_binary_order": "1001011001101001",
+    "timing": "Output follows current inputs after combinational settling; no clock cycles or explicit delay. Waveform times are stimulus times.",
+    "reset": "No reset port or reset behavior",
+    "initialization": "No stored state or initialization required; 0000 produces 1",
+    "history": "Independent of input history"
+  },
+  "numeric": {
+    "operands": "one-bit unsigned Boolean inputs",
+    "result": "one-bit Boolean output",
+    "arithmetic": "Bitwise XOR and complement; no numeric addition, rounding, truncation, saturation, or overflow"
+  },
+  "verification": {
+    "oracle": "Literal truth table transcribed from the original waveform, indexed by {a,b,c,d}; independent of the RTL parity expression",
+    "coverage": "All 16 binary combinations forward and reverse, repeated 0000 holding checks, and all 256 ordered transitions",
+    "comparison": "Case inequality against literal expected bit after 1 ns settling",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; matching vvp; finite external timeouts and testbench watchdog",
+    "scope": "Development simulation only; no official evaluation or synthesis"
+  },
+  "specification_ambiguities": [
+    "Behavior for X or Z inputs is not specified; development acceptance covers binary inputs only."
+  ]
+}

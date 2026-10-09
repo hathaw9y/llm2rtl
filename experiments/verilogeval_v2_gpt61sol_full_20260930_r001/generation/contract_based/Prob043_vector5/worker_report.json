@@ -1,0 +1,44 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "passed",
+      "details": "Exact ports and widths; 25-bit replicated operands; continuous combinational XNOR assignment; no state, latch or external module dependencies."
+    },
+    {
+      "name": "icarus_compile",
+      "result": "failed",
+      "exit_code": 139,
+      "log": "compile.log",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv"
+    },
+    {
+      "name": "exhaustive_binary_simulation",
+      "result": "failed_or_not_run",
+      "exit_code": null,
+      "log": "simulation.log",
+      "coverage": "Planned: 32 input combinations and 800 output-bit comparisons; not executed.",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim"
+    }
+  ],
+  "development_outcome": "Development tool failure; logs preserved and best initial RTL delivered.",
+  "limitations": [
+    "Official evaluation has not run and its results are unavailable.",
+    "No synthesis, timing analysis or board validation performed.",
+    "X/Z behavior uses bitwise XNOR semantics but was not separately simulated.",
+    "Icarus compilation exited with status 139 (SIGSEGV), so RTL elaboration and simulation were not verified."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

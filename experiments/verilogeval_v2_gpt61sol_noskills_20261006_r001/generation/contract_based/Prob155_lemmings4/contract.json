@@ -1,0 +1,61 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": [
+      "clk",
+      "areset",
+      "bump_left",
+      "bump_right",
+      "ground",
+      "dig"
+    ],
+    "outputs": [
+      "walk_left",
+      "walk_right",
+      "aaah",
+      "digging"
+    ],
+    "widths": "All ports one bit"
+  },
+  "semantics": {
+    "evidence": "problem.txt: Moore machine; all sequential logic positive clock edge; positive-edge asynchronous areset resets to walk left",
+    "reset": "Asynchronous assertion selects walking left and clears fall duration; no specified power-up state before reset",
+    "walking": "ground loss overrides dig, which overrides bump in current direction; both bumps reverse direction",
+    "digging": "Persists until ground loss; retains direction and ignores bumps",
+    "falling": "Retains direction; ignores bumps and dig; on landing walks if duration <=20, otherwise enters permanent all-zero dead state",
+    "outputs": "Moore outputs decoded from state, updated after sequential NBA settling"
+  },
+  "numeric": {
+    "fall_duration": "Count consecutive complete falling clock intervals: first ground=0 edge enters falling with count 1; after N successive ground=0 sampled edges, landing at next edge completes N falling intervals",
+    "threshold": "20 survives, 21 splatters only at landing",
+    "overflow": "Saturate count at 21 so arbitrarily long falls remain lethal"
+  },
+  "verification": {
+    "oracle": "Independent behavioral mode/direction and unbounded integer fall duration based on original text",
+    "sampling": "Drive inputs on negative edges; inspect stable outputs before positive edge and after NBA settling",
+    "cases": [
+      "asynchronous reset",
+      "both bump directions and simultaneous bumps",
+      "fall/dig/bump priority",
+      "dig persistence",
+      "landing ignores bumps and dig",
+      "19/20/21/22 cycle falls",
+      "very long falls",
+      "dead absorbing state",
+      "reset while falling/digging/dead",
+      "deterministic randomized transitions"
+    ],
+    "timeout": "Bounded testbench timeout and fatal on mismatches"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Fall-cycle counting",
+      "resolution": "Interpret a falling cycle as the interval between entry into falling and the next positive edge; N ground-low samples followed by landing yield N falling cycles. Text specifies more than 20 cycles, with no waveform."
+    },
+    {
+      "topic": "Before first reset",
+      "resolution": "No initial state specified; verification asserts reset before requiring known outputs."
+    }
+  ]
+}

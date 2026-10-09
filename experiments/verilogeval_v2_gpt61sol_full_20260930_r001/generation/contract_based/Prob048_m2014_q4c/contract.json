@@ -1,0 +1,49 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "d": {
+        "direction": "input",
+        "width": 1
+      },
+      "r": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "rising edge of clk (conventional D flip-flop interpretation)",
+    "update": "At each rising edge, q becomes 0 if r is high, otherwise q becomes sampled d.",
+    "reset": "Active-high synchronous reset; r takes priority over d. Reset transitions alone do not change q.",
+    "hold": "q holds between rising clock edges, including falling edges.",
+    "initialization": "No specified power-up value; no RTL initialization. Tests establish known state with a clocked reset.",
+    "latency": "Sampled input appears at q after the same rising edge register update; one sample per rising edge."
+  },
+  "numeric": {
+    "data": "One-bit logic copied without arithmetic.",
+    "reset_value": "1'b0",
+    "signedness": "Unsigned scalar ports.",
+    "overflow_rounding_saturation": "Not applicable."
+  },
+  "verification": {
+    "oracle": "Independent edge-based expected value: r ? 0 : d, checked after nonblocking assignments settle.",
+    "directed": "Cover all four binary r/d combinations, repeated samples, reset with d high, and reset release.",
+    "timing": "Toggle d and assert/deassert r between edges and check q holds; check falling edges hold.",
+    "initialization": "Do not assert a value before the first clocked reset.",
+    "tools": "Icarus v12, -g2012, explicit dev_tb top; finite compile and simulation timeouts."
+  },
+  "specification_ambiguities": [
+    "Clock edge is not explicitly stated; use the conventional rising edge for a simple D flip-flop.",
+    "Power-up output is unspecified; no initial value is imposed."
+  ]
+}

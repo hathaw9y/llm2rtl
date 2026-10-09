@@ -62,6 +62,23 @@ module tb_command_queue;
    reset_all();send(a,n,o,b);response(c,0);
    if(issued!=0 || active || faulted) $fatal(1,"invalid descriptor dispatched or poisoned channel");
  endtask
+ task automatic prime_active;
+   reset_all();send(0,8,0,0);wait(issued==1);
+ endtask
+ task automatic simultaneous_abort(input logic drive_status,input logic [7:0] s,input logic drive_done);
+   @(negedge clk);sd=s;sk=1;sl=1;sv=drive_status;adone=drive_done;abort_req=1;
+   @(posedge clk);#1;
+   @(negedge clk);sv=0;adone=0;abort_req=0;
+ endtask
+ task automatic check_abort_response(input logic [7:0] expected_raw,input logic [3:0] expected_received);
+   wait(rv);@(negedge clk);
+   if(code!==8'h50 || rt!==0 || raw!==expected_raw || received_tag!==expected_received)
+     $fatal(1,"abort response mismatch code=%h tag=%h raw=%h received=%h",code,rt,raw,received_tag);
+   repeat(3) begin @(negedge clk);if(!rv || code!==8'h50) $fatal(1,"abort response not held");end
+   rr=1;@(negedge clk);rr=0;
+   repeat(3) @(negedge clk);
+   if(rv || !faulted || !active) $fatal(1,"abort response repeated or head retired");
+ endtask
  initial begin
    reject(0,0,0,0,8'h01);
    reject(3,8,0,0,8'h02);
@@ -105,8 +122,29 @@ module tb_command_queue;
    repeat(3) @(negedge clk);abort_req=0;
    if(!faulted || cr || !dv) $fatal(1,"scheduler abort guard");
    dr=1;response(8'h50,0);
+   // Abort wins over status/adapter concurrency and reports exactly once.
+   prime_active();simultaneous_abort(1,8'h80,1);check_abort_response(8'h80,0);
+   prime_active();simultaneous_abort(1,8'hc7,1);check_abort_response(8'hc7,7);
+   prime_active();simultaneous_abort(0,8'h00,1);check_abort_response(8'h00,0);
+   prime_active();simultaneous_abort(1,8'h80,0);check_abort_response(8'h80,0);
+   prime_active();simultaneous_abort(1,8'hc7,0);check_abort_response(8'hc7,7);
+   prime_active();simultaneous_abort(0,8'h00,0);check_abort_response(8'h00,0);
+   // An already offered response is stable. Abort follows it without pop.
+   prime_active();adapter_finish();status(8'h80,1,1);wait(rv);
+   @(negedge clk);if(code!==0) $fatal(1,"normal completion setup");abort_req=1;
+   @(posedge clk);#1;if(!rv || code!==0) $fatal(1,"abort overwrote stalled completion");
+   @(negedge clk);abort_req=0;rr=1;@(posedge clk);#1;
+   if(!rv || code!==8'h50) $fatal(1,"deferred abort response missing");
+   @(negedge clk);rr=0;repeat(2) @(negedge clk);rr=1;@(negedge clk);rr=0;
+   repeat(2) @(negedge clk);if(rv || !active) $fatal(1,"deferred abort repeated/retired head");
+   // Existing completion accepted on the abort edge is replaced next cycle.
+   prime_active();adapter_finish();status(8'h80,1,1);wait(rv);
+   @(negedge clk);abort_req=1;rr=1;@(posedge clk);#1;
+   if(!rv || code!==8'h50) $fatal(1,"same-edge accepted completion did not yield abort");
+   @(negedge clk);abort_req=0;rr=0;repeat(2) @(negedge clk);rr=1;@(negedge clk);rr=0;
+   repeat(2) @(negedge clk);if(rv || !active) $fatal(1,"same-edge abort repeated/retired head");
    reset_all();send(0,8,0,0);wait(issued==1);adapter_finish();status(8'h80,1,1);response(0,0);
-   $display("PASS command queue descriptor/order/capacity/tag-wrap/status-fault/stall/scheduler-recovery");$finish;
+   $display("PASS command queue descriptor/order/capacity/tag-wrap/status-fault/stall/scheduler-recovery/abort-concurrency");$finish;
  end
  initial begin #200000;$fatal(1,"timeout");end
 endmodule

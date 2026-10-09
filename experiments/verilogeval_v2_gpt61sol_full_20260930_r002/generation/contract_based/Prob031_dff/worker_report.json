@@ -1,0 +1,66 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790742797.7597044,
+      "source_sha256": "9e35ed35cfb02c9a32d52717b6bd2bd0d743a9e2f9144264436c11f81e7cc817",
+      "testbench_sha256": "28a779bf1266606970e48dc460aa54cda94dccefcc191d853de0f6aae2dea7f5",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob031_dff/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.013035801239311695
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: D flip-flop capture and hold verified (39 checks)\ndev_tb.sv:60: $finish called at 60000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.006010537035763264
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_validation": "passed_structure_only; see contract_gate.json",
+  "limitations": [
+    "Development verification only; official correctness has not been evaluated.",
+    "Original text lists q as input; interpreted as output to implement the explicitly requested single D flip-flop.",
+    "No power-up value specified; testbench establishes state at first rising edge without asserting an initial value.",
+    "No synthesis or board work performed."
+  ],
+  "justified_changes": {
+    "rtl": [],
+    "testbench": [],
+    "contract": []
+  },
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "behavior": "One-bit positive-edge D flip-flop; q <= d, no reset, no extra latency.",
+    "numeric": "One-bit four-state signals; no arithmetic.",
+    "static_review": "Single sequential driver, nonblocking assignment, original clock and data names preserved; q direction ambiguity documented."
+  }
+}

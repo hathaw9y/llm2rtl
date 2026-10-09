@@ -1,0 +1,60 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "in": {
+        "direction": "input",
+        "width": 8
+      },
+      "pedge": {
+        "direction": "output",
+        "width": 8
+      }
+    },
+    "additional_ports": false
+  },
+  "semantics": {
+    "clock": "posedge clk",
+    "sample": "Sample all eight input bits at every rising clock edge.",
+    "equation": "After rising edge n, pedge[i] = (sample[n-1][i] == 0) and (sample[n][i] == 1).",
+    "output_timing": "Registered output is visible during the cycle following the sampling edge detecting the transition; holds between rising edges. No additional delay stage.",
+    "history": "Store the current sampled input for comparison at the next rising edge.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No initial values specified; history and output may be unknown before sufficient known samples. No forced initialization.",
+    "independence": "Each bit is detected independently; held highs and falling transitions produce zero."
+  },
+  "numeric": {
+    "width": 8,
+    "interpretation": "Eight independent Boolean signals indexed 7 through 0.",
+    "operation": "Bitwise rising-transition detection, no arithmetic.",
+    "overflow_rounding_saturation": "Not applicable."
+  },
+  "verification": {
+    "oracle": "Independent per-bit comparisons of previous and current sampled values, evaluated after nonblocking updates.",
+    "startup": "Establish known input history with one sample before checking outputs.",
+    "coverage": [
+      "all 65536 previous/current byte pairs",
+      "held zero and held one",
+      "each independent bit rise and fall",
+      "simultaneous mixed transitions",
+      "output stable between sampling edges"
+    ],
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp; finite command and testbench timeouts.",
+    "scope": "Independent development test only, no official evaluation or synthesis."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "startup",
+      "resolution": "Unspecified initial state remains unconstrained."
+    },
+    {
+      "topic": "cycle after transition",
+      "resolution": "Registered detection of the current sample versus the previous sample is visible immediately after the detecting rising edge for the following cycle."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"in1": 1, "in2": 1, "in3": 1},
+    "outputs": {"out": 1}
+  },
+  "semantics": {
+    "original_evidence": "The two-input XNOR of in1 and in2 feeds a two-input XOR whose second input is in3.",
+    "function": "out = (in1 XNOR in2) XOR in3",
+    "timing": "Combinational gates; no clock, state, or added latency.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No initialized state; output follows current inputs after combinational settling."
+  },
+  "numeric": {
+    "width": "All signals are one bit.",
+    "binary_truth_table_in1_in2_in3_to_out": {"000": 1, "001": 0, "010": 0, "011": 1, "100": 0, "101": 1, "110": 1, "111": 0},
+    "unknowns": "Ordinary Verilog gate semantics propagate x/z at any input to x at out."
+  },
+  "verification": {
+    "oracle": "Explicit binary truth table derived from the original XNOR then XOR circuit; unknown inputs checked with case equality.",
+    "coverage": "All eight binary combinations and all 64 combinations over 0,1,x,z.",
+    "sampling": "Drive inputs then wait one testbench time unit for combinational settling.",
+    "failure": "$fatal on mismatch or bounded timeout; PASS only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

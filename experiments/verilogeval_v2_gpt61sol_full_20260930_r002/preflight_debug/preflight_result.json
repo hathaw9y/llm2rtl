@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "model": "gpt-6.1-sol",
+  "scope": "Synthetic debugging preflight excluded from benchmark score",
+  "seconds": 64.89423108100891,
+  "initial_check": "simulation_failed",
+  "final_check": "passed",
+  "check_count": 2,
+  "worker_report": {
+    "revision_count": 1,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "evidence": "environment_smoke.json"
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "simulation_failed",
+        "evidence": "development/01/result.json",
+        "failure_log": "development/01/simulation.log",
+        "failure": "Expected sampled d=0"
+      },
+      {
+        "command": "python3 dev_check.py --label revision_1",
+        "status": "passed",
+        "evidence": "development/02/result.json",
+        "simulation_log": "development/02/simulation.log"
+      }
+    ],
+    "fix": "Changed q <= ~d to q <= d at each positive clock edge; no reset or initialization added.",
+    "revision_file": "candidate_revision_1.sv",
+    "preservation": {
+      "candidate_initial_unchanged": true,
+      "testbench_unchanged": true,
+      "helpers_edited": false
+    },
+    "official_feedback": "unavailable"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "outcome": "passed",
+      "details": "100-bit register; rising-edge synchronous load has priority; right rotation wraps bit 0 into bit 99; left rotation wraps bit 99 into bit 0; ena 00 and 11 hold state. No reset is specified or added."
+    },
+    {
+      "name": "Icarus development compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "outcome": "tool failure",
+      "exit_code": 139,
+      "log": "compile.log",
+      "details": "Compiler exited with code 139 without diagnostic output; status preserved in check_status.log."
+    },
+    {
+      "name": "development simulation",
+      "outcome": "not run",
+      "details": "Compile failed. Independent dev_tb.sv includes synchronous behavior, load priority, wraparound, both hold modes, full rotation cycles and randomized checks with an internal timeout."
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate delivered unchanged; candidate_initial.sv preserved before development checks. Static review passed, but simulation success is not established.",
+  "limitations": [
+    "Icarus compile failed with exit code 139; no development simulation results are available.",
+    "Initial register contents are unspecified until a synchronous load.",
+    "No synthesis, timing analysis, board access or official evaluation was performed."
+  ]
+}

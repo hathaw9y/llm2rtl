@@ -1,0 +1,55 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "clk": "input 1 bit",
+      "load": "input 1 bit",
+      "data": "input unsigned 10 bits",
+      "tc": "output 1 bit"
+    },
+    "reset": "No reset port specified"
+  },
+  "semantics": {
+    "edge": "All sequential logic triggered on positive edge, as explicitly stated",
+    "load": "At each rising edge load=1 replaces count with data, including during countdown",
+    "countdown": "At each rising edge load=0 decrements positive count; zero holds until load",
+    "tc": "Combinational indication count == 0; no additional registered latency",
+    "initialization": "No initial value specified; leave count uninitialized; tests establish known state by load"
+  },
+  "numeric": {
+    "count_width": 10,
+    "range": [
+      0,
+      1023
+    ],
+    "signedness": "unsigned",
+    "underflow": "Prevent decrement at zero; saturate at zero"
+  },
+  "verification": {
+    "oracle": "Independent integer remaining-duration model grounded in numbered rules of problem.txt",
+    "sampling": "Drive on falling edges; check before and after rising edge after NBA settling",
+    "cases": [
+      "load zero",
+      "load one",
+      "load maximum and full countdown",
+      "reload while counting",
+      "consecutive loads",
+      "zero hold",
+      "input mutation away from rising edge",
+      "exhaustive loaded durations 0 through 1023"
+    ],
+    "timeout": "Bounded simulation timeout",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "evidence": "The module should implement a single D flip-flop.",
+      "resolution": "Conflicts with explicit 10-bit reloadable countdown requirements. Interpret as stray sentence; implement one 10-bit counter register bank."
+    },
+    {
+      "evidence": "No reset or initial count is given.",
+      "resolution": "No reset or initializer added; functional checks start with explicit load, without requiring a defined startup output."
+    }
+  ]
+}

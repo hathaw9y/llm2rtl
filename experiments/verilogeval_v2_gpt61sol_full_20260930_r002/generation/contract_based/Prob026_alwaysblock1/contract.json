@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"a": 1, "b": 1}, "outputs": {"out_assign": 1, "out_alwaysblock": 1}, "evidence": "problem.txt explicitly lists these four one-bit ports"},
+  "semantics": {"function": "Both outputs implement the AND truth table of a and b", "implementation": "out_assign uses continuous assign; out_alwaysblock uses a combinational always block", "timing": "Combinational evaluation after input changes; no clock, cycle latency, reset, handshake or stored state", "initialization": "No initialization specified; outputs follow inputs after combinational settling", "evidence": "problem.txt: AND gate using both an assign statement and a combinational always block"},
+  "numeric": {"width": "All ports are one bit", "operation": "Bitwise one-bit AND", "arithmetic": "No signed arithmetic, rounding, overflow or saturation"},
+  "verification": {"oracle": "Explicit AND truth table independently encoded in dev_tb", "cases": "All four binary combinations, repeated input transitions, and supplemental four-state AND cases", "sampling": "Sample one simulation time unit after driving inputs to allow combinational settling", "failure": "$fatal on mismatch; bounded timeout", "evaluator": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": [{"topic": "X/Z inputs", "evidence": "Original problem does not specify X/Z behavior", "resolution": "Use standard SystemVerilog bitwise AND; four-state tests are supplemental language-semantic checks"}]
+}

@@ -1,0 +1,37 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed_as_expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "name": "dev_check",
+      "label": "initial",
+      "status": "passed",
+      "evidence_directory": "development/01",
+      "directed_checks": 21,
+      "simulator": "Icarus Verilog 12"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation was not accessed or run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation: positive-edge D capture with active-high asynchronous reset to zero; no subsequent RTL revisions."
+  ],
+  "justified_tb_changes": [
+    "Initial independent directed testbench checks uninitialized storage, both data values, hold behavior, asynchronous reset at both clock levels, reset priority, reset release, and simultaneous reset/clock assertion. No subsequent testbench changes."
+  ],
+  "interface_cycle_contract": "TopModule(clk, ar, d, q), all one-bit; q captures d on rising clk when ar is low, and clears to zero asynchronously when ar is asserted.",
+  "numeric_width_decisions": "All ports and stored data are one bit.",
+  "pipeline_latency_and_ii": "Single D flip-flop; capture on each positive clock edge, no added latency.",
+  "static_review_result": "Single always_ff driver, nonblocking assignments, exact required ports and asynchronous reset sensitivity."
+}

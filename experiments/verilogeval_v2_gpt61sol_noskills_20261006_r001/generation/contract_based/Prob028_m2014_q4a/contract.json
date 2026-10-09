@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"d": 1, "ena": 1},
+    "outputs": {"q": 1},
+    "evidence": "Original problem lists input d, input ena, output q; all ports one bit."
+  },
+  "semantics": {
+    "storage": "D latch implemented using an always block",
+    "enabled": "When ena is 1, q follows d after procedural simulation settling, including d changes while ena stays high.",
+    "disabled": "When ena is 0, q retains its previously captured value.",
+    "timing": "Level sensitive; no clock and no extra latency.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "No initial value is specified; do not initialize q. In four-state simulation q starts unknown until enabled capture.",
+    "evidence": "Original calls for a D latch and lists only d, ena and q."
+  },
+  "numeric": {
+    "width": "All signals are single-bit; no arithmetic or signed interpretation.",
+    "logic": "Capture both binary data values; an unknown d propagates while enabled."
+  },
+  "verification": {
+    "oracle": "Directed expected values derived from level-sensitive D latch behavior in the original problem.",
+    "sampling": "Check after a 1 ns settling interval following stimulus changes.",
+    "cases": ["uninitialized disabled latch", "disabled data toggles", "enable with each data value", "data toggles with enable held high", "disable retains both values", "simultaneous enable and data changes", "unknown data capture and retention"],
+    "completion": "Self-checking dev_tb with fatal mismatches, bounded timeout and PASS only after all checks. Use fixed dev_check.py."
+  },
+  "specification_ambiguities": [
+    "Power-up value is unspecified; implementation has no initialization and development simulation checks the resulting unknown before first capture.",
+    "Unknown or high-impedance enable behavior is unspecified; no expected behavior is imposed for those inputs."
+  ]
+}

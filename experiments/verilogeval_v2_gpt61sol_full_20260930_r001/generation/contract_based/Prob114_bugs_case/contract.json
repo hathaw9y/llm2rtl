@@ -1,0 +1,56 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "code": {
+        "direction": "input",
+        "width": 8
+      },
+      "out": {
+        "direction": "output",
+        "width": 4
+      },
+      "valid": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "combinational stateless decoder",
+    "mapping_hex_to_decimal": {
+      "45": 0,
+      "16": 1,
+      "1e": 2,
+      "26": 3,
+      "25": 4,
+      "2e": 5,
+      "36": 6,
+      "3d": 7,
+      "3e": 8,
+      "46": 9
+    },
+    "recognized": "out equals mapped digit and valid equals 1",
+    "unrecognized": "out equals 0 and valid equals 0",
+    "timing": "Outputs follow current input combinationally; no clock or cycle latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization required."
+  },
+  "numeric": {
+    "code": "unsigned 8-bit exact pattern",
+    "out": "unsigned 4-bit digit 0 through 9, otherwise zero",
+    "valid": "one-bit recognition indicator",
+    "arithmetic": "No arithmetic, rounding, truncation, saturation or overflow."
+  },
+  "verification": {
+    "oracle": "Independent ten-entry scancode array indexed by digit; search to compute expected digit and recognition.",
+    "coverage": "All 256 binary inputs in ascending and descending order to verify mappings, default outputs and absence of retained state.",
+    "comparison": "Exact four-state comparison after combinational settling.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts.",
+    "scope": "Development testing only; no official evaluation or synthesis."
+  },
+  "specification_ambiguities": [
+    "X/Z input behavior is unspecified by the original problem; no correctness claim is made for nonbinary inputs."
+  ]
+}

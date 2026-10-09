@@ -1,0 +1,34 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob118_history_shift/development/01"
+    },
+    {
+      "label": "tb_correction_1",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob118_history_shift/development/02"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Original specification does not define a pre-reset power-up value; known-value checks begin after asynchronous reset."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_original": "dev_tb_initial.sv",
+      "reason": "Initial testbench deasserted reset while leaving train_mispredicted high across an intervening rising clock edge, but its oracle still expected zero. Clear predict_valid and train_mispredicted at reset release so the intervening edge correctly holds zero. All expected-value checks retained."
+    }
+  ],
+  "contract": {
+    "status": "frozen",
+    "validation": "passed_structure_only",
+    "changes": []
+  },
+  "environment_smoke": "passed",
+  "verification": "Icarus 12 compilation and simulation passed with 604 checks after testbench correction; initial failure evidence retained."
+}

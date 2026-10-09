@@ -1,0 +1,41 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "in": "100-bit unsigned packed vector [99:0]"
+    },
+    "outputs": {
+      "out_both": "100 bits [99:0]",
+      "out_any": "100 bits [99:0]",
+      "out_different": "100 bits [99:0]"
+    },
+    "clock_reset": "None in original interface"
+  },
+  "semantics": {
+    "out_both": "For i=0..98, in[i] AND in[i+1]; bit 99 is 0 (original item 1).",
+    "out_any": "For i=1..99, in[i] OR in[i-1]; bit 0 is 0 (original item 2).",
+    "out_different": "For i=0..98, in[i] XOR in[i+1]; bit 99 is in[99] XOR in[0] (original item 3).",
+    "timing": "Combinational, follows current input after simulator settling; no cycle latency, clock, reset, or acceptance protocol is specified.",
+    "initialization": "No stored state or initialization requirement; outputs depend only on current input."
+  },
+  "numeric": {
+    "width": 100,
+    "operations": "Single-bit Boolean AND, OR, XOR; no arithmetic, rounding, saturation, or overflow.",
+    "index_order": "Left neighbor is the next higher index, except wrapped bit 99 for out_different."
+  },
+  "verification": {
+    "oracle": "Independent per-bit loop directly implementing original numbered requirements.",
+    "cases": [
+      "zero",
+      "all ones",
+      "alternating patterns",
+      "every walking one and walking zero",
+      "all adjacent pair positions",
+      "deterministic randomized vectors"
+    ],
+    "sampling": "Drive input, wait 1 ns for combinational settling, compare all 100 bits of all outputs using case inequality.",
+    "completion": "Fatal on mismatch, bounded timeout, PASS only after all checks."
+  },
+  "specification_ambiguities": []
+}

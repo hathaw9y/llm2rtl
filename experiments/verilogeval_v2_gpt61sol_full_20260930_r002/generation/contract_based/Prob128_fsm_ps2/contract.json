@@ -1,0 +1,14 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "reset": 1, "in": 8}, "outputs": {"done": 1}, "acceptance": "One input byte at every rising clock edge except during reset; no handshake."},
+  "semantics": {
+    "evidence": "problem.txt: discard bytes until in[3]=1, receive three bytes, signal done in the cycle immediately after the third byte; active high synchronous reset; positive-edge sequential logic.",
+    "framing": "While searching, in[3]=0 is discarded and in[3]=1 starts a message. The next two bytes are accepted regardless of their bit 3.",
+    "cycle": "If byte 1 is sampled at edge k, byte 2 at k+1 and byte 3 at k+2, done is high after edge k+2 until edge k+3. The byte at k+3 is immediately eligible to start another message.",
+    "reset": "reset=1 at a positive edge clears framing progress and done. Changes to reset between edges have no immediate effect.",
+    "initialization": "No power-up value is specified; verification begins checking defined behavior after a synchronous reset. No RTL initialization is added."
+  },
+  "numeric": {"input": "Unsigned 8-bit byte, only bit 3 participates in framing", "output": "One-bit done pulse", "arithmetic": "None; four-state FSM encoded in two bits"},
+  "verification": {"oracle": "Independent remaining-byte counter derived from original prose, updated at rising edges, compared after NBA settlement", "coverage": ["discarded bytes", "all bit-3 patterns in payload bytes", "consecutive messages", "all 256 input bytes", "reset at each framing phase and done", "synchronous reset between edges", "deterministic mixed stream"], "timeout": "Bounded testbench watchdog", "evaluator": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": [{"topic": "Cycle terminology", "resolution": "The cycle immediately after reception is the interval following the edge that samples byte 3; no additional delayed edge is introduced.", "basis": "Original positive-edge byte-stream and immediately-after wording."}, {"topic": "Before first reset", "resolution": "Unspecified; no expected initial output value is imposed.", "basis": "Original provides synchronous reset but no initialization requirement."}]
+}

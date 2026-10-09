@@ -1,0 +1,59 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structural validation only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "compile_and_elaborate",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "PASS, exit 0, no compiler diagnostics",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "independent_self_checking_simulation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "PASS, exit 0, 15346 cycle comparisons",
+      "log": "dev_sim.log",
+      "coverage": [
+        "All 256 eight-bit serial streams",
+        "Four shift cycles",
+        "Early and held done_counting and ack",
+        "Notification hold and acknowledgement",
+        "Repeated transactions",
+        "Synchronous reset in search and active phases",
+        "10000 deterministic pseudorandom cycles"
+      ]
+    },
+    {
+      "name": "static_review",
+      "result": "PASS by inspection: exact interface, synchronous active-high reset, full combinational defaults, single state register driver, no datapath or nonsynthesizable DUT constructs"
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "result": "PASS: candidate.sv matches candidate_initial.sv; initial preserved before development checks"
+    }
+  ],
+  "development_outcome": "Initial candidate passed local compilation and independent simulation; no RTL revisions required.",
+  "limitations": [
+    "Official evaluation not accessed or run; its result is unknown.",
+    "No synthesis, timing or board validation performed.",
+    "Simulation checks binary inputs after reset; unspecified power-up and unknown-input behavior are not verified.",
+    "Contract gate checks structure, not semantic correctness."
+  ],
+  "artifacts": [
+    "contract.json",
+    "contract_gate.json",
+    "contract_gate_history.jsonl",
+    "contract_validation.log",
+    "candidate.sv",
+    "candidate_initial.sv",
+    "dev_tb.sv",
+    "dev_compile.log",
+    "dev_sim.log"
+  ]
+}

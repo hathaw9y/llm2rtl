@@ -1,0 +1,27 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "areset": 1, "predict_valid": 1, "predict_taken": 1, "train_mispredicted": 1, "train_taken": 1, "train_history": 32},
+    "outputs": {"predict_history": 32}
+  },
+  "semantics": {
+    "clock": "Original: all sequential logic uses the positive edge of clk.",
+    "reset": "Original: positive-edge asynchronous areset resets history to zero; reset has priority while asserted.",
+    "misprediction": "At a clock rising edge, if train_mispredicted is one, history becomes {train_history[30:0], train_taken}; original gives misprediction priority over prediction.",
+    "prediction": "Otherwise if predict_valid is one, shift history toward bit 31 and insert predict_taken at bit 0 (youngest branch).",
+    "hold": "Otherwise preserve history; output directly represents the register without added latency.",
+    "initialization": "Original supplies reset but no power-up value; do not initialize RTL. Verification asserts reset before requiring a known state."
+  },
+  "numeric": {
+    "width": 32,
+    "overflow": "Appending one bit to a 32-bit history discards its oldest bit, bit 31.",
+    "interpretation": "Bit vector of branch outcomes, no signed arithmetic."
+  },
+  "verification": {
+    "oracle": "Independent bit-by-bit state model derived from original prose, sampled after nonblocking updates.",
+    "directed": "Asynchronous reset between clock edges; reset held over clock edges; hold; both predicted directions; rollback with both actual directions; simultaneous rollback/prediction priority; oldest-bit discard; 32 and more shifts.",
+    "additional": "Deterministic randomized input combinations and checks before rising clock edges; bounded timeout and fatal on mismatches."
+  },
+  "specification_ambiguities": ["No pre-reset power-up state specified; RTL remains uninitialized until reset or a full rollback establishes state."]
+}

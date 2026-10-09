@@ -1,0 +1,50 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": {
+        "width": 1
+      },
+      "b": {
+        "width": 1
+      }
+    },
+    "outputs": {
+      "sum": {
+        "width": 1
+      },
+      "cout": {
+        "width": 1
+      }
+    },
+    "evidence": "problem.txt explicitly lists TopModule and four one-bit ports"
+  },
+  "semantics": {
+    "function": "Half adder: sum is the low bit of a+b; cout is the high bit. No carry-in.",
+    "timing": "Combinational response after input changes settle; no clock or added cycle latency.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No state or specified initialization; outputs derive from current inputs.",
+    "evidence": "problem.txt states half adder adds two bits (with no carry-in) and specifies no clock/reset ports."
+  },
+  "numeric": {
+    "input_domain": "Unsigned single-bit binary operands, values 0 and 1.",
+    "result": "Exact two-bit unsigned addition, represented as {cout,sum}; range 0 through 2.",
+    "overflow": "Carry-out preserves high result bit; no saturation or rounding."
+  },
+  "verification": {
+    "oracle": "Independent two-bit arithmetic addition of zero-extended inputs from original half-adder definition.",
+    "coverage": "All four binary pairs, repeated transitions, input holds.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling before comparing both outputs with case inequality.",
+    "failure": "$fatal on mismatch or bounded timeout.",
+    "success": "Explicit PASS line only after all checks.",
+    "command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Four-state unknown/high-impedance inputs",
+      "original_evidence": "Original problem specifies adding two bits but gives no X/Z truth table.",
+      "resolution": "Verify all binary inputs; do not impose extra X/Z requirements."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "x": 1}, "outputs": {"z": 1}},
+  "semantics": {
+    "clock": "All sequential logic updates on positive clk edge, as specified.",
+    "reset": "Synchronous active high reset takes priority and sets state 000 at positive clk edge.",
+    "transition_table": {"000": ["000", "001"], "001": ["001", "100"], "010": ["010", "001"], "011": ["001", "010"], "100": ["011", "100"]},
+    "output_table": {"000": 0, "001": 0, "010": 0, "011": 1, "100": 1},
+    "output_timing": "Moore output depends on present state; updates combinationally after state update with no extra cycle.",
+    "initialization": "No initial state specified. No initialization is added; verification establishes state via synchronous reset."
+  },
+  "numeric": {"state_width": 3, "state_encoding": "Preserve given binary state assignment", "input_index": "transition_table entries correspond to x=0 then x=1"},
+  "verification": {"oracle": "Independent integer state model copied from original table", "coverage": "Every listed state/input transition; reset from every reachable state for both x values; off-edge reset and input changes; exhaustive 8-bit input sequences", "sampling": "Check stable output before edges and after nonblocking updates settle", "failure": "$fatal on mismatch and bounded timeout; PASS only after all checks"},
+  "specification_ambiguities": ["States 101, 110, 111 and their outputs are unspecified; implementation uses recovery to 000 and unknown output, and tests do not impose behavior for these states.", "Power-on state is unspecified; testbench does not require a definite output before the first reset edge."]
+}

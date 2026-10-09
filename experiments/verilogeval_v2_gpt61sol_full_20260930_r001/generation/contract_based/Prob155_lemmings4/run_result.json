@@ -1,0 +1,196 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob155_lemmings4",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob155_lemmings4",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob155_lemmings4/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790737846.55876,
+    "ended_at_unix": 1790738074.0239654,
+    "seconds": 227.4652063846588,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 186526,
+      "cached_input_tokens": 152576,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 4337,
+      "reasoning_output_tokens": 292
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "c4ec33f30035ed39417593533b93e7931fe5fe87fbf1568b0b294e153553128e",
+  "contract_sha256": "22786e3f616349f44db58ab3832a0378b77e3c14e8b774f33b0f7fea9cb8b34a",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract_gate",
+        "command": "python3 validate_contract.py",
+        "exit_code": 0,
+        "result": "PASS (structural validation only)",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "initial_candidate_preservation",
+        "result": "candidate_initial.sv copied immediately after implementation before development checks; no RTL revisions"
+      },
+      {
+        "name": "static_review",
+        "result": "Reviewed exact interface, asynchronous active-high reset, Moore output decode, fall/dig/bump precedence, remembered direction, absorbing splatter, explicit 5-bit saturating fall duration, and single-driver sequential logic. No issues identified by manual inspection."
+      },
+      {
+        "name": "development_compile",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "exit_code": 139,
+        "result": "FAILED; empty compiler diagnostic output",
+        "log": "dev_compile.log",
+        "status_log": "dev_status.log"
+      },
+      {
+        "name": "tool_version",
+        "result": "Driver reports Icarus 12.0 but cannot get backend version",
+        "log": "dev_tool_version.log"
+      },
+      {
+        "name": "diagnostic_compile_retry",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -v -s dev_tb -o dev_sim_retry candidate.sv dev_tb.sv",
+        "exit_code": 139,
+        "result": "FAILED again without RTL diagnostic",
+        "log": "dev_compile_retry.log",
+        "status_log": "dev_retry_status.log"
+      },
+      {
+        "name": "development_simulation",
+        "result": "NOT RUN because compilation failed"
+      }
+    ],
+    "development_outcome": "Frozen contract passed structural gate. Initial RTL delivered unchanged. Independent self-checking dev_tb.sv created, but Icarus compilation failed twice with exit 139; no simulation success claimed.",
+    "limitations": [
+      "Functional behavior and compilation remain unverified by a running simulator.",
+      "Manual review and structural contract validation are not functional correctness proofs.",
+      "No official evaluation results accessed or available.",
+      "No synthesis, timing, or hardware validation performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "c4ec33f30035ed39417593533b93e7931fe5fe87fbf1568b0b294e153553128e",
+      "Prob155_lemmings4_ref.sv": "a238a1a879b4b4213bedf9bb47a23ece031df6a3d9cb836c5c42769141ae522c",
+      "Prob155_lemmings4_test.sv": "3f22f4ca91763277dcb324821a257ebdbb98fbcdb2daf4011211de72715573e7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob155_lemmings4_test.sv",
+        "Prob155_lemmings4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.016099915839731693
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb155_lemmings4_test.sv:158: $finish called at 5016 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Output 'digging' has no mismatches.\nHint: Total mismatched samples is 0 out of 1003 samples\n\nSimulation finished at 5016 ps\nMismatches: 0 in 1003 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015677638351917267
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "c4ec33f30035ed39417593533b93e7931fe5fe87fbf1568b0b294e153553128e",
+      "Prob155_lemmings4_ref.sv": "a238a1a879b4b4213bedf9bb47a23ece031df6a3d9cb836c5c42769141ae522c",
+      "Prob155_lemmings4_test.sv": "3f22f4ca91763277dcb324821a257ebdbb98fbcdb2daf4011211de72715573e7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob155_lemmings4_test.sv",
+        "Prob155_lemmings4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015547027811408043
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb155_lemmings4_test.sv:158: $finish called at 5016 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Output 'digging' has no mismatches.\nHint: Total mismatched samples is 0 out of 1003 samples\n\nSimulation finished at 5016 ps\nMismatches: 0 in 1003 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01521019171923399
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

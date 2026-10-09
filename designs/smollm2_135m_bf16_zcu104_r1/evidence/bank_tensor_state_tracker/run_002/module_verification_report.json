@@ -1,0 +1,50 @@
+{
+  "module_id": "bank_tensor_state_tracker",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "proof_scope": "Control metadata for successful and failed writes to 13 banks. This does not prove physical bank data, executor arithmetic, command dispatch, integrated timing or board operation.",
+  "source_sha256": {
+    "module_contract": "248de020270a3cbfa486761bdd8259e0e30abf40132e82b11fa275333a78abb8",
+    "rtl": "909f184009f191f0b7d3851612f5de949dadfa4c8d36c315b8d3bde1f5ad2f23",
+    "testbench": "88868f118a929476e2ccf4f360542be1256e6527d8722e1630cec1e42505e7fa",
+    "ooc_script": "4c97e240ce851abd6007bf17cbea897c48cba222d14609f2d461a95b6a5be0a2",
+    "clock_xdc": "5127d6af45d0824731a9420894371f0d7825842f4e10d80851efa06bd5a3bbde"
+  },
+  "checks": {
+    "design_structure": "passed_structure_only with expected module SHA-256",
+    "icarus_self_check": "PASS bank_tensor_state_tracker",
+    "verilator_lint": "PASS with --Wall -Wno-fatal and no output",
+    "vivado_ooc_synthesis": "PASS, Vivado 2025.2, xczu7ev-ffvc1156-2-e, 5.000 ns XDC applied during synthesis",
+    "vivado_post_synth_drc": "0 checks found",
+    "board_execution": "not run"
+  },
+  "covered_behaviors": [
+    "single full DMA completion",
+    "32 ordered embedding rows",
+    "eight ordered 192-column GEMM tiles",
+    "in-place success and failure",
+    "failed write invalidates tensor",
+    "state survives a four-cycle chunk gap without reset",
+    "simultaneous writes to different banks",
+    "same-bank overlap and out-of-order partial write signal error"
+  ],
+  "post_synth_resources": {
+    "clb_luts": 1444,
+    "clb_registers": 885,
+    "carry8": 104,
+    "bram_tiles": 0,
+    "uram": 0,
+    "dsps": 0
+  },
+  "post_synth_timing_ns": {
+    "clock_period": 5.0,
+    "setup_wns": 2.888,
+    "hold_whs": 0.075,
+    "pulse_width_wpws": 2.225
+  },
+  "limitations": [
+    "Out-of-context timing has no HD.CLK_SRC and does not estimate integrated clock skew.",
+    "The module relies on matched issue and completion events from the dispatcher and executors; that wiring is not yet implemented.",
+    "No placed or routed implementation is claimed."
+  ]
+}

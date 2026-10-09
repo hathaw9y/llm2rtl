@@ -1,0 +1,36 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {"direction": "input", "width": 3, "range": "[2:0]"},
+      "b": {"direction": "input", "width": 3, "range": "[2:0]"},
+      "out_or_bitwise": {"direction": "output", "width": 3, "range": "[2:0]"},
+      "out_or_logical": {"direction": "output", "width": 1},
+      "out_not": {"direction": "output", "width": 6, "range": "[5:0]"}
+    }
+  },
+  "semantics": {
+    "timing": "Pure combinational logic; outputs respond to current inputs without a clock or registered latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization requirement; outputs depend solely on inputs.",
+    "bitwise_or": "For i=0..2, out_or_bitwise[i] is a[i] OR b[i].",
+    "logical_or": "out_or_logical is 1 iff either input vector is nonzero for binary inputs; use SystemVerilog logical OR semantics.",
+    "inverse": "For i=0..2, out_not[i] is NOT a[i] and out_not[i+3] is NOT b[i]."
+  },
+  "numeric": {
+    "representation": "Unsigned packed bit vectors.",
+    "widths": "Bitwise OR is 3 bits, logical OR is 1 bit, concatenated inverses are 6 bits.",
+    "arithmetic": "Boolean operations only; no arithmetic overflow, rounding, saturation, or truncation.",
+    "packing": "Inverse b occupies [5:3]; inverse a occupies [2:0]."
+  },
+  "verification": {
+    "compile": "Icarus v12 with -g2012 and explicit dev_tb top, finite timeout.",
+    "simulation": "Exhaust all 8 values of a and 8 values of b; allow combinational settling and compare every output with case inequality.",
+    "oracle": "Build OR and inverse outputs using per-bit binary truth tables, and logical result by detecting a set bit in either vector.",
+    "coverage": "All 64 binary pairs include zero, maximum, one-hot, complementary, and equal vectors.",
+    "timeout": "External finite compile/run timeouts and a testbench watchdog.",
+    "scope": "Independent development checks only; no official evaluation or synthesis."
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,20 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "resetn": 1, "x": 1, "y": 1}, "outputs": {"f": 1, "g": 1}},
+  "semantics": {
+    "clock": "All state updates occur at positive clock edges, as stated in the problem.",
+    "reset": "Synchronous active-low reset: each rising edge with resetn=0 enters A with f=g=0; asserting reset between edges does not alter state.",
+    "startup": "The first rising edge with resetn=1 after A starts a single cycle with f=1 and g=0. Monitoring x starts at the next rising edge, after the f pulse.",
+    "pattern": "Detect consecutive sampled x values 1,0,1, allowing restart after mismatches. After the third sample edge, g=1 for the following cycle.",
+    "y_window": "Sample y at the two rising edges ending the first and second cycles with g=1. A high on either edge latches g=1 until reset. Two lows latch g=0 until reset.",
+    "initialization": "No power-up state is specified; no initial state assignment is added. Verification establishes state using synchronous reset.",
+    "outputs": "f=1 only in the startup pulse state. g=1 only during the two-cycle response window or the permanent success state."
+  },
+  "numeric": {"data": "All ports are one bit; x and y are Boolean samples.", "timing": "One startup pulse cycle, three consecutive pattern samples, two y response samples."},
+  "verification": {"oracle": "Independent sampled-history and response-deadline model derived from original prose, compared after NBA state updates.", "directed": "Synchronous reset between edges, pulse timing, mismatched and overlapping x prefixes, early y ignored, first/second/late y responses, terminal permanence and reset recovery.", "coverage": "Exhaustive short x streams and y-window combinations plus deterministic randomized reset/x/y streams.", "completion": "Fatal on mismatch, bounded timeout, explicit PASS after all comparisons."},
+  "specification_ambiguities": [
+    {"issue": "Following clock cycle could be misread as an extra delayed edge.", "resolution": "The cycle immediately after sampling the third x bit is the following clock cycle; g rises after that sampling edge, with no extra latency."},
+    {"issue": "The exact y sampling phase is expressed in cycles rather than a waveform.", "resolution": "While maintaining g=1, y is sampled at the next two rising edges; the edge that detects x=101 does not sample y for the response window."},
+    {"issue": "Power-up outputs are unspecified.", "resolution": "No initialization guarantees before a reset edge; the testbench does not assert pre-reset values."}
+  ]
+}

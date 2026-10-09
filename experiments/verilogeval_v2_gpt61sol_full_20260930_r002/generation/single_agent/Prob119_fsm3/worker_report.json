@@ -1,0 +1,42 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": [
+        "correct fixture passed",
+        "deliberately wrong fixture failed",
+        "repaired fixture passed"
+      ]
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "simulation_failed",
+      "evidence": "development/01/result.json",
+      "reason": "Testbench allowed an unmodeled clock edge after reset release."
+    },
+    {
+      "command": "python3 dev_check.py --label tb_timing_fix",
+      "status": "passed",
+      "evidence": "development/02/result.json",
+      "checks_completed": 4903
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed.",
+    "Initial state before reset is unspecified and is not asserted by the testbench."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_original": "dev_tb_initial.sv",
+      "change": "Release reset just after the checked rising edge instead of after the following falling edge.",
+      "justification": "The original reset task returned after a falling edge; step then waited for another falling edge, allowing a rising edge with stale input without updating the oracle. Corrected scheduling ensures every non-reset rising edge is modeled; expected values and coverage requirements are unchanged."
+    }
+  ],
+  "interface_cycle_contract": "TopModule(clk, areset, in, out); one-bit ports; positive-edge state updates; positive-edge active-high asynchronous reset to A; Moore output high only in D.",
+  "static_review": "All four table rows implemented with explicit if/else; two-bit enum state; nonblocking sequential assignments; complete combinational next-state logic; no extra output latency."
+}

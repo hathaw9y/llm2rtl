@@ -1,0 +1,16 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "cases": "correct passed, injected fault failed as expected, repair passed"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "checked_clock_samples": 4815, "evidence": "development/01 and dev_checks.jsonl", "compiler": "Icarus Verilog 12", "compile_diagnostics": "none"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "No synthesis or board verification performed.", "Behavior before synchronous reset is not specified by the problem and is not asserted by the testbench."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "TopModule preserves clk/reset/in/done ports. Active-high synchronous reset enters idle. Eight data samples follow the start sample; a high stop sample produces done for one cycle. A low stop enters recovery until a high sample, without asserting done. The next sample may start a new byte.",
+  "width_decisions": "Three-bit data counter covers all eight data samples; no received payload storage is required.",
+  "static_review": "Complete combinational state cases, nonblocking sequential assignments, explicit enum if/else transitions, no added ports or latency.",
+  "testbench_coverage": "Independent remaining-samples oracle, all 256 payloads, back-to-back frames, invalid stops and prolonged recovery, reset during partial frames and completion, randomized serial/reset samples, pre-edge stability and bounded timeout.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv"}
+}

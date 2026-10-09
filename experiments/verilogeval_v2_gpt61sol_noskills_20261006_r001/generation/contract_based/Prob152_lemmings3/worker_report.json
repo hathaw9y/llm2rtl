@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob152_lemmings3/development/01"
+    },
+    {
+      "label": "initial_tb_fix",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob152_lemmings3/development/02"
+    }
+  ],
+  "environment_smoke": "passed: correct passes, injected fault fails, repair passes",
+  "contract_validation": "passed_structure_only; contract frozen before RTL",
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Pre-reset state and unknown-valued input behavior are not specified and were not constrained."
+  ],
+  "justified_RTL_changes": [],
+  "justified_TB_changes": [
+    {
+      "preserved_old_version": "dev_tb_before_reset_timing_fix.sv",
+      "reason": "Reset task originally released reset on a negative edge and returned after that edge. The next step waited for another negative edge, allowing an unmodeled intervening positive edge with ground=0. DUT correctly fell while the oracle still expected walking.",
+      "correction": "Release reset shortly after the checked positive edge so the next step drives inputs at the following negative edge, before any intervening positive edge. All expected values and checks were retained."
+    }
+  ],
+  "contract_changes": []
+}

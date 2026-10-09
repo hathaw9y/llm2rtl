@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clock": {
+        "direction": "input",
+        "width": 1
+      },
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "p": {
+        "direction": "output",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "p": "High-level transparent latch: while clock=1 p follows a; while clock=0 p holds the value from the end of the preceding high phase.",
+    "q": "Negative-edge flip-flop captures p on each falling edge of clock and otherwise holds.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No initialization; p and q start unknown in four-state simulation. p becomes defined when clock first goes high; q becomes defined on a falling edge after p is defined.",
+    "edge_order": "At a simultaneous clock falling edge and a change, p holds its pre-edge value and q captures that held value, matching 115ns and 175ns.",
+    "latency": "p transparent during high phase; q updates only on falling clock edges."
+  },
+  "numeric": {
+    "type": "Single-bit four-state logic; no arithmetic, signedness, overflow, rounding or saturation."
+  },
+  "verification": {
+    "waveform": "Replay every row of the original waveform and use case-inequality comparisons after settling, including initial unknown outputs.",
+    "directed": "Exercise both input values during high and low phases, verify p transparency and hold and q falling-edge capture, including simultaneous input/clock changes.",
+    "tools": "Icarus Verilog v12, explicit dev_tb top, -g2012, finite external compile and simulation timeouts; testbench watchdog."
+  },
+  "specification_ambiguities": [
+    "Finite waveforms do not uniquely specify all possible circuits; infer the minimal high-transparent latch for p and falling-edge storage of p for q. No additional behavior is specified for unknown clock or input values."
+  ]
+}

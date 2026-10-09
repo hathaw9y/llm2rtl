@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "in",
+        "direction": "input",
+        "width": 8,
+        "range": "[7:0]"
+      },
+      {
+        "name": "out",
+        "direction": "output",
+        "width": 8,
+        "range": "[7:0]"
+      }
+    ]
+  },
+  "semantics": {
+    "function": "For each i from 0 through 7, out[i] = in[7-i].",
+    "timing": "Pure combinational continuous mapping; no cycle latency or input capture.",
+    "clock": "None",
+    "reset": "None",
+    "initialization": "No state or initialization required; output follows current input.",
+    "protocol": "No handshake; all input bit patterns are legal."
+  },
+  "numeric": {
+    "representation": "8-bit bit vector; unsigned ports",
+    "arithmetic": "No arithmetic, extension, truncation, rounding, saturation, or overflow.",
+    "ordering": "Input bit 0 maps to output bit 7 and input bit 7 maps to output bit 0.",
+    "four_state": "Bit permutation propagates each source bit including X or Z."
+  },
+  "verification": {
+    "method": "Independent self-checking development testbench with arithmetic bit reversal oracle.",
+    "binary_coverage": "Exhaustively drive all 256 8-bit binary inputs and compare after combinational settling.",
+    "four_state_coverage": "Directed X and Z single-bit inputs checked at the reversed position.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp.",
+    "bounds": "Finite 30-second compile and simulation timeouts, plus testbench watchdog.",
+    "success": "No mismatches and explicit PASS marker."
+  },
+  "specification_ambiguities": []
+}

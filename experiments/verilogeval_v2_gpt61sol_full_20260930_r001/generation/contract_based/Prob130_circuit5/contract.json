@@ -1,0 +1,77 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": {
+        "width": 4,
+        "type": "unsigned packed logic [3:0]"
+      },
+      "b": {
+        "width": 4,
+        "type": "unsigned packed logic [3:0]"
+      },
+      "c": {
+        "width": 4,
+        "type": "unsigned packed logic [3:0]"
+      },
+      "d": {
+        "width": 4,
+        "type": "unsigned packed logic [3:0]"
+      },
+      "e": {
+        "width": 4,
+        "type": "unsigned packed logic [3:0]"
+      }
+    },
+    "outputs": {
+      "q": {
+        "width": 4,
+        "type": "unsigned packed logic [3:0]"
+      }
+    },
+    "clock": null,
+    "reset": null
+  },
+  "semantics": {
+    "kind": "combinational",
+    "selection": {
+      "0": "b",
+      "1": "e",
+      "2": "a",
+      "3": "d",
+      "4 through 15": "4'hf"
+    },
+    "latency": "No clock cycles or storage; output responds to input changes after combinational settling.",
+    "initialization": "No state or initialization required. Initial all-X waveform samples do not specify an unknown-selector truth table.",
+    "unknown_selector": "Unspecified by problem; implementation uses ordinary case with default 4'hf.",
+    "selected_unknown_data": "Selected input bits propagate unchanged."
+  },
+  "numeric": {
+    "width_bits": 4,
+    "interpretation": "Waveform values are hexadecimal unsigned bit patterns.",
+    "operations": "Selection only; no arithmetic, rounding, overflow, saturation or signed extension.",
+    "default_value": 15
+  },
+  "verification": {
+    "oracle": "Independent indexed data table [b,e,a,d] for binary c below 4, constant 15 otherwise.",
+    "coverage": [
+      "Replay all 16 provided binary waveform samples.",
+      "Exhaustively check all 2^20 binary combinations of five 4-bit inputs.",
+      "Observe output after input mutation to verify combinational response.",
+      "Check X/Z propagation from selected data with known selector."
+    ],
+    "tools": "Icarus v12, -g2012, explicit dev_tb top; finite shell and testbench timeouts.",
+    "scope": "Development verification only; no official evaluation, synthesis or board access."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Only one data tuple appears in the waveform.",
+      "resolution": "Infer a four-input selector using the distinct hexadecimal data values and c sweep."
+    },
+    {
+      "issue": "Initial X samples lack a defined settled binary selector.",
+      "resolution": "Unknown-selector output is unspecified; do not assert an X output requirement from initialization samples."
+    }
+  ]
+}

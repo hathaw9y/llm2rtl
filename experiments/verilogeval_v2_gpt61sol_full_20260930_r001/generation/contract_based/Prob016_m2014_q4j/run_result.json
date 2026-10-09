@@ -1,0 +1,184 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob016_m2014_q4j",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob016_m2014_q4j",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob016_m2014_q4j/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790731234.9910517,
+    "ended_at_unix": 1790731312.6239753,
+    "seconds": 77.6329243183136,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 99119,
+      "cached_input_tokens": 74752,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2000,
+      "reasoning_output_tokens": 16
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "2cbbec813a3b0e6330407e8bb182898be0c77a72482c00d9d612c031d4d4596d",
+  "contract_sha256": "66f756bd3f199549e79db4c801da97d48b117aeddf782f3c6822b7edb9d41928",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "frozen_contract_gate",
+        "outcome": "PASS (structure only)",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "static_review",
+        "outcome": "PASS",
+        "details": "Exact TopModule interface; four generated full-adder stages; carry-in zero; final carry in sum[4]; no state, latches, or simulation-only DUT constructs."
+      },
+      {
+        "name": "iverilog_compile",
+        "outcome": "PASS",
+        "exit_code": 0,
+        "log": "development_compile.log",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv"
+      },
+      {
+        "name": "exhaustive_development_simulation",
+        "outcome": "PASS",
+        "exit_code": 0,
+        "cases": 256,
+        "log": "development_simulation.log",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim"
+      },
+      {
+        "name": "initial_candidate_preservation",
+        "outcome": "PASS"
+      }
+    ],
+    "development_outcome": "PASS: all 256 binary input combinations produce the exact 5-bit unsigned sum; initial implementation retained unchanged.",
+    "limitations": [
+      "Official evaluation not accessed or run; results unavailable.",
+      "No synthesis, physical timing analysis, or board testing performed.",
+      "X/Z input behavior is not specified by the problem and was not tested."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2cbbec813a3b0e6330407e8bb182898be0c77a72482c00d9d612c031d4d4596d",
+      "Prob016_m2014_q4j_test.sv": "1e75d8de66fd70710909918fa2560737f4f260d7cfd131ec14491ff2ee679f88",
+      "Prob016_m2014_q4j_ref.sv": "dbfde2547444cd93dd259aa37ac84ae811e0bf36c656c404594129d5683d536c"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob016_m2014_q4j_test.sv",
+        "Prob016_m2014_q4j_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014189411886036396
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb016_m2014_q4j_test.sv:16: $finish called at 501 (1ps)\nHint: Output 'sum' has no mismatches.\nHint: Total mismatched samples is 0 out of 100 samples\n\nSimulation finished at 501 ps\nMismatches: 0 in 100 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007559006102383137
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2cbbec813a3b0e6330407e8bb182898be0c77a72482c00d9d612c031d4d4596d",
+      "Prob016_m2014_q4j_test.sv": "1e75d8de66fd70710909918fa2560737f4f260d7cfd131ec14491ff2ee679f88",
+      "Prob016_m2014_q4j_ref.sv": "dbfde2547444cd93dd259aa37ac84ae811e0bf36c656c404594129d5683d536c"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob016_m2014_q4j_test.sv",
+        "Prob016_m2014_q4j_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010780437849462032
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb016_m2014_q4j_test.sv:16: $finish called at 501 (1ps)\nHint: Output 'sum' has no mismatches.\nHint: Total mismatched samples is 0 out of 100 samples\n\nSimulation finished at 501 ps\nMismatches: 0 in 100 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007232554256916046
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

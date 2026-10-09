@@ -1,0 +1,168 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob133_2014_q3fsm",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob133_2014_q3fsm",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob133_2014_q3fsm/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790748454.8294039,
+    "ended_at_unix": 1790748576.710838,
+    "seconds": 121.88143467903137,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 77094,
+      "cached_input_tokens": 55936,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2032,
+      "reasoning_output_tokens": 86
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "b173713d615a069418d3d0aa5615b1ef51befef2c8b85bae0a6077ac7f37244c",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "initial",
+        "status": "passed",
+        "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob133_2014_q3fsm/development/01"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "No synthesis or board work performed."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "Eight-state FSM; entry into B does not sample w. Each subsequent group of three samples produces a one-cycle result, with no gap between groups. Active-high synchronous reset returns to A.",
+    "verification": "Environment smoke passed correct/fault/repair checks. Icarus 12 development check passed 1268 cycle checks, covering all pairs of three-bit groups, idle behavior, entry timing, s ignored while active, reset at all phases, and deterministic randomized stimulus.",
+    "static_review": "Explicit enum if/else transitions, complete combinational defaults, nonblocking sequential assignments, unchanged required interface and cycle semantics."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "b173713d615a069418d3d0aa5615b1ef51befef2c8b85bae0a6077ac7f37244c",
+      "Prob133_2014_q3fsm_ref.sv": "3c52c08d38debcd7e09092f2e7cf82e0497e058a9584ece479d1c3a4957afef1",
+      "Prob133_2014_q3fsm_test.sv": "7838cbe970c633be739f4ce7eb19d642baae7818068e05994acb802a94fd0c45"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob133_2014_q3fsm_test.sv",
+        "Prob133_2014_q3fsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.016288507729768753
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb133_2014_q3fsm_test.sv:59: $finish called at 7071 (1ps)\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 1414 samples\n\nSimulation finished at 7071 ps\nMismatches: 0 in 1414 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015855560079216957
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "b173713d615a069418d3d0aa5615b1ef51befef2c8b85bae0a6077ac7f37244c",
+      "Prob133_2014_q3fsm_ref.sv": "3c52c08d38debcd7e09092f2e7cf82e0497e058a9584ece479d1c3a4957afef1",
+      "Prob133_2014_q3fsm_test.sv": "7838cbe970c633be739f4ce7eb19d642baae7818068e05994acb802a94fd0c45"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob133_2014_q3fsm_test.sv",
+        "Prob133_2014_q3fsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015072211623191833
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb133_2014_q3fsm_test.sv:59: $finish called at 7071 (1ps)\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 1414 samples\n\nSimulation finished at 7071 ps\nMismatches: 0 in 1414 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015963214449584484
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"in": "8-bit vector [7:0]"},
+    "outputs": {"parity": "1-bit wire"},
+    "extra_ports": false
+  },
+  "semantics": {
+    "function": "parity equals XOR of all eight input data bits, making the total number of ones in the nine-bit word even",
+    "timing": "Combinational; original problem defines a byte-to-parity function and provides no clock or cycle latency",
+    "reset": "No reset port or reset behavior specified",
+    "initialization": "No state or specified initial value; output follows the current input"
+  },
+  "numeric": {
+    "input_width": 8,
+    "output_width": 1,
+    "known_binary_rule": "parity is the input population count modulo 2",
+    "four_state_rule": "Verilog XOR propagates X or Z input bits to unknown parity"
+  },
+  "verification": {
+    "oracle": "Independently count set bits and compute remainder modulo 2, based on the original even-parity statement",
+    "coverage": "Exhaust all 256 binary bytes including zero, all ones, single-bit and complementary patterns; supplementary X/Z propagation checks",
+    "sampling": "Drive input and sample after one simulation time unit for combinational settling",
+    "failure": "$fatal on mismatch or bounded timeout; PASS printed only after all checks",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "Original text does not specify behavior for X/Z inputs; standard four-state XOR semantics are used and checked supplementally."
+  ]
+}

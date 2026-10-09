@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"x": "4-bit vector [3:0]"}, "outputs": {"f": "one bit"}},
+  "semantics": {"kind": "combinational Boolean function", "evidence": "Original problem specifies a Karnaugh map with columns x[0]x[1] and rows x[2]x[3], both ordered 00,01,11,10.", "cycles": "No clock or latency specified; output follows current input combinationally.", "reset": "No reset port or reset behavior specified.", "initialization": "No state or initial values specified; binary inputs determine output immediately after combinational settling."},
+  "numeric": {"bit_order": "Integer x = 8*x[3] + 4*x[2] + 2*x[1] + x[0]", "one_minterms": [0,1,4,5,6,12,14,15], "zero_minterms": [2,3,7,8,9,10,11,13], "arithmetic": "No arithmetic, signedness, or overflow involved."},
+  "verification": {"oracle": "Use original map rows in testbench, selecting by x[2]x[3], then index by x[0]x[1] in binary order.", "coverage": "Exhaust all 16 binary inputs in ascending and descending orders.", "sampling": "Sample after a 1 ns combinational settling delay for each input.", "failure": "$fatal on mismatch or bounded timeout; print PASS only after all comparisons succeed."},
+  "specification_ambiguities": ["Original map only defines binary inputs; behavior for X or Z input bits is unspecified and is not asserted by development verification."]
+}

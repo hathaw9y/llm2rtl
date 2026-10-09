@@ -1,0 +1,25 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "details": "Correct fixture passed, injected fault failed simulation as expected, repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "development/01 and dev_checks.jsonl", "details": "Icarus 12 compilation without diagnostics; matching vvp passed 2355 checked rising edges."}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation; official correctness is not established.",
+    "No synthesis, timing, or board verification performed, as required.",
+    "Initial state before synchronous reset is unconstrained by the prose; no initial-value assertion imposed. Payload is checked only when done is asserted.",
+    "Coincident waveform input changes are replayed using nonblocking assignments after edge sampling, consistent with all original timestamped outputs."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": {
+    "files": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "contract.json"],
+    "behavior": "Three-state byte receiver accepts a first byte with bit 3 set, then two unconditional bytes. Completion is registered after third-byte sampling; next packet can begin at the following edge.",
+    "reset": "Original active-high synchronous reset clears progress and done, leaving don't-care data unreset.",
+    "packing": "Unsigned 8-bit first, second, third bytes concatenate into 24-bit output in original order.",
+    "static_review": "Single sequential driver per register, nonblocking assignments, explicit enum state branches, no added ports or initialization, no extra packet latency."
+  }
+}

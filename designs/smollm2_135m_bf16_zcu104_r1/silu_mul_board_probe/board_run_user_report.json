@@ -1,0 +1,28 @@
+{
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "user_reported_date": "2026-10-02",
+  "probe": "DMA_LOAD B8/B9 -> SILU_MUL B10 -> END",
+  "corrected_elf_sha256": "53bdd7e2312a5fd3bdc9cf653de76b2862e5b30fa73959cffc3a0f75e0f975a3",
+  "bitstream_sha256": "59fa3bed24f14a6dbaa7433e2c6cb76225068d6b208991d2fba48424403486aa",
+  "evidence_type": "user_reported_physical_board_uart",
+  "first_run": {
+    "observed_lines": [
+      "SmolLM2-135M BF16 ZCU104 DMA_LOAD+SILU_MUL probe",
+      "checkpoint 93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+      "SILU write count=0 expected=6144",
+      "BOARD SILU_MUL FAIL"
+    ],
+    "result": "failed before result comparison",
+    "diagnosis": "The A53 app read the write counter immediately after the host START acknowledgement. That acknowledgement does not indicate dispatcher DONE; the RTL integration test waits for DONE and passed."
+  },
+  "app_correction": "A53 app revision 2 polls host status bit 27 for dispatcher DONE and bit 28 for error before reading the result count; only ELF and handoff package changed.",
+  "corrected_run": {
+    "raw_user_message": "SmolLM2-135M BF16 ZCU104 DMA_LOAD+SILU_MUL probe checkpoint 93efa2f097d58c2a74874c7e644dbc9b0cee75a2 app revision 2: wait for dispatcher DONE prefill32 SILU compare=512 mismatches=0 decode SILU compare=16 mismatches=0 BOARD SILU_MUL PASS",
+    "app_revision": 2,
+    "prefill32_compared_bf16": 512,
+    "decode_compared_bf16": 16,
+    "reported_mismatches": 0,
+    "reported_final_marker": "BOARD SILU_MUL PASS",
+    "scope": "The board probe reports the first 16 of 1536 BF16 output values per row; full output is not externally read back. Gate and up inputs are pinned checkpoint intermediates loaded by DMA."
+  }
+}

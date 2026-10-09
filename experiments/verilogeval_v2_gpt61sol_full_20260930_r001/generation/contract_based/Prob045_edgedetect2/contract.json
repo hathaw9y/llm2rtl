@@ -1,0 +1,39 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "in": {"direction": "input", "width": 8, "range": "[7:0]"},
+      "anyedge": {"direction": "output", "width": 8, "range": "[7:0]"}
+    }
+  },
+  "semantics": {
+    "clock": "All sequential state updates on positive edge of clk",
+    "sampling": "Every positive edge samples all eight input bits",
+    "equation": "After positive edge n, anyedge[i] equals 1 iff input sample n differs from input sample n-1 at bit i, for n >= 2",
+    "latency": "Registered detection at the next positive edge after an inter-edge input transition; output held until next positive edge",
+    "reset": "No reset port or reset behavior specified",
+    "initialization": "No initialization imposed; first output sample unspecified because no previous sample exists",
+    "independence": "Each output bit detects both rising and falling sampled transitions independently; input changes that return before sampling are not detected"
+  },
+  "numeric": {
+    "type": "Eight independent unsigned one-bit Boolean signals",
+    "operation": "Bitwise change detection; no arithmetic, rounding, saturation or overflow",
+    "width": "Input history and output each exactly eight bits",
+    "unknowns": "Four-state unknown inputs are outside specified binary behavior; no special unknown filtering"
+  },
+  "verification": {
+    "oracle": "Independent per-bit comparison of current and preceding sampled input, using inequality rather than vector XOR",
+    "startup": "Skip first output assertion, then check every sampled result",
+    "directed": "Stable zero and one, each bit rising and falling, simultaneous changes, alternating vectors, consecutive transitions",
+    "exhaustive": "Check every pair of eight-bit previous and current input vectors",
+    "between_edges": "Assert output holds when input changes between positive edges, including a pulse returning before sampling",
+    "tools": "Icarus v12, -g2012, explicit dev_tb top, finite timeout on compile and simulation",
+    "acceptance": "Self-checking simulation terminates with PASS and no mismatches; contract gate is structural only"
+  },
+  "specification_ambiguities": [
+    "Power-up and first-cycle values are unspecified; no initial value or reset is added.",
+    "Cycle-after-transition is interpreted as registered comparison of consecutive positive-edge samples."
+  ]
+}

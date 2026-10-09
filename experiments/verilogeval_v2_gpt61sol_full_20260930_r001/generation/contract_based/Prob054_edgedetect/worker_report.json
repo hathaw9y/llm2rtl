@@ -1,0 +1,45 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "exit_code": 0,
+      "result": "PASS: passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "Reviewed exact TopModule ports, 8-bit bitwise logic, rising-edge nonblocking assignments, registered output and history, no reset or initialization, single module and no dependencies."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "result": "FAILED: process exited with code 139; diagnostic log empty; no executable produced.",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "exit_code": 255,
+      "result": "FAILED: unable to open missing compile output. No tests executed.",
+      "log": "dev_simulation.log"
+    }
+  ],
+  "development_outcome": "Initial candidate retained without RTL revisions. Contract gate passed; static review completed; requested development simulator compilation failed, so no simulation success claimed.",
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  },
+  "limitations": [
+    "No successful development simulation due to compiler process failure.",
+    "Startup state is unspecified because no reset or initialization is specified.",
+    "Independent testbench designed for exhaustive byte transitions and clock stability, but not executed successfully.",
+    "Contract validator checks structure only.",
+    "No official evaluation results available; no synthesis or board work performed."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS: passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "PASS by inspection: exact one-bit ports; rising-edge active-high synchronous reset with priority; OFF uses j and ON uses k; out reflects state; single sequential driver; no initialization or arithmetic added"
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "FAILED: exit code 139; no compiler diagnostic output",
+      "log": "dev_compile.log",
+      "exit_record": "dev_compile.exit"
+    },
+    {
+      "name": "tool_version_diagnostic",
+      "command": "timeout 10s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -V",
+      "result": "Driver reports Icarus 12.0; reports unable to get backend ivl version",
+      "log": "tool_version.log"
+    },
+    {
+      "name": "development_simulation",
+      "result": "NOT RUN: compilation failed"
+    }
+  ],
+  "development_outcome": "Delivered initial synthesizable candidate without RTL revisions. Frozen contract passed structural validation. Independent self-checking testbench provided, but no simulation success claimed because the specified compiler failed.",
+  "limitations": [
+    "Functional behavior reviewed statically only; development testbench was not successfully compiled or simulated.",
+    "Contract gate validates structure, not functional correctness.",
+    "Power-up state unspecified; rising-edge clock convention assumed as recorded in contract.",
+    "Official evaluation results unavailable; no synthesis or board access performed."
+  ],
+  "artifacts": ["contract.json", "candidate.sv", "candidate_initial.sv", "dev_tb.sv", "contract_validation.log", "dev_compile.log", "dev_compile.exit", "tool_version.log", "tool_version.exit"]
+}

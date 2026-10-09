@@ -1,0 +1,52 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": {
+        "width": 3
+      }
+    },
+    "outputs": {
+      "q": {
+        "width": 16
+      }
+    },
+    "clock_reset": "None; original interface is combinational."
+  },
+  "semantics": {
+    "behavior": "Combinational lookup with no state or added latency",
+    "mapping": {
+      "0": "1232",
+      "1": "aee0",
+      "2": "27d4",
+      "3": "5a0e",
+      "4": "2066",
+      "5": "64ce",
+      "6": "c526",
+      "7": "2f19"
+    },
+    "initialization": "Original 0ns, 5ns, 10ns show a=x and q=x. Unknown input produces all-X output.",
+    "sampling": "Replay original changes at 15ns then each 5ns through 90ns; observe after delta settling at each timestamp."
+  },
+  "numeric": {
+    "input": "3-bit unsigned index",
+    "output": "16-bit hexadecimal bit patterns",
+    "arithmetic": "None; no rounding, overflow, or saturation"
+  },
+  "verification": {
+    "oracle": "Original problem waveform values, directly specified in testbench",
+    "coverage": "Initial X observations, every original timestamp, all 64 known-input transitions",
+    "checks": "Case inequality, fatal mismatches, bounded timeout, PASS marker; dev_check.py initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Radix",
+      "resolution": "q is hexadecimal because values contain a-f; a is index 0-7."
+    },
+    {
+      "topic": "Partially unknown or high impedance a",
+      "resolution": "Not specified by waveform; default all-X chosen, with official correctness limited to specified behavior."
+    }
+  ]
+}

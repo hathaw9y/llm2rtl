@@ -1,0 +1,56 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "qwen25_05b_w4_shared_zcu104",
+  "revision": "r1",
+  "module_id": "softmax_executor",
+  "module_kind": "opcode_executor",
+  "opcode": "SOFTMAX_MASKED",
+  "status": "frozen",
+  "authorization": "Remaining implementation decisions delegated by user; no historical skill approval rules.",
+  "interface": {
+    "request": [
+      "cmd_valid",
+      "cmd_ready",
+      "cmd_id[9:0]",
+      "mode",
+      "bank IDs",
+      "semantic dimensions/selectors",
+      "flags"
+    ],
+    "response": [
+      "rsp_valid",
+      "rsp_ready",
+      "rsp_cmd_id[9:0]",
+      "rsp_error",
+      "rsp_error_code"
+    ],
+    "response_rule": "One stable ready/valid response per accepted command; capacity one active command per executor.",
+    "bank_ports": "Role-routed128-bit native reads with latency3 and byte-masked128-bit writes. Module computes memory word addresses internally; commands have no raw offsets.",
+    "target_clock_MHz": 200,
+    "reset": "Cancels active work and invalidates affected state; normal END/DONE is not reset."
+  },
+  "numeric": {
+    "contract": {
+      "path": "designs/qwen25_05b_w4_shared_zcu104_r1/numeric_contract.json",
+      "sha256": "c47c1cd15afdedcb178df704e1ee9c9488d7f234c1b3f192cb489e6581386227"
+    },
+    "operation": "SOFTMAX_MASKED",
+    "parallelism": {
+      "elements": 1
+    },
+    "architecture": "Sequential bank traversal and unfused FP32 arithmetic, explicit BF16 boundaries.",
+    "FP32_core": "Custom six-stage FP32 RNE/FTZ add/multiply, unfused; exponent preparation and alignment are separate stages, with whole-pipeline response backpressure. Exact source/ROM simulation and OOC identities must match the implementation."
+  },
+  "verification": {
+    "golden": "Fresh command_golden.safetensors and independent scalar arithmetic tests; exact numeric words plus descriptor changes.",
+    "RTL": [
+      "reset/backpressure",
+      "one response",
+      "source preservation on error",
+      "tail/shape coverage",
+      "all supported modes"
+    ],
+    "synthesis": "Fresh200MHz OOC plus resource evidence for this exact module and later full integration.",
+    "board": "Not verified; user-run after full integration artifacts."
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob028_m2014_q4a/development/01",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "pass_marker": "PASS: D latch passed 22 checks"
+    }
+  ],
+  "environment_smoke": {
+    "status": "passed",
+    "checks": [
+      {
+        "case": "correct",
+        "expected_pass": true,
+        "observed": "passed"
+      },
+      {
+        "case": "injected_fault",
+        "expected_pass": false,
+        "observed": "simulation_failed"
+      },
+      {
+        "case": "repair",
+        "expected_pass": true,
+        "observed": "passed"
+      }
+    ]
+  },
+  "contract_validation": "passed_structure_only; see contract_gate.json and contract_gate_history.jsonl",
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; no official evaluation or reference RTL was accessed.",
+    "Enable polarity is interpreted as active-high; original prose does not explicitly state polarity.",
+    "No defined power-up value or X/Z input hardware behavior is specified.",
+    "No synthesis or board verification performed, as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": {
+    "source": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "behavior": "One-bit transparent-high D latch with an always @(*) block and intentional retention when disabled.",
+    "skill_exceptions": "Original requirement for a D latch using an always block overrides generic latch-avoidance, always_comb, naming, and reset conventions. No clock, reset, or additional ports added."
+  },
+  "verification_coverage": [
+    "Initial disabled unknown output",
+    "Enable opening at data zero and one",
+    "Both data transitions with enable continuously high",
+    "Disabled retention of zero and one",
+    "Coincident data and enable changes",
+    "Repeated operation and longer disabled hold",
+    "Bounded timeout and fatal mismatch checks"
+  ],
+  "static_review": "Exact TopModule interface; single procedural q driver; one-bit data; no initialization, reset, clock, or extra latency; intentional latch inference."
+}

@@ -1,0 +1,72 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1,
+      "d": 1
+    },
+    "outputs": {
+      "out": 1
+    }
+  },
+  "semantics": {
+    "kind": "combinational",
+    "evidence": "Original requests a circuit described by a Karnaugh map with only a,b,c,d and out ports.",
+    "column_order_ab": [
+      "00",
+      "01",
+      "11",
+      "10"
+    ],
+    "row_order_cd": [
+      "00",
+      "01",
+      "11",
+      "10"
+    ],
+    "row_values": [
+      [
+        1,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        0,
+        0
+      ]
+    ],
+    "cycle_reset_initialization": "No clock, reset, state, or initialization is specified; output follows inputs without cycle latency."
+  },
+  "numeric": {
+    "port_domain": "One-bit Boolean inputs and output",
+    "arithmetic": "None",
+    "specified_combinations": 16
+  },
+  "verification": {
+    "oracle": "Original map rows and columns in Gray-code order",
+    "coverage": "Exhaustively drive all 16 map cells and repeat in reverse order",
+    "sampling": "Wait 1 ns after input changes for combinational settling",
+    "failure": "Case inequality with $fatal; bounded timeout; PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z inputs is unspecified; verify all binary input combinations."
+  ]
+}

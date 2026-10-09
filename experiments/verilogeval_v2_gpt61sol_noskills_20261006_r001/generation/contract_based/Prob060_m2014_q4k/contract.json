@@ -1,0 +1,14 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "resetn": 1, "in": 1}, "outputs": {"out": 1}},
+  "semantics": {
+    "source": "Original problem: shift register with four D flops; all sequential logic positive-edge triggered; active-low synchronous reset.",
+    "transition": "At each positive clock edge, if resetn is zero clear all four stages; otherwise stage 0 captures in and each subsequent stage captures the previous stage.",
+    "output": "out continuously exposes stage 3; input sampled on edge N reaches out on edge N+3 (four sampling edges).",
+    "reset": "Reset assertion between rising edges leaves state unchanged; rising edge with resetn=0 clears every stage.",
+    "initialization": "No initial value is specified; no RTL initialization is added. Verification establishes known state using a synchronous reset edge."
+  },
+  "numeric": {"stage_count": 4, "stage_width_bits": 1, "reset_value": 0, "arithmetic": "None"},
+  "verification": {"oracle": "Independent history of the most recent four input samples, cleared on active reset edges, derived from original problem.", "cases": ["single-bit impulse and exact four-edge propagation", "alternating and sustained values", "reset assertion and release between edges", "reset flush of nonzero history", "input changes between clock edges", "deterministic varied input stream"], "sampling": "Check unchanged output before edge and after falling edge; check new output after positive-edge nonblocking updates.", "success": "No mismatches, explicit PASS line, bounded timeout"},
+  "specification_ambiguities": [{"issue": "Reset value is not explicitly stated.", "resolution": "Interpret reset of D flops as clearing all stages to zero."}, {"issue": "Pre-reset power-up values are unspecified.", "resolution": "Leave RTL uninitialized and impose no defined initial output requirement."}]
+}

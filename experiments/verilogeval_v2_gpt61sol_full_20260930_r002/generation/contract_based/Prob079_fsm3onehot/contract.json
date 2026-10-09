@@ -1,0 +1,74 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "in": 1,
+      "state": 4
+    },
+    "outputs": {
+      "next_state": 4,
+      "out": 1
+    },
+    "clock_reset": "None: original requests only combinational logic."
+  },
+  "semantics": {
+    "evidence": "Original problem: one-hot encoding A=0001 B=0010 C=0100 D=1000; implement only state transition and output logic.",
+    "encoding": {
+      "A": "0001",
+      "B": "0010",
+      "C": "0100",
+      "D": "1000"
+    },
+    "table": {
+      "A": {
+        "0": "A",
+        "1": "B",
+        "out": 0
+      },
+      "B": {
+        "0": "C",
+        "1": "B",
+        "out": 0
+      },
+      "C": {
+        "0": "A",
+        "1": "D",
+        "out": 0
+      },
+      "D": {
+        "0": "C",
+        "1": "B",
+        "out": 1
+      }
+    },
+    "equations": {
+      "next_state[0]": "~in & (state[0] | state[2])",
+      "next_state[1]": "in & (state[0] | state[1] | state[3])",
+      "next_state[2]": "~in & (state[1] | state[3])",
+      "next_state[3]": "in & state[2]",
+      "out": "state[3]"
+    },
+    "latency": "Combinational; no clock or added latency.",
+    "initialization": "No stored state or initialization specified; outputs depend on current inputs."
+  },
+  "numeric": {
+    "state": "4-bit unsigned one-hot vector; bit 0=A, bit 1=B, bit 2=C, bit 3=D",
+    "input_output": "1-bit Boolean",
+    "arithmetic": "Bitwise Boolean operations only; no rounding or overflow."
+  },
+  "verification": {
+    "oracle": "Independent case table copied from original problem, not DUT equations.",
+    "coverage": "All four legal states for both input values, repeated in different orders with input-only and state-only changes.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling; original has no clock or waveform timing.",
+    "failure": "Case-inequality comparisons, fatal mismatches, bounded timeout, PASS only after all checks.",
+    "primary_command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Illegal/non-one-hot or unknown state/input",
+      "evidence": "Original table only defines A/B/C/D with binary in and assumes one-hot encoding.",
+      "resolution": "Use direct one-hot Boolean equations without recovery logic; no independent behavioral assertion for unspecified encodings."
+    }
+  ]
+}

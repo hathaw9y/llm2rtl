@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"a": 1, "b": 1, "c": 1, "d": 1}, "outputs": {"out": 1}},
+  "semantics": {"kind": "combinational", "evidence": "Original specifies a Karnaugh map indexed by ab columns and cd rows, with no clock or reset ports.", "column_order_ab": ["00", "01", "11", "10"], "row_order_cd": ["00", "01", "11", "10"], "row_values": [[0,1,0,1],[1,0,1,0],[0,1,0,1],[1,0,1,0]], "latency": "Combinational only; no stored state", "reset_initialization": "No reset or initialization behavior specified; no state required"},
+  "numeric": {"domain": "One-bit binary inputs and output", "function": "Odd parity of a,b,c,d", "signedness": "Unsigned single bits"},
+  "verification": {"oracle": "Literal original map, using independent row and column index mapping", "coverage": "All 16 binary input combinations in forward and reverse order", "sampling": "Sample after 1 ns combinational settling for each stimulus", "failure": "$fatal on mismatch and bounded timeout", "success": "PASS line only after all comparisons"},
+  "specification_ambiguities": ["Original map defines binary combinations only; X/Z input behavior is not specified and is not asserted by the testbench."]
+}

@@ -1,0 +1,34 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "passed",
+      "details": "Four-state Moore FSM; falling retains direction; ground loss takes priority over bumps; falling and landing ignore bumps; positive-edge asynchronous active-high reset to walk left; complete combinational assignments and single sequential driver."
+    },
+    {
+      "name": "Icarus development compile",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "timeout_seconds": 30,
+      "top": "dev_tb",
+      "language_flag": "-g2012",
+      "log": "dev_compile.log",
+      "details": "Requested compiler exited with code 139 and no diagnostic output."
+    },
+    {
+      "name": "development simulation",
+      "result": "not_successful",
+      "timeout_seconds": 30,
+      "log": "dev_sim.log",
+      "details": "Matching vvp could not open dev_sim because compilation did not produce an executable."
+    }
+  ],
+  "development_outcome": "Initial candidate retained without RTL revisions. Independent self-checking testbench created for all 32 state/input combinations, Moore output stability, asynchronous resets, and a longer deterministic sequence, but not successfully executed due to compiler failure.",
+  "limitations": [
+    "No successful simulation; behavior assessed by static review only.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing analysis, or board validation performed."
+  ],
+  "artifacts": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "dev_compile.log", "dev_sim.log", "dev_tool_status.log"]
+}

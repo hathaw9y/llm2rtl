@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "A": {
+        "direction": "input",
+        "width": 2,
+        "range": "[1:0]"
+      },
+      "B": {
+        "direction": "input",
+        "width": 2,
+        "range": "[1:0]"
+      },
+      "z": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "z is 1 exactly when A equals B; otherwise z is 0",
+    "timing": "Purely combinational; output follows current inputs with no clock cycles or registered latency",
+    "clock": "None",
+    "reset": "None",
+    "initialization": "No state or initialization required",
+    "handshake": "None"
+  },
+  "numeric": {
+    "inputs": "Two unsigned 2-bit vectors, each representing 0 through 3",
+    "output": "One-bit Boolean equality result",
+    "arithmetic": "Exact equality of both bits; no addition, truncation, rounding, saturation or overflow"
+  },
+  "verification": {
+    "plan": "Independently enumerate all 16 pairs of input values 0 through 3 and compare output to integer equality after combinational settling",
+    "coverage": "All four equal pairs and twelve unequal pairs, including minimum and maximum inputs",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp; finite command timeouts",
+    "pass_criterion": "Every expected-versus-actual comparison passes; explicit PASS marker"
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z input bits is unspecified; verification covers binary inputs only."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "status": "frozen",
+  "module": "TopModule",
+  "interface": {
+    "in": {
+      "direction": "input",
+      "width": 8,
+      "range": "[7:0]"
+    },
+    "out": {
+      "direction": "output",
+      "width": 8,
+      "range": "[7:0]"
+    }
+  },
+  "semantics": "Combinational bit reversal: out[i] = in[7-i] for i=0..7.",
+  "numeric_widths": "Eight unsigned individual bits; no arithmetic, rounding, or overflow.",
+  "latency_reset": "No clock or reset; continuous combinational output after simulator settling.",
+  "specification_ambiguities": [],
+  "verification_plan": [
+    "Explicit dev_tb top elaboration using Icarus -g2012 -Wall.",
+    "Exhaustive 256 binary inputs with independently calculated arithmetic bit-reversal oracle.",
+    "Check X/Z positional propagation."
+  ],
+  "source_closure": [
+    "candidate.sv"
+  ],
+  "benchmark_overrides": "Preserve TopModule, in, out and exact 8-bit interface; no accelerator handshakes."
+}

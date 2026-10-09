@@ -1,0 +1,14 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed (expected)", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "compile_returncode": 0, "simulation_returncode": 0, "evidence": "development/01", "coverage": "All four binary input combinations and repeated combinational transitions"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "No synthesis or board verification performed."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "TopModule implements one-bit combinational NOR using assign out = ~(in1 | in2), with original ports and no added latency.",
+  "static_review": "Single continuous driver, explicit one-bit ports, no state, reset, clock, or inferred latch. Initial snapshot preserved unchanged.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "check_records": "dev_checks.jsonl"}
+}

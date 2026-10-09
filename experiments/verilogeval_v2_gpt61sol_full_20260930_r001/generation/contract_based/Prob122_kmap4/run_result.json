@@ -1,0 +1,187 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob122_kmap4",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob122_kmap4",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob122_kmap4/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790730645.694033,
+    "ended_at_unix": 1790730735.3421407,
+    "seconds": 89.64810848236084,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 101106,
+      "cached_input_tokens": 75136,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2331,
+      "reasoning_output_tokens": 53
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "ab0e0052a99219b78a6377f88cb93739499728c1b0d0a3125afbfe8341626f8b",
+  "contract_sha256": "65d60f4d2200950be02c71756f3d1aa40c8a5a8618b00d9266168c69f1aeae34",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "frozen_contract_gate",
+        "result": "passed_structure_only",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "static_rtl_review",
+        "result": "pass",
+        "details": "Exact TopModule ports, one-bit unsigned logic, continuous combinational assignment, no state, delays, latches or dependencies."
+      },
+      {
+        "name": "Icarus -g2012 -Wall explicit dev_tb elaboration",
+        "result": "fail",
+        "exit_code": 139,
+        "timeout_seconds": 20,
+        "log": "development_compile.log",
+        "error_log": "development_tool_error.log"
+      },
+      {
+        "name": "independent K-map exhaustive simulation",
+        "result": "not_run",
+        "exit_code": "not_run",
+        "timeout_seconds": 20,
+        "log": "development_simulation.log",
+        "comparisons": null
+      }
+    ],
+    "development_outcome": "Compiler failed with exit code 139; best RTL delivered unchanged, with zero RTL revisions.",
+    "limitations": [
+      "Development simulation was not run because the requested Icarus compiler exited with code 139 (SIGSEGV); functional correctness is based on direct truth-table reasoning and static review only.",
+      "X/Z behavior is unspecified by the problem.",
+      "No synthesis, board testing or official evaluation performed."
+    ],
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_rtl": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "ab0e0052a99219b78a6377f88cb93739499728c1b0d0a3125afbfe8341626f8b",
+      "Prob122_kmap4_ref.sv": "4094b301b666c925eb833a38df14836c24f6e90f56d1903a4c3db1e4a6c6d01e",
+      "Prob122_kmap4_test.sv": "1752d6f03374c971cc2364affd4a0f4052c7956e5d14d1b146c40af886eb2b73"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob122_kmap4_test.sv",
+        "Prob122_kmap4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014810187742114067
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb122_kmap4_test.sv:38: $finish called at 1161 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 232 samples\n\nSimulation finished at 1161 ps\nMismatches: 0 in 232 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009743073023855686
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "ab0e0052a99219b78a6377f88cb93739499728c1b0d0a3125afbfe8341626f8b",
+      "Prob122_kmap4_ref.sv": "4094b301b666c925eb833a38df14836c24f6e90f56d1903a4c3db1e4a6c6d01e",
+      "Prob122_kmap4_test.sv": "1752d6f03374c971cc2364affd4a0f4052c7956e5d14d1b146c40af886eb2b73"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob122_kmap4_test.sv",
+        "Prob122_kmap4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011811633594334126
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb122_kmap4_test.sv:38: $finish called at 1161 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 232 samples\n\nSimulation finished at 1161 ps\nMismatches: 0 in 232 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008746295236051083
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

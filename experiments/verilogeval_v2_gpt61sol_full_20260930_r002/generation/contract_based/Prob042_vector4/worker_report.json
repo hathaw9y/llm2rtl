@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "outcome": "passed",
+      "coverage": "correct fixture passed; injected fault failed; repair passed"
+    },
+    {
+      "command": "python3 validate_contract.py",
+      "outcome": "passed_structure_only"
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "outcome": "passed",
+      "coverage": "265 checks: exhaustive 256 binary inputs, initial unknown, and eight directed four-state/boundary cases",
+      "evidence": "dev_checks.jsonl and development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis or board verification performed, as requested."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": "Combinational 24-bit replication of in[7] concatenated with in[7:0]; exact TopModule ports, no clock, reset, state, or added latency.",
+  "static_review": "Single continuous driver, exact 32-bit result, no dependencies or inferred storage.",
+  "initial_snapshot": "candidate_initial.sv preserved immediately after initial RTL creation and unchanged."
+}

@@ -1,0 +1,31 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"A": {"direction": "input", "width": 2}, "B": {"direction": "input", "width": 2}, "z": {"direction": "output", "width": 1}},
+    "evidence": "Original problem lists two 2-bit inputs A[1:0], B[1:0] and one-bit output z."
+  },
+  "semantics": {
+    "function": "z is 1 when A equals B, otherwise 0 for binary inputs",
+    "timing": "Combinational; output follows current inputs with no added cycle latency",
+    "clock_reset": "None: original interface has no clock or reset",
+    "initialization": "No stored state or initialization required; original problem specifies no initial value",
+    "evidence": "Original problem describes a circuit producing z based on equality of A and B without sequential ports or timing requirements."
+  },
+  "numeric": {
+    "input_domain": "Two-bit unsigned binary vectors, values 0 through 3",
+    "output_domain": "One-bit Boolean equality result",
+    "arithmetic": "No arithmetic, rounding, saturation, or overflow"
+  },
+  "verification": {
+    "oracle": "Independent explicit truth table from original equality requirement",
+    "coverage": "All 16 binary A/B combinations, repeated in reverse order to check changing inputs",
+    "sampling": "Sample one simulation time unit after each input change for combinational settling; no clock edges",
+    "failure": "$fatal on mismatch and bounded timeout",
+    "success": "Print line beginning PASS only after every comparison succeeds",
+    "runner": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {"topic": "Four-state inputs", "evidence": "Original problem does not define behavior for X or Z inputs", "resolution": "Use normal logical equality in RTL; required development oracle covers all specified binary combinations without inventing X/Z requirements"}
+  ]
+}

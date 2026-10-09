@@ -1,0 +1,37 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {"direction": "input", "width": 1},
+      "state": {"direction": "input", "width": 2},
+      "next_state": {"direction": "output", "width": 2},
+      "out": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "kind": "pure combinational Moore state transition and output logic",
+    "encoding": {"A": "00", "B": "01", "C": "10", "D": "11"},
+    "transitions": {
+      "A": {"in_0": "A", "in_1": "B", "out": 0},
+      "B": {"in_0": "C", "in_1": "B", "out": 0},
+      "C": {"in_0": "A", "in_1": "D", "out": 0},
+      "D": {"in_0": "C", "in_1": "B", "out": 1}
+    },
+    "timing": "Outputs follow current inputs combinationally after settling; no clock or cycle latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No storage or initialization required.",
+    "legal_inputs": "All eight binary state/input combinations are legal. X/Z behavior is unspecified."
+  },
+  "numeric": {
+    "representation": "Unsigned two-bit state encodings and one-bit boolean input/output.",
+    "arithmetic": "No arithmetic, rounding, truncation, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Independent explicit lookup of the original eight transition-table entries and four Moore outputs.",
+    "coverage": "Exhaustively apply all eight combinations in ascending and descending order; compare both outputs after settling and repeat to check history independence.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp, finite compile and simulation timeouts.",
+    "static_review": "Check exact ports, complete combinational assignments, widths, no sequential logic and no simulation-only DUT constructs."
+  },
+  "specification_ambiguities": []
+}

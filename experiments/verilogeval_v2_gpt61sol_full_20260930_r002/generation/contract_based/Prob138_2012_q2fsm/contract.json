@@ -1,0 +1,65 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "w": 1
+    },
+    "outputs": {
+      "z": 1
+    }
+  },
+  "semantics": {
+    "evidence": "problem.txt: state transition list, synchronous active-high reset to A, all sequential logic on positive edge, separate state-table and state-flop always blocks",
+    "reset": "reset=1 at posedge clk takes priority and selects A; between edges reset does not alter state",
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "D",
+        "1": "C"
+      },
+      "C": {
+        "0": "D",
+        "1": "E"
+      },
+      "D": {
+        "0": "A",
+        "1": "F"
+      },
+      "E": {
+        "0": "D",
+        "1": "E"
+      },
+      "F": {
+        "0": "D",
+        "1": "C"
+      }
+    },
+    "output": "Combinational Moore output: z=1 in E/F, z=0 in A/B/C/D; new-state output visible after posedge update without extra cycle",
+    "initialization": "No initial state specified; no explicit initialization; verification starts with sampled reset"
+  },
+  "numeric": {
+    "ports": "single-bit logic",
+    "state_encoding": "six distinct 3-bit enum values",
+    "arithmetic": "none"
+  },
+  "verification": {
+    "oracle": "independent integer transition table from original problem.txt",
+    "sampling": "drive at falling edge, verify old output before rising edge and updated output after NBA settles",
+    "coverage": "all binary input sequences of length 8 from reset; all 12 transitions; reset in each reachable state, reset priority for both w values, synchronous reset assertion/deassertion between edges",
+    "failure": "fatal mismatches, bounded timeout, PASS only after all checks",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Power-up and illegal state behavior",
+      "evidence": "Original problem specifies reset to A but no power-up or illegal-state output/transition",
+      "resolution": "No pre-reset output requirement; unused state default recovery to A is implementation choice and not tested as specified behavior."
+    }
+  ]
+}

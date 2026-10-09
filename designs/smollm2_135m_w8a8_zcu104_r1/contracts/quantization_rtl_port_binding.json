@@ -1,0 +1,138 @@
+{
+  "schema": "llm2rtl.quantization_rtl_port_binding.v1",
+  "status": "frozen",
+  "module_id": "quantization_executor",
+  "executor": {
+    "rtl_module": "smollm2_quantization_executor",
+    "clock_reset": {
+      "clk": 1,
+      "resetn": 1
+    },
+    "command_inputs": {
+      "cmd_valid": 1,
+      "cmd_opcode": 4,
+      "cmd_payload": 112,
+      "cmd_bank_ids": 12,
+      "cmd_transaction_id": 32,
+      "cmd_generations": 96
+    },
+    "command_outputs": {
+      "cmd_ready": 1
+    },
+    "descriptor_inputs": {
+      "cmd_desc_present": 3,
+      "cmd_profiles": 15,
+      "cmd_rows": 33,
+      "cmd_cols": 48,
+      "cmd_positions": 30,
+      "cmd_layers": 15,
+      "cmd_desc_generations": 96,
+      "cmd_data_valid": 3,
+      "cmd_scale_valid": 3,
+      "cmd_desc_busy": 3,
+      "cmd_desc_owner": 15,
+      "cmd_b7_static_valid": 1,
+      "cmd_embedding_lanes": 64,
+      "cmd_embedding_lane_valid": 32
+    },
+    "descriptor_capture": "all fields stable with command and captured on accept; packed role order A low lane, B middle, C high; busy/owners refer to atomic controller acquisition, descriptor generations must match accepted command identity; source data/scale flags refer to same generation; C need not be ready B7 validity is dedicated static component flag; profile11, rows/cols/position not used forstatic scales; B7 desc generation equals max component generation. DQ row selector2bits at2*row, each usedrow selectorvalid required; validate onlyselected scale lane.",
+    "roles_outputs": {
+      "a_role": 5,
+      "b_role": 5,
+      "c_role": 5
+    },
+    "read_outputs": {
+      "a_rd_valid": 1,
+      "a_rd_bank": 4,
+      "a_rd_address": 19,
+      "a_rd_wide": 1,
+      "b_rd_valid": 1,
+      "b_rd_bank": 4,
+      "b_rd_address": 19,
+      "b_rd_wide": 1
+    },
+    "read_inputs": {
+      "a_rd_ready": 1,
+      "a_rd_resp_valid": 1,
+      "a_rd_data": 128,
+      "b_rd_ready": 1,
+      "b_rd_resp_valid": 1,
+      "b_rd_data": 128
+    },
+    "write_outputs": {
+      "c_wr_valid": 1,
+      "c_wr_bank": 4,
+      "c_wr_address": 19,
+      "c_wr_data": 128,
+      "c_wr_strb": 16
+    },
+    "write_inputs": {
+      "c_wr_ready": 1
+    },
+    "response_outputs": {
+      "resp_valid": 1,
+      "resp_transaction_id": 32,
+      "resp_used_bank_mask": 3,
+      "resp_used_bank_count": 2,
+      "resp_bank_ids": 12,
+      "resp_generations": 96,
+      "resp_error_code": 8
+    },
+    "response_inputs": {
+      "resp_ready": 1
+    },
+    "producer_begin_outputs": {
+      "dst_begin_valid": 1,
+      "dst_begin_bank": 4,
+      "dst_begin_accepted_generation": 32,
+      "dst_begin_generation": 32,
+      "dst_begin_profile": 5,
+      "dst_begin_rows": 11,
+      "dst_begin_cols": 16,
+      "dst_begin_position": 10,
+      "dst_begin_layer": 5
+    },
+    "producer_begin_inputs": {
+      "dst_begin_ready": 1,
+      "dst_begin_error_code": 8
+    },
+    "producer_begin_semantics": "Allmodes beforewrites: profile21/23/12/14/22 forquantmodes0..4, DQ1; rows=mcount; cols=K/576/192/192/L or DQ576; querypositiononlyP, layeronlyK/V; generation=acceptedCgen+1,no wrap. OldC profile/shape/position ignored. Completionechoesoriginalcapturedgenerations.",
+    "invalidate_outputs": {
+      "dst_invalidate_valid": 1,
+      "dst_invalidate_bank": 4,
+      "dst_invalidate_generation": 32
+    },
+    "invalidate_inputs": {
+      "dst_invalidate_ready": 1
+    },
+    "invalidate_semantics": "Drain acceptedread/heldoffers, arithmetic and allalreadyofferedCwrite handshakes beforeinvalidateactiveCgenerationack then originalidentityerrorresponse.",
+    "credit_invariant": "per A/B role outstanding accepted reads plus queued returned beats <=4; read responses have no ready and must always be captured; credits freed on processing, not merely response arrival",
+    "write_commit": "native accepted wr handshake commits selected-byte coverage atomically. No success sideband needed; response after all accepted responses processed and final write/coverage accepted.",
+    "read_semantics": "All narrow128bit, a/b_rd_wide=0. 3cycle in-order no-readyresponses. FIFO4x128 perrole; count outstanding+queued+decoded/heldbeat <=4 until all subbundles processed.",
+    "roles_semantics": "Quant21/22/23, B onlystatic modes; DQ24/0/25. Outputs refer capturedactivejob; controller derives incoming acquisition roles. usedmask101 count2 dynamic/DQ;111 count3 static.",
+    "tag_semantics": "Childtag bits31:0 destinationbyteoffset, bits95:32 zero; duringscalegen bits31:0 scaleindex. Top distinguishes phase, no interphase inflight overlap.",
+    "output_coverage": "Write every configured payload byte and align16 scale extent including zero padding exactlyonce; leave all other allocation bytes unchanged. Masked P outputs are stored zero even though arithmetic mask excludes those lanes."
+  },
+  "arithmetic": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/datapaths/quantization_arithmetic.json",
+    "sha256": "61b35d34919d364a99e371cfbf8e50d483da08b3105d942402a1138f63d9c432"
+  },
+  "numerical_interpreter_refinements": [
+    "Pmask excludes even NaN/Inf fromdecode/reduction/errors, writes0",
+    "ValidnegativePclip0, allnegativevalidgroupscale1",
+    "A outputrowrelativegroups floor((source_row-mstart)/16)",
+    "Q/Psidecar head*ceil(mcount/16)+row//16",
+    "DQvalidatesonlyselectedlane andexactsource rows=mcount; Q/K/V/Pprefixrowsallowed",
+    "Kstaticonly3selectedscales, unused4thpaddingignored; Vall12scales",
+    "Destinationprofilegeneration producerbegin rejects beforewrites; sourcevalidatedagainstcapturedgeneration"
+  ],
+  "local_buffers": {
+    "source_response_fifo_bytes": 64,
+    "table_response_fifo_bytes": 64,
+    "output_packer_bytes": 32,
+    "scale_cache_slots": 18,
+    "max_reducers": 18,
+    "full_tensor_buffer": false
+  },
+  "build_policy": "RTL/simulation authorized, synthwaitinguserdesignatedmachine"
+}

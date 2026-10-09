@@ -1,0 +1,85 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "areset": {
+        "direction": "input",
+        "width": 1
+      },
+      "bump_left": {
+        "direction": "input",
+        "width": 1
+      },
+      "bump_right": {
+        "direction": "input",
+        "width": 1
+      },
+      "walk_left": {
+        "direction": "output",
+        "width": 1
+      },
+      "walk_right": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "states": [
+      "LEFT",
+      "RIGHT"
+    ],
+    "reset": "Active-high asynchronous reset on posedge areset; reset dominates clock and selects LEFT. While areset is high, each posedge clk also selects LEFT.",
+    "initialization": "No power-up state promised before reset.",
+    "sampling": "Bumps sampled at posedge clk when reset is low. Outputs decode registered state (Moore); bump changes between clocks do not change outputs.",
+    "transition_table": {
+      "LEFT": {
+        "00": "LEFT",
+        "01": "LEFT",
+        "10": "RIGHT",
+        "11": "RIGHT"
+      },
+      "RIGHT": {
+        "00": "RIGHT",
+        "01": "LEFT",
+        "10": "RIGHT",
+        "11": "LEFT"
+      }
+    },
+    "input_order": "bump_left,bump_right",
+    "outputs": {
+      "LEFT": {
+        "walk_left": 1,
+        "walk_right": 0
+      },
+      "RIGHT": {
+        "walk_left": 0,
+        "walk_right": 1
+      }
+    },
+    "reset_release": "Deasserting reset alone does not change state."
+  },
+  "numeric": {
+    "state_width": 1,
+    "ports": "Unsigned one-bit Boolean signals",
+    "arithmetic": "No arithmetic, rounding, overflow, saturation, or signed operations."
+  },
+  "verification": {
+    "oracle": "Independent explicit transition table derived from problem; compare both outputs after clock and asynchronous reset events.",
+    "coverage": [
+      "All four bump combinations from both states",
+      "Simultaneous bumps repeatedly reverse direction",
+      "Bump changes between clocks preserve Moore outputs",
+      "Asynchronous reset while walking right between clock edges",
+      "Reset held across clock edges with bumps asserted",
+      "Reset release preserves LEFT until next clock"
+    ],
+    "tools": "Icarus v12, -g2012, explicit dev_tb top, finite compile and simulation timeouts; testbench watchdog."
+  },
+  "specification_ambiguities": []
+}

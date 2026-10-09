@@ -1,0 +1,49 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "dev_checks.jsonl and development/01",
+      "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; no diagnostics",
+      "simulation": "matching vvp; PASS timer: 528896 checked edges, all 1024 durations"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation; official correctness is unevaluated.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": [
+    "candidate.sv",
+    "candidate_initial.sv"
+  ],
+  "testbench_files": [
+    "dev_tb.sv"
+  ],
+  "interface_cycle_semantics": "Original TopModule ports preserved. Positive-edge load has priority over decrement. Counter stops at zero; tc is the combinational zero indication. No reset, initialization, extra ports, or added latency.",
+  "numeric_width_decisions": "Unsigned 10-bit counter and explicitly sized decrement and zero constants.",
+  "static_review": "Single sequential counter driver, nonblocking updates, continuous terminal-count output; no latch or added pipeline.",
+  "test_coverage": [
+    "Unknown output before first load",
+    "Every duration from 0 through 1023",
+    "Pre-edge and post-update sampling",
+    "Saturation after terminal count",
+    "Reload during active countdown",
+    "Consecutive loads",
+    "Data changes while load is low",
+    "Deterministic random interruptions",
+    "Bounded timeout"
+  ]
+}

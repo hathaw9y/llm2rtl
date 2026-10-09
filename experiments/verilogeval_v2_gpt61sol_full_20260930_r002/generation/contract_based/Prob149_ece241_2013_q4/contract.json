@@ -1,0 +1,54 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "s": 3
+    },
+    "outputs": {
+      "fr2": 1,
+      "fr1": 1,
+      "fr0": 1,
+      "dfr": 1
+    }
+  },
+  "semantics": {
+    "sampling": "State changes on rising clk; outputs decode registered water level and last-change direction. Between edges inputs do not alter outputs. This follows the specified synchronous state machine.",
+    "reset": "Active-high synchronous reset overrides s and establishes below-low state with all four outputs asserted.",
+    "levels": {
+      "000": "below s[0], nominal 111, dfr 1",
+      "001": "between s[0] and s[1], nominal 011",
+      "011": "between s[1] and s[2], nominal 001",
+      "111": "above s[2], nominal 000, dfr 0"
+    },
+    "direction": "At an intermediate level dfr is 1 if the previous distinct sampled water level was lower, 0 if higher; unchanged levels retain direction. Compare levels even for skipped sensors.",
+    "initialization": "No power-up initialization specified; deterministic behavior is required after synchronous reset."
+  },
+  "numeric": {
+    "sensor_encoding": "Unsigned 3-bit thermometer code, s[0] lowest, s[2] highest",
+    "flow_order": "Nominal vector is {fr2,fr1,fr0}",
+    "arithmetic": "Only level ordering comparisons; no rounding or overflow"
+  },
+  "verification": {
+    "oracle": "Independent integer water-level model derived from original prose and table, persistent last-change direction",
+    "directed": "Reset phase and priority, every ordered pair of levels, rising/falling history, repeated level hold, skipped levels, input changes between edges",
+    "checks": "Case-inequality comparison after edge settling and before rising edges, fatal mismatch, bounded timeout, explicit PASS",
+    "runner": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Non-thermometer sensor patterns are unspecified",
+      "resolution": "Exclude from correctness oracle; RTL holds state for these patterns."
+    },
+    {
+      "issue": "Pre-reset power-up state unspecified",
+      "resolution": "No initial RTL values and no required pre-reset output value."
+    },
+    {
+      "issue": "Clock edge is implicit in synchronous FSM wording",
+      "resolution": "Use rising clk with no additional latency."
+    }
+  ]
+}

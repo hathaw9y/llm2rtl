@@ -1,0 +1,203 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob031_dff",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob031_dff",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob031_dff/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791270596.4219875,
+    "ended_at_unix": 1791270648.974264,
+    "seconds": 52.552276611328125,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 89909,
+      "cached_input_tokens": 80768,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1822,
+      "reasoning_output_tokens": 11
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "2338ca5854c1ec5de0c93682353695d36477e7e27ecb2694d36245b709648901",
+  "contract_sha256": "9e04f497b94bfb140ac737927aa9a42e7f74957b96e28a80c60f91dfbb036abe",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "cases": "correct passes, deliberate fault fails, repair passes"
+      },
+      {
+        "name": "contract_structure",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "compile": "Icarus 12 compile passed without warnings",
+        "simulation": "Self-checking simulation emitted PASS"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official correctness; official evaluation has not run.",
+      "Original text labels q as input despite requesting a D flip-flop. Implemented q as output to expose stored state; this ambiguity is recorded in contract.json.",
+      "No power-up value is promised by the original problem. The simulation unknown-state check verifies absence of added initialization."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "Single one-bit D flip-flop with positive-edge nonblocking capture and no reset or initialization.",
+    "preserved_artifacts": [
+      "candidate.sv",
+      "candidate_initial.sv",
+      "dev_tb.sv",
+      "contract.json",
+      "contract_gate.json",
+      "contract_gate_history.jsonl",
+      "environment_smoke.json",
+      "environment_smoke",
+      "development/01",
+      "dev_checks.jsonl",
+      "dev_final_result.json"
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2338ca5854c1ec5de0c93682353695d36477e7e27ecb2694d36245b709648901",
+      "Prob031_dff_ref.sv": "fbfa1604c31f03dca7217b6d4f2ce1b67e85898ec94195ea3dc460868a186e40",
+      "Prob031_dff_test.sv": "60f190b0ab719f7c116072537965ebbcfa8420f3fdee1878db2aa3d8235f6012"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob031_dff_test.sv",
+        "Prob031_dff_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013715224340558052
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb031_dff_test.sv:37: $finish called at 605 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 121 samples\n\nSimulation finished at 605 ps\nMismatches: 0 in 121 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008536730892956257
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2338ca5854c1ec5de0c93682353695d36477e7e27ecb2694d36245b709648901",
+      "Prob031_dff_ref.sv": "fbfa1604c31f03dca7217b6d4f2ce1b67e85898ec94195ea3dc460868a186e40",
+      "Prob031_dff_test.sv": "60f190b0ab719f7c116072537965ebbcfa8420f3fdee1878db2aa3d8235f6012"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob031_dff_test.sv",
+        "Prob031_dff_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012483222410082817
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb031_dff_test.sv:37: $finish called at 605 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 121 samples\n\nSimulation finished at 605 ps\nMismatches: 0 in 121 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0067687081173062325
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

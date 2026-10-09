@@ -1,0 +1,35 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "shift_ena": 1, "count_ena": 1, "data": 1},
+    "outputs": {"q": 4},
+    "reset": "No reset port exists in the original interface."
+  },
+  "semantics": {
+    "clock": "Original problem: all sequential logic is triggered on the positive edge of the clock.",
+    "shift": "When shift_ena=1, shift toward higher bit indices and insert data into bit 0. Sending b3,b2,b1,b0 produces q=b3b2b1b0, as required by MSB-first input.",
+    "count": "When shift_ena=0 and count_ena=1, decrement the current four-bit register on that edge.",
+    "hold": "With both enables zero, retain the register value.",
+    "simultaneous": "Original problem explicitly allows arbitrary behavior when both enables are one. Implementation selects shift priority; oracle does not constrain that case.",
+    "initialization": "Original specifies no initialization or reset. RTL supplies neither; simulation starts unknown and four shifts establish a known word.",
+    "latency": "q updates at the accepting rising edge through a nonblocking register assignment, with no additional pipeline."
+  },
+  "numeric": {
+    "width": 4,
+    "representation": "Unsigned four-bit binary register",
+    "decrement": "Modulo 16 subtraction; zero becomes 15 under four-bit arithmetic.",
+    "serial_order": "First of four supplied bits becomes bit 3."
+  },
+  "verification": {
+    "oracle": "Derived from original prose: collect four serial bits MSB-first to load each integer 0..15, then compare direct integer decrements modulo 16.",
+    "sampling": "Drive at falling edges, verify hold before rising edge and compare after the nonblocking update; also verify falling-edge stability.",
+    "coverage": "Startup unknown and partial serial loading, all 16 loads, hold with changing data, every count state and repeated wraparound, interleaved shifts and counts.",
+    "infrastructure": "Smoke fixture gate, structural contract gate, then python3 dev_check.py --label initial.",
+    "termination": "Fatal mismatches, bounded timeout, and PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {"topic": "startup", "evidence": "No initial value or reset is specified", "resolution": "No synthesized initialization; do not require a particular hardware startup value. Check natural unknown simulation and convergence after four input bits."},
+    {"topic": "both enables", "evidence": "It does not matter what your circuit does if both control inputs are 1", "resolution": "Shift priority chosen; not tested as a required behavior."}
+  ]
+}

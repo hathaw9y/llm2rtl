@@ -1,0 +1,102 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "y": {
+        "direction": "input",
+        "width": 3,
+        "range": "[2:0]"
+      },
+      "w": {
+        "direction": "input",
+        "width": 1
+      },
+      "Y1": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "combinational next-state bit logic",
+    "output": "Y1 equals bit 1 of the next state selected by current state y and input w, not current y[1] or the Moore output in parentheses",
+    "state_codes": {
+      "A": "000",
+      "B": "001",
+      "C": "010",
+      "D": "011",
+      "E": "100",
+      "F": "101"
+    },
+    "transitions_w0_w1": {
+      "A": [
+        "B",
+        "A"
+      ],
+      "B": [
+        "C",
+        "D"
+      ],
+      "C": [
+        "E",
+        "D"
+      ],
+      "D": [
+        "F",
+        "A"
+      ],
+      "E": [
+        "E",
+        "D"
+      ],
+      "F": [
+        "C",
+        "D"
+      ]
+    },
+    "timing": "No clock, registers, reset, or initialization; output responds combinationally to inputs",
+    "illegal_states": "110 and 111 have unspecified functional behavior; implementation chooses Y1=0 for deterministic complete combinational assignment"
+  },
+  "numeric": {
+    "representation": "unsigned three-bit state codes, one-bit Boolean input/output",
+    "arithmetic": "No arithmetic, rounding, saturation, overflow, or accumulation",
+    "expected_Y1_w0_w1": {
+      "A": [
+        0,
+        0
+      ],
+      "B": [
+        1,
+        1
+      ],
+      "C": [
+        0,
+        1
+      ],
+      "D": [
+        0,
+        0
+      ],
+      "E": [
+        0,
+        1
+      ],
+      "F": [
+        1,
+        1
+      ]
+    }
+  },
+  "verification": {
+    "oracle": "Independent testbench stores full destination state codes from the original transition diagram and compares bit 1 with DUT output",
+    "coverage": "All 12 defined state/input combinations, repeated in reverse order to exercise combinational responsiveness; illegal states checked only against the documented implementation choice",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp; finite external timeout per compile and simulation",
+    "pass_condition": "All checked comparisons pass, explicit PASS marker, normal simulator exit",
+    "scope": "Development only; no official evaluation, synthesis, timing, or board claims"
+  },
+  "specification_ambiguities": [
+    "The final sentence says output Y1 is y[1], but the explicit request to implement next-state logic establishes that Y1 is the next value of state bit 1.",
+    "Behavior for unused state encodings 110 and 111 is not specified."
+  ]
+}

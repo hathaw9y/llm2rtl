@@ -1,0 +1,304 @@
+{
+  "status": "awaiting_boundary_discussion",
+  "user_decisions": {
+    "weight_precision": "INT4",
+    "original_request": "이 프레임워크를 이용해서 Qwen/Qwen2.5-0.5B 를 FPGA로 구현해봐. 단 기존 build는 참고하지 말고",
+    "attention_executor_separate": true,
+    "attention_boundary_request": "아니 아니 QK와 PV는 Attention executer에서 하자고",
+    "attention_owns_qk_and_pv": true
+  },
+  "proposed_hardware": {
+    "schema": "llm2rtl_v2.hardware.v1",
+    "hardware_profile_id": "zcu104",
+    "board": "AMD ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "target_clock_mhz": 200,
+    "target_clock_period_ns": 5.0,
+    "memory_stream_width_bits": 128,
+    "ps_ddr_port": "S_AXI_HP0_FPD",
+    "control_port": "M_AXI_HPM0_FPD",
+    "default_runtime": "baremetal",
+    "board_memory_map": "boards/zcu104/contracts/board_memory_map.json",
+    "pl_ddr_region": {
+      "start_address": null,
+      "end_address_inclusive": null,
+      "size_bytes": 2147483648,
+      "capacity_basis": "2 GiB usable accelerator DDR under bare-metal; stack and heap excluded",
+      "address_assignment": "Resolve legal accelerator ranges from the bare-metal linker script and board memory map before execution; exclude application code/data, stack and heap",
+      "owner": "PL accelerator",
+      "range_rule": "Require resolved address ranges; every transfer must lie entirely within an accelerator range and not overlap reserved application, stack or heap memory"
+    },
+    "device_inventory": {
+      "lut": 230400,
+      "ff": 460800,
+      "dsp": 1728,
+      "bram_36k": 312,
+      "uram": 96
+    },
+    "vivado_expected": "2024.1",
+    "vivado_last_verified": "2025.2"
+  },
+  "operation_candidates": [
+    {
+      "operation_id": "embedding",
+      "semantic_kind": "embedding_lookup",
+      "source_location": "reference/modeling_qwen2.py:819",
+      "proposed_opcode": "DMA_LOAD",
+      "proposed_executor": "datamover_executor",
+      "rationale": "PS selects token row; no PS embedding arithmetic",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "input_norm",
+      "semantic_kind": "rmsnorm",
+      "source_location": "reference/modeling_qwen2.py:593",
+      "proposed_opcode": "RMSNORM",
+      "proposed_executor": "rmsnorm_executor",
+      "rationale": "Shared with post-attention and final RMSNorm",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "qkv",
+      "semantic_kind": "affine_projection",
+      "source_location": "reference/modeling_qwen2.py:239",
+      "proposed_opcode": "GEMM_W4",
+      "proposed_executor": "gemm_executor",
+      "rationale": "Q/K/V share W4 projection with BF16 bias epilogue",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "qkv_layout",
+      "semantic_kind": "reshape_transpose",
+      "source_location": "reference/modeling_qwen2.py:243",
+      "proposed_opcode": "LAYOUT",
+      "proposed_executor": "layout_executor",
+      "rationale": "Explicit physical bank layouts or executor transformation; never hidden PS tensor math",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "rope",
+      "semantic_kind": "rotary_position_embedding",
+      "source_location": "reference/modeling_qwen2.py:257",
+      "proposed_opcode": "ROPE",
+      "proposed_executor": "rope_executor",
+      "rationale": "Q and K head_dim=64, split halves rotation",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "kv_append",
+      "semantic_kind": "cache_update",
+      "source_location": "reference/modeling_qwen2.py:261",
+      "proposed_opcode": "DMA_STORE",
+      "proposed_executor": "datamover_executor",
+      "rationale": "PS computes cache addresses; store rotated K and unrotated V",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "kv_read",
+      "semantic_kind": "cache_access",
+      "source_location": "reference/modeling_qwen2.py:264",
+      "proposed_opcode": "DMA_LOAD",
+      "proposed_executor": "datamover_executor",
+      "rationale": "Explicit DDR cache loads for attention tiles",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "gqa",
+      "semantic_kind": "grouped_query_head_mapping",
+      "source_location": "reference/modeling_qwen2.py:264",
+      "proposed_opcode": "ATTENTION",
+      "proposed_executor": "attention_executor",
+      "rationale": "Attention executor maps seven Q heads to each KV head and reuses local KV data without DDR replication",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "qk",
+      "semantic_kind": "attention_score",
+      "source_location": "reference/modeling_qwen2.py:267",
+      "proposed_opcode": "ATTENTION",
+      "proposed_executor": "attention_executor",
+      "rationale": "Attention executor computes QK transpose using its own attention datapath; not dispatched to the projection GEMM executor",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "score_scale",
+      "semantic_kind": "attention_scale",
+      "source_location": "reference/modeling_qwen2.py:267",
+      "proposed_opcode": "ATTENTION",
+      "proposed_executor": "attention_executor",
+      "rationale": "Scale=1/8",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "causal_mask",
+      "semantic_kind": "causal_mask",
+      "source_location": "reference/modeling_qwen2.py:277",
+      "proposed_opcode": "ATTENTION",
+      "proposed_executor": "attention_executor",
+      "rationale": "Generate causal mask from global positions",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "softmax",
+      "semantic_kind": "stable_softmax",
+      "source_location": "reference/modeling_qwen2.py:280",
+      "proposed_opcode": "ATTENTION",
+      "proposed_executor": "attention_executor",
+      "rationale": "Attention executor owns stable softmax between QK transpose and PV; materialized versus tiled online algorithm and numerical boundaries remain pending",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "pv",
+      "semantic_kind": "attention_value",
+      "source_location": "reference/modeling_qwen2.py:282",
+      "proposed_opcode": "ATTENTION",
+      "proposed_executor": "attention_executor",
+      "rationale": "Attention executor computes probability-times-V using its own attention datapath; not dispatched to the projection GEMM executor",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "head_merge",
+      "semantic_kind": "reshape_transpose",
+      "source_location": "reference/modeling_qwen2.py:290",
+      "proposed_opcode": "LAYOUT",
+      "proposed_executor": "layout_executor",
+      "rationale": "Could be bank addressing inside attention output; layout decision pending",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "o_proj",
+      "semantic_kind": "linear_projection",
+      "source_location": "reference/modeling_qwen2.py:293",
+      "proposed_opcode": "GEMM_W4",
+      "proposed_executor": "gemm_executor",
+      "rationale": "Shared projection engine, no bias",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "residual",
+      "semantic_kind": "residual_add",
+      "source_location": "reference/modeling_qwen2.py:605",
+      "proposed_opcode": "ADD",
+      "proposed_executor": "vector_executor",
+      "rationale": "Two residual adds per layer",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "post_norm",
+      "semantic_kind": "rmsnorm",
+      "source_location": "reference/modeling_qwen2.py:609",
+      "proposed_opcode": "RMSNORM",
+      "proposed_executor": "rmsnorm_executor",
+      "rationale": "Shared normalization",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "gate_up",
+      "semantic_kind": "linear_projection",
+      "source_location": "reference/modeling_qwen2.py:168",
+      "proposed_opcode": "GEMM_W4",
+      "proposed_executor": "gemm_executor",
+      "rationale": "Two projections 896 -> 4864",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "swiglu",
+      "semantic_kind": "silu_multiply",
+      "source_location": "reference/modeling_qwen2.py:168",
+      "proposed_opcode": "SILU_MUL",
+      "proposed_executor": "vector_executor",
+      "rationale": "Proposed SiLU(gate)*up fusion; no GELU",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "down",
+      "semantic_kind": "linear_projection",
+      "source_location": "reference/modeling_qwen2.py:168",
+      "proposed_opcode": "GEMM_W4",
+      "proposed_executor": "gemm_executor",
+      "rationale": "4864 -> 896; shared projection",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "final_norm",
+      "semantic_kind": "rmsnorm",
+      "source_location": "reference/modeling_qwen2.py:874",
+      "proposed_opcode": "RMSNORM",
+      "proposed_executor": "rmsnorm_executor",
+      "rationale": "One final RMSNorm",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "lm_head",
+      "semantic_kind": "linear_projection",
+      "source_location": "reference/modeling_qwen2.py:1068",
+      "proposed_opcode": "GEMM_W4",
+      "proposed_executor": "gemm_executor",
+      "rationale": "Tied embedding/head weights; quantized boundary pending",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    },
+    {
+      "operation_id": "logits_cast",
+      "semantic_kind": "dtype_cast",
+      "source_location": "reference/modeling_qwen2.py:1069",
+      "proposed_opcode": "CAST",
+      "proposed_executor": "vector_executor",
+      "rationale": "Match FP32 logits output",
+      "observation": "Source-reviewed functional semantics with enclosing-module hooks; not operator-level dynamic trace"
+    }
+  ],
+  "proposed_scope": {
+    "batch": 1,
+    "prefill": true,
+    "decode": true,
+    "initial_context_limit": 2048,
+    "output": "FP32 logits; tokenizer and sampling on PS"
+  },
+  "proposed_numeric_policy": {
+    "weights": "INT4 symmetric group128",
+    "scales": "BF16",
+    "activations": "BF16",
+    "kv": "BF16",
+    "accumulation": "FP32",
+    "bias_and_norm_weights": "BF16",
+    "rounding": "round-to-nearest ties-to-even; explicit casts in ISA reference"
+  },
+  "unresolved_decisions": [
+    "Remaining executor boundaries and W4A16KV16 scope; Attention owns QK transpose and PV per user correction",
+    "Quantization calibration/quality gate and embedding treatment",
+    "Tile/bank capacity and ownership-port extensions for non-GEMM executors",
+    "First executor algorithm, interfaces and verification discussion",
+    "DDR linker ranges and actual memory bandwidth"
+  ],
+  "forbidden_claims": [
+    "No implemented ISA",
+    "No RTL module PASS",
+    "No bitstream",
+    "No FPGA execution"
+  ],
+  "attention_boundary": {
+    "status": "user_directed_scope",
+    "attention_executor": [
+      "GQA head mapping",
+      "QK transpose",
+      "score scale 1/8",
+      "global-position causal mask",
+      "stable softmax",
+      "probability-times-V"
+    ],
+    "gemm_executor": [
+      "INT4 weight projections: Q/K/V/O, FFN gate/up/down, LM head"
+    ],
+    "command_sequence": [
+      "ATTENTION Q_bank K_bank V_bank -> context_bank"
+    ],
+    "ports": "Compute commands name logical local banks only; DMA owns external DDR addresses",
+    "pending": [
+      "Materialized versus tiled online attention algorithm",
+      "Numerical formats and rounding boundaries",
+      "Tile/bank capacity and ownership roles",
+      "Attention executor interface and verification contract"
+    ],
+    "scope_note": "User scope supersedes prior parent interpretation; remaining hardware, numeric, context and implementation choices are proposals"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790743748.3480966,
+      "source_sha256": "f682a0f81e82513e5ed036f5f8e31a7141e7199c77f0f4d01564b7244177aa43",
+      "testbench_sha256": "bf8e725addc904e08a1350dcdd35a95addb2b713cde9fef14fb6a2c5f4298c50",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob105_rotate100/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.01242186687886715
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS rotator: 415 checked cycles\ndev_tb.sv:70: $finish called at 4156000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.038529202342033386
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board validation was performed."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation: 100-bit rising-edge register with synchronous load priority; right/left rotation for ena 01/10 and hold for 00/11. No reset or extra latency. No revisions."
+  ],
+  "justified_tb_changes": [
+    "Initial independent bit-index oracle checks 415 cycles, unknown startup, load priority across all modes, wraparound, 100-step revolutions, both hold modes, inter-edge stability, and varied payloads. No testbench revisions."
+  ],
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "static_review": "Ports and widths match; nonblocking sequential assignments; no extra ports, initialization, reset, or pipeline."
+}

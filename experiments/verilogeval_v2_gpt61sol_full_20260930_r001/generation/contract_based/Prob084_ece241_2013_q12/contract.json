@@ -1,0 +1,37 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "enable": 1, "S": 1, "A": 1, "B": 1, "C": 1},
+    "outputs": {"Z": 1}
+  },
+  "semantics": {
+    "storage": "Exactly eight D-type flip-flops Q[7:0] and combinational read multiplexing",
+    "clock": "Positive edge of clk",
+    "shift": "If enable is high at the positive edge: Q_next[0]=S and Q_next[i]=Q_previous[i-1] for i=1..7",
+    "hold": "If enable is low at the positive edge, all Q bits hold",
+    "read": "Z=Q[{A,B,C}] continuously, with A the address MSB and C the LSB; no clock or enable needed for read",
+    "reset": "No reset port or reset behavior",
+    "initialization": "Initial Q contents unspecified; no initialization added. Eight enabled writes make all contents known",
+    "serial_order": "For loading an eight-bit word, send bit 7 first and bit 0 last",
+    "read_during_shift": "Z reflects updated Q after the clocked register update settles"
+  },
+  "numeric": {
+    "storage_width": 8,
+    "element_width": 1,
+    "address_width": 3,
+    "address_encoding": "Unsigned binary ABC maps 000..111 to Q[0]..Q[7]",
+    "arithmetic": "No arithmetic, rounding, saturation, or accumulator; oldest Q[7] is discarded on shift"
+  },
+  "verification": {
+    "oracle": "Independent eight-element bit array updated in descending index order on enabled clock edges",
+    "initial_state": "Do not assert power-up contents; first fill with eight known bits",
+    "directed": "Load every possible eight-bit word MSB first; check every read address after loading",
+    "timing": "Check all addresses before and after rising edges, after falling edges, during enable holds, and after input changes without rising edges",
+    "hold": "Exercise enable=0 with changing S and addresses",
+    "tools": "Icarus v12 compile with -g2012 and explicit dev_tb top, matching vvp; finite command and testbench timeouts"
+  },
+  "specification_ambiguities": [
+    "Power-up contents are not specified, so no deterministic initialization is implemented or required by tests."
+  ]
+}

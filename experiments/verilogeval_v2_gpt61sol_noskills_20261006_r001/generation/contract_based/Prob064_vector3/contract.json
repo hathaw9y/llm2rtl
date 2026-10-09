@@ -1,0 +1,48 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 5,
+      "b": 5,
+      "c": 5,
+      "d": 5,
+      "e": 5,
+      "f": 5
+    },
+    "outputs": {
+      "w": 8,
+      "x": 8,
+      "y": 8,
+      "z": 8
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "function": "{w,x,y,z} = {a,b,c,d,e,f,2'b11}",
+    "ordering": "a occupies the most significant five bits; f precedes the two constant least significant ones; w is the most significant output byte.",
+    "timing": "Combinational concatenation and splitting; original specification supplies no clock, reset, or storage.",
+    "initialization": "No state or initialization specified; unknown input bits propagate to their corresponding output bits; final two bits remain one."
+  },
+  "numeric": {
+    "input_total_bits": 30,
+    "output_total_bits": 32,
+    "padding_bits": 2,
+    "padding_value": "11",
+    "arithmetic": "None; preserve each bit without numeric conversion."
+  },
+  "verification": {
+    "oracle": "From original input ordering, independently map each input bit to output position 2 + input_index*5 + bit_index, with input_index zero for f through five for a.",
+    "cases": [
+      "all zero",
+      "all one",
+      "walking one and walking zero across all 30 input bits",
+      "each possible value of each individual input",
+      "deterministic pseudorandom vectors",
+      "X and Z propagation"
+    ],
+    "sampling": "Set inputs then allow 1 ns combinational settling before checking.",
+    "failure": "Case inequality triggers $fatal; bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1,
+      "d": 1,
+      "e": 1
+    },
+    "outputs": {
+      "out": "25 bits [24:0]"
+    },
+    "source": "problem.txt interface list"
+  },
+  "semantics": {
+    "function": "For row i and column j in [a,b,c,d,e], out[24-5*i-j] is one when their bits are equal.",
+    "ordering_evidence": "problem.txt examples out[24]=~a ^ a, out[23]=~a ^ b, out[22]=~a ^ c, out[1]=~e ^ d, out[0]=~e ^ e",
+    "timing": "Combinational; no clock port or latency specified. Observe after combinational settling.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No state or initialization specified; output follows present inputs.",
+    "four_state": "Use bitwise inverted XOR as shown by original equations; X/Z operands propagate X."
+  },
+  "numeric": {
+    "input_type": "Unsigned one-bit logic",
+    "output_type": "Unsigned packed 25-bit logic",
+    "operation": "One-bit XNOR; no arithmetic, rounding, saturation or overflow"
+  },
+  "verification": {
+    "oracle": "Independently construct matrix using logical equality of separately indexed inputs for binary inputs; four-state expected values follow original bitwise equations.",
+    "coverage": "All 32 binary input combinations, repeated descending traversal; all 1024 four-state combinations including X and Z.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling. No clock or reset stimulus.",
+    "failure": "Case-inequality comparison with $fatal; bounded timeout; PASS only after every check.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z behavior",
+      "evidence": "Problem says one-bit signals and provides bitwise ~x ^ y equations, but does not separately discuss X/Z.",
+      "resolution": "Preserve equation behavior rather than force self-comparisons to constant one for unknown inputs."
+    }
+  ]
+}

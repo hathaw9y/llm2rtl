@@ -1,0 +1,83 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 1
+      },
+      "state": {
+        "direction": "input",
+        "width": 4
+      },
+      "next_state": {
+        "direction": "output",
+        "width": 4
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "Pure combinational Moore state transition and output logic; no registers or clock.",
+    "encoding": {
+      "A": "0001",
+      "B": "0010",
+      "C": "0100",
+      "D": "1000"
+    },
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "D"
+      },
+      "D": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "outputs": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 1
+    },
+    "equations": {
+      "next_state[0]": "~in & (state[0] | state[2])",
+      "next_state[1]": "in & (state[0] | state[1] | state[3])",
+      "next_state[2]": "~in & (state[1] | state[3])",
+      "next_state[3]": "in & state[2]",
+      "out": "state[3]"
+    },
+    "timing": "Outputs respond combinationally to current inputs; no cycle latency.",
+    "reset_initialization": "No reset port, initialization, or persistent state.",
+    "input_domain": "Transition table assumes one-hot state and binary in; no recovery behavior specified for other encodings."
+  },
+  "numeric": {
+    "state_width": 4,
+    "input_output_width": 1,
+    "signedness": "Unsigned bit vectors",
+    "arithmetic": "Bitwise Boolean equations only; no arithmetic, rounding, overflow, truncation, or saturation."
+  },
+  "verification": {
+    "oracle": "Independent case table transcribed from the original problem, not DUT equations.",
+    "coverage": "All four legal states with both input values; repeated changes in state and input to check combinational response and Moore output independence.",
+    "comparison": "Exact 4-bit next_state and 1-bit out after settling; fatal on mismatch.",
+    "tools": "Icarus v12 -g2012 with explicit dev_tb top, matching vvp, finite compile and simulation timeouts.",
+    "scope": "Development simulation only; no official tests, synthesis, board access or illegal-state recovery assertion."
+  },
+  "specification_ambiguities": [
+    "Zero-hot, multi-hot and X/Z states or inputs are outside the specified one-hot transition table. RTL uses direct bitwise equations without additional recovery logic."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json",
+      "cases": [
+        "correct fixture passed",
+        "injected fault failed",
+        "repaired fixture passed"
+      ]
+    },
+    {
+      "name": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "coverage": "Original waveform at 0 through 90 ns, initial unknown output, and all 64 known-input transitions",
+      "compile_returncode": 0,
+      "simulation_returncode": 0
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "The original waveform specifies only fully unknown and known inputs; partially unknown inputs are not specified."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation is a combinational case lookup for the eight waveform values, with an unknown default. No RTL revisions."
+  ],
+  "justified_tb_changes": [
+    "Initial independent testbench replays original timestamps using delta-cycle settling and additionally checks every known-input transition. No testbench revisions."
+  ]
+}

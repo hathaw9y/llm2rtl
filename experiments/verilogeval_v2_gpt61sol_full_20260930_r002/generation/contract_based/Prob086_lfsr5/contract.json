@@ -1,0 +1,51 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "clk": "input 1 bit",
+      "reset": "input 1 bit",
+      "q": "output 5 bits [4:0]"
+    },
+    "source": "problem.txt interface"
+  },
+  "semantics": {
+    "clock": "positive edge, as explicitly specified",
+    "reset": "active-high synchronous; q becomes 5'b00001 on each rising edge with reset high",
+    "transition": "With reset low, shift right and XOR outgoing q[0] into one-based tap positions 5 and 3: next[4]=q[0], next[3]=q[4], next[2]=q[3]^q[0], next[1]=q[2], next[0]=q[1].",
+    "between_edges": "q holds; reset changes alone do not update q",
+    "initialization": "No power-up initialization specified; no DUT initializer. Tests establish state by synchronous reset.",
+    "source": "problem.txt Galois right-shift description, taps 5 and 3, and reset/clock paragraph"
+  },
+  "numeric": {
+    "state_width": 5,
+    "state_type": "unsigned bit vector",
+    "feedback_mask": "10100 binary (20 decimal)",
+    "period": "31 nonzero states after reset before repeat",
+    "arithmetic": "bitwise XOR only; no rounding, saturation or added latency"
+  },
+  "verification": {
+    "oracle": "Original problem interpreted as unsigned right shift XOR mask 20 if old LSB is 1; use integer arithmetic independent of DUT bit concatenation",
+    "sampling": "Inputs change on falling edge; compare after rising edge NBA settles and between rising edges",
+    "coverage": [
+      "full 31-state unique nonzero cycle and return to seed",
+      "multiple cycles",
+      "reset held across edges",
+      "mid-sequence synchronous reset",
+      "reset pulse entirely between rising edges",
+      "falling-edge stability"
+    ],
+    "failure": "$fatal for mismatches, bounded timeout, PASS line only on completion",
+    "primary_command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "tap numbering",
+      "resolution": "Positions 5 and 3 are one-based register positions, mapping to zero-based q[4] and q[2]; position 5 cannot be a zero-based index of a 5-bit state."
+    },
+    {
+      "topic": "power-up state",
+      "resolution": "Unspecified; no defined numeric state required before first sampled reset."
+    }
+  ]
+}

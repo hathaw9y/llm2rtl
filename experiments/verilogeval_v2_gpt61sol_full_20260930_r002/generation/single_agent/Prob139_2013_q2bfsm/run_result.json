@@ -1,0 +1,187 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob139_2013_q2bfsm",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob139_2013_q2bfsm",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob139_2013_q2bfsm/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790744000.7179132,
+    "ended_at_unix": 1790744138.7621787,
+    "seconds": 138.0442659854889,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 97848,
+      "cached_input_tokens": 84736,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2507,
+      "reasoning_output_tokens": 77
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "66dc434d0ff5b6e4a08b733cd1a54eff0842b9d3fd116e7ff8487c183a5a77e6",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed as expected",
+          "repair": "passed"
+        }
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "label": "initial",
+        "cycle_checks": 21582,
+        "evidence_directory": "development/01",
+        "compiler": "Icarus 12, -g2012 -Wall -Wno-timescale"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "No synthesis or board verification was performed.",
+      "Pre-reset outputs are unspecified by the problem and are not checked."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "TopModule preserves the original one-bit ports and positive-edge synchronous active-low reset. Moore outputs implement the one-cycle f pulse, consecutive 101 detection, two y sampling opportunities, and permanent high/low outcomes until reset. No added ports or pipeline latency.",
+    "verification": "Independent three-bit sample-history oracle and response timer; exhaustive eight-bit x histories, directed first/second/late y response, repeated reset, bounded timeout, fatal mismatches, explicit PASS.",
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "check_records": "dev_checks.jsonl"
+    },
+    "static_review": "Complete combinational assignments, explicit enum if/else transitions, single sequential state driver, synchronous reset, one-bit outputs."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "66dc434d0ff5b6e4a08b733cd1a54eff0842b9d3fd116e7ff8487c183a5a77e6",
+      "Prob139_2013_q2bfsm_ref.sv": "402d30bac3c3565f2b88cf78d76f8a80f0469df5594ffd2e8fac39f4008e0806",
+      "Prob139_2013_q2bfsm_test.sv": "526bf9a0f7806389fbad89837515512a65bd628033563f7d6b077c277f0a68af"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob139_2013_q2bfsm_test.sv",
+        "Prob139_2013_q2bfsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014390679076313972
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb139_2013_q2bfsm_test.sv:24: $finish called at 5011 (1ps)\nHint: Output 'f' has no mismatches.\nHint: Output 'g' has no mismatches.\nHint: Total mismatched samples is 0 out of 1002 samples\n\nSimulation finished at 5011 ps\nMismatches: 0 in 1002 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012558196671307087
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "66dc434d0ff5b6e4a08b733cd1a54eff0842b9d3fd116e7ff8487c183a5a77e6",
+      "Prob139_2013_q2bfsm_ref.sv": "402d30bac3c3565f2b88cf78d76f8a80f0469df5594ffd2e8fac39f4008e0806",
+      "Prob139_2013_q2bfsm_test.sv": "526bf9a0f7806389fbad89837515512a65bd628033563f7d6b077c277f0a68af"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob139_2013_q2bfsm_test.sv",
+        "Prob139_2013_q2bfsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012728143483400345
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb139_2013_q2bfsm_test.sv:24: $finish called at 5011 (1ps)\nHint: Output 'f' has no mismatches.\nHint: Output 'g' has no mismatches.\nHint: Total mismatched samples is 0 out of 1002 samples\n\nSimulation finished at 5011 ps\nMismatches: 0 in 1002 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012677924707531929
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

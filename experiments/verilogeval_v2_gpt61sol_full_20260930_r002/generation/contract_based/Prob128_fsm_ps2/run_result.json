@@ -1,0 +1,182 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob128_fsm_ps2",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 3,
+  "development_failed_check_count": 2,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 2,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob128_fsm_ps2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob128_fsm_ps2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790752895.5472593,
+    "ended_at_unix": 1790753093.5354803,
+    "seconds": 197.98822116851807,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 205975,
+      "cached_input_tokens": 171904,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3515,
+      "reasoning_output_tokens": 91
+    },
+    "cli_errors": []
+  },
+  "revision_count": 2,
+  "final_source_sha256": "f129241c82e155764d5624e99c9ec5fda174f673fb856966e4b13758a8ce4b89",
+  "contract_sha256": "9607beac87563d23680c9a854bc5250920489e29017bb922a9e46a19fc860c48",
+  "worker_report": {
+    "revision_count": 2,
+    "checks": [
+      {
+        "label": "initial",
+        "status": "compile_failed",
+        "evidence": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob128_fsm_ps2/development/01"
+      },
+      {
+        "label": "revision_1",
+        "status": "compile_failed",
+        "evidence": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob128_fsm_ps2/development/02"
+      },
+      {
+        "label": "revision_2",
+        "status": "passed",
+        "evidence": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob128_fsm_ps2/development/03"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not occurred.",
+      "No synthesis or board work performed.",
+      "Original specification leaves behavior before the first reset unspecified; testbench begins assertions after synchronous reset."
+    ],
+    "justified_rtl_changes": [
+      {
+        "revision": 1,
+        "reason": "Initial Icarus 12 compile crashed with return code 139; supplemental Icarus 11 compiled. Replaced enum state type with explicit two-bit localparams and logic registers to investigate simulator compatibility without changing transitions. Icarus 12 still crashed."
+      },
+      {
+        "revision": 2,
+        "reason": "Saved diagnostics implicated always_* processing of constant bit selects. Replaced always_comb with always @(*) as a simulator compatibility exception. Transition logic and latency are unchanged; required Icarus 12 compile and simulation passed."
+      }
+    ],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "interface_cycle_summary": "TopModule(clk, reset, in[7:0], done); synchronous active-high reset. One byte per rising edge. done high immediately after third-byte edge for one cycle; next edge accepts a possible new first byte.",
+    "numeric_width_decisions": "8-bit input, one-bit output, two-bit FSM; no arithmetic.",
+    "static_review": "Complete combinational assignments; nonblocking clocked state; no extra ports, initializers, or latency; standalone DUT has no child dependencies.",
+    "coverage": "Search discard, all 256 byte values, payload bit-3 combinations, back-to-back messages, resets at all framing phases, synchronous reset within done cycle, deterministic mixed input stream.",
+    "pass_marker": "PASS checks=3368 messages=769",
+    "snapshots": "candidate_initial.sv preserved unchanged; candidate_revision_1.sv and candidate_revision_2.sv preserved; helper snapshots and logs retained."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "f129241c82e155764d5624e99c9ec5fda174f673fb856966e4b13758a8ce4b89",
+      "Prob128_fsm_ps2_test.sv": "03461424196e1d977774f4e603118291e3cccf0cfce1e693b3119833b6cb84a6",
+      "Prob128_fsm_ps2_ref.sv": "88fd53ff936047b70a0407ec1c4eb55d74d05a80ef4fa45997a288daae8d4d6d"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob128_fsm_ps2_test.sv",
+        "Prob128_fsm_ps2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014175253920257092
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb128_fsm_ps2_test.sv:18: $finish called at 2001 (1ps)\nHint: Output 'done' has no mismatches.\nHint: Total mismatched samples is 0 out of 400 samples\n\nSimulation finished at 2001 ps\nMismatches: 0 in 400 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011234941892325878
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "candidate.sv": "2a27f5a73ef20002163455fa4cd07efb44790fcb880c58bd99e39e8c0e9af616",
+      "Prob128_fsm_ps2_test.sv": "03461424196e1d977774f4e603118291e3cccf0cfce1e693b3119833b6cb84a6",
+      "Prob128_fsm_ps2_ref.sv": "88fd53ff936047b70a0407ec1c4eb55d74d05a80ef4fa45997a288daae8d4d6d"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob128_fsm_ps2_test.sv",
+        "Prob128_fsm_ps2_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.1376064419746399
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

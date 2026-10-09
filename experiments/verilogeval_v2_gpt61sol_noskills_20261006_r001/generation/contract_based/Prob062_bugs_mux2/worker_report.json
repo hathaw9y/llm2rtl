@@ -1,0 +1,20 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"check": "environment_smoke", "status": "passed", "evidence": "environment_smoke.json", "cases": "correct passes, injected fault fails, repair passes"},
+    {"check": "contract_structure", "status": "passed_structure_only", "evidence": "contract_gate.json"},
+    {"check": "initial", "status": "passed", "evidence": "development/01/result.json", "simulation_checks": 131078}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation; no official correctness claim is made.",
+    "Original description says eight-bit mux but declares scalar out. Explicit harness instruction to preserve widths was followed: out remains scalar and reports bit zero of the selected input. If official evaluation expects a corrected eight-bit output declaration, this candidate will not meet that interpretation.",
+    "Unknown-selector behavior is a language-defined conditional operator choice, not explicit problem behavior."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation replaces bitwise masking with conditional mux selection, preserving the original named ports and declared widths. No post-initial RTL revisions."
+  ],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "artifacts": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json", "development_history": "dev_checks.jsonl"}
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "llm2rtl.isa_validation.v1",
+  "design_id": "llama32_1b_w4a4kv4_issue",
+  "revision": "r3",
+  "model_trace": {"path": "designs/llama32_1b_w4a4kv4_issue_r3/model_trace.json", "sha256": "0b08378276ed7a2f60d7ba90d1c40cd54830864d3dc390f615ca352f25bd6f7a"},
+  "isa_spec": {"path": "designs/llama32_1b_w4a4kv4_issue_r3/isa_spec.json", "sha256": "df27a4d544b6880718019b7dcff127fdc6ecaa73ba71ab9b3a3e282091045b14"},
+  "bank_layout": {"path": "designs/llama32_1b_w4a4kv4_issue_r3/bank_layout.json", "sha256": "9e18315706c75db3ca0c48482be239555a5fcf972875b03b878496221a5e03b7"},
+  "status": "passed",
+  "no_host_tensor_compute": true,
+  "model_source_sha256": "13e65b752a9c9d8a5c22b83df73009a8940c0eefdc58c101df3eb910e3efc2f9",
+  "reference_model": {
+    "path": "designs/llama32_1b_w4a4kv4_issue_r3/run_dispatcher_model.py",
+    "vectors": "designs/llama32_1b_w4a4kv4_issue_r3/vectors/dispatcher_cases.json",
+    "vector_sha256": "1bcec8a8e48ac6827b6fc925e51bf117440bed8b7ee788239cf8ef99ee122b5d",
+    "case_count": 4,
+    "coverage": "bank acquire/release and issue/completion decoupling only"
+  },
+  "lowerings": [
+    {
+      "operation_id": "linear_projection_control_subset",
+      "instructions": [
+        {"opcode": "DMA_LOAD", "banks": ["BANK_1"]},
+        {"opcode": "DMA_LOAD", "banks": ["BANK_2"]},
+        {"opcode": "GEMM", "banks": ["BANK_1", "BANK_2", "BANK_3"]},
+        {"opcode": "DMA_STORE", "banks": ["BANK_3"]},
+        {"opcode": "END", "banks": []}
+      ]
+    }
+  ],
+  "workload_results": [
+    {"workload_id": "prefill_projection_control_subset", "status": "passed", "vector_sha256": "1bcec8a8e48ac6827b6fc925e51bf117440bed8b7ee788239cf8ef99ee122b5d", "scope": "control-only; no bank data or tensor arithmetic"},
+    {"workload_id": "decode_projection_control_subset", "status": "passed", "vector_sha256": "1bcec8a8e48ac6827b6fc925e51bf117440bed8b7ee788239cf8ef99ee122b5d", "scope": "control-only; no bank data or tensor arithmetic"}
+  ],
+  "limitations": [
+    "Only command issue, outstanding tracking and bank acquire/release are modeled.",
+    "Bank memory reads and writes are explicitly outside this revision.",
+    "No tensor arithmetic, board integration or physical-board behavior is proven."
+  ]
+}

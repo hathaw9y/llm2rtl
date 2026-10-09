@@ -1,0 +1,92 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "x": {
+        "direction": "input",
+        "width": 1
+      },
+      "y": {
+        "direction": "input",
+        "width": 3,
+        "range": "[2:0]"
+      },
+      "Y0": {
+        "direction": "output",
+        "width": 1
+      },
+      "z": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "logic": "Combinational next-state bit and Moore output; present state is supplied externally as y.",
+    "clock": "clk has no effect; no internal state or edge-triggered behavior.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or initialization required; outputs settle from inputs.",
+    "latency": "Combinational, no clock-cycle latency.",
+    "table": [
+      {
+        "y": "000",
+        "Y_x0": "000",
+        "Y_x1": "001",
+        "z": 0
+      },
+      {
+        "y": "001",
+        "Y_x0": "001",
+        "Y_x1": "100",
+        "z": 0
+      },
+      {
+        "y": "010",
+        "Y_x0": "010",
+        "Y_x1": "001",
+        "z": 0
+      },
+      {
+        "y": "011",
+        "Y_x0": "001",
+        "Y_x1": "010",
+        "z": 1
+      },
+      {
+        "y": "100",
+        "Y_x0": "011",
+        "Y_x1": "100",
+        "z": 1
+      }
+    ],
+    "Y0": "Least significant bit of next state Y, not the present-state bit.",
+    "unspecified_states": "For binary y=101,110,111 choose Y0=0 and z=0 as a deterministic implementation default; original specification imposes no values."
+  },
+  "numeric": {
+    "encoding": "Unsigned three-bit state codes; one-bit Boolean input and outputs.",
+    "arithmetic": "No arithmetic, rounding, saturation, or overflow; exact Boolean table mapping."
+  },
+  "verification": {
+    "oracle": "Independent explicit expected Y0 and z pairs derived from the original table, with no RTL-derived oracle.",
+    "coverage": "All five specified states and both x values, with clk low and high; repeat in reverse order to detect retained outputs.",
+    "clock_independence": "Change inputs while clk is held fixed and check outputs before any clock edge.",
+    "unspecified_states": "Check documented zero defaults separately, not as original requirements.",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top; finite compile and simulation timeouts.",
+    "pass_criterion": "Every exact output comparison passes; simulation prints PASS."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Unused clk",
+      "resolution": "Only output and next-state logic are requested and y is an input; implement combinational logic."
+    },
+    {
+      "topic": "Unlisted states",
+      "resolution": "States 101 through 111 have unspecified outputs; choose zero defaults."
+    }
+  ]
+}

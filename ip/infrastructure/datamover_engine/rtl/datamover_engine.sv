@@ -1,6 +1,7 @@
 import datamover_engine_pkg::*;
 
 module datamover_engine #(
+    parameter int DMA_DATA_WIDTH = 64,
     parameter int BANK_NUM   = 4,
     parameter logic [BANK_NUM*32-1:0] BANK_WORD_BYTES={BANK_NUM{32'd8}},
     parameter logic [BANK_NUM*32-1:0] BANK_CAPACITY_BYTES={BANK_NUM{32'd4096}},
@@ -46,8 +47,8 @@ module datamover_engine #(
     output logic [ CMD_DATA_WIDTH-1:0] m_axis_mm2s_cmd_tdata,
     output logic                       m_axis_mm2s_cmd_tvalid,
     input  logic                       m_axis_mm2s_cmd_tready,
-    input  logic [MM2S_DATA_WIDTH-1:0] s_axis_mm2s_tdata,
-    input  logic [MM2S_KEEP_WIDTH-1:0] s_axis_mm2s_tkeep,
+    input  logic [DMA_DATA_WIDTH-1:0] s_axis_mm2s_tdata,
+    input  logic [DMA_DATA_WIDTH/8-1:0] s_axis_mm2s_tkeep,
     input  logic                       s_axis_mm2s_tvalid,
     output logic                       s_axis_mm2s_tready,
     input  logic                       s_axis_mm2s_tlast,
@@ -59,8 +60,8 @@ module datamover_engine #(
     output logic [ CMD_DATA_WIDTH-1:0] m_axis_s2mm_cmd_tdata,
     output logic                       m_axis_s2mm_cmd_tvalid,
     input  logic                       m_axis_s2mm_cmd_tready,
-    output logic [S2MM_DATA_WIDTH-1:0] m_axis_s2mm_tdata,
-    output logic [S2MM_KEEP_WIDTH-1:0] m_axis_s2mm_tkeep,
+    output logic [DMA_DATA_WIDTH-1:0] m_axis_s2mm_tdata,
+    output logic [DMA_DATA_WIDTH/8-1:0] m_axis_s2mm_tkeep,
     output logic                       m_axis_s2mm_tvalid,
     input  logic                       m_axis_s2mm_tready,
     output logic                       m_axis_s2mm_tlast,
@@ -76,8 +77,8 @@ module datamover_engine #(
     input  logic                       m_ctrl_mm2s_adapter_done  [BANK_NUM],
     output logic                       m_ctrl_mm2s_adapter_abort [BANK_NUM],
     output logic [      BTT_WIDTH-1:0] m_ctrl_mm2s_adapter_offset[BANK_NUM],
-    output logic [MM2S_DATA_WIDTH-1:0] m_axis_mm2s_tdata         [BANK_NUM],
-    output logic [MM2S_KEEP_WIDTH-1:0] m_axis_mm2s_tkeep         [BANK_NUM],
+    output logic [DMA_DATA_WIDTH-1:0] m_axis_mm2s_tdata         [BANK_NUM],
+    output logic [DMA_DATA_WIDTH/8-1:0] m_axis_mm2s_tkeep         [BANK_NUM],
     output logic                       m_axis_mm2s_tvalid        [BANK_NUM],
     input  logic                       m_axis_mm2s_tready        [BANK_NUM],
     output logic                       m_axis_mm2s_tlast         [BANK_NUM],
@@ -88,13 +89,14 @@ module datamover_engine #(
     output logic                       m_ctrl_s2mm_adapter_abort [BANK_NUM],
     output logic [      BTT_WIDTH-1:0] m_ctrl_s2mm_adapter_btt   [BANK_NUM],
     output logic [      BTT_WIDTH-1:0] m_ctrl_s2mm_adapter_offset[BANK_NUM],
-    input  logic [S2MM_DATA_WIDTH-1:0] s_axis_s2mm_tdata         [BANK_NUM],
-    input  logic [S2MM_KEEP_WIDTH-1:0] s_axis_s2mm_tkeep         [BANK_NUM],
+    input  logic [DMA_DATA_WIDTH-1:0] s_axis_s2mm_tdata         [BANK_NUM],
+    input  logic [DMA_DATA_WIDTH/8-1:0] s_axis_s2mm_tkeep         [BANK_NUM],
     input  logic                       s_axis_s2mm_tvalid        [BANK_NUM],
     output logic                       s_axis_s2mm_tready        [BANK_NUM],
     input  logic                       s_axis_s2mm_tlast         [BANK_NUM]
 );
   mm2s_channel #(
+      .DMA_DATA_WIDTH(DMA_DATA_WIDTH),
       .BANK_WORD_BYTES(BANK_WORD_BYTES),.BANK_CAPACITY_BYTES(BANK_CAPACITY_BYTES),
       .BANK_NUM  (BANK_NUM),
       .BANK_WIDTH(BANK_WIDTH)
@@ -145,6 +147,7 @@ module datamover_engine #(
   );
 
   s2mm_channel #(
+      .DMA_DATA_WIDTH(DMA_DATA_WIDTH),
       .BANK_WORD_BYTES(BANK_WORD_BYTES),.BANK_CAPACITY_BYTES(BANK_CAPACITY_BYTES),
       .BANK_NUM  (BANK_NUM),
       .BANK_WIDTH(BANK_WIDTH)

@@ -1,0 +1,24 @@
+{
+  "status": "integration_analysis_no_RTL",
+  "issue": "Dispatcher template completion tag is the bank identity and needs 5 bits for23banks. Engine vendor sequence tag is4 bits and is separate from its5-bit completion bank.",
+  "binding_candidate": "Set dispatcher TAG_WIDTH=5; drive dispatcher completion identity from engine sts_bank, with matched engine status valid/error. Do not drive it from or truncate to the 4-bit vendor tag. Engine allocates/checks its own vendor tags.",
+  "command_tag": "Dispatcher emitted bank-valued tag is not an engine command input; wrapper checks identity against cmd_bank and retains PC for evidence.",
+  "offset_binding": "Template DMA local offset32bits to engine BTT_WIDTH23bits only after bounds/high-bit check. Never silently truncate an illegal offset.",
+  "verification_cases": [
+    "Banks0,15,16,22 success",
+    "vendor sequence-tag wrap without bank alias",
+    "status error and identity mismatch",
+    "backpressure and exactly-one completion",
+    "outstanding drain before next chunk"
+  ],
+  "source_identity": [
+    {
+      "path": "ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv",
+      "sha256": "f1d4dcb08faac1f469c857132344b6be057c82b52c6f870557dde2a45a46d8fe"
+    },
+    {
+      "path": "ip/infrastructure/datamover_engine/rtl/datamover_engine.sv",
+      "sha256": "ae3f25daa2531d4d92efa9b510a807e36c8998cf6b9914af744cebfcb4c7f076"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "llm2rtl.independent_timing_retry_functional_audit.v1",
+  "module": "int8_gemm_executor",
+  "functional_status": "PASS",
+  "overall_status": "OOC_PENDING",
+  "source_sha256": {
+    "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+    "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+    "rtl/fp32_bf16_epilogue.sv": "3fbf60151b57fe04f4aa1546f62735562b283a5499a0c18e6cf281e085e78611",
+    "rtl/int8_dot_core.sv": "9825be03f1f6021cab761a4ae15a238f81e02f43e15685abb65c8789e47b589e",
+    "rtl/smollm2_int8_gemm_executor.sv": "cff0628d17b29102952bd0a5927b503009fad83cc948deeac5c8adac9141f5b6",
+    "tb/executor_tb.sv": "22400d20725133ecfe87167ff4be6b237cf66072ded1f70d497e637bb36930e0",
+    "tb/executor_stress_tb.sv": "798058801dca513ca175e9565f0cecb94ccc3e08c9697275914cd7515086d805"
+  },
+  "source_unchanged_before_after": true,
+  "fresh_test_scenarios": 14,
+  "replay_evidence": "audit/gemm/replay_results.json",
+  "static_review": [
+    "Separate request counters advance handshake only and response counters response only",
+    "Issue head/token bounded comparison matches0..3M-1 division; stagecapture still controls issue advancement",
+    "Epiltoken advances successful vector fifo_pop only and resets beforepanel outputs; panel/KV frozen through drain",
+    "A_high single write port preserves previousword address for16B alignment; everyobservedtailgolden passes",
+    "No extra child latency or tag payload; fixed96tag highbits preserved"
+  ],
+  "counter_model": "audit/counter_model.json",
+  "causal_model": "audit/causal_mask_model.json",
+  "functional_findings": [],
+  "historical_PASS_inherited": false,
+  "arithmetic_children_unchanged": true,
+  "OOC": "Fresh retry still executing; no targetclock timing claim",
+  "excluded": [
+    "routedtiming",
+    "I/O boundary timing",
+    "combined boardfit",
+    "physicalboardexecution"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static_review",
+      "result": "pass",
+      "details": "One-bit combinational OR is zero for abc=000 and one for all seven other binary inputs, matching the map. Exact module and port names preserved; no state or inferred latches."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "log": "compile.log",
+      "details": "Compiler exited with code 139 and no diagnostic output; compile.log is empty."
+    },
+    {
+      "name": "development_simulation",
+      "result": "not_run",
+      "details": "Compilation failed. Independent self-checking dev_tb.sv covers all eight binary input combinations and includes a finite watchdog."
+    }
+  ],
+  "development_outcome": "Initial candidate delivered unchanged. Static review passed; simulation success is not claimed because the development compiler failed.",
+  "limitations": [
+    "No successful development compilation or simulation.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing, or board evidence produced."
+  ]
+}

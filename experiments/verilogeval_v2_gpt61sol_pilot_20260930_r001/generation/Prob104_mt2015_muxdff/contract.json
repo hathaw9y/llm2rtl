@@ -1,0 +1,21 @@
+{
+  "status": "frozen",
+  "module": "TopModule",
+  "interface": {
+    "clk": "input 1 bit",
+    "L": "input 1 bit",
+    "q_in": "input 1 bit",
+    "r_in": "input 1 bit",
+    "Q": "output 1 bit"
+  },
+  "sequential_semantics": "On each rising clk edge, Q captures r_in when L is 1, otherwise q_in. Between rising edges Q holds.",
+  "combinational_semantics": "2:1 data selection preceding flip-flop",
+  "numeric_widths": "All signals one-bit unsigned; no arithmetic",
+  "latency_reset_behavior": "Output updates after rising-edge nonblocking assignment; no reset or specified initialization; one register stage, every cycle accepted.",
+  "specification_ambiguities": [],
+  "verification_plan": [
+    "Exhaust all eight L/q_in/r_in combinations repeatedly",
+    "Verify no output response to input changes or falling clock edges",
+    "Check initial Q is uninitialized"
+  ]
+}

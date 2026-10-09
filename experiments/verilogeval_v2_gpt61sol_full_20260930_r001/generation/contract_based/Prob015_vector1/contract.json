@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 16,
+        "range": "[15:0]"
+      },
+      "out_hi": {
+        "direction": "output",
+        "width": 8,
+        "range": "[7:0]"
+      },
+      "out_lo": {
+        "direction": "output",
+        "width": 8,
+        "range": "[7:0]"
+      }
+    }
+  },
+  "semantics": {
+    "behavior": "out_hi = in[15:8]; out_lo = in[7:0]",
+    "timing": "Pure combinational wiring; outputs follow current input after combinational settling, with no cycle latency.",
+    "clock": "None",
+    "reset": "None",
+    "initialization": "No stored state or initialization requirement.",
+    "input_domain": "All 16-bit binary patterns are legal."
+  },
+  "numeric": {
+    "representation": "Unsigned packed bit vectors",
+    "arithmetic": "None; exact bit selection preserves bit order.",
+    "rounding_overflow_saturation": "Not applicable; no arithmetic or numeric conversion."
+  },
+  "verification": {
+    "method": "Independent self-checking SystemVerilog testbench using integer division by 256 for high byte and remainder modulo 256 for low byte.",
+    "coverage": "Exhaustively apply all 65536 binary inputs and check both bytes after combinational settling.",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top, matching vvp.",
+    "timeout": "Finite external compile and simulation timeouts plus testbench watchdog.",
+    "static_review": "Check exact ports, slice mapping, no registers, no clock/reset, and synthesizable continuous assignments."
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,36 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "x": 1,
+      "y": 1
+    },
+    "outputs": {
+      "z": 1
+    },
+    "clock_reset": "No clock or reset ports in original interface."
+  },
+  "semantics": {
+    "function": "Combinational equality: z=1 for 00 and 11, z=0 for 01 and 10.",
+    "evidence": "Original waveform: 0ns 00->1, 25ns 10->0, 35ns 01->0, 45ns 11->1; subsequent rows agree.",
+    "latency": "No cycle latency; waveform shows output associated with current inputs.",
+    "initialization": "At 0ns inputs 00 require z=1 after combinational settling; no stored state or initialization requirement."
+  },
+  "numeric": {
+    "port_widths": "All ports are single bits.",
+    "operation": "Bitwise XNOR for binary inputs.",
+    "unknowns": "Original waveform specifies only binary inputs; unknown-input behavior is unspecified."
+  },
+  "verification": {
+    "oracle": "Explicit expected z values transcribed from all original waveform rows, independent of RTL expression.",
+    "timing": "Drive original rows at 0,5,...,90ns, sample 1ps later to allow delta-cycle settling without shifting input timestamps.",
+    "additional_cases": "Exercise all four binary combinations and single-input transitions after original waveform.",
+    "failure": "Case-inequality checks with $fatal; bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "The finite waveform cannot uniquely exclude arbitrary history-dependent implementations; full binary truth-table coverage and absence of clock/reset support combinational equality.",
+    "Delta-cycle observation at each listed timestamp is unspecified; testbench samples 1ps after each timestamp.",
+    "X/Z input behavior is not specified and is not required by the development oracle."
+  ]
+}

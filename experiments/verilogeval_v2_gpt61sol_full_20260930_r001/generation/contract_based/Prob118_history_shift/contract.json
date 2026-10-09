@@ -1,0 +1,56 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "areset": 1,
+      "predict_valid": 1,
+      "predict_taken": 1,
+      "train_mispredicted": 1,
+      "train_taken": 1,
+      "train_history": 32
+    },
+    "outputs": {
+      "predict_history": 32
+    }
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "reset": "active-high asynchronous; posedge areset clears history to zero, reset dominates clock updates while asserted",
+    "initialization": "No power-up value specified before reset; no RTL initial assignment",
+    "priority": [
+      "areset",
+      "train_mispredicted",
+      "predict_valid",
+      "hold"
+    ],
+    "rollback": "At clock edge, load train_history shifted left by one with train_taken in bit 0",
+    "prediction": "At clock edge, shift current history left by one with predict_taken in bit 0",
+    "output": "predict_history directly exposes the 32-bit stored history; bit 0 is youngest branch",
+    "inactive": "Hold when neither training misprediction nor prediction valid; changes to inputs between edges do not update history except reset",
+    "throughput": "One update per rising clock edge; no additional pipeline latency"
+  },
+  "numeric": {
+    "format": "unsigned 32-bit bit history, not an arithmetic counter",
+    "shift": "Discard old bit 31; new bit i for i=1..31 comes from old bit i-1",
+    "rollback_width": "Use low 31 bits of train_history followed by one train_taken bit; discard train_history[31]",
+    "rounding_saturation": "Not applicable; fixed-width history truncation only"
+  },
+  "verification": {
+    "oracle": "Independent 32-element bit array with bit-by-bit update from prior state or training input",
+    "directed": [
+      "off-clock asynchronous reset",
+      "reset held through clock",
+      "prediction with both directions",
+      "hold despite changing inputs",
+      "rollback including high-bit truncation",
+      "simultaneous prediction and misprediction priority",
+      "32 and 33 shifts to check eviction",
+      "reset during activity and deassertion without update"
+    ],
+    "random": "Deterministic seeded random controls and 32-bit training histories compared after each edge",
+    "checks": "Explicit dev_tb top, Icarus -g2012 with finite shell timeout; testbench watchdog and fatal mismatches"
+  },
+  "specification_ambiguities": []
+}

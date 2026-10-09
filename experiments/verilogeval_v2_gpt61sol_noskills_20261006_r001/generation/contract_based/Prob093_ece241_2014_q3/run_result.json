@@ -1,0 +1,193 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob093_ece241_2014_q3",
+  "official_status": "functional_failure",
+  "official_analyzer_code": "R",
+  "workflow_status": "failed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob093_ece241_2014_q3",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob093_ece241_2014_q3/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791270987.2087238,
+    "ended_at_unix": 1791271051.6100717,
+    "seconds": 64.40134859085083,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 94080,
+      "cached_input_tokens": 72320,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2229,
+      "reasoning_output_tokens": 65
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "2663640c092a8f4f698ea5c454cc1096eca878574bcb208ed24637072aa04693",
+  "contract_sha256": "f19c59285ba652c25786d3f05b63692fdcac4d58c998bfabcf7b86691174e3d3",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "cases": "Correct sequential fixture passed, deliberately wrong fixture failed, repaired fixture passed"
+      },
+      {
+        "name": "contract_structure",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "coverage": "All 16 binary K-map entries repeated three times; 48 selected-output checks plus full-vector checks",
+        "compile_log": "development/01/compile.log",
+        "simulation_log": "development/01/simulation.log"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official evaluation; no official feedback was accessed.",
+      "Original specification does not define X/Z input behavior; verification covers all binary input combinations.",
+      "Contract gate validates structure only, not functional correctness."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation_rationale": "Original K-map columns implement c OR d, zero, c OR NOT d, and c AND d at indices 0,1,2,3. Three conditional expressions implement the three nonconstant functions as 2-to-1 multiplexers, using constants and wires without additional logic gates.",
+    "preserved_initial_snapshot": "candidate_initial.sv",
+    "contract_changes": []
+  },
+  "final": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "2663640c092a8f4f698ea5c454cc1096eca878574bcb208ed24637072aa04693",
+      "Prob093_ece241_2014_q3_ref.sv": "338ff59874541b90c096c9c935cd91a0c98e5b9af4dcbf0d4a76b074b89ffae3",
+      "Prob093_ece241_2014_q3_test.sv": "0ddb80595db2eab28594494a88d258da49e2ed89568536291b4e32edc8798f01"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob093_ece241_2014_q3_test.sv",
+        "Prob093_ece241_2014_q3_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01480637863278389
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb093_ece241_2014_q3_test.sv:38: $finish called at 300 (1ps)\nHint: Output 'mux_in' has 11 mismatches. First mismatch occurred at time 50.\nHint: Total mismatched samples is 11 out of 60 samples\n\nSimulation finished at 300 ps\nMismatches: 11 in 60 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.006782740354537964
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 11,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "2663640c092a8f4f698ea5c454cc1096eca878574bcb208ed24637072aa04693",
+      "Prob093_ece241_2014_q3_ref.sv": "338ff59874541b90c096c9c935cd91a0c98e5b9af4dcbf0d4a76b074b89ffae3",
+      "Prob093_ece241_2014_q3_test.sv": "0ddb80595db2eab28594494a88d258da49e2ed89568536291b4e32edc8798f01"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob093_ece241_2014_q3_test.sv",
+        "Prob093_ece241_2014_q3_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012839354574680328
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb093_ece241_2014_q3_test.sv:38: $finish called at 300 (1ps)\nHint: Output 'mux_in' has 11 mismatches. First mismatch occurred at time 50.\nHint: Total mismatched samples is 11 out of 60 samples\n\nSimulation finished at 300 ps\nMismatches: 11 in 60 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0072867777198553085
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 11,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

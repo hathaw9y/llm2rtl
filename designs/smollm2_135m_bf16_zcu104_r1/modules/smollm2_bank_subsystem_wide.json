@@ -1,0 +1,67 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "smollm2_bank_subsystem_wide",
+  "module_kind": "infrastructure",
+  "status": "frozen",
+  "target": {
+    "board": "ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 200
+  },
+  "routed_opcodes": [
+    "DMA_LOAD",
+    "DMA_STORE",
+    "GEMM",
+    "RMSNORM",
+    "ROPE",
+    "ATTN_SCORE",
+    "SOFTMAX",
+    "ATTN_VALUE",
+    "ADD",
+    "SILU_MUL"
+  ],
+  "interface": {
+    "children": [
+      "ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv",
+      "smollm2_bank_port_router_wide",
+      "smollm2_bank_memories_wide"
+    ],
+    "bank_count": 13,
+    "role_width": 5,
+    "data_word_bits": 128,
+    "read_latency_cycles": 3,
+    "read_write_clients": "role-indexed 0..20 narrow data ports; roles 3 and 4 can request paired 256-bit reads from B2/B3/B10/B11",
+    "ownership_client": "dispatcher bank_acquire and bank_release vectors",
+    "status": "bank_busy and owner plus sticky child/error summary",
+    "gemm_source_read_bits": 256
+  },
+  "numeric": {
+    "kind": "bit_exact_data_transport",
+    "tensor_arithmetic": "none"
+  },
+  "control_rules": {
+    "acquire_release": "The common ownership table stores one role per bank; dispatcher must atomically acquire all operand banks before executor data traffic and release after final data operation.",
+    "routing": "Only model-valid role-bank pairs and authorized owner requests reach XPM memory ports.",
+    "error": "Ownership or router error sets sticky subsystem_error until reset; fabric must turn this into failed command completion and prevent success.",
+    "reset": "Ownership clears, but memory data remains; tensor validity is separately reset by bank_tensor_state_tracker."
+  },
+  "verification": {
+    "required_cases": [
+      "DMA_LOAD-style write then compute read across release/reacquire",
+      "GEMM-style three-bank concurrent data use",
+      "in-place read/write on separate addresses",
+      "data and ownership behavior across reset",
+      "unauthorized request reports an error without writing",
+      "combined 200 MHz OOC resource and timing",
+      "simultaneous paired GEMM reads from B2 and B3"
+    ],
+    "required_tools": [
+      "self-checking XSIM with XPM",
+      "Verilator lint with memory stubs",
+      "Vivado out-of-context synthesis"
+    ],
+    "proof_scope": "local data ownership and storage only; no vendor DataMover transfer, numeric executor, DDR, Vitis or board execution"
+  }
+}

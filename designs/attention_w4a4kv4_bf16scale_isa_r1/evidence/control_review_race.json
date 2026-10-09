@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "status": "BLOCKED_HISTORICAL_CANDIDATE",
+  "severity": "P1",
+  "scope": "Independent read-only historical control_final002 negative reproduction; not acceptance of current corrected RTL",
+  "candidate_manifest_sha256": "7b948da716dc7e88dc8bafe18d82299205e5c712a9b78b75012e564649ef83ce",
+  "candidate_wrapper_sha256": "a0a0cb44b9cb8e2a6848b86eee8ea543a607a1b40ef087d390394096c4e82d0d",
+  "cases": [
+    {
+      "id": 0,
+      "injection": "unauthorized MM2S bank17 on matching completion edge"
+    },
+    {
+      "id": 1,
+      "injection": "MM2S bank18 capacity-range fault on RELEASE edge"
+    },
+    {
+      "id": 2,
+      "injection": "unauthorized MM2S bank17 on RELEASE edge"
+    }
+  ],
+  "observed": "All three cleared bank_busy to 0 and committed bank_valid18 before terminal error7; bad request itself was not accepted and did not touch memory.",
+  "expected": "Retain acquired ownership and invalid destination until coordinated reset when a native memory fault occurs before successful release/commit.",
+  "simulation_exit": 0,
+  "exact_marker": "CONTROL_REVIEW_REPRO_CONFIRMED",
+  "marker_meaning": "Negative behavior reproduced, not a verification PASS.",
+  "files_sha256": {
+    "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_race_repro/compile.log": "22ce79daee92dcbff14ea972b22f6cb99b0c33160b803f8f470b88c2b2bbf490",
+    "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_race_repro/compile.log.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_race_repro/elaborate.log": "e0013c8c259312c7d0a5663b6f83510e4cc2c4acc43739dc7c91326198f2d20e",
+    "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_race_repro/elaborate.log.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_race_repro/manifest.json": "a675ec8d4174abb0014fbfe62c5d664c18d5f9e97ead0a842cdcdfd8938174c2",
+    "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_race_repro/reproduce.py": "6b58e3c88c1602c97e72d48bce7dd5fb63d1854acb542eba00573949856e9e6b",
+    "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_race_repro/simulation.log": "c6e6b6796c1f49d9681c42d326718097a61a2e0170c84de6428a10dab2e4b706",
+    "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_race_repro/simulation.log.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_race_repro/simulation.log.stdout": "eab04431b7e9085a85f94b4becf1143efe5097fc535c89a3ecee31463174f300",
+    "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_race_repro/tb_attention_control.sv": "6c65f8fdf5967b28b698db0493457b65d52e676b5cd212ca96ef89a10d082d17"
+  },
+  "fix_status": "Wrapper immediate raw-request/registered-child fault guard being independently reviewed separately under fresh source pins."
+}

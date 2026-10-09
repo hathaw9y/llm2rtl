@@ -1,0 +1,56 @@
+{
+  "module_id": "smollm2_dma_bank_bridge",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "proof_scope": "Common stream adapters to 128-bit model bank roles; XSIM uses actual XPM banks, no DDR",
+  "source_sha256": {
+    "ip/infrastructure/datamover_engine/rtl/pipeline.sv": "a898c37725e714a6b5ea7ebdc63d6b04db5263b6f591d9e7b15c13f1c6621ddd",
+    "ip/infrastructure/datamover_engine/rtl/fifo.sv": "08429e4fc6fc43d23248fbd2a3d85bab12e7a51bee033fbb4c7a95148cdc305f",
+    "ip/infrastructure/datamover_engine/rtl/axis_width_up_converter.sv": "fa71fed6c724ec92fea95bcc035f85a79c1a1107728c8ee1f0c172db273f81b2",
+    "ip/infrastructure/datamover_engine/rtl/axis_width_down_converter.sv": "d7e6da6402eb17db83d4a01b332327d87fd67d9303ec23bfd46b82407e3b036d",
+    "ip/infrastructure/datamover_engine/rtl/axis_width_converter.sv": "403dbd62f09c0ac98143576575aa1090e9884dafa5b5bf5ff305ba17f100c050",
+    "ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv": "0606d2b72a34765c067cbbc9ca9962e98002c24c5bb7999d482be96837b16f00",
+    "ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv": "59bc18e6c8a61f163423a22664a970e28ee853e6d4cf013657a4feda171368fa",
+    "designs/smollm2_135m_bf16_zcu104_r1/modules/smollm2_dma_bank_bridge.json": "557610bdb4c6feb7c35cee069e2a61b95123a50651777d12fb813d75cc480225",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_dma_bank_bridge.sv": "42575deb12b0f538557c4465e44241b8b68444d4f964592263634c3026bbce27",
+    "designs/smollm2_135m_bf16_zcu104_r1/tb/tb_smollm2_dma_bank_bridge.sv": "564ee4bb2968ee8f2e0e86d2d8ce22e4088cfdd9d96953b3736bdfe69c103207",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_dma_bank_bridge_xsim.sh": "9a9b519ebe81fa7fb68da6800d49822f855e5ec02fb2b8024706cd67dcd2e482",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_dma_bank_bridge_ooc.tcl": "43e4be5a97f269a8422331783a27533331615f0b5d37063c669d5ca6ad7d692f",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/check_bank_role_pairs.py": "8318ee240c86e04cad4bbf62649232f24df35a15b21bae167d76ca8a846c5d75",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/bank_memories_clock.xdc": "5127d6af45d0824731a9420894371f0d7825842f4e10d80851efa06bd5a3bbde"
+  },
+  "checks": {
+    "design_structure": "passed_structure_only with expected module SHA-256",
+    "bank_pair_identity": "PASS actual prefill/decode pairs match contract, router, dispatcher and DMA bridge",
+    "capacity_identity": "covered by link capacity check",
+    "verilator_lint": "PASS; existing common adapter WIDTH warnings waived",
+    "xsim_self_check": "PASS smollm2_dma_bank_bridge, Vivado XSIM 2025.2",
+    "vivado_ooc_synthesis": "PASS, Vivado 2025.2, xczu7ev-ffvc1156-2-e, 5.000 ns clock",
+    "post_synth_drc": "0 checks found",
+    "board_execution": "not run"
+  },
+  "xsim_scenarios": [
+    "B0 LOAD then compute read",
+    "compute write B5 then STORE stream",
+    "unowned LOAD request produces direction-specific fault",
+    "missing STORE read response produces direction-specific fault"
+  ],
+  "post_synth_resources": {
+    "clb_luts": 3837,
+    "clb_registers": 719,
+    "bram_tiles": 0,
+    "uram": 0,
+    "dsps": 0
+  },
+  "post_synth_timing_ns": {
+    "clock_period": 5.0,
+    "setup_wns": 2.972,
+    "hold_whs": 0.048,
+    "pulse_width_wpws": 1.968
+  },
+  "limitations": [
+    "No vendor AXI DataMover IP, DDR controller, board wrapper, placed/routed timing or Vitis execution in this verification.",
+    "A faulted engine retains its metadata head; system-level recovery must reset engine, vendor DataMover and dispatcher together.",
+    "No inference about full-model acceleration follows from this module-level result."
+  ]
+}

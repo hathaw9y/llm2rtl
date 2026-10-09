@@ -1,0 +1,112 @@
+{
+  "schema": "llm2rtl.kernel_report.v1",
+  "module_id": "command_bram",
+  "top": "smollm2_command_bram",
+  "status": "INDEPENDENTLY_ACCEPTED_SCOPED_MODULE",
+  "source_sha256": "882cc3486240ea6c2d7cc8a2e948d06dbd7b9578514aabb048f9d8d92a554b13",
+  "manifest_sha256": "380b80e1d61f7501782edc8b469e3307c1e47097e74f9bdadf995d08edfd310a",
+  "binding_sha256": "d81a86da3e01f9bd131e2041590674f8a975b905271f39f4e8a7e56fc7239155",
+  "source_closure": {
+    "rtl/smollm2_command_bram.sv": "882cc3486240ea6c2d7cc8a2e948d06dbd7b9578514aabb048f9d8d92a554b13",
+    "ip/infrastructure/datamover_engine/rtl/bram_bank.sv": "7199594e43e1c9c951067882d31d0baaa1b1e626ab5d5cb14013af9a9de36221"
+  },
+  "self_test": {
+    "status": "PASS_ACTUAL_VENDOR_XPM",
+    "testbench_sha256": "707e41bf7fb5121a383c0ecbbbd7cc8e5861f496769f5c02b067be7e7db11092",
+    "checks": 110,
+    "log": "self_001/simulation_plain.log",
+    "verification": [
+      "16actualrecords preloaded",
+      "2cycle and consecutive reads",
+      "full/alternating/zero byte strobes",
+      "idle-only writes andSTART priority",
+      "read-pipeline reset and payload persistence"
+    ],
+    "tool": "Vivado2025.2 XSIM plain snapshot",
+    "commands_reproducer": "scripts/run_command_bram_tests.py --run-dir <fresh-directory>"
+  },
+  "lint": {
+    "argv": [
+      "verilator",
+      "--lint-only",
+      "-Wall",
+      "--top-module",
+      "smollm2_command_bram",
+      "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/scripts/native_bank_pool/xpm_lint.vlt",
+      "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/scripts/native_bank_pool/xpm_declaration_only.sv",
+      "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/smollm2_command_bram.sv"
+    ],
+    "actual_exit_code": 0,
+    "scope": "NEWRTL boundary lint with declaration-only external bram_bank; real XPM used in all simulation/synthesis",
+    "limitation": "Declaration-only bram_bank interface for NEWRTL strictWall; vendorXPM/private pinned core not claimed lintclean. Actual bram_bank/vendorXPM used all simulation/synthesis."
+  },
+  "ooc": {
+    "top": "smollm2_command_bram",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "tool": "Vivado2025.2",
+    "clock_ns": 5,
+    "actual_exit_code": 0,
+    "actual_executed_marker_line": 444,
+    "resources": {
+      "LUT_total": 2,
+      "FF": 0,
+      "RAMB36": 2,
+      "RAMB18": 0,
+      "DSP": 0,
+      "URAM": 0
+    },
+    "timing": {
+      "WNS_ns": null,
+      "TNS_ns": null,
+      "setup_failing_endpoints": null,
+      "WHS_ns": null,
+      "THS_ns": null,
+      "hold_failing_endpoints": null,
+      "WPWS_ns": 1.958,
+      "TPWS_ns": 0.0,
+      "pulse_failing_endpoints": 0,
+      "pulse_total_endpoints": 4
+    },
+    "status": "OOC_COMPLETED_NO_INTERNAL_REGISTER_TO_REGISTER_PATHS",
+    "source_snapshot_at_active_run": {
+      "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/bram_bank.sv": "7199594e43e1c9c951067882d31d0baaa1b1e626ab5d5cb14013af9a9de36221",
+      "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/smollm2_command_bram.sv": "882cc3486240ea6c2d7cc8a2e948d06dbd7b9578514aabb048f9d8d92a554b13",
+      "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/scripts/command_bram_ooc.tcl": "228478d0d435c5a2ea44ed278879c751729629b4305f16c493d6c0a98a04995e"
+    },
+    "source_hashes_after": {
+      "/home/shmin/llm2rtl/ip/infrastructure/datamover_engine/rtl/bram_bank.sv": "7199594e43e1c9c951067882d31d0baaa1b1e626ab5d5cb14013af9a9de36221",
+      "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/smollm2_command_bram.sv": "882cc3486240ea6c2d7cc8a2e948d06dbd7b9578514aabb048f9d8d92a554b13",
+      "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/scripts/command_bram_ooc.tcl": "228478d0d435c5a2ea44ed278879c751729629b4305f16c493d6c0a98a04995e"
+    },
+    "scope": "Clock-only post-synth XPM mapping. Setup/hold NA: BRAM boundary inputs and outputs are unconstrained; no routed or board200MHz claim. Actual RAMB36E2 DOA_REG/DOB_REG=1 independently inspected; actualXPM2cycle simulation verified.",
+    "artifact_sha256": {
+      "methodology.rpt": "5aa229a62653e9f887390d803bd8ce0a7ec2f528e3814d2a325c6a123402bb74",
+      "utilization_hier.rpt": "b009f9e4c4d16ecbb450e5040b19e33c07b3603aa829e129cd56c5f8c4d23c46",
+      "command_bram.dcp": "cf65df667ce0de2873595b4e765e2a77c73963435e1fc1a242339f6abc00e47e",
+      "setup_paths.rpt": "f05da971ff5b1f8606e818ccb131a802e556115ac4d5b70a4f497e04f153392d",
+      "utilization.rpt": "499e025520823400e236dd904da1042ce19ef2c787b337d19097cf4d4fcdbcae",
+      "launch.log": "ebd01316d90da1f75bc2e23a854b6eab8389ac51941374eb5d63eda099cf004d",
+      "hold_paths.rpt": "1dd4d1d7e7a8bfa1ff2594b452310ba0f17a81acff1405fc28ad6fee1dc75d8d",
+      "drc.rpt": "aea1f2192dd800e80e6183fcf18104017cc05ce6bb87d3ba4d90bd609fe6b927",
+      "timing_summary.rpt": "ad056588aac50a3e471da9fd9d6e8a5ebe6f7a216463642abbaf1c1425c7103d",
+      "clock.xdc": "b931a39f364001496b788713c8d647df9a55d7252974cb8fec82a62fba950eee",
+      "vivado.log": "39a4802027ca9cbb29da756a8bf539b1259be62e2abd71fcbd95669c1fdac315"
+    }
+  },
+  "independent_functional_audit": {
+    "path": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/native_fabric_boundary_audit/command_bram_replay01/report.json",
+    "sha256": "0da3b34698a9c2d630fcdb5ef618f3d09cf76349be39a1cb1eb3aa88b66615f4",
+    "status": "PASS_ACTUAL_XPM"
+  },
+  "preserved_tool_failure": "self_001/simulation.log records debug-typical xsimk launch failed before elaboration; plain snapshot simulation_plain.log succeeded. No RTL change needed.",
+  "limitations": [
+    "Standalone command memory only",
+    "Clock-only OOC setup/holdNA: no internal reg-to-reg paths. PS/native I/O timing excluded",
+    "No dispatcher/fabric/PS-DDR integration or routed/hardware claims"
+  ],
+  "independent_module_gate": {
+    "path": "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/native_fabric_boundary_audit/command_bram_module_audit.json",
+    "sha256": "8afdb78e295055bedcb7bd64c4cb1cbbb890823d4337a60086fec7fd6bdb7e11",
+    "status": "PASS_SCOPED_STORAGE_MODULE"
+  }
+}

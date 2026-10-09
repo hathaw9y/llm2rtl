@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "areset": 1, "bump_left": 1, "bump_right": 1}, "outputs": {"walk_left": 1, "walk_right": 1}},
+  "semantics": {
+    "states": ["walking_left", "walking_right"],
+    "reset": "Original: positive edge triggered asynchronous areset resets to walking_left; asserted reset also dominates positive clock edges.",
+    "clock": "Original: all sequential logic triggered on positive clock edge.",
+    "transitions": "From walking_left, bump_left causes walking_right; otherwise hold. From walking_right, bump_right causes walking_left; otherwise hold. Both bumps therefore reverse current direction.",
+    "outputs": "Moore outputs: walking_left gives walk_left=1, walk_right=0; walking_right gives walk_left=0, walk_right=1.",
+    "initialization": "No power-up state specified; no initialization imposed before first reset."
+  },
+  "numeric": {"port_widths": "All ports one bit per original interface", "state_encoding": "One internal bit suffices for two states", "arithmetic": "None"},
+  "verification": {"oracle": "Independent behavioral direction model from original obstacle and both-bumps rules", "sampling": "Check outputs after NBA settlement following clock/reset edges; check stable Moore outputs between clock edges", "coverage": "Every input combination in each direction; simultaneous bumps; irrelevant-side bumps; repeated bumps; asynchronous reset away from clock; reset dominance and release", "termination": "Fatal on mismatch, bounded timeout, PASS only after all checks"},
+  "specification_ambiguities": ["Power-up behavior before areset is unspecified; tests do not demand a known initial direction.", "Single bumps are interpreted as obstacles relevant to the current walking direction; opposite-side bumps preserve direction. This follows the two-state direction/obstacle model and the explicit both-sides reversal rule."]
+}

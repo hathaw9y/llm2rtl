@@ -1,0 +1,197 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob154_fsm_ps2data",
+  "official_status": "functional_failure",
+  "official_analyzer_code": "R",
+  "workflow_status": "failed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob154_fsm_ps2data",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob154_fsm_ps2data/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791271139.9080088,
+    "ended_at_unix": 1791271231.2110302,
+    "seconds": 91.30302166938782,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 86753,
+      "cached_input_tokens": 63616,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3291,
+      "reasoning_output_tokens": 330
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "26b0b102c40a0e501e86c389659c17d1d93c6e1c7a45d19ff68c3aa4ffa010e9",
+  "contract_sha256": "80931c330cb8085d6b1eef3a591f1565abd3595b673a0b23064e16ef64a1b48b",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "cases": "Correct fixture passes, deliberately wrong fixture fails, repaired fixture passes."
+      },
+      {
+        "name": "contract_structure",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "coverage": "Original waveform at original rising/falling timestamps; initial unknown done; discard bytes; consecutive packets; all byte values in payload positions; reset during every packet phase; reset pulses between clock edges; deterministic random stream."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official evaluation or a formal correctness proof.",
+      "out_bytes is intentionally unchecked outside done because the original specification declares it don't-care.",
+      "The contract gate validates structure only."
+    ],
+    "justified_RTL_changes": [],
+    "justified_TB_changes": [],
+    "contract_changes": [],
+    "implementation_reasoning": "The explicit original waveform reports at 45ns the packet whose third byte was sampled at 35ns. A report state delays done by one edge and accepts the next candidate first byte on that reporting edge. Completed packet publication uses the buffered data before simultaneous acceptance of a subsequent first byte.",
+    "artifacts": {
+      "RTL": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "development_history": "dev_checks.jsonl"
+    }
+  },
+  "final": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "26b0b102c40a0e501e86c389659c17d1d93c6e1c7a45d19ff68c3aa4ffa010e9",
+      "Prob154_fsm_ps2data_test.sv": "df9bb8075240ccb7922bb2df360bbed1cf89fc8cc663ad9423fc8c0a5e8ecd17",
+      "Prob154_fsm_ps2data_ref.sv": "366c2db7618fb43718229b1ed4d5e65a948566a7be6945f99a9160bde7a2df6a"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob154_fsm_ps2data_test.sv",
+        "Prob154_fsm_ps2data_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012771009467542171
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb154_fsm_ps2data_test.sv:31: $finish called at 8096 (1ps)\nHint: Output 'out_bytes' has 490 mismatches. First mismatch occurred at time 210.\nHint: Output 'done' has 978 mismatches. First mismatch occurred at time 210.\nHint: Total mismatched samples is 978 out of 1619 samples\n\nSimulation finished at 8096 ps\nMismatches: 978 in 1619 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01998470164835453
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 978,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "26b0b102c40a0e501e86c389659c17d1d93c6e1c7a45d19ff68c3aa4ffa010e9",
+      "Prob154_fsm_ps2data_test.sv": "df9bb8075240ccb7922bb2df360bbed1cf89fc8cc663ad9423fc8c0a5e8ecd17",
+      "Prob154_fsm_ps2data_ref.sv": "366c2db7618fb43718229b1ed4d5e65a948566a7be6945f99a9160bde7a2df6a"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob154_fsm_ps2data_test.sv",
+        "Prob154_fsm_ps2data_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01119565311819315
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb154_fsm_ps2data_test.sv:31: $finish called at 8096 (1ps)\nHint: Output 'out_bytes' has 490 mismatches. First mismatch occurred at time 210.\nHint: Output 'done' has 978 mismatches. First mismatch occurred at time 210.\nHint: Total mismatched samples is 978 out of 1619 samples\n\nSimulation finished at 8096 ps\nMismatches: 978 in 1619 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.019596919417381287
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 978,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

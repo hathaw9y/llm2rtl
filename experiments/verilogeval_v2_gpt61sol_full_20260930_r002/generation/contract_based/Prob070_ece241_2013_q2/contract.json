@@ -1,0 +1,36 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"a": 1, "b": 1, "c": 1, "d": 1},
+    "outputs": {"out_sop": 1, "out_pos": 1},
+    "source": "problem.txt: original interface"
+  },
+  "semantics": {
+    "type": "combinational, no state or latency",
+    "input_encoding": "unsigned {a,b,c,d}; original example 7 = 0111 establishes significance",
+    "ones": [2, 7, 15],
+    "zeros": [0, 1, 4, 5, 6, 9, 10, 13, 14],
+    "unreachable_dont_cares": [3, 8, 11, 12],
+    "forms": {"out_sop": "minimum sum of products", "out_pos": "minimum product of sums"},
+    "clock_reset_initialization": "No clock, reset or initialization specified or present in original interface; outputs continuously follow inputs"
+  },
+  "numeric": {
+    "ports": "one-bit Boolean signals",
+    "input_range": "four-bit unsigned encoding 0 through 15",
+    "arithmetic": "Boolean only; no rounding, overflow or signed arithmetic"
+  },
+  "verification": {
+    "oracle": "Original truth-table requirements, independent case lookup",
+    "coverage": "All 16 binary input patterns in ascending and descending order; assert both outputs for the 12 specified patterns",
+    "sampling": "Drive inputs then wait one simulation time unit for combinational settling",
+    "failure": "$fatal on mismatch and bounded timeout",
+    "success": "Explicit PASS line after all checks",
+    "environment": "python3 smoke_environment.py passed all three expected outcomes",
+    "development": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {"topic": "Unreachable inputs", "resolution": "3, 8, 11 and 12 are Boolean minimization don't-cares; no fixed output required."},
+    {"topic": "Unknown/high-impedance inputs", "resolution": "Original problem specifies binary patterns only; no added X/Z behavior requirement."}
+  ]
+}

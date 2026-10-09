@@ -1,0 +1,201 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob132_always_if2",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob132_always_if2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob132_always_if2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790733667.9725552,
+    "ended_at_unix": 1790733781.0535488,
+    "seconds": 113.08099412918091,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 146811,
+      "cached_input_tokens": 119424,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2645,
+      "reasoning_output_tokens": 47
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "59ea9082deec973003fd0a37de84d0b3df59bbaffb43f1a087f671031be3b832",
+  "contract_sha256": "53f5a409ac5624a4598ba3365c81d8c2b63e1b2f318545f9a229be93c4ee82d6",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract gate",
+        "result": "PASS (structure only)",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "name": "initial candidate preservation",
+        "result": "PASS, candidate.sv equals candidate_initial.sv"
+      },
+      {
+        "name": "static RTL review",
+        "result": "Both outputs assigned on every path; exact original module/ports; no state, clock, reset or arithmetic added; reg outputs preserved for interface compatibility"
+      },
+      {
+        "name": "Icarus compilation with -g2012 -Wall -s dev_tb and 20s timeout",
+        "result": "FAIL: exit 139, no diagnostic output",
+        "evidence": [
+          "dev_compile.log",
+          "dev_status.log"
+        ]
+      },
+      {
+        "name": "Icarus v12 version check with 10s timeout",
+        "result": "Version 12.0 reported; internal ivl version query warning",
+        "evidence": [
+          "dev_tool_version.log",
+          "dev_tool_status.log"
+        ]
+      },
+      {
+        "name": "Icarus compilation retry with -g2012 -s dev_tb and 20s timeout",
+        "result": "PASS: exit 0; same RTL, -Wall omitted",
+        "evidence": [
+          "dev_compile_retry.log",
+          "dev_retry_status.log"
+        ]
+      },
+      {
+        "name": "Matching vvp simulation with 20s timeout",
+        "result": "PASS: 128 comparisons covering all eight binary combinations and all 64 ordered input transitions; exit 0",
+        "evidence": [
+          "dev_simulation_retry.log",
+          "dev_retry_status.log"
+        ]
+      }
+    ],
+    "development_outcome": "Initial RTL passes independent exhaustive binary truth-table and transition simulation with no RTL revisions. Initial -Wall compiler failure preserved; successful retry omitted -Wall.",
+    "limitations": [
+      "Official evaluation was not accessed and results are unavailable.",
+      "No synthesis, timing analysis or board testing performed.",
+      "X/Z input behavior is unspecified and not verified.",
+      "The initial compiler exit 139 remains unexplained; no successful -Wall lint result is claimed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "59ea9082deec973003fd0a37de84d0b3df59bbaffb43f1a087f671031be3b832",
+      "Prob132_always_if2_ref.sv": "5d7b5e97e5f038c0c13d3f06634095f23b50b946223ee7ec398483e0a74dc36e",
+      "Prob132_always_if2_test.sv": "ba6be33c005273b938774d09e0c9f089539d15edc6ffd3dab09f34c0f37e6946"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob132_always_if2_test.sv",
+        "Prob132_always_if2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012872365303337574
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb132_always_if2_test.sv:45: $finish called at 605 (1ps)\nHint: Output 'shut_off_computer' has no mismatches.\nHint: Output 'keep_driving' has no mismatches.\nHint: Total mismatched samples is 0 out of 121 samples\n\nSimulation finished at 605 ps\nMismatches: 0 in 121 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0075190262869000435
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "59ea9082deec973003fd0a37de84d0b3df59bbaffb43f1a087f671031be3b832",
+      "Prob132_always_if2_ref.sv": "5d7b5e97e5f038c0c13d3f06634095f23b50b946223ee7ec398483e0a74dc36e",
+      "Prob132_always_if2_test.sv": "ba6be33c005273b938774d09e0c9f089539d15edc6ffd3dab09f34c0f37e6946"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob132_always_if2_test.sv",
+        "Prob132_always_if2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012466179206967354
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb132_always_if2_test.sv:45: $finish called at 605 (1ps)\nHint: Output 'shut_off_computer' has no mismatches.\nHint: Output 'keep_driving' has no mismatches.\nHint: Total mismatched samples is 0 out of 121 samples\n\nSimulation finished at 605 ps\nMismatches: 0 in 121 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007249530404806137
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

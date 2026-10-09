@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "coverage": "All 2048 binary combinations of state[9:0] and in",
+      "compiler": "Icarus Verilog 12, -g2012 -Wall -Wno-timescale"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Unknown and high-impedance inputs are not specified and were not tested.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Combinational incoming-transition OR equations support simultaneous active states; Moore outputs OR all active output-producing states.",
+  "interface_cycle_contract": "Original TopModule ports preserved, no clock, reset, storage, or extra latency.",
+  "static_review": "All ten next_state bits and both outputs continuously assigned with one driver; no latches; one-bit Boolean equations.",
+  "initial_snapshot_preserved": true
+}

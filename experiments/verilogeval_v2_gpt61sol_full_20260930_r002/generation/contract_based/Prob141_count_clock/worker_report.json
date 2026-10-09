@@ -1,0 +1,79 @@
+{
+  "revision_count": 0,
+  "checks": {
+    "environment_smoke": {
+      "status": "passed",
+      "cases": [
+        "correct fixture passed",
+        "deliberately wrong fixture failed",
+        "repaired fixture passed"
+      ]
+    },
+    "contract": {
+      "status": "passed_structure_only",
+      "checked_at_unix": 1790750894.4082427,
+      "contract_sha256": "34d854c82ad967a58811a16e84ade0763dfbda10ddef90d5703074d66ccfae2d"
+    },
+    "development": [
+      {
+        "label": "initial",
+        "check_index": 1,
+        "checked_at_unix": 1790750958.007688,
+        "source_sha256": "12adf874af677059c1c6f71e886a88127e8e08db7b6951e802bcf6132a870759",
+        "testbench_sha256": "4c2fb858996b41e5aabe80a27eaaaa211a5098a20482d6759ef8e15389b919d9",
+        "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob141_count_clock/development/01",
+        "compile": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+            "-g2012",
+            "-Wall",
+            "-Wno-timescale",
+            "-s",
+            "dev_tb",
+            "-o",
+            "dev.vvp",
+            "candidate.sv",
+            "dev_tb.sv"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.013325254432857037
+        },
+        "simulation": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+            "dev.vvp"
+          ],
+          "returncode": 0,
+          "stdout": "PASS clock oracle checks=174451\ndev_tb.sv:77: $finish called at 872266000 (1ps)\n",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 1.5054814359173179
+        },
+        "status": "passed"
+      }
+    ]
+  },
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official correctness; official evaluation has not run.",
+    "Power-up values and invalid BCD-state recovery are unspecified and not imposed.",
+    "No synthesis or board work performed, as required."
+  ],
+  "justified_changes": {
+    "rtl": [],
+    "testbench": [],
+    "contract": []
+  },
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface_cycle": "Original ports; positive-edge, active-high synchronous reset with priority over ena; no extra latency",
+    "numeric": "8-bit packed BCD hours 01-12, minutes/seconds 00-59; pm toggles entering 12",
+    "static_review": "Single sequential driver, nonblocking state assignments, explicit arithmetic widths, no testbench constructs in DUT"
+  },
+  "verification_coverage": "Independent integer modulo-86400 oracle; entire day plus bursty enables, stalls, synchronous reset between edges, reset with ena low/high, and reset during activity; 174451 comparisons"
+}

@@ -1,0 +1,29 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {"out": {"direction": "output", "width": 1}},
+    "inputs": [],
+    "evidence": "problem.txt specifies TopModule and only output out; all ports are one bit unless otherwise specified."
+  },
+  "semantics": {
+    "equation": "out = 1'b0 continuously",
+    "clock_reset": "None: no clock or reset ports are specified.",
+    "latency": "No cycle or state; constant combinational drive.",
+    "initialization": "Always drive zero, including initial settled simulation time; no unknown startup interval is specified.",
+    "evidence": "problem.txt: The module should always drive 0 (or logic low)."
+  },
+  "numeric": {
+    "output_width": 1,
+    "output_value": "1'b0",
+    "arithmetic": "None; rounding, overflow, and signed arithmetic are inapplicable."
+  },
+  "verification": {
+    "oracle": "Literal zero derived independently from the original problem.",
+    "sampling": "Check at time zero after a delta for continuous-assignment settlement, then at 1 ps, 1 ns, and repeated later times.",
+    "unknown_detection": "Use case inequality to reject X and Z.",
+    "completion": "Explicit PASS only after all checks; bounded fatal timeout.",
+    "primary_command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

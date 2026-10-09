@@ -1,0 +1,14 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "L": 1, "q_in": 1, "r_in": 1}, "outputs": {"Q": 1}},
+  "semantics": {
+    "update": "At each positive edge of clk, Q receives r_in if L is asserted, otherwise q_in; output holds between positive edges.",
+    "evidence": "Original full_module uses always @(posedge clk), if (L) q <= r; else q <= {q[1] ^ q[2], q[0], q[2]}. Each submodule receives the corresponding externally computed next-state bit as q_in and load bit as r_in.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "No initial assignment is present in the original sequential block; Q is uninitialized until its first clocked assignment.",
+    "latency": "One flip-flop with nonblocking positive-edge update, no additional pipeline stage."
+  },
+  "numeric": {"width": "All ports are one bit", "operations": "Bit selection through a 2:1 mux; feedback XOR belongs to the parent module."},
+  "verification": {"oracle": "Use original positive-edge if/else load behavior, independently selecting input values before each edge.", "cases": ["Initial unknown output", "All eight binary L/q_in/r_in combinations", "No update on input changes or negative clock edges", "Repeated load and shift-input updates", "Three-instance reconstruction checked against original vector recurrence"], "completion": "Bounded timeout, fatal mismatches, PASS only after all checks"},
+  "specification_ambiguities": []
+}

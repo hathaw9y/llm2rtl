@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "in",
+        "direction": "input",
+        "width": 8,
+        "type": "unsigned packed vector [7:0]"
+      },
+      {
+        "name": "pos",
+        "direction": "output",
+        "width": 3,
+        "type": "unsigned packed vector [2:0]"
+      }
+    ]
+  },
+  "semantics": {
+    "function": "pos is the smallest index i in 0..7 for which in[i] is 1; if in is zero, pos is zero.",
+    "timing": "Pure combinational behavior; output follows current input after combinational settling, with no clock or cycle latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization required.",
+    "priority": "Bit 0 has highest priority; bit 7 has lowest priority.",
+    "example": "8'b10010000 produces 3'd4."
+  },
+  "numeric": {
+    "input_domain": "All 256 binary 8-bit vectors.",
+    "output_range": "Unsigned indices 0 through 7 encoded in 3 bits.",
+    "arithmetic": "No arithmetic accumulation, rounding, truncation, saturation, or overflow. Zero input and bit-0-first input both encode as zero."
+  },
+  "verification": {
+    "compile": "Icarus v12 with -g2012, warnings, explicit dev_tb top, finite timeout.",
+    "oracle": "For each binary input, independently scan indices from 7 down to 0 and overwrite expected on each set bit, leaving the smallest index. Default expected is zero.",
+    "coverage": "Exhaust all 256 binary inputs in ascending and descending order, checking after settling to exercise input changes and reveal stale outputs. Includes zero, all one-hot inputs, all ones and the given example.",
+    "comparison": "Use case inequality and fatal mismatch; emit explicit PASS only after all checks.",
+    "simulation": "Matching vvp with finite shell timeout and testbench watchdog."
+  },
+  "specification_ambiguities": [
+    "Behavior for X or Z input bits is unspecified; verification and functional guarantees cover binary inputs only."
+  ]
+}

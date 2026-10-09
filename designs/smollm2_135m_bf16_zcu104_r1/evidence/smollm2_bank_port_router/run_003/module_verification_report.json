@@ -1,0 +1,56 @@
+{
+  "module_id": "smollm2_bank_port_router",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "proof_scope": "21 role-indexed client data ports routed to 13 physical 128-bit bank ports under bank owner authorization. XSIM uses behavioral memory; this module contains no storage or arithmetic.",
+  "source_sha256": {
+    "module_contract": "460cbca308130e8ae911eb194d98dbdd310f7a9a5a99d2673eb9969a2699d818",
+    "rtl": "5c701b91668aadad96e638f4fc7d820a5e02db392cd6f657307599bd5a3736f8",
+    "testbench": "1c745e15b1bb07bd1bd9e7543cb0f0ea5cb8a4dce34954cdf33118b8f0672e08",
+    "role_pair_check": "7719d5e71df87e07284b604c5cc6294fa56e815edad8739a67ffa92ca9e47774",
+    "xsim_script": "218d6d20cef979e540266a31df1427c0568096e98089fe7ebb1494556b0d8d6f",
+    "ooc_script": "ea777dadc13c3a4214c201b075e6e3d6ff255cade563733e04a3ded55194abf7",
+    "clock_xdc": "5127d6af45d0824731a9420894371f0d7825842f4e10d80851efa06bd5a3bbde"
+  },
+  "checks": {
+    "design_structure": "passed_structure_only with expected module SHA-256",
+    "bank_pair_identity": "PASS: both prefill and decode builder role-bank sets match contract, router and dispatcher",
+    "verilator_lint": "PASS with little-endian bus convention warning disabled",
+    "xsim_self_check": "PASS smollm2_bank_port_router, Vivado XSIM 2025.2",
+    "vivado_ooc_synthesis": "PASS, Vivado 2025.2, xczu7ev-ffvc1156-2-e, 5.000 ns constraint",
+    "post_synth_drc": "0 checks found in OOC design",
+    "board_execution": "not run"
+  },
+  "xsim_scenarios": [
+    "DMA write and model-legal read of one bank",
+    "16-byte strobe with two-byte partial update",
+    "GEMM source/weight reads and destination write in one cycle on three banks",
+    "SOFTMAX role 14 reads and writes different addresses of B10 in one cycle",
+    "three-cycle read response alignment and simultaneous responses from two banks",
+    "first permitted and first forbidden address for each of 13 banks",
+    "owner mismatch, out-of-range bank, unsupported read role and forbidden role-bank pair rejected"
+  ],
+  "post_synth_resources": {
+    "clb_luts": 5253,
+    "clb_registers": 247,
+    "bram_tiles": 0,
+    "uram": 0,
+    "dsps": 0
+  },
+  "post_synth_timing_ns": {
+    "clock_period": 5.0,
+    "setup_wns": 4.159,
+    "hold_whs": 0.082,
+    "pulse_width_wpws": 2.225
+  },
+  "comparison": {
+    "dynamic_index_router_luts": 31818,
+    "pair_restricted_dynamic_router_luts": 29266,
+    "static_pair_router_luts": 5253
+  },
+  "limitations": [
+    "No XPM storage, actual DataMover adapter or compute executor is instantiated in this module test.",
+    "OOC timing does not include clock source delay or placed/routed board timing.",
+    "Router faults must propagate through the future fabric to command failure; no successful DMA or compute completion may be emitted after a rejected bank request."
+  ]
+}

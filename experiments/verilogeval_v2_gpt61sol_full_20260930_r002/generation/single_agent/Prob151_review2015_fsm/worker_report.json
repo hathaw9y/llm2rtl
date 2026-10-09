@@ -1,0 +1,36 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence_directory": "development/01",
+      "evidence_index": "dev_checks.jsonl",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "simulation_marker": "PASS independent FSM checks: 7195 cycles"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis, timing, or board verification performed.",
+    "The specification does not define power-up behavior before the first synchronous reset; tests begin by applying reset."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "implementation": "Ten-state Moore FSM with overlapping 1101 prefix detection, four shift states, count wait, and acknowledgment wait. Original one-bit ports and active-high synchronous reset are preserved.",
+  "verification": "Independent rolling-window oracle checked after positive-edge NBA updates; outputs also checked for stability between edges. Directed tests, exhaustive eight-bit streams, reset interruption, and randomized controls were exercised.",
+  "static_review": "Complete combinational state assignments, single sequential state driver, explicit enum if/else transitions, and no added interface latency. Four-bit state encoding is sufficient for ten states."
+}

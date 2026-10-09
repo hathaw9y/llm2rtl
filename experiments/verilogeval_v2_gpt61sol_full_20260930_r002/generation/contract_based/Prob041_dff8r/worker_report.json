@@ -1,0 +1,57 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790747847.3306105,
+      "source_sha256": "e2c616ed62420d838c4fdf3ca83e0a9e4002f206cd9652c8dfb139df835050ca",
+      "testbench_sha256": "6a435dcc2734442b76a7f72e1aef2b27df70ea05ad6a8d53dd84b7d52385023e",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob041_dff8r/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011394093744456768
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: synchronous reset, exhaustive data capture, and edge hold (1129 checks)\ndev_tb.sv:109: $finish called at 1187000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.006858928129076958
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Power-up q is unspecified by the original problem and is not asserted by the testbench.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "implementation": "TopModule uses an 8-bit register with positive-edge capture and active-high synchronous reset to zero; original ports preserved, no extra latency.",
+  "verification_summary": "Initial Icarus 12 helper check passed with 1129 comparisons, exhaustive 8-bit capture, reset priority, between-edge reset pulses, repeated reset, data mutation and falling-edge hold.",
+  "static_review": "Single always_ff driver, nonblocking assignments, explicit 8-bit reset constant, no DUT initialization or simulation-only constructs.",
+  "initial_snapshot_preserved": true
+}

@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Exact TopModule interface; combinational continuous assignments; 100-bit outputs; required zero endpoints and XOR wraparound. No clocks, resets, latches, or pipeline state."
+    },
+    {
+      "name": "Icarus development compile",
+      "result": "pass",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+      "options": "-g2012 -Wall -s dev_tb",
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "Independent self-checking development simulation",
+      "result": "pass",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "vectors_checked": 1204,
+      "details": "Zero, ones, alternating patterns, every one-hot and one-cold position, and 1000 random vectors; all 300 output bits checked against per-bit neighbor calculations.",
+      "log": "dev_simulation.log"
+    }
+  ],
+  "development_outcome": "Initial candidate passed development checks without RTL revisions. candidate_initial.sv was preserved immediately after implementation and before checks.",
+  "limitations": [
+    "Development simulation covers binary inputs and is not exhaustive over all 100-bit vectors.",
+    "Official evaluation was not accessed and its results are unavailable.",
+    "No synthesis, Vivado timing/resource evidence, or board testing was performed."
+  ]
+}

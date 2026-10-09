@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "s": 1, "w": 1}, "outputs": {"z": 1}},
+  "semantics": {
+    "clock": "All sequential updates occur on the positive edge, as explicitly specified.",
+    "reset": "Active-high synchronous reset enters A and makes z zero; no asynchronous update.",
+    "start": "In A, s=0 holds A; s=1 enters B. The entry edge does not sample w, because the original says the next three clock cycles once in B.",
+    "groups": "Sample w on each of the next three rising edges, repeatedly in nonoverlapping groups. s is ignored outside A.",
+    "output": "After the third sampling edge, z equals whether that completed group contained exactly two ones, for the following clock interval. It returns to zero on the first sample of the next group.",
+    "state_minimization": "Eight Moore states: A; two group-boundary states distinguished by z; two one-sample states; three two-sample states. No extra cycles.",
+    "initialization": "The problem assumes initial reset state A. Verification applies synchronous reset before checking functional behavior; RTL relies on that reset rather than an unspecified hardware initializer."
+  },
+  "numeric": {"group_length": 3, "required_ones": 2, "state_count": 8, "state_width": 3, "all_ports_single_bit": true},
+  "verification": {"oracle": "Independent chronological sample-count model derived from original prose", "cases": "All pairs of three-bit groups; entry w exclusion; idle s; s ignored in B; resets at each group phase; synchronous reset between edges; output before and after edges", "failure": "$fatal on any mismatch, bounded timeout, explicit PASS only on completion", "tool": "Fixed dev_check.py with Icarus 12"},
+  "specification_ambiguities": ["The prose references a depiction not supplied in problem.txt. Following clock cycle is interpreted as the interval immediately after the third sampled rising edge, consistent with a Moore FSM."]
+}

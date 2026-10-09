@@ -1,0 +1,34 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob066_edgecapture/development/01",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "pass_marker": "PASS 481 sampled checks plus directed assertions"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_gate": "passed_structure_only",
+  "limitations": [
+    "Development verification is not official benchmark correctness; official evaluation was not accessed.",
+    "Power-up state is unspecified and left uninitialized; tests establish defined output via synchronous reset.",
+    "Input history during reset is unspecified explicitly; chosen behavior samples every rising edge, including reset edges, as recorded in contract.json.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "32-bit previous-input register samples every positive edge; output accumulates per-bit sampled falling edges, with active-high synchronous reset priority.",
+  "verification_coverage": "Independent per-lane oracle; 481 sampled comparisons, all 32 individual lanes, constant inputs, rising and falling transitions, alternating masks, reset between edges, reset dominance, post-reset falling capture, unsampled pulse, deterministic pseudorandom inputs and resets.",
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json",
+    "development_records": "dev_checks.jsonl"
+  },
+  "initial_snapshot_unchanged": true
+}

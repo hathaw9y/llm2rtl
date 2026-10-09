@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob152_lemmings3/development/01"
+    },
+    {
+      "label": "tb_correction_1",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob152_lemmings3/development/02"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation is pending.",
+    "No behavior before the first reset is specified or asserted."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_version": "dev_tb_initial.sv",
+      "change": "Drive ground=1, dig=0, bump_left=0 and bump_right=0 during reset.",
+      "reason": "The reset task releases reset before an idle positive clock edge preceding the next stimulus task. Stale ground=0 previously caused a legitimate fall on this edge while the oracle incorrectly retained walking. Neutral walking inputs keep that idle edge stable without weakening any expected outputs or checks."
+    }
+  ],
+  "verification_scope": "All 16 binary input combinations from all six activity/direction states, continuation and landing priorities, Moore output stability before clock edges, asynchronous reset, and 1000 pseudorandom cycles.",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "initial_snapshot_unchanged": true
+}

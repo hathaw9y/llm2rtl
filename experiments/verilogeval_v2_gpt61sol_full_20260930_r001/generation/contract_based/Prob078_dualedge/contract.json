@@ -1,0 +1,35 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "d": {"direction": "input", "width": 1},
+      "q": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "capture": "On every rising and falling edge of clk, capture the value of d at that edge; q equals that sample after sequential updates settle.",
+    "hold": "Between clock edges q holds the latest sampled value regardless of changes to d.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "Initial q is unspecified until the first clock edge captures d; no initialization is added.",
+    "implementation_constraint": "Use separate single-edge sequential blocks; do not use a combined posedge/negedge sensitivity list.",
+    "timing": "No additional full-cycle latency. Inputs in development tests are stable across sampling edges. Physical propagation delay and clock-edge glitches are unspecified."
+  },
+  "numeric": {
+    "data": "One-bit logic copied exactly, without arithmetic.",
+    "signedness": "Unsigned single-bit ports.",
+    "overflow_rounding_saturation": "Not applicable."
+  },
+  "verification": {
+    "oracle": "Independent expected register updated to d on each driven clock transition, compared against q after NBA settling.",
+    "directed": "Both data values at both edge polarities; alternating and repeated samples; data changes between edges must not affect q; first capture is checked.",
+    "extended": "Deterministic pseudorandom samples and uneven half-cycle lengths with between-edge data mutations.",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top; finite compile and simulation timeouts.",
+    "scope": "Development simulation and static inspection only; no official evaluation, synthesis, or board claims."
+  },
+  "specification_ambiguities": [
+    "Power-up value is unspecified and is not constrained.",
+    "Simultaneous data/clock changes, unknown clock levels, and physical edge glitches are unspecified; tests use binary clocks with data stable at each edge."
+  ]
+}

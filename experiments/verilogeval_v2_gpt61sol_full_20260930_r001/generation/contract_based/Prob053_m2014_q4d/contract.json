@@ -1,0 +1,49 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "in": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "transition": "out_next = out_previous XOR in sampled at the positive edge",
+    "between_edges": "out holds its stored value, including on falling edges and input changes",
+    "reset": "none",
+    "initialization": "No specified initial state; do not initialize the DUT. Four-state simulation starts out unknown.",
+    "latency": "Stored output updates after each positive edge using nonblocking assignment semantics"
+  },
+  "numeric": {
+    "operation": "one-bit bitwise XOR",
+    "truth_table": [
+      "0 XOR 0 = 0",
+      "0 XOR 1 = 1",
+      "1 XOR 0 = 1",
+      "1 XOR 1 = 0"
+    ],
+    "signedness": "unsigned one-bit logic",
+    "overflow_rounding_saturation": "not applicable",
+    "unknowns": "Standard four-state XOR propagates X/Z to an unknown result"
+  },
+  "verification": {
+    "compile": "Icarus -g2012 with explicit dev_tb top and finite timeout",
+    "initial_state": "Check uninitialized out is X and remains X across binary input edges",
+    "known_state": "Testbench-only deposit of both possible stored values between edges, then independently expect hold for in=0 and toggle for in=1",
+    "edge_coverage": "Check input changes and falling edges do not change stored output; sample after NBA on positive edges",
+    "four_state": "Check X and Z input produce unknown output",
+    "completion": "Self-checking fatal failures, explicit PASS marker and watchdog"
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,35 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "zero",
+        "width_bits": 1,
+        "direction": "output"
+      }
+    ]
+  },
+  "semantics": {
+    "equation": "zero = 1'b0",
+    "timing": "Constant combinational output; no clock or cycle-dependent behavior.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization required; output continuously driven LOW.",
+    "transactions": "None."
+  },
+  "numeric": {
+    "output_value": 0,
+    "output_width_bits": 1,
+    "arithmetic": "None.",
+    "rounding_overflow_saturation": "Not applicable."
+  },
+  "verification": {
+    "basis": "Original problem only: output zero must always be LOW.",
+    "static_review": "Check exact module/port names, one-bit output, no inputs, and unconditional sized constant assignment.",
+    "simulation": "Independent dev_tb instantiates TopModule and checks zero with four-state case inequality after time-zero settling and at repeated later times.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp; finite external timeouts.",
+    "pass_criteria": "Compilation exits zero, simulation exits zero and prints PASS; any X/Z/1 is a failure."
+  },
+  "specification_ambiguities": []
+}

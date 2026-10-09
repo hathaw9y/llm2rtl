@@ -1,0 +1,34 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "details": "Correct sequential fixture passed, injected fault failed simulation, repaired fixture passed."
+    },
+    {
+      "name": "initial",
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "details": "Icarus 12 compilation and matching vvp simulation passed; all 16 binary inputs exercised and all 9 care cells checked against the literal original Karnaugh map."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation; official correctness remains unevaluated.",
+    "No synthesis or board verification performed.",
+    "The specification assigns no required behavior to unknown input values or don't-care map cells."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface": "TopModule(input logic [4:1] x, output logic f)",
+    "behavior": "Pure combinational Karnaugh-map function; no clock, reset, or added latency.",
+    "numeric_widths": "Four one-bit input variables and one-bit Boolean output.",
+    "static_review": "Single continuous driver, no storage, and specified map indices preserved."
+  }
+}

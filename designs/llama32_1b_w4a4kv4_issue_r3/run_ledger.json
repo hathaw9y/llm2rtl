@@ -1,0 +1,37 @@
+{
+  "schema": "llm2rtl.run_ledger.v1",
+  "design_id": "llama32_1b_w4a4kv4_issue",
+  "revision": "r3",
+  "status": "superseded_before_independent_verification",
+  "parent_work": [
+    "reviewed the user-provided cmd_dispatcher and bank_subsystem as reference implementations",
+    "changed PC advance from completion to executor request acceptance",
+    "allowed multiple outstanding commands limited by bank ownership and executor capacity",
+    "limited the bank_subsystem boundary to read/write acquire release and busy only",
+    "reserved bank zero for command BRAM and defined END followed by outstanding drain",
+    "preserved the prior one-outstanding common contract at its exact SHA-256 history path"
+  ],
+  "parent_skills": ["multi-agent-hdl-generation", "parent-module-decomposition", "fpga-systemverilog"],
+  "child_assignments": [
+    {
+      "task": "/root/dispatcher_impl",
+      "role": "r3 HDL implementation and self-verification",
+      "module_id": "isa_command_dispatcher",
+      "module_contract_sha256": "919ac6231abad1fb7557ba8c5334364fe8be0c06d0339b5cc70cb4ec550a092b",
+      "skills": ["hdl-module-implementation", "fpga-systemverilog", "fpga-vivado", "hdl-kernel-contract-gates"],
+      "source_sha256": "47e0d2d53c92e5df607df11959771215359990ce5370ebebc1f14f458b1ca805",
+      "status": "passed_self_verification"
+    },
+    {
+      "task": "/root/dispatcher_verify",
+      "role": "r3 independent source-read-only module verification",
+      "module_id": "isa_command_dispatcher",
+      "module_contract_sha256": "919ac6231abad1fb7557ba8c5334364fe8be0c06d0339b5cc70cb4ec550a092b",
+      "source_sha256": "47e0d2d53c92e5df607df11959771215359990ce5370ebebc1f14f458b1ca805",
+      "skills": ["hdl-module-verification", "hdl-kernel-contract-gates", "fpga-systemverilog", "fpga-vivado"],
+      "status": "interrupted_by_parent_after_user_clarified_unified_bank_lock"
+    }
+  ],
+  "claims": ["r3 contract and acquire/release control reference model only"],
+  "next_action": "preserve r3 and create r4 with one unified acquire/release lock per bank"
+}

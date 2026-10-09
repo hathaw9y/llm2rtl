@@ -1,0 +1,560 @@
+{
+  "schema": "llm2rtl.isa_spec.v1",
+  "design_id": "qwen25_05b_zcu104",
+  "revision": "r1",
+  "status": "draft",
+  "common_contracts": {
+    "contracts/common/evidence_identity_contract.json": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda",
+    "contracts/common/isa_command_contract.json": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15",
+    "contracts/common/local_bank_contract.json": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d"
+  },
+  "user_scope_evidence": [
+    "User chose INT4 weights",
+    "User explicitly assigned QK and PV to Attention executor",
+    "User asked to proceed to next step"
+  ],
+  "command_transport": {
+    "command_order_owner": "ps_software",
+    "residency_tiling_owner": "ps_software",
+    "recovery_policy_owner": "ps_software",
+    "pl_dispatcher_role": "route_execute_report_only",
+    "request_protocol": "ready_valid",
+    "response_protocol": "ready_valid",
+    "program_transport": "ps_preloaded_command_bram",
+    "queue_policy": "no_ring_queue",
+    "dispatch_policy": "strict_in_order_single_pc_scoreboard",
+    "execution_policy": "issue_on_request_handshake_with_scoreboard_completion",
+    "outstanding_policy": "bank_hazard_limited_multiple",
+    "pc_advance_event": "executor_command_acceptance",
+    "response_collection": "independent_of_current_pc",
+    "program_terminal_policy": "end_opcode_then_drain_outstanding",
+    "blocked_pc_policy": "stall_without_lookahead",
+    "program_publish_order": [
+      "instruction_records_ending_in_END",
+      "start"
+    ],
+    "mutation_while_busy": "forbidden"
+  },
+  "instruction_record": {
+    "width_bits": 512,
+    "byte_order": "little_endian",
+    "bytes_per_record": 64,
+    "fields": [
+      {
+        "name": "opcode",
+        "bit_offset": 0,
+        "width_bits": 8
+      },
+      {
+        "name": "flags_reserved_zero",
+        "bit_offset": 8,
+        "width_bits": 8
+      },
+      {
+        "name": "response_tag",
+        "bit_offset": 16,
+        "width_bits": 16
+      },
+      {
+        "name": "six_bank_ids",
+        "bit_offset": 32,
+        "width_bits": 48
+      },
+      {
+        "name": "six_opcode_specific_u32_parameters",
+        "bit_offset": 80,
+        "width_bits": 192
+      },
+      {
+        "name": "dma_external_address_only",
+        "bit_offset": 272,
+        "width_bits": 64
+      },
+      {
+        "name": "dma_rows_rowbytes_stride_reserved",
+        "bit_offset": 336,
+        "width_bits": 128
+      },
+      {
+        "name": "reserved_zero",
+        "bit_offset": 464,
+        "width_bits": 48
+      }
+    ],
+    "unused_bank_id": 255,
+    "unused_parameter_value": 0,
+    "bank_zero_legal": true,
+    "tag_rule": "Software programs below 24,576 records use unique 16-bit tags; response echoes the accepted command tag"
+  },
+  "opcodes": [
+    {
+      "opcode": "END",
+      "encoding": 0,
+      "module_id": "isa_command_dispatcher",
+      "opcode_class": "control",
+      "operands": [],
+      "operand_semantics": "Ordered bank slots and scalar parameter slots defined in operands; distinct bank operands; compute external address and DMA fields must be zero",
+      "completion_semantics": "Exactly one tag-identified response per accepted command; END stops issue and drains all outstanding commands",
+      "failure_semantics": "Reject invalid opcode/shape/format/range before commit; failed compute leaves destination invalid; DMA_STORE validates all ranges before any write",
+      "bank_port_roles": [],
+      "numeric_semantics_source": "isa/interpreter.py",
+      "implemented_in_rtl": false
+    },
+    {
+      "opcode": "DMA_LOAD",
+      "encoding": 1,
+      "module_id": "datamover_executor",
+      "opcode_class": "dma_load",
+      "operands": [
+        {
+          "name": "dst",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "ddr",
+          "kind": "external_ddr_address"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        },
+        {
+          "name": "row_bytes",
+          "kind": "transfer_length"
+        },
+        {
+          "name": "ddr_stride",
+          "kind": "stride"
+        }
+      ],
+      "operand_semantics": "Ordered bank slots and scalar parameter slots defined in operands; distinct bank operands; compute external address and DMA fields must be zero",
+      "completion_semantics": "Exactly one tag-identified response per accepted command; END stops issue and drains all outstanding commands",
+      "failure_semantics": "Reject invalid opcode/shape/format/range before commit; failed compute leaves destination invalid; DMA_STORE validates all ranges before any write",
+      "bank_port_roles": [
+        "datamover_executor.dst"
+      ],
+      "numeric_semantics_source": "isa/interpreter.py",
+      "implemented_in_rtl": false
+    },
+    {
+      "opcode": "DMA_STORE",
+      "encoding": 2,
+      "module_id": "datamover_executor",
+      "opcode_class": "dma_store",
+      "operands": [
+        {
+          "name": "src",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "ddr",
+          "kind": "external_ddr_address"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        },
+        {
+          "name": "row_bytes",
+          "kind": "transfer_length"
+        },
+        {
+          "name": "ddr_stride",
+          "kind": "stride"
+        }
+      ],
+      "operand_semantics": "Ordered bank slots and scalar parameter slots defined in operands; distinct bank operands; compute external address and DMA fields must be zero",
+      "completion_semantics": "Exactly one tag-identified response per accepted command; END stops issue and drains all outstanding commands",
+      "failure_semantics": "Reject invalid opcode/shape/format/range before commit; failed compute leaves destination invalid; DMA_STORE validates all ranges before any write",
+      "bank_port_roles": [
+        "datamover_executor.src"
+      ],
+      "numeric_semantics_source": "isa/interpreter.py",
+      "implemented_in_rtl": false
+    },
+    {
+      "opcode": "GEMM_W4",
+      "encoding": 3,
+      "module_id": "gemm_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "activation",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "packed_weight",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "scales",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bias",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "m",
+          "kind": "dimension"
+        },
+        {
+          "name": "n",
+          "kind": "dimension"
+        },
+        {
+          "name": "k",
+          "kind": "dimension"
+        },
+        {
+          "name": "group_size",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Ordered bank slots and scalar parameter slots defined in operands; distinct bank operands; compute external address and DMA fields must be zero",
+      "completion_semantics": "Exactly one tag-identified response per accepted command; END stops issue and drains all outstanding commands",
+      "failure_semantics": "Reject invalid opcode/shape/format/range before commit; failed compute leaves destination invalid; DMA_STORE validates all ranges before any write",
+      "bank_port_roles": [
+        "gemm_executor.activation",
+        "gemm_executor.packed_weight",
+        "gemm_executor.scales",
+        "gemm_executor.bias",
+        "gemm_executor.output"
+      ],
+      "numeric_semantics_source": "isa/interpreter.py",
+      "implemented_in_rtl": false
+    },
+    {
+      "opcode": "DEQUANT",
+      "encoding": 4,
+      "module_id": "vector_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "packed_weight",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "scales",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "one",
+          "kind": "dimension"
+        },
+        {
+          "name": "rows",
+          "kind": "dimension"
+        },
+        {
+          "name": "k",
+          "kind": "dimension"
+        },
+        {
+          "name": "group_size",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Ordered bank slots and scalar parameter slots defined in operands; distinct bank operands; compute external address and DMA fields must be zero",
+      "completion_semantics": "Exactly one tag-identified response per accepted command; END stops issue and drains all outstanding commands",
+      "failure_semantics": "Reject invalid opcode/shape/format/range before commit; failed compute leaves destination invalid; DMA_STORE validates all ranges before any write",
+      "bank_port_roles": [
+        "vector_executor.packed_weight",
+        "vector_executor.scales",
+        "vector_executor.output"
+      ],
+      "numeric_semantics_source": "isa/interpreter.py",
+      "implemented_in_rtl": false
+    },
+    {
+      "opcode": "RMSNORM",
+      "encoding": 5,
+      "module_id": "rmsnorm_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "activation",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "gamma",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "m",
+          "kind": "dimension"
+        },
+        {
+          "name": "k",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Ordered bank slots and scalar parameter slots defined in operands; distinct bank operands; compute external address and DMA fields must be zero",
+      "completion_semantics": "Exactly one tag-identified response per accepted command; END stops issue and drains all outstanding commands",
+      "failure_semantics": "Reject invalid opcode/shape/format/range before commit; failed compute leaves destination invalid; DMA_STORE validates all ranges before any write",
+      "bank_port_roles": [
+        "rmsnorm_executor.activation",
+        "rmsnorm_executor.gamma",
+        "rmsnorm_executor.output"
+      ],
+      "numeric_semantics_source": "isa/interpreter.py",
+      "implemented_in_rtl": false
+    },
+    {
+      "opcode": "ROPE",
+      "encoding": 6,
+      "module_id": "rope_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "activation",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "cos",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "sin",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "m",
+          "kind": "dimension"
+        },
+        {
+          "name": "heads",
+          "kind": "dimension"
+        },
+        {
+          "name": "head_dim",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Ordered bank slots and scalar parameter slots defined in operands; distinct bank operands; compute external address and DMA fields must be zero",
+      "completion_semantics": "Exactly one tag-identified response per accepted command; END stops issue and drains all outstanding commands",
+      "failure_semantics": "Reject invalid opcode/shape/format/range before commit; failed compute leaves destination invalid; DMA_STORE validates all ranges before any write",
+      "bank_port_roles": [
+        "rope_executor.activation",
+        "rope_executor.cos",
+        "rope_executor.sin",
+        "rope_executor.output"
+      ],
+      "numeric_semantics_source": "isa/interpreter.py",
+      "implemented_in_rtl": false
+    },
+    {
+      "opcode": "ATTENTION",
+      "encoding": 7,
+      "module_id": "attention_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "q",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "k",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "v",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "m",
+          "kind": "dimension"
+        },
+        {
+          "name": "cache_length",
+          "kind": "dimension"
+        },
+        {
+          "name": "query_start",
+          "kind": "dimension"
+        },
+        {
+          "name": "head_dim",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Ordered bank slots and scalar parameter slots defined in operands; distinct bank operands; compute external address and DMA fields must be zero",
+      "completion_semantics": "Exactly one tag-identified response per accepted command; END stops issue and drains all outstanding commands",
+      "failure_semantics": "Reject invalid opcode/shape/format/range before commit; failed compute leaves destination invalid; DMA_STORE validates all ranges before any write",
+      "bank_port_roles": [
+        "attention_executor.q",
+        "attention_executor.k",
+        "attention_executor.v",
+        "attention_executor.output"
+      ],
+      "numeric_semantics_source": "isa/interpreter.py",
+      "implemented_in_rtl": false
+    },
+    {
+      "opcode": "ADD",
+      "encoding": 8,
+      "module_id": "vector_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "a",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "b",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "m",
+          "kind": "dimension"
+        },
+        {
+          "name": "k",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Ordered bank slots and scalar parameter slots defined in operands; distinct bank operands; compute external address and DMA fields must be zero",
+      "completion_semantics": "Exactly one tag-identified response per accepted command; END stops issue and drains all outstanding commands",
+      "failure_semantics": "Reject invalid opcode/shape/format/range before commit; failed compute leaves destination invalid; DMA_STORE validates all ranges before any write",
+      "bank_port_roles": [
+        "vector_executor.a",
+        "vector_executor.b",
+        "vector_executor.output"
+      ],
+      "numeric_semantics_source": "isa/interpreter.py",
+      "implemented_in_rtl": false
+    },
+    {
+      "opcode": "SILU_MUL",
+      "encoding": 9,
+      "module_id": "vector_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "gate",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "up",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "m",
+          "kind": "dimension"
+        },
+        {
+          "name": "k",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Ordered bank slots and scalar parameter slots defined in operands; distinct bank operands; compute external address and DMA fields must be zero",
+      "completion_semantics": "Exactly one tag-identified response per accepted command; END stops issue and drains all outstanding commands",
+      "failure_semantics": "Reject invalid opcode/shape/format/range before commit; failed compute leaves destination invalid; DMA_STORE validates all ranges before any write",
+      "bank_port_roles": [
+        "vector_executor.gate",
+        "vector_executor.up",
+        "vector_executor.output"
+      ],
+      "numeric_semantics_source": "isa/interpreter.py",
+      "implemented_in_rtl": false
+    },
+    {
+      "opcode": "CAST",
+      "encoding": 10,
+      "module_id": "vector_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "activation",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "output",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "m",
+          "kind": "dimension"
+        },
+        {
+          "name": "k",
+          "kind": "dimension"
+        }
+      ],
+      "operand_semantics": "Ordered bank slots and scalar parameter slots defined in operands; distinct bank operands; compute external address and DMA fields must be zero",
+      "completion_semantics": "Exactly one tag-identified response per accepted command; END stops issue and drains all outstanding commands",
+      "failure_semantics": "Reject invalid opcode/shape/format/range before commit; failed compute leaves destination invalid; DMA_STORE validates all ranges before any write",
+      "bank_port_roles": [
+        "vector_executor.activation",
+        "vector_executor.output"
+      ],
+      "numeric_semantics_source": "isa/interpreter.py",
+      "implemented_in_rtl": false
+    }
+  ],
+  "numeric_candidate": {
+    "weights": "Signed INT4 [-7,7], -8 reserved",
+    "group_sizes_under_comparison": [
+      32,
+      128
+    ],
+    "scales": "BF16, per output row and K group; quantization uses stored scale",
+    "activations_and_kv": "BF16",
+    "projection": "Dequantize to BF16, FP32 dot and bias, BF16 output",
+    "attention": "BF16 Q/K/V; FP32 dot, BF16 score, divide 8 and cast BF16, mask, FP32 stable softmax cast BF16, FP32 PV cast BF16",
+    "nonlinear_reference": "Pinned PyTorch operations; RTL approximation and reduction ordering not defined",
+    "zero_groups": "Scale=1, all q=0",
+    "packing": "Two complement nibble; even K low; odd-K high padding=0"
+  },
+  "supported_software_test_scope": {
+    "batch": 1,
+    "prefill_tokens": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "decode_tokens": [
+      5
+    ],
+    "token_tile_max": 4
+  },
+  "proposed_capacity": {
+    "context_max": 2048,
+    "output_tile_max": 128,
+    "command_records_max": 24576
+  },
+  "unresolved_decisions": [
+    "INT4 group32 versus group128 selection and model-quality acceptance",
+    "User discussion of concrete first executor implementation and golden criteria",
+    "Physical bank and native command-memory mapping; board linker ranges; full context validation"
+  ]
+}

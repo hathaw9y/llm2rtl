@@ -1,0 +1,68 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract structural gate",
+      "outcome": "passed",
+      "log": "contract_validation_retry.log",
+      "limitation": "Structural validation only, not functional proof"
+    },
+    {
+      "name": "initial contract command wrapper",
+      "outcome": "shell error after validator ran",
+      "error": "zsh read-only variable status; gate rerun successfully",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial development testbench compile",
+      "outcome": "failed",
+      "exit_code": 139,
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "logs": [
+        "development_compile.log",
+        "development_compile_exit.log"
+      ]
+    },
+    {
+      "name": "Icarus version diagnostic",
+      "outcome": "driver reports version 12.0; backend version query fails",
+      "log": "development_tool_version.log"
+    },
+    {
+      "name": "DUT-only compile",
+      "outcome": "passed",
+      "exit_code": 0,
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s TopModule -o dev_dut_compile candidate.sv",
+      "log": "development_dut_compile.log"
+    },
+    {
+      "name": "development testbench compile retry",
+      "outcome": "failed",
+      "exit_code": 139,
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim_retry candidate.sv dev_tb.sv",
+      "log": "development_compile_retry.log",
+      "change": "Testbench only: replace multidimensional transition/coverage arrays with function and flat arrays; initial testbench preserved"
+    },
+    {
+      "name": "static RTL review and initial preservation",
+      "outcome": "passed",
+      "log": "development_static_review.log"
+    }
+  ],
+  "development_outcome": "DUT-only compilation passed. Self-checking simulation was not run because both explicit dev_tb compilations exited with code 139. Candidate RTL remains unchanged from initial implementation.",
+  "limitations": [
+    "Reset polarity and destination omitted by original problem; assumed active-high synchronous reset to A.",
+    "No behavior claimed before reset or for unknown inputs/illegal state.",
+    "Independent testbench coverage plan not executed due to compile failures; no simulation success claimed.",
+    "No official evaluation results, synthesis, timing, or board evidence."
+  ],
+  "artifacts": [
+    "contract.json",
+    "contract_gate.json",
+    "candidate.sv",
+    "candidate_initial.sv",
+    "dev_tb.sv",
+    "dev_tb_initial.sv"
+  ]
+}

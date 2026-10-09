@@ -1,0 +1,14 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "x": 1, "y": 3}, "outputs": {"Y0": 1, "z": 1}},
+  "semantics": {
+    "evidence": "Original asks for output logic and next state logic; y is present state input and Y0 is Y[0] of next state.",
+    "timing": "Combinational response to x and y, no storage or additional cycle latency; clk is unused.",
+    "reset_initialization": "No reset port or specified initial internal state; outputs depend on current inputs after combinational settling.",
+    "table": {"000": {"x0": "000", "x1": "001", "z": 0}, "001": {"x0": "001", "x1": "100", "z": 0}, "010": {"x0": "010", "x1": "001", "z": 0}, "011": {"x0": "001", "x1": "010", "z": 1}, "100": {"x0": "011", "x1": "100", "z": 1}},
+    "unspecified_states": "Use Y0=0 and z=0 for unlisted state codes as an implementation choice, not a specification requirement."
+  },
+  "numeric": {"y": "Unsigned three-bit state encoding", "Y0": "Least significant bit of listed three-bit next state", "arithmetic": "No arithmetic, rounding, saturation or overflow"},
+  "verification": {"oracle": "Independent literal next-state table from original problem, compare bit zero and listed z", "coverage": "All ten specified y/x pairs, repeated transitions, input changes without clock edges, clock toggles while inputs held", "sampling": "Check after one time unit of combinational settling", "failure": "$fatal on mismatch and bounded timeout", "scope": "Development simulation only; no official evaluation or synthesis"},
+  "specification_ambiguities": ["No outputs are specified for y=101,110,111 or unknown inputs; these are not scored by the development oracle.", "clk is listed but the requested next-state/output logic has no edge-triggered behavior; preserve clk as unused input."]
+}

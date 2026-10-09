@@ -1,0 +1,101 @@
+{
+  "schema": "llm2rtl.quantization_discussion.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104_r1",
+  "status": "ISA_bank_numeric_and_GEMM_implementation_contracts_frozen",
+  "agreed": {
+    "compute_sharing": "One signed INT8 GEMM datapath for projections, QK^T, PV and lm_head; K/V are matrix operands, not restored BF16 weights.",
+    "integer_tensor_range": [
+      -127,
+      127
+    ],
+    "probability_range": [
+      0,
+      127
+    ],
+    "zero_point": 0,
+    "accumulator_bits": 32,
+    "accumulator_signed": true,
+    "accumulator_runtime_overflow_detection": false,
+    "scale_storage_and_arithmetic": "FP32",
+    "rounding": "round_to_nearest_ties_to_even",
+    "quantization_clipping": "saturate_to_tensor_integer_range",
+    "gemm_stored_output": "BF16",
+    "scale_groups": {
+      "A": "up to 16 rows, common scale across the complete reduction K",
+      "B_weight": "up to 16 output channels, common scale across the complete reduction K",
+      "Q": "per query head and up to 16 queries, across all 64 head dimensions",
+      "K_cache": "one static scale per layer/KV head, shared by all up-to-16-token tiles and all 64 dimensions",
+      "P": "per query head and up to 16 queries, across the entire valid context",
+      "V_cache": "one static scale per layer/KV head/16-feature group, shared across all context tokens"
+    },
+    "scale_generation": {
+      "weight": "offline_static_prepared",
+      "K_cache": "offline_static_prepared",
+      "V_cache": "offline_static_prepared",
+      "A": "PL_dynamic_absmax",
+      "Q": "PL_dynamic_absmax_after_RoPE",
+      "P": "PL_dynamic_max"
+    },
+    "dynamic_scale_rule": "FP32_RNE(max_abs_or_max/127); all-zero block has scale 1 and integer values 0",
+    "gemm_scale_application_sequence": [
+      "sC = FP32_RNE(sA*sB)",
+      "fC = FP32_RNE(INT32_dot)",
+      "y = FP32_RNE(fC*sC)",
+      "stored = BF16_RNE(y)"
+    ],
+    "QK_scale_factor": "sC=FP32_RNE(sA*sB), then FP32_RNE(sC*0.125)",
+    "PS_tensor_arithmetic": false,
+    "physical_execution_owner": "user",
+    "calibration": "Excluded for now; assume matching prepared weights/static scales exist, without claiming assets have been obtained or quality validated",
+    "executor_boundaries": {
+      "gemm": "shared INT8 core plus FP32-scale/BF16 output path",
+      "quantization": "separate reusable PL quantization/dequantization executor",
+      "attention": "head mapping and layout/transpose adapters around shared GEMM",
+      "nonlinear_vector": "RMSNorm, RoPE, Softmax, SiLU and residual engines; detailed numerical algorithms remain pending"
+    },
+    "weight_pingpong": {
+      "method": "explicit PS-issued ISA, two independent weight banks",
+      "banks": [
+        3,
+        15
+      ],
+      "compute_and_load": "GEMM on one bank may overlap DMA_LOAD of weight and scale into the other; no autonomous prefetch",
+      "scale_table_relocation": "B7 static subregion to keep four-bit bank IDs"
+    },
+    "quantization_evaluation": "FP32 division followed by nearest-even integer rounding and saturation; no reciprocal substitution",
+    "GEMM_implementation": {
+      "contract": {
+        "path": "designs/smollm2_135m_w8a8_zcu104_r1/modules/int8_gemm_executor.json",
+        "sha256": "5a21d45e1461bedc5dad49348c25d142a07f13a8c3e6125abbd9f5d7f0ccb19c"
+      },
+      "compute": "N16 x K16 SIMD, 256 INT8 products/cycle staged capacity",
+      "internal_weight_panel": "two N16 x K32 panels",
+      "GQA_reuse": "three query heads per KV head; up to96 logical rows",
+      "epilogue": "four FP32-scale/BF16 lanes",
+      "module_OOC_target_mhz": 200
+    }
+  },
+  "accumulator_proof": {
+    "max_abs_integer_operand": 127,
+    "term_abs_bound": 16129,
+    "prefix_abs_bound_rule": "prefix_K*127*127 <= full_K*127*127",
+    "bounds": {
+      "projection_K1536": 24774144,
+      "QK_K64": 1032256,
+      "PV_K1024": 16516096
+    },
+    "int32_positive_limit": 2147483647,
+    "preconditions": [
+      "legal shape limits",
+      "operands within declared integer ranges",
+      "accumulator cleared for each new output tile",
+      "partial sums retained only across its reduction tiles"
+    ]
+  },
+  "not_yet_agreed": [
+    "nonlinear internal algorithms, precision and approximation criteria",
+    "final calibration/evaluation dataset and quality/performance targets",
+    "build machine designation"
+  ],
+  "implementation_status": "Binary codec and scoped synthetic tensor interpreter verified; GEMM implementation contract frozen by user approval; RTL/synthesis/board not started."
+}

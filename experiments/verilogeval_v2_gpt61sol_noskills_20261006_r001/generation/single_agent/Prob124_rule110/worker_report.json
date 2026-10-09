@@ -1,0 +1,30 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "checked_cycles": 427,
+      "evidence": "development/01 and dev_checks.jsonl",
+      "coverage": "Truth-table neighborhoods, zero boundaries, single-cell propagation, uniform and alternating states, consecutive synchronous loads, random states and multi-cycle evolution, and stability between positive edges"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not been run.",
+    "No reset or initial state is specified; state comparisons begin with a synchronous load."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Rule 110 uses (center OR right) AND NOT(left AND center AND right), with zero boundary neighbors and synchronous load priority.",
+  "initial_snapshot": "candidate_initial.sv preserved immediately after candidate creation; no RTL revisions"
+}

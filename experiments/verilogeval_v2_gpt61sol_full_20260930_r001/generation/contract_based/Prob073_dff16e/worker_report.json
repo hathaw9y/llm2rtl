@@ -1,0 +1,48 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract structural validation",
+      "result": "PASS",
+      "log": "contract_validation_retry.log",
+      "scope": "Structural fields only; not functional proof"
+    },
+    {
+      "name": "initial contract gate wrapper",
+      "result": "shell error after validator ran",
+      "log": "contract_validation.log",
+      "details": "zsh variable status is read-only; gate rerun successfully using contract_rc"
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS",
+      "details": "Exact TopModule ports and widths; positive-edge always_ff; synchronous active-low zero reset prioritized over enables; independent byte writes; nonblocking assignments; disabled-byte hold; no added initialization or dependencies"
+    },
+    {
+      "name": "development compilation",
+      "result": "FAIL",
+      "exit_code": 139,
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim.vvp candidate.sv dev_tb.sv",
+      "log": "development_compile.log",
+      "details": "Compiler exited with code 139 and produced no diagnostic text"
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT RUN",
+      "details": "Compilation failed; no simulation success claimed"
+    }
+  ],
+  "development_outcome": "Initial synthesizable RTL delivered unchanged; contract gate passed and manual static review passed; development simulation unverified because Icarus compilation exited 139.",
+  "limitations": [
+    "Reset clearing to zero is the recorded interpretation of implicit reset value.",
+    "Independent testbench written but not executed successfully.",
+    "No synthesis, board access, official testbench, reference RTL or official evaluation results accessed."
+  ],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  }
+}

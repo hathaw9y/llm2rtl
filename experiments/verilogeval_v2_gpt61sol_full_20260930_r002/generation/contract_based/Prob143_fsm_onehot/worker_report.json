@@ -1,0 +1,60 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790742592.5053914,
+      "source_sha256": "100bd78eb9d9188c836ebf79e9d675e009e8f4d6b3ffc3d7632f08351f24a01e",
+      "testbench_sha256": "faf772148dc85b6fbc32515f59212840f2d801cc0826e0466d6b9c9555e7e939",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob143_fsm_onehot/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.013386967591941357
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS exhaustive binary transition/output checks: 2048\ndev_tb.sv:67: $finish called at 2048000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.04179229959845543
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "X/Z inputs are unspecified by the original problem and are not covered by the binary exhaustive oracle.",
+    "No synthesis or board work performed, as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "verification_summary": {
+    "smoke_environment": "passed: correct passes, injected fault fails, repair passes",
+    "contract_validation": "passed_structure_only",
+    "binary_cases_checked": 2048,
+    "initial_snapshot": "Unchanged; byte equality checked."
+  },
+  "implementation_summary": "Pure combinational union of all active source-state transitions and Moore output labels; original ports and widths preserved; no clock, reset or extra latency."
+}

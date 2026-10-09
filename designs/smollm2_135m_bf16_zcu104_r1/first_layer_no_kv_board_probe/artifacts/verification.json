@@ -1,0 +1,37 @@
+{
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "tool": "Vivado 2025.2; Vitis 2025.2 A53 standalone BSP",
+  "part": "xczu7ev-ffvc1156-2-e",
+  "clock_mhz": 100,
+  "scope": "SmolLM2-135M layer 0 from embeddings to post-FFN residual; no KV cache; prefill32 and cold single token",
+  "routed_timing_ns": {
+    "setup_wns": 0.898,
+    "hold_whs": 0.01,
+    "pulse_wpws": 3.5
+  },
+  "routed_resources": {
+    "clb_luts": 207069,
+    "clb_registers": 96424,
+    "bram_tiles": 135.5,
+    "uram": 64,
+    "dsp": 282
+  },
+  "drc": "0 errors; advisory warnings in routed_drc.rpt",
+  "verification": {
+    "python_interpreter": "prefill32 and single_token_cold first layer output bit exact versus pinned HF eager BF16",
+    "rtl_rope_b8": "standalone golden prefill32, one token and tail exact; cumulative XSIM first16 prefill32=512 and one token=16 exact",
+    "rtl_add_b0_tap": "cumulative XSIM one-token first16 within prior 16 ULP or 0.002 absolute criterion",
+    "physical_board": "user-reported diagnostic run: prefill32 4/512 final values beyond 16 ULP and 0.002 absolute; all sampled intermediate stages within criterion. Cold single-token final 0/16 failures. Full-layer prefill board PASS remains false. See board_run_user_report.json."
+  },
+  "artifact_sha256": {
+    "zcu104_first_layer_no_kv_board_probe.bit": "e7a77ce57f1d540fbad2476a75d75669ca710e5ed54dcb05fc4bdd2181bc5372",
+    "zcu104_first_layer_no_kv_board_probe.xsa": "9bede22ec36bfac930f617a513efd56f5778323e740f5f47c8c64498f60889cb",
+    "zcu104_first_layer_no_kv_board_probe.hwh": "f35edacd018398c6d44460ec6294d87136a696699c42453882db3fd795be755c",
+    "zcu104_first_layer_no_kv_board_probe.elf": "1803ce98ef3be90d071a8e3a6f8c7fa8e71e9440e75ff2bd6ca3236c4be5818e"
+  },
+  "source_sha256": {
+    "main.c": "b70c15600a5bb8b1192f6f767d4c85c213972403d81f2c28d646c16c5b289bc8",
+    "vectors.h": "c20856512820cf41105d4849e19b52ad64c1185dcaf80121540e24684ad61ca8"
+  },
+  "xsa_embedded_bit_matches_external_bit": true
+}

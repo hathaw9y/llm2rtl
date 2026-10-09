@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"in": {"width": 255, "range": "254:0"}},
+    "outputs": {"out": {"width": 8, "range": "7:0"}},
+    "evidence": "Original problem explicitly names TopModule, input in (255 bits), output out (8 bits)."
+  },
+  "semantics": {
+    "function": "out equals the number of binary one bits in in",
+    "timing": "Combinational; output reflects current input after combinational settling, without cycle latency.",
+    "clock_reset": "None: the original interface has only in and out.",
+    "initialization": "No stored state or initialization requirement; test known inputs after settling.",
+    "evidence": "Original text requests a population count circuit and supplies no clock, reset, or sequential behavior."
+  },
+  "numeric": {
+    "input_domain": "255 binary bits",
+    "output_domain": "Unsigned integer 0 through 255 inclusive",
+    "accumulation": "Eight bits suffice for all partial and final sums; no overflow for legal inputs.",
+    "rounding_saturation": "None; exact integer count."
+  },
+  "verification": {
+    "oracle": "Independent testbench repeatedly shifts a copy of the original input and counts set least-significant bits using an integer.",
+    "coverage": "Zero, all ones, every one-hot and one-cold position, every count from 0 through 255, alternating patterns, random vectors and complements.",
+    "sampling": "Drive inputs then wait one simulation time unit before checking combinational output.",
+    "failure_success": "Case-inequality comparison with fatal on mismatch, bounded timeout, PASS only after all tests.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {"topic": "X/Z inputs", "evidence": "Original text defines counting ones but does not define four-state input behavior.", "resolution": "No extra X/Z requirements inferred; functional verification uses binary inputs."}
+  ]
+}

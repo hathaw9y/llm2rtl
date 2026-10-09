@@ -1,0 +1,41 @@
+module smollm2_first_layer_no_kv_board_probe_bd (
+    input wire aclk, aresetn,
+    input wire [31:0] host_data0, host_data1, host_data2, host_data3,
+    input wire [31:0] host_control,
+    output wire [31:0] host_status,
+    output wire [71:0] m_axis_mm2s_cmd_tdata,
+    output wire m_axis_mm2s_cmd_tvalid,
+    input wire m_axis_mm2s_cmd_tready,
+    input wire [63:0] s_axis_mm2s_tdata,
+    input wire [7:0] s_axis_mm2s_tkeep,
+    input wire s_axis_mm2s_tvalid,
+    output wire s_axis_mm2s_tready,
+    input wire s_axis_mm2s_tlast,
+    input wire [7:0] s_axis_mm2s_sts_tdata,
+    input wire s_axis_mm2s_sts_tkeep,
+    input wire s_axis_mm2s_sts_tvalid,
+    output wire s_axis_mm2s_sts_tready,
+    input wire s_axis_mm2s_sts_tlast,
+    input wire datamover_mm2s_err
+);
+    smollm2_dma_gemm_board_probe #(.REAL_RMS(1'b1), .REAL_ROPE(1'b1), .REAL_SOFTMAX(1'b1), .PROBE_SCORE(1'b0), .REAL_ATTENTION(1'b1), .REAL_ADD(1'b1), .REAL_SILU(1'b1), .FULL_LAYER_PROBE(1'b1)) core (
+        .aclk(aclk), .aresetn(aresetn),
+        .host_data0(host_data0), .host_data1(host_data1),
+        .host_data2(host_data2), .host_data3(host_data3),
+        .host_control(host_control), .host_status(host_status),
+        .m_axis_mm2s_cmd_tdata(m_axis_mm2s_cmd_tdata),
+        .m_axis_mm2s_cmd_tvalid(m_axis_mm2s_cmd_tvalid),
+        .m_axis_mm2s_cmd_tready(m_axis_mm2s_cmd_tready),
+        .s_axis_mm2s_tdata(s_axis_mm2s_tdata),
+        .s_axis_mm2s_tkeep(s_axis_mm2s_tkeep),
+        .s_axis_mm2s_tvalid(s_axis_mm2s_tvalid),
+        .s_axis_mm2s_tready(s_axis_mm2s_tready),
+        .s_axis_mm2s_tlast(s_axis_mm2s_tlast),
+        .s_axis_mm2s_sts_tdata(s_axis_mm2s_sts_tdata),
+        .s_axis_mm2s_sts_tkeep(s_axis_mm2s_sts_tkeep),
+        .s_axis_mm2s_sts_tvalid(s_axis_mm2s_sts_tvalid),
+        .s_axis_mm2s_sts_tready(s_axis_mm2s_sts_tready),
+        .s_axis_mm2s_sts_tlast(s_axis_mm2s_sts_tlast),
+        .datamover_mm2s_err(datamover_mm2s_err)
+    );
+endmodule

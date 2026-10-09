@@ -1,0 +1,36 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {"direction": "input", "width": 8, "signed": false},
+      "b": {"direction": "input", "width": 8, "signed": false},
+      "c": {"direction": "input", "width": 8, "signed": false},
+      "d": {"direction": "input", "width": 8, "signed": false},
+      "min": {"direction": "output", "width": 8, "signed": false}
+    }
+  },
+  "semantics": {
+    "function": "min = minimum(a, b, c, d)",
+    "timing": "Pure combinational output follows current inputs after combinational settling; no clock or cycle latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization requirement.",
+    "ties": "Equal minima produce their shared numeric value.",
+    "transactions": "All combinations of four known binary 8-bit inputs are legal; no handshake."
+  },
+  "numeric": {
+    "type": "Unsigned 8-bit integers, range 0 through 255 inclusive.",
+    "comparison": "Unsigned ordering for each input.",
+    "arithmetic": "Comparison and selection only; no addition, rounding, truncation, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Independent testbench integer oracle scans all four values with a running minimum initialized to 255.",
+    "directed": "All-equal values across the full range; each input as unique minimum; ties; zero and 255; unsigned boundary 127/128.",
+    "sweep": "Sweep every a/b pair with c and d fixed at 255, then exercise every value in each unique-minimum position.",
+    "random": "Deterministic pseudorandom four-input vectors.",
+    "checks": "Explicit dev_tb top, Icarus -g2012 compile, finite command timeouts, exact output comparison after settling, PASS or fatal FAIL."
+  },
+  "specification_ambiguities": [
+    "Unknown (X) and high-impedance (Z) input behavior is unspecified; verification covers known binary values."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "checked_cases": 131080,
+      "coverage": "All 131072 binary input combinations plus eight directed zero-flag transition and wraparound cases",
+      "compiler": "Icarus Verilog 12, -g2012 -Wall -Wno-timescale"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Unknown or high-impedance input behavior is not specified and was not tested.",
+    "No synthesis, timing, or board evidence was produced."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation computes the specified addition or subtraction with truncation to eight bits.",
+    "Replaces the faulty bitwise complement condition with an explicit equality-to-zero test.",
+    "Assigns result_is_zero on every combinational evaluation to remove inferred storage.",
+    "Preserves TopModule and all original port names, widths, and directions; adds no reset, clock, ports, or latency."
+  ],
+  "justified_tb_changes": [],
+  "static_review": "Complete combinational assignments with blocking assignment; eight-bit wraparound and zero detection; no added pipeline or state.",
+  "initial_snapshot": "candidate_initial.sv"
+}

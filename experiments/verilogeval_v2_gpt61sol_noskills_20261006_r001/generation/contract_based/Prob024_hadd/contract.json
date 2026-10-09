@@ -1,0 +1,49 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1
+    },
+    "outputs": {
+      "sum": 1,
+      "cout": 1
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "operation": "Combinational half adder with no carry-in: sum is the low bit and cout the high bit of a+b.",
+    "truth_table": {
+      "00": "00",
+      "01": "01",
+      "10": "01",
+      "11": "10"
+    },
+    "truth_table_output_order": [
+      "cout",
+      "sum"
+    ],
+    "timing": "No clock or cycle latency; outputs follow inputs after combinational settling. Original interface contains no clock.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or specified initial values; binary behavior checked after driving inputs."
+  },
+  "numeric": {
+    "input_domain": "one-bit binary operands",
+    "result_range": [
+      0,
+      2
+    ],
+    "sum": "(a+b) modulo 2",
+    "cout": "floor((a+b)/2)"
+  },
+  "verification": {
+    "oracle": "Original half-adder definition, checked using integer arithmetic independent of RTL Boolean expressions.",
+    "cases": "All four binary input pairs, repeated in reverse order to exercise transitions.",
+    "sampling": "Drive inputs and wait 1 ns for combinational settling before checking both outputs.",
+    "failure": "Case inequality and $fatal on mismatch; bounded timeout; PASS printed only after all checks."
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z input values is not specified; verification covers the complete binary domain."
+  ]
+}

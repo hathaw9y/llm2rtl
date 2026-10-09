@@ -1,0 +1,39 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "smoke_environment",
+      "outcome": "passed",
+      "details": "Correct fixture passed, injected fault failed, repaired fixture passed."
+    },
+    {
+      "label": "initial",
+      "outcome": "simulation_failed",
+      "evidence": "development/01",
+      "cause": "Testbench allowed an unmodeled rising edge with stale inputs following reset release."
+    },
+    {
+      "label": "tb_correction_1",
+      "outcome": "passed",
+      "evidence": "development/02",
+      "output_checks": 2738
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_RTL_changes": [],
+  "justified_TB_changes": [
+    {
+      "preserved_version": "dev_tb_initial.sv",
+      "change": "Drive ground=1, dig=0, bump_left=0, bump_right=0 during reset setup so intervening clocks after release leave the reset walking state unchanged.",
+      "reason": "Prevents stale stimulus from causing a real DUT transition on a clock edge that was outside the step-task oracle. No expected values or checks were removed."
+    }
+  ],
+  "interface_cycle_contract": "Original one-bit ports; positive-edge clock; positive-edge asynchronous active-high reset to walking left; Moore outputs with no extra latency.",
+  "implementation": "Six-state FSM retaining direction while falling or digging; fall takes precedence over dig, then direction change.",
+  "static_review": "Complete next-state assignments, nonblocking state register update, explicit enum if/else transitions; initial RTL unchanged.",
+  "verification_coverage": "All 16 input combinations from all six reachable states, multi-cycle falling/digging/landing, simultaneous conditions, reset from each state, pre-edge Moore stability, and a 512-cycle varied trace."
+}

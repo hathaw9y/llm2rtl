@@ -1,0 +1,40 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract structural gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (passed_structure_only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS: exact ports and one-bit widths, specified gate equations, combinational continuous assignments, no state, delays, or external dependencies."
+    },
+    {
+      "name": "initial snapshot preservation",
+      "result": "PASS: candidate.sv and candidate_initial.sv are identical."
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "FAIL: exit code 139, no diagnostics or executable; same exit code on retry.",
+      "logs": [
+        "dev_compile.log",
+        "dev_compile.exit",
+        "dev_compile_retry.log"
+      ]
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT RUN: compilation did not produce executable."
+    }
+  ],
+  "development_outcome": "Delivered unchanged initial synthesizable candidate and independent exhaustive 1024-vector testbench; simulation success is not claimed due to compiler failure.",
+  "limitations": [
+    "Official evaluation was not accessed and its result is unknown.",
+    "No simulation, synthesis, physical timing, or board validation result is available.",
+    "Development testbench covers binary inputs; unspecified X/Z behavior is not tested."
+  ]
+}

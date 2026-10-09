@@ -1,0 +1,47 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json",
+      "cases": [
+        "correct fixture passed",
+        "injected fault failed",
+        "repair passed"
+      ]
+    },
+    {
+      "name": "contract_structure",
+      "status": "passed_structure_only",
+      "evidence": "contract_gate.json"
+    },
+    {
+      "name": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "assertions": 403,
+      "compile": "Icarus 12, -g2012 -Wall -Wno-timescale",
+      "simulation": "matching vvp"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation or a formal proof.",
+    "Rising-edge clocking assumed because original problem does not explicitly name an edge.",
+    "Power-up state and X/Z input behavior are unspecified and are not assigned deterministic requirements."
+  ],
+  "justified_changes": {
+    "rtl": [],
+    "testbench": [],
+    "contract": []
+  },
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json",
+    "development_history": "dev_checks.jsonl"
+  },
+  "implementation": "Two-state Moore FSM follows the original OFF/j and ON/k transitions with active-high asynchronous reset to OFF."
+}

@@ -1,0 +1,86 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "in": 1,
+      "state": 10
+    },
+    "outputs": {
+      "next_state": 10,
+      "out1": 1,
+      "out2": 1
+    },
+    "clock_reset": "None: original requests transition/output logic but not flip-flops."
+  },
+  "semantics": {
+    "encoding": "state[i] represents Si, i=0..9; multiple active bits are permitted explicitly.",
+    "transition_table": {
+      "0": [
+        0,
+        1
+      ],
+      "1": [
+        0,
+        2
+      ],
+      "2": [
+        0,
+        3
+      ],
+      "3": [
+        0,
+        4
+      ],
+      "4": [
+        0,
+        5
+      ],
+      "5": [
+        8,
+        6
+      ],
+      "6": [
+        9,
+        7
+      ],
+      "7": [
+        0,
+        7
+      ],
+      "8": [
+        0,
+        1
+      ],
+      "9": [
+        0,
+        1
+      ]
+    },
+    "composition": "OR together contributions of every asserted current-state bit; no priority.",
+    "outputs": "out1 = state[8] OR state[9]; out2 = state[7] OR state[9], from original Moore labels.",
+    "timing": "Pure combinational response after propagation; no clock, reset, storage, or added latency.",
+    "initialization": "No internal persistent state; original specifies no power-up/reset behavior.",
+    "zero_state": "No active source contributes: next_state and both outputs zero."
+  },
+  "numeric": {
+    "state_width": 10,
+    "next_state_width": 10,
+    "bit_order": "LSB is S0, MSB is S9",
+    "arithmetic": "Unsigned bitwise logic; no arithmetic, rounding, saturation or overflow."
+  },
+  "verification": {
+    "oracle": "Independent per-source transition table taken directly from original problem, union of targets and Moore output labels.",
+    "coverage": "All 1024 state bit patterns for both binary input values; includes one-hot, multi-hot, zero and all-one states.",
+    "sampling": "Drive inputs, wait 1 ns for combinational settling, compare using case inequality.",
+    "failure": "$fatal on mismatch and independent bounded timeout.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z input values",
+      "evidence": "Original defines binary transition labels and bit encodings but no X/Z behavior.",
+      "resolution": "Do not assert a special X/Z contract; exhaustive verification covers binary inputs."
+    }
+  ]
+}

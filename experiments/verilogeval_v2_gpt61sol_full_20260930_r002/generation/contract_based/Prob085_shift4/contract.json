@@ -1,0 +1,55 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "areset": 1,
+      "load": 1,
+      "ena": 1,
+      "data": 4
+    },
+    "outputs": {
+      "q": 4
+    }
+  },
+  "semantics": {
+    "clock": "Positive edge clk, as stated in final sentence of problem.txt",
+    "reset": "Asynchronous active-high areset sets q to zero; evidence: asynchronous positive edge triggered areset and item (1)",
+    "priority": "areset > load > ena > hold; evidence: items (1)-(3) and explicit load-over-ena priority",
+    "load": "At positive clock edge with reset low and load high, q becomes data[3:0]",
+    "shift": "At positive clock edge with reset and load low and ena high, q becomes floor(unsigned q / 2), inserting zero at bit 3",
+    "hold": "No load or enable: retain register contents",
+    "initialization": "No power-up initialization is specified; do not initialize DUT; known values established by reset or load",
+    "latency": "q updates on the same triggering event, observed after NBA; no added cycles"
+  },
+  "numeric": {
+    "width_bits": 4,
+    "interpretation": "Unsigned bit vector",
+    "shift_fill": 0,
+    "discarded_bit": "old q[0]",
+    "load_range": [
+      0,
+      15
+    ],
+    "arithmetic": "No rounding, saturation, or signed arithmetic"
+  },
+  "verification": {
+    "oracle": "Derived independently from original problem.txt using unsigned integer divide by two",
+    "sampling": "Drive controls on negative edges; check before next positive edge and after NBA delay; assert reset away from clock edges",
+    "coverage": [
+      "All 16 data values and all four load/ena combinations from each starting value",
+      "Four shifts flush all bits, followed by additional zero shifts",
+      "Asynchronous reset between clock edges, reset priority over controls, reset held through clock edges, deassertion without clock update",
+      "Control/data changes and falling clock edges do not alter q"
+    ],
+    "failure": "$fatal on case-inequality mismatch; bounded timeout; explicit PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Power-up contents",
+      "evidence": "Problem specifies reset but no initial value before reset",
+      "resolution": "No deterministic power-up expectation; check behavior after explicit reset or load"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "study_id": "llm_accelerator_cold_start_v1",
+  "version": "pilot-2-direct-rtl",
+  "main_frozen": false,
+  "model": "HuggingFaceTB/SmolLM2-135M",
+  "checkpoint": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "board": "ZCU104",
+  "conditions": [
+    "general_agent",
+    "llm2rtl_procedure"
+  ],
+  "scope": "all custom compute and control RTL directly authored in synthesizable Verilog/SystemVerilog from scratch",
+  "participant_model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "wall_budget_seconds": 28800,
+  "token_limit": null,
+  "pilot_runs": 2,
+  "execution_order_seed": 20261006,
+  "parallel_participants": false,
+  "additional_human_design_guidance": false,
+  "agent_decides": [
+    "precision",
+    "quantization",
+    "accumulation",
+    "clock",
+    "parallelism",
+    "bank_layout",
+    "isa_or_fsm",
+    "ps_runtime",
+    "supported_context",
+    "processing_tokens"
+  ],
+  "common_target": "full model prefill and persistent-KV continuous decode in PL",
+  "ps_or_host_model_tensor_execution_allowed": false,
+  "evaluation_status": "milestone evidence recorded; independent numeric/top qualification required before scoring verified completion",
+  "physical_board": "separate user-run endpoint",
+  "claims": "initial generation with framework procedure; not isolated ISA effect or reuse of production infrastructure",
+  "hls_allowed": false,
+  "vendor_ip_policy": "standard infrastructure and leaf primitives allowed; no generated high-level model or executor implementation",
+  "resource_policy": {
+    "serialize_both_studies": true,
+    "simultaneous_heavy_tools": 1,
+    "vivado_jobs": 1,
+    "vivado_max_threads": 2,
+    "cpu_affinity_cores": 8,
+    "blas_threads": 2,
+    "memory_hard_limit": null,
+    "scope": "resource-controlled calibration restart; not main results"
+  }
+}

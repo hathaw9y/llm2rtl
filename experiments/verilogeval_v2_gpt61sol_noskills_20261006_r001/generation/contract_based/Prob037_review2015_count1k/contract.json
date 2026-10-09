@@ -1,0 +1,46 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1
+    },
+    "outputs": {
+      "q": 10
+    }
+  },
+  "semantics": {
+    "edge": "positive clock edge, as explicitly specified",
+    "reset": "Active high synchronous: at a positive edge with reset high, q becomes 0; reset takes priority over counting.",
+    "count": "At every positive edge with reset low, increment by one; after 999 produce 0.",
+    "between_edges": "q retains its value, including when reset changes between positive edges.",
+    "initialization": "No initial value is specified; no initialization is added. Verification establishes state with synchronous reset before comparing numeric outputs."
+  },
+  "numeric": {
+    "minimum": 0,
+    "maximum": 999,
+    "period_cycles": 1000,
+    "width_bits": 10,
+    "increment": 1,
+    "wrap_transition": "999 -> 0"
+  },
+  "verification": {
+    "oracle": "Independent integer model based on the original 0..999 inclusive count and synchronous reset specification.",
+    "sampling": "Drive reset on falling edges or between edges; compare q after positive-edge nonblocking updates and between edges.",
+    "cases": [
+      "first reset",
+      "held reset",
+      "multiple complete 1000-cycle periods",
+      "999 to 0 boundary",
+      "mid-count reset",
+      "reset at wrap boundary",
+      "reset pulse entirely between positive edges"
+    ],
+    "failure": "$fatal on mismatch and bounded timeout; PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    "Power-up output before the first reset is unspecified, so no numeric value is required before reset.",
+    "Recovery from unreachable states 1000..1023 is unspecified and is not tested."
+  ]
+}

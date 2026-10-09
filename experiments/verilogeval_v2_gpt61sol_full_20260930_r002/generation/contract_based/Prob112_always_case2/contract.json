@@ -1,0 +1,41 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "in": {
+        "width": 4
+      }
+    },
+    "outputs": {
+      "pos": {
+        "width": 2
+      }
+    },
+    "clock_reset": "None: original interface has only in and pos."
+  },
+  "semantics": {
+    "function": "pos is the minimum index i in [0,3] for which in[i] is 1; zero input produces pos=0.",
+    "priority_evidence": "Original 10010000 example chooses bit 4 rather than bit 7.",
+    "timing": "Combinational, no cycle latency or stored state, per original combinational circuit requirement.",
+    "initialization": "No initialized state required; known binary inputs determine output after combinational settling."
+  },
+  "numeric": {
+    "input": "Unsigned four-bit vector indexed [3:0].",
+    "output": "Unsigned two-bit index [1:0], range 0 to 3.",
+    "arithmetic": "No rounding, overflow, or saturation."
+  },
+  "verification": {
+    "oracle": "Independent explicit truth table derived from original lowest-set-bit requirement.",
+    "coverage": "All 16 binary input combinations, ascending and descending sweeps to exercise transitions and zero recovery.",
+    "sampling": "Sample one simulation time unit after each input change for combinational settling.",
+    "success": "Fatal on mismatch, bounded timeout, PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Four-state inputs",
+      "evidence": "Original specifies 16 possible combinations, with no X/Z behavior.",
+      "resolution": "Verify all binary combinations; X/Z behavior is outside specified verification scope."
+    }
+  ]
+}

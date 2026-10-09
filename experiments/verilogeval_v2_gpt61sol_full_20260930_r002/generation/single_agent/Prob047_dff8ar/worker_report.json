@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "simulator": "Icarus Verilog 12",
+      "assertion_checks": 1040,
+      "evidence": "dev_checks.jsonl",
+      "snapshot_directory": "development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not been run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Eight 1-bit D flip-flops capture d on the positive edge of clk and asynchronously clear q to zero on active-high areset, with reset priority.",
+  "interface": "TopModule(clk, areset, d[7:0], q[7:0]); no additional ports or latency.",
+  "static_review": "Explicit 8-bit assignments, nonblocking sequential updates, one output driver, no initialization or extra behavior in RTL.",
+  "testbench_coverage": "All 256 data words, data changes between clock edges, falling-edge hold, reset with clock low and high, reset release without capture, and reset held through a rising edge."
+}

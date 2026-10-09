@@ -1,0 +1,30 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "evidence_directory": "development/01",
+      "coverage": "Both binary input values, repeated transitions, and X/Z propagation with explicit expected outputs"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation is pending."
+  ],
+  "justified_changes": {
+    "rtl": "Initial implementation uses a continuous bitwise inversion for the one-bit NOT gate; no revisions.",
+    "testbench": "Independent directed testbench with explicit truth-table expectations, four-state checks, fatal mismatches, and bounded timeout; no corrections."
+  }
+}

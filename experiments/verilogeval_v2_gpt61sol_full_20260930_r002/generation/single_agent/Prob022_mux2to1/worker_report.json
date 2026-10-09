@@ -1,0 +1,41 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "check": "smoke_environment",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "check": "dev_check",
+      "label": "initial",
+      "status": "passed",
+      "simulator": "Icarus Verilog 12",
+      "comparisons": 12,
+      "evidence": "dev_checks.jsonl; development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Original specification defines binary select behavior; no additional unknown-select requirements were assumed.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation uses a one-bit combinational selection: sel=0 selects a, sel=1 selects b. No revisions."
+  ],
+  "justified_tb_changes": [
+    "Initial independent oracle uses explicit if/else and tests all eight binary input combinations plus four repeated select transitions. No testbench revisions."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  },
+  "interface_cycle_contract": "TopModule(a,b,sel,out), all ports one bit; combinational with no added ports or latency.",
+  "static_review": "Complete continuous assignment; no state, latches, reset, or pipeline."
+}

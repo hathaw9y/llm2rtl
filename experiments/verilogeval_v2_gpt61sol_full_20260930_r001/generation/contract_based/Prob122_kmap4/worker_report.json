@@ -1,0 +1,44 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_rtl_review",
+      "result": "pass",
+      "details": "Exact TopModule ports, one-bit unsigned logic, continuous combinational assignment, no state, delays, latches or dependencies."
+    },
+    {
+      "name": "Icarus -g2012 -Wall explicit dev_tb elaboration",
+      "result": "fail",
+      "exit_code": 139,
+      "timeout_seconds": 20,
+      "log": "development_compile.log",
+      "error_log": "development_tool_error.log"
+    },
+    {
+      "name": "independent K-map exhaustive simulation",
+      "result": "not_run",
+      "exit_code": "not_run",
+      "timeout_seconds": 20,
+      "log": "development_simulation.log",
+      "comparisons": null
+    }
+  ],
+  "development_outcome": "Compiler failed with exit code 139; best RTL delivered unchanged, with zero RTL revisions.",
+  "limitations": [
+    "Development simulation was not run because the requested Icarus compiler exited with code 139 (SIGSEGV); functional correctness is based on direct truth-table reasoning and static review only.",
+    "X/Z behavior is unspecified by the problem.",
+    "No synthesis, board testing or official evaluation performed."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

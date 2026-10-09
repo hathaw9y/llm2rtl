@@ -1,0 +1,50 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "a": 1
+    },
+    "outputs": {
+      "q": 3
+    },
+    "reset": "No reset port"
+  },
+  "semantics": {
+    "edge": "posedge clk",
+    "load": "When sampled a=1, q becomes 4 at that edge; supported by 5 through 35 ns",
+    "count": "When sampled a=0, increment q; 6 wraps to 0; observed 55,65,75,85 ns",
+    "hold": "q holds between rising edges, including all falling edges",
+    "initialization": "q uninitialized (xxx), matching 0 ns; no initial assignment",
+    "simultaneous_input": "At 45 ns sample prior a=1, then change a to 0 in NBA stimulus phase, consistent with displayed q=4"
+  },
+  "numeric": {
+    "q": "3-bit unsigned",
+    "sequence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      0
+    ],
+    "load_value": 4,
+    "wrap_value": 6,
+    "arithmetic": "3-bit increment except explicit 6-to-0"
+  },
+  "verification": {
+    "oracle": "Original timestamp table replay with exact times and NBA-settled observation",
+    "initial_unknown": "Check q === 3'bxxx before first clock",
+    "additional_cases": "Full inferred modulo-7 sequence, load from multiple states, falling-edge and between-edge stability",
+    "timeout_ns": 1000,
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "The table does not specify delta-cycle ordering at 45 ns. Prior-value sampling followed by same-timestamp a change explains q=4 without additional latency.",
+    "Transitions from 1,2,3 and behavior of unreachable state 7 are not shown. Infer ordinary modulo-7 counting from 4,5,6,0,1; state 7 has no specified recovery requirement.",
+    "The waveform alone cannot uniquely determine every possible circuit; select synchronous load-4 modulo-7 counter as the minimal natural interpretation."
+  ]
+}

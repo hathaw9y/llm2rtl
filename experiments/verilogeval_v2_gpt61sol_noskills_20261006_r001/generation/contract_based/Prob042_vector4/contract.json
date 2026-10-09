@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"in": 8}, "outputs": {"out": 32}},
+  "semantics": {"operation": "Combinational sign extension: out[7:0] equals in, and each out[31:8] equals in[7].", "timing_evidence": "Original problem requires concatenation of 24 sign bits followed by the input; no clock or latency is specified.", "reset_evidence": "Original interface has no reset port.", "initialization_evidence": "No initial state is specified; output is solely a combinational function of input."},
+  "numeric": {"input_interpretation": "8-bit two's-complement signed value", "output_interpretation": "32-bit two's-complement representation of the same value", "range": [-128, 127], "widths": "24 replicated sign bits plus 8 original bits"},
+  "verification": {"oracle": "For all 256 binary inputs, interpret the integer input as signed by subtracting 256 for values >=128 and compare its 32-bit representation.", "sampling": "Drive input then wait one simulation time unit for combinational settling.", "boundaries": [0, 127, 128, 255], "four_state": "Supplemental checks ensure unknown/high-impedance sign bits propagate and low input bits are retained.", "completion": "Fatal on mismatches, bounded timeout, PASS only after all checks."},
+  "specification_ambiguities": []
+}

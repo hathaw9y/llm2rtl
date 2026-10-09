@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 8
+      },
+      "out": {
+        "direction": "output",
+        "width": 8
+      }
+    },
+    "evidence": "problem.txt explicitly names TopModule and 8-bit in/out; no other ports."
+  },
+  "semantics": {
+    "equation": "out[i] = in[7-i] for i=0..7",
+    "timing": "Combinational continuous mapping; no cycle latency or stored state. Sample after simulator combinational settling.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No initialized state specified; output follows current input including unknown bits.",
+    "evidence": "Original requirement: reverse the bit ordering of the input port and write the result to the output port."
+  },
+  "numeric": {
+    "representation": "8-bit packed bit vector [7:0]",
+    "arithmetic": "None; no signed interpretation, rounding, truncation or overflow.",
+    "ordering": "Input bit 0 maps to output bit 7; input bit 7 maps to output bit 0."
+  },
+  "verification": {
+    "oracle": "Independent procedural per-bit reversal grounded in original bit-order requirement.",
+    "coverage": [
+      "All 256 binary inputs",
+      "Zero/all-ones boundaries",
+      "Every one-hot and one-cold input via exhaustive coverage",
+      "Alternating patterns",
+      "Four-state X/Z propagation at each bit"
+    ],
+    "sampling": "Drive input, wait 1 ns for combinational settling, compare using case inequality.",
+    "failure": "$fatal on mismatch and bounded timeout; PASS only after every check.",
+    "primary_command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

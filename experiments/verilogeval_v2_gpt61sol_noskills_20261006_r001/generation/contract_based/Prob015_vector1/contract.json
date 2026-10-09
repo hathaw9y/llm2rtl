@@ -1,0 +1,37 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "in": "[15:0]"
+    },
+    "outputs": {
+      "out_hi": "[7:0]",
+      "out_lo": "[7:0]"
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "behavior": "Combinational byte split: out_hi is input bits 15 through 8; out_lo is input bits 7 through 0.",
+    "latency": "No clock or cycle latency; sample after combinational settling.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or specified initialization; outputs follow input, including unknown bits.",
+    "evidence": "Original problem explicitly specifies a combinational circuit splitting [15:0] into lower [7:0] and upper [15:8]."
+  },
+  "numeric": {
+    "input_width": 16,
+    "output_widths": [
+      8,
+      8
+    ],
+    "bit_order": "Retain order within each byte.",
+    "arithmetic": "None; no signed interpretation or truncation beyond selecting each byte."
+  },
+  "verification": {
+    "oracle": "Independently calculate high byte by integer division by 256 and low byte by remainder modulo 256 for all binary inputs.",
+    "coverage": "Directed zero, all ones, byte boundaries, alternating patterns; exhaustive 65536 binary values; selected X/Z propagation checks.",
+    "sampling": "Drive input then wait 1 ns before checking combinational outputs.",
+    "failure": "$fatal on any mismatch or bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": []
+}

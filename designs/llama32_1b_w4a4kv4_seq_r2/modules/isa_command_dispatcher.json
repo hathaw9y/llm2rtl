@@ -1,0 +1,128 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "llama32_1b_w4a4kv4_seq",
+  "revision": "r2",
+  "module_id": "isa_command_dispatcher",
+  "module_kind": "infrastructure",
+  "agent_role": "command_bram_fetch_in_order_scoreboard_dispatch",
+  "routed_opcodes": ["DMA_LOAD", "DMA_STORE", "GEMM"],
+  "status": "frozen",
+  "target": {
+    "board": "ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 200,
+    "vivado": "2025.2"
+  },
+  "source_scope": {
+    "allowed": [
+      "designs/llama32_1b_w4a4kv4_seq_r2/rtl/isa_command_dispatcher.sv",
+      "designs/llama32_1b_w4a4kv4_seq_r2/tb/tb_isa_command_dispatcher.sv",
+      "designs/llama32_1b_w4a4kv4_seq_r2/scripts/run_dispatcher_verification.tcl",
+      "designs/llama32_1b_w4a4kv4_seq_r2/evidence/isa_command_dispatcher/*"
+    ],
+    "forbidden": [
+      "contracts/**",
+      "scripts/check_*.py",
+      "verification/framework/**",
+      "ip/**",
+      "boards/**"
+    ]
+  },
+  "interface": {
+    "clock": "aclk",
+    "reset": "aresetn synchronous active-low",
+    "program_control": {
+      "inputs": ["start", "command_count[10:0]"],
+      "outputs": ["busy", "done", "error", "error_code[7:0]", "current_pc[9:0]"],
+      "start_rule": "accepted for one cycle only when not busy; command_count must be 1 through 1024",
+      "terminal_status_rule": "done or error stays asserted until reset or a later accepted start; faulted banks require reset before a later start"
+    },
+    "command_bram": {
+      "word_bits": 128,
+      "depth_words": 2048,
+      "read_latency_cycles": 1,
+      "outputs": ["cmd_mem_en", "cmd_mem_addr[10:0]"],
+      "inputs": ["cmd_mem_rdata[127:0]"],
+      "record_assembly": "two consecutive 128-bit words form one 256-bit instruction, lower word first"
+    },
+    "dma_executor": {
+      "request": "dma_cmd_valid/dma_cmd_ready with stable dma_cmd_data[255:0] while stalled",
+      "response": "dma_rsp_valid/dma_rsp_ready plus dma_rsp_error and dma_rsp_tag[15:0]"
+    },
+    "gemm_executor": {
+      "request": "gemm_cmd_valid/gemm_cmd_ready with stable gemm_cmd_data[255:0] while stalled",
+      "response": "gemm_rsp_valid/gemm_rsp_ready plus gemm_rsp_error and gemm_rsp_tag[15:0]"
+    },
+    "debug": {
+      "bank_states": "bank_state[bank_id*3 +: 3] for four banks",
+      "state_encoding": {
+        "free": 0,
+        "filling": 1,
+        "ready": 2,
+        "compute_active": 3,
+        "draining": 4,
+        "fault": 5
+      }
+    }
+  },
+  "execution_contract": {
+    "fsm": ["IDLE", "FETCH_LO", "FETCH_HI", "CHECK_READY", "ISSUE", "WAIT_COMPLETION", "DONE", "ERROR"],
+    "single_pc": true,
+    "maximum_outstanding_commands": 1,
+    "next_fetch_rule": "never read the next instruction until the current executor response handshakes successfully",
+    "blocked_rule": "hold current PC and decoded command; never inspect a later instruction",
+    "issue_rule": "known opcode, legal operands, required source banks ready and destination bank free cause request valid to assert and remain stable independently of selected executor ready until handshake",
+    "ready_valid_deadlock_rule": "request valid must never be combinationally or sequentially gated by executor ready once the command and banks are eligible",
+    "gemm_alias_rule": "dst equal to src0 or src1 is an immediate illegal-operand error; src0 equal to src1 is permitted when dst is distinct",
+    "reservation_rule": "bank state changes for issue occur in the same cycle as request valid-and-ready",
+    "pc_rule": "increment exactly once after a matching successful completion; final successful completion enters DONE without another fetch",
+    "tag_rule": "completion tag must equal the current instruction tag",
+    "failure_rule": "unknown opcode, illegal operand, response error, or tag mismatch enters ERROR and does not commit a destination ready",
+    "reset_rule": "abort the active command state, clear terminal status and return every bank to free",
+    "program_image_rule": "PS must keep instruction records and command_count stable from accepted start through done or error"
+  },
+  "bank_transitions": {
+    "DMA_LOAD": "dst free -> filling at issue -> ready on success or fault on failure",
+    "DMA_STORE": "src ready -> draining at issue -> ready on success, or free when release flag is set; failure returns src ready and enters ERROR",
+    "GEMM": "src0/src1 remain owned and dst free -> compute_active at issue -> ready on success or fault on failure; release flags may free sources only on success"
+  },
+  "numeric": {
+    "kind": "control_only",
+    "instruction_width_bits": 256,
+    "bank_id_width_bits": 8,
+    "tag_width_bits": 16,
+    "command_count_max": 1024,
+    "tensor_arithmetic": "none"
+  },
+  "verification": {
+    "golden": "designs/llama32_1b_w4a4kv4_seq_r2/run_dispatcher_model.py",
+    "vectors": "designs/llama32_1b_w4a4kv4_seq_r2/vectors/dispatcher_cases.json",
+    "required_cases": [
+      "normal DMA_LOAD DMA_LOAD GEMM DMA_STORE completes strictly in order",
+      "blocked current command never fetches or issues the next command",
+      "request payload remains stable under executor backpressure",
+      "executor ready remains low until request valid and then accepts without deadlock",
+      "all 256 request payload bits equal the fetched command for DMA and GEMM",
+      "next BRAM address is not presented before current completion",
+      "zero and oversized command_count reject and command_count 1024 executes through PC 1023",
+      "unknown opcode and out-of-range bank reject",
+      "GEMM destination-source alias rejects while equal sources with a distinct destination are legal",
+      "GEMM backpressure preserves valid and payload and successful release flags update source banks",
+      "DMA_STORE and GEMM executor failures restore sources and prevent destination ready commit",
+      "executor error prevents destination ready commit and stops later commands",
+      "completion tag mismatch errors",
+      "reset during every active FSM state returns all banks free and suppresses stale issue/fetch state",
+      "repeated program execution after successful completion"
+    ],
+    "required_tools": ["self-checking simulation", "Verilator lint", "Vivado 2025.2 OOC synthesis"],
+    "required_evidence": ["kernel_report.json", "module_ooc_synthesis_report.json", "subagent_result.json", "retained verilator --version output"],
+    "clock_constraint_ns": 5.0
+  },
+  "does_not_claim": [
+    "AXI BRAM Controller or PS register wrapper",
+    "DMA or GEMM executor implementation",
+    "tensor arithmetic correctness",
+    "full-model execution",
+    "board integration, bitstream, or physical-board validation"
+  ]
+}

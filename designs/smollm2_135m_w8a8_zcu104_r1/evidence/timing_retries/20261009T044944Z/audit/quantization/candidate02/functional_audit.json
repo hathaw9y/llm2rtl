@@ -1,0 +1,61 @@
+{
+  "module": "quantization_executor",
+  "functional_status": "PASS",
+  "source_sha256": {
+    "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+    "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+    "rtl/w8a8_fp32_div4.sv": "8f9c1884cc50e1c0e69c4101397ea1af18e6a0323e1fac0b97c9704e928667ce",
+    "rtl/w8a8_quant_lane4.sv": "d3a1459716e5ee22af9c40770be67998a0ebe5755e172cff11953bea06c9d5ad",
+    "rtl/w8a8_dequant_lane4.sv": "012c5a81dde04820412b906cb06f2279e6b358306649d6599eb45245f5fb03ee",
+    "rtl/smollm2_quantization_executor.sv": "27e9f0ae0928e7fc331f8f25fff31838a14d0003e81500851d9efdfb340f8be1",
+    "tb/quant_executor_tb.sv": "f4a8d0cb85e91eafbed5450365f0571296c88ddb0daf91cbea8fd329226a2775",
+    "tb/quant_executor_fault_tb.sv": "d885a3c55c732724255fb54d1d511592f57808e285a0d68a01245c43023dbf99",
+    "tb/quant_executor_repeat_tb.sv": "fc0a68e6c31d4084fbafc1de5bd13e5bc76c6d8ad3dfb6d17d0b89796c0d6bf8",
+    "evidence/timing_retries/20261009T044944Z/audit/audit_quant_terminal_fault_tb.sv": "545c8f8114d96f25523d098bb82bf744b12208a2efcdbc6d56c3e557f2af1c16"
+  },
+  "source_unchanged_before_after": true,
+  "scenarios": 18,
+  "replay_results": "audit/quantization/candidate02/replay_results.json",
+  "registered_reducer_review": [
+    "Capture accepted group/max/bad record; retire nextedge againstcurrentmax afterpreviousretirement",
+    "Pendingvalid includeddrain and REDUCEexit; no rewind/scalepublication while pending",
+    "Pendingbad fault dominatesFSMtransition; laterqueuedresponse/child/native/Coffers drain normally",
+    "Reset pendingvalid0; newcmd only accepted after matchedresponse/drainedIDLE",
+    "Added internal dynamic-reduction retirement wait, unchanged external protocol and arithmetic child latency"
+  ],
+  "independent_terminal_fault": {
+    "case": "A1/K576 finalBF16 laneNaN",
+    "result": "PASS",
+    "assertions": [
+      "numeric05",
+      "zeroquant scale offers",
+      "zeroCoffers",
+      "zeroacceptedwrites",
+      "native/pendingquiescencebeforeinvalidate",
+      "matchedoriginalidentityresponse"
+    ],
+    "testbench": "audit/audit_quant_terminal_fault_tb.sv"
+  },
+  "functional_findings": [],
+  "OOC02_raw_review": {
+    "status": "POST_SYNTH_INTERNAL_5NS_PASS",
+    "WNS_ns": 0.19,
+    "TNS_ns": 0,
+    "setup_fails": 0,
+    "WHS_ns": 0.042,
+    "THS_ns": 0,
+    "hold_fails": 0,
+    "WPWS_ns": 1.968,
+    "TPWS_ns": 0,
+    "PW_fails": 0,
+    "boundary": "Only5nsclk constraint; noI/Odelays; placement/routingnotrun"
+  },
+  "historical_top_PASS_inherited": false,
+  "children_baseline_identity_unchanged": true,
+  "excluded": [
+    "routed200MHz",
+    "externalnative/controlI/O timing",
+    "combinedboardresourcefit",
+    "boardruntime"
+  ]
+}

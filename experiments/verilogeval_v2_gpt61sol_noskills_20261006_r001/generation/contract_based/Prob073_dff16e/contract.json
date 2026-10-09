@@ -1,0 +1,13 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "resetn": 1, "byteena": 2, "d": 16}, "outputs": {"q": 16}},
+  "semantics": {
+    "clock": "All 16 DFFs update only on the positive edge of clk, as explicitly specified.",
+    "reset": "Synchronous active-low reset: on a positive edge with resetn=0, clear all 16 bits, irrespective of byteena.",
+    "write": "When resetn=1 on a positive edge, byteena[1] writes d[15:8] and byteena[0] writes d[7:0]; disabled bytes retain their stored values.",
+    "initialization": "No initial value is specified; no initialization is added. The oracle does not require a known value until reset or a write establishes it."
+  },
+  "numeric": {"data_width": 16, "byte_width": 8, "enable_mapping": {"1": "upper byte", "0": "lower byte"}, "arithmetic": "None; bit-preserving storage."},
+  "verification": {"oracle": "Original problem's edge-triggered byte storage rules", "sampling": "Check retention before positive edges and after falling edges; sample updates after NBA settling.", "directed": "Synchronous reset between edges, reset priority for all enable masks, disabled-byte retention, each byte alone and both together, boundary and walking-bit patterns.", "timeout": "Bounded simulation timeout with fatal mismatches and PASS only after all checks."},
+  "specification_ambiguities": ["Reset value is not explicitly stated; interpret reset of DFFs as clearing q to zero.", "Power-up state and unknown control values are unspecified; no power-up value or unknown-control behavior is imposed by verification."]
+}

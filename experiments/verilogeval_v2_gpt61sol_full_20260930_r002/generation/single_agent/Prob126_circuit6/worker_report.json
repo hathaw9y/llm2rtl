@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "name": "initial",
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; no diagnostics",
+      "simulation": "147 checks passed",
+      "evidence": "development/01 and dev_checks.jsonl"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "The waveform specifies fully unknown initial input/output; behavior of partially unknown or high-impedance inputs is not specified."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Eight-entry combinational lookup with original TopModule ports, 3-bit input and 16-bit hexadecimal outputs; default unknown output. No clock, reset, or added latency.",
+  "testbench": "Original 0-to-90 ns waveform replay including initial unknowns and repeated inputs, plus all 64 known-value transition pairs; delta-cycle sampling, fatal mismatches and bounded timeout.",
+  "static_review": "Complete case with default, blocking combinational assignments, explicitly sized constants, no inferred state.",
+  "initial_snapshot_unchanged": true
+}

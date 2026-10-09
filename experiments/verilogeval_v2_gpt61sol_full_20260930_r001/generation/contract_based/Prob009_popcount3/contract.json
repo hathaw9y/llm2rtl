@@ -1,0 +1,35 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {"direction": "input", "width": 3, "range": "[2:0]", "signed": false},
+      "out": {"direction": "output", "width": 2, "range": "[1:0]", "signed": false}
+    },
+    "additional_ports": "none"
+  },
+  "semantics": {
+    "function": "out equals the number of one bits in in",
+    "timing": "combinational; output follows current input after combinational settling, with no clock-cycle latency",
+    "clock": "none",
+    "reset": "none",
+    "initialization": "no stored state or initialization required",
+    "handshake": "none; all binary input vectors are legal"
+  },
+  "numeric": {
+    "input_domain": "all eight binary 3-bit vectors",
+    "output_domain": "unsigned integers 0 through 3",
+    "arithmetic": "exact sum of three unsigned one-bit values, each extended to two bits",
+    "overflow": "none; two output bits represent the maximum count of three",
+    "rounding_truncation_saturation": "none"
+  },
+  "verification": {
+    "oracle": "independent literal truth table: 000=0, 001=1, 010=1, 011=2, 100=1, 101=2, 110=2, 111=3",
+    "coverage": "check all eight inputs and all 64 ordered input transitions after settling",
+    "checks": "explicit-top Icarus SystemVerilog compile with warnings, self-checking simulation using case inequality and finite compile/run timeouts",
+    "scope": "development verification only; no official reference, synthesis, or board checks"
+  },
+  "specification_ambiguities": [
+    "Behavior for X or Z inputs is unspecified by the original problem; binary inputs define the required verification domain."
+  ]
+}

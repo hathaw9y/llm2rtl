@@ -1,0 +1,108 @@
+{
+  "module": "quantization_executor",
+  "rtl_module": "smollm2_quantization_executor",
+  "status": "SELF_FUNCTIONAL_PASS_INDEPENDENT_EXECUTOR_AUDIT_PENDING",
+  "source_sha256": "fa02a045c836090049818f765484d5f7be0f9f95f35d1edf4b60e976fb01d411",
+  "frozen_module_sha256": "a4b8f62dc6af29033e6cd688ae7f09fadb0de6b6342aec0d86a907d2bcdce86f",
+  "binding_sha256": "b671bd31a3fcff17a0fcd955c0df2a63f802ee963df48b3636c4ccc808acd7dd",
+  "module_manifest_sha256": "29f8048bd6dbc761a4c1c73b1f5acebc3401200368a99f376962b9664d689fb8",
+  "fixture_manifest_sha256": "c96b1f2578814cd004af4b6d8f50dd6d5768b7d2876019d4622bfd7a12a5c2cc",
+  "requirements": [
+    "QUANTIZE A,Q,K,V,P and embedding DEQUANTIZE",
+    "Four-lane native streaming with two-pass dynamic reduction/replay; no full-tensor buffer",
+    "128bit narrow A/B reads, exactly four accepted+queued+decoded credits each",
+    "Four lanes per child offer; holds all native/child/C/response payloads under stalls",
+    "Selected embedding scale lane only; B7 static flag independent of RoPE window descriptor",
+    "Head-major Q/P scales; relative selected A row groups; K ignores fourth padding FP32",
+    "Masked P nonfinite ignored and stored zero; selected negative finite P clips zero",
+    "Every configured data and padded scale byte stored exactly once",
+    "Producer begin generation/shape/profile before memory; matched response identity",
+    "Error retains previous C/native/child offers, drains all credits and arithmetic, invalidates published/accepted generation then responds"
+  ],
+  "bounded_storage": {
+    "native_A_FIFO_bytes": 64,
+    "native_B_FIFO_bytes": 64,
+    "native_C_packer_bytes": 32,
+    "scale_cache_entries_FP32": 18,
+    "dynamic_reducer_entries_BF16": 18,
+    "full_tensor_staging_bytes": 0
+  },
+  "verification": {
+    "normal_cases": 41,
+    "normal_result": "PASS",
+    "fault_cases": 18,
+    "fault_result": "PASS",
+    "repeat_reset_scenarios": 12,
+    "transactions_per_repeat_scenario": 3,
+    "repeat_reset_result": "PASS",
+    "normal_compare": "Full destination allocation and exact-once selected-byte writes against independent approved fixtures; native A/B model memories have no writable path",
+    "error_compare": "Exact golden accepted-prefix selected bytes; no duplicate/unselected bytes; stalled C and child/native offers retain payloads; drain before invalidation; original transaction/generation response",
+    "late_C_stall_cases": [
+      "K NaN BF16 element24 with C held200cycles followed immediately by dynamic A without reset",
+      "DQ INT8 byte8=-128 with C held200cycles"
+    ],
+    "reset_phases": [
+      "Native accepted read A/K/P/DQ",
+      "Live quant child accepted input A",
+      "Live dequant child accepted input DQ",
+      "Queued C offer A/DQ"
+    ],
+    "max_case": "P32/L1024 source589824B, destination294912B plus80B padded scales;151137cycles18437writes",
+    "lint": {
+      "tool": "Verilator4.038",
+      "result": "PASS",
+      "warning_policy": "default warnings fatal; no suppressions",
+      "evidence": "lint_result.json"
+    },
+    "raw_records": [
+      "simulation_cases.json",
+      "fault_cases.json",
+      "repeat_cases.json",
+      "source_manifest.json",
+      "lint.log"
+    ]
+  },
+  "error_policy": {
+    "producer_begin_rejection": "Maps any nonzero ready-qualified begin rejection to protocol07, invalidates captured old destination generation because publication did not occur",
+    "operand_nonfinite_or_invalid_scale": "05",
+    "runtime_overflow_detection": "None; quotient overflow saturates via accepted child contract"
+  },
+  "integration_scope": {
+    "tested": "Standalone exact native-bank model with captured controller descriptors and producer sideband; real independently accepted arithmetic children",
+    "external_obligations": [
+      "Atomic ISA controller derives preaccept acquisition roles from incoming opcode/operand positions; active executor role outputs describe captured accepted job",
+      "Provide in-order latency3 no-ready native read responses and producer/invalidate acknowledgements",
+      "Global reset must flush native provider response pipelines consistently with executor/children",
+      "DMA/local-bank routing, full token ISA integration and physical board validation remain separate"
+    ],
+    "no_claims": [
+      "Actual DDR/DMA fabric integration",
+      "Physical board deployment",
+      "Full-model end-to-end inference acceptance",
+      "200MHz closure or resource fit"
+    ]
+  },
+  "OOC": {
+    "status": "NOT_RUN_AWAITING_USER_DESIGNATED_BUILD_MACHINE",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_period_ns": 5.0,
+    "script": "scripts/quant_executor_ooc.tcl",
+    "tool_requested": "Vivado2025.2"
+  },
+  "repairs": [
+    {
+      "issue": "Signed sized integer ring index cast could address negative entries2/3",
+      "repair": "Use nonnegative integer bitmask(index&3)",
+      "evidence": "Initial first A test output skipped odd C words. Original raw failure log was overwritten by passing rerun; no claim of preserved raw failure."
+    },
+    {
+      "issue": "Observed bounded simulation delta-cycle oscillation when inactive reducer inspected streaming NaN",
+      "repair": "Evaluate reducer operands only in REDUCE; streaming group/mask/address remain unchanged",
+      "evidence": "Pre-repair K late-NaN simulation timed out at cycle25; final active-REDUCE P NaN and stale-error-to-dynamic-A tests pass. Precise simulator mechanism not proven; initial raw timeout log not preserved."
+    }
+  ],
+  "risks": [
+    "Synthesis/timing/resource inference unmeasured; runtime index divide/mod and floating datapaths require designated-machine OOC",
+    "Functional evidence uses simulation models, not board/native DMA fabric"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "reset": 1, "j": 1, "k": 1}, "outputs": {"out": 1}},
+  "semantics": {
+    "clock": "State updates on rising clk edge, conventional interpretation of the clocked synchronous FSM.",
+    "reset": "problem.txt: active-high synchronous reset to OFF; reset overrides j and k at rising edge.",
+    "transitions": {"OFF": "j=0 holds OFF; j=1 enters ON; k irrelevant", "ON": "k=0 holds ON; k=1 enters OFF; j irrelevant"},
+    "output": "problem.txt: Moore output, OFF out=0 and ON out=1; reflects current state without extra latency.",
+    "initialization": "No initial state specified in problem.txt; no declaration initialization; verification asserts behavior only after first reset edge.",
+    "between_edges": "Inputs and reset cannot change state between rising edges."
+  },
+  "numeric": {"state_width": 1, "encoding": {"OFF": 0, "ON": 1}, "arithmetic": "None; all ports and state are single-bit unsigned."},
+  "verification": {
+    "oracle": "Independent output-state recurrence from original OFF/ON transition diagram.",
+    "sampling": "Drive on falling edge; check before rising edge and after NBA settling; check falling edge stability.",
+    "coverage": "All input combinations from both states; synchronous reset asserted between edges in ON; all reset input combinations; extended deterministic sequence.",
+    "failure": "$fatal on mismatch and bounded timeout; PASS only after completion.",
+    "tool": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {"issue": "Clock edge not explicitly stated", "resolution": "Use conventional rising-edge sequential FSM."},
+    {"issue": "Power-up state and X/Z inputs unspecified", "resolution": "No power-up initialization or guarantees for unknown inputs; functional checks use binary inputs after reset."}
+  ]
+}

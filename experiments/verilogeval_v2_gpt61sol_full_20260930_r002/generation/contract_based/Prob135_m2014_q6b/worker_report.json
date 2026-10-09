@@ -1,0 +1,70 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790749640.1945627,
+      "source_sha256": "4353bf9a15ea69efae29f74c4209aca1757d243d9ffe9a4bbb3de40a3e3ff8c3",
+      "testbench_sha256": "83a4e0598bae2c5e54579e0376f1e28c803d9a916034f48820f40e9f0594f622",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob135_m2014_q6b/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.01105946209281683
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: 72 legal combinational transition checks\ndev_tb.sv:48: $finish called at 72000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.006267255172133446
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_gate": "passed_structure_only",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "State codes 110/111 and X/Z inputs are unspecified and not included in the correctness oracle.",
+    "Y1 interpreted as next-state bit 1 as requested by the explicit next-state requirement.",
+    "No synthesis or board validation performed, as instructed."
+  ],
+  "justified_RTL_TB_changes": {
+    "initial_RTL": "Combinational case implements destination-state bit 1 for original A-F transitions, with zero default for unspecified states.",
+    "initial_TB": "Independent full destination-state oracle; 72 checks across all 12 legal pairs, forward/reverse repetitions, 1 ns settling, fatal mismatches and bounded timeout.",
+    "RTL_revisions": [],
+    "TB_revisions": [],
+    "contract_revisions": []
+  },
+  "files": {
+    "RTL": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json",
+    "evidence": "development/01 and dev_checks.jsonl"
+  },
+  "interface_cycle_contract": "TopModule(y[2:0], w, Y1), combinational without clock/reset or added latency.",
+  "numeric_widths": "Unsigned 3-bit state code and 1-bit input/output.",
+  "static_review": "All legal transitions checked; complete combinational assignments; no latches or sequential state."
+}

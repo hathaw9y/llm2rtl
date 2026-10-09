@@ -1,0 +1,39 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "coverage": "Correct sequential fixture passes, injected fault fails, repaired fixture passes."
+    },
+    {
+      "name": "contract_structure",
+      "status": "passed_structure_only",
+      "evidence": "contract_gate.json"
+    },
+    {
+      "name": "development",
+      "label": "initial",
+      "status": "passed",
+      "evidence": "dev_checks.jsonl",
+      "simulation_output": "PASS 775 checks: serial loading, hold, edge behavior, decrement and wraparound\ndev_tb.sv:83: $finish called at 7756000 (1ps)\n"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No reset or startup value is specified; the RTL has no initialization.",
+    "Both enables asserted is unconstrained by the original problem and excluded from required-value checks; RTL chooses shift priority.",
+    "No synthesis or board work was performed."
+  ],
+  "justified_RTL_TB_changes": [],
+  "contract_changes": [],
+  "implementation": "Four-bit positive-edge register; shift inserts data at bit 0, decrement wraps modulo 16, disabled register holds.",
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  },
+  "static_review": "Exact original ports and widths, no reset or added latency, one always_ff driver, nonblocking assignments and sized subtraction."
+}

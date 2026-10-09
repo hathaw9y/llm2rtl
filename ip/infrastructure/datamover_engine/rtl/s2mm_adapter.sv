@@ -20,6 +20,7 @@ module s2mm_adapter #(
     input  logic                        m_axis_s2mm_tready,
     output logic                        m_axis_s2mm_tlast,
     output logic                        bank_enb,
+    output logic                        bank_read_issue,
     output logic [BANK_ADDRB_WIDTH-1:0] bank_addrb,
     input  logic [BANK_DOUTB_WIDTH-1:0] bank_doutb
 );
@@ -146,6 +147,7 @@ module s2mm_adapter #(
 
   assign bank_read_issue_w = aresetn && state == READ && !abort_requested_w
                           && !enb_done_r && ((fifo_cnt_w + outstanding_cnt_r) < BANK_FIFO_DEPTH);
+  assign bank_read_issue = bank_read_issue_w;
   assign bank_enb          = bank_read_issue_w || (outstanding_cnt_r != '0);
   assign bank_addrb        = base_addr_r + addr_cnt_r;
   assign last_addr_issue_w = (addr_cnt_r == last_addr_r);

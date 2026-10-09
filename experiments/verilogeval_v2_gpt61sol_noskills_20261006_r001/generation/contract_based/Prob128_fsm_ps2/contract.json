@@ -1,0 +1,14 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "in": 8}, "outputs": {"done": 1}},
+  "semantics": {
+    "sampling": "Each rising clock edge receives one input byte, as specified by positive-edge sequential logic and continuous byte stream.",
+    "reset": "Active-high synchronous reset abandons any partial message and resumes searching; done is low after the reset edge.",
+    "framing": "Discard bytes with bit 3 zero while searching. A byte with bit 3 one starts a message. Consume the following two bytes regardless of their bit 3.",
+    "completion": "done is high during the cycle immediately following the edge that receives byte 3, and low on the next cycle unless reset intervenes. During this done cycle the next rising edge may receive byte 1 of a new message.",
+    "initialization": "No power-up state is specified; verification establishes state using synchronous reset."
+  },
+  "numeric": {"byte_width": 8, "marker_bit": 3, "message_length_bytes": 3, "signed_arithmetic": "none"},
+  "verification": {"oracle": "Independent received-byte count based on original prose", "sampling": "Drive on falling edge; check before rising edge for synchronous behavior and after rising edge settling for completion", "cases": ["discarded bytes", "all payload marker combinations", "consecutive messages", "reset at each partial-message position and completion", "deterministic random bytes and resets"], "success": "fatal on mismatch, bounded timeout, explicit PASS"},
+  "specification_ambiguities": ["Power-up behavior is unspecified; no initial value is imposed.", "Reset recovery is inferred as searching for a fresh message boundary, with no completion for an abandoned partial message."]
+}

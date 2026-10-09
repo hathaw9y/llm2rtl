@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 100,
+        "range": "[99:0]"
+      },
+      "out": {
+        "direction": "output",
+        "width": 100,
+        "range": "[99:0]"
+      }
+    },
+    "evidence": "Original problem names TopModule, input in (100 bits), output out (100 bits)."
+  },
+  "semantics": {
+    "equation": "For each i from 0 through 99, out[i] = in[99-i].",
+    "timing": "Combinational; output follows input after combinational settling, no added cycle latency.",
+    "reset": "None: no reset or clock port in original interface.",
+    "initialization": "No stored state or specified initialized output; output reflects current input including unknown bits.",
+    "evidence": "Original problem: reverse the bit ordering of the input and write to the output."
+  },
+  "numeric": {
+    "representation": "100-bit unsigned packed bit vector",
+    "operation": "Permutation only; no arithmetic, rounding, saturation, or overflow.",
+    "endpoints": "out[99] = in[0]; out[0] = in[99]"
+  },
+  "verification": {
+    "oracle": "Build expected vector by consuming input from bit 0 upward and shifting expected left, appending each consumed bit. Compare with case inequality after settling.",
+    "cases": [
+      "Initial undriven unknown input",
+      "All zeros and all ones",
+      "Alternating patterns",
+      "Every walking one and walking zero",
+      "Asymmetric deterministic random vectors",
+      "X and Z bit preservation"
+    ],
+    "sampling": "Drive input then wait 1 ns for combinational settling; no clock edges exist.",
+    "completion": "Fatal on mismatches, bounded timeout, explicit PASS only after all checks."
+  },
+  "specification_ambiguities": []
+}

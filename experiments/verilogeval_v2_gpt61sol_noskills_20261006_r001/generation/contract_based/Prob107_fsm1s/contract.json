@@ -1,0 +1,58 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "in": 1
+    },
+    "outputs": {
+      "out": 1
+    }
+  },
+  "semantics": {
+    "kind": "two-state Moore FSM",
+    "states": {
+      "A": {
+        "out": 0,
+        "in_0_next": "B",
+        "in_1_next": "A"
+      },
+      "B": {
+        "out": 1,
+        "in_0_next": "A",
+        "in_1_next": "B"
+      }
+    },
+    "clock": "Update state on rising clk edge (conventional interpretation of synchronous FSM).",
+    "reset": "Original explicitly specifies active-high synchronous reset to B; reset overrides input on the active edge.",
+    "output": "Decode current state with no additional register or cycle latency.",
+    "initialization": "Original gives no power-up state; no initialization is added; verification establishes a known state with synchronous reset."
+  },
+  "numeric": {
+    "port_widths": "All ports one bit as explicitly specified.",
+    "state_encoding": {
+      "A": 0,
+      "B": 1
+    },
+    "arithmetic": "None"
+  },
+  "verification": {
+    "oracle": "Original four transition arrows and state output labels, modeled independently by named state in testbench.",
+    "sampling": "Drive at falling edges; verify unchanged output before rising edge and expected output after NBA settling.",
+    "directed": "Both transitions from each state, hold versus toggle, reset priority for both inputs, reset assertion and deassertion away from clock edges.",
+    "coverage": "Directed sequences and deterministic mixed input/reset sequence.",
+    "termination": "Fatal on mismatch and bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Active clock edge is not explicitly named.",
+      "resolution": "Use rising edge, conventional synchronous FSM interpretation."
+    },
+    {
+      "issue": "Pre-reset state and X/Z input behavior are unspecified.",
+      "resolution": "No power-up initialization; do not demand a specific pre-reset value or unspecified X/Z transitions."
+    }
+  ]
+}

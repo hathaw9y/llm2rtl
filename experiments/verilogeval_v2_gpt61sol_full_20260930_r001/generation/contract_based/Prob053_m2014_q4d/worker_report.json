@@ -1,0 +1,37 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "PASS (structural validation only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial preservation",
+      "outcome": "PASS: candidate.sv and candidate_initial.sv are identical"
+    },
+    {
+      "name": "static RTL review",
+      "outcome": "One single-bit state register updated with nonblocking XOR assignment only at positive clock edges; exact interface; no reset, initialization, extra ports or dependencies"
+    },
+    {
+      "name": "development compile",
+      "outcome": "FAILED: exit code 139, empty diagnostic log, no executable",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "log": "development_compile.log",
+      "result": "development_compile_result.json"
+    },
+    {
+      "name": "development simulation",
+      "outcome": "NOT RUN: compile did not produce an executable"
+    }
+  ],
+  "development_outcome": "Initial synthesizable RTL delivered unchanged. Contract gate passed; manual static review matched the frozen contract. Development simulation was blocked by compiler failure.",
+  "limitations": [
+    "No successful development compilation or simulation; testbench has not been executed.",
+    "Initial state is unspecified by design; testbench deposits known states solely for testing.",
+    "No synthesis, timing, board checks or official evaluation performed."
+  ]
+}

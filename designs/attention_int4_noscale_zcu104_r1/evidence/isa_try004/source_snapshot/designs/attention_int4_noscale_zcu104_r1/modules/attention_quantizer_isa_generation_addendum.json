@@ -1,0 +1,17 @@
+{
+  "schema": "llm2rtl.generated_configuration_addendum.v1",
+  "parent_packet": {
+    "path": "designs/attention_int4_noscale_zcu104_r1/modules/attention_quantizer_isa.json",
+    "sha256": "cb0734d094aaa449f4f1cdcee01ac0f3cc43aac427bc1aab0288d7850d027a47"
+  },
+  "status": "approved_by_parent",
+  "reason": "BANK_NUM3/BANK_NUM_WIDTH2 with DMA TAG_WIDTH4 requires explicit packed-array index widths in copied controller. Existing full tag range checks remain authoritative.",
+  "allowed_change": "Generator may replace exactly [s_ctrl_mm2s_sts_tag] and [s_ctrl_s2mm_sts_tag] with [BANK_NUM_WIDTH'(s_ctrl_mm2s_sts_tag)] and [BANK_NUM_WIDTH'(s_ctrl_s2mm_sts_tag)] in generated controller copy only, outside USER bodies.",
+  "constraints": [
+    "Keep full-width tag range/match comparisons, DMA tag interface4bits, all states and tracking unchanged.",
+    "Do not modify shared native controller/template contracts or verified quantizer.",
+    "Record transform count and pinned input/output hashes in generator evidence.",
+    "Integration tests reject invalid full tags >=BANK_NUM and include samebank reuse.",
+    "All other controller edits remain USER bodies plus module rename."
+  ]
+}

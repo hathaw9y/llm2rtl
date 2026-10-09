@@ -1,0 +1,37 @@
+{
+  "schema": "llm2rtl.verification_packet.v1",
+  "module_id": "attention_fp32_math_review",
+  "status": "frozen",
+  "agent_role": "independent_read_only_math_verifier",
+  "implementation_agent": "/root/native_tests",
+  "review_agent": "/root/native_core",
+  "contract": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_fp32_math.json",
+    "sha256": "5b24dfa7f8dd8db519cf807b40df0b5e830c22be8379d23e30b072007a934421"
+  },
+  "manifest": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/math_final001/manifest.json",
+    "sha256": "9f27b44c312839014465f02f3c53ac9effb939a520cbf7294ca91fe8b3787670"
+  },
+  "kernel_report": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/math_final001/kernel_report.json",
+    "sha256": "58756aa633f3cfb1610a97095a4a4ba590a64571ebc78733d1971956d7ffac96"
+  },
+  "write_scope": [
+    "evidence/math_review.md",
+    "evidence/math_review.json",
+    "evidence/math_review_vectors.json"
+  ],
+  "read_only": [
+    "all math RTL, scripts, tb, reference and final001 evidence"
+  ],
+  "verification": [
+    "recompute current/source snapshot hashes and packet/commonpins",
+    "read exactfinite gradualunderflow ADDMULDIVI32SUB and heldresponse/reset implementation",
+    "independentlyassess Fractionoracle and signedzero/overflow/subnormal/tie data coverage; extra Pythonoracle crosscheck ifneeded",
+    "verify actualXsimlogs PASScounts/exitcodes strictlint logs and exact5nsOOCsetupholdpulsefailcounts/resource/clock exclusions",
+    "verify257entryROM identity and statedexp analytic/dense error bounds and precise cutoff",
+    "state blockers explicitly or sourceidentifiedacceptance; no independenthardware/widerclaim"
+  ],
+  "recursive_subagents": false
+}

@@ -1,0 +1,39 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1
+    },
+    "outputs": {
+      "q": 1
+    }
+  },
+  "semantics": {
+    "function": "q is 1 exactly when a and b are both 1; otherwise q is 0",
+    "evidence": "Original waveform covers 00->0, 01->0, 10->0, 11->1 twice",
+    "timing": "Combinational, no clock, state, or added latency",
+    "reset": "No reset port or reset behavior specified",
+    "initialization": "At original time 0, a=0,b=0,q=0 after combinational settling; no unspecified state initialization required"
+  },
+  "numeric": {
+    "widths": "All ports are single bits",
+    "binary_truth_table": {
+      "00": 0,
+      "01": 0,
+      "10": 0,
+      "11": 1
+    },
+    "arithmetic": "No signed arithmetic or overflow"
+  },
+  "verification": {
+    "oracle": "Explicit expected q values from original waveform, independent of RTL expression",
+    "stimulus": "Replay every original sample at 0,5,...,90 ns; drive changes at original timestamps and sample after delta settling",
+    "coverage": "All four binary combinations, repeated transitions and stable intervals",
+    "failure": "Case-inequality mismatch triggers $fatal; bounded timeout; PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    "Original waveform does not specify X/Z input behavior; use standard Verilog bitwise AND semantics without claiming this is required by the binary waveform."
+  ]
+}

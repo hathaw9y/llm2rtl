@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "areset": 1, "x": 1}, "outputs": {"z": 1}},
+  "semantics": {
+    "evidence": "Original specifies LSB-first serial two's complement, Moore output, positive-edge sequential logic and positive-edge asynchronous reset; conversion runs between reset release and assertion.",
+    "sampling": "Consume x on each rising clk edge when areset is low; after state settles, z is the transformed bit consumed at that edge, held between edges independent of x.",
+    "conversion": "Copy bits through and including the first 1; invert each subsequent bit until reset.",
+    "reset": "Assertion of areset asynchronously enters the waiting-for-first-1 state with z=0; hold that state while reset is high; release alone consumes no bit.",
+    "initialization": "No specified power-up state; no initial assignment; verification asserts reset before requiring a known output.",
+    "states": "Waiting (z=0), first-1-seen/output-1 (z=1), first-1-seen/output-0 (z=0)."
+  },
+  "numeric": {"order": "Least significant bit first", "width": "Arbitrary stream length without a counter limit", "arithmetic": "Negation modulo 2^N for a finite N-bit input", "ports": "All ports are one bit"},
+  "verification": {"oracle": "For finite words independently compute modulo-width negation and compare each post-rising-edge output to corresponding bit", "cases": "Exhaustive words of lengths 1 to 8, directed long zero/one streams, alternating inputs, reset mid-conversion and reset held over clocks", "timing": "Drive x away from rising edges, check output stability before edges, check asynchronous reset between clock edges", "completion": "Fatal on mismatches, bounded timeout, explicit PASS after checks"},
+  "specification_ambiguities": ["No explicit output sampling diagram is supplied; Moore semantics imply that the bit captured on a rising clock edge is represented by the resulting state output after that edge.", "Power-up output before the first reset is unspecified; no deterministic power-up behavior is imposed."]
+}

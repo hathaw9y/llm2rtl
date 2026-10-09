@@ -1,0 +1,45 @@
+{
+  "schema": "llm2rtl.feedback_packet.v1",
+  "module_id": "quantization_executor",
+  "manifest": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_module_manifest.json",
+    "sha256": "29f8048bd6dbc761a4c1c73b1f5acebc3401200368a99f376962b9664d689fb8"
+  },
+  "approval": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_implementation_approval.json",
+    "sha256": "3cb075a86e08f0fe202181bd6b216566d4c6a724980c604909a809eb4716c2df"
+  },
+  "assignments": [
+    {
+      "agent": "/root/fp32_epilogue_rtl",
+      "scope": "newdiv4/quant4/dequant4 arithmetic only",
+      "contract": {
+        "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/datapaths/quantization_arithmetic.json",
+        "sha256": "61b35d34919d364a99e371cfbf8e50d483da08b3105d942402a1138f63d9c432"
+      }
+    },
+    {
+      "agent": "/root/int8_core_rtl",
+      "scope": "newquantizationexecutor/nativebankFSM, testfixtures andselfverify",
+      "contract": {
+        "path": "designs/smollm2_135m_w8a8_zcu104_r1/modules/quantization_executor.json",
+        "sha256": "a4b8f62dc6af29033e6cd688ae7f09fadb0de6b6342aec0d86a907d2bcdce86f"
+      },
+      "binding": {
+        "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_rtl_port_binding.json",
+        "sha256": "b671bd31a3fcff17a0fcd955c0df2a63f802ee963df48b3636c4ccc808acd7dd"
+      }
+    },
+    {
+      "agent": "/root/executor_contract_audit",
+      "scope": "independent arithmetic then executor audit/replay; immutable implementation sources"
+    }
+  ],
+  "held": "Vivado OOC and package pending designatedmachine; no fullmodel/board claim",
+  "user_override": "Defer GEMM boardcheckpoint for this approved quantizationRTLwave",
+  "status": "approved_quantization_RTL_wave_completed_functional_scope",
+  "independent_executor_evidence": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_quant_executor_audit/module_verification_report.json",
+    "sha256": "4802f7bbe3a9ca5b4215353bc3e77047dc5a04195fa42662415c91ef2cd4ed45"
+  }
+}

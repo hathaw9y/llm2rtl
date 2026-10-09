@@ -1,0 +1,80 @@
+{
+  "module_id": "int8_dot_core",
+  "status": "PASS_LOCAL_SIMULATION_AND_LINT_ONLY",
+  "contract_sha256": "68a0eee518d475d0df3fd2e6052150ca9c9bd59b79f400eb74ee3eb48324ecff",
+  "source_sha256": "9825be03f1f6021cab761a4ae15a238f81e02f43e15685abb65c8789e47b589e",
+  "file_hashes": {
+    "rtl/int8_dot_core.sv": "9825be03f1f6021cab761a4ae15a238f81e02f43e15685abb65c8789e47b589e",
+    "tb/tb_int8_dot_core.sv": "abec43a779e6dcf937c1fe4be6e22c427d586e1ac19b111c1f2d2f460a59a6b0",
+    "scripts/core_vectors.py": "265e5f444f11e3cb2434ee739a95e4f1ef7bacf4278cfb054763577ffc17caec",
+    "scripts/run_core_sim.py": "f79c5a8aa77ebc62991bf27abe688f322cf95ad714cee74ef9b478c5f382bc59",
+    "evidence/int8_dot_core/inputs.txt": "9c25235149309b59f391b8e4aadbf2249af97b44116250d54f0d4749b8ad175d",
+    "evidence/int8_dot_core/expected.txt": "c663fe0e17b5db853517d835a52b5448f35aafde361b348d7e3ff6d4837cbb12"
+  },
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/scripts/core_vectors.py"
+      ],
+      "exit_code": 0,
+      "log": "sim_stage_0.log"
+    },
+    {
+      "command": [
+        "iverilog",
+        "-g2012",
+        "-s",
+        "tb_int8_dot_core",
+        "-o",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/int8_dot_core/sim",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/int8_dot_core.sv",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/tb/tb_int8_dot_core.sv"
+      ],
+      "exit_code": 0,
+      "log": "sim_stage_1.log"
+    },
+    {
+      "command": [
+        "vvp",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/evidence/int8_dot_core/sim"
+      ],
+      "exit_code": 0,
+      "log": "sim_stage_2.log"
+    },
+    {
+      "command": [
+        "verilator",
+        "--lint-only",
+        "--unroll-count",
+        "2048",
+        "-Wall",
+        "--top-module",
+        "int8_dot_core",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/int8_dot_core.sv"
+      ],
+      "exit_code": 0,
+      "log": "sim_stage_3.log"
+    }
+  ],
+  "accepted_steps": 9718,
+  "compared_results": 250,
+  "nominal_latency_accepted_edge_to_result_edge": 5,
+  "registered_stages": 6,
+  "issue_interval_unstalled": 1,
+  "cases": [
+    "K1536 maxima \u00b1127",
+    "signed cancellation",
+    "96 interleaved contexts",
+    "row0 consecutive K steps",
+    "N1..N16",
+    "random bubbles and result stalls",
+    "reset live pipeline and no stale result"
+  ],
+  "synthesis": "NOT_RUN_PENDING_DESIGNATED_MACHINE_AUTHORIZATION",
+  "forbidden_claims": [
+    "full executor PASS",
+    "full model PASS",
+    "board timing or deployment"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "pass",
+      "details": "TopModule has exactly input in[7:0] and output out[31:0]. Continuous assignment concatenates 24 sign bits and all 8 input bits. No registers, clock, reset, latches, dependencies or simulation-only constructs."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "tool_failed",
+      "exit_code": 139,
+      "log": "development_compile.log",
+      "exit_record": "development_compile.exit",
+      "details": "Compiler produced no diagnostic text and no executable."
+    },
+    {
+      "name": "development_simulation",
+      "result": "not_run",
+      "details": "Compilation failed; exhaustive independent testbench is preserved as dev_tb.sv."
+    }
+  ],
+  "development_outcome": "Contract structurally validated and RTL statically reviewed. Development simulation unverified because Icarus compilation failed with exit code 139. Initial RTL retained without revisions.",
+  "limitations": [
+    "No simulation success claimed.",
+    "Official evaluation has not occurred and its results are unavailable.",
+    "No synthesis, timing or board verification performed."
+  ],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

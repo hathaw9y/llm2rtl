@@ -1,0 +1,41 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial_preservation",
+      "result": "PASS",
+      "details": "candidate_initial.sv preserved immediately after initial implementation, before development checks; identical to final candidate."
+    },
+    {
+      "name": "static_review",
+      "result": "PASS",
+      "details": "Exact TopModule name; one-bit input x and y, output z; continuous assignment matches frozen equation; no clocks, reset, state, latches, dependencies or simulation-only DUT constructs."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "TOOL FAILURE",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "status_file": "dev_compile_status.json"
+    },
+    {
+      "name": "development_simulation",
+      "result": "NOT RUN",
+      "details": "Compilation produced no dev_sim executable; matching vvp could not be run."
+    }
+  ],
+  "development_outcome": "Initial synthesizable combinational RTL delivered unchanged. Independent exhaustive binary truth-table testbench prepared, but simulation unverified because development compilation failed.",
+  "limitations": [
+    "No successful development simulation or lint result. Compiler returned exit code 139 with no diagnostic output.",
+    "Unknown/high-impedance input behavior is unspecified by the original Boolean problem; RTL uses the literal bitwise equation.",
+    "No synthesis, board work or official evaluation performed; official results unavailable."
+  ]
+}

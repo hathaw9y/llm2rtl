@@ -1,0 +1,40 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "areset": 1,
+      "bump_left": 1,
+      "bump_right": 1,
+      "ground": 1
+    },
+    "outputs": {
+      "walk_left": 1,
+      "walk_right": 1,
+      "aaah": 1
+    }
+  },
+  "semantics": {
+    "clock": "State changes on positive clk edges as explicitly specified.",
+    "reset": "Positive edge asynchronous areset resets to walking left; asserted reset holds left at clock edges.",
+    "outputs": "Moore outputs: walking left=(1,0,0), walking right=(0,1,0), falling=(0,0,1).",
+    "walking": "At a clock edge, absent ground has priority over bumps. With ground, left-facing switches only on bump_left and right-facing switches only on bump_right; both bumps switch direction.",
+    "falling": "Retain pre-fall direction. Ignore both bumps on entry, during fall, and landing. Resume retained direction on the edge sampling ground=1.",
+    "initialization": "No power-up state specified; verification asserts asynchronous reset before expecting defined outputs."
+  },
+  "numeric": {
+    "port_widths": "All ports one bit.",
+    "state_space": "Four states: walk left/right and fall retaining left/right.",
+    "arithmetic": "None."
+  },
+  "verification": {
+    "oracle": "Independent direction and falling history model derived from original problem.",
+    "sampling": "Drive inputs at falling edges; compare Moore outputs before and after rising edges, after NBA settling. Assert reset between clock edges.",
+    "coverage": "All bump combinations in both directions, fall entry priority, persistent fall, landing priority, reset while walking and falling, exhaustive short input sequences.",
+    "success": "Bounded timeout, fatal on mismatch, PASS only after every check."
+  },
+  "specification_ambiguities": [
+    "Power-up behavior before any reset is unspecified; no defined output is assumed before reset."
+  ]
+}

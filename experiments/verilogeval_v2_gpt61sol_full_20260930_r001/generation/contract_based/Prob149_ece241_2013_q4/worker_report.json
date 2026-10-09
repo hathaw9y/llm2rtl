@@ -1,0 +1,65 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial_development_compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "outcome": "FAIL: exit 139, no executable produced, empty diagnostic log",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "tool_version",
+      "outcome": "Icarus 12.0 driver reported; backend version query failed",
+      "log": "dev_tool_version.log"
+    },
+    {
+      "name": "rtl_elaboration",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s TopModule -o dev_elab candidate.sv",
+      "outcome": "PASS: exit 0",
+      "log": "dev_elaboration.log"
+    },
+    {
+      "name": "development_compile_retry",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -s dev_tb -o dev_sim_retry candidate.sv dev_tb.sv",
+      "outcome": "PASS: exit 0; same RTL and testbench, omitted -Wall",
+      "log": "dev_compile_retry.log"
+    },
+    {
+      "name": "development_simulation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim_retry",
+      "outcome": "PASS: 22589 comparisons, all 1024 length-five legal histories with hold cycles, synchronous input/reset timing, all sensor patterns under reset, and chosen invalid-input hold behavior",
+      "log": "dev_simulation.log"
+    },
+    {
+      "name": "initial_preservation",
+      "command": "cmp candidate.sv candidate_initial.sv",
+      "outcome": "PASS: identical"
+    },
+    {
+      "name": "static_review",
+      "outcome": "Single standalone module; exact ports; synchronous active-high reset; explicit unsigned 2-bit levels; nonblocking sequential assignments; complete combinational assignments; no DUT delays or initial blocks"
+    }
+  ],
+  "development_outcome": "PASS on independent development simulation after compile retry; candidate unchanged from initial implementation.",
+  "limitations": [
+    "Official evaluation was not accessed and its result is unknown.",
+    "Invalid thermometer sensor patterns are unspecified; chosen behavior is state hold.",
+    "Positive-edge sampled Moore output timing is the documented interpretation of the state-machine requirement.",
+    "Pre-reset power-up state is unspecified.",
+    "Initial development compile crashed and the backend version query failed; root cause is undiagnosed, successful retry evidence is preserved.",
+    "No synthesis, timing analysis, or board access performed."
+  ],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  }
+}

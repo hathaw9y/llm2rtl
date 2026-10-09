@@ -1,0 +1,57 @@
+{
+  "schema": "llm2rtl.isa_validation.v1",
+  "design_id": "llama32_1b_w4a4kv4_seq",
+  "revision": "r2",
+  "model_trace": {
+    "path": "designs/llama32_1b_w4a4kv4_seq_r2/model_trace.json",
+    "sha256": "fd2196baae2f0d1f83b1d759980264cb33855dec819dfe41929551652156b1d6"
+  },
+  "isa_spec": {
+    "path": "designs/llama32_1b_w4a4kv4_seq_r2/isa_spec.json",
+    "sha256": "5e6a4192abddb70d3c6a489fdbbb6296f00bd1d17f8dc613f420bed4a06b1f77"
+  },
+  "bank_layout": {
+    "path": "designs/llama32_1b_w4a4kv4_seq_r2/bank_layout.json",
+    "sha256": "ce0c65e164919b2ee647de3adad8b8ee47e86e375ad1a266fac9a45fa635a697"
+  },
+  "status": "passed",
+  "no_host_tensor_compute": true,
+  "model_source_sha256": "13e65b752a9c9d8a5c22b83df73009a8940c0eefdc58c101df3eb910e3efc2f9",
+  "reference_model": {
+    "path": "designs/llama32_1b_w4a4kv4_seq_r2/run_dispatcher_model.py",
+    "vectors": "designs/llama32_1b_w4a4kv4_seq_r2/vectors/dispatcher_cases.json",
+    "vector_sha256": "be200fb398a7e2a1485d2256d2acea914b741a0a9db2f134b5476fbb0fdb14e3",
+    "case_count": 4,
+    "coverage": "dispatcher control and bank-state transitions only"
+  },
+  "lowerings": [
+    {
+      "operation_id": "linear_projection_control_subset",
+      "instructions": [
+        {"opcode": "DMA_LOAD", "banks": ["BANK_A"]},
+        {"opcode": "DMA_LOAD", "banks": ["BANK_B"]},
+        {"opcode": "GEMM", "banks": ["BANK_A", "BANK_B", "BANK_C"]},
+        {"opcode": "DMA_STORE", "banks": ["BANK_C"]}
+      ]
+    }
+  ],
+  "workload_results": [
+    {
+      "workload_id": "prefill_projection_control_subset",
+      "status": "passed",
+      "vector_sha256": "be200fb398a7e2a1485d2256d2acea914b741a0a9db2f134b5476fbb0fdb14e3",
+      "scope": "control-only; no tensor arithmetic"
+    },
+    {
+      "workload_id": "decode_projection_control_subset",
+      "status": "passed",
+      "vector_sha256": "be200fb398a7e2a1485d2256d2acea914b741a0a9db2f134b5476fbb0fdb14e3",
+      "scope": "control-only; no tensor arithmetic"
+    }
+  ],
+  "limitations": [
+    "This validation does not execute model tensor arithmetic.",
+    "This validation does not prove RTL, Vivado timing, bitstream, or physical-board behavior.",
+    "Full Llama prefill and decode remain unsupported until later opcode modules are defined and verified."
+  ]
+}

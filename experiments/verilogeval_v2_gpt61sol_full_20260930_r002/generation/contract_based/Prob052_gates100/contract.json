@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"in": "100-bit unsigned packed vector [99:0]"},
+    "outputs": {"out_and": "1 bit", "out_or": "1 bit", "out_xor": "1 bit"},
+    "source": "problem.txt interface and in[99:0] statement"
+  },
+  "semantics": {
+    "out_and": "AND of all 100 input bits",
+    "out_or": "OR of all 100 input bits",
+    "out_xor": "XOR of all 100 input bits, equivalently odd parity for binary inputs",
+    "timing": "Combinational response without added latency or state, from original combinational circuit requirement",
+    "clock_reset_initialization": "No clock or reset ports and no stored initialization state specified; outputs follow current inputs after combinational settling"
+  },
+  "numeric": {
+    "input_width": 100,
+    "output_widths": 1,
+    "operations": "Boolean gates; no signed arithmetic, rounding, saturation, or overflow",
+    "four_state": "Use standard SystemVerilog gate reduction semantics; original problem does not explicitly specify X/Z behavior"
+  },
+  "verification": {
+    "oracle": "Independent bit-count oracle for binary vectors, derived from original AND/OR/XOR definitions",
+    "coverage": "All-zero/all-one, every single-one and single-zero position, all population counts 0 through 100, alternating patterns, random vectors, supplemental X/Z gate propagation",
+    "sampling": "Drive inputs and wait one simulation time unit for combinational settling before comparisons",
+    "failure": "$fatal on mismatch and bounded timeout",
+    "success": "PASS line only after all cases; run python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "X/Z inputs are not explicitly discussed; standard SystemVerilog gate semantics are used and checked supplementally."
+  ]
+}

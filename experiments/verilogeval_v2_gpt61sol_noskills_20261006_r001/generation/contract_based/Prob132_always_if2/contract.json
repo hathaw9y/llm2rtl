@@ -1,0 +1,38 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "cpu_overheated": 1,
+      "arrived": 1,
+      "gas_tank_empty": 1
+    },
+    "outputs": {
+      "shut_off_computer": 1,
+      "keep_driving": 1
+    },
+    "clock_reset": "None in original port list; add none."
+  },
+  "semantics": {
+    "kind": "Combinational with complete assignments; repair missing else branches to remove unintended latches.",
+    "shut_off_computer": "1 when cpu_overheated is 1, otherwise 0.",
+    "keep_driving": "When arrived is 0, complement gas_tank_empty; otherwise 0.",
+    "timing": "Outputs settle after combinational evaluation with no cycle latency or stored history. Original uses always @(*).",
+    "initialization": "Original specifies no reset or initial values; check after known inputs settle, not at untriggered time zero."
+  },
+  "numeric": {
+    "widths": "Every port is one bit.",
+    "values": "Use explicit one-bit zero and one constants.",
+    "four_state": "Preserve procedural if behavior: X/Z condition takes else; bitwise complement of X/Z gas input is X when arrived is 0."
+  },
+  "verification": {
+    "oracle": "Independent truth table from the original conditions with missing branches interpreted as deasserted outputs.",
+    "coverage": "All eight binary input combinations; all ordered binary state transitions; directed release from overheat and stop on arrival; X/Z procedural behavior.",
+    "sampling": "Drive inputs then delay 1 ns before checking with case inequality.",
+    "completion": "Fatal mismatches, bounded timeout, explicit PASS on completion."
+  },
+  "specification_ambiguities": [
+    "Introductory adder-subtractor/zero-flag wording conflicts with the supplied interface and code; use the concrete supplied module.",
+    "The missing else values are not written explicitly; infer zero from shut_off_computer and keep_driving names and the request to fix incomplete combinational assignments."
+  ]
+}

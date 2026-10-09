@@ -1,0 +1,24 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"d": 1, "done_counting": 1, "ack": 1, "state": 10},
+    "outputs": {"B3_next": 1, "S_next": 1, "S1_next": 1, "Count_next": 1, "Wait_next": 1, "done": 1, "counting": 1, "shift_ena": 1},
+    "state_bits": {"S": 0, "S1": 1, "S11": 2, "S110": 3, "B0": 4, "B1": 5, "B2": 6, "B3": 7, "Count": 8, "Wait": 9}
+  },
+  "semantics": {
+    "timing": "Pure combinational next-state and Moore output logic; no clock, registers, or stored state.",
+    "reset_initialization": "External FSM begins in S at reset; this module has no reset port and no initialization mechanism.",
+    "transitions": {"S": "d ? S1 : S", "S1": "d ? S11 : S", "S11": "d ? S11 : S110", "S110": "d ? B0 : S", "B0": "B1", "B1": "B2", "B2": "B3", "B3": "Count", "Count": "done_counting ? Wait : Count", "Wait": "ack ? S : Wait"},
+    "requested_equations": {"B3_next": "state[6]", "S_next": "((state[0] | state[1] | state[3]) & ~d) | (state[9] & ack)", "S1_next": "state[0] & d", "Count_next": "state[7] | (state[8] & ~done_counting)", "Wait_next": "(state[8] & done_counting) | (state[9] & ~ack)"},
+    "outputs": {"done": "state[9]", "counting": "state[8]", "shift_ena": "state[4] | state[5] | state[6] | state[7]"}
+  },
+  "numeric": {"types": "All ports unsigned Boolean bits except unsigned state[9:0].", "arithmetic": "Bitwise Boolean logic only; no arithmetic, rounding, overflow, or saturation."},
+  "verification": {
+    "oracle": "Independent transition-table case model for each of the ten legal one-hot states; compare requested next-state indicators and Moore outputs.",
+    "coverage": "Exhaust all ten legal states and eight combinations of d, done_counting, ack (80 checks).",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts; preserve logs.",
+    "static_review": "Check exact interface, bit mapping, combinational drivers and lack of inferred storage."
+  },
+  "specification_ambiguities": ["Behavior for zero-hot, multi-hot, or X/Z states is not specified. Implement direct one-hot equations without added recovery or priority behavior."]
+}

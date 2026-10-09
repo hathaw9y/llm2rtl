@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "module": "TopModule",
+  "interface": {
+    "inputs": {
+      "d": 1,
+      "done_counting": 1,
+      "ack": 1,
+      "state": 10
+    },
+    "outputs": {
+      "B3_next": 1,
+      "S_next": 1,
+      "S1_next": 1,
+      "Count_next": 1,
+      "Wait_next": 1,
+      "done": 1,
+      "counting": 1,
+      "shift_ena": 1
+    }
+  },
+  "semantics": "Combinational one-hot incoming-transition equations; Moore outputs depend only on active state bits. State index 0..9 maps S,S1,S11,S110,B0,B1,B2,B3,Count,Wait.",
+  "latency": "Zero combinational cycles",
+  "reset": "No clock/reset ports or state storage; upstream reset selects state[0].",
+  "numeric_widths": "One-bit Boolean equations; state unsigned 10-bit",
+  "ambiguities": [
+    "Illegal zero/multi-hot state is not specified; use direct OR-of-incoming-transition equations, including superposition for multi-hot states."
+  ],
+  "verification_plan": "Exhaust all 1024 state masks and 8 binary inputs using table-based incoming transitions and Moore-output superposition. No official tests."
+}

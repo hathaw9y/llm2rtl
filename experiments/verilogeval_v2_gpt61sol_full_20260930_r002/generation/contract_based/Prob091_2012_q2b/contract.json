@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"y": "unsigned 6-bit [5:0]", "w": "1-bit"},
+    "outputs": {"Y1": "1-bit", "Y3": "1-bit"},
+    "clock_reset": "None in original interface; no ports added"
+  },
+  "semantics": {
+    "evidence": "Original transition table and one-hot assignment A=y[0], B=y[1], C=y[2], D=y[3], E=y[4], F=y[5]",
+    "Y1": "Input of B state flip-flop; asserted for A with w=1",
+    "Y3": "Input of D state flip-flop; asserted for B,C,E,F with w=0",
+    "timing": "Pure combinational next-state-bit logic; no stored state or added cycle latency",
+    "reset_initialization": "No reset or initialization specified or required; outputs depend on current inputs"
+  },
+  "numeric": {
+    "encoding": "000001 A, 000010 B, 000100 C, 001000 D, 010000 E, 100000 F",
+    "arithmetic": "Single-bit Boolean logic only; no rounding, overflow or signed arithmetic"
+  },
+  "verification": {
+    "oracle": "Independent transition-table lookup for all six original states and both w values",
+    "sampling": "Drive input then wait one simulation time unit for combinational settling",
+    "coverage": "All 12 legal transitions, repeated changes, startup with unknown inputs observed but not assigned a specified result",
+    "failure": "$fatal on mismatch, bounded timeout, PASS only after all checks",
+    "primary_check": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "Zero-hot, multi-hot and unknown input behavior is not specified by the one-hot-state assumption. Implementation uses direct one-hot Boolean equations without adding recovery semantics; functional oracle checks legal states only."
+  ]
+}

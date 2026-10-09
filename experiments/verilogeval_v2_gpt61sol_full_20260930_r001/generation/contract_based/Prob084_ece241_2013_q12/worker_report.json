@@ -1,0 +1,54 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_structural_gate",
+      "outcome": "PASS",
+      "log": "contract_validation.log",
+      "scope": "Structural gate only, not a functional proof"
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "outcome": "PASS",
+      "files": [
+        "candidate.sv",
+        "candidate_initial.sv"
+      ]
+    },
+    {
+      "name": "static_review",
+      "outcome": "PASS",
+      "scope": "Exact seven scalar ports; eight state bits; positive-edge enabled shift toward higher indices; no reset or initialization; combinational ABC-indexed mux; no extra state or dependencies"
+    },
+    {
+      "name": "development_compile",
+      "outcome": "TOOL_FAILURE",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "diagnostics": "No output was emitted; exit 139 is consistent with a segmentation fault"
+    },
+    {
+      "name": "tool_version_diagnostic",
+      "exit_code": 0,
+      "log": "dev_tool_version.log",
+      "command": "timeout 10s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -V"
+    },
+    {
+      "name": "development_simulation",
+      "outcome": "NOT_RUN",
+      "reason": "Compile failed; no usable development executable"
+    }
+  ],
+  "development_outcome": "Frozen contract structurally validated; candidate preserved and statically reviewed. Independent self-checking testbench created, but simulator compilation failed. No simulation success claimed.",
+  "limitations": [
+    "Initial shift-register contents are unspecified by the problem.",
+    "Development simulation could not run due to Icarus compiler failure.",
+    "Official evaluation was not accessed; results are unavailable.",
+    "No synthesis, timing, or board checks performed."
+  ],
+  "setup_notes": [
+    "First gate invocation ran the validator but its shell wrapper failed on assigning the read-only zsh variable status. The original validator output was preserved in contract_validation_initial.log; rerun with contract_exit succeeded before RTL creation."
+  ]
+}

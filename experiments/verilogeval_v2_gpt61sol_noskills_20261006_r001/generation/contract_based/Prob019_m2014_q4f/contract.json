@@ -1,0 +1,38 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "in1": 1,
+      "in2": 1
+    },
+    "outputs": {
+      "out": 1
+    }
+  },
+  "semantics": {
+    "function": "out = in1 AND (NOT in2)",
+    "evidence": "Original circuit: AND gate with a bubble on its in2 input.",
+    "timing": "Combinational; no clock, storage, reset or added latency.",
+    "initialization": "No initial value specified; output follows gate evaluation of current inputs."
+  },
+  "numeric": {
+    "width": "All ports are one bit.",
+    "operations": "One-bit bitwise inversion and AND.",
+    "binary_truth_table": {
+      "00": 0,
+      "01": 0,
+      "10": 1,
+      "11": 0
+    }
+  },
+  "verification": {
+    "oracle": "Explicit gate truth table grounded in original circuit.",
+    "coverage": "All four binary pairs, repeated input transitions, and supplemental four-state gate propagation.",
+    "sampling": "Sample after one nanosecond of combinational settling per vector.",
+    "success": "Fatal on mismatch; bounded timeout; PASS only after all vectors."
+  },
+  "specification_ambiguities": [
+    "X/Z behavior is not explicitly specified; supplemental checks use standard Verilog four-state gate semantics."
+  ]
+}

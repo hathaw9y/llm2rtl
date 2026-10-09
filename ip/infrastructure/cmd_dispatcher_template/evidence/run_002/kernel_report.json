@@ -1,0 +1,86 @@
+{
+  "schema": "llm2rtl.kernel_report.v1",
+  "status": "passed",
+  "template_id": "cmd_dispatcher_template",
+  "run_id": "run_002",
+  "module_id": "cmd_dispatcher_template",
+  "coverage_level": "reusable_fixed_infrastructure_plus_marker_only_extension_probe",
+  "template_index_sha256": "3034c654f045dfafa5a5a494e974685e97f4dad46687c90f6aeab60f09a898b0",
+  "template_contract_sha256": "afd9955d437995275304ffc4d0f04bf2a34e145b07c3137a3748edfd86b5400d",
+  "rtl_sha256": "000d9c1e89f2aa4cfb6888f810d6273b3135084ee433ca31b66c27e029f6cf80",
+  "base_testbench_sha256": "3dc50bd5a83d790340312dbdf61c74e69f4a011db7047628cffab21489850ee2",
+  "extension_testbench_sha256": "69590be2397e4df89a66366156ce2e5ff783b24d221399acd98e97d064467822",
+  "source_manifest_sha256": "22abec5bfac877a6fd6c4c05aa5ed847317ee49fbbe40093852ae0e0ef31f01a",
+  "run_001_source_snapshot_manifest_sha256": "40119aeff81f1068b852b9431a071bd59e60a1e9d24fd440cd454efda65f85fe",
+  "extension_hooks": [
+    "opcode_known", "command_legality", "bank_eligibility",
+    "request_valid_ready_fire", "atomic_bank_acquire", "pending_any",
+    "completion_bank_release", "response_fault", "executor_fault"
+  ],
+  "fixed_semantics": {
+    "opcodes": {"END": 0, "MM2S": 1, "S2MM": 2},
+    "status": "unchanged_and_base_regression_passed",
+    "pc_policy": "strict current PC with no lookahead",
+    "terminal_policy": "END and error drain aggregate fixed-or-user pending plus external busy"
+  },
+  "simulation": {
+    "tool": "Vivado XSIM 2025.2 exact generated xsimk snapshots",
+    "base_status": "passed",
+    "base_pass_marker": "PASS: cmd_dispatcher_template fixed infrastructure verification",
+    "base_log_sha256": "0fd42dc51649bb0a48a1897d59f929e65c6008e619bc51716df8094fb9491476",
+    "extension_status": "passed",
+    "extension_pass_marker": "PASS: marker-only opcode-3 extension probe",
+    "extension_log_sha256": "2a7d0bf96de8e7eab993ad0a4c938b2baebeedb2139b44f4406e79fcecf32ac1",
+    "extension_generated_rtl_sha256": "af6ece2a748caf5418723139cbf2fd8fd2c3e639d8c9c7f542b36370f9618d56",
+    "extension_coverage": [
+      "generator proves only USER marker bodies changed",
+      "opcode 3 recognized without fixed opcode rejection",
+      "busy operand stalls strict current PC",
+      "request valid and both-bank payload stable while ready is low",
+      "handshake atomically acquires two distinct operand banks and advances PC",
+      "nonconflicting fixed MM2S remains outstanding concurrently",
+      "matching completion releases exactly the two user-owned banks",
+      "fixed completion remains independent and END reaches DONE after drain"
+    ],
+    "run_001_negative_probe": {
+      "status": "expected_compile_failure_observed",
+      "cause": "run_001 scaffold has no declared or consumed user hook signals",
+      "log": "run001_negative/extension_xvlog.log"
+    }
+  },
+  "verilator": {
+    "executable": "/usr/bin/verilator",
+    "version": "Verilator 4.038 2020-07-11 rev v4.036-114-g0cd4a57ad",
+    "base_rtl_status": "passed",
+    "base_rtl_warning_count": 0,
+    "extension_rtl_status": "passed_with_nonfunctional_filename_warning",
+    "testbench_lint_limitation": "this retained Verilator version does not support the timing controls used by the XSIM testbenches"
+  },
+  "vivado": {
+    "version": "2025.2 build 6299465",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "stage": "post_synth_ooc",
+    "clock_period_ns": 5.0,
+    "status": "passed",
+    "wns_ns": 2.796,
+    "tns_ns": 0.0,
+    "whs_ns": 0.079,
+    "ths_ns": 0.0,
+    "setup_failing_endpoints": 0,
+    "hold_failing_endpoints": 0,
+    "blackboxes": 0
+  },
+  "resources": {
+    "clb_luts": 184,
+    "clb_registers": 145,
+    "dsp": 0,
+    "bram_tiles": 0,
+    "uram": 0
+  },
+  "does_not_claim": [
+    "user extensions other than the marker-only probe",
+    "DMA payload correctness or data-bank memory implementation",
+    "post-place or post-route timing",
+    "board integration, bitstream, or physical-board validation"
+  ]
+}

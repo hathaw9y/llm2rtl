@@ -1,0 +1,66 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "load": {
+        "direction": "input",
+        "width": 1
+      },
+      "data": {
+        "direction": "input",
+        "width": 512,
+        "range": "511:0"
+      },
+      "q": {
+        "direction": "output",
+        "width": 512,
+        "range": "511:0"
+      }
+    }
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "load": "When load is high at a rising edge, q becomes sampled data; load takes priority over evolution. Consecutive high cycles each load data.",
+    "evolution": "When load is low at a rising edge, all 512 cells simultaneously update from pre-edge q. Left of i is q[i+1]; right is q[i-1].",
+    "boundaries": "q[-1] and q[512] are constant zero; no wraparound.",
+    "truth_table": {
+      "111": 0,
+      "110": 1,
+      "101": 1,
+      "100": 0,
+      "011": 1,
+      "010": 1,
+      "001": 1,
+      "000": 0
+    },
+    "reset": "No reset port or reset behavior.",
+    "initialization": "Initial state is unspecified; tests load before checking evolution.",
+    "between_edges": "q holds between positive clock edges; changes of load or data alone do not update q."
+  },
+  "numeric": {
+    "cell": "one-bit unsigned Boolean state",
+    "state": "512 packed one-bit cells, bit i denotes cell i",
+    "operations": "Boolean Rule 110 lookup, no arithmetic, rounding, saturation or overflow",
+    "latency": "one update or load per positive edge; no extra pipeline"
+  },
+  "verification": {
+    "oracle": "Independent per-cell case lookup directly from the original eight-entry table, using pre-edge reference state and constant-zero boundaries.",
+    "directed": [
+      "all zero",
+      "all one",
+      "alternating patterns",
+      "single bits at both boundaries",
+      "all eight neighborhoods at an interior cell",
+      "successive load edges and load priority",
+      "no changes between positive edges"
+    ],
+    "random": "Deterministic pseudo-random 512-bit loads interleaved with multi-cycle evolution; compare all 512 outputs after each rising edge.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top, matching vvp; finite compile and simulation timeouts; internal testbench watchdog."
+  },
+  "specification_ambiguities": []
+}

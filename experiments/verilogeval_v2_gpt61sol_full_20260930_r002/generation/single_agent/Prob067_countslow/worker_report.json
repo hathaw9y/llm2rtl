@@ -1,0 +1,41 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "checked_cycles": 174,
+      "evidence_directory": "development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis or board verification performed.",
+    "Power-up state is unspecified by the problem and is not asserted by the testbench."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": [
+    "candidate.sv",
+    "candidate_initial.sv"
+  ],
+  "testbench_files": [
+    "dev_tb.sv"
+  ],
+  "interface_cycle_contract": "Original TopModule ports; positive-edge decade counter, active-high synchronous reset has priority, slowena enables counting and otherwise holds q.",
+  "numeric_width_decisions": "Four-bit unsigned state; explicit 4-bit constants; wrap from 9 to 0.",
+  "pipeline_latency_and_ii": "State updates on each enabled rising edge with no extra latency.",
+  "static_review_result": "Single always_ff driver, nonblocking assignments, synchronous reset, no extra ports or initial state assignment."
+}

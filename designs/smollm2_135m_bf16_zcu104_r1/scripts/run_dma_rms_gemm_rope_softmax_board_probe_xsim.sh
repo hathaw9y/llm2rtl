@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+set -euo pipefail
+design_dir=$(cd "$(dirname "$0")/.." && pwd)
+repo_dir=$(cd "$design_dir/../.." && pwd)
+run_dir=${1:-/tmp/smollm2_dma_rms_gemm_rope_softmax_board_probe_xsim}
+mkdir -p "$run_dir"
+cd "$run_dir"
+mkdir -p vectors
+cp "$design_dir"/dma_rms_gemm_rope_board_probe/*.hex vectors/
+cp "$design_dir"/golden/softmax_checkpoint/{prefill32,decode1}_{score,expected}_words.hex vectors/
+cp "$design_dir"/golden/rmsnorm_checkpoint/gamma_words.hex vectors/
+xvlog -sv -i "$design_dir/rtl" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/datamover_engine_pkg.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/fifo.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/pipeline.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/axis_width_up_converter.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/axis_width_down_converter.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/axis_width_converter.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/datamover_command_queue.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/mm2s_channel.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/s2mm_channel.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/datamover_engine.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/bram_bank.sv" \
+  "$repo_dir/ip/infrastructure/datamover_engine/rtl/uram_bank.sv" \
+  "$repo_dir/ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv" \
+  "$design_dir/rtl/smollm2_bank_port_router_wide.sv" \
+  "$design_dir/rtl/smollm2_bank_memories_wide.sv" \
+  "$design_dir/rtl/smollm2_bank_subsystem_wide.sv" \
+  "$design_dir/rtl/smollm2_dma_bank_bridge.sv" \
+  "$design_dir/rtl/smollm2_dma_engine_link.sv" \
+  "$design_dir/rtl/bank_tensor_state_tracker.sv" \
+  "$design_dir/rtl/isa_command_dispatcher.sv" \
+  "$design_dir/rtl/smollm2_dma_control_fabric_wide.sv" \
+  "$design_dir/rtl/smollm2_gemm_systolic_wide_executor.sv" \
+  "$design_dir/rtl/smollm2_rmsnorm_executor.sv" \
+  "$design_dir/rtl/smollm2_rope_executor.sv" \
+  "$design_dir/rtl/smollm2_softmax_executor.sv" \
+  "$design_dir/rtl/smollm2_attention_executor.sv" \
+  "$design_dir/rtl/smollm2_gemm_dma_fabric_wide.sv" \
+  "$design_dir/rtl/smollm2_dma_gemm_board_probe.sv" \
+  "$design_dir/tb/tb_smollm2_dma_rms_gemm_rope_softmax_board_probe.sv" \
+  > xvlog.log 2>&1
+xelab tb_smollm2_dma_rms_gemm_rope_softmax_board_probe -L xpm --timescale 1ns/1ps \
+  -s tb_smollm2_dma_rms_gemm_rope_softmax_board_probe_sim > xelab.log 2>&1
+python3 "$repo_dir/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
+  "$run_dir/xsim.dir/tb_smollm2_dma_rms_gemm_rope_softmax_board_probe_sim/xsimk" \
+  'PASS smollm2_dma_rms_gemm_rope_softmax_board_probe' > xsim.log 2>&1
+evidence_dir="$design_dir/evidence/smollm2_dma_rms_gemm_rope_softmax_board_probe/run_001"
+mkdir -p "$evidence_dir"
+cp xvlog.log xelab.log xsim.log "$evidence_dir/"
+tail -35 xsim.log

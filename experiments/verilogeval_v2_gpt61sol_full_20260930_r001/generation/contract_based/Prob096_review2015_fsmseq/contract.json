@@ -1,0 +1,27 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": {"direction": "input", "width": 1}, "reset": {"direction": "input", "width": 1}, "data": {"direction": "input", "width": 1}, "start_shifting": {"direction": "output", "width": 1}}
+  },
+  "semantics": {
+    "clock": "All sequential updates occur on the positive edge of clk.",
+    "reset": "Active-high synchronous reset has priority over data; a rising edge with reset=1 clears detected status and all partial sequence history.",
+    "sampling": "Each rising edge with reset=0 accepts one data bit; consecutive bits are searched for 1101, including overlapping candidate prefixes.",
+    "output": "start_shifting is zero after reset and becomes one immediately after the rising edge accepting the final bit of 1101. It remains one regardless of subsequent data until a rising edge with reset=1.",
+    "initialization": "Power-up behavior before the first sampled reset is unspecified; no initialization is required.",
+    "throughput": "One bit per rising edge without handshake or stalls."
+  },
+  "numeric": {
+    "type": "Single-bit binary inputs and output; sequence order is temporal 1,1,0,1.",
+    "arithmetic": "No arithmetic, signedness, rounding, saturation, or overflow behavior is involved.",
+    "state": "FSM stores matched sequence prefix and an absorbing detected state."
+  },
+  "verification": {
+    "oracle": "Independent four-bit sliding history with valid-bit count and sticky expected output; compare output after each rising edge.",
+    "coverage": "Exhaust all 4096 length-12 binary streams with reset between streams; test repeated ones, partial-prefix reset, reset after detection, data during reset, and synchronous reset asserted between edges.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts plus testbench watchdog.",
+    "scope": "Development simulation and static source review only; no official tests, synthesis, or board access."
+  },
+  "specification_ambiguities": ["Behavior before the first synchronous reset is unspecified; development checks begin with reset."]
+}

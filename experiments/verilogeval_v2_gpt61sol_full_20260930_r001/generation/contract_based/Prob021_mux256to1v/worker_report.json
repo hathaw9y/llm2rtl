@@ -1,0 +1,42 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structure only)",
+      "exit_code": 0,
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial candidate preservation",
+      "result": "PASS",
+      "detail": "candidate_initial.sv copied immediately after initial implementation and before development checks; byte-identical to candidate.sv.",
+      "identical": true
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS",
+      "detail": "Exact specified module and ports. Continuous indexed part select; 10-bit concatenated selector base spans 0..1020, upper selected bit at most 1023. No state, latch, clock, reset, data arithmetic, or dependencies."
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "result": "FAIL: compiler process terminated with status 139; no diagnostic output",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT RUN: compilation failed",
+      "planned_command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim"
+    }
+  ],
+  "development_outcome": "Synthesizable combinational candidate delivered with initial snapshot and independent self-checking testbench. Static review passed; development simulation unverified due to compiler failure.",
+  "limitations": [
+    "No successful compiler elaboration or simulation evidence.",
+    "X/Z selector behavior unspecified by original problem.",
+    "No synthesis, timing, board checks, or official evaluation performed."
+  ]
+}

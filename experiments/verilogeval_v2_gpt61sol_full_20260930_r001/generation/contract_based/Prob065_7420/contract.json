@@ -1,0 +1,80 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "p1a",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "p1b",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "p1c",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "p1d",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "p2a",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "p2b",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "p2c",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "p2d",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "p1y",
+        "direction": "output",
+        "width": 1
+      },
+      {
+        "name": "p2y",
+        "direction": "output",
+        "width": 1
+      }
+    ]
+  },
+  "semantics": {
+    "function": {
+      "p1y": "NOT (p1a AND p1b AND p1c AND p1d)",
+      "p2y": "NOT (p2a AND p2b AND p2c AND p2d)"
+    },
+    "timing": "Pure combinational logic; outputs follow current inputs with no clock or cycle latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization requirement.",
+    "independence": "Each output depends only on its corresponding four inputs."
+  },
+  "numeric": {
+    "type": "Single-bit unsigned logic",
+    "arithmetic": "Boolean AND followed by inversion; no arithmetic, overflow, rounding, or saturation."
+  },
+  "verification": {
+    "oracle": "For each four-bit binary group, output is 0 exactly when its unsigned value is 15; otherwise output is 1.",
+    "coverage": "Exhaust all 256 combinations of the eight input bits, checking both outputs after combinational settling.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp.",
+    "timeouts": "Finite external compile and simulation timeouts plus an internal testbench watchdog.",
+    "review": "Check exact interface and absence of state, delays, latches, and dependencies between gates."
+  },
+  "specification_ambiguities": []
+}

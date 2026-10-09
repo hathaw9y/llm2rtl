@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "cases_checked": 261,
+      "evidence_directory": "development/01",
+      "evidence_index": "dev_checks.jsonl"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "TopModule reverses eight input bits using a continuous assignment; original ports are preserved, with no clock, reset, or added latency.",
+  "verification": "Independent per-bit oracle checks all 256 binary inputs and five additional four-state/boundary cases with case inequality, fatal mismatch checks, and a bounded timeout.",
+  "static_review": "Eight-bit input and output; each output bit is connected to input bit 7 minus its index. No storage or inferred latches. Initial RTL snapshot preserved unchanged."
+}

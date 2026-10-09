@@ -1,0 +1,57 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "areset": {
+        "direction": "input",
+        "width": 1
+      },
+      "train_valid": {
+        "direction": "input",
+        "width": 1
+      },
+      "train_taken": {
+        "direction": "input",
+        "width": 1
+      },
+      "state": {
+        "direction": "output",
+        "width": 2
+      }
+    }
+  },
+  "semantics": {
+    "clock": "Sequential updates on posedge clk.",
+    "reset": "Active-high asynchronous reset triggered by posedge areset; reset has priority at clock edges while asserted and sets state to 2'b01.",
+    "training": "At posedge clk with areset low, train_valid=1 increments if train_taken=1 or decrements if train_taken=0; train_valid=0 holds state.",
+    "output": "state is the stored counter, updated after the triggering edge with no additional pipeline stages.",
+    "initialization": "No power-up initialization specified; verify only after reset.",
+    "between_edges": "Training input changes and falling clock edges do not update state; reset deassertion alone does not update state."
+  },
+  "numeric": {
+    "encoding": "Unsigned two-bit binary counter, range 0 through 3.",
+    "increment": "min(state+1,3)",
+    "decrement": "max(state-1,0)",
+    "overflow": "Saturate, never wrap.",
+    "reset_value": 1
+  },
+  "verification": {
+    "oracle": "Independent integer reference applying clamped addition/subtraction on each positive clock edge and reset to 1 on asynchronous assertion.",
+    "coverage": [
+      "All four starting states with all four combinations of training inputs",
+      "Repeated saturation at 0 and 3",
+      "Disabled training holds for either direction",
+      "Reset away from a clock edge",
+      "Reset priority over training and held reset through clock edges",
+      "Reset deassertion and falling edges preserve state",
+      "Repeated resets during active operation"
+    ],
+    "checks": "Self-checking independent development testbench, explicit dev_tb top, Icarus -g2012, finite compile and simulation timeouts; static source review."
+  },
+  "specification_ambiguities": []
+}

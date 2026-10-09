@@ -1,0 +1,38 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "a": 1,
+      "b": 1
+    },
+    "outputs": {
+      "q": 1,
+      "state": 1
+    }
+  },
+  "semantics": {
+    "memory": "One uninitialized positive-edge flip-flop, exposed as state; no reset port or initialization.",
+    "transition": "state captures a AND b at each positive edge.",
+    "output": "q = a XOR b XOR state, combinational.",
+    "evidence": "state at 75 ns reflects a=b=1 from 65-70 ns; state at 85 ns reflects a=b=0 from 75-80 ns. All eight binary combinations of a,b,state appear and match XOR parity. State and q initially X; a=0,b=0 before 15 ns establishes state=0.",
+    "sampling": "Input changes listed at positive edges are interpreted as occurring after the flip-flop samples the preceding values; observations reflect new inputs and updated state after settling."
+  },
+  "numeric": {
+    "widths": "All signals one bit",
+    "operations": "Bitwise AND for D; three-input XOR for q",
+    "unknowns": "Four-state logic: uninitialized state X; 0 AND X is 0; XOR with X is X"
+  },
+  "verification": {
+    "waveform": "Replay every original row at its original timestamp, checking outputs after delta/NBA settling; edge-coincident input changes scheduled by NBA to preserve preceding-value capture.",
+    "directed": "After waveform, exercise all eight known state/input combinations, off-edge combinational changes, state stability away from rising edges, and unknown-input masking/propagation.",
+    "success": "Fatal mismatch, bounded timeout, PASS line only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Table does not explicitly specify simulator scheduling for input changes coincident with rising edges.",
+      "resolution": "The changes at 75 and 85 ns show state sampling preceding inputs, so replay applies edge-coincident inputs after clock sampling."
+    }
+  ]
+}

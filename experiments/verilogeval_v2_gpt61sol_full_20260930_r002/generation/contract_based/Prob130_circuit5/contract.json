@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 4,
+      "b": 4,
+      "c": 4,
+      "d": 4,
+      "e": 4
+    },
+    "outputs": {
+      "q": 4
+    },
+    "clock_reset": "None; original specifies a combinational circuit."
+  },
+  "semantics": {
+    "selection": {
+      "0": "b",
+      "1": "e",
+      "2": "a",
+      "3": "d",
+      "4 through 15": "4'hf"
+    },
+    "latency": "Combinational, no cycle delay or storage.",
+    "evidence": "problem.txt waveform at 15,20,25,30 ns establishes selection; 35 through 90 ns establish constant f.",
+    "initialization": "At 0,5,10 ns all inputs and q are x. Preserve q=4'hx for unknown c; no reset or initialized state."
+  },
+  "numeric": {
+    "type": "Unsigned four-bit vectors",
+    "arithmetic": "None; exact bitwise selection or constant 4'hf.",
+    "overflow_rounding": "Not applicable."
+  },
+  "verification": {
+    "oracle": "Original problem waveform and stated combinational circuit, independent expected values.",
+    "waveform": "Replay unknown observations at 0,5,10 ns and original data/selector at 15 through 90 ns; sample after delta settling without shifting stimulus times.",
+    "coverage": "All 16 selectors, all 65536 four-data combinations per selector, selected unknown payload propagation.",
+    "failure": "Case-inequality mismatch causes fatal; bounded timeout; PASS only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "Waveform cannot mathematically identify a unique function for all unshown data combinations; infer the conventional data mux from the four distinct selected outputs.",
+    "Partially unknown or high-impedance selectors are not specified; use unknown output. All-unknown initial behavior is explicitly shown."
+  ]
+}

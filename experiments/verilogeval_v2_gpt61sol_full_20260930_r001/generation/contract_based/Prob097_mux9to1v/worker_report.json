@@ -1,0 +1,47 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (passed_structure_only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial preservation",
+      "result": "PASS: candidate.sv equals candidate_initial.sv, checked with cmp"
+    },
+    {
+      "name": "static RTL review",
+      "result": "Exact interface; complete selector case; combinational blocking assignments; no storage, clock, reset, arithmetic, or dependencies"
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "FAILED: exit 139; diagnostic log empty",
+      "log": "compile.log",
+      "status_log": "development_status.log"
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT RUN because compilation failed"
+    }
+  ],
+  "development_outcome": "Frozen contract gate passed. Initial candidate retained unchanged. Independent self-checking testbench prepared for 2384 comparisons, but simulator compilation failed; functional simulation is unverified.",
+  "limitations": [
+    "No successful development simulation or lint result.",
+    "No synthesis, timing or board evidence was requested or produced.",
+    "Official evaluation is external and its results are unavailable.",
+    "Unknown selector behavior is unspecified by the problem."
+  ],
+  "process_notes": [
+    "Initial contract creation encountered a Python quoting syntax error before any contract or RTL existed; failed gate output preserved in contract_validation_attempt1.log. Creation was corrected and structural gate passed before writing RTL."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  }
+}

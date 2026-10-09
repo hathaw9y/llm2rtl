@@ -1,0 +1,54 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "isa_command_dispatcher",
+  "module_kind": "infrastructure",
+  "status": "frozen",
+  "target": {"board": "ZCU104", "part": "xczu7ev-ffvc1156-2-e", "clock_mhz": 200},
+  "routed_opcodes": ["END", "DMA_LOAD", "DMA_STORE", "GEMM", "RMSNORM", "ROPE", "ATTN_SCORE", "SOFTMAX", "ATTN_VALUE", "ADD", "SILU_MUL", "FENCE"],
+  "interface": {
+    "source_template": "ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv",
+    "extension_rule": "Copy the common template; change only USER marker bodies and the generated module name. The generated revision needs fresh proof.",
+    "command_record_bits": 128,
+    "bank_count": 13,
+    "bank_role_width": 5,
+    "compute_channels": ["GEMM", "RMSNORM", "ROPE", "ATTN_SCORE", "SOFTMAX", "ATTN_VALUE", "VECTOR"],
+    "compute_request": "Each channel has cmd_valid/cmd_ready, opcode, three logical bank IDs and 112 compute payload bits. cmd_valid and payload remain stable until acceptance.",
+    "compute_response": "Each channel has done_valid/done_ready, response tag equal to accepted operand0 bank, used bank count, all three operand bank IDs, and error. One command may be outstanding per channel. Unused bank fields must echo the accepted command fields.",
+    "executor_completion_order": "An executor asserts done_valid only after its final destination bank write has been accepted. It holds tag, bank count, bank IDs and error stable until done_ready. A matching response releases bank ownership at that handshake.",
+    "bank_ownership": "All distinct operand banks are acquired atomically on request acceptance. A completion must match tag, count and every returned bank ID against the accepted command; only then are the returned used bank IDs released exactly once with the stored bank_layout.json module-port roles.",
+    "write_metadata": "Emit per-bank issue and matched completion events to bank_tensor_state_tracker for DMA_LOAD and compute destinations. DMA_STORE and FENCE do not alter tensor validity.",
+    "bank_data_ports": "Owned by execution fabric/wrapper; dispatcher routes logical bank IDs only."
+  },
+  "numeric": {"kind": "control_only", "tensor_arithmetic": "none"},
+  "control_rules": {
+    "pc": "Strict in-order issue; advance after request acceptance, except END. No lookahead.",
+    "dma_load": "Completion must mean the final local bank write has finished. Embedding rows use aux expected_rows and row for PART progress; all other DMA_LOAD transfers use FULL progress.",
+    "dma_store": "Source bank must be valid before issue; completion must mean DDR write response received.",
+    "source_validity": "A compute command may issue only when each source tensor is complete and valid. For ROPE and SOFTMAX, the in-place bank must be valid at acceptance.",
+    "bank_pair_legality": "Compute operand role-bank pairs must match smollm2_bank_port_router.json. Fixed DMA role-bank pairs are rejected in the extension before request acceptance.",
+    "gemm_output": "PART progress uses n_start,n_tile,n_total from the approved payload; the bank becomes valid only after the last tile completes.",
+    "other_outputs": "FULL progress after successful response; ROPE and SOFTMAX use INPLACE progress.",
+    "fence": "No executor request, bank acquire or tensor mutation. It advances PC only after all earlier DMA and compute completions have drained and all banks are idle.",
+    "end": "DONE only after all earlier completions have drained and all banks are idle. State tracker and bank contents persist until explicit reset; PS may then load the next BRAM chunk.",
+    "errors": "Spurious or mismatched tag, bank count or bank ID is an error and never releases a bank. Recovery requires coherent reset if no correct completion arrives. Failed matched completion releases the bank, invalidates its write destination and enters error drain."
+  },
+  "verification": {
+    "required_cases": [
+      "all 12 opcode encodings and legal/illegal operand shapes",
+      "backpressure keeps request valid and payload stable",
+      "distinct-bank compute and DMA overlap with independently matched responses",
+      "same-bank hazard stalls current PC",
+      "GEMM partial output remains invalid until final N tile",
+      "DMA_LOAD embedding rows remain invalid until final row",
+      "DMA_STORE rejects an incomplete source",
+      "FENCE waits for DDR S2MM response and any compute completion",
+      "END waits for pending work but preserves banks and tensor state for next chunk",
+      "spurious tag or mismatched returned bank ID never releases bank ownership or completes tensor",
+      "failed matched executor response releases banks and invalidates destination"
+    ],
+    "required_tools": ["self-checking RTL simulation", "Verilator lint", "Vivado out-of-context synthesis"],
+    "proof_scope": "Control routing only; compute numerical, bank data routing, board and Vitis execution need separate evidence."
+  }
+}

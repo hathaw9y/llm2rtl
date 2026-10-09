@@ -1,0 +1,178 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob149_ece241_2013_q4",
+  "official_status": "functional_failure",
+  "workflow_status": "failed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob149_ece241_2013_q4",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob149_ece241_2013_q4/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790736992.5373297,
+    "ended_at_unix": 1790737144.1704054,
+    "seconds": 151.6330761909485,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 156233,
+      "cached_input_tokens": 132992,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2571,
+      "reasoning_output_tokens": 104
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "27dee4bca6272786fd17d50780d3ef94043a461dd72d1b43d254c9d0dc52c825",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "outcome": "passed",
+        "details": "Reviewed exact interface, synchronous active-high reset, registered nominal flow, direction retention, endpoint supplemental flow, complete combinational assignments and single register drivers."
+      },
+      {
+        "name": "Icarus 12 development compile",
+        "outcome": "tool_failed",
+        "exit_code": 139,
+        "timeout_seconds": 30,
+        "top": "dev_tb",
+        "language_flag": "-g2012",
+        "logs": [
+          "compile.log",
+          "development_status.log"
+        ]
+      },
+      {
+        "name": "Icarus version diagnostic",
+        "outcome": "backend_version_unavailable",
+        "exit_code": 0,
+        "timeout_seconds": 10,
+        "log": "tool_version.log"
+      }
+    ],
+    "development_outcome": "Initial synthesizable candidate delivered unchanged and preserved as candidate_initial.sv. Independent self-checking testbench created for all length-six sequences of valid water levels, repeated resets, direction changes, holds, jumps and synchronous output behavior. Compilation failed; no simulation success is claimed.",
+    "limitations": [
+      "Development simulation could not run because the specified compiler exited with code 139 without diagnostics.",
+      "Physically inconsistent sensor patterns are unspecified by the problem; this implementation retains the current level for those patterns.",
+      "No official evaluation, synthesis, timing or board results are available."
+    ]
+  },
+  "final": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "27dee4bca6272786fd17d50780d3ef94043a461dd72d1b43d254c9d0dc52c825",
+      "Prob149_ece241_2013_q4_test.sv": "9960ee5afb688df4d1ea88fb41b0bf3f4ca0ad84f78fce34291c65f1b0dcb09c",
+      "Prob149_ece241_2013_q4_ref.sv": "e31ed6b179de4a33384b70182dc83a894ba4db0da08ab72945f3dd6f60788e06"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob149_ece241_2013_q4_test.sv",
+        "Prob149_ece241_2013_q4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01346435397863388
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb149_ece241_2013_q4_test.sv:84: $finish called at 10200 (1ps)\nHint: Output 'fr2' has no mismatches.\nHint: Output 'fr1' has no mismatches.\nHint: Output 'fr0' has no mismatches.\nHint: Output 'dfr' has 1171 mismatches. First mismatch occurred at time 30.\nHint: Total mismatched samples is 1171 out of 2040 samples\n\nSimulation finished at 10200 ps\nMismatches: 1171 in 2040 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.02426831517368555
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1171,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "27dee4bca6272786fd17d50780d3ef94043a461dd72d1b43d254c9d0dc52c825",
+      "Prob149_ece241_2013_q4_test.sv": "9960ee5afb688df4d1ea88fb41b0bf3f4ca0ad84f78fce34291c65f1b0dcb09c",
+      "Prob149_ece241_2013_q4_ref.sv": "e31ed6b179de4a33384b70182dc83a894ba4db0da08ab72945f3dd6f60788e06"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob149_ece241_2013_q4_test.sv",
+        "Prob149_ece241_2013_q4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013221918605268002
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb149_ece241_2013_q4_test.sv:84: $finish called at 10200 (1ps)\nHint: Output 'fr2' has no mismatches.\nHint: Output 'fr1' has no mismatches.\nHint: Output 'fr0' has no mismatches.\nHint: Output 'dfr' has 1171 mismatches. First mismatch occurred at time 30.\nHint: Total mismatched samples is 1171 out of 2040 samples\n\nSimulation finished at 10200 ps\nMismatches: 1171 in 2040 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.024105409160256386
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1171,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "R"
+}

@@ -1,0 +1,83 @@
+#! /home/conda/feedstock_root/build_artifacts/bld/rattler-build_iverilog_1777218095/host_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/lib/ivl/system.vpi";
+:vpi_module "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/lib/ivl/v2005_math.vpi";
+:vpi_module "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/lib/ivl/va_math.vpi";
+:vpi_module "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/lib/ivl/v2009.vpi";
+S_0x63556a944e80 .scope package, "$unit" "$unit" 2 1;
+ .timescale 0 0;
+S_0x63556a945ef0 .scope module, "dev_tb" "dev_tb" 3 1;
+ .timescale 0 0;
+v0x63556a981c60_0 .var "in1", 0 0;
+v0x63556a981d00_0 .var "in2", 0 0;
+v0x63556a981dd0_0 .net "out", 0 0, L_0x63556a981fc0;  1 drivers
+S_0x63556a96dff0 .scope begin, "$ivl_for_loop0" "$ivl_for_loop0" 3 6, 3 6 0, S_0x63556a945ef0;
+ .timescale 0 0;
+v0x63556a96e180_0 .var/i "i", 31 0;
+S_0x63556a981670 .scope module, "dut" "TopModule" 3 4, 4 1 0, S_0x63556a945ef0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "in1";
+    .port_info 1 /INPUT 1 "in2";
+    .port_info 2 /OUTPUT 1 "out";
+L_0x63556a981ed0 .functor NOT 1, v0x63556a981d00_0, C4<0>, C4<0>, C4<0>;
+L_0x63556a981fc0 .functor AND 1, v0x63556a981c60_0, L_0x63556a981ed0, C4<1>, C4<1>;
+v0x63556a9818c0_0 .net *"_ivl_0", 0 0, L_0x63556a981ed0;  1 drivers
+v0x63556a9819c0_0 .net "in1", 0 0, v0x63556a981c60_0;  1 drivers
+v0x63556a981a80_0 .net "in2", 0 0, v0x63556a981d00_0;  1 drivers
+v0x63556a981b20_0 .net "out", 0 0, L_0x63556a981fc0;  alias, 1 drivers
+    .scope S_0x63556a945ef0;
+T_0 ;
+    %fork t_1, S_0x63556a96dff0;
+    %jmp t_0;
+    .scope S_0x63556a96dff0;
+t_1 ;
+    %pushi/vec4 0, 0, 32;
+    %store/vec4 v0x63556a96e180_0, 0, 32;
+T_0.0 ;
+    %load/vec4 v0x63556a96e180_0;
+    %cmpi/s 4, 0, 32;
+    %jmp/0xz T_0.1, 5;
+    %load/vec4 v0x63556a96e180_0;
+    %parti/s 2, 0, 2;
+    %split/vec4 1;
+    %store/vec4 v0x63556a981d00_0, 0, 1;
+    %store/vec4 v0x63556a981c60_0, 0, 1;
+    %delay 1, 0;
+    %load/vec4 v0x63556a981dd0_0;
+    %load/vec4 v0x63556a96e180_0;
+    %pushi/vec4 2, 0, 32;
+    %cmp/e;
+    %flag_get/vec4 4;
+    %cmp/ne;
+    %jmp/0xz  T_0.2, 6;
+    %vpi_call/w 3 10 "$fatal", 32'sb00000000000000000000000000000001, "FAIL inputs=%b%b out=%b", v0x63556a981c60_0, v0x63556a981d00_0, v0x63556a981dd0_0 {0 0 0};
+T_0.2 ;
+    %load/vec4 v0x63556a96e180_0;
+    %addi 1, 0, 32;
+    %store/vec4 v0x63556a96e180_0, 0, 32;
+    %jmp T_0.0;
+T_0.1 ;
+    %end;
+    .scope S_0x63556a945ef0;
+t_0 %join;
+    %vpi_call/w 3 12 "$display", "PASS: all four binary input combinations" {0 0 0};
+    %vpi_call/w 3 13 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+    .scope S_0x63556a945ef0;
+T_1 ;
+    %delay 100, 0;
+    %vpi_call/w 3 17 "$fatal", 32'sb00000000000000000000000000000001, "FAIL: timeout" {0 0 0};
+    %end;
+    .thread T_1;
+# The file index is used to find the file name in the following table.
+:file_names 5;
+    "N/A";
+    "<interactive>";
+    "-";
+    "dev_tb.sv";
+    "candidate.sv";

@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"do_sub": 1, "a": 8, "b": 8}, "outputs": {"out": 8, "result_is_zero": 1}, "clock_reset": "None: original interface has no clock or reset."},
+  "semantics": {"operation": "do_sub=0 adds a and b; do_sub=1 subtracts b from a.", "zero_flag": "result_is_zero equals (out == 8'h00), assigned for both zero and nonzero results.", "timing": "Combinational as evidenced by original always @(*); no state or added latency.", "initialization": "No specified initialization; outputs settle from current inputs without reset."},
+  "numeric": {"operands": "Unsigned 8-bit vectors", "result": "Low eight bits of addition or subtraction, modulo 256, from original 8-bit out assignment", "flag": "Tests truncated 8-bit result, including overflow yielding zero"},
+  "verification": {"oracle": "Independent integer addition/subtraction modulo 256 from original stated adder-subtractor and zero flag", "coverage": "Directed flag transitions and wrap boundaries, then exhaustive 2*256*256 binary input combinations", "sampling": "Drive inputs then wait one simulation time unit for combinational settling", "failure": "$fatal on mismatch; bounded timeout; explicit PASS only on completion", "evaluator": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": [{"topic": "Unknown or high-impedance control/operands", "evidence": "Original problem states binary operation cases but gives no required X/Z behavior", "resolution": "Binary inputs define verified behavior; unknown do_sub produces unknown out rather than retained state, with ordinary four-state equality for flag."}]
+}

@@ -1,0 +1,19 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"name": "environment_smoke", "status": "passed", "evidence": "environment_smoke.json", "cases": "Correct fixture passes, deliberately wrong fixture fails, repaired fixture passes."},
+    {"name": "contract_structure", "status": "passed_structure_only", "evidence": "contract_gate.json"},
+    {"name": "initial", "status": "passed", "evidence": "development/01/result.json", "coverage": "Original waveform at original rising/falling timestamps; initial unknown done; discard bytes; consecutive packets; all byte values in payload positions; reset during every packet phase; reset pulses between clock edges; deterministic random stream."}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation or a formal correctness proof.",
+    "out_bytes is intentionally unchecked outside done because the original specification declares it don't-care.",
+    "The contract gate validates structure only."
+  ],
+  "justified_RTL_changes": [],
+  "justified_TB_changes": [],
+  "contract_changes": [],
+  "implementation_reasoning": "The explicit original waveform reports at 45ns the packet whose third byte was sampled at 35ns. A report state delays done by one edge and accepts the next candidate first byte on that reporting edge. Completed packet publication uses the buffered data before simultaneous acceptance of a subsequent first byte.",
+  "artifacts": {"RTL": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json", "development_history": "dev_checks.jsonl"}
+}

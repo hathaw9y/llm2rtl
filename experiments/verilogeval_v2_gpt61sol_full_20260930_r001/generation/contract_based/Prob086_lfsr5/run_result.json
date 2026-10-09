@@ -1,0 +1,181 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob086_lfsr5",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob086_lfsr5",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob086_lfsr5/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790733774.4696226,
+    "ended_at_unix": 1790733887.0233004,
+    "seconds": 112.55367803573608,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 122500,
+      "cached_input_tokens": 108288,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2698,
+      "reasoning_output_tokens": 120
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "4d86f2293f52bc5bcb61e1a28cb630c012f689920a1d231fc47de76e576174c3",
+  "contract_sha256": "676eb8af9860da057a0668e4e0924ba6a52221a52f4c31c0a23aa1f289a94211",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "frozen_contract_gate",
+        "command": "python3 validate_contract.py",
+        "outcome": "PASS (structure only)",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "initial_candidate_preservation",
+        "outcome": "candidate_initial.sv copied immediately after initial implementation, before development checks"
+      },
+      {
+        "name": "static_review",
+        "outcome": "RTL matches frozen per-bit equations, exact ports, 5-bit reset seed and synchronous positive-edge reset; single sequential driver, nonblocking assignments, no simulation-only DUT constructs"
+      },
+      {
+        "name": "development_compile",
+        "outcome": "FAILED: exit 139, no compiler diagnostics",
+        "log": "dev_compile.log",
+        "status_file": "dev_compile_status.json",
+        "timeout_seconds": 20
+      },
+      {
+        "name": "development_simulation",
+        "outcome": "NOT RUN because compilation failed"
+      }
+    ],
+    "development_outcome": "Initial synthesizable candidate delivered without revisions. Independent self-checking dev_tb.sv prepared for cycle oracle, full nonzero state coverage, two complete periods, synchronous reset priority, held reset, mid-sequence restart, and between-edge stability. Tool failure prevented executable verification.",
+    "limitations": [
+      "No simulation success is claimed; required Icarus compiler exited 139.",
+      "Contract validator establishes structural completeness, not functional correctness.",
+      "Power-up state before synchronous reset is unspecified by the original problem.",
+      "Official evaluation results are unavailable; no synthesis or board work performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "4d86f2293f52bc5bcb61e1a28cb630c012f689920a1d231fc47de76e576174c3",
+      "Prob086_lfsr5_ref.sv": "f2e92f3eb73c77bfdcf81b00cbc032cea78d888428e11235c4eae04897d8ac6f",
+      "Prob086_lfsr5_test.sv": "e17dd6b4ee5387085ecac2fba94676ad53cb4bfd55fb116b246fadd2fecd04ac"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob086_lfsr5_test.sv",
+        "Prob086_lfsr5_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013728830963373184
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb086_lfsr5_test.sv:65: $finish called at 22216 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 4443 samples\n\nSimulation finished at 22216 ps\nMismatches: 0 in 4443 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.026688060723245144
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "4d86f2293f52bc5bcb61e1a28cb630c012f689920a1d231fc47de76e576174c3",
+      "Prob086_lfsr5_ref.sv": "f2e92f3eb73c77bfdcf81b00cbc032cea78d888428e11235c4eae04897d8ac6f",
+      "Prob086_lfsr5_test.sv": "e17dd6b4ee5387085ecac2fba94676ad53cb4bfd55fb116b246fadd2fecd04ac"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob086_lfsr5_test.sv",
+        "Prob086_lfsr5_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011476854793727398
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb086_lfsr5_test.sv:65: $finish called at 22216 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 4443 samples\n\nSimulation finished at 22216 ps\nMismatches: 0 in 4443 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.026668278500437737
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "in": {
+        "width": 8
+      }
+    },
+    "outputs": {
+      "out": {
+        "width": 32
+      }
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "function": "out[7:0] = in; every out bit 8 through 31 equals in[7]",
+    "timing": "Pure combinational continuous mapping; no clock or cycle latency",
+    "reset": "No reset port or reset behavior specified",
+    "initialization": "No stored state; output follows input including four-state bits",
+    "evidence": "problem.txt explicitly requires 24 copies of bit[7] followed by the 8-bit number; interface contains only in and out"
+  },
+  "numeric": {
+    "input_encoding": "8-bit two\u2019s complement bit pattern",
+    "output_encoding": "32-bit sign-extended bit pattern",
+    "widths": {
+      "input": 8,
+      "extension": 24,
+      "output": 32
+    },
+    "rounding": "none",
+    "overflow": "none; value preserved"
+  },
+  "verification": {
+    "top": "dev_tb",
+    "oracle": "Independent arithmetic signed-value conversion for all binary inputs; per-bit mapping for X/Z cases",
+    "coverage": "All 256 input patterns, signed boundaries, all-X initial input, X and Z sign and payload bits",
+    "sampling": "Check after a 1 ns combinational settling interval; no clock/reset stimulus",
+    "failure": "$fatal on mismatch or bounded timeout",
+    "success": "Explicit PASS line after all checks",
+    "primary_command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

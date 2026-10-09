@@ -1,0 +1,32 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "check": "smoke_environment",
+      "status": "passed",
+      "cases": "correct passed; injected fault failed as expected; repaired passed"
+    },
+    {
+      "check": "contract_structure",
+      "status": "passed_structure_only",
+      "evidence": "contract_gate.json"
+    },
+    {
+      "check": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "compile_log": "development/01/compile.log",
+      "simulation_log": "development/01/simulation.log"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation.",
+    "Coincident a/clk changes in the source waveform have unspecified event ordering; implementation assumes a changes after edge sampling. The finite waveform does not uniquely determine all possible sequential circuits."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Single positive-edge register captures ~a; no reset or initialization added.",
+  "verification": "Original 0-90 ns waveform replay plus pre-edge transitions, output hold, unknown/high-impedance propagation and recovery.",
+  "initial_snapshot_preserved": true
+}

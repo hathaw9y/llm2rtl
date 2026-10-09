@@ -1,0 +1,56 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "in",
+        "direction": "input",
+        "width": 32,
+        "range": "[31:0]"
+      },
+      {
+        "name": "out",
+        "direction": "output",
+        "width": 32,
+        "range": "[31:0]"
+      }
+    ]
+  },
+  "semantics": {
+    "function": "Reverse the order of four bytes, preserving bit order within each byte.",
+    "mapping": {
+      "out[31:24]": "in[7:0]",
+      "out[23:16]": "in[15:8]",
+      "out[15:8]": "in[23:16]",
+      "out[7:0]": "in[31:24]"
+    },
+    "timing": "Pure combinational mapping; output follows input without clocked latency.",
+    "clock": "none",
+    "reset": "none",
+    "initialization": "No stored state or initialization required.",
+    "handshake": "none"
+  },
+  "numeric": {
+    "input": "32-bit unsigned packed bit vector",
+    "output": "32-bit unsigned packed bit vector",
+    "byte_width": 8,
+    "byte_count": 4,
+    "arithmetic": "No arithmetic, signed interpretation, rounding, truncation, saturation, or overflow; all bits are preserved by permutation."
+  },
+  "verification": {
+    "oracle": "For each source bit i, expected destination bit is (3 - i//8)*8 + i%8; implement independently in a testbench bit loop.",
+    "directed": [
+      "zero",
+      "all ones",
+      "distinct bytes 0x12345678 -> 0x78563412",
+      "alternating patterns",
+      "all 32 walking-one and walking-zero vectors"
+    ],
+    "random": "1000 deterministic pseudorandom vectors",
+    "comparison": "Exact four-state comparison after combinational settling.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; finite external timeouts for compile and simulation.",
+    "scope": "Development simulation only; no official tests, synthesis, or board checks."
+  },
+  "specification_ambiguities": []
+}

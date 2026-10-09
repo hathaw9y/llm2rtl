@@ -1,0 +1,81 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "w": {
+        "direction": "input",
+        "width": 1
+      },
+      "z": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "reset": "Assume active-high synchronous reset; reset has priority and selects A on a rising edge.",
+    "initialization": "No power-up initialization specified; behavior checked after a reset edge.",
+    "input_sampling": "w selects the transition at each rising edge when reset is low.",
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "D"
+      },
+      "C": {
+        "0": "E",
+        "1": "D"
+      },
+      "D": {
+        "0": "F",
+        "1": "A"
+      },
+      "E": {
+        "0": "E",
+        "1": "D"
+      },
+      "F": {
+        "0": "C",
+        "1": "D"
+      }
+    },
+    "output": "Combinational Moore output from current registered state: z=1 in E or F; z=0 in A,B,C,D. No extra output pipeline.",
+    "between_edges": "w and reset changes do not alter registered state or z before a rising clock edge.",
+    "illegal_state": "Not specified by problem; implementation may recover to A; no functional claim for illegal state or unknown inputs."
+  },
+  "numeric": {
+    "ports": "Unsigned one-bit control signals",
+    "arithmetic": "No arithmetic, rounding, saturation, or overflow",
+    "state_encoding": "Implementation-defined internal encoding of six states"
+  },
+  "verification": {
+    "oracle": "Independent integer-state transition table transcribed from original problem; compare only public z.",
+    "coverage": "Enumerate all binary input sequences of length 10 starting from reset; cover all 12 state/input transitions, prolonged E and A loops, reset from every reachable state with both w values.",
+    "timing": "Check z after each rising edge and check stability while w/reset change before a rising edge, including reset asserted while z=1.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp; finite shell and testbench timeouts.",
+    "scope": "Development verification only; no official testbench, synthesis, or board evidence."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Reset polarity and reset destination are omitted.",
+      "resolution": "Assume active-high reset to A, the first listed state."
+    },
+    {
+      "issue": "Reset synchronicity is not separately stated.",
+      "resolution": "Use synchronous reset because all sequential logic is specified to trigger on positive clock edges."
+    }
+  ]
+}

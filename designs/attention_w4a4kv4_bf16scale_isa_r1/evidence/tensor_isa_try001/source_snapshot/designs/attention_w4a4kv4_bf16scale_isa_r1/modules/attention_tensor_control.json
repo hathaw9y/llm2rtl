@@ -1,0 +1,63 @@
+{
+  "schema": "llm2rtl.module_packet.v1",
+  "status": "frozen",
+  "authorization": "User: \uacc4\uc18d \uc9c4\ud589\ud574",
+  "common_contracts": {
+    "contracts/common/engine_completion_contract.json": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446",
+    "contracts/common/evidence_identity_contract.json": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda",
+    "contracts/common/isa_command_contract.json": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15",
+    "contracts/common/local_bank_contract.json": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d"
+  },
+  "rtl_contract": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/rtl_contract.md",
+    "sha256": "78767ed45329729e8b5a32ab78270ede83bda3cfc76c45eafb17f4baf22c06bb"
+  },
+  "isa": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/isa_spec.json",
+    "sha256": "d695117b2da384a40a40509fc4ec5cd80fffd4d94eeeaaeeb6630b3b4916186c"
+  },
+  "hardware": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_ns": 5,
+    "vivado": "2025.2"
+  },
+  "recursive_subagents": false,
+  "forbidden_claims": [
+    "board",
+    "routed timing",
+    "pretrained model support or accuracy",
+    "previous revision PASS inheritance"
+  ],
+  "module_id": "attention_tensor_control",
+  "agent_role": "infrastructure_dispatcher_and_bank_integration",
+  "scope": "new design-local controller, generated descriptor/package ROM, ownership-routing-memory wrapper; executor child integrated only after independent acceptance",
+  "write_scope": [
+    "rtl/attention_tensor_pkg.sv",
+    "rtl/attention_tensor_config_pkg.sv",
+    "rtl/attention_descriptor_rom.sv",
+    "rtl/attention_tensor_controller.sv",
+    "rtl/attention_tensor_bank_subsystem.sv",
+    "rtl/attention_tensor_isa_top.sv",
+    "scripts/generate_tensor_config.py",
+    "scripts/run_control*",
+    "scripts/control_*",
+    "tb/tb_attention_control.sv",
+    "evidence/control*"
+  ],
+  "protected": [
+    "all shared infrastructure and previous revision files",
+    "isa_program.py and existing program artifacts",
+    "modules/*.json"
+  ],
+  "verification": [
+    "preload command BRAM: full8-bit bank guard/reserved/opcode checks and expected descriptor shape validation",
+    "atomic acquisition on request handshake; full5-bit DMA response bank identity; compute savedid; release only quiescent completion; no partial destination commit",
+    "END drain, missingEND bound, uninitializedsource, stalledcmd/completion, wrongresponseidentity, error/reset/restart",
+    "XPM bank native data route and source response latency; strictlint OOC report on real completed topology"
+  ],
+  "dependencies": {
+    "executor": "attention_tensor_executor",
+    "math": "attention_fp32_math"
+  },
+  "boundary": "rtl_contract.md exact executor/context/descriptor ABI, no user change to program fields"
+}

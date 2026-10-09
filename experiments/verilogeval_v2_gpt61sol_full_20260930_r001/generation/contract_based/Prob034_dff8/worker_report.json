@@ -1,0 +1,42 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "exit_code": 0,
+      "outcome": "PASS (structural gate only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_rtl_review",
+      "outcome": "PASS",
+      "details": "TopModule ports clk, d[7:0], q[7:0]; one always_ff positive-edge block; q <= d; no reset, initialization, enable, arithmetic, or instantiated dependencies."
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "outcome": "PASS"
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "outcome": "FAILED: compiler terminated without diagnostics; no executable produced",
+      "log": "development_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "exit_code": 255,
+      "outcome": "FAILED: Unable to open input file",
+      "log": "development_simulation.log"
+    }
+  ],
+  "development_outcome": "Best RTL delivered unchanged from initial implementation. Contract gate and static review passed; development compilation failed, so no simulation success is claimed.",
+  "limitations": [
+    "Independent testbench was written but could not execute because development compilation failed.",
+    "No synthesis, timing, board or official evaluation results are available.",
+    "Power-up q is unspecified by the original problem."
+  ]
+}

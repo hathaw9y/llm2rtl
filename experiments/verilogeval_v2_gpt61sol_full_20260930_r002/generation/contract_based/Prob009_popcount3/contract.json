@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "in": "unsigned packed [2:0]"
+    },
+    "outputs": {
+      "out": "unsigned packed [1:0]"
+    },
+    "evidence": "problem.txt explicitly names TopModule and gives input 3 bits, output 2 bits"
+  },
+  "semantics": {
+    "function": "out equals the number of 1 bits in in",
+    "timing": "pure combinational response after settling; no clock or cycle latency",
+    "reset": "no reset port or reset behavior specified",
+    "initialization": "no stored state or initialization requirement; output determined by input",
+    "evidence": "problem.txt describes a population count circuit and lists only in and out"
+  },
+  "numeric": {
+    "input_domain": "all eight binary three-bit vectors",
+    "output_range": [
+      0,
+      3
+    ],
+    "arithmetic": "unsigned exact count with two-bit operands and result",
+    "overflow": "none: maximum count 3 is representable in two bits"
+  },
+  "verification": {
+    "oracle": "independent explicit expected-count table derived from original population-count requirement",
+    "coverage": "all eight vectors and all 64 ordered transitions between vectors",
+    "sampling": "drive input then wait 1 ns for combinational settling",
+    "failure": "$fatal on mismatch or bounded timeout",
+    "success": "PASS line only after every comparison succeeds",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "four-state inputs",
+      "evidence": "original problem does not specify X or Z behavior",
+      "resolution": "verify all binary vectors; do not impose an additional four-state requirement"
+    }
+  ]
+}

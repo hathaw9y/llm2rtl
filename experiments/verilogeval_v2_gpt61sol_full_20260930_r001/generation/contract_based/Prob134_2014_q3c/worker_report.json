@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial candidate preservation",
+      "result": "PASS",
+      "details": "candidate_initial.sv copied immediately after initial RTL write, before development checks; matches final candidate byte-for-byte."
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS",
+      "details": "Exact ports and widths; all ten specified y/x mappings checked manually; z asserted in states 011 and 100; complete combinational assignments, no inferred storage, no clock/reset logic, no arithmetic."
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim.vvp candidate.sv dev_tb.sv",
+      "result": "FAILED",
+      "exit_code": 139,
+      "log": "compile.log",
+      "exit_code_file": "compile.exitcode",
+      "details": "Compiler terminated with exit code 139; diagnostic log is empty."
+    },
+    {
+      "name": "development simulation",
+      "result": "NOT RUN",
+      "details": "Compilation failed; no successful simulation claimed."
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate delivered without RTL revisions. Contract structural validation and static review passed; independent self-checking testbench prepared but simulator compile failed.",
+  "limitations": [
+    "No successful development simulation due to compiler exit code 139.",
+    "Unlisted states 101, 110, 111 use documented zero defaults; original problem leaves them unspecified.",
+    "Four-state unknown inputs are not specified by the problem.",
+    "No synthesis, timing, board, or official evaluation results obtained."
+  ]
+}

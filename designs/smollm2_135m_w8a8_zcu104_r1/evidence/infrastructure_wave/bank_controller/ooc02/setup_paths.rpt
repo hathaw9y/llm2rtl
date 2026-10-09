@@ -1,0 +1,788 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
+| Date              : Fri Oct  9 18:34:28 2026
+| Host              : admin1-SYS-521C-NR running 64-bit Ubuntu 22.04.5 LTS
+| Command           : report_timing -delay_type max -max_paths 10 -file setup_paths.rpt
+| Design            : smollm2_bank_controller
+| Device            : xczu7ev-ffvc1156
+| Speed File        : -2  PRODUCTION 1.30 05-15-2022
+| Design State      : Synthesized
+| Temperature Grade : E
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             1.062ns  (required time - arrival time)
+  Source:                 owner_txn_r_reg[11][3]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            ownership/bank_owner_port_reg[0][0]/CE
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.833ns  (logic 1.276ns (33.290%)  route 2.557ns (66.710%))
+  Logic Levels:           15  (CARRY8=2 LUT3=1 LUT4=2 LUT5=2 LUT6=8)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=2644, unset)         0.030     0.030    clk
+                         FDRE                                         r  owner_txn_r_reg[11][3]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_FDRE_C_Q)         0.077     0.107 f  owner_txn_r_reg[11][3]/Q
+                         net (fo=6, unplaced)         0.176     0.283    ownership/release_error_code[0]_INST_0_i_201_11[3]
+                         LUT6 (Prop_LUT6_I0_O)        0.150     0.433 f  ownership/release_error_code[0]_INST_0_i_736/O
+                         net (fo=1, unplaced)         0.141     0.574    ownership/release_error_code[0]_INST_0_i_736_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.100     0.674 r  ownership/release_error_code[0]_INST_0_i_340/O
+                         net (fo=1, unplaced)         0.140     0.814    ownership/release_error_code[0]_INST_0_i_340_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.089     0.903 r  ownership/release_error_code[0]_INST_0_i_198/O
+                         net (fo=1, unplaced)         0.023     0.926    ownership/release_error_code[0]_INST_0_i_198_n_0
+                         CARRY8 (Prop_CARRY8_S[1]_CO[7])
+                                                      0.197     1.123 f  ownership/release_error_code[0]_INST_0_i_80/CO[7]
+                         net (fo=1, unplaced)         0.005     1.128    ownership/release_error_code[0]_INST_0_i_80_n_0
+                         CARRY8 (Prop_CARRY8_CI_CO[2])
+                                                      0.057     1.185 f  ownership/release_error_code[0]_INST_0_i_24/CO[2]
+                         net (fo=1, unplaced)         0.186     1.371    ownership/owned5_return0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.409 r  ownership/release_error_code[0]_INST_0_i_7/O
+                         net (fo=1, unplaced)         0.186     1.595    ownership/release_error_code[0]_INST_0_i_7_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.633 r  ownership/release_error_code[0]_INST_0_i_2/O
+                         net (fo=1, unplaced)         0.140     1.773    ownership/release_error_code[0]_INST_0_i_2_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.090     1.863 r  ownership/release_error_code[0]_INST_0/O
+                         net (fo=19, unplaced)        0.234     2.097    ownership/release_used_bank_mask_1_sn_1
+                         LUT3 (Prop_LUT3_I0_O)        0.038     2.135 r  ownership/bank_busy[15]_i_15/O
+                         net (fo=190, unplaced)       0.286     2.421    ownership/bank_busy[15]_i_15_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     2.459 f  ownership/bank_busy[9]_i_2/O
+                         net (fo=5, unplaced)         0.204     2.663    ownership/core_rel[9]
+                         LUT4 (Prop_LUT4_I3_O)        0.038     2.701 f  ownership/bank_busy[15]_i_60/O
+                         net (fo=1, unplaced)         0.186     2.887    ownership/bank_busy[15]_i_60_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     2.925 f  ownership/bank_busy[15]_i_26/O
+                         net (fo=1, unplaced)         0.141     3.066    ownership/bank_busy[15]_i_26_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.100     3.166 f  ownership/bank_busy[15]_i_7/O
+                         net (fo=1, unplaced)         0.105     3.271    ownership/bank_busy[15]_i_7_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.150     3.421 r  ownership/bank_busy[15]_i_3/O
+                         net (fo=32, unplaced)        0.246     3.667    ownership/bank_busy1
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.705 r  ownership/bank_owner_port[0][4]_i_1/O
+                         net (fo=5, unplaced)         0.158     3.863    ownership/bank_owner_port[0][4]_i_1_n_0
+                         FDRE                                         r  ownership/bank_owner_port_reg[0][0]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=2644, unset)         0.021     5.021    ownership/clk
+                         FDRE                                         r  ownership/bank_owner_port_reg[0][0]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_CE)      -0.061     4.925    ownership/bank_owner_port_reg[0][0]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -3.863    
+  -------------------------------------------------------------------
+                         slack                                  1.062    
+
+Slack (MET) :             1.062ns  (required time - arrival time)
+  Source:                 owner_txn_r_reg[11][3]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            ownership/bank_owner_port_reg[0][1]/CE
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.833ns  (logic 1.276ns (33.290%)  route 2.557ns (66.710%))
+  Logic Levels:           15  (CARRY8=2 LUT3=1 LUT4=2 LUT5=2 LUT6=8)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=2644, unset)         0.030     0.030    clk
+                         FDRE                                         r  owner_txn_r_reg[11][3]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_FDRE_C_Q)         0.077     0.107 f  owner_txn_r_reg[11][3]/Q
+                         net (fo=6, unplaced)         0.176     0.283    ownership/release_error_code[0]_INST_0_i_201_11[3]
+                         LUT6 (Prop_LUT6_I0_O)        0.150     0.433 f  ownership/release_error_code[0]_INST_0_i_736/O
+                         net (fo=1, unplaced)         0.141     0.574    ownership/release_error_code[0]_INST_0_i_736_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.100     0.674 r  ownership/release_error_code[0]_INST_0_i_340/O
+                         net (fo=1, unplaced)         0.140     0.814    ownership/release_error_code[0]_INST_0_i_340_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.089     0.903 r  ownership/release_error_code[0]_INST_0_i_198/O
+                         net (fo=1, unplaced)         0.023     0.926    ownership/release_error_code[0]_INST_0_i_198_n_0
+                         CARRY8 (Prop_CARRY8_S[1]_CO[7])
+                                                      0.197     1.123 f  ownership/release_error_code[0]_INST_0_i_80/CO[7]
+                         net (fo=1, unplaced)         0.005     1.128    ownership/release_error_code[0]_INST_0_i_80_n_0
+                         CARRY8 (Prop_CARRY8_CI_CO[2])
+                                                      0.057     1.185 f  ownership/release_error_code[0]_INST_0_i_24/CO[2]
+                         net (fo=1, unplaced)         0.186     1.371    ownership/owned5_return0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.409 r  ownership/release_error_code[0]_INST_0_i_7/O
+                         net (fo=1, unplaced)         0.186     1.595    ownership/release_error_code[0]_INST_0_i_7_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.633 r  ownership/release_error_code[0]_INST_0_i_2/O
+                         net (fo=1, unplaced)         0.140     1.773    ownership/release_error_code[0]_INST_0_i_2_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.090     1.863 r  ownership/release_error_code[0]_INST_0/O
+                         net (fo=19, unplaced)        0.234     2.097    ownership/release_used_bank_mask_1_sn_1
+                         LUT3 (Prop_LUT3_I0_O)        0.038     2.135 r  ownership/bank_busy[15]_i_15/O
+                         net (fo=190, unplaced)       0.286     2.421    ownership/bank_busy[15]_i_15_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     2.459 f  ownership/bank_busy[9]_i_2/O
+                         net (fo=5, unplaced)         0.204     2.663    ownership/core_rel[9]
+                         LUT4 (Prop_LUT4_I3_O)        0.038     2.701 f  ownership/bank_busy[15]_i_60/O
+                         net (fo=1, unplaced)         0.186     2.887    ownership/bank_busy[15]_i_60_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     2.925 f  ownership/bank_busy[15]_i_26/O
+                         net (fo=1, unplaced)         0.141     3.066    ownership/bank_busy[15]_i_26_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.100     3.166 f  ownership/bank_busy[15]_i_7/O
+                         net (fo=1, unplaced)         0.105     3.271    ownership/bank_busy[15]_i_7_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.150     3.421 r  ownership/bank_busy[15]_i_3/O
+                         net (fo=32, unplaced)        0.246     3.667    ownership/bank_busy1
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.705 r  ownership/bank_owner_port[0][4]_i_1/O
+                         net (fo=5, unplaced)         0.158     3.863    ownership/bank_owner_port[0][4]_i_1_n_0
+                         FDRE                                         r  ownership/bank_owner_port_reg[0][1]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=2644, unset)         0.021     5.021    ownership/clk
+                         FDRE                                         r  ownership/bank_owner_port_reg[0][1]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_CE)      -0.061     4.925    ownership/bank_owner_port_reg[0][1]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -3.863    
+  -------------------------------------------------------------------
+                         slack                                  1.062    
+
+Slack (MET) :             1.062ns  (required time - arrival time)
+  Source:                 owner_txn_r_reg[11][3]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            ownership/bank_owner_port_reg[0][2]/CE
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.833ns  (logic 1.276ns (33.290%)  route 2.557ns (66.710%))
+  Logic Levels:           15  (CARRY8=2 LUT3=1 LUT4=2 LUT5=2 LUT6=8)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=2644, unset)         0.030     0.030    clk
+                         FDRE                                         r  owner_txn_r_reg[11][3]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_FDRE_C_Q)         0.077     0.107 f  owner_txn_r_reg[11][3]/Q
+                         net (fo=6, unplaced)         0.176     0.283    ownership/release_error_code[0]_INST_0_i_201_11[3]
+                         LUT6 (Prop_LUT6_I0_O)        0.150     0.433 f  ownership/release_error_code[0]_INST_0_i_736/O
+                         net (fo=1, unplaced)         0.141     0.574    ownership/release_error_code[0]_INST_0_i_736_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.100     0.674 r  ownership/release_error_code[0]_INST_0_i_340/O
+                         net (fo=1, unplaced)         0.140     0.814    ownership/release_error_code[0]_INST_0_i_340_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.089     0.903 r  ownership/release_error_code[0]_INST_0_i_198/O
+                         net (fo=1, unplaced)         0.023     0.926    ownership/release_error_code[0]_INST_0_i_198_n_0
+                         CARRY8 (Prop_CARRY8_S[1]_CO[7])
+                                                      0.197     1.123 f  ownership/release_error_code[0]_INST_0_i_80/CO[7]
+                         net (fo=1, unplaced)         0.005     1.128    ownership/release_error_code[0]_INST_0_i_80_n_0
+                         CARRY8 (Prop_CARRY8_CI_CO[2])
+                                                      0.057     1.185 f  ownership/release_error_code[0]_INST_0_i_24/CO[2]
+                         net (fo=1, unplaced)         0.186     1.371    ownership/owned5_return0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.409 r  ownership/release_error_code[0]_INST_0_i_7/O
+                         net (fo=1, unplaced)         0.186     1.595    ownership/release_error_code[0]_INST_0_i_7_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.633 r  ownership/release_error_code[0]_INST_0_i_2/O
+                         net (fo=1, unplaced)         0.140     1.773    ownership/release_error_code[0]_INST_0_i_2_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.090     1.863 r  ownership/release_error_code[0]_INST_0/O
+                         net (fo=19, unplaced)        0.234     2.097    ownership/release_used_bank_mask_1_sn_1
+                         LUT3 (Prop_LUT3_I0_O)        0.038     2.135 r  ownership/bank_busy[15]_i_15/O
+                         net (fo=190, unplaced)       0.286     2.421    ownership/bank_busy[15]_i_15_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     2.459 f  ownership/bank_busy[9]_i_2/O
+                         net (fo=5, unplaced)         0.204     2.663    ownership/core_rel[9]
+                         LUT4 (Prop_LUT4_I3_O)        0.038     2.701 f  ownership/bank_busy[15]_i_60/O
+                         net (fo=1, unplaced)         0.186     2.887    ownership/bank_busy[15]_i_60_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     2.925 f  ownership/bank_busy[15]_i_26/O
+                         net (fo=1, unplaced)         0.141     3.066    ownership/bank_busy[15]_i_26_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.100     3.166 f  ownership/bank_busy[15]_i_7/O
+                         net (fo=1, unplaced)         0.105     3.271    ownership/bank_busy[15]_i_7_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.150     3.421 r  ownership/bank_busy[15]_i_3/O
+                         net (fo=32, unplaced)        0.246     3.667    ownership/bank_busy1
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.705 r  ownership/bank_owner_port[0][4]_i_1/O
+                         net (fo=5, unplaced)         0.158     3.863    ownership/bank_owner_port[0][4]_i_1_n_0
+                         FDRE                                         r  ownership/bank_owner_port_reg[0][2]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=2644, unset)         0.021     5.021    ownership/clk
+                         FDRE                                         r  ownership/bank_owner_port_reg[0][2]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_CE)      -0.061     4.925    ownership/bank_owner_port_reg[0][2]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -3.863    
+  -------------------------------------------------------------------
+                         slack                                  1.062    
+
+Slack (MET) :             1.062ns  (required time - arrival time)
+  Source:                 owner_txn_r_reg[11][3]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            ownership/bank_owner_port_reg[0][3]/CE
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.833ns  (logic 1.276ns (33.290%)  route 2.557ns (66.710%))
+  Logic Levels:           15  (CARRY8=2 LUT3=1 LUT4=2 LUT5=2 LUT6=8)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=2644, unset)         0.030     0.030    clk
+                         FDRE                                         r  owner_txn_r_reg[11][3]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_FDRE_C_Q)         0.077     0.107 f  owner_txn_r_reg[11][3]/Q
+                         net (fo=6, unplaced)         0.176     0.283    ownership/release_error_code[0]_INST_0_i_201_11[3]
+                         LUT6 (Prop_LUT6_I0_O)        0.150     0.433 f  ownership/release_error_code[0]_INST_0_i_736/O
+                         net (fo=1, unplaced)         0.141     0.574    ownership/release_error_code[0]_INST_0_i_736_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.100     0.674 r  ownership/release_error_code[0]_INST_0_i_340/O
+                         net (fo=1, unplaced)         0.140     0.814    ownership/release_error_code[0]_INST_0_i_340_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.089     0.903 r  ownership/release_error_code[0]_INST_0_i_198/O
+                         net (fo=1, unplaced)         0.023     0.926    ownership/release_error_code[0]_INST_0_i_198_n_0
+                         CARRY8 (Prop_CARRY8_S[1]_CO[7])
+                                                      0.197     1.123 f  ownership/release_error_code[0]_INST_0_i_80/CO[7]
+                         net (fo=1, unplaced)         0.005     1.128    ownership/release_error_code[0]_INST_0_i_80_n_0
+                         CARRY8 (Prop_CARRY8_CI_CO[2])
+                                                      0.057     1.185 f  ownership/release_error_code[0]_INST_0_i_24/CO[2]
+                         net (fo=1, unplaced)         0.186     1.371    ownership/owned5_return0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.409 r  ownership/release_error_code[0]_INST_0_i_7/O
+                         net (fo=1, unplaced)         0.186     1.595    ownership/release_error_code[0]_INST_0_i_7_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.633 r  ownership/release_error_code[0]_INST_0_i_2/O
+                         net (fo=1, unplaced)         0.140     1.773    ownership/release_error_code[0]_INST_0_i_2_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.090     1.863 r  ownership/release_error_code[0]_INST_0/O
+                         net (fo=19, unplaced)        0.234     2.097    ownership/release_used_bank_mask_1_sn_1
+                         LUT3 (Prop_LUT3_I0_O)        0.038     2.135 r  ownership/bank_busy[15]_i_15/O
+                         net (fo=190, unplaced)       0.286     2.421    ownership/bank_busy[15]_i_15_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     2.459 f  ownership/bank_busy[9]_i_2/O
+                         net (fo=5, unplaced)         0.204     2.663    ownership/core_rel[9]
+                         LUT4 (Prop_LUT4_I3_O)        0.038     2.701 f  ownership/bank_busy[15]_i_60/O
+                         net (fo=1, unplaced)         0.186     2.887    ownership/bank_busy[15]_i_60_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     2.925 f  ownership/bank_busy[15]_i_26/O
+                         net (fo=1, unplaced)         0.141     3.066    ownership/bank_busy[15]_i_26_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.100     3.166 f  ownership/bank_busy[15]_i_7/O
+                         net (fo=1, unplaced)         0.105     3.271    ownership/bank_busy[15]_i_7_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.150     3.421 r  ownership/bank_busy[15]_i_3/O
+                         net (fo=32, unplaced)        0.246     3.667    ownership/bank_busy1
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.705 r  ownership/bank_owner_port[0][4]_i_1/O
+                         net (fo=5, unplaced)         0.158     3.863    ownership/bank_owner_port[0][4]_i_1_n_0
+                         FDRE                                         r  ownership/bank_owner_port_reg[0][3]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=2644, unset)         0.021     5.021    ownership/clk
+                         FDRE                                         r  ownership/bank_owner_port_reg[0][3]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_CE)      -0.061     4.925    ownership/bank_owner_port_reg[0][3]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -3.863    
+  -------------------------------------------------------------------
+                         slack                                  1.062    
+
+Slack (MET) :             1.062ns  (required time - arrival time)
+  Source:                 owner_txn_r_reg[11][3]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            ownership/bank_owner_port_reg[0][4]/CE
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.833ns  (logic 1.276ns (33.290%)  route 2.557ns (66.710%))
+  Logic Levels:           15  (CARRY8=2 LUT3=1 LUT4=2 LUT5=2 LUT6=8)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=2644, unset)         0.030     0.030    clk
+                         FDRE                                         r  owner_txn_r_reg[11][3]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_FDRE_C_Q)         0.077     0.107 f  owner_txn_r_reg[11][3]/Q
+                         net (fo=6, unplaced)         0.176     0.283    ownership/release_error_code[0]_INST_0_i_201_11[3]
+                         LUT6 (Prop_LUT6_I0_O)        0.150     0.433 f  ownership/release_error_code[0]_INST_0_i_736/O
+                         net (fo=1, unplaced)         0.141     0.574    ownership/release_error_code[0]_INST_0_i_736_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.100     0.674 r  ownership/release_error_code[0]_INST_0_i_340/O
+                         net (fo=1, unplaced)         0.140     0.814    ownership/release_error_code[0]_INST_0_i_340_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.089     0.903 r  ownership/release_error_code[0]_INST_0_i_198/O
+                         net (fo=1, unplaced)         0.023     0.926    ownership/release_error_code[0]_INST_0_i_198_n_0
+                         CARRY8 (Prop_CARRY8_S[1]_CO[7])
+                                                      0.197     1.123 f  ownership/release_error_code[0]_INST_0_i_80/CO[7]
+                         net (fo=1, unplaced)         0.005     1.128    ownership/release_error_code[0]_INST_0_i_80_n_0
+                         CARRY8 (Prop_CARRY8_CI_CO[2])
+                                                      0.057     1.185 f  ownership/release_error_code[0]_INST_0_i_24/CO[2]
+                         net (fo=1, unplaced)         0.186     1.371    ownership/owned5_return0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.409 r  ownership/release_error_code[0]_INST_0_i_7/O
+                         net (fo=1, unplaced)         0.186     1.595    ownership/release_error_code[0]_INST_0_i_7_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.633 r  ownership/release_error_code[0]_INST_0_i_2/O
+                         net (fo=1, unplaced)         0.140     1.773    ownership/release_error_code[0]_INST_0_i_2_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.090     1.863 r  ownership/release_error_code[0]_INST_0/O
+                         net (fo=19, unplaced)        0.234     2.097    ownership/release_used_bank_mask_1_sn_1
+                         LUT3 (Prop_LUT3_I0_O)        0.038     2.135 r  ownership/bank_busy[15]_i_15/O
+                         net (fo=190, unplaced)       0.286     2.421    ownership/bank_busy[15]_i_15_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     2.459 f  ownership/bank_busy[9]_i_2/O
+                         net (fo=5, unplaced)         0.204     2.663    ownership/core_rel[9]
+                         LUT4 (Prop_LUT4_I3_O)        0.038     2.701 f  ownership/bank_busy[15]_i_60/O
+                         net (fo=1, unplaced)         0.186     2.887    ownership/bank_busy[15]_i_60_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     2.925 f  ownership/bank_busy[15]_i_26/O
+                         net (fo=1, unplaced)         0.141     3.066    ownership/bank_busy[15]_i_26_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.100     3.166 f  ownership/bank_busy[15]_i_7/O
+                         net (fo=1, unplaced)         0.105     3.271    ownership/bank_busy[15]_i_7_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.150     3.421 r  ownership/bank_busy[15]_i_3/O
+                         net (fo=32, unplaced)        0.246     3.667    ownership/bank_busy1
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.705 r  ownership/bank_owner_port[0][4]_i_1/O
+                         net (fo=5, unplaced)         0.158     3.863    ownership/bank_owner_port[0][4]_i_1_n_0
+                         FDRE                                         r  ownership/bank_owner_port_reg[0][4]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=2644, unset)         0.021     5.021    ownership/clk
+                         FDRE                                         r  ownership/bank_owner_port_reg[0][4]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_CE)      -0.061     4.925    ownership/bank_owner_port_reg[0][4]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -3.863    
+  -------------------------------------------------------------------
+                         slack                                  1.062    
+
+Slack (MET) :             1.062ns  (required time - arrival time)
+  Source:                 owner_txn_r_reg[11][3]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            ownership/bank_owner_port_reg[10][0]/CE
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.833ns  (logic 1.276ns (33.290%)  route 2.557ns (66.710%))
+  Logic Levels:           15  (CARRY8=2 LUT3=1 LUT4=2 LUT5=2 LUT6=8)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=2644, unset)         0.030     0.030    clk
+                         FDRE                                         r  owner_txn_r_reg[11][3]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_FDRE_C_Q)         0.077     0.107 f  owner_txn_r_reg[11][3]/Q
+                         net (fo=6, unplaced)         0.176     0.283    ownership/release_error_code[0]_INST_0_i_201_11[3]
+                         LUT6 (Prop_LUT6_I0_O)        0.150     0.433 f  ownership/release_error_code[0]_INST_0_i_736/O
+                         net (fo=1, unplaced)         0.141     0.574    ownership/release_error_code[0]_INST_0_i_736_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.100     0.674 r  ownership/release_error_code[0]_INST_0_i_340/O
+                         net (fo=1, unplaced)         0.140     0.814    ownership/release_error_code[0]_INST_0_i_340_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.089     0.903 r  ownership/release_error_code[0]_INST_0_i_198/O
+                         net (fo=1, unplaced)         0.023     0.926    ownership/release_error_code[0]_INST_0_i_198_n_0
+                         CARRY8 (Prop_CARRY8_S[1]_CO[7])
+                                                      0.197     1.123 f  ownership/release_error_code[0]_INST_0_i_80/CO[7]
+                         net (fo=1, unplaced)         0.005     1.128    ownership/release_error_code[0]_INST_0_i_80_n_0
+                         CARRY8 (Prop_CARRY8_CI_CO[2])
+                                                      0.057     1.185 f  ownership/release_error_code[0]_INST_0_i_24/CO[2]
+                         net (fo=1, unplaced)         0.186     1.371    ownership/owned5_return0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.409 r  ownership/release_error_code[0]_INST_0_i_7/O
+                         net (fo=1, unplaced)         0.186     1.595    ownership/release_error_code[0]_INST_0_i_7_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.633 r  ownership/release_error_code[0]_INST_0_i_2/O
+                         net (fo=1, unplaced)         0.140     1.773    ownership/release_error_code[0]_INST_0_i_2_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.090     1.863 r  ownership/release_error_code[0]_INST_0/O
+                         net (fo=19, unplaced)        0.234     2.097    ownership/release_used_bank_mask_1_sn_1
+                         LUT3 (Prop_LUT3_I0_O)        0.038     2.135 r  ownership/bank_busy[15]_i_15/O
+                         net (fo=190, unplaced)       0.286     2.421    ownership/bank_busy[15]_i_15_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     2.459 f  ownership/bank_busy[9]_i_2/O
+                         net (fo=5, unplaced)         0.204     2.663    ownership/core_rel[9]
+                         LUT4 (Prop_LUT4_I3_O)        0.038     2.701 f  ownership/bank_busy[15]_i_60/O
+                         net (fo=1, unplaced)         0.186     2.887    ownership/bank_busy[15]_i_60_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     2.925 f  ownership/bank_busy[15]_i_26/O
+                         net (fo=1, unplaced)         0.141     3.066    ownership/bank_busy[15]_i_26_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.100     3.166 f  ownership/bank_busy[15]_i_7/O
+                         net (fo=1, unplaced)         0.105     3.271    ownership/bank_busy[15]_i_7_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.150     3.421 r  ownership/bank_busy[15]_i_3/O
+                         net (fo=32, unplaced)        0.246     3.667    ownership/bank_busy1
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.705 r  ownership/bank_owner_port[10][4]_i_1/O
+                         net (fo=5, unplaced)         0.158     3.863    ownership/bank_owner_port[10][4]_i_1_n_0
+                         FDRE                                         r  ownership/bank_owner_port_reg[10][0]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=2644, unset)         0.021     5.021    ownership/clk
+                         FDRE                                         r  ownership/bank_owner_port_reg[10][0]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_CE)      -0.061     4.925    ownership/bank_owner_port_reg[10][0]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -3.863    
+  -------------------------------------------------------------------
+                         slack                                  1.062    
+
+Slack (MET) :             1.062ns  (required time - arrival time)
+  Source:                 owner_txn_r_reg[11][3]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            ownership/bank_owner_port_reg[10][1]/CE
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.833ns  (logic 1.276ns (33.290%)  route 2.557ns (66.710%))
+  Logic Levels:           15  (CARRY8=2 LUT3=1 LUT4=2 LUT5=2 LUT6=8)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=2644, unset)         0.030     0.030    clk
+                         FDRE                                         r  owner_txn_r_reg[11][3]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_FDRE_C_Q)         0.077     0.107 f  owner_txn_r_reg[11][3]/Q
+                         net (fo=6, unplaced)         0.176     0.283    ownership/release_error_code[0]_INST_0_i_201_11[3]
+                         LUT6 (Prop_LUT6_I0_O)        0.150     0.433 f  ownership/release_error_code[0]_INST_0_i_736/O
+                         net (fo=1, unplaced)         0.141     0.574    ownership/release_error_code[0]_INST_0_i_736_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.100     0.674 r  ownership/release_error_code[0]_INST_0_i_340/O
+                         net (fo=1, unplaced)         0.140     0.814    ownership/release_error_code[0]_INST_0_i_340_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.089     0.903 r  ownership/release_error_code[0]_INST_0_i_198/O
+                         net (fo=1, unplaced)         0.023     0.926    ownership/release_error_code[0]_INST_0_i_198_n_0
+                         CARRY8 (Prop_CARRY8_S[1]_CO[7])
+                                                      0.197     1.123 f  ownership/release_error_code[0]_INST_0_i_80/CO[7]
+                         net (fo=1, unplaced)         0.005     1.128    ownership/release_error_code[0]_INST_0_i_80_n_0
+                         CARRY8 (Prop_CARRY8_CI_CO[2])
+                                                      0.057     1.185 f  ownership/release_error_code[0]_INST_0_i_24/CO[2]
+                         net (fo=1, unplaced)         0.186     1.371    ownership/owned5_return0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.409 r  ownership/release_error_code[0]_INST_0_i_7/O
+                         net (fo=1, unplaced)         0.186     1.595    ownership/release_error_code[0]_INST_0_i_7_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.633 r  ownership/release_error_code[0]_INST_0_i_2/O
+                         net (fo=1, unplaced)         0.140     1.773    ownership/release_error_code[0]_INST_0_i_2_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.090     1.863 r  ownership/release_error_code[0]_INST_0/O
+                         net (fo=19, unplaced)        0.234     2.097    ownership/release_used_bank_mask_1_sn_1
+                         LUT3 (Prop_LUT3_I0_O)        0.038     2.135 r  ownership/bank_busy[15]_i_15/O
+                         net (fo=190, unplaced)       0.286     2.421    ownership/bank_busy[15]_i_15_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     2.459 f  ownership/bank_busy[9]_i_2/O
+                         net (fo=5, unplaced)         0.204     2.663    ownership/core_rel[9]
+                         LUT4 (Prop_LUT4_I3_O)        0.038     2.701 f  ownership/bank_busy[15]_i_60/O
+                         net (fo=1, unplaced)         0.186     2.887    ownership/bank_busy[15]_i_60_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     2.925 f  ownership/bank_busy[15]_i_26/O
+                         net (fo=1, unplaced)         0.141     3.066    ownership/bank_busy[15]_i_26_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.100     3.166 f  ownership/bank_busy[15]_i_7/O
+                         net (fo=1, unplaced)         0.105     3.271    ownership/bank_busy[15]_i_7_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.150     3.421 r  ownership/bank_busy[15]_i_3/O
+                         net (fo=32, unplaced)        0.246     3.667    ownership/bank_busy1
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.705 r  ownership/bank_owner_port[10][4]_i_1/O
+                         net (fo=5, unplaced)         0.158     3.863    ownership/bank_owner_port[10][4]_i_1_n_0
+                         FDRE                                         r  ownership/bank_owner_port_reg[10][1]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=2644, unset)         0.021     5.021    ownership/clk
+                         FDRE                                         r  ownership/bank_owner_port_reg[10][1]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_CE)      -0.061     4.925    ownership/bank_owner_port_reg[10][1]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -3.863    
+  -------------------------------------------------------------------
+                         slack                                  1.062    
+
+Slack (MET) :             1.062ns  (required time - arrival time)
+  Source:                 owner_txn_r_reg[11][3]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            ownership/bank_owner_port_reg[10][2]/CE
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.833ns  (logic 1.276ns (33.290%)  route 2.557ns (66.710%))
+  Logic Levels:           15  (CARRY8=2 LUT3=1 LUT4=2 LUT5=2 LUT6=8)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=2644, unset)         0.030     0.030    clk
+                         FDRE                                         r  owner_txn_r_reg[11][3]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_FDRE_C_Q)         0.077     0.107 f  owner_txn_r_reg[11][3]/Q
+                         net (fo=6, unplaced)         0.176     0.283    ownership/release_error_code[0]_INST_0_i_201_11[3]
+                         LUT6 (Prop_LUT6_I0_O)        0.150     0.433 f  ownership/release_error_code[0]_INST_0_i_736/O
+                         net (fo=1, unplaced)         0.141     0.574    ownership/release_error_code[0]_INST_0_i_736_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.100     0.674 r  ownership/release_error_code[0]_INST_0_i_340/O
+                         net (fo=1, unplaced)         0.140     0.814    ownership/release_error_code[0]_INST_0_i_340_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.089     0.903 r  ownership/release_error_code[0]_INST_0_i_198/O
+                         net (fo=1, unplaced)         0.023     0.926    ownership/release_error_code[0]_INST_0_i_198_n_0
+                         CARRY8 (Prop_CARRY8_S[1]_CO[7])
+                                                      0.197     1.123 f  ownership/release_error_code[0]_INST_0_i_80/CO[7]
+                         net (fo=1, unplaced)         0.005     1.128    ownership/release_error_code[0]_INST_0_i_80_n_0
+                         CARRY8 (Prop_CARRY8_CI_CO[2])
+                                                      0.057     1.185 f  ownership/release_error_code[0]_INST_0_i_24/CO[2]
+                         net (fo=1, unplaced)         0.186     1.371    ownership/owned5_return0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.409 r  ownership/release_error_code[0]_INST_0_i_7/O
+                         net (fo=1, unplaced)         0.186     1.595    ownership/release_error_code[0]_INST_0_i_7_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.633 r  ownership/release_error_code[0]_INST_0_i_2/O
+                         net (fo=1, unplaced)         0.140     1.773    ownership/release_error_code[0]_INST_0_i_2_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.090     1.863 r  ownership/release_error_code[0]_INST_0/O
+                         net (fo=19, unplaced)        0.234     2.097    ownership/release_used_bank_mask_1_sn_1
+                         LUT3 (Prop_LUT3_I0_O)        0.038     2.135 r  ownership/bank_busy[15]_i_15/O
+                         net (fo=190, unplaced)       0.286     2.421    ownership/bank_busy[15]_i_15_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     2.459 f  ownership/bank_busy[9]_i_2/O
+                         net (fo=5, unplaced)         0.204     2.663    ownership/core_rel[9]
+                         LUT4 (Prop_LUT4_I3_O)        0.038     2.701 f  ownership/bank_busy[15]_i_60/O
+                         net (fo=1, unplaced)         0.186     2.887    ownership/bank_busy[15]_i_60_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     2.925 f  ownership/bank_busy[15]_i_26/O
+                         net (fo=1, unplaced)         0.141     3.066    ownership/bank_busy[15]_i_26_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.100     3.166 f  ownership/bank_busy[15]_i_7/O
+                         net (fo=1, unplaced)         0.105     3.271    ownership/bank_busy[15]_i_7_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.150     3.421 r  ownership/bank_busy[15]_i_3/O
+                         net (fo=32, unplaced)        0.246     3.667    ownership/bank_busy1
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.705 r  ownership/bank_owner_port[10][4]_i_1/O
+                         net (fo=5, unplaced)         0.158     3.863    ownership/bank_owner_port[10][4]_i_1_n_0
+                         FDRE                                         r  ownership/bank_owner_port_reg[10][2]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=2644, unset)         0.021     5.021    ownership/clk
+                         FDRE                                         r  ownership/bank_owner_port_reg[10][2]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_CE)      -0.061     4.925    ownership/bank_owner_port_reg[10][2]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -3.863    
+  -------------------------------------------------------------------
+                         slack                                  1.062    
+
+Slack (MET) :             1.062ns  (required time - arrival time)
+  Source:                 owner_txn_r_reg[11][3]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            ownership/bank_owner_port_reg[10][3]/CE
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.833ns  (logic 1.276ns (33.290%)  route 2.557ns (66.710%))
+  Logic Levels:           15  (CARRY8=2 LUT3=1 LUT4=2 LUT5=2 LUT6=8)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=2644, unset)         0.030     0.030    clk
+                         FDRE                                         r  owner_txn_r_reg[11][3]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_FDRE_C_Q)         0.077     0.107 f  owner_txn_r_reg[11][3]/Q
+                         net (fo=6, unplaced)         0.176     0.283    ownership/release_error_code[0]_INST_0_i_201_11[3]
+                         LUT6 (Prop_LUT6_I0_O)        0.150     0.433 f  ownership/release_error_code[0]_INST_0_i_736/O
+                         net (fo=1, unplaced)         0.141     0.574    ownership/release_error_code[0]_INST_0_i_736_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.100     0.674 r  ownership/release_error_code[0]_INST_0_i_340/O
+                         net (fo=1, unplaced)         0.140     0.814    ownership/release_error_code[0]_INST_0_i_340_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.089     0.903 r  ownership/release_error_code[0]_INST_0_i_198/O
+                         net (fo=1, unplaced)         0.023     0.926    ownership/release_error_code[0]_INST_0_i_198_n_0
+                         CARRY8 (Prop_CARRY8_S[1]_CO[7])
+                                                      0.197     1.123 f  ownership/release_error_code[0]_INST_0_i_80/CO[7]
+                         net (fo=1, unplaced)         0.005     1.128    ownership/release_error_code[0]_INST_0_i_80_n_0
+                         CARRY8 (Prop_CARRY8_CI_CO[2])
+                                                      0.057     1.185 f  ownership/release_error_code[0]_INST_0_i_24/CO[2]
+                         net (fo=1, unplaced)         0.186     1.371    ownership/owned5_return0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.409 r  ownership/release_error_code[0]_INST_0_i_7/O
+                         net (fo=1, unplaced)         0.186     1.595    ownership/release_error_code[0]_INST_0_i_7_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.633 r  ownership/release_error_code[0]_INST_0_i_2/O
+                         net (fo=1, unplaced)         0.140     1.773    ownership/release_error_code[0]_INST_0_i_2_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.090     1.863 r  ownership/release_error_code[0]_INST_0/O
+                         net (fo=19, unplaced)        0.234     2.097    ownership/release_used_bank_mask_1_sn_1
+                         LUT3 (Prop_LUT3_I0_O)        0.038     2.135 r  ownership/bank_busy[15]_i_15/O
+                         net (fo=190, unplaced)       0.286     2.421    ownership/bank_busy[15]_i_15_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     2.459 f  ownership/bank_busy[9]_i_2/O
+                         net (fo=5, unplaced)         0.204     2.663    ownership/core_rel[9]
+                         LUT4 (Prop_LUT4_I3_O)        0.038     2.701 f  ownership/bank_busy[15]_i_60/O
+                         net (fo=1, unplaced)         0.186     2.887    ownership/bank_busy[15]_i_60_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     2.925 f  ownership/bank_busy[15]_i_26/O
+                         net (fo=1, unplaced)         0.141     3.066    ownership/bank_busy[15]_i_26_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.100     3.166 f  ownership/bank_busy[15]_i_7/O
+                         net (fo=1, unplaced)         0.105     3.271    ownership/bank_busy[15]_i_7_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.150     3.421 r  ownership/bank_busy[15]_i_3/O
+                         net (fo=32, unplaced)        0.246     3.667    ownership/bank_busy1
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.705 r  ownership/bank_owner_port[10][4]_i_1/O
+                         net (fo=5, unplaced)         0.158     3.863    ownership/bank_owner_port[10][4]_i_1_n_0
+                         FDRE                                         r  ownership/bank_owner_port_reg[10][3]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=2644, unset)         0.021     5.021    ownership/clk
+                         FDRE                                         r  ownership/bank_owner_port_reg[10][3]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_CE)      -0.061     4.925    ownership/bank_owner_port_reg[10][3]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -3.863    
+  -------------------------------------------------------------------
+                         slack                                  1.062    
+
+Slack (MET) :             1.062ns  (required time - arrival time)
+  Source:                 owner_txn_r_reg[11][3]/C
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Destination:            ownership/bank_owner_port_reg[10][4]/CE
+                            (rising edge-triggered cell FDRE clocked by clk  {rise@0.000ns fall@2.500ns period=5.000ns})
+  Path Group:             clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            5.000ns  (clk rise@5.000ns - clk rise@0.000ns)
+  Data Path Delay:        3.833ns  (logic 1.276ns (33.290%)  route 2.557ns (66.710%))
+  Logic Levels:           15  (CARRY8=2 LUT3=1 LUT4=2 LUT5=2 LUT6=8)
+  Clock Path Skew:        -0.009ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.021ns = ( 5.021 - 5.000 ) 
+    Source Clock Delay      (SCD):    0.030ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk rise edge)        0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=2644, unset)         0.030     0.030    clk
+                         FDRE                                         r  owner_txn_r_reg[11][3]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_FDRE_C_Q)         0.077     0.107 f  owner_txn_r_reg[11][3]/Q
+                         net (fo=6, unplaced)         0.176     0.283    ownership/release_error_code[0]_INST_0_i_201_11[3]
+                         LUT6 (Prop_LUT6_I0_O)        0.150     0.433 f  ownership/release_error_code[0]_INST_0_i_736/O
+                         net (fo=1, unplaced)         0.141     0.574    ownership/release_error_code[0]_INST_0_i_736_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.100     0.674 r  ownership/release_error_code[0]_INST_0_i_340/O
+                         net (fo=1, unplaced)         0.140     0.814    ownership/release_error_code[0]_INST_0_i_340_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.089     0.903 r  ownership/release_error_code[0]_INST_0_i_198/O
+                         net (fo=1, unplaced)         0.023     0.926    ownership/release_error_code[0]_INST_0_i_198_n_0
+                         CARRY8 (Prop_CARRY8_S[1]_CO[7])
+                                                      0.197     1.123 f  ownership/release_error_code[0]_INST_0_i_80/CO[7]
+                         net (fo=1, unplaced)         0.005     1.128    ownership/release_error_code[0]_INST_0_i_80_n_0
+                         CARRY8 (Prop_CARRY8_CI_CO[2])
+                                                      0.057     1.185 f  ownership/release_error_code[0]_INST_0_i_24/CO[2]
+                         net (fo=1, unplaced)         0.186     1.371    ownership/owned5_return0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.409 r  ownership/release_error_code[0]_INST_0_i_7/O
+                         net (fo=1, unplaced)         0.186     1.595    ownership/release_error_code[0]_INST_0_i_7_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.038     1.633 r  ownership/release_error_code[0]_INST_0_i_2/O
+                         net (fo=1, unplaced)         0.140     1.773    ownership/release_error_code[0]_INST_0_i_2_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.090     1.863 r  ownership/release_error_code[0]_INST_0/O
+                         net (fo=19, unplaced)        0.234     2.097    ownership/release_used_bank_mask_1_sn_1
+                         LUT3 (Prop_LUT3_I0_O)        0.038     2.135 r  ownership/bank_busy[15]_i_15/O
+                         net (fo=190, unplaced)       0.286     2.421    ownership/bank_busy[15]_i_15_n_0
+                         LUT6 (Prop_LUT6_I5_O)        0.038     2.459 f  ownership/bank_busy[9]_i_2/O
+                         net (fo=5, unplaced)         0.204     2.663    ownership/core_rel[9]
+                         LUT4 (Prop_LUT4_I3_O)        0.038     2.701 f  ownership/bank_busy[15]_i_60/O
+                         net (fo=1, unplaced)         0.186     2.887    ownership/bank_busy[15]_i_60_n_0
+                         LUT5 (Prop_LUT5_I4_O)        0.038     2.925 f  ownership/bank_busy[15]_i_26/O
+                         net (fo=1, unplaced)         0.141     3.066    ownership/bank_busy[15]_i_26_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.100     3.166 f  ownership/bank_busy[15]_i_7/O
+                         net (fo=1, unplaced)         0.105     3.271    ownership/bank_busy[15]_i_7_n_0
+                         LUT6 (Prop_LUT6_I0_O)        0.150     3.421 r  ownership/bank_busy[15]_i_3/O
+                         net (fo=32, unplaced)        0.246     3.667    ownership/bank_busy1
+                         LUT5 (Prop_LUT5_I0_O)        0.038     3.705 r  ownership/bank_owner_port[10][4]_i_1/O
+                         net (fo=5, unplaced)         0.158     3.863    ownership/bank_owner_port[10][4]_i_1_n_0
+                         FDRE                                         r  ownership/bank_owner_port_reg[10][4]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk rise edge)        5.000     5.000 r  
+                                                      0.000     5.000 r  clk (IN)
+                         net (fo=2644, unset)         0.021     5.021    ownership/clk
+                         FDRE                                         r  ownership/bank_owner_port_reg[10][4]/C
+                         clock pessimism              0.000     5.021    
+                         clock uncertainty           -0.035     4.986    
+                         FDRE (Setup_FDRE_C_CE)      -0.061     4.925    ownership/bank_owner_port_reg[10][4]
+  -------------------------------------------------------------------
+                         required time                          4.925    
+                         arrival time                          -3.863    
+  -------------------------------------------------------------------
+                         slack                                  1.062    
+
+
+
+

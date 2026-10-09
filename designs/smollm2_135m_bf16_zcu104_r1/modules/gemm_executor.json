@@ -1,0 +1,40 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "gemm_executor",
+  "module_kind": "opcode_executor",
+  "opcode": "GEMM",
+  "status": "frozen",
+  "target": {"board": "ZCU104", "part": "xczu7ev-ffvc1156-2-e", "clock_mhz": 200},
+  "interface": {
+    "rtl_module": "smollm2_gemm_executor",
+    "compute_channel": 0,
+    "request": "cmd_valid/cmd_ready, opcode 3, three bank IDs and approved 112-bit GEMM payload",
+    "response": "done_valid/done_ready, operand0 tag, bank_count=3, all three accepted bank IDs and error, held until accepted",
+    "bank_roles": {"activation_read": 3, "weight_read": 4, "destination_write": 5},
+    "bank_word_bits": 128,
+    "read_response_latency_cycles": 3,
+    "layout": "activation [M,K] row-major; loaded weight [n_tile,K] row-major; destination [m_count,n_total] row-major with n_start column offset",
+    "completion_order": "done_valid follows the final successful destination write handshake"
+  },
+  "numeric": {
+    "input": "BF16, including zero and subnormal",
+    "multiply": "exact BF16 significand multiplication",
+    "accumulate": "K ascending, signed 64-bit shared-exponent mantissa with 32 guard bits; alignment right shifts truncate magnitude toward zero",
+    "output": "BF16 round-to-nearest-ties-even; finite overflow yields infinity",
+    "nonfinite_input": "return error before the next output write",
+    "throughput": "scalar functional baseline; one output dot product at a time"
+  },
+  "control_rules": {
+    "dimensions": "reject zero and out-of-bank dimensions before any bank access",
+    "n_tile": "writes only requested N columns; no first/accum/last mode or partial-sum read",
+    "bank_release": "executor returns exact accepted bank IDs; dispatcher verifies and releases only on matching completion",
+    "error": "error response keeps original tag and bank IDs; dispatcher invalidates destination on matched error"
+  },
+  "verification": {
+    "required_cases": ["exact integer BF16 dot products", "deterministic random BF16 exact-rational golden comparison", "pinned checkpoint layer-0 Q projection BF16 activation and weight values in prefill and decode compared bitwise with exact and PyTorch BF16 outputs", "odd K across bank word boundary", "nonzero M and N offsets with byte strobes", "full 32-row by 192-column output tile", "last-token m_start=31 and final 192 columns of 49152-wide logits", "full K=1536 dot product", "ties-to-even and subnormal values", "nonfinite-input and malformed-dimension errors", "destination backpressure and held completion IDs", "5 ns module OOC timing"],
+    "required_tools": ["self-checking XSIM", "Verilator lint", "Vivado out-of-context synthesis"],
+    "proof_scope": "standalone scalar GEMM executor only; fabric integration, full model prefill/decode numerical acceptance, placed/routed board and Vitis run remain unverified"
+  }
+}

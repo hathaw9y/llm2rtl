@@ -1,0 +1,19 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "reset": 1, "w": 1}, "outputs": {"z": 1}},
+  "semantics": {
+    "clock": "All state updates occur at positive clk edges, as explicitly stated in problem.txt.",
+    "reset": "Assume active-high synchronous reset to A; reset takes priority over w.",
+    "transitions_w0_w1": {"A": ["B", "A"], "B": ["C", "D"], "C": ["E", "D"], "D": ["F", "A"], "E": ["E", "D"], "F": ["C", "D"]},
+    "output": "Moore output: z=1 in E and F, z=0 in A, B, C, D, directly from state annotations.",
+    "initialization": "No specified power-up state; no initialization before reset and no pre-reset output guarantee.",
+    "latency": "z reflects the current state after each rising-edge state update, without extra registers."
+  },
+  "numeric": {"ports": "All ports single-bit unsigned", "state": "Six states require three internal encoding bits", "arithmetic": "None"},
+  "verification": {"oracle": "Independent integer transition table transcribed from original problem", "sampling": "Drive on falling edges; check output before rising edge and after NBA settling", "coverage": "All short binary sequences, every state/input transition, reset from every state, reset between edges, output independence of w", "timeout": "Bounded simulation with fatal timeout", "primary_command": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": [
+    {"issue": "Reset polarity and target omitted", "resolution": "Assume active-high reset to first-listed state A", "evidence": "reset input exists; A is first listed state; no explicit reset edge or destination given"},
+    {"issue": "Reset timing omitted separately", "resolution": "Synchronous reset", "evidence": "Original says all sequential logic is triggered on positive clock edge"},
+    {"issue": "Power-up state unspecified", "resolution": "Do not initialize or assert a known pre-reset output", "evidence": "Original contains no initial-state requirement"}
+  ]
+}

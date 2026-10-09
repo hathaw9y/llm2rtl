@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "in": 1}, "outputs": {"done": 1}},
+  "semantics": {
+    "clock": "Sample serial input and update state on each positive clock edge, as specified.",
+    "reset": "Active-high synchronous reset returns to idle and clears done at the rising edge; no asynchronous response.",
+    "framing": "Idle high; sampled low starts a frame. Consume exactly the next eight samples as data, regardless of value. The following sample is the stop bit.",
+    "completion": "A high valid stop sample asserts done after that edge for one clock cycle. The next sample may start another frame immediately if low.",
+    "bad_stop": "A low expected stop sample produces no done. Ignore all subsequent lows until a high sample restores idle; that recovery high does not complete the rejected frame.",
+    "initialization": "No power-up value is specified; behavior is verified after a synchronous reset. No initial block in DUT.",
+    "data_order": "Data arrives least significant bit first; no data output or data storage is required."
+  },
+  "numeric": {"data_bits": 8, "start_bit": 0, "stop_bit": 1, "idle_level": 1, "counter": "Three bits represent data positions zero through seven."},
+  "verification": {"oracle": "Independent procedural frame parser derived from original start/eight-data/stop requirements.", "sampling": "Drive inputs on falling edges, compare done after rising-edge NBA settlement, and verify it holds between edges.", "cases": ["synchronous reset including mid-frame and done", "idle", "all 256 data bytes", "back-to-back frames", "bad stop and prolonged low recovery", "reset during recovery", "deterministic random streams"], "termination": "Fatal on mismatch or bounded timeout; PASS only after all checks."},
+  "specification_ambiguities": ["The prose does not explicitly specify done pulse width. Interpret identification of each received byte as a one-cycle pulse starting immediately after the valid stop-bit sampling edge.", "Power-up state is unspecified; do not assume defined outputs before reset."]
+}

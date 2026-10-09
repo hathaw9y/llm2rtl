@@ -1,0 +1,622 @@
+{
+  "stage": "independent_post_synthesis_OOC_audit",
+  "iteration": "02",
+  "runs": {
+    "gemm": {
+      "hierarchy": [
+        {
+          "instance": "smollm2_int8_gemm_executor",
+          "module": "(top)",
+          "resources": {
+            "LUT": 38753,
+            "LogicLUT": 38651,
+            "LUTRAM": 20,
+            "SRL": 82,
+            "FF": 64405,
+            "RAMB36": 31,
+            "RAMB18": 2,
+            "URAM": 0,
+            "DSP": 281
+          }
+        },
+        {
+          "instance": "(smollm2_int8_gemm_executor)",
+          "module": "(top)",
+          "resources": {
+            "LUT": 10759,
+            "LogicLUT": 10739,
+            "LUTRAM": 20,
+            "SRL": 0,
+            "FF": 10676,
+            "RAMB36": 31,
+            "RAMB18": 2,
+            "URAM": 0,
+            "DSP": 15
+          }
+        },
+        {
+          "instance": "dots",
+          "module": "int8_dot_core",
+          "resources": {
+            "LUT": 19157,
+            "LogicLUT": 19078,
+            "LUTRAM": 0,
+            "SRL": 79,
+            "FF": 52007,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 256
+          }
+        },
+        {
+          "instance": "output_conversion",
+          "module": "fp32_bf16_epilogue",
+          "resources": {
+            "LUT": 6796,
+            "LogicLUT": 6796,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 1510,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 8
+          }
+        },
+        {
+          "instance": "(output_conversion)",
+          "module": "fp32_bf16_epilogue",
+          "resources": {
+            "LUT": 5032,
+            "LogicLUT": 5032,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 614,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 0
+          }
+        },
+        {
+          "instance": "lanes[0].mul",
+          "module": "w8a8_fp32_mul_0",
+          "resources": {
+            "LUT": 412,
+            "LogicLUT": 412,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 224,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 2
+          }
+        },
+        {
+          "instance": "lanes[1].mul",
+          "module": "w8a8_fp32_mul_1",
+          "resources": {
+            "LUT": 390,
+            "LogicLUT": 390,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 224,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 2
+          }
+        },
+        {
+          "instance": "lanes[2].mul",
+          "module": "w8a8_fp32_mul_2",
+          "resources": {
+            "LUT": 573,
+            "LogicLUT": 573,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 224,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 2
+          }
+        },
+        {
+          "instance": "lanes[3].mul",
+          "module": "w8a8_fp32_mul_3",
+          "resources": {
+            "LUT": 389,
+            "LogicLUT": 389,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 224,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 2
+          }
+        },
+        {
+          "instance": "scale_multiplier",
+          "module": "w8a8_fp32_mul",
+          "resources": {
+            "LUT": 2041,
+            "LogicLUT": 2038,
+            "LUTRAM": 0,
+            "SRL": 3,
+            "FF": 212,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 2
+          }
+        }
+      ],
+      "source_before_after_unchanged": true,
+      "source_pins": {
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/fp32_bf16_epilogue.sv": "3fbf60151b57fe04f4aa1546f62735562b283a5499a0c18e6cf281e085e78611",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/int8_dot_core.sv": "9825be03f1f6021cab761a4ae15a238f81e02f43e15685abb65c8789e47b589e",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/smollm2_int8_gemm_executor.sv": "dcfeba4288fd8f91aa3ba2ba23256229dca59e378fdcb9a8efa3ae08bece21d4"
+      },
+      "archived_source_match": true,
+      "top": "smollm2_int8_gemm_executor",
+      "process_exit": 0,
+      "actual_marker_count": 1,
+      "tool": "Vivado2025.2",
+      "part": "xczu7ev-ffvc1156-2-e",
+      "clock_period_ns": 5.0,
+      "resources": {
+        "LUT": 38753,
+        "LogicLUT": 38651,
+        "LUTRAM": 20,
+        "SRL": 82,
+        "FF": 64405,
+        "RAMB36": 31,
+        "RAMB18": 2,
+        "URAM": 0,
+        "DSP": 281
+      },
+      "timing": {
+        "WNS_ns": 0.184,
+        "TNS_ns": 0.0,
+        "setup_failures": 0,
+        "setup_endpoints": 158681,
+        "WHS_ns": 0.031,
+        "THS_ns": 0.0,
+        "hold_failures": 0,
+        "hold_endpoints": 158681,
+        "WPWS_ns": 1.958,
+        "TPWS_ns": 0.0,
+        "PW_failures": 0,
+        "PW_endpoints": 64854,
+        "no_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 1048,
+        "no_output_delay": 510,
+        "loops": 0,
+        "latch_loops": 0
+      },
+      "status": "POST_SYNTH_INTERNAL_TIMING_PASS",
+      "hashes": {
+        "executor_synth.dcp": "6d27b0c8b22e33c3a9bc78d08ba7a9d981ba39c88a0790e8d5b88d464884b6ee",
+        "methodology_synth.rpt": "5d64d2bf904dc1c0ebf07f7afab3df8dbe2fe0a6572db9c6e7e63fc2109abca7",
+        "drc_synth.rpt": "a0546d2c60e8a40db5ad173b60bea8c31befdf2dd5015990fa0470e4b9ed5d51",
+        "inspect.tcl": "46ee057ba0934cd6986b32e36c5cb0892ef0fe02b201a9621f5f0bf66cb5db37",
+        "executor_clock.xdc": "1c373865e78d270d2736fcaa48b7f3f0b82bc6317c29814bd2b3a6323928c6a6",
+        "source_hashes_after.json": "2c8246c2e08cdfde9e207d264a2247e8722796aaa059b1a12644301ef57861e1",
+        "invocation.json": "95a6004c853018a374e5ae3a382f8d53051897bc03bfe741112209ccf15772ae",
+        "timing_synth.rpt": "8106ffb4d80ee06e6541418c54ed795d443d58078cc380f2402c85e467de40c1",
+        "executor_ooc.snapshot.tcl": "f657ac822a9373b3889fe67f23ba1cf6ac64d23e6b635ff5d3fe0e10a8b9dcd2",
+        "source_hashes_before.json": "2c8246c2e08cdfde9e207d264a2247e8722796aaa059b1a12644301ef57861e1",
+        "stdout.log": "84fdc9c20cfcd66edfb243139d119448006091c8e321760c0fc8a554cf8625ae",
+        "run.tcl": "990bdbc4ec0307477d758a2b197d14367c65ee6f0da64447890ab5d31e5ba0d9",
+        "utilization_synth.rpt": "233b6a8c7308c8db7a2786aad8265432776993c0ba820f9851432eb1544b5618",
+        "vivado.log": "98b546d44850bb5a9e53fa0aa5c7a7a0320efbdaaa8777d182bd73ce39b62e8f"
+      },
+      "physical_mapping": {
+        "*": {
+          "DSP48E2": 281,
+          "RAMB36E2": 31,
+          "RAMB18E2": 2,
+          "URAM288": 0,
+          "FDRE": 64386,
+          "FDSE": 19,
+          "RAM32M": 1,
+          "RAM64M": 0,
+          "RAMD32": 34,
+          "RAMS32": 6,
+          "RAMD64E": 0,
+          "RAMS64E": 0
+        },
+        "dots/*": {
+          "DSP48E2": 256,
+          "RAMB36E2": 0,
+          "RAMB18E2": 0,
+          "URAM288": 0,
+          "FDRE": 52007,
+          "FDSE": 0,
+          "RAM32M": 0,
+          "RAM64M": 0,
+          "RAMD32": 0,
+          "RAMS32": 0,
+          "RAMD64E": 0,
+          "RAMS64E": 0
+        },
+        "output_conversion/*": {
+          "DSP48E2": 8,
+          "RAMB36E2": 0,
+          "RAMB18E2": 0,
+          "URAM288": 0,
+          "FDRE": 1510,
+          "FDSE": 0,
+          "RAM32M": 0,
+          "RAM64M": 0,
+          "RAMD32": 0,
+          "RAMS32": 0,
+          "RAMD64E": 0,
+          "RAMS64E": 0
+        },
+        "*a_low*": {
+          "DSP48E2": 0,
+          "RAMB36E2": 11,
+          "RAMB18E2": 1,
+          "URAM288": 0,
+          "FDRE": 0,
+          "FDSE": 0,
+          "RAM32M": 0,
+          "RAM64M": 0,
+          "RAMD32": 0,
+          "RAMS32": 0,
+          "RAMD64E": 0,
+          "RAMS64E": 0
+        },
+        "*a_high*": {
+          "DSP48E2": 0,
+          "RAMB36E2": 11,
+          "RAMB18E2": 1,
+          "URAM288": 0,
+          "FDRE": 0,
+          "FDSE": 0,
+          "RAM32M": 0,
+          "RAM64M": 0,
+          "RAMD32": 0,
+          "RAMS32": 0,
+          "RAMD64E": 0,
+          "RAMS64E": 0
+        },
+        "*result_fifo*": {
+          "DSP48E2": 0,
+          "RAMB36E2": 9,
+          "RAMB18E2": 0,
+          "URAM288": 0,
+          "FDRE": 0,
+          "FDSE": 0,
+          "RAM32M": 0,
+          "RAM64M": 0,
+          "RAMD32": 0,
+          "RAMS32": 0,
+          "RAMD64E": 0,
+          "RAMS64E": 0
+        },
+        "*b_panels*": {
+          "DSP48E2": 0,
+          "RAMB36E2": 0,
+          "RAMB18E2": 0,
+          "URAM288": 0,
+          "FDRE": 8192,
+          "FDSE": 0,
+          "RAM32M": 0,
+          "RAM64M": 0,
+          "RAMD32": 0,
+          "RAMS32": 0,
+          "RAMD64E": 0,
+          "RAMS64E": 0
+        },
+        "*psum*": {
+          "DSP48E2": 0,
+          "RAMB36E2": 0,
+          "RAMB18E2": 0,
+          "URAM288": 0,
+          "FDRE": 49152,
+          "FDSE": 0,
+          "RAM32M": 0,
+          "RAM64M": 0,
+          "RAMD32": 0,
+          "RAMS32": 0,
+          "RAMD64E": 0,
+          "RAMS64E": 0
+        }
+      },
+      "inspection_actual_exit": 0,
+      "inspection_actual_marker_count": 1,
+      "inspection_sha256": {
+        "top_setup_paths.rpt": "d148382435ca3ea9c12dada690f9b72c6d1ca04b1427d0c83794f1276fbfe5df",
+        "vivado.jou": "117eb50bdee20bcabdc5496400ef8adafca455a1286fac2b6fc7d9297b09d9ba",
+        "exit_code.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "primitive_cells.tsv": "1a593ab9fa808893ecd91f5c5389fc67357f6ff574d28b6a8b17ff063b38686b",
+        "physical_mapping.tsv": "9efcbe361a24384929360a4385007a808a3025bc526fa07531fce508592a42c5",
+        "stdout.log": "d460b2a7ff2ec83eab5fe3f783fbd8d0b87ebab696cca85458b5d18700d2c085",
+        "vivado.log": "06ec1c35c3773187f464a4c6304079ae6ffcebaf72859ec95d6669d70ba1d3ea",
+        "clocks_synth.rpt": "27e551b1840d48a2cee9deda43881dfa0cef67a030f0e19b4f0f32e804f76aaf"
+      },
+      "independent_functional_report": "evidence/timing_retries/20261009T044944Z/audit/gemm/candidate02/functional_audit.json",
+      "functional_source_sha256": {
+        "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+        "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+        "rtl/fp32_bf16_epilogue.sv": "3fbf60151b57fe04f4aa1546f62735562b283a5499a0c18e6cf281e085e78611",
+        "rtl/int8_dot_core.sv": "9825be03f1f6021cab761a4ae15a238f81e02f43e15685abb65c8789e47b589e",
+        "rtl/smollm2_int8_gemm_executor.sv": "dcfeba4288fd8f91aa3ba2ba23256229dca59e378fdcb9a8efa3ae08bece21d4",
+        "tb/executor_tb.sv": "22400d20725133ecfe87167ff4be6b237cf66072ded1f70d497e637bb36930e0",
+        "tb/executor_stress_tb.sv": "798058801dca513ca175e9565f0cecb94ccc3e08c9697275914cd7515086d805"
+      },
+      "functional_scenarios": 15
+    },
+    "quantization": {
+      "hierarchy": [
+        {
+          "instance": "smollm2_quantization_executor",
+          "module": "(top)",
+          "resources": {
+            "LUT": 18500,
+            "LogicLUT": 17888,
+            "LUTRAM": 432,
+            "SRL": 180,
+            "FF": 8081,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 15
+          }
+        },
+        {
+          "instance": "(smollm2_quantization_executor)",
+          "module": "(top)",
+          "resources": {
+            "LUT": 1491,
+            "LogicLUT": 1059,
+            "LUTRAM": 432,
+            "SRL": 0,
+            "FF": 2441,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 7
+          }
+        },
+        {
+          "instance": "dequantization",
+          "module": "w8a8_dequant_lane4",
+          "resources": {
+            "LUT": 3023,
+            "LogicLUT": 3023,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 1329,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 8
+          }
+        },
+        {
+          "instance": "(dequantization)",
+          "module": "w8a8_dequant_lane4",
+          "resources": {
+            "LUT": 1423,
+            "LogicLUT": 1423,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 433,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 0
+          }
+        },
+        {
+          "instance": "lanes[0].mul",
+          "module": "w8a8_fp32_mul",
+          "resources": {
+            "LUT": 390,
+            "LogicLUT": 390,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 224,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 2
+          }
+        },
+        {
+          "instance": "lanes[1].mul",
+          "module": "w8a8_fp32_mul_0",
+          "resources": {
+            "LUT": 387,
+            "LogicLUT": 387,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 224,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 2
+          }
+        },
+        {
+          "instance": "lanes[2].mul",
+          "module": "w8a8_fp32_mul_1",
+          "resources": {
+            "LUT": 390,
+            "LogicLUT": 390,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 224,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 2
+          }
+        },
+        {
+          "instance": "lanes[3].mul",
+          "module": "w8a8_fp32_mul_2",
+          "resources": {
+            "LUT": 433,
+            "LogicLUT": 433,
+            "LUTRAM": 0,
+            "SRL": 0,
+            "FF": 224,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 2
+          }
+        },
+        {
+          "instance": "quantization",
+          "module": "w8a8_quant_lane4",
+          "resources": {
+            "LUT": 13986,
+            "LogicLUT": 13806,
+            "LUTRAM": 0,
+            "SRL": 180,
+            "FF": 4311,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 0
+          }
+        },
+        {
+          "instance": "(quantization)",
+          "module": "w8a8_quant_lane4",
+          "resources": {
+            "LUT": 5250,
+            "LogicLUT": 5245,
+            "LUTRAM": 0,
+            "SRL": 5,
+            "FF": 664,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 0
+          }
+        },
+        {
+          "instance": "div",
+          "module": "w8a8_fp32_div4",
+          "resources": {
+            "LUT": 8736,
+            "LogicLUT": 8561,
+            "LUTRAM": 0,
+            "SRL": 175,
+            "FF": 3647,
+            "RAMB36": 0,
+            "RAMB18": 0,
+            "URAM": 0,
+            "DSP": 0
+          }
+        }
+      ],
+      "source_before_after_unchanged": true,
+      "source_pins": {
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_fp32_div4.sv": "8f9c1884cc50e1c0e69c4101397ea1af18e6a0323e1fac0b97c9704e928667ce",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_quant_lane4.sv": "d3a1459716e5ee22af9c40770be67998a0ebe5755e172cff11953bea06c9d5ad",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_dequant_lane4.sv": "012c5a81dde04820412b906cb06f2279e6b358306649d6599eb45245f5fb03ee",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/rtl/smollm2_quantization_executor.sv": "27e9f0ae0928e7fc331f8f25fff31838a14d0003e81500851d9efdfb340f8be1",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_module_manifest.json": "29f8048bd6dbc761a4c1c73b1f5acebc3401200368a99f376962b9664d689fb8",
+        "/home/shmin/llm2rtl/designs/smollm2_135m_w8a8_zcu104_r1/scripts/quant_executor_ooc.tcl": "4d3d05ebc17a10e44275809210914570324593b593c8ea2fa80b84264f45a325"
+      },
+      "archived_source_match": true,
+      "top": "smollm2_quantization_executor",
+      "process_exit": 0,
+      "actual_marker_count": 1,
+      "tool": "Vivado2025.2",
+      "part": "xczu7ev-ffvc1156-2-e",
+      "clock_period_ns": 5.0,
+      "resources": {
+        "LUT": 18500,
+        "LogicLUT": 17888,
+        "LUTRAM": 432,
+        "SRL": 180,
+        "FF": 8081,
+        "RAMB36": 0,
+        "RAMB18": 0,
+        "URAM": 0,
+        "DSP": 15
+      },
+      "timing": {
+        "WNS_ns": 0.19,
+        "TNS_ns": 0.0,
+        "setup_failures": 0,
+        "setup_endpoints": 18682,
+        "WHS_ns": 0.042,
+        "THS_ns": 0.0,
+        "hold_failures": 0,
+        "hold_endpoints": 18682,
+        "WPWS_ns": 1.968,
+        "TPWS_ns": 0.0,
+        "PW_failures": 0,
+        "PW_endpoints": 8862,
+        "no_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 797,
+        "no_output_delay": 515,
+        "loops": 0,
+        "latch_loops": 0
+      },
+      "status": "POST_SYNTH_INTERNAL_TIMING_PASS",
+      "hashes": {
+        "original_script_reference.tcl": "4d3d05ebc17a10e44275809210914570324593b593c8ea2fa80b84264f45a325",
+        "source_before.json": "30f7a09fceefc9a84f3ba6acf7eaaea4ec08ecb0b2ee35e6ade372747db54ffb",
+        "methodology_synth.rpt": "a245f917b9b1caf8665cd3d7057a1c90cb2cc66852b2edc09e35b4af7575df3f",
+        "drc_synth.rpt": "b08ca6bff7d928c25392d5f3b97d6264090d27a5d2b342f473df5f67622921b8",
+        "console.log": "0775cd6595814644b6121102a1259db4c44e829a5d9bdc8994d8544b04135984",
+        "quant_executor_clock.xdc": "1c373865e78d270d2736fcaa48b7f3f0b82bc6317c29814bd2b3a6323928c6a6",
+        "summary.json": "9f61b18a6eaf7991b2a99065b39ce89815376b8fa6d11b96cffc0f9939eaaea3",
+        "launch.tcl": "caf86676e72a83df9e2a2cb0c3f852a4578af11e2cc86f19772f73eb9b00b26d",
+        "timing_synth.rpt": "04174b18ddb4d15e4aadc295d26b858bfcd3a7231697c303547211c2bc43c003",
+        "process_result.json": "ca9c0f6dd2e62ff23ba647c2886f67431232facbbe29cdf910dd31b22c35cfb0",
+        "command.json": "451cee301b37165a03d569a0d7e5220683da038250f474873145c48a970488c8",
+        "utilization_synth.rpt": "f2dcce1a572b410ed584cee5b6dc6cc1f3f03f95d0c73e00cd27ec598b83cca1",
+        "vivado.log": "7824ffd8016db5c77061f12fe7ec1686c998fd792dcd0d328ad97d1081394352",
+        "quant_executor_synth.dcp": "f5b89b0365f2a6990d3d312ab9b0d039a650d2b1a959f69849942ff2fe4b4b90",
+        "source_after.json": "30f7a09fceefc9a84f3ba6acf7eaaea4ec08ecb0b2ee35e6ade372747db54ffb"
+      },
+      "independent_functional_report": "evidence/timing_retries/20261009T044944Z/audit/quantization/candidate02/functional_audit.json",
+      "functional_source_sha256": {
+        "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+        "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+        "rtl/w8a8_fp32_div4.sv": "8f9c1884cc50e1c0e69c4101397ea1af18e6a0323e1fac0b97c9704e928667ce",
+        "rtl/w8a8_quant_lane4.sv": "d3a1459716e5ee22af9c40770be67998a0ebe5755e172cff11953bea06c9d5ad",
+        "rtl/w8a8_dequant_lane4.sv": "012c5a81dde04820412b906cb06f2279e6b358306649d6599eb45245f5fb03ee",
+        "rtl/smollm2_quantization_executor.sv": "27e9f0ae0928e7fc331f8f25fff31838a14d0003e81500851d9efdfb340f8be1",
+        "tb/quant_executor_tb.sv": "f4a8d0cb85e91eafbed5450365f0571296c88ddb0daf91cbea8fd329226a2775",
+        "tb/quant_executor_fault_tb.sv": "d885a3c55c732724255fb54d1d511592f57808e285a0d68a01245c43023dbf99",
+        "tb/quant_executor_repeat_tb.sv": "fc0a68e6c31d4084fbafc1de5bd13e5bc76c6d8ad3dfb6d17d0b89796c0d6bf8",
+        "evidence/timing_retries/20261009T044944Z/audit/audit_quant_terminal_fault_tb.sv": "545c8f8114d96f25523d098bb82bf744b12208a2efcdbc6d56c3e557f2af1c16"
+      },
+      "functional_scenarios": 18
+    }
+  },
+  "functional_reports": "Separate exact-source audit reports; no historical top PASS inheritance",
+  "excluded": [
+    "routed200MHzclosure",
+    "unconstrained native/control interface timing",
+    "combinedboardfit",
+    "physicalboarddeployment"
+  ],
+  "no_RTL_or_contract_edits": true,
+  "overall_scope_status": "PASS_FUNCTIONAL_AND_POST_SYNTH_INTERNAL_5NS",
+  "fixture_identity": "audit/fixture_identity.json",
+  "baseline_failures_preserved": "baseline_rtl and original evidence/ooc_runs/20261009T042510Z; counter-only retry ooc01 retained",
+  "full_board_or_routed_promotion": false
+}

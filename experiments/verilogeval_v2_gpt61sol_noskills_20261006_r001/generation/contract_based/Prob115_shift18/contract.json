@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "load": 1, "ena": 1, "amount": 2, "data": 64}, "outputs": {"q": 64}, "reset": "No reset port is specified."},
+  "semantics": {"edge": "Update on rising clk edge; synchronous register behavior assumed because polarity is unstated.", "priority": "Active-high load replaces q with data, regardless of ena or amount, instead of shifting.", "shift": "If load is low and ena high: 00 left 1, 01 left 8, 10 arithmetic right 1, 11 arithmetic right 8.", "hold": "If load and ena are low, retain q.", "initialization": "No initial value specified; no initializer or reset is added. Verification establishes known state by loading."},
+  "numeric": {"width": 64, "left": "Zero fill low bits and discard high bits beyond 64.", "right": "Replicate original q[63] into vacated high bits for arithmetic shifts.", "amount": "Two-bit direction/distance selector, not a numeric shift count."},
+  "verification": {"oracle": "Independent bit-by-bit movement from prior expected state, derived from original shift definitions.", "sampling": "Drive at falling edges, check retention before rising edge, sample after rising edge NBA updates.", "directed": "Load priority, disabled hold, all selectors, positive and negative data, zero, all ones, boundary bits, repeated shifts.", "random": "Deterministic pseudo-random loads, holds and shifts.", "termination": "Fatal mismatch, bounded timeout, PASS only after all comparisons."},
+  "specification_ambiguities": ["Clock edge polarity is not explicitly stated; rising-edge operation is assumed.", "Power-up contents are unspecified; tests do not require a particular initial value before the first load."]
+}

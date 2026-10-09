@@ -1,0 +1,66 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "out_assign": {
+        "direction": "output",
+        "width": 1
+      },
+      "out_always_comb": {
+        "direction": "output",
+        "width": 1
+      },
+      "out_always_ff": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "out_assign": "Continuous assign of a XOR b.",
+    "out_always_comb": "Combinational always block assigns a XOR b with no storage.",
+    "out_always_ff": "At every positive edge of clk, sample a XOR b and update the single flip-flop output via nonblocking assignment; hold between positive edges.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No specified initial registered value; leave uninitialized and do not require a binary value before first positive edge.",
+    "latency": "Combinational outputs settle in the same simulation time; registered output reflects inputs sampled at the latest positive edge after nonblocking update."
+  },
+  "numeric": {
+    "operation": "One-bit bitwise XOR",
+    "truth_table": {
+      "00": 0,
+      "01": 1,
+      "10": 1,
+      "11": 0
+    },
+    "signedness": "Unsigned one-bit logic",
+    "arithmetic": "No accumulation, overflow, rounding, saturation or truncation.",
+    "four_state": "Standard SystemVerilog bitwise XOR semantics for X/Z operands."
+  },
+  "verification": {
+    "source": "Independent testbench derived only from problem.txt.",
+    "oracle": "For binary inputs use inequality truth-table expectation rather than DUT expression.",
+    "coverage": [
+      "All four binary combinations for both combinational outputs and rising-edge sampling.",
+      "Change inputs while clock is low and high to verify registered output holds.",
+      "Verify falling edges do not update the registered output.",
+      "Repeated sampling and all 16 transitions between binary input combinations."
+    ],
+    "sampling": "Drive inputs away from rising edges; check outputs after settling and NBA completion.",
+    "initialization": "Do not check initial registered output before first rising edge.",
+    "tools": "Explicit dev_tb top, Icarus -g2012, matching vvp, finite compile and simulation timeouts."
+  },
+  "specification_ambiguities": []
+}

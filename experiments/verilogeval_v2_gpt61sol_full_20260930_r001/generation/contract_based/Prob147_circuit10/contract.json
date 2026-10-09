@@ -1,0 +1,56 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 1
+      },
+      "state": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "storage": "Exactly one flip-flop, observable as state.",
+    "clock": "Positive edge of clk; state_next = a & b sampled immediately before the edge.",
+    "output": "q = a XOR b XOR state, combinational with no registered latency.",
+    "hold": "state holds between positive edges, including negative edges.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No initialization; state is unknown until a clock edge samples an AND expression with a known result.",
+    "waveform_interpretation": "Inputs updated in rows at rising edges are interpreted as post-sampling stimulus; the previous stable inputs determine the shown new state."
+  },
+  "numeric": {
+    "domain": "One-bit unsigned Boolean logic, with ordinary four-state SystemVerilog simulation semantics.",
+    "state_equation": "state_next = a & b",
+    "q_equation": "q = a ^ b ^ state",
+    "arithmetic": "No multi-bit arithmetic, overflow, truncation, rounding, or saturation."
+  },
+  "verification": {
+    "source": "Only original problem waveform and independently constructed Boolean truth tables.",
+    "waveform": "Replay all supplied rows with rising-edge input changes driven after state sampling; compare state and q including unknowns.",
+    "exhaustive": "For both reachable state values and all four input pairs, check combinational truth table before clock, next state at rising edge, and hold at falling edge.",
+    "unknowns": "Check uninitialized state and unknown b at startup, and recovery by sampling a=b=0.",
+    "tool": "Icarus v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Waveform changes inputs on the same displayed timestamps as clock rising edges, without specifying simulator scheduling.",
+      "resolution": "Infer sampling of previously stable inputs from state at 75ns, 85ns, 95ns and 145ns; drive testbench inputs after each edge when replaying rows."
+    }
+  ]
+}

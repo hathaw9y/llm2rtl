@@ -1,0 +1,31 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in1": {"direction": "input", "width": 1},
+      "in2": {"direction": "input", "width": 1},
+      "in3": {"direction": "input", "width": 1},
+      "out": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "function": "out = XNOR(in1, in2) XOR in3",
+    "timing": "Pure combinational evaluation; no clock cycles or registered latency; output follows current inputs after combinational settling.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization required."
+  },
+  "numeric": {
+    "type": "One-bit unsigned Boolean signals",
+    "operations": "One-bit bitwise XNOR followed by one-bit bitwise XOR",
+    "arithmetic": "No arithmetic accumulation, overflow, rounding, truncation, or saturation.",
+    "unknowns": "Use normal SystemVerilog bitwise four-state propagation; original problem specifies Boolean circuit behavior."
+  },
+  "verification": {
+    "oracle": "Independent literal truth table indexed by {in1,in2,in3}: outputs 1,0,0,1,0,1,1,0 for indices 0 through 7.",
+    "coverage": "Exhaust all eight binary input combinations and repeat in reverse order to check input-dependent combinational behavior.",
+    "checks": "Icarus SystemVerilog compilation with explicit dev_tb top and warnings; self-checking comparisons after settling with fatal on mismatch and explicit PASS.",
+    "timeouts": "Finite shell timeouts for compilation and simulation plus a testbench watchdog."
+  },
+  "specification_ambiguities": []
+}

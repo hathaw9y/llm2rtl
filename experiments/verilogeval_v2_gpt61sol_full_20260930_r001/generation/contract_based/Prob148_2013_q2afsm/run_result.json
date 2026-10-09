@@ -1,0 +1,175 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob148_2013_q2afsm",
+  "official_status": "compile_failure",
+  "workflow_status": "failed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob148_2013_q2afsm",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob148_2013_q2afsm/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790736565.317784,
+    "ended_at_unix": 1790736735.3653038,
+    "seconds": 170.04752039909363,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 130522,
+      "cached_input_tokens": 108928,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3188,
+      "reasoning_output_tokens": 64
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "207cbb7c8ef66f9e5d44ffd091fd0f6c504b59179d4297f9a9193e17ed73f76e",
+  "contract_sha256": "76eaca343bb09d25da9484a32cc06c9469b7355d02433b19762607c2f492f4c9",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract_gate",
+        "command": "python3 validate_contract.py",
+        "result": "passed_structure_only",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "static_review",
+        "result": "passed",
+        "details": "Exact ports; synchronous active-low reset; separate next-state and state-register blocks; complete Moore output decode; priority 0 > 1 > 2; no preemption; release returns to idle."
+      },
+      {
+        "name": "development_compile",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "exit_code": 139,
+        "result": "failed",
+        "log": "dev_compile.log"
+      },
+      {
+        "name": "development_simulation",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+        "exit_code": 255,
+        "result": "failed_no_compiled_input",
+        "log": "dev_simulation.log"
+      },
+      {
+        "name": "tool_version",
+        "command": "timeout 10s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -V",
+        "exit_code": 0,
+        "result": "driver_reports_12.0_but_backend_version_failed",
+        "log": "dev_tool_version.log"
+      },
+      {
+        "name": "dut_elaboration",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -s TopModule -o dev_elaborated candidate.sv",
+        "exit_code": 139,
+        "result": "failed",
+        "log": "dev_elaboration.log"
+      }
+    ],
+    "development_outcome": "Initial candidate preserved unchanged. Contract structural gate and static review passed. Compiler failed with exit 139 for both testbench and standalone DUT; no simulation success claimed.",
+    "limitations": [
+      "Diagram typo and omitted D transitions resolved using original prose, as recorded in frozen contract.",
+      "Self-checking development testbench created but could not execute due to compilation failure.",
+      "Behavior before synchronous reset is unspecified.",
+      "No official evaluation results available; no synthesis or board work performed."
+    ]
+  },
+  "final": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "Prob148_2013_q2afsm_test.sv": "df10a7f9f94e93223d460bc15ed6293990c35a7b91f11614676d0ee7fa5659e7",
+      "candidate.sv": "207cbb7c8ef66f9e5d44ffd091fd0f6c504b59179d4297f9a9193e17ed73f76e",
+      "Prob148_2013_q2afsm_ref.sv": "8d9517c9f3e10906de5849675419e92605b04ead1a1b74b0df6a7785ff5197d6"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob148_2013_q2afsm_test.sv",
+        "Prob148_2013_q2afsm_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.13728480134159327
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "Prob148_2013_q2afsm_test.sv": "df10a7f9f94e93223d460bc15ed6293990c35a7b91f11614676d0ee7fa5659e7",
+      "candidate.sv": "207cbb7c8ef66f9e5d44ffd091fd0f6c504b59179d4297f9a9193e17ed73f76e",
+      "Prob148_2013_q2afsm_ref.sv": "8d9517c9f3e10906de5849675419e92605b04ead1a1b74b0df6a7785ff5197d6"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob148_2013_q2afsm_test.sv",
+        "Prob148_2013_q2afsm_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.1365525759756565
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "R"
+}

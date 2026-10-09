@@ -1,0 +1,179 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob010_mt2015_q4a",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob010_mt2015_q4a",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob010_mt2015_q4a/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790742826.4436886,
+    "ended_at_unix": 1790742927.590341,
+    "seconds": 101.14665293693542,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 124492,
+      "cached_input_tokens": 110336,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1744,
+      "reasoning_output_tokens": 14
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "2be4334cddbda0b0fb68868112151c8dcad8c98f67bacbf1d77faab3372e8b4d",
+  "contract_sha256": "ae8798ab22ac717653668be86926c02afaba2f778a8e3ad76cb3502836557a1c",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "coverage": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+      },
+      {
+        "command": "python3 validate_contract.py",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "evidence": "dev_checks.jsonl",
+        "coverage": "Icarus 12 compile and simulation; 16 checks including exhaustive binary truth table, transitions and supplementary four-state cases."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "No synthesis or board verification performed, as required."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "candidate.sv directly implements the specified one-bit combinational equation with the exact TopModule interface; candidate_initial.sv is the unchanged initial snapshot.",
+    "contract_changes": [],
+    "static_review": "Exact ports and widths; no state, reset, extra latency, dependencies or inferred latches."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2be4334cddbda0b0fb68868112151c8dcad8c98f67bacbf1d77faab3372e8b4d",
+      "Prob010_mt2015_q4a_test.sv": "cac566cc2151a3442f886b2958080e7ca27ceae9c596d95bc63e3bdbab52b730",
+      "Prob010_mt2015_q4a_ref.sv": "f9d234ca574a9b0df09f733c0fc9d08b3ff52fe3dd019ec5ae66d2a7c10c00a6"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob010_mt2015_q4a_test.sv",
+        "Prob010_mt2015_q4a_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013696023263037205
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb010_mt2015_q4a_test.sv:17: $finish called at 1011 (1ps)\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 202 samples\n\nSimulation finished at 1011 ps\nMismatches: 0 in 202 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.00842752680182457
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2be4334cddbda0b0fb68868112151c8dcad8c98f67bacbf1d77faab3372e8b4d",
+      "Prob010_mt2015_q4a_test.sv": "cac566cc2151a3442f886b2958080e7ca27ceae9c596d95bc63e3bdbab52b730",
+      "Prob010_mt2015_q4a_ref.sv": "f9d234ca574a9b0df09f733c0fc9d08b3ff52fe3dd019ec5ae66d2a7c10c00a6"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob010_mt2015_q4a_test.sv",
+        "Prob010_mt2015_q4a_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012306401506066322
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb010_mt2015_q4a_test.sv:17: $finish called at 1011 (1ps)\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 202 samples\n\nSimulation finished at 1011 ps\nMismatches: 0 in 202 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008116244338452816
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

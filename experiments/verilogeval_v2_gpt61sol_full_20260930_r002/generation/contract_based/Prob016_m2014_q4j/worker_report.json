@@ -1,0 +1,64 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790744169.0735207,
+      "source_sha256": "dc30975ff5d8f7d97d5346640f149e3a7f4da1b4a6a3c03619dc597efcf652c6",
+      "testbench_sha256": "8269d8fb38c66f668c552f69749c20d13c34ecbfd9aa30efd46098333cca00eb",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob016_m2014_q4j/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.009861722588539124
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS exhaustive 4-bit addition: 518 comparisons\ndev_tb.sv:39: $finish called at 518000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.008585031144320965
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, deliberately wrong fixture failed, repaired fixture passed",
+  "contract_validation": "passed_structure_only",
+  "coverage": "518 comparisons: six directed carry/boundary cases and all 256 binary input pairs in ascending and descending order",
+  "rtl_changes": [
+    {
+      "stage": "initial",
+      "justification": "Four combinational full-adder stages implement the original 4-bit addition request, preserving carry out in sum[4]."
+    }
+  ],
+  "tb_changes": [],
+  "contract_changes": [],
+  "interface_cycle_contract": "TopModule: unsigned x[3:0], y[3:0], sum[4:0]; combinational, no clock/reset or additional latency.",
+  "numeric_width_decisions": "Maximum result 30 fits exactly in 5 bits; carry-in is zero and final carry is retained.",
+  "static_review": "All output bits have one continuous driver; carry chain covers four stages; no latches, sequential state, or external source dependencies.",
+  "limitations": [
+    "Development PASS is not official evaluation correctness.",
+    "X/Z input behavior is unspecified in the original problem and not checked.",
+    "No synthesis or board work performed, as required."
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "module_id": "smollm2_bank_memories",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "proof_scope": "13 physical XPM local banks, 128-bit byte-strobe writes and three-cycle reads; no owner routing, DMA or compute",
+  "source_sha256": {
+    "ip/infrastructure/datamover_engine/rtl/bram_bank.sv": "7199594e43e1c9c951067882d31d0baaa1b1e626ab5d5cb14013af9a9de36221",
+    "ip/infrastructure/datamover_engine/rtl/uram_bank.sv": "11520a8bb955d10c89ca6f699d42bcfccd5458e6abee1be67a044dbfdaa92bd1",
+    "designs/smollm2_135m_bf16_zcu104_r1/modules/smollm2_bank_memories.json": "e35991c4ada277912c5130c79465672c0a7f391107b05498dc80c162972146bd",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_bank_memories.sv": "67ee289771f4dc7014f37a184b2c747b798aa2528332563dce7e0a03ee612cf4",
+    "designs/smollm2_135m_bf16_zcu104_r1/tb/tb_smollm2_bank_memories.sv": "ddcd7cf5b90e3b5b698b5addc99d72a6bc6d4dfdc77c29ec7cc5031e26b9947a",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_bank_memories_xsim.sh": "1aec2d9205b433dfb06a004ffb43eb90dedbd806921d4b33e70419d02d6ca18d",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_bank_memories_ooc.tcl": "1497d214a9ba643940d8f9fe2689ea790339a3b8a8eb64b1c0481104449f7abf",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/bank_memories_clock.xdc": "5127d6af45d0824731a9420894371f0d7825842f4e10d80851efa06bd5a3bbde"
+  },
+  "checks": {
+    "design_structure": "passed_structure_only with expected module SHA-256",
+    "verilator_lint": "PASS with vendor XPM wrapper stubs",
+    "xsim_self_check": "PASS with real XPM models, Vivado XSIM 2025.2",
+    "vivado_ooc_synthesis": "PASS, Vivado 2025.2, xczu7ev-ffvc1156-2-e, 5.000 ns clock",
+    "post_synth_drc": "0 checks found",
+    "board_execution": "not run"
+  },
+  "xsim_scenarios": [
+    "first and last word of every bank",
+    "partial byte strobe",
+    "same-bank separate-address read/write",
+    "storage across chunk gap and reset"
+  ],
+  "post_synth_resources": {
+    "clb_luts": 322,
+    "clb_registers": 1677,
+    "bram_tiles": 134,
+    "uram": 60,
+    "dsps": 0
+  },
+  "post_synth_timing_ns": {
+    "clock_period": 5.0,
+    "setup_wns": 2.288,
+    "hold_whs": 0.105,
+    "pulse_width_wpws": 1.8
+  },
+  "limitations": [
+    "OOC synthesis is not placed/routed timing or physical board proof.",
+    "DMA adapters, compute executors, DDR transfer and Vitis software are outside this module."
+  ]
+}

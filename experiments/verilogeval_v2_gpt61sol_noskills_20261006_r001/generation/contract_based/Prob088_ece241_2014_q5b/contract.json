@@ -1,0 +1,20 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "areset": 1, "x": 1}, "outputs": {"z": 1}},
+  "semantics": {
+    "encoding": {"A": "01", "B": "10", "requirement": "Implement using a one-hot encoding"},
+    "reset": "Asynchronous active-high areset sets state A, as explicitly specified",
+    "clock": "State transitions occur at positive clk edges, as explicitly specified",
+    "transitions": {"A,x=0": "A,z=0", "A,x=1": "B,z=1", "B,x=0": "B,z=1", "B,x=1": "B,z=0"},
+    "output": "Mealy combinational output uses current state and current x; no output register or added latency",
+    "initialization": "No power-up state is specified; verification establishes state through asynchronous reset"
+  },
+  "numeric": {"port_widths": "All ports are one bit", "state_width": 2, "arithmetic": "No numeric arithmetic; bitwise output inversion in B"},
+  "verification": {
+    "oracle": "Independent boolean history model from original transitions: after reset no one has been sampled; once x=1 is sampled at a positive edge state remains B until reset",
+    "sampling": "Check combinational outputs before edges and after NBA settling; change x away from positive edges",
+    "cases": "Both inputs in both states, A to B transition pre/post edge, repeated B cycles, between-edge x changes, off-edge reset assertion and release, reset held over positive edges",
+    "completion": "Bounded timeout, fatal mismatches, PASS line only on success; use fixed dev_check.py"
+  },
+  "specification_ambiguities": ["Power-up state before first reset and behavior of illegal one-hot states or unknown inputs are unspecified; no required values are asserted for these cases."]
+}

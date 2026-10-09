@@ -1,0 +1,36 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1,
+      "d": 1
+    },
+    "outputs": {
+      "q": 1
+    }
+  },
+  "semantics": {
+    "kind": "combinational",
+    "function": "q = b OR c",
+    "evidence": "All 16 binary input combinations occur in the original table; q is zero exactly when b=c=0, independent of a and d.",
+    "timing": "No clock, state, reset, or cycle latency. Original observations are at 0ns through 90ns in 5ns increments.",
+    "initialization": "Inputs 0000 at 0ns yield q=0 after combinational settling; no stored initial state specified."
+  },
+  "numeric": {
+    "widths": "All ports are single bit.",
+    "operator": "Bitwise OR of b and c; no arithmetic or signed interpretation."
+  },
+  "verification": {
+    "oracle": "Explicit expected q values transcribed from the ORIGINAL waveform table, not computed from the RTL expression.",
+    "stimulus": "Replay all 19 rows at original 0,5,...,90ns timestamps. Check after one delta settlement at each timestamp.",
+    "coverage": "All 16 binary combinations plus the repeated initial rows.",
+    "failure": "Case-inequality mismatches call $fatal; bounded timeout; PASS only after every row."
+  },
+  "specification_ambiguities": [
+    "The original table specifies binary inputs only; behavior with X or Z inputs is not specified. Use ordinary Verilog bitwise OR semantics without claiming additional requirements.",
+    "No within-timestamp sampling region is specified. Inputs change at listed timestamps and observations occur after combinational delta settlement, without moving physical stimulus times."
+  ]
+}

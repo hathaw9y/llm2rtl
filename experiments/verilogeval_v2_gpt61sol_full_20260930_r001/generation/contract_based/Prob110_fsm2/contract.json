@@ -1,0 +1,23 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": {"direction": "input", "width": 1}, "areset": {"direction": "input", "width": 1}, "j": {"direction": "input", "width": 1}, "k": {"direction": "input", "width": 1}, "out": {"direction": "output", "width": 1}}
+  },
+  "semantics": {
+    "clock": "State updates at rising edges of clk.",
+    "reset": "Active-high asynchronous areset forces OFF immediately and takes priority over transitions; while held high, rising clock edges keep OFF.",
+    "initialization": "No specified power-up state before reset; no RTL initial state imposed.",
+    "transitions": {"OFF": "j=0 holds OFF; j=1 enters ON; k is irrelevant.", "ON": "k=0 holds ON; k=1 enters OFF; j is irrelevant."},
+    "output": "Moore output: OFF produces 0 and ON produces 1; output changes with state, without an additional clock delay.",
+    "reset_release": "Deasserting reset alone does not change state. Next rising edge applies the OFF transition if reset has been released."
+  },
+  "numeric": {"state_width": 1, "state_encoding": {"OFF": 0, "ON": 1}, "arithmetic": "Boolean state selection only; no arithmetic, rounding, overflow or signed operands."},
+  "verification": {
+    "oracle": "Independent testbench tracks a Boolean expected state from the original transition table, and compares out after each state update.",
+    "coverage": "Test all four j/k combinations from both states, input changes between edges, reset assertion between clock edges from ON and OFF, reset held across edges, reset release without clock and repeated transition sequences.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp; bounded compile and simulation timeouts.",
+    "scope": "Independent development tests only; no official evaluation, synthesis or board claims."
+  },
+  "specification_ambiguities": ["Clock edge is not explicitly named in the prose; use the conventional rising edge.", "Behavior before first reset and for unknown input values is unspecified; no tests assert such behavior."]
+}

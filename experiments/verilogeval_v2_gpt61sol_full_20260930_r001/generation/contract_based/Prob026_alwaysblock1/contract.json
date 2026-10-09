@@ -1,0 +1,54 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "out_assign": {
+        "direction": "output",
+        "width": 1
+      },
+      "out_alwaysblock": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "Both outputs equal the AND of a and b.",
+    "out_assign_implementation": "continuous assign statement",
+    "out_alwaysblock_implementation": "combinational always block",
+    "timing": "Combinational; outputs follow current inputs after combinational settling, with no clock-cycle latency or storage.",
+    "clock": "none",
+    "reset": "none",
+    "initialization": "No explicit initialization or persistent state; outputs derive from current inputs."
+  },
+  "numeric": {
+    "operand_width_bits": 1,
+    "result_width_bits": 1,
+    "operation": "one-bit bitwise AND",
+    "binary_truth_table": {
+      "00": 0,
+      "01": 0,
+      "10": 0,
+      "11": 1
+    },
+    "arithmetic": "No addition, overflow, rounding, saturation or truncation.",
+    "four_state": "Use standard SystemVerilog bitwise AND propagation for X/Z; original problem specifies binary AND behavior."
+  },
+  "verification": {
+    "independent_oracle": "Explicit binary truth table, not a copy of the DUT expression.",
+    "coverage": "Exhaust all four binary input pairs and all ordered transitions; check both outputs after settling. Supplement with standard four-state AND truth-table checks.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; compile and simulation each under finite timeout.",
+    "acceptance": "All checks pass with an explicit PASS marker; any mismatch is fatal.",
+    "scope": "Local development verification only; no official evaluation, synthesis or board testing."
+  },
+  "specification_ambiguities": []
+}

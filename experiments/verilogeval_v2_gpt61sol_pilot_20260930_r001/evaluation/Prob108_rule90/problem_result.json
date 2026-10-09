@@ -1,0 +1,130 @@
+{
+  "problem_id": "Prob108_rule90",
+  "status": "passed",
+  "initial_status": "passed",
+  "final_source_sha256": "d27c2369a8f9cb2010ba6e872a69482a141a17e7c57b7c3d759e206c4b014433",
+  "contract_sha256": "b45e9b5a0fb5c50b3ad176a5c2421d64fc97c36c5c09935f37ef85e9a1547a40",
+  "worker_report": {
+    "requested_model": "gpt-6.1-sol",
+    "contract_sha256": "b45e9b5a0fb5c50b3ad176a5c2421d64fc97c36c5c09935f37ef85e9a1547a40",
+    "final_source_sha256": "d27c2369a8f9cb2010ba6e872a69482a141a17e7c57b7c3d759e206c4b014433",
+    "revision_count": 0,
+    "revisions": [],
+    "actual_checks": [
+      {
+        "kind": "static review",
+        "result": "pass",
+        "detail": "512-bit neighbor XOR, zero boundaries, nonblocking positive-edge state updates and load priority verified by inspection"
+      },
+      {
+        "kind": "development compile",
+        "command": "iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "result": "tool crashed, exit 139; compile.log empty"
+      },
+      {
+        "kind": "simulation attempt",
+        "command": "vvp dev_sim",
+        "result": "failed: executable absent; simulation.log preserved"
+      },
+      {
+        "kind": "development compile retry",
+        "command": "iverilog -B /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/lib/ivl -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "result": "tool crashed, exit 139; compile_retry.log empty"
+      }
+    ],
+    "elapsed_wall_seconds": 91.134893,
+    "start_timestamp_utc": "2026-09-30T00:44:48+00:00",
+    "final_artifact_timestamp_utc": "2026-09-30T00:46:19.134893+00:00",
+    "timestamp_precision": "first tool call clock reading has one-second resolution",
+    "development_outcome": "simulation blocked by supplied iverilog exit 139; static review passed",
+    "known_limitations": [
+      "No completed development simulation due to compiler crash",
+      "No official benchmark evaluation accessed",
+      "No synthesis performed",
+      "Power-up state unspecified per interface lacking reset"
+    ],
+    "token_usage": null
+  },
+  "final": {
+    "status": "passed",
+    "source_sha256": "d27c2369a8f9cb2010ba6e872a69482a141a17e7c57b7c3d759e206c4b014433",
+    "file_sha256": {
+      "Prob108_rule90_ref.sv": "65419cbb139b74225b3d35c2c5c054034d082de3f5f9c00b7bb79d0b48d845db",
+      "candidate.sv": "d27c2369a8f9cb2010ba6e872a69482a141a17e7c57b7c3d759e206c4b014433",
+      "Prob108_rule90_test.sv": "298ebda07623c87b6ac77ab7d971e3670ab30e3e221ffc9b5029d4d31f13aa37"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob108_rule90_test.sv",
+        "Prob108_rule90_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.014141852967441082,
+      "timeout": false
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb108_rule90_test.sv:75: $finish called at 35606 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 7121 samples\n\nSimulation finished at 35606 ps\nMismatches: 0 in 7121 samples\n",
+      "stderr": "",
+      "seconds": 0.26287269964814186,
+      "timeout": false
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "source_sha256": "d27c2369a8f9cb2010ba6e872a69482a141a17e7c57b7c3d759e206c4b014433",
+    "file_sha256": {
+      "Prob108_rule90_ref.sv": "65419cbb139b74225b3d35c2c5c054034d082de3f5f9c00b7bb79d0b48d845db",
+      "candidate.sv": "d27c2369a8f9cb2010ba6e872a69482a141a17e7c57b7c3d759e206c4b014433",
+      "Prob108_rule90_test.sv": "298ebda07623c87b6ac77ab7d971e3670ab30e3e221ffc9b5029d4d31f13aa37"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob108_rule90_test.sv",
+        "Prob108_rule90_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.012639055959880352,
+      "timeout": false
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb108_rule90_test.sv:75: $finish called at 35606 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 7121 samples\n\nSimulation finished at 35606 ps\nMismatches: 0 in 7121 samples\n",
+      "stderr": "",
+      "seconds": 0.2609258061274886,
+      "timeout": false
+    }
+  }
+}

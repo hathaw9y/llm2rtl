@@ -1,0 +1,14 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "development/01", "simulation_checked_cycles": 147421}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "No synthesis or board verification was performed."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Synchronous active-high reset; prefix detector for 1101; four MSB-first delay bits; 10-bit counter for 1000-cycle intervals; 4-bit remaining count; done held until ack. Original interface preserved with no added latency.",
+  "verification": "Independent rolling-window oracle and integer total-cycle countdown check every sampled edge. Covers all delays 0 through 15, overlapping prefixes, invalid patterns, data and ack during counting, delayed acknowledgement, repeated timers, and resets during prefixes, duration capture, counting and done. Outputs sampled after nonblocking updates. No initial-state behavior required before reset. Count checked only while counting.",
+  "static_review": "Single sequential driver, sized RTL arithmetic, complete state recovery, synthesizable DUT, original synchronous reset semantics. Initial snapshot retained unchanged."
+}

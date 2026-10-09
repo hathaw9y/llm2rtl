@@ -1,0 +1,31 @@
+{
+  "status": "frozen",
+  "module": "TopModule",
+  "interface": {
+    "in": {
+      "direction": "input",
+      "width": 8,
+      "signed": false
+    },
+    "pos": {
+      "direction": "output",
+      "width": 3,
+      "signed": false
+    }
+  },
+  "semantics": "Combinational priority encoder: pos = minimum i in [0,7] such that in[i] == 1; pos = 0 for in == 0.",
+  "numeric_widths": {
+    "input": 8,
+    "index": 3
+  },
+  "latency": "Combinational, no clock or registered latency",
+  "reset_behavior": "No reset port or state",
+  "specification_ambiguities": [
+    "Four-state X/Z behavior unspecified; verification covers all binary vectors."
+  ],
+  "verification_plan": [
+    "Compile with iverilog -g2012 and explicit dev_tb top",
+    "Exhaustively compare all 256 binary inputs using an independent shift/count oracle",
+    "Repeat all vectors in reverse order to check combinational update behavior"
+  ]
+}

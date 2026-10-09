@@ -1,0 +1,62 @@
+{
+  "schema": "llm2rtl.benchmark_reaudit_synthesis.v1",
+  "created_at_utc": "2026-10-05T07:09:15.976527+00:00",
+  "scope": "Re-audit and functional replay of earlier generated RTL, plus new OOC synthesis",
+  "new_llm_generation": false,
+  "old_experiment": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002",
+  "source_manifest_sha256": "1e8b33222f8275c9bc41ea90b43e20f8a98ccb6ac5952c7fe9980d24ead749f2",
+  "source_results_sha256": "6518227373be1d40a378ea73f38a538960bee2ff532aa2127680458e278b8fa5",
+  "dataset_commit": "c498220d0a52248f8e3fdffe279075215bde2da6",
+  "generation_model": "gpt-6.1-sol",
+  "conditions": {
+    "single_agent": "one fresh Agent, ordinary specification and self-verification, no explicit contract",
+    "contract_based": "one fresh Agent, structured contract freeze + structural gate before RTL, self-verification"
+  },
+  "tasks_per_condition": 156,
+  "samples_per_task_per_condition": 1,
+  "agent_count_per_job": 1,
+  "functional_replay": [
+    "initial",
+    "final",
+    "official_reference_control"
+  ],
+  "official_analyzer_sha256": "618311b497547b9cb3e65a4ff22da5f9dd4409f096958b0fd00b72de9d9fadac",
+  "functional_pass_requires": "Official analyzer dot AND compile/simulation exit zero, no external timeout",
+  "synthesis": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "top": "TopModule",
+    "stage": "out_of_context_synthesis",
+    "period_ns": 5.0,
+    "vivado_version": "vivado v2025.2 (64-bit)",
+    "clock_policy": "Original DUT clk/clock ports at 5ns; virtual 5ns clock when absent",
+    "io_delay_policy": "max 2.5ns, min 0ns; no pin placement or board IO timing claims",
+    "all_156_tasks_in_denominator": true,
+    "only_final_rtl": true,
+    "pilot_tasks": [
+      "Prob001_zero",
+      "Prob040_count10",
+      "Prob078_dualedge",
+      "Prob128_fsm_ps2",
+      "Prob144_conwaylife",
+      "Prob155_lemmings4"
+    ],
+    "synthesis_repair_allowed": false,
+    "default_parallel_vivado_processes": 2,
+    "threads_per_process": 2
+  },
+  "limitations": [
+    "One fresh sample per task per arm; no repeated-run variance estimate",
+    "Both conditions use one Agent; not a multi-Agent comparison",
+    "Contract arm includes an additional contract skill; compares workflow as a whole",
+    "Benchmark-adapted module contract; no accelerator ISA/bank/board evidence",
+    "Decoding uses Codex CLI defaults",
+    "Instruction-separated filesystem access, not hard read isolation",
+    "Earlier run used different debugging environment and budget; not a controlled before/after ablation",
+    "Captured RTL reused; not a fresh generation or evaluation of current full LLM2RTL",
+    "Reference-failing tasks retained in 156-task primary denominator",
+    "Synthesis timing reports are diagnostic; no routed timing or board-runtime claim",
+    "No MAGE rerun, VerilogEval v1, CVDP, accelerator integration, or measured TOPS/W in this run"
+  ],
+  "runner_sha256": "a5e863c2c3ad4010bfc74ff00a490167f309c3f89931a2ada458e70525c869ec",
+  "tcl_sha256": "46682d36c51e0e90654157e580feda723e91fc0a08128128468ecf2132744dbc"
+}

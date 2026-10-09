@@ -1,0 +1,64 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width_bits": 1
+      },
+      "b": {
+        "direction": "input",
+        "width_bits": 1
+      },
+      "out": {
+        "direction": "output",
+        "width_bits": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "out = NOT (a OR b)",
+    "truth_table": [
+      {
+        "a": 0,
+        "b": 0,
+        "out": 1
+      },
+      {
+        "a": 0,
+        "b": 1,
+        "out": 0
+      },
+      {
+        "a": 1,
+        "b": 0,
+        "out": 0
+      },
+      {
+        "a": 1,
+        "b": 1,
+        "out": 0
+      }
+    ],
+    "timing": "Pure combinational response to current inputs; no clock or registered latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization required.",
+    "handshake": "None."
+  },
+  "numeric": {
+    "operands": "One-bit Boolean inputs",
+    "result": "One-bit Boolean NOR",
+    "arithmetic": "Bitwise OR followed by one-bit complement; no arithmetic, rounding, saturation, or overflow."
+  },
+  "verification": {
+    "method": "Independent explicit truth-table expected values, checked after combinational settling.",
+    "coverage": "All four binary input combinations, repeated in reverse order to exercise input changes.",
+    "tools": "Icarus Verilog v12 compile with -g2012 and explicit dev_tb top, followed by matching vvp.",
+    "timeout": "Finite external timeout for compilation and simulation; internal testbench watchdog.",
+    "scope": "Local development checks only; no official evaluation or synthesis."
+  },
+  "specification_ambiguities": [
+    "X/Z input behavior is not specified by the original problem; binary truth-table behavior is the acceptance requirement."
+  ]
+}

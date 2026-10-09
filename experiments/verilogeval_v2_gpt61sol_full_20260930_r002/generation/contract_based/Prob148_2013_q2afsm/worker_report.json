@@ -1,0 +1,45 @@
+{
+  "revision_count": 2,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "compile_failed",
+      "evidence": "development/01/result.json"
+    },
+    {
+      "label": "revision_1",
+      "status": "compile_failed",
+      "evidence": "development/02/result.json"
+    },
+    {
+      "label": "revision_2",
+      "status": "passed",
+      "evidence": "development/03/result.json"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Original diagram has a duplicate A-to-D condition and omits D transitions; resolved using explicit arbiter prose as recorded in contract.json.",
+    "Power-up state is unspecified; deterministic verification begins after a synchronous reset edge.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [
+    {
+      "revision": 1,
+      "change": "Replace enum with explicit two-bit localparam state codes and logic state registers.",
+      "reason": "Icarus 12 initial compile crashed (139); supplemental Icarus 11 compiled successfully. Representation-only compatibility change; revision 1 still crashed."
+    },
+    {
+      "revision": 2,
+      "change": "Use always @(*) and always @(posedge clk) instead of always_comb/always_ff.",
+      "reason": "Repeated Icarus 12 compiler crash with supplemental always_* sensitivity diagnostics; legacy equivalent blocks eliminated crash and passed original-spec oracle."
+    }
+  ],
+  "justified_tb_changes": [],
+  "contract_validation": "passed_structure_only",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repair passed",
+  "interface_cycle_summary": "TopModule(clk, resetn, r[2:0], g[2:0]); synchronous active-low reset; positive-edge state updates; combinational Moore grants; release returns idle before re-arbitration.",
+  "numeric_summary": "Unsigned 3-bit requests/grants; four 2-bit state codes; no arithmetic.",
+  "static_review": "Separate state table and state flip-flops; complete combinational assignments; nonblocking sequential assignment; original ports and latency preserved."
+}

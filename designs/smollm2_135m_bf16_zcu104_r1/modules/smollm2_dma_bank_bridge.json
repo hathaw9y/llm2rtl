@@ -1,0 +1,33 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "smollm2_dma_bank_bridge",
+  "module_kind": "infrastructure",
+  "status": "frozen",
+  "target": {"board": "ZCU104", "part": "xczu7ev-ffvc1156-2-e", "clock_mhz": 200},
+  "routed_opcodes": ["DMA_LOAD", "DMA_STORE"],
+  "interface": {
+    "engine_side": "13 per-bank MM2S and S2MM adapter control and 64-bit AXI stream arrays from common datamover_engine",
+    "bank_side": "role 1 write and role 2 read ports of smollm2_bank_subsystem",
+    "bank_word_bits": 128,
+    "bank_read_latency_cycles": 3,
+    "store_adapter_read_latency_cycles": 4,
+    "legal_load_banks": [0, 3, 7, 8, 9],
+    "legal_store_banks": [5, 6, 12],
+    "shared_dependency_change": "s2mm_adapter.bank_read_issue exposes one actual native read request; bank_enb also covers pipeline hold cycles"
+  },
+  "numeric": {"kind": "bit_exact_data_transport", "tensor_arithmetic": "none"},
+  "control_rules": {
+    "grant": "Granted only when requested bank is legal, acquired by the dispatcher, and owned by DMA role 1 or 2",
+    "load": "MM2S adapter converts two 64-bit stream beats to each 128-bit bank word; a one-cycle 165-bit role-1 write register sustains one word per cycle, and LOAD done waits until its final registered write is accepted by the bank router",
+    "store": "S2MM adapter issues only actual read requests; a one-cycle registered role-2 request plus the bank's three-cycle response yields four cycles to the adapter before conversion to 64-bit stream beats",
+    "fault": "Rejected access, missing or mismatched three-cycle STORE read response, illegal or unowned grant request, or simultaneous same-direction local access sets sticky bridge_fault and direction flags until reset; smollm2_dma_engine_link converts them to corresponding command failure and engine abort",
+    "success": "Adapter done alone is not DDR completion; the common DataMover engine must also accept a successful matching status before dispatcher completion"
+  },
+  "verification": {
+    "required_cases": ["model-legal DMA_LOAD into B0 with registered write drained before done, then compute-role read", "compute-role write into B5 then DMA_STORE stream", "ownership-denied request faults", "missing STORE read response faults", "common adapter regression after read-issue port addition", "200 MHz OOC resource and timing"],
+    "required_tools": ["self-checking XSIM with XPM bank subsystem", "Verilator lint", "Vivado out-of-context synthesis"],
+    "proof_scope": "stream adapter to local bank connection only; no vendor DataMover IP, DDR response, board placement or Vitis execution"
+  }
+}

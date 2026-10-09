@@ -1,0 +1,41 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "outcome": "pass",
+      "details": "Exact TopModule scalar ports; continuous single-bit XNOR matches all four waveform input combinations. No state, delays, extra ports, dependencies or inferred latches."
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "outcome": "pass"
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim.vvp candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "outcome": "tool_failed",
+      "log": "dev_compile.log",
+      "details": "Exit 139; no diagnostic output and no simulation executable produced."
+    },
+    {
+      "name": "development_simulation",
+      "outcome": "not_run",
+      "details": "Compilation failed. Independent testbench prepared for 19 waveform samples and all 16 ordered binary transitions; finite watchdog included."
+    }
+  ],
+  "development_outcome": "RTL implemented and statically reviewed; development simulation unverified due to compiler failure.",
+  "limitations": [
+    "Official evaluation was not accessed and occurs after this turn.",
+    "No successful development simulation; compiler exited 139.",
+    "X/Z input behavior is unspecified by the original problem.",
+    "No synthesis, timing analysis or board work performed."
+  ],
+  "contract_corrections": []
+}

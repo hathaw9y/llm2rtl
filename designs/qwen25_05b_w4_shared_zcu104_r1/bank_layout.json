@@ -1,0 +1,654 @@
+{
+  "schema": "llm2rtl.bank_layout.v1",
+  "design_id": "qwen25_05b_w4_shared_zcu104",
+  "revision": "r1",
+  "ownership_model": {
+    "mode": "single_exclusive_lock_per_bank",
+    "acquire": "All operand roles atomically acquire at command acceptance.",
+    "release": "Matching command completion only, independently of PC."
+  },
+  "native_read_latency": 3,
+  "DMA_stream_bits": 64,
+  "banks": [
+    {
+      "bank_id": "0",
+      "name": "H0",
+      "capacity_words": 2048,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "Reusable full hidden/residual/normalized/Q tensor slot; row tile at most 16 x 896; allocate by liveness, not fixed layer identity.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "1",
+      "name": "H1",
+      "capacity_words": 2048,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "Reusable full hidden/residual/normalized/Q tensor slot; row tile at most 16 x 896; allocate by liveness, not fixed layer identity.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "2",
+      "name": "H2",
+      "capacity_words": 2048,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "Reusable full hidden/residual/normalized/Q tensor slot; row tile at most 16 x 896; allocate by liveness, not fixed layer identity.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "3",
+      "name": "H3",
+      "capacity_words": 2048,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "Reusable full hidden/residual/normalized/Q tensor slot; row tile at most 16 x 896; allocate by liveness, not fixed layer identity.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "4",
+      "name": "K_NEW",
+      "capacity_words": 256,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "New K for at most 16 query tokens and 2 KV heads; explicit DMA_STORE to layer KV cache.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "5",
+      "name": "V_NEW",
+      "capacity_words": 256,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "New V for at most 16 query tokens and 2 KV heads; explicit DMA_STORE to layer KV cache.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "6",
+      "name": "ACT_TILE",
+      "capacity_words": 256,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "Explicit vector-extracted GEMM activation tile up to 16 x 128, or one attention head Q tile 16 x 64.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "7",
+      "name": "WGT_TILE",
+      "capacity_words": 512,
+      "word_bits": 128,
+      "format": "packed signed W4",
+      "layout": "Projection B tile: 128 outputs x 128 input features. Also holds W4 embedding rows for at most 16 tokens (row packing pending).",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "8",
+      "name": "SCALE_TILE",
+      "capacity_words": 64,
+      "word_bits": 128,
+      "format": "FP32",
+      "layout": "128 projection group scales or at most 16 embedding rows of 7 scales; aligned packing pending.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "9",
+      "name": "K_CONTEXT",
+      "capacity_words": 8192,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "One KV head at context<=1024 and head_dim64; explicit DMA_LOAD. Reused for its seven Q heads.",
+      "memory_kind": "URAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "10",
+      "name": "V_CONTEXT",
+      "capacity_words": 8192,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "One KV head V at context<=1024 and head_dim64; explicit DMA_LOAD. Reused for its seven Q heads.",
+      "memory_kind": "URAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "11",
+      "name": "PSUM0",
+      "capacity_words": 512,
+      "word_bits": 128,
+      "format": "FP32",
+      "layout": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "12",
+      "name": "PSUM1",
+      "capacity_words": 512,
+      "word_bits": 128,
+      "format": "FP32",
+      "layout": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "13",
+      "name": "PSUM2",
+      "capacity_words": 512,
+      "word_bits": 128,
+      "format": "FP32",
+      "layout": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "14",
+      "name": "PSUM3",
+      "capacity_words": 512,
+      "word_bits": 128,
+      "format": "FP32",
+      "layout": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "15",
+      "name": "PSUM4",
+      "capacity_words": 512,
+      "word_bits": 128,
+      "format": "FP32",
+      "layout": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "16",
+      "name": "PSUM5",
+      "capacity_words": 512,
+      "word_bits": 128,
+      "format": "FP32",
+      "layout": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "17",
+      "name": "PSUM6",
+      "capacity_words": 512,
+      "word_bits": 128,
+      "format": "FP32",
+      "layout": "16 x 128 partial-sum tile. Seven independent tiles retain the full FFN-down output accumulations across intermediate chunks; also reused for projections and P x V.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "18",
+      "name": "SCORE",
+      "capacity_words": 4096,
+      "word_bits": 128,
+      "format": "FP32",
+      "layout": "Attention QK FP32 score up to16x1024; during FFN, reused as independent16x128 FP32 gate/up projection scratch. Mutually exclusive lifetimes, descriptor reinitialization required.",
+      "memory_kind": "URAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "19",
+      "name": "GATE_TILE",
+      "capacity_words": 256,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "FFN gate tile 16 x 128; reusable BF16 result staging slot.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "20",
+      "name": "UP_TILE",
+      "capacity_words": 256,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "FFN up tile 16 x 128; reusable BF16 result staging slot.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "21",
+      "name": "PROB",
+      "capacity_words": 2048,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "Softmax probabilities for one Q head: at most 16 x 1024; direct shared GEMM activation operand for P x V.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    },
+    {
+      "bank_id": "22",
+      "name": "PARAM",
+      "capacity_words": 256,
+      "word_bits": 128,
+      "format": "BF16 tables/parameters",
+      "layout": "Explicitly loaded norm gamma, projection bias or query-tile RoPE cos/sin; mutually exclusive lifetimes and layouts.",
+      "memory_kind": "BRAM",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "GEMM",
+        "RMSNORM",
+        "ROPE",
+        "SOFTMAX_MASKED",
+        "VECTOR"
+      ],
+      "capability_note": "Descriptor format/shape and opcode role enforce runtime compatibility; lists are possible roles, not blanket valid-format permission."
+    }
+  ],
+  "descriptor_fields": [
+    "format",
+    "shape",
+    "stride",
+    "tensor_identity",
+    "layout",
+    "valid",
+    "busy",
+    "owner",
+    "assembly_coverage",
+    "next_K_group",
+    "partial_sum"
+  ],
+  "SCORE_reuse": "FP32 attention[M,L] stride4096 or FFN[M,128] stride512; mutually exclusive lifetimes and explicit INIT.",
+  "synthesis_status": "passed_200MHz_bank_fabric_OOC_only",
+  "synthesis_evidence": {
+    "manifest.json": {
+      "path": "designs/qwen25_05b_w4_shared_zcu104_r1/evidence/bank_fabric_200mhz_ooc_run002/manifest.json",
+      "sha256": "3a9658a8252db170e9773cfcb1d411b69662251069a4d79f80846caeddb89872"
+    },
+    "invocation.json": {
+      "path": "designs/qwen25_05b_w4_shared_zcu104_r1/evidence/bank_fabric_200mhz_ooc_run002/invocation.json",
+      "sha256": "fde27201603dd49f49f3dabbb9dcc997f0073acb737b22a352ad0256a05ff234"
+    },
+    "timing_summary.rpt": {
+      "path": "designs/qwen25_05b_w4_shared_zcu104_r1/evidence/bank_fabric_200mhz_ooc_run002/timing_summary.rpt",
+      "sha256": "7039203736c321ff06f0b5474c724338edb0a819e36583cd3cd96eb7b2163048"
+    },
+    "utilization.rpt": {
+      "path": "designs/qwen25_05b_w4_shared_zcu104_r1/evidence/bank_fabric_200mhz_ooc_run002/utilization.rpt",
+      "sha256": "903851d2eb31e322d6d8704a42e228874e6877f1118b4380d4d222335bfc6aca"
+    }
+  },
+  "measured_resources": {
+    "BRAM36_tiles": 70,
+    "URAM288": 10,
+    "CLB_LUTs": 37251,
+    "clock_MHz": 200,
+    "setup_slack_ns": 0.327,
+    "hold_slack_ns": 0.108,
+    "scope": "23 data banks and role fabric only; excludes command memory, compute, DataMover and PS/PL composition."
+  }
+}

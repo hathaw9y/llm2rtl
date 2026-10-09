@@ -1,0 +1,27 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"in": "256-bit packed vector [255:0]", "sel": "8-bit packed vector [7:0]"},
+    "outputs": {"out": "1 bit"}
+  },
+  "semantics": {
+    "function": "out equals the bit of in indexed by sel, for every selection from 0 through 255",
+    "evidence": "Original problem says sel=0 selects in[0], sel=1 selects in[1], sel=2 selects in[2], etc., and calls this a 256-to-1 multiplexer.",
+    "timing": "Combinational selection; no clock, reset, state, or added latency is specified or present in the interface.",
+    "initialization": "No initialization requirement or stored state; output follows current inputs."
+  },
+  "numeric": {
+    "selection": "Unsigned 8-bit index covers all 256 input bits; no arithmetic or overflow.",
+    "bit_order": "Index zero is the least significant vector bit."
+  },
+  "verification": {
+    "oracle": "Independent scan of all 256 positions to find the position equal to sel.",
+    "cases": "All selections on zero and one vectors, every one-hot input against all selections, complementary one-cold patterns, alternating patterns and selected X/Z data.",
+    "sampling": "Sample after a one-time-unit combinational settling delay following input changes; no cycle or reset sampling applies.",
+    "completion": "Bounded timeout, fatal mismatches, and PASS only after all cases complete."
+  },
+  "specification_ambiguities": [
+    "Unknown or high-impedance selector behavior is unspecified; use normal Verilog indexed bit-select semantics and do not impose additional requirements."
+  ]
+}

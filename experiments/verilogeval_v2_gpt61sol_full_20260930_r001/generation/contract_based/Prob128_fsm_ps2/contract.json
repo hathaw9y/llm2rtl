@@ -1,0 +1,35 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "reset": {"direction": "input", "width": 1},
+      "in": {"direction": "input", "width": 8},
+      "done": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "clock": "All sequential state updates occur on the rising edge of clk; one input byte is sampled per non-reset edge.",
+    "reset": "Active-high synchronous reset takes priority, abandons any partial message, returns to searching, and makes done zero after the reset edge. No asynchronous reset behavior.",
+    "initialization": "No power-up state specified; behavior is defined after a rising edge with reset asserted.",
+    "search": "Discard bytes with in[3]=0 until a sampled byte has in[3]=1; that byte is message byte one.",
+    "message": "The next two sampled bytes are bytes two and three regardless of all their bit values, including in[3].",
+    "done": "done is high during the cycle immediately following the edge that samples byte three, and low otherwise. It is a one-cycle completion indication.",
+    "continuous_stream": "At the edge ending the done cycle, the current input is examined as a potential first byte of the next message. No gap or discarded byte is inserted between messages."
+  },
+  "numeric": {
+    "input": "Unsigned eight-bit byte; only bit 3 is used for boundary detection.",
+    "output": "One-bit Boolean completion indication.",
+    "arithmetic": "No payload arithmetic, signed interpretation, rounding, saturation, overflow, or byte storage is required.",
+    "state": "Four FSM states can be encoded in two bits."
+  },
+  "verification": {
+    "oracle": "Independent countdown model: zero means searching; a marker sets remaining bytes to two; each subsequent byte decrements the count; decrement from one produces done for the following cycle.",
+    "directed": "Check discarded nonmarkers, both values of bit 3 in payloads, contiguous messages, idle after completion, and reset at every message phase including completion.",
+    "random": "Compare every cycle over deterministic pseudorandom byte and reset sequences, varying all input bits.",
+    "reset_timing": "Toggle reset between rising edges and verify it has no immediate effect; verify reset wins at the rising edge.",
+    "tools": "Use specified Icarus v12 and matching vvp, -g2012 and explicit dev_tb top, each under finite timeout. Preserve compile and simulation logs."
+  },
+  "specification_ambiguities": []
+}

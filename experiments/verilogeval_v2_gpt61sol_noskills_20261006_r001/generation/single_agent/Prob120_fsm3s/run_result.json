@@ -1,0 +1,183 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob120_fsm3s",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob120_fsm3s",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob120_fsm3s/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791275345.435726,
+    "ended_at_unix": 1791275398.74982,
+    "seconds": 53.31409478187561,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 72713,
+      "cached_input_tokens": 64384,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1682,
+      "reasoning_output_tokens": 84
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "f37186c21be4b35b360ac9e9a2ae5370234128e28a929e31949712709705da17",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "coverage": "Correct sequential fixture passed; injected fault failed; repaired fixture passed."
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "coverage": "All 256 eight-bit input sequences from reset, reset from all four states, reset priority, and output stability before rising edges; 6950 output checks."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation is pending.",
+      "The specification does not define power-up state; checks begin after a synchronous reset edge."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "initial_implementation": "Four-state Moore FSM implements the original transition table with synchronous active-high reset to A and output asserted only in D. candidate_initial.sv was preserved before development checks."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "f37186c21be4b35b360ac9e9a2ae5370234128e28a929e31949712709705da17",
+      "Prob120_fsm3s_ref.sv": "298b3f24aedd73776017b86b1a50f48d8a45fe314eda28204a31ae30a46462dc",
+      "Prob120_fsm3s_test.sv": "c32cb3db833a51549d911fb4d76e25ff0b89206fd0e15febada62703189d9bf8"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob120_fsm3s_test.sv",
+        "Prob120_fsm3s_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01601656712591648
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb120_fsm3s_test.sv:77: $finish called at 1151 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 230 samples\n\nSimulation finished at 1151 ps\nMismatches: 0 in 230 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010927599854767323
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "f37186c21be4b35b360ac9e9a2ae5370234128e28a929e31949712709705da17",
+      "Prob120_fsm3s_ref.sv": "298b3f24aedd73776017b86b1a50f48d8a45fe314eda28204a31ae30a46462dc",
+      "Prob120_fsm3s_test.sv": "c32cb3db833a51549d911fb4d76e25ff0b89206fd0e15febada62703189d9bf8"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob120_fsm3s_test.sv",
+        "Prob120_fsm3s_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015771259553730488
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb120_fsm3s_test.sv:77: $finish called at 1151 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 230 samples\n\nSimulation finished at 1151 ps\nMismatches: 0 in 230 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010559290647506714
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

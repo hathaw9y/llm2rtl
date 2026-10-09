@@ -1,0 +1,42 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_structural_gate",
+      "result": "PASS",
+      "log": "contract_validation_retry.log",
+      "scope": "Structure only, not functional proof"
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "result": "PASS",
+      "detail": "candidate_initial.sv preserved immediately after initial implementation and equals candidate.sv"
+    },
+    {
+      "name": "static_review",
+      "result": "PASS",
+      "detail": "Exact module and ports; all ten mappings match contract; blocking combinational assignments cover all outputs; no state, clocks, reset, delays or DUT dependencies"
+    },
+    {
+      "name": "development_compile",
+      "result": "TOOL_FAILURE",
+      "exit_code": 139,
+      "timeout_seconds": 20,
+      "log": "development_compile.log",
+      "detail": "No diagnostic output; failure recorded in development_tool_failure.log"
+    },
+    {
+      "name": "development_simulation",
+      "result": "NOT_RUN",
+      "detail": "Compilation failed; independent dev_tb.sv prepared for 512 checks over all 256 binary inputs"
+    }
+  ],
+  "development_outcome": "Best RTL delivered unchanged after development compiler failure; simulation success is not claimed.",
+  "limitations": [
+    "Functional correctness was reviewed statically but not established by simulation.",
+    "X/Z input behavior is unspecified.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing or board verification performed."
+  ]
+}

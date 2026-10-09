@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "Reviewed exact ports, rising-edge updates, nonblocking assignments, sized unsigned arithmetic, synchronous load, modulo-7 wrap, no initialization, and single driver; conforms to frozen contract."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "result": "FAIL: process exited 139 with empty diagnostic log",
+      "logs": [
+        "dev_compile.log",
+        "dev_status.log"
+      ]
+    },
+    {
+      "name": "development_simulation",
+      "result": "NOT RUN because compilation failed"
+    }
+  ],
+  "development_outcome": "Initial synthesizable RTL delivered without revisions. Frozen contract passed structural validation; development simulation success is not established.",
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  },
+  "limitations": [
+    "The short waveform is not a unique behavioral specification; coincident a/clock transition is interpreted as old-a sampling.",
+    "State 7 and unknown-input behavior are not specified by the waveform.",
+    "Icarus compilation failed with exit code 139; no functional simulation result is available.",
+    "No official evaluation, synthesis, timing analysis, or board work performed."
+  ]
+}

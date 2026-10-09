@@ -1,0 +1,56 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "sel_b1": {
+        "direction": "input",
+        "width": 1
+      },
+      "sel_b2": {
+        "direction": "input",
+        "width": 1
+      },
+      "out_assign": {
+        "direction": "output",
+        "width": 1
+      },
+      "out_always": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "Both outputs select b when sel_b1 and sel_b2 are both 1; otherwise select a.",
+    "out_assign_implementation": "continuous assign statement",
+    "out_always_implementation": "combinational procedural if statement with else",
+    "timing": "Combinational; outputs follow current inputs after combinational settling; no clock or cycle latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization requirement.",
+    "transactions": "No handshake; inputs may change freely."
+  },
+  "numeric": {
+    "data": "One-bit unsigned logic values",
+    "selection": "Logical conjunction of the two one-bit select inputs",
+    "arithmetic": "No arithmetic, rounding, truncation, saturation or overflow."
+  },
+  "verification": {
+    "oracle": "Independent binary truth-table selection: select b for selector pair 11, select a for selector pairs 00, 01, 10.",
+    "coverage": "Exhaust all 16 binary combinations of a, b, sel_b1, sel_b2; traverse forward and backward to check input changes and absence of retained outputs.",
+    "comparison": "Check each output against expected using case inequality after settling.",
+    "tools": "Icarus v12 compile with -g2012 and explicit dev_tb top; matching vvp; finite timeout for each.",
+    "static_review": "Exact module and ports; continuous assign; complete procedural if/else; no storage or nonsynthesizable DUT constructs."
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z inputs is not specified; functional verification covers binary inputs only."
+  ]
+}

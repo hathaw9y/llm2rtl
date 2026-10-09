@@ -1,0 +1,49 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "rope_executor",
+  "module_kind": "opcode_executor",
+  "opcode": "ROPE",
+  "status": "frozen",
+  "target": {
+    "board": "ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 150
+  },
+  "interface": {
+    "rtl_module": "smollm2_rope_executor",
+    "compute_channel": 2,
+    "request": "opcode 5, data bank B4, B5 or B8, coefficient bank B7, unused bank ID zero, rows 1..32 in payload bits [5:0], other payload bits zero",
+    "response": "held done_valid/done_ready, data-bank tag, bank_count=2, all accepted bank IDs and error",
+    "bank_roles": {
+      "data_read_write": 9,
+      "coefficient_read": 10
+    },
+    "bank_word_bits": 128,
+    "layout": "Q [rows,9,64] in B4 or K [rows,3,64] in B5 or B8; coefficient B7 [rows,64] with cos[0:32] then sin[0:32]; eight BF16 values per word",
+    "completion_order": "after last in-place data write handshake"
+  },
+  "architecture": {
+    "rows_per_command": "1..32",
+    "data_access": "read corresponding lower and upper half-head words before either in-place write; read cos and sin words from B7; write both output words after 8 lanes"
+  },
+  "numeric": {
+    "arithmetic": "BF16 product round-to-nearest-even for each multiply, then BF16 add round-to-nearest-even; aligned add, magnitude, leading-bit detection and output packing use registered stages",
+    "range": "nonfinite operands return error; subnormal results underflow to signed zero",
+    "reference": "Transformers 5.16.1 apply_rotary_pos_emb, BF16 eager, checkpoint revision 93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+    "observed_error": "zero bit differences over 49,920 first-layer Q/K RTL values at positions 0..31, 32 and 992..1023; Python sweep of all 30 layers in prefill32/decode1 found zero nonfinite or subnormal Q/K and coefficient inputs or outputs"
+  },
+  "verification": {
+    "proof_scope": "standalone RTL versus exact-checkpoint Q/K prefill32, decode1 and positions 992..1023: 49,920 BF16 values bit-exact; 150 MHz OOC synthesis WNS +1.235 ns; existing RMSNorm+GEMM board XSIM regression passed; new RoPE channel board integration and physical run pending; B8 K alias standalone golden prefill32, decode1 and tail exact; new full-layer board route pending",
+    "required_cases": [
+      "Q and K prefill 32 rows",
+      "Q and K decode one row at position 32",
+      "Q and K prefill at positions 992..1023",
+      "in-place read-before-write and backpressure",
+      "nonfinite operand and illegal command response",
+      "150 MHz synthesis timing",
+      "cumulative board integration and physical result"
+    ]
+  }
+}

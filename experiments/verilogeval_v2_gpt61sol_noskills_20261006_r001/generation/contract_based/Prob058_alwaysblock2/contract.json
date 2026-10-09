@@ -1,0 +1,40 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "a": 1,
+      "b": 1
+    },
+    "outputs": {
+      "out_assign": 1,
+      "out_always_comb": 1,
+      "out_always_ff": 1
+    }
+  },
+  "semantics": {
+    "evidence": "Original problem requires XOR using assign, combinational always block, and clocked always block; all sequential logic uses positive clock edges.",
+    "combinational": "out_assign and out_always_comb continuously reflect a XOR b after combinational settling.",
+    "sequential": "out_always_ff captures a XOR b on each rising clk edge and holds between rising edges; nonblocking assignment updates after the edge.",
+    "reset": "No reset port or reset behavior specified; do not add reset.",
+    "initialization": "No initial value specified for the flip-flop; leave uninitialized (X in four-state simulation before the first rising edge)."
+  },
+  "numeric": {
+    "widths": "All ports are one bit.",
+    "operation": "Bitwise XOR, with standard four-state Verilog propagation; no arithmetic or signedness required."
+  },
+  "verification": {
+    "oracle": "Use original XOR truth table for binary values and explicit unknown expected values for X/Z inputs.",
+    "sampling": "Drive inputs with clk low, settle and check combinational outputs and held register; check register after rising edge NBA settling; check falling edges do not capture.",
+    "coverage": "All binary input combinations, input changes between edges, repeated samples, and X/Z propagation.",
+    "termination": "Fatal on mismatch, bounded timeout, PASS line only after checks succeed."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Power-up state",
+      "evidence": "Original problem gives no initialization or reset.",
+      "resolution": "Do not initialize DUT register; verify X before first positive edge in simulation."
+    }
+  ]
+}

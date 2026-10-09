@@ -1,0 +1,195 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob030_popcount255",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob030_popcount255",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob030_popcount255/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791270843.0061855,
+    "ended_at_unix": 1791270893.9652839,
+    "seconds": 50.95909881591797,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 71330,
+      "cached_input_tokens": 54272,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1714,
+      "reasoning_output_tokens": 11
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "5ee568dacf514e4f0d1ed38e572353fe93161c3975527d80aab656de9b67c642",
+  "contract_sha256": "db201e76580d730a6af979c949649593d28cf24378d5bd72d2b9d83f1342e1f8",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "check": "python3 smoke_environment.py",
+        "status": "passed",
+        "details": "Correct fixture passed, injected fault failed, repaired fixture passed"
+      },
+      {
+        "check": "python3 validate_contract.py",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "check": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "test_cases": 1771,
+        "evidence": "development/01/result.json",
+        "details": "Icarus 12 compilation and simulation succeeded; independent bit-clearing oracle checked boundaries, one-hot/one-cold vectors, every possible count, alternating patterns, and random binary vectors"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official evaluation or an exhaustive proof over all 255-bit vectors",
+      "Original specification does not define X/Z input behavior"
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "unchanged_initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "development_history": "dev_checks.jsonl"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "5ee568dacf514e4f0d1ed38e572353fe93161c3975527d80aab656de9b67c642",
+      "Prob030_popcount255_test.sv": "d232308e7f686aaf721e7a3eac277a25dab267d0a4fce2b51fb6ff8b3e790354",
+      "Prob030_popcount255_ref.sv": "9159b1dda6cad0c06ec47be5bbd680dd13007eacd0ee6832c443550c8283c9bb"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob030_popcount255_test.sv",
+        "Prob030_popcount255_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013143976218998432
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb030_popcount255_test.sv:49: $finish called at 1076 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 215 samples\n\nSimulation finished at 1076 ps\nMismatches: 0 in 215 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.15837487112730742
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "5ee568dacf514e4f0d1ed38e572353fe93161c3975527d80aab656de9b67c642",
+      "Prob030_popcount255_test.sv": "d232308e7f686aaf721e7a3eac277a25dab267d0a4fce2b51fb6ff8b3e790354",
+      "Prob030_popcount255_ref.sv": "9159b1dda6cad0c06ec47be5bbd680dd13007eacd0ee6832c443550c8283c9bb"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob030_popcount255_test.sv",
+        "Prob030_popcount255_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012052473612129688
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb030_popcount255_test.sv:49: $finish called at 1076 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 215 samples\n\nSimulation finished at 1076 ps\nMismatches: 0 in 215 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.09128665085881948
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

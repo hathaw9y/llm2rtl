@@ -1,0 +1,58 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "gemm_systolic_wide_executor",
+  "module_kind": "opcode_executor",
+  "opcode": "GEMM",
+  "status": "frozen",
+  "target": {
+    "board": "ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 200
+  },
+  "interface": {
+    "rtl_module": "smollm2_gemm_systolic_wide_executor",
+    "compute_channel": 0,
+    "request": "same approved GEMM opcode, three bank IDs and 112-bit payload as scalar reference",
+    "response": "held done_valid/done_ready, operand0 tag, bank_count=3, all accepted bank IDs and error",
+    "bank_roles": {
+      "activation_read": 3,
+      "weight_read": 4,
+      "destination_write": 5
+    },
+    "bank_word_bits": 128,
+    "layout": "activation [M,K] row-major; weight [n_tile,K] row-major; destination [m_count,n_total] row-major with n_start offset",
+    "completion_order": "after final destination write handshake",
+    "gemm_source_read_bits": 256,
+    "gemm_source_read_address": "even 128-bit word address; each response is {word[a+1],word[a]}"
+  },
+  "architecture": {
+    "array": "16x16 output-stationary BF16 systolic PEs; activation propagates right, weight down",
+    "dsp": "one explicitly attributed and registered 8x8 BF16 significand multiplier per PE; post-synthesis DSP mapping must be verified",
+    "tile": "up to 16 M x 16 N x 16 K; K tiled internally without ISA partial-sum commands",
+    "bank_feed": "role-3 activation and role-4 weight banks each return one 256-bit pair per read; K16 aligned row segment uses one read, then private word buffers supply the wavefront",
+    "tails": "M, N and K tails are masked, including unaligned row-major bank words",
+    "attention_modes": "opcodes 6 and 8 share the 16x16 PE array, with 128-bit head-aware Q/K/P/V tile loading and V tile transposition; logical channels 3 and 5 retain separate bank roles and responses"
+  },
+  "numeric": {
+    "input": "BF16 including zero/subnormal; nonfinite inputs return error before writes from the affected M/N tile, while prior tiles may have written",
+    "multiply": "exact BF16 significand product per PE",
+    "accumulate": "K ascending, signed 32-bit shared-exponent mantissa with 4 guard bits; alignment shifts truncate magnitude toward zero",
+    "output": "BF16 nearest-even; finite overflow yields infinity"
+  },
+  "verification": {
+    "proof_scope": "standalone XSIM and 200 MHz module OOC only; no fabric routing, placed/routed board, or Vitis execution",
+    "required_cases": [
+      "same scalar GEMM golden cases",
+      "real checkpoint BF16 q_proj prefill/decode values",
+      "16x16 and edge-tile wavefronts",
+      "K tails and full M32 N192 K576 command",
+      "destination backpressure",
+      "5 ns OOC timing",
+      "XPM striped-bank GEMM integration",
+      "aligned and unaligned K16 wide source reads"
+    ],
+    "attention_modes": "XSIM full prefill32 and decode1 golden PASS; N=193/K=193 tile boundary PASS; integrated prefill32, focused one-key, and decode1 kv_len=33 two-chunk PASS; revised 100 MHz ZCU104 board routed WNS +1.475 ns, WHS +0.010 ns; physical board execution pending user"
+  }
+}

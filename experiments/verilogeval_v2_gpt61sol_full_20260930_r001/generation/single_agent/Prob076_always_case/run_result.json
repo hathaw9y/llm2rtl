@@ -1,0 +1,178 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob076_always_case",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob076_always_case",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob076_always_case/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790731434.4578972,
+    "ended_at_unix": 1790731502.1739259,
+    "seconds": 67.7160291671753,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 71721,
+      "cached_input_tokens": 61440,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1708,
+      "reasoning_output_tokens": 21
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "4b3dcdb70ae5ffb8a2381b936f5ffc5180c174ea2dbb803694e71238650f691b",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "result": "pass",
+        "details": "Required TopModule ports and widths retained. Combinational blocking assignments cover selectors 0 through 5 and a zero-valued default. No clock, reset, registers, or latch required."
+      },
+      {
+        "name": "development compilation",
+        "result": "tool_failure",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "exit_code": 139,
+        "log": "dev_compile.log",
+        "details": "Compiler produced no diagnostic text."
+      },
+      {
+        "name": "development simulation",
+        "result": "not_run",
+        "log": "dev_simulation.log",
+        "details": "Compilation failed. Independent testbench contains 768 expected-versus-actual checks across all selectors and all values of each input, plus a finite simulation watchdog."
+      }
+    ],
+    "development_outcome": "Initial RTL retained without revisions after static review; development compilation failed and simulation success is not claimed.",
+    "limitations": [
+      "RTL has not been validated by a successful development simulation.",
+      "Official evaluation results are unavailable and were not accessed.",
+      "No synthesis, timing, or board validation performed."
+    ],
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_rtl": "candidate_initial.sv",
+      "testbench": "dev_tb.sv"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "4b3dcdb70ae5ffb8a2381b936f5ffc5180c174ea2dbb803694e71238650f691b",
+      "Prob076_always_case_test.sv": "db5a64eb9e0fa149faf500a1a40c1a8a15e281325d585de51f26bd401f1d55fe",
+      "Prob076_always_case_ref.sv": "bc2d160effd6fbaf591d8adaab32f897fcc0479ea8ddb8d1eb92fb3b59cf3d23"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob076_always_case_test.sv",
+        "Prob076_always_case_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012419700622558594
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb076_always_case_test.sv:49: $finish called at 590 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 118 samples\n\nSimulation finished at 590 ps\nMismatches: 0 in 118 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007485168986022472
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "4b3dcdb70ae5ffb8a2381b936f5ffc5180c174ea2dbb803694e71238650f691b",
+      "Prob076_always_case_test.sv": "db5a64eb9e0fa149faf500a1a40c1a8a15e281325d585de51f26bd401f1d55fe",
+      "Prob076_always_case_ref.sv": "bc2d160effd6fbaf591d8adaab32f897fcc0479ea8ddb8d1eb92fb3b59cf3d23"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob076_always_case_test.sv",
+        "Prob076_always_case_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009917612187564373
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb076_always_case_test.sv:49: $finish called at 590 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 118 samples\n\nSimulation finished at 590 ps\nMismatches: 0 in 118 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007962031289935112
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

@@ -1,0 +1,36 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {"direction": "input", "width": 4, "range": "[3:0]"},
+      "out_and": {"direction": "output", "width": 1},
+      "out_or": {"direction": "output", "width": 1},
+      "out_xor": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "kind": "pure combinational, no state",
+    "out_and": "1 if and only if all four input bits are 1",
+    "out_or": "1 if and only if at least one input bit is 1",
+    "out_xor": "1 if and only if the number of input bits equal to 1 is odd",
+    "timing": "Outputs continuously reflect current inputs after combinational settling; no clock or cycle latency",
+    "reset": "No reset port or reset behavior",
+    "initialization": "No stored state or initialization requirement"
+  },
+  "numeric": {
+    "input": "Four individual Boolean bits in an unsigned packed vector",
+    "outputs": "Single-bit Boolean gate results",
+    "arithmetic": "Logical AND, OR and XOR over all four bits; no arithmetic rounding, truncation, saturation or overflow"
+  },
+  "verification": {
+    "oracle": "For each input, independently count asserted bits using a loop; AND is count==4, OR is count!=0, XOR is count modulo 2",
+    "coverage": "Exhaust all 16 binary input patterns, then repeat in reverse order to exercise changing inputs",
+    "comparison": "Check all three DUT outputs with case inequality after combinational settling",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top, matching vvp, finite command and testbench timeouts",
+    "scope": "Development simulation and static review only; no synthesis or official evaluation"
+  },
+  "specification_ambiguities": [
+    "Original problem does not specify X/Z input behavior; binary inputs define the required verification domain and RTL uses standard SystemVerilog gate reduction semantics."
+  ]
+}

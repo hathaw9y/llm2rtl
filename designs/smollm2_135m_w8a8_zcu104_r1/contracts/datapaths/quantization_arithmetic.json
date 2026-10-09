@@ -1,0 +1,111 @@
+{
+  "schema": "llm2rtl.datapath_contract.v1",
+  "module_id": "quantization_arithmetic",
+  "status": "frozen",
+  "authorization": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_implementation_approval.json",
+    "sha256": "3cb075a86e08f0fe202181bd6b216566d4c6a724980c604909a809eb4716c2df"
+  },
+  "numeric": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/numeric_contract.json",
+    "sha256": "f5bb6dbf52528e9fe921867e465aca6c74768402be7860cedeadc950e9bf9261"
+  },
+  "clock_reset": "clk risingedge, resetn synchronous active-low; reset discards all inflight outputs",
+  "protocol": "s_valid/s_ready and m_valid/m_ready; arbitrary bubbles, global elastic freeze or equivalent stageelastic; outputs/payload remain stable while stalled; nominal latency counts advancing clock edges",
+  "tag_semantics": "96bit opaque bitexact passthrough; masks4 identify active lanes; masked lanes must not produce error",
+  "units": {
+    "w8a8_fp32_div4": {
+      "latency": 19,
+      "II": 1,
+      "stages": [
+        "2 decode/normalize",
+        "1 initial remainder/exponent",
+        "13 stages of2 restoring quotient bits",
+        "1 gradual subnormal alignment",
+        "1 RNE",
+        "1 pack"
+      ],
+      "inputs": {
+        "s_a": 128,
+        "s_b": 128,
+        "s_mask": 4,
+        "s_tag": 96
+      },
+      "outputs": {
+        "m_result": 128,
+        "m_mask": 4,
+        "m_tag": 96,
+        "m_invalid": 4,
+        "m_overflow": 4
+      },
+      "semantics": "Four exact finite IEEEbinary32 divisions RNE, gradual subnormals, signedzero XOR. Nonfinite operand or zero denominator marksinvalid; finite result overflow produces signedInf andoverflow withoutinvalid. Exact final remaindersticky, no reciprocal and no vendor FTZ."
+    },
+    "w8a8_quant_lane4": {
+      "latency": 22,
+      "II": 1,
+      "inputs": {
+        "s_bf16": 64,
+        "s_scale": 128,
+        "s_unsigned": 1,
+        "s_mask": 4,
+        "s_tag": 96
+      },
+      "outputs": {
+        "m_int8": 32,
+        "m_mask": 4,
+        "m_tag": 96,
+        "m_error": 4,
+        "m_quotient": 128
+      },
+      "semantics": "1BF16promote/validate+19division+2clip/nearest-eveninteger. Originalscale positivefinite; sourcefinite. Signedclip[-127,127], unsignedPclip[0,127], overflowclipsuccess. Allnegative Pallowed andclips0. Inactivelanerrors0.",
+      "quotient_sideband": "Raw correctly-rounded FP32 division, aligned with integer output at22cycles. Parent reuses this same divider during max/127 scale generation, ignores integer output; no extra four-lane divider instance."
+    },
+    "w8a8_dequant_lane4": {
+      "latency": 8,
+      "II": 1,
+      "inputs": {
+        "s_int8": 32,
+        "s_scale": 128,
+        "s_mask": 4,
+        "s_tag": 96
+      },
+      "outputs": {
+        "m_bf16": 64,
+        "m_mask": 4,
+        "m_tag": 96,
+        "m_error": 4
+      },
+      "semantics": "1 exactsignedINT8convert+6 frozen FP32mul+1 BF16RNE. INT8-128 invalid; originalscale positivefinite; FP32orBF16nonfinite result error; gradualsubnormals/signedzero."
+    }
+  },
+  "unchanged_reuse": {
+    "rtl/w8a8_fp32_pkg.sv": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_fp32_pkg.sv",
+      "sha256": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f"
+    },
+    "rtl/w8a8_fp32_mul.sv": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/rtl/w8a8_fp32_mul.sv",
+      "sha256": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62"
+    }
+  },
+  "verification": [
+    "Python Fraction exact oracle, randomized normal/subnormal/ties/overflow/invalid combinations",
+    "ConsecutivefourlaneII1, masks/tags, longstalls/bubbles andlive reset",
+    "Bitexact quantinteger anddequantBF16 outputs versus existingexact_numeric.py",
+    "Strictwidth/sign/latchlint; prepared 5ns Vivado2025.2 OOC script without execution"
+  ],
+  "writable": [
+    "rtl/w8a8_fp32_div4.sv",
+    "rtl/w8a8_quant_lane4.sv",
+    "rtl/w8a8_dequant_lane4.sv",
+    "tb/quant_arithmetic*",
+    "scripts/quant_arithmetic*",
+    "evidence/quantization_arithmetic/"
+  ],
+  "forbidden": [
+    "Edit frozen GEMM/arithmetic children",
+    "Synthesize before usermachine designation",
+    "Replace divisionwithreciprocal",
+    "Fullmodel/timing/boardPASS"
+  ]
+}

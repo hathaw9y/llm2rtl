@@ -1,0 +1,48 @@
+{
+  "active_assignments": [
+    {
+      "agent": "/root/native_tests",
+      "role": "math_implementation",
+      "contract": {
+        "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_fp32_math.json",
+        "sha256": "5b24dfa7f8dd8db519cf807b40df0b5e830c22be8379d23e30b072007a934421"
+      }
+    },
+    {
+      "agent": "/root/native_core",
+      "role": "control_implementation",
+      "contract": {
+        "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_control.json",
+        "sha256": "53fe7ef380ce28536cd9c48be01b1957230f7263bbf5c65bc8eb872cc6a38ec2"
+      }
+    },
+    {
+      "agent": "/root/native_review",
+      "role": "tensor_executor_implementation",
+      "contract": {
+        "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_executor.json",
+        "sha256": "0023e5d80df0b358aadc30431dc9ca38279cf6e51d8d9fc534333453ee7c0292"
+      }
+    }
+  ],
+  "shared_boundary": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/rtl_contract.md",
+    "sha256": "78767ed45329729e8b5a32ab78270ede83bda3cfc76c45eafb17f4baf22c06bb"
+  },
+  "current_wave": {
+    "agent": "/root/native_tests",
+    "role": "real_tensor_ISA_validation",
+    "contract": {
+      "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_isa_validation.json",
+      "sha256": "74a112af3ddb22996ddfa16759f373b54c61c7f2ab9af326fd52ee2e2b277531"
+    },
+    "children": "math/control/executor independently accepted",
+    "frozen_sources": "control_final005+executor53d1f861+math_final001",
+    "full_late_fault_scope": "completion/RELEASE wrongowner; range requests during same wrongowner; registeredrouterfault isolated; authorized range covered control/executor",
+    "status": "complete",
+    "final_acceptance": {
+      "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/tensor_isa_final002/parent_acceptance.json",
+      "sha256": "8efae2f38907cb83bc2f307fe13f31f18f6a949785109be9f12b291ac01d1cd4"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"a": 1, "b": 1, "c": 1, "d": 1}, "outputs": {"out": 1, "out_n": 1}},
+  "semantics": {"out": "(a AND b) OR (c AND d)", "out_n": "NOT out", "structure": "Two intermediate wires driven by the two AND gates; out driven by the OR gate and feeding the inverter.", "timing": "Combinational gates as described in original problem; no clock, state, reset, or cycle latency.", "initialization": "No stored state or specified initialization; outputs follow gate operations after combinational settling."},
+  "numeric": {"width": "All ports and intermediate wires are one bit.", "operators": "Bitwise AND, OR, and NOT with Verilog four-state gate semantics."},
+  "verification": {"oracle": "Independent truth table: out is true exactly when a and b are both 1 or c and d are both 1; out_n is complementary.", "cases": "All 16 binary inputs plus directed unknown/high-impedance propagation and masking cases.", "sampling": "Sample 1 ns after driving each input tuple to allow combinational settling.", "completion": "Fatal on any mismatch, bounded timeout, and PASS only after all checks."},
+  "specification_ambiguities": []
+}

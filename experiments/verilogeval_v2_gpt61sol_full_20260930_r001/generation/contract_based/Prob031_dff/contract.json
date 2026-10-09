@@ -1,0 +1,59 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "clk",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "d",
+        "direction": "input",
+        "width": 1
+      },
+      {
+        "name": "q",
+        "direction": "output",
+        "width": 1
+      }
+    ],
+    "original_port_listing": "input clk; input d; input q",
+    "q_direction_resolution": "Interpret q as output to implement the specified observable D flip-flop; the original input declaration conflicts with that function."
+  },
+  "semantics": {
+    "sampling": "At each positive edge of clk, q captures d using a nonblocking assignment.",
+    "hold": "q holds its stored value between positive edges, including negative edges.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No specified initial value; q is unconstrained before the first positive edge.",
+    "latency": "Captured value appears after the nonblocking update of the sampling edge.",
+    "throughput": "One sample per positive edge."
+  },
+  "numeric": {
+    "data_width_bits": 1,
+    "signedness": "unsigned single-bit logic",
+    "arithmetic": "None; bit-preserving storage.",
+    "rounding_overflow_saturation": "Not applicable."
+  },
+  "verification": {
+    "tool": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp.",
+    "oracle": "Independent expected value set from d on each manually generated positive edge, compared after the NBA update.",
+    "coverage": [
+      "Capture zero and one",
+      "Repeated and alternating data",
+      "Data changes while clock low and high must not alter q",
+      "Negative edges must not alter q"
+    ],
+    "initial_state": "Do not require a particular value before the first capture.",
+    "timeout": "Finite shell timeouts for compilation and simulation plus testbench watchdog.",
+    "scope": "Development simulation only, no official evaluation or synthesis."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "q is listed as input despite the single D flip-flop requirement.",
+      "resolution": "Use output logic q as the stored result.",
+      "limitation": "Literal input-q interface is not preserved; it cannot expose the specified flip-flop output."
+    }
+  ]
+}

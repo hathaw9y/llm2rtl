@@ -1,0 +1,41 @@
+{
+  "schema": "llm2rtl.subagent_result.v1",
+  "status": "passed_core_scope_with_residual_regressions",
+  "module_ids": ["bram_bank", "uram_bank"],
+  "contract_sha256": "cefa9d9dd7844cbdb0c84f4397fe69f788e8dd5422ee284ba13dd84436e8099d",
+  "source_manifest_sha256": "797f0dd245ea81cf32377f5aab0e9dc0ae20a3aa813344c43f32794a4394585a",
+  "evidence_manifest_sha256": "1008ab021044ba86dcb905b0c4e811204e5afabfccf4cea122de560a2ddff05e",
+  "source_snapshot_manifest_sha256": "84f241a74fc0c8f58e9db595acd77ec6d51d06284571d06c9c02e1b95064d3cc",
+  "changed_paths": [
+    "ip/infrastructure/datamover_engine/rtl/bram_bank.sv",
+    "ip/infrastructure/datamover_engine/rtl/uram_bank.sv",
+    "ip/infrastructure/datamover_engine/tb/integration_bank.sv",
+    "ip/infrastructure/datamover_engine/tb/tb_engine_integration.sv",
+    "ip/infrastructure/datamover_engine/tb/tb_memory_banks.sv",
+    "ip/infrastructure/datamover_engine/scripts/run_integration_sim.sh",
+    "ip/infrastructure/datamover_engine/scripts/run_memory_bank_ooc.tcl",
+    "ip/infrastructure/datamover_engine/scripts/run_memory_bank_xsim.tcl",
+    "ip/infrastructure/datamover_engine/README.md",
+    "ip/infrastructure/datamover_engine/interface_contract.json",
+    "ip/infrastructure/datamover_engine/evidence/memory_bank/run_001/"
+  ],
+  "results": {
+    "memory_bank_xsim": "passed",
+    "intentional_out_of_range_diagnostics": {
+      "count": 6,
+      "severity": "$error",
+      "classification": "expected contract diagnostics, not CHECK_FAILED events",
+      "breakdown": ["symmetric BRAM invalid write/read", "asymmetric BRAM invalid write/read", "URAM invalid write/read"],
+      "suppression_and_state_preservation_checked": true
+    },
+    "bram_default_ooc": "passed: 16 RAMB36E2, 0 URAM288, WNS 3.223 ns",
+    "uram_default_ooc": "passed: 4 URAM288, 0 RAMB, WNS 3.075 ns"
+  },
+  "skills_used": ["hdl-generation-verification", "fpga-systemverilog", "fpga-vivado", "hdl-kernel-contract-gates"],
+  "residuals": [
+    "Updated full DataMover integration XSIM was prepared but not rerun in the reduced turnaround scope.",
+    "Existing adapter/unit regressions and Verilator lint were not rerun in the reduced turnaround scope."
+  ],
+  "does_not_claim": ["route", "board", "bitstream", "physical hardware", "full vendor DataMover integration"],
+  "skill_update_candidate": null
+}

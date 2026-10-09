@@ -1,0 +1,118 @@
+{
+  "schema": "llm2rtl.infrastructure_integration.v1",
+  "module_id": "bank_subsystem",
+  "version": 1,
+  "status": "frozen_for_integration",
+  "purpose": "compose capability-checked ownership, sparse routing, and four configured BRAM/URAM banks into one local-memory subsystem",
+  "consumed_children": {
+    "bank_config_pkg": {
+      "path": "ip/infrastructure/bank_sparse_router/rtl/bank_config_pkg.sv",
+      "sha256": "00020944752c8754b6f8208478dbacf84b6d76d1f0214dfb4778ee7f3344c7fa"
+    },
+    "bank_sparse_router": {
+      "path": "ip/infrastructure/bank_sparse_router/rtl/bank_sparse_router.sv",
+      "sha256": "6e62a5464d1fc3cf902c8ad5bc7394a9ea478b62082854a87c8ca0253ed28799",
+      "verification_report": "ip/infrastructure/bank_sparse_router/evidence/run_002/module_verification_report.json",
+      "verification_sha256": "c80a76ac8242e9073aa5e827ccf55eb6abb198040d9142a3b4face1320d52343"
+    },
+    "bank_ownership_table": {
+      "path": "ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv",
+      "sha256": "28de9cc7ad4cb40c822dd3fe17b0a6f8eb8c69fbf5570e7de66a6729611a04ff",
+      "verification_report": "ip/infrastructure/bank_ownership_table/evidence/run_001/module_verification_report.json",
+      "verification_sha256": "83402da88340eca1b77070369519021cfedff301fb0a6598548a8af4f9a03a9a"
+    },
+    "bram_bank": {
+      "path": "ip/infrastructure/datamover_engine/rtl/bram_bank.sv",
+      "sha256": "7199594e43e1c9c951067882d31d0baaa1b1e626ab5d5cb14013af9a9de36221"
+    },
+    "uram_bank": {
+      "path": "ip/infrastructure/datamover_engine/rtl/uram_bank.sv",
+      "sha256": "11520a8bb955d10c89ca6f699d42bcfccd5458e6abee1be67a044dbfdaa92bd1"
+    },
+    "memory_bank_evidence": {
+      "path": "ip/infrastructure/datamover_engine/evidence/memory_bank/run_001/module_ooc_synthesis_report.json",
+      "sha256": "3bf82b02772e4721f15605436adc6331246b892ef9a9b33af076b545af379e9f"
+    }
+  },
+  "structure": {
+    "ownership_table_instances": 1,
+    "sparse_router_instances": 1,
+    "banks": {
+      "0": "bram_bank WRITE128 READ128 DEPTH2048 LATENCY3",
+      "1": "bram_bank WRITE128 READ256 DEPTH4096 LATENCY3",
+      "2": "uram_bank DATA128 DEPTH65536 LATENCY3",
+      "3": "bram_bank WRITE1024 READ1024 DEPTH1024 LATENCY3"
+    },
+    "bank0_read_port": "disabled and output internal only",
+    "command_bram": "not part of this subsystem or bank namespace"
+  },
+  "public_interfaces": {
+    "clock_reset": ["aclk", "aresetn"],
+    "ownership_request": ["bank_acquire_valid", "bank_acquire_port", "bank_release_valid", "bank_release_port"],
+    "ownership_state": ["bank_busy", "bank_owner_port"],
+    "mm2s": "128-bit write with logical bank ID 0 1 or 2",
+    "s2mm": "1024-bit read fixed to bank3",
+    "sa_act": "256-bit read fixed to bank1",
+    "sa_wgt": "128-bit read fixed to bank2",
+    "sa_out": "1024-bit read and write fixed to bank3",
+    "status": ["bank_subsystem_error", "bank_subsystem_error_code", "ownership_error", "ownership_error_code", "router_error", "router_error_code"]
+  },
+  "address_units": {
+    "mm2s_bank0_bank1_bank2_write_addr": "128-bit write words",
+    "sa_act_read_addr": "256-bit bank1 read words; one read word spans two consecutive 128-bit write words",
+    "sa_wgt_read_addr": "128-bit bank2 read words",
+    "sa_out_and_s2mm_bank3_addr": "1024-bit words"
+  },
+  "capability_gate": {
+    "request_pulse_rule": "each acquire and release vector is a one-cycle transaction pulse and must not remain asserted for replay",
+    "atomicity": "all requested acquire entries pass to the ownership table or none pass",
+    "valid_pairs": {
+      "owner1_MM2S": [0, 1, 2],
+      "owner2_S2MM": [3],
+      "owner3_SA_ACT": [1],
+      "owner4_SA_WGT": [2],
+      "owner5_SA_OUT": [3]
+    },
+    "invalid": "BANK_NONE, out-of-range, owner zero, unknown owner, or unsupported owner-bank pair latches a subsystem error and cannot modify ownership",
+    "release": "inactive or unsupported owner-bank release vectors are rejected atomically before the ownership table; matching active releases retain child-table owner checking"
+  },
+  "error_policy": {
+    "bank_subsystem_error": "sticky first error until reset",
+    "priority": ["capability gate", "bank_ownership_table", "bank_sparse_router"],
+    "child_errors_remain_visible": true,
+    "memory_no_touch": "a rejected ownership or router request cannot assert any memory ena enb or write enable"
+  },
+  "integration_rules": [
+    "child RTL is instantiated without modification",
+    "memory contents persist across valid release and reacquire owner transitions",
+    "response data is consumed only when its response valid is asserted",
+    "all memories and router use synchronous active-low reset and one common clock",
+    "READ_LATENCY is exactly 3 end to end",
+    "BANK_NONE entries 4 through 15 never instantiate memory and can never become busy"
+  ],
+  "verification": {
+    "target_part": "xczu7ev-ffvc1156-2-e",
+    "target_clock_ns": 5.0,
+    "vivado": "2025.2",
+    "required_cases": [
+      "reset clears ownership response-valid and all errors",
+      "invalid BANK_NONE and unsupported owner-bank atomic acquire do not change any busy bit",
+      "MM2S writes bank1 then release and SA_ACT reacquire reads exact combined 256-bit payload",
+      "MM2S writes bank2 then release and SA_WGT reacquire reads exact 128-bit payload",
+      "SA_OUT writes bank3 then release and S2MM reacquire reads exact 1024-bit payload",
+      "bank1 ACT and bank2 WGT read concurrently with exact latency3 responses",
+      "SA_OUT bank3 read and write concurrent behavior matches BRAM read_first contract",
+      "wrong-owner release faults and preserves ownership",
+      "bank zero is writable and ownership-reusable",
+      "rejected router access asserts no physical memory enable",
+      "source closure contains exactly the frozen children and no behavioral memory substitute",
+      "OOC synthesis reports actual aggregate BRAM and URAM mapping and 200MHz timing"
+    ]
+  },
+  "blocked_dependencies": [
+    "design-specific dispatcher must use bank_config_pkg capability checks before executor command acceptance",
+    "DataMover adapters and systolic-array ports are not connected in this packet",
+    "post-route timing and physical-board validation remain required"
+  ],
+  "does_not_claim": ["command dispatcher integration", "DDR DataMover payload integration", "systolic-array arithmetic", "board wrapper", "bitstream", "physical-board execution"]
+}

@@ -1,0 +1,40 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "c": {"direction": "input", "width": 1},
+      "d": {"direction": "input", "width": 1},
+      "mux_in": {"direction": "output", "width": 4, "range": "[3:0]"}
+    },
+    "external_selector_mapping": "{a,b}=00,01,10,11 select mux_in[0], mux_in[1], mux_in[2], mux_in[3] respectively; a and b are not module ports"
+  },
+  "semantics": {
+    "timing": "Pure combinational response to current c,d; no clock or cycle latency",
+    "reset": "No reset port or reset behavior",
+    "initialization": "No stored state or initialization requirement",
+    "truth_table": {
+      "cd=00": "mux_in=0100",
+      "cd=01": "mux_in=0001",
+      "cd=10": "mux_in=0101",
+      "cd=11": "mux_in=1101"
+    },
+    "implementation": "Only wiring, constants, and three 2-to-1 muxes: mux_in[0]=c?1:d; mux_in[1]=0; mux_in[2]=d?c:1; mux_in[3]=c?d:0. External 4-to-1 mux is outside TopModule.",
+    "minimality": "Three distinct nonconstant outputs each require a mux because none is a direct c/d wire or constant; one mux per such output suffices"
+  },
+  "numeric": {
+    "types": "Unsigned one-bit Boolean inputs and four-bit packed output",
+    "arithmetic": "No arithmetic, overflow, rounding, saturation, or signed operations",
+    "constants": "Explicit one-bit 0 and 1",
+    "input_domain": "K-map specifies binary 0/1 inputs; X/Z behavior is unspecified"
+  },
+  "verification": {
+    "gate": "Run supplied validate_contract.py before writing RTL; structural gate is not functional proof",
+    "oracle": "Independent literal K-map row values, arranged in ab binary selector order 00,01,10,11",
+    "coverage": "Exhaust all four c,d pairs and all four external a,b selector pairs; repeat in reverse order to check combinational changes",
+    "comparison": "Compare full mux_in vector and independently selected output against original K-map",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; matching vvp; finite compile and simulation timeouts",
+    "preservation": "Save candidate_initial.sv immediately after implementation before checks or edits; preserve revisions and logs"
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "outcome": "passed",
+      "details": "Reviewed synchronous active-low reset, one-cycle f pulse, successive 101 detection with repeated-one handling, two y sampling opportunities, permanent high/low terminal states, complete next-state assignments, and single sequential driver. No synthesis was run."
+    },
+    {
+      "name": "development compile",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+      "arguments": "-g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "timeout_seconds": 30,
+      "exit_code": 139,
+      "outcome": "failed; compiler terminated without diagnostic output",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development simulation attempt",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+      "arguments": "dev_sim",
+      "timeout_seconds": 30,
+      "exit_code": 255,
+      "outcome": "failed; compiled simulation file unavailable",
+      "log": "dev_simulation.log"
+    }
+  ],
+  "development_outcome": "Initial candidate delivered unchanged after static review. Independent self-checking testbench created, but no simulation passed because development compilation failed.",
+  "limitations": [
+    "No successful development simulation or synthesis evidence.",
+    "Official evaluation was not accessed and its outcome is unknown."
+  ]
+}

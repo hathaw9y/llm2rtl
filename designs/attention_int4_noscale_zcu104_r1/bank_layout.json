@@ -1,0 +1,21 @@
+{
+  "schema": "llm2rtl.standalone_native_bank_layout.v1",
+  "scope": "ISA QUANTIZE integration; this is not a whole-model bank allocation",
+  "ownership": "native_v3 per-direction module-port roles",
+  "data_bank_zero_legal": true,
+  "command_bram": "separate native command BRAM, not data-bank namespace",
+  "banks": [
+    {"bank_id": 0, "memory": "BRAM", "word_bits": 128, "depth_words": 256, "default_role": "FP32 source"},
+    {"bank_id": 1, "memory": "BRAM", "word_bits": 128, "depth_words": 256, "default_role": "INT4 output"},
+    {"bank_id": 2, "memory": "BRAM", "word_bits": 128, "depth_words": 256, "default_role": "BF16 scale output"}
+  ],
+  "role_ids": {"MM2S": 1, "S2MM": 2, "QUANT_SRC": 3, "QUANT_DATA_DST": 4, "QUANT_SCALE_DST": 5},
+  "read_capabilities": [2, 3],
+  "write_capabilities": [1, 4, 5],
+  "permutation": "QUANTIZE may assign any three distinct banks to its source/data/scale operands",
+  "fp32_layout": "four FP32 elements perword, lane0 in bits31:0",
+  "int4_layout": "32 signed two-complement nibbles perword, element0 in bits3:0; finalword paddedzero and written with fullbyte strobes",
+  "scale_layout": "BF16 in bits15:0 of word0, allotherbits zero, fullbyte strobes",
+  "row_boundary": "Each QUANTIZE traverses from word0. PS manages tiled row residency using explicit DMA instructions.",
+  "completion": "Data and scale writes must both be accepted before operand validity and ISA completion."
+}

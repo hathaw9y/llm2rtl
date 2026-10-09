@@ -1,0 +1,78 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "c": {
+        "direction": "input",
+        "width": 1
+      },
+      "d": {
+        "direction": "input",
+        "width": 1
+      },
+      "out_sop": {
+        "direction": "output",
+        "width": 1
+      },
+      "out_pos": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "type": "pure combinational Boolean logic",
+    "encoding": "unsigned input number = 8*a + 4*b + 2*c + d",
+    "ones": [
+      2,
+      7,
+      15
+    ],
+    "zeros": [
+      0,
+      1,
+      4,
+      5,
+      6,
+      9,
+      10,
+      13,
+      14
+    ],
+    "dont_cares": [
+      3,
+      8,
+      11,
+      12
+    ],
+    "out_sop": "minimum sum of products",
+    "out_pos": "minimum product of sums",
+    "timing": "outputs respond combinationally to current inputs; no cycle latency or sampling edge",
+    "reset": "no reset port or reset behavior",
+    "initialization": "no stored state or initialization needed",
+    "dont_care_policy": "never-occurring inputs may take either Boolean output; outputs need not agree there"
+  },
+  "numeric": {
+    "type": "one-bit unsigned Boolean signals",
+    "bit_order": "a is MSB, d is LSB",
+    "operations": "Boolean AND, OR, NOT only; no arithmetic datapath",
+    "overflow_rounding_saturation": "not applicable"
+  },
+  "verification": {
+    "oracle": "independent case lookup from original ones/zeros lists, not implementation expressions",
+    "simulation": "exhaustively drive all 16 binary input combinations, check both outputs on 12 specified combinations; do not constrain four dont-care combinations; repeat reverse order to check combinational response",
+    "form_minimality": "enumerate admissible implicants covering ones (SOP) and zeros (POS), with dont-cares allowed, then find minimum term count and literal count",
+    "tool": "specified Icarus v12 and matching vvp, -g2012, explicit dev_tb top, finite shell timeouts",
+    "scope": "development simulation only, no official evaluation, synthesis or board access"
+  },
+  "specification_ambiguities": []
+}

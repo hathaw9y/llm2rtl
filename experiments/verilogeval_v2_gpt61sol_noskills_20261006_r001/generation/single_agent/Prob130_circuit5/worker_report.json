@@ -1,0 +1,24 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "observations": "Correct sequential fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "coverage": "Original 0–90 ns waveform including initial unknowns; all 16 selectors with each data input independently varied through all 16 values."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "The supplied waveform does not define selector X/Z behavior after the initial unknown interval."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Combinational selector: c=0 selects b, c=1 selects e, c=2 selects a, c=3 selects d; otherwise q=4'hf. Initial RTL snapshot preserved before development checks."
+}

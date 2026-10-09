@@ -1,0 +1,14 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "areset": 1, "d": 8}, "outputs": {"q": 8}, "source": "problem.txt interface list"},
+  "semantics": {
+    "capture": "On each positive edge of clk, q captures d when areset is low, with no additional cycle latency.",
+    "reset": "Active-high asynchronous reset sets all q bits to zero on assertion, independently of clk, and dominates clock capture while high.",
+    "hold": "q holds between positive clock edges except for asynchronous reset assertion. Reset deassertion alone does not capture data.",
+    "initialization": "No power-up initialization is specified; no defined initial q is required before a reset or capture event.",
+    "evidence": "problem.txt: 8 D flip-flops with active high asynchronous reset; output reset to 0; triggered by positive edge of clk."
+  },
+  "numeric": {"data": "Eight independent one-bit state elements, represented by unsigned packed vectors [7:0].", "reset_value": "8'h00", "arithmetic": "None"},
+  "verification": {"oracle": "Original problem.txt requirements", "sampling": "Check after nonblocking assignments settle; drive data separately from clock edges.", "cases": ["Asynchronous reset without a clock edge", "Reset priority at positive clock edge", "Reset release holding zero", "All 256 data patterns captured", "Data changes and falling clock edges hold output", "Reset while clock high and low"], "evaluator": "python3 dev_check.py --label initial", "timeout": "Bounded simulation timeout; fatal mismatches and final PASS marker"},
+  "specification_ambiguities": [{"topic": "Power-up state", "resolution": "Unspecified by original text; do not assert a specific power-up value or add initialization."}]
+}

@@ -1,0 +1,39 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "in": "input logic [1023:0]",
+      "sel": "input logic [7:0]",
+      "out": "output logic [3:0]"
+    },
+    "evidence": "Original problem interface lists 1024-bit in, 8-bit sel, 4-bit out."
+  },
+  "semantics": {
+    "function": "For each output bit b in 0..3, out[b] = in[4*unsigned(sel)+b].",
+    "timing": "Pure combinational selection; changes to either input affect output after combinational settling, without clock cycles or added latency.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or specified initial value; output follows the current inputs.",
+    "evidence": "Original specifies a 4-bit wide 256-to-1 multiplexer and examples sel=0 -> in[3:0], sel=1 -> in[7:4], sel=2 -> in[11:8]."
+  },
+  "numeric": {
+    "data": "Packed bit groups; no arithmetic interpretation, rounding, saturation, or overflow.",
+    "selector": "Unsigned 8-bit selector, all binary values 0..255 legal.",
+    "ordering": "Group zero occupies least significant four bits; final group occupies bits 1023:1020.",
+    "index": "10-bit base from {sel,2'b00}; range 0..1020."
+  },
+  "verification": {
+    "oracle": "Compute each expected output bit independently from original mapping, using integer group and bit indices.",
+    "coverage": "All 256 selectors with all 16 nibble values, zero/one backgrounds, walking input bits, random vectors, input changes with fixed sel, selected X/Z data.",
+    "sampling": "Drive inputs then wait #1 for combinational settling before comparing with case inequality.",
+    "failure": "$fatal on any mismatch and bounded timeout; PASS only after all checks.",
+    "evaluation": "python3 dev_check.py --label initial; development evidence only."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Unknown selector",
+      "evidence": "Original gives binary selector examples but does not define X/Z selector handling.",
+      "resolution": "No extra behavior required or asserted for unknown selector; use standard SystemVerilog indexing semantics."
+    }
+  ]
+}

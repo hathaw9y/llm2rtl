@@ -1,0 +1,22 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "w": 1, "R": 1, "E": 1, "L": 1}, "outputs": {"Q": 1}},
+  "semantics": {
+    "clock": "State updates only on positive clk edges, explicitly required by original problem.",
+    "transition": "At each positive edge: if L is asserted load R; otherwise if E is asserted shift w; otherwise hold Q.",
+    "reset": "No reset port or reset behavior is specified; R is the load data, not reset.",
+    "initialization": "No initial value is specified. Leave state uninitialized; verification establishes known state by loading before checking data behavior.",
+    "evidence": "Original says E enables shift, R is value to load, L is asserted when it should load, and w comes from previous stage."
+  },
+  "numeric": {"width": "All inputs and output are one bit", "operations": "Single-bit storage and selection; no arithmetic or signedness dependency"},
+  "verification": {
+    "oracle": "Independent procedural scoreboard using original load/shift/hold meanings",
+    "sampling": "Drive inputs at falling edge, check stability before rising edge, check updated output after NBA settles",
+    "coverage": "All binary L/E/R/w combinations from both stored values, directed load priority and hold/shift cases, input changes between edges",
+    "termination": "Fatal on mismatch, bounded timeout, PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    {"issue": "Simultaneous L and E priority is not explicitly stated", "resolution": "L takes priority because asserted L means it should load; E enables shifting when not loading"},
+    {"issue": "Power-on value is unspecified", "resolution": "No initialization added and no required initial Q value asserted by oracle"}
+  ]
+}

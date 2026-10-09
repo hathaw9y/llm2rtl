@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "areset": 1, "bump_left": 1, "bump_right": 1, "ground": 1, "dig": 1}, "outputs": {"walk_left": 1, "walk_right": 1, "aaah": 1, "digging": 1}},
+  "semantics": {
+    "clock": "Original: all sequential logic on positive clock edge; sample inputs at that edge and update Moore outputs after state update.",
+    "reset": "Original: positive-edge asynchronous areset resets to walking left; while asserted clock edges also reset to walking left.",
+    "walking": "Original: ground=0 takes priority and preserves direction into falling; otherwise dig=1 starts digging and preserves direction; otherwise bump on current walking side reverses direction, including simultaneous bumps.",
+    "falling": "Original: ignore bump and dig; retain direction; ground=1 resumes walking in retained direction on that edge.",
+    "digging": "Original: retain direction, ignore bumps and dig deassertion, remain digging while ground=1; ground=0 enters falling.",
+    "outputs": "Moore: exactly one of walk_left, walk_right, aaah, digging asserted after reset; output depends only on registered state.",
+    "initialization": "No pre-reset initial state specified; no declaration initialization added and no pre-reset value required by verification."
+  },
+  "numeric": {"ports": "All one-bit unsigned logic", "state": "Six direction/activity states encoded in three bits", "arithmetic": "None"},
+  "verification": {"oracle": "Independent activity and direction model derived from original prose", "sampling": "Drive away from rising clock; check unchanged Moore outputs before edge and check after NBA settling", "coverage": "All 16 control combinations from all six states, direction retention across dig/fall, priorities, repeated cycles and asynchronous reset from each state", "success": "Fatal on mismatch, bounded timeout, explicit PASS; run mandatory dev_check.py initial"},
+  "specification_ambiguities": ["Behavior before first reset and for unknown-valued inputs is unspecified; no additional functional requirements imposed."]
+}

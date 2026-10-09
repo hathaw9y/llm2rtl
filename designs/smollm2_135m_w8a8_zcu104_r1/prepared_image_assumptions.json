@@ -1,0 +1,72 @@
+{
+  "schema": "llm2rtl.prepared_image_assumptions.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104_r1",
+  "status": "assumed_available_not_located_or_validated",
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "calibration_work": "not_performed",
+  "required_assets": [
+    {
+      "asset": "projection_and_lm_head_weights",
+      "dtype": "signed INT8",
+      "range": [
+        -127,
+        127
+      ],
+      "logical_layout": "[N,K]",
+      "scale": "FP32 [ceil(N/16)], constant across K",
+      "matrices": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj",
+        "tied_lm_head"
+      ]
+    },
+    {
+      "asset": "K_cache_scales",
+      "dtype": "FP32",
+      "shape": [
+        30,
+        3
+      ],
+      "scope": "post-RoPE K, static across tokens and head dimensions"
+    },
+    {
+      "asset": "V_cache_scales",
+      "dtype": "FP32",
+      "shape": [
+        30,
+        3,
+        4
+      ],
+      "scope": "four groups of 16 dimensions per KV head; static across tokens"
+    },
+    {
+      "asset": "norm_gamma_and_RoPE_coefficients",
+      "dtype": "BF16_proposed",
+      "status": "packing_and_non_linear_contract_pending"
+    }
+  ],
+  "manifest_requirements": [
+    "checkpoint revision and weight tensor identities",
+    "scale group axes and group size",
+    "numeric rules and image version",
+    "dtype, shape and prepared scale values",
+    "actual byte offsets, padded strides, DMA alignment and tail encoding after layout agreement",
+    "asset sizes and checksums"
+  ],
+  "implementation_vectors": "Directed and deterministic synthetic vectors may test arithmetic/protocol contracts; they are not calibration or model quality evidence.",
+  "capacity_estimates_excluding_alignment": {
+    "weight_payload_bytes": 134479872,
+    "weight_FP32_scale_count": 12792,
+    "weight_FP32_scale_bytes": 51168,
+    "K_scale_bytes": 360,
+    "V_scale_bytes": 1440,
+    "KV_payload_bytes_at_context1024": 11796480
+  },
+  "estimates_conditions": "All projection and tied embedding/lm_head weights are INT8 with 16-output-channel scale groups; embedding representation is still a proposal. Counts omit norm, RoPE, tensor workspace, alignment and duplicated metadata.",
+  "evidence_policy": "Assumptions are not proof of image presence, provenance, accuracy or numerical quality."
+}

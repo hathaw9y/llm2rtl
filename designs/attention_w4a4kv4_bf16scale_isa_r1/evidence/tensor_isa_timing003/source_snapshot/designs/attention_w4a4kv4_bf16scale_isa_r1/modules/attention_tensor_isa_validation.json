@@ -1,0 +1,73 @@
+{
+  "schema": "llm2rtl.verification_packet.v1",
+  "module_id": "attention_tensor_isa_validation",
+  "status": "frozen",
+  "agent_role": "independent_executor_verifier_and_integration_test_worker",
+  "authorization": "User continued full Attention RTL",
+  "common_contracts": {
+    "contracts/common/engine_completion_contract.json": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446",
+    "contracts/common/evidence_identity_contract.json": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda",
+    "contracts/common/isa_command_contract.json": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15",
+    "contracts/common/local_bank_contract.json": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d"
+  },
+  "rtl_contract": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/rtl_contract.md",
+    "sha256": "78767ed45329729e8b5a32ab78270ede83bda3cfc76c45eafb17f4baf22c06bb"
+  },
+  "control_contract": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_control.json",
+    "sha256": "53fe7ef380ce28536cd9c48be01b1957230f7263bbf5c65bc8eb872cc6a38ec2"
+  },
+  "executor_contract": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_executor.json",
+    "sha256": "0023e5d80df0b358aadc30431dc9ca38279cf6e51d8d9fc534333453ee7c0292"
+  },
+  "math_contract": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_fp32_math.json",
+    "sha256": "5b24dfa7f8dd8db519cf807b40df0b5e830c22be8379d23e30b072007a934421"
+  },
+  "math_manifest": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/math_final001/manifest.json",
+    "sha256": "9f27b44c312839014465f02f3c53ac9effb939a520cbf7294ca91fe8b3787670"
+  },
+  "vector_generator": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/scripts/make_rtl_vectors.py",
+    "sha256": "b7e42d30c73b99c80802568c2aea11f0c4d2365f53f9005efa4845417b9cc6b0"
+  },
+  "numeric_golden": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/python/attention_hardware_reference.py",
+    "sha256": "257e829f8fe42c0c16d0daf7303746fb1f9e2ec7a90400d6cac1de65ba080db4"
+  },
+  "hardware": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_ns": 5.0,
+    "vivado": "2025.2"
+  },
+  "write_scope": [
+    "tb/tb_attention_tensor_isa.sv",
+    "scripts/run_tensor_isa.py",
+    "scripts/tensor_isa_ooc.tcl",
+    "evidence/tensor_isa*",
+    "evidence/executor_review*"
+  ],
+  "read_only_sources": [
+    "all RTL and existing packet/test/golden/math artifacts"
+  ],
+  "work": [
+    "prepare native MM2S/S2MM BFMs and commandBRAM testbench while implementation children pending",
+    "independentlyaudit finalized realexecutor sources against contract and exactfullbankgoldens; no editdatapath",
+    "full integration awaits parent acceptance of math/executor children and control sourcefreeze; compile/prepare top may identifyportmismatch but do not claimdependentPASS",
+    "execute canonical21program and diagnostic34program using actualtop/controller/nativeXPMbanks/realcomputechildren, all9profiles coverage where runtime viable",
+    "compare finalINT4+scale and exportedall13computedtensorwords inclpadding exacthardwaregolden; mathematicalprobabilityboundseparate",
+    "commandstalls/responseholds/finalwritecompletionordering/ownershipatomicacquireandreleases/noaftercompletionrequests/ENDdrain",
+    "illegalfull8bitbanks32or255/aliases/reserved/descriptor/upperDMAaddress32/opcode/uninitializedsource/missingEND/statuswrongbank/fault/resetrestart",
+    "fullstrictlint and5nsOOCtopwithrealchildsourceclosureandXPMmemorynoblackboxes, actualtiming/resources andscopedwarnings"
+  ],
+  "forbidden_claims": [
+    "self-auditofmathcounts asindependentmathverification",
+    "DMA BFMasvendorDataMoverorPS/DDRboardproof",
+    "routedtiming/modelquality/large model support",
+    "invalidatingoldprogram/evidenceidentities"
+  ],
+  "recursive_subagents": false
+}

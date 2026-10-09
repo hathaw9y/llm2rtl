@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "areset": 1, "in": 1}, "outputs": {"out": 1}},
+  "semantics": {
+    "states": {"A": {"out": 0}, "B": {"out": 1}},
+    "transitions": {"A,in=0": "B", "A,in=1": "A", "B,in=0": "A", "B,in=1": "B"},
+    "clock": "Update state on rising clk edge; diagram gives transitions for sampled in.",
+    "reset": "Original text: asynchronously reset into state B if reset is high. areset is active high, overrides transitions while high.",
+    "output": "Moore output depends only on current state, without added latency.",
+    "initialization": "No power-up state specified; no initializer; verification begins functional state checks after reset."
+  },
+  "numeric": {"port_widths": "All ports one bit as specified", "state_encoding": "A=0, B=1; no arithmetic or counters"},
+  "verification": {"oracle": "Explicit original A/B transition table maintained independently in testbench", "cases": ["asynchronous reset between clock edges", "reset priority at rising clock edge", "all four transitions", "input changes between edges do not change output", "falling clock edges do not change state", "reset release holds state until rising edge", "long mixed input sequence"], "sampling": "Check after a delay following edges to allow nonblocking state update", "completion": "Fatal mismatches, bounded timeout, PASS only at completion"},
+  "specification_ambiguities": [{"item": "Active clock edge is not explicitly stated in the prose or diagram", "resolution": "Use rising edge of clk, the conventional clock interpretation for this synchronous FSM."}, {"item": "State before first reset or clock is unspecified", "resolution": "Do not impose a defined power-up state or assert a pre-reset value."}]
+}

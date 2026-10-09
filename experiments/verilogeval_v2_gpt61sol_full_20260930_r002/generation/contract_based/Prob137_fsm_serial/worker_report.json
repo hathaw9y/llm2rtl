@@ -1,0 +1,26 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "details": "Correct fixture passed; injected fault failed; repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only", "evidence": "contract_gate.json"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "dev_checks.jsonl and development/01", "details": "Icarus 12 compilation and simulation passed without diagnostics; PASS serial framing: 6378 samples, 397 completed frames."}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation was not accessed and official correctness is not established.",
+    "Original specification does not explicitly state done pulse duration; interpreted as one cycle immediately following a valid stop sample.",
+    "Power-up state is unspecified; reception checks begin after synchronous reset.",
+    "No synthesis, timing, or board verification performed, as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "artifacts": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json"},
+  "implementation": {
+    "cycle_contract": "Start sample, eight data samples, stop sample; valid stop asserts done immediately after that edge for one cycle. Following edge can accept next start. Invalid stop waits for high before returning to start search.",
+    "reset": "Active-high synchronous reset clears done and returns to idle.",
+    "numeric_width": "One-bit interface; three-bit data index counts eight samples.",
+    "source_closure": "Single TopModule with no child modules or external synthesizable dependencies.",
+    "static_review": "No added ports or latency, no initial blocks in DUT, no enum ternary, sequential nonblocking assignments, bounded data index."
+  }
+}

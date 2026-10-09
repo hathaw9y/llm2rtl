@@ -1,0 +1,34 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "observations": "Correct sequential fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+    },
+    {
+      "name": "initial",
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; no diagnostics",
+      "simulation": "Matching vvp; PASS with 8229 output assertions",
+      "evidence": "development/01 and dev_checks.jsonl"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation or proof of official correctness.",
+    "No synthesis or board verification was performed.",
+    "The original specification does not define a state before reset; the testbench begins output checks after asynchronous reset."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "One-bit state encodes A=0 and B=1. Rising clock edges toggle state for input 0 and hold state for input 1. Active-high asynchronous reset selects B. Output directly reflects the current state, with no extra ports or latency.",
+  "verification_coverage": "Original transition-table oracle, all 256 eight-input sequences from reset B, input changes between edges, falling-edge stability, reset from A, reset held over clock edges, reset release stability, and reset assertion while clock is high.",
+  "files": {
+    "rtl": "candidate.sv",
+    "unchanged_initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  }
+}

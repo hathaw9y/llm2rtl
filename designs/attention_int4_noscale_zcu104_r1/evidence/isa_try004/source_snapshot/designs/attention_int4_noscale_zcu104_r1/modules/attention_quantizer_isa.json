@@ -1,0 +1,98 @@
+{
+  "schema": "llm2rtl.operator_integration.v1",
+  "module_id": "attention_quantizer_isa",
+  "status": "frozen",
+  "scope": "ISA-driven QUANTIZE executor/controller/native banks; quantizer is verified child. Full Attention arithmetic remains separate pending work.",
+  "authorization": "User clarified ISA-based implementation; wire explicit quantizer into existing ISA controller/bank path.",
+  "child": {
+    "path": "designs/attention_int4_noscale_zcu104_r1/rtl/attention_int4_quantizer.sv",
+    "sha256": "9740ff60facbed8a74f3a881dfd1d51316719a9a31a44d1852515fccbcc9db5c"
+  },
+  "child_contract": {
+    "path": "designs/attention_int4_noscale_zcu104_r1/modules/attention_int4_quantizer.json",
+    "sha256": "25f32c88bfda1ae3285b4c892b52301ebf490d9da46c618b95b7d44960906361"
+  },
+  "child_independent_review": {
+    "path": "designs/attention_int4_noscale_zcu104_r1/evidence/quantizer_review.md",
+    "sha256": "d659a9e8e89b5a7fced47f4fbb5431d53a289ed48ce96183fbadb04bcf30c7e6"
+  },
+  "native_contract": {
+    "path": "ip/infrastructure/bank_subsystem/contracts/native_v3.json",
+    "sha256": "631c393c53cd56a9c916c91fe5b685be572569fa8c19bb3bb22aebd802e70d1f"
+  },
+  "controller_contract": {
+    "path": "ip/infrastructure/cmd_dispatcher_template/template_contract.json",
+    "sha256": "7657697438b595e983de27eb0fb03b046cbb493d0304548d2e1926ea1a66becc"
+  },
+  "controller_index": {
+    "path": "ip/infrastructure/cmd_dispatcher_template/template_index.json",
+    "sha256": "1bd3a315cbda58d543610e23aaab2a091fdc704cfcc68e247dab199675c111dc"
+  },
+  "common_contracts": {
+    "contracts/common/engine_completion_contract.json": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446",
+    "contracts/common/evidence_identity_contract.json": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda",
+    "contracts/common/isa_command_contract.json": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15",
+    "contracts/common/local_bank_contract.json": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d"
+  },
+  "hardware": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_ns": 5.0,
+    "vivado": "2025.2"
+  },
+  "generated_sources": [
+    "rtl/attention_quantizer_executor.sv",
+    "rtl/attention_quantizer_controller.sv",
+    "rtl/attention_quantizer_bank_config_pkg.sv",
+    "rtl/attention_quantizer_bank_subsystem.sv",
+    "rtl/attention_quantizer_isa_top.sv"
+  ],
+  "isa": {
+    "record": "existing native controller 128-bit command record; AXI_ADDR_WIDTH32 BTT_WIDTH23 BANK_NUM3 BANK_NUM_WIDTH2 TAG_WIDTH4 BANK_ADDR_WIDTH32 OPCODE_WIDTH4",
+    "opcodes": {
+      "END": 0,
+      "MM2S": 1,
+      "S2MM": 2,
+      "QUANTIZE": 3
+    },
+    "QUANTIZE_operands": {
+      "operand0_bank": "FP32 source",
+      "operand1_bank": "INT4 destination",
+      "operand2_bank": "BF16 scale destination"
+    },
+    "QUANTIZE_immediate": "existing BTT field reinterpreted as element_count [1,256], no external address/localoffset passed to compute",
+    "legality": "three distinct legal bank IDs, count1..256, AXIaddress/localoffset zero for compute",
+    "pc_policy": "unchanged strict sequential command BRAM and acquire-before-valid, next PC after engine command handshake",
+    "completion": "saved 3-bank identity held until response handshake; controller validates outstanding matching roles, release atomic rd source + wr data+scale and cleartracking only accepted; END drains allcommands"
+  },
+  "bank_config": {
+    "BANK_NUM": 3,
+    "ROLE_WIDTH": 3,
+    "banks": "three BRAM128/128 depth256 banks, 4-cycle read latency, all DMA mappings [0,1,2]",
+    "roles": {
+      "MM2S": 1,
+      "S2MM": 2,
+      "QUANT_SRC": 3,
+      "QUANT_DATA_DST": 4,
+      "QUANT_SCALE_DST": 5
+    },
+    "capabilities": "every bank permits DMAwriter and quant data/scale writers, DMAreader and quant source reader; aliases forbidden by controller",
+    "payload_layout": "all compute addressing internal starts at word0; FP32source four little-endian lanes per128bitword, INT4out32 low-nibble-first elements/word, zero-pad finalword and fullstrb writes; BF16scale low16bits of separatebank word0 remainingbitszero fullstrb"
+  },
+  "executor_interface": {
+    "clock_reset": "aclk/aresetn sync",
+    "command": "cmd_valid/ready, cmd_src/dst/scale_bank 2bit logicalIDs, cmd_elements9bit",
+    "response": "resp_valid/ready, saved src/dst/scale_bank, resp_error",
+    "memory": "perbank128bit native read enb/addrb/read_ready/valid/doutb and write ena/addra/dina/wea/ready; source requests role3, datawrites role4, scalewrites role5, routerresponseowner tags preserved"
+  },
+  "executor_behavior": "one accepted command at a time; issue one sourceword read only when buffer free, wait memoryvalid then feed each requiredFP32lane tochild respectingready; after allinputs feed core outputs into128bitpack buffer respectingstall, write complete/finalpackedword when accepted, final BF16scalewrite before acceptingchild response; handle error response without output and no furthermemory requests; complete only allreadresponses processed and data/scalewritesaccepted",
+  "top": "commandBRAMnative + controllerstatus + fixedMM2S/S2MMcmd/status/nativebankports, instantiate generatedcontroller/banks + executor + verifiedquantizer; no standalone direct compute command port bypassingISA",
+  "extension_policy": "Generate localcopies from pinned shared templates; only USER bodies changed plus copied module/package names/configuration. Do not change shared template/core or verifiedquantizer.",
+  "verification": [
+    "Python ISAencoder + quantizer Fractionoracle source-identified vectors",
+    "real PS-style commandBRAM -> MM2S(source) -> QUANTIZE -> S2MM(data) -> S2MM(scale) -> END using native XPM bank payloads; DMA peers exercised as testbench busfunctional models, no vendorDataMoverinstantiationclaim",
+    "atleast1/13/32/33/256elements, unequal rows/scales/zero/nonfinite, oddtails, sequentialreuse of3banks",
+    "stalledDMA/compute command and output writes/readresponsewait; all3atomicacquires beforeexecutorvalid; noreleasebeforefinaldataANDscalewriteaccept; completionidentity/role and exactreleasecount;ENDdrain",
+    "invalidbankalias/count/unsupportedopcode noacquire, resetduringread/write, DMAdata+scaleroundtrip comparison",
+    "strictlint and OOCtop synthesis exactsourceclosure/newcopies; no board/fullAttentionhardware claim"
+  ]
+}

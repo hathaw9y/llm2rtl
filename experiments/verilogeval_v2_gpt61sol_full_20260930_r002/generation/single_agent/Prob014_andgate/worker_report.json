@@ -1,0 +1,37 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "coverage": "All four binary input combinations and repeated output transitions; six checks."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board work performed."
+  ],
+  "justified_changes": {
+    "rtl": [],
+    "testbench": []
+  },
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface": "TopModule with one-bit inputs a, b and one-bit output out",
+    "behavior": "Combinational two-input AND; no clock, reset, or added latency.",
+    "static_review": "Single continuous driver; exact port names and widths; no storage."
+  }
+}

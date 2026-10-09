@@ -1,0 +1,39 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "Frozen contract structural gate",
+      "command": "python3 validate_contract.py",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "Explicit-top compilation with warnings enabled",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 0,
+      "result": "PASS; no compiler warnings",
+      "log": "compile_initial.log"
+    },
+    {
+      "name": "Independent population-count oracle simulation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "exit_code": 0,
+      "result": "PASS: 1305 binary vectors checked",
+      "log": "simulation_initial.log",
+      "coverage": "All-zero/all-one, all 100 single-one and single-zero positions, alternating patterns, populations 0 through 100, and 1000 reproducible pseudorandom vectors."
+    },
+    {
+      "name": "Static RTL review",
+      "result": "PASS: exact TopModule interface, three continuous 100-bit reductions, no state, clocks, reset, latches, or external source dependencies."
+    }
+  ],
+  "development_outcome": "Initial candidate passed independent development compilation and simulation. candidate_initial.sv was preserved immediately after implementation and before development checks. candidate.sv remains unchanged. Frozen contract honored.",
+  "limitations": [
+    "Development tests do not exhaust all 2^100 binary inputs.",
+    "X/Z input behavior is unspecified by the original problem and was not tested.",
+    "The contract gate validates structure only, not functional correctness.",
+    "Official evaluation results are unavailable; no official tests or reference RTL were accessed.",
+    "No synthesis, physical timing, or board checks were performed."
+  ]
+}

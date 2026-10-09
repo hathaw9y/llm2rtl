@@ -1,0 +1,32 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "compile_failed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob047_dff8ar/development/01"
+    },
+    {
+      "label": "tb_correction_1",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob047_dff8ar/development/02"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_validation": "passed_structure_only",
+  "limitations": [
+    "Development verification is not official evaluation.",
+    "The original specification does not define a power-up value before any reset or positive clock edge; no initial-value assertion is imposed."
+  ],
+  "justified_RTL_changes": [],
+  "justified_TB_changes": [
+    {
+      "old_version": "dev_tb_initial.sv",
+      "change": "Renamed task argument context to case_name because context is a reserved SystemVerilog keyword.",
+      "evidence": "Initial Icarus 12 compiler crashed; supplemental Icarus 11 diagnostic reported syntax error at dev_tb.sv:13. Corrected testbench compiled and passed using the mandatory Icarus 12 helper.",
+      "oracle_impact": "No expected values, stimulus timing, or checks changed."
+    }
+  ],
+  "contract_changes": []
+}

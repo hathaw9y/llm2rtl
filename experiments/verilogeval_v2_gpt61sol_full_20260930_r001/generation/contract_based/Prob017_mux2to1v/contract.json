@@ -1,0 +1,49 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 100,
+        "range": "[99:0]"
+      },
+      "b": {
+        "direction": "input",
+        "width": 100,
+        "range": "[99:0]"
+      },
+      "sel": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 100,
+        "range": "[99:0]"
+      }
+    }
+  },
+  "semantics": {
+    "function": "sel=0: out=a; sel=1: out=b",
+    "timing": "Purely combinational; output follows current inputs after combinational settling; no cycle latency or clock.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization requirement.",
+    "input_changes": "Selected data and selection changes immediately affect combinational result; no sampling handshake."
+  },
+  "numeric": {
+    "representation": "100-bit unsigned bit vectors",
+    "mapping": "For each index i from 0 through 99, out[i] equals selected input[i].",
+    "arithmetic": "No arithmetic, extension, truncation, rounding, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "For each bit independently, compare out[i] to a[i] for sel=0 and b[i] for sel=1 after settling.",
+    "directed": "Zeros, ones, complementary alternating patterns, walking one and walking zero at all 100 positions, both sel values.",
+    "dynamic": "Change both data vectors with sel held fixed, and toggle sel with data fixed.",
+    "random": "Exercise 1000 independently generated 100-bit input pairs with both sel values.",
+    "execution": "Icarus v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts; self-checking fatal mismatch and PASS marker."
+  },
+  "specification_ambiguities": [
+    "Behavior for unknown or high-impedance sel is unspecified by the original problem; verification constrains sel to 0 or 1."
+  ]
+}

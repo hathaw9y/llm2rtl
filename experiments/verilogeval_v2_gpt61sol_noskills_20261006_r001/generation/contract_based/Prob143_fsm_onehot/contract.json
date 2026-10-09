@@ -1,0 +1,76 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "in": 1,
+      "state": 10
+    },
+    "outputs": {
+      "next_state": 10,
+      "out1": 1,
+      "out2": 1
+    }
+  },
+  "semantics": {
+    "kind": "Combinational transition and Moore output logic only; original explicitly excludes state flip-flops.",
+    "encoding": "state[i] represents Si; next_state[i] represents destination Si.",
+    "multi_active": "OR the destination contributions of every active source state; OR each active source Moore output.",
+    "destinations_for_in_0": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      8,
+      9,
+      0,
+      0,
+      0
+    ],
+    "destinations_for_in_1": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      7,
+      1,
+      1
+    ],
+    "out1_active_states": [
+      8,
+      9
+    ],
+    "out2_active_states": [
+      7,
+      9
+    ],
+    "timing": "No clock, reset, initialization, or cycle latency specified or present in interface; outputs follow combinational inputs."
+  },
+  "numeric": {
+    "state_width": 10,
+    "next_state_width": 10,
+    "bit_order": "Index 0 is S0 through index 9 is S9.",
+    "zero_state": "No active source produces zero next_state and zero outputs.",
+    "operations": "Boolean bitwise gates; no arithmetic or signedness."
+  },
+  "verification": {
+    "oracle": "Original transition rows replayed independently by iterating active source states and ORing destination bits.",
+    "coverage": "All 1024 binary state vectors with both input values (2048 cases), covering one-hot, multi-hot, all-zero and all-one.",
+    "sampling": "Drive combinational inputs, wait 1 ns, compare all outputs using case inequality.",
+    "failure": "$fatal on mismatch and bounded timeout; PASS emitted after all comparisons."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Multiple active sources",
+      "resolution": "Treat each active state independently and OR contributions, consistent with explicit requirement to respond to multiple states."
+    },
+    {
+      "topic": "X/Z inputs",
+      "resolution": "Original gives no required X/Z behavior; binary inputs verified exhaustively, gate propagation retained without special handling."
+    }
+  ]
+}

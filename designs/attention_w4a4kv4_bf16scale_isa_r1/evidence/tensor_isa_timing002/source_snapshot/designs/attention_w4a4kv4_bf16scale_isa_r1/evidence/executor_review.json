@@ -1,0 +1,110 @@
+{
+  "module_id": "attention_tensor_executor",
+  "status": "passed",
+  "implementation_agent": "/root/native_review",
+  "review_agent": "/root/native_tests",
+  "independence": "Executor source/test read-only; arithmetic authored by reviewer separately accepted by independent /root/native_core math_review.json. No self-arithmetic audit credited.",
+  "sources": {
+    "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_tensor_executor.sv": "53d1f861cb2f09efdc8707989fed8f46d507619dbf2517d99829a590eb6af830",
+    "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_tensor_pkg.sv": "e561d5c873bdf681d2b107ebdc39a945a7aed533f68175fec6274f77360fd611",
+    "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/tb/tb_attention_executor.sv": "2100c0b38b1f32910085a83e35703e11ea0d6d54a7e0b4c61d502d90dfdff5e8",
+    "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/scripts/run_executor.py": "912056a74587b9f55d0dec4b5ea0553230c3fe249b0f44c26c9e1e9cec58c458",
+    "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/scripts/executor_ooc.tcl": "8a0a64fab192c0a29fc477efd0be66a7aac97e28c6e67267ba8367f9f8f51899",
+    "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_executor.json": "0023e5d80df0b358aadc30431dc9ca38279cf6e51d8d9fc534333453ee7c0292",
+    "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_isa_validation.json": "74a112af3ddb22996ddfa16759f373b54c61c7f2ab9af326fd52ee2e2b277531",
+    "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_fp32_alu.sv": "0efe18f10d9aa05713fd9c2a1b9b34468fc15a9243642a857dc55af15987dd96",
+    "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_fp32_exp_rom.sv": "26bb8fa3840a6ec14eef82c9ab58902ae29b29b07c9d9b38fa2d3584f682c85d",
+    "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/rtl/attention_exp_neg.sv": "8806b93341794f26c061b35ac26a78d8746e8b1abf985cfd1e96e1392527e16a",
+    "/home/shmin/llm2rtl/designs/attention_int4_noscale_zcu104_r1/rtl/attention_int4_quantizer.sv": "9740ff60facbed8a74f3a881dfd1d51316719a9a31a44d1852515fccbcc9db5c",
+    "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/math_review.json": "1a5a14d4bcea589ce2cab5e1b821d6ec55f23121134c187a0966c2f56dcaa0a2"
+  },
+  "evidence": {
+    "executor_sim010": {
+      "manifest_sha256": "426558cfc49bfeaac30c851381f5e112757d79129bcd2b767c6c2671deec8198",
+      "source_count": 269,
+      "profiles": [
+        "prefill",
+        "last_token",
+        "odd_head",
+        "noncausal_mask",
+        "all_masked",
+        "zero",
+        "gentle",
+        "max_tokens",
+        "max_row"
+      ]
+    },
+    "executor_timing009": {
+      "manifest_sha256": "342a7f0a469634688961c78f1848105c939e1fc6be5cf94561279a864e3b0845",
+      "source_count": 26,
+      "profiles": [
+        "prefill",
+        "last_token",
+        "odd_head",
+        "noncausal_mask",
+        "all_masked",
+        "zero",
+        "gentle",
+        "max_tokens",
+        "max_row"
+      ]
+    },
+    "executor_review_run001": {
+      "manifest_sha256": "42ed13a4eb712c8f4519ece301f686548e79949e282fc5b5100ae31d5ec64092",
+      "source_count": 107,
+      "profiles": [
+        "prefill",
+        "all_masked",
+        "max_row"
+      ]
+    }
+  },
+  "findings": [],
+  "promotion_eligible": true,
+  "checks": [
+    "final source and every source snapshot exact; recorded exits0/exact PASS; empty strict Wall lint",
+    "all9profiles243cases/117realcomputecommands exact fullbank bytes including scales/padding and capacity sentinel",
+    "independent fresh rerun prefill/all_masked/max_row81cases/39computecommands exact payload PASS",
+    "full-width descriptor/context legality in registered validation before clear/no-touch negatives",
+    "stable native requests under stalled ready; actual pulse response consumption; matching saved command ID and held completion; reset during outstanding read and stalled payload write",
+    "nonfinite consumes complete first row, fresh legal quantize without reset, mask2/nonnormal scale/reserved -8, invalid V/scale when probability0, unexpected/wrong-bank response reset-only hold",
+    "QK selected query saved, ordered INT32 accumulation/scales conversion; Softmax masking/max/exp/sum/div/BF16RNE and allmaskedzero; PV visited V validated even zero probability",
+    "actual5ns xczu7ev Vivado2025.2 executor OOC no blackboxes; raw setup/hold/pulse failcounts0; metrics match reports"
+  ],
+  "metrics": {
+    "timing": {
+      "wns_ns": 0.725,
+      "setup_failing": 0,
+      "whs_ns": 0.063,
+      "hold_failing": 0,
+      "wpws_ns": 1.958,
+      "pulse_failing": 0
+    },
+    "resources": {
+      "total_lut": 12228,
+      "logic_lut": 12128,
+      "lutram": 100,
+      "srl": 0,
+      "ff": 4691,
+      "ramb36": 0,
+      "ramb18": 1,
+      "uram": 0,
+      "dsp": 8
+    },
+    "scope": "unplaced OOC estimate, external boundary hold excluded"
+  },
+  "drc": "18 DSP pipeline advisory warnings; no errors/critical warnings",
+  "methodology": "one SYNTH-6 advisory; unplaced synthesis checks",
+  "remaining_risks": [
+    "Only visited source elements/scales validated; unselected Q rows and masked score entries are not global source preflight.",
+    "A late numerical failure may leave earlier physical destination writes; controller must keep destination invalid until successful complete. No rollback.",
+    "Scalar bounded immutable descriptors and selected9profiles/corners; no exhaustive shape Cartesian proof or throughput claim.",
+    "Unplaced5ns OOC estimate with external boundary hold excluded; no routed/board/DDR/model quality claim.",
+    "Unexpected protocol identity retains job in FAULT_HOLD until coordinated reset; no spontaneous error completion or watchdog promise."
+  ],
+  "retry_owner": "/root/native_review",
+  "forbidden_claims": [
+    "Full Attention ISA RTL PASS from executor-only evidence",
+    "Physical DDR/board/routed/pretrained model accuracy"
+  ]
+}

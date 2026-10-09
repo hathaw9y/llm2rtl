@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "d": "input, 1 bit",
+      "ena": "input, 1 bit",
+      "q": "output, 1 bit"
+    },
+    "evidence": "problem.txt explicitly lists d, ena, q and states all ports are one bit."
+  },
+  "semantics": {
+    "function": "Level-sensitive D latch using an always block: q follows d while ena=1; q retains its previous value while ena=0.",
+    "timing": "No clock or cycle latency. Observe after simulator updates settle following input changes.",
+    "reset": "No reset port or reset behavior is specified; do not add a reset.",
+    "initialization": "No initial value is specified; leave q uninitialized, hence X in four-state RTL simulation until enabled with known d.",
+    "evidence": "problem.txt: The module should impement a D latch using an always block. Interface includes only d, ena, q."
+  },
+  "numeric": {
+    "width": "All ports exactly one bit.",
+    "arithmetic": "None; bit storage and transfer only."
+  },
+  "verification": {
+    "oracle": "Explicit expected values derived from transparent-high D-latch behavior in original problem, independently of DUT implementation.",
+    "cases": [
+      "Disabled initial state and disabled input changes",
+      "Enable rising with either data value",
+      "Data rising and falling while enable remains high",
+      "Hold zero and one through disabled data toggles",
+      "Data change coincident with enable falling and rising",
+      "Repeated enable/data combinations"
+    ],
+    "sampling": "Drive at integer ns and sample 1 ns later, after procedural updates settle.",
+    "pass": "Fatal on mismatches; bounded timeout; PASS marker only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Enable polarity",
+      "resolution": "ena is interpreted as active-high, conventional D-latch enable; the prose supplies no inversion."
+    },
+    {
+      "topic": "Power-up and unknown-valued inputs",
+      "resolution": "No initialization or X/Z-input hardware behavior is specified. Leave output uninitialized; known binary enable/data behavior is the functional acceptance requirement. Initial X check detects an invented initialization."
+    }
+  ]
+}

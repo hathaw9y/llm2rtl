@@ -1,0 +1,173 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob027_fadd",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob027_fadd",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob027_fadd/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790733263.1576176,
+    "ended_at_unix": 1790733333.1758966,
+    "seconds": 70.01827955245972,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 89427,
+      "cached_input_tokens": 70400,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1338,
+      "reasoning_output_tokens": 54
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "956e29318390713e406e16079a3d8c65e01d363d836cc599947b569b34117ce0",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "outcome": "pass",
+        "details": "Exact one-bit TopModule ports; continuous combinational assignments; XOR sum and majority carry; no clocks, resets, state, delays, or width-dependent arithmetic in RTL."
+      },
+      {
+        "name": "Icarus development compile",
+        "outcome": "tool_failure",
+        "exit_code": 139,
+        "timeout_seconds": 20,
+        "log": "compile.log"
+      },
+      {
+        "name": "exhaustive eight-vector development simulation",
+        "outcome": "not_completed",
+        "details": "Matching vvp could not open dev_sim because compilation failed.",
+        "timeout_seconds": 20,
+        "log": "simulation.log"
+      }
+    ],
+    "development_outcome": "Initial synthesizable full-adder candidate delivered unchanged. Independent self-checking testbench provided, but simulation success is not claimed due to compiler failure.",
+    "limitations": [
+      "Development simulation did not run successfully.",
+      "No synthesis, timing, or board verification performed.",
+      "Official evaluation was not accessed and its results are unavailable."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "956e29318390713e406e16079a3d8c65e01d363d836cc599947b569b34117ce0",
+      "Prob027_fadd_test.sv": "83bc76bc52bb134aba9a4cc1c762740cb6785f60413fa75becb826ce9128a9d8",
+      "Prob027_fadd_ref.sv": "8607c120d36481ba0a8c2f6b8d71af7a7ba27b4850781b0b7326020b4046ac30"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob027_fadd_test.sv",
+        "Prob027_fadd_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01273578405380249
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb027_fadd_test.sv:40: $finish called at 1070 (1ps)\nHint: Output 'cout' has no mismatches.\nHint: Output 'sum' has no mismatches.\nHint: Total mismatched samples is 0 out of 214 samples\n\nSimulation finished at 1070 ps\nMismatches: 0 in 214 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008139047771692276
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "956e29318390713e406e16079a3d8c65e01d363d836cc599947b569b34117ce0",
+      "Prob027_fadd_test.sv": "83bc76bc52bb134aba9a4cc1c762740cb6785f60413fa75becb826ce9128a9d8",
+      "Prob027_fadd_ref.sv": "8607c120d36481ba0a8c2f6b8d71af7a7ba27b4850781b0b7326020b4046ac30"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob027_fadd_test.sv",
+        "Prob027_fadd_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013774179853498936
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb027_fadd_test.sv:40: $finish called at 1070 (1ps)\nHint: Output 'cout' has no mismatches.\nHint: Output 'sum' has no mismatches.\nHint: Total mismatched samples is 0 out of 214 samples\n\nSimulation finished at 1070 ps\nMismatches: 0 in 214 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008528039790689945
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

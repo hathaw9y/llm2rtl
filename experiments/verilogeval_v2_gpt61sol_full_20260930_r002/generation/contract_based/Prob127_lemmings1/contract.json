@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "areset": 1, "bump_left": 1, "bump_right": 1}, "outputs": {"walk_left": 1, "walk_right": 1}},
+  "semantics": {"states": ["left", "right"], "clock": "Original: all sequential logic is triggered on the positive edge of the clock.", "reset": "Original: positive edge triggered asynchronous areset resets to walking left; held reset has priority at clock edges.", "transition": "At each rising clock edge without reset: left switches to right if bump_left; right switches to left if bump_right; otherwise holds. Both bumps switch direction.", "outputs": "Moore outputs: left => walk_left=1, walk_right=0; right => walk_left=0, walk_right=1. No added latency.", "initialization": "No initial direction specified before reset; no declaration initialization or pre-reset value assertion."},
+  "numeric": {"widths": "All ports and state encoding are one bit", "arithmetic": "No arithmetic, rounding, saturation or overflow"},
+  "verification": {"oracle": "Independent direction variable updated by the original directional obstacle rule at rising clock edges; outputs sampled after NBA settlement", "coverage": "All four bump combinations in both states, repeated both-bump toggles, held reset, off-clock asynchronous reset, reset release, between-edge output stability", "success": "Fatal on mismatch, bounded timeout, PASS only on completion", "evaluator": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": ["Pre-reset initial state is unspecified and is not constrained by the testbench.", "The phrase one output (internal) is interpreted as one internal direction state; the explicit interface requires both walk outputs."]
+}

@@ -1,0 +1,33 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1,
+      "d": 1,
+      "e": 1
+    },
+    "outputs": {
+      "out": 25
+    }
+  },
+  "semantics": {
+    "operation": "Combinational pairwise bit equality for ordered inputs [a,b,c,d,e].",
+    "mapping": "out[24 - (5*row + column)] compares inputs[row] with inputs[column].",
+    "evidence": "Original examples assign out[24]=~a^a, out[23]=~a^b, out[22]=~a^c, out[1]=~e^d, out[0]=~e^e.",
+    "cycle_reset_initialization": "No clock, reset, storage, or initialization specified; output continuously follows inputs with no added latency."
+  },
+  "numeric": {
+    "width": "Each comparison is one bit; out is [24:0].",
+    "logic": "Use bitwise XNOR, equivalent to the original ~left ^ right expression; X/Z inputs propagate unknown comparison results."
+  },
+  "verification": {
+    "oracle": "Independently index ordered inputs and compute equality for all 25 pairs.",
+    "coverage": "Exhaust all 32 binary input combinations, plus directed X/Z input cases matching original bitwise expressions.",
+    "sampling": "Allow combinational settling after each input change; no clock sampling.",
+    "completion": "Fatal on mismatch and bounded timeout; print PASS only after every check."
+  },
+  "specification_ambiguities": []
+}

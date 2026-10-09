@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "manual RTL review",
+      "outcome": "completed",
+      "details": "Three-state Moore FSM; copies zeros and first one, then inverts remaining sampled bits. Output depends only on state. State updates on positive clock edges, with positive-edge asynchronous active-high reset to zero-output state. All next-state paths assigned."
+    },
+    {
+      "name": "Icarus development compile",
+      "outcome": "tool_failure",
+      "exit_code": 139,
+      "timeout_seconds": 30,
+      "log": "compile.log",
+      "details": "Used requested Icarus path, -g2012, -Wall and explicit dev_tb top. Compiler exited without diagnostics or a simulation executable."
+    },
+    {
+      "name": "development simulation",
+      "outcome": "failed_to_start",
+      "timeout_seconds": 30,
+      "log": "simulation.log",
+      "details": "Matching vvp could not open dev_sim. Independent testbench includes exhaustive arithmetic comparisons for widths 1 through 10, Moore output stability, a 256-bit stream and repeated asynchronous resets, but these checks did not execute."
+    }
+  ],
+  "development_outcome": "Initial RTL delivered unchanged; candidate_initial.sv preserved before all development checks. Simulation unverified due to compiler failure.",
+  "limitations": [
+    "No successful development compilation or simulation.",
+    "No synthesis, timing analysis or board validation performed.",
+    "Official evaluation was not accessed and its results are unavailable."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "PASS",
+      "details": "Exactly TopModule with two 100-bit ports; each output bit has one continuous driver from input bit 99-i. No state, latch, clock, reset, arithmetic, or external module dependency. Net ports use wire for continuous wiring."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "exit_code": 0,
+      "result": "PASS: 1205 bit-reversal checks",
+      "log": "dev_simulation.log"
+    },
+    {
+      "name": "initial_preservation",
+      "command": "cmp candidate.sv candidate_initial.sv",
+      "exit_code": 0,
+      "result": "Identical; initial preserved before development checks"
+    }
+  ],
+  "development_outcome": "Initial candidate passed directed, walking-one, walking-zero, 1000 random-vector, and mixed X/Z checks. No RTL revisions needed.",
+  "limitations": [
+    "Contract validator checks structure only.",
+    "Development simulation is independent and does not establish official evaluation results.",
+    "No synthesis, physical timing analysis, or board work performed."
+  ]
+}

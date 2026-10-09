@@ -1,0 +1,170 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob112_always_case2",
+  "official_status": "compile_failure",
+  "workflow_status": "failed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob112_always_case2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob112_always_case2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790737382.133077,
+    "ended_at_unix": 1790737520.7270741,
+    "seconds": 138.5939977169037,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 164338,
+      "cached_input_tokens": 150144,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2424,
+      "reasoning_output_tokens": 74
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "668b0851a7e505ef26a6be955161164f3e00918d09a9da7d417a29f982f063c0",
+  "contract_sha256": "8158d1ed4667edeae0e38383659f342178621dc2067afec2ef774afb0d018063",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": 0,
+    "checks": [
+      {
+        "name": "contract structural gate",
+        "result": "PASS",
+        "log": "contract_validation_retry.log",
+        "scope": "required fields and frozen status only"
+      },
+      {
+        "name": "initial candidate preservation",
+        "result": "PASS",
+        "detail": "candidate_initial.sv copied immediately after initial RTL creation, before development checks; byte-identical to candidate.sv"
+      },
+      {
+        "name": "static RTL review",
+        "result": "PASS",
+        "detail": "Exact TopModule interface, combinational complete assignment, unsigned two-bit indices, least-significant-set-bit priority, zero fallback, no state or extra ports; no child dependencies"
+      },
+      {
+        "name": "Icarus development compilation",
+        "result": "TOOL_FAILURE",
+        "exit_code": 139,
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "logs": [
+          "dev_compile.log",
+          "dev_compile.exit",
+          "development_tool_failure.log"
+        ]
+      },
+      {
+        "name": "development simulation",
+        "result": "NOT_RUN",
+        "reason": "Compilation failed and produced no executable"
+      }
+    ],
+    "development_outcome": "RTL implemented and statically reviewed; development compilation failed with exit 139 and empty diagnostics. No simulation success claimed.",
+    "limitations": [
+      "Binary input behavior specified; X/Z behavior unspecified.",
+      "Exhaustive independent testbench provided but not executed because the compiler failed.",
+      "No synthesis, timing, board validation, or official evaluation performed."
+    ],
+    "setup_notes": [
+      "First gate invocation completed, but its shell postprocessing failed because zsh reserves status as read-only; repeated gate using contract_rc passed. Original gate log and gate history retained."
+    ]
+  },
+  "final": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "candidate.sv": "668b0851a7e505ef26a6be955161164f3e00918d09a9da7d417a29f982f063c0",
+      "Prob112_always_case2_ref.sv": "1381f5ab0ed243628965c0d2c89bd792f0455a6c9a8e3b113fa380e2590e94ec",
+      "Prob112_always_case2_test.sv": "baf60f2facbac768d2e6e88fbdd4eecd7b5061d5f58059cf8432fd5834463086"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob112_always_case2_test.sv",
+        "Prob112_always_case2_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.1243829857558012
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "compile_failure",
+    "file_sha256": {
+      "candidate.sv": "668b0851a7e505ef26a6be955161164f3e00918d09a9da7d417a29f982f063c0",
+      "Prob112_always_case2_ref.sv": "1381f5ab0ed243628965c0d2c89bd792f0455a6c9a8e3b113fa380e2590e94ec",
+      "Prob112_always_case2_test.sv": "baf60f2facbac768d2e6e88fbdd4eecd7b5061d5f58059cf8432fd5834463086"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob112_always_case2_test.sv",
+        "Prob112_always_case2_ref.sv"
+      ],
+      "returncode": 139,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.12308157421648502
+    },
+    "simulation": null,
+    "pre_official_analyzer_status": "compile_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "R"
+}

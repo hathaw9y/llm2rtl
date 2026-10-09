@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1,
+      "d": 1
+    },
+    "outputs": {
+      "q": 1
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "kind": "combinational",
+    "equation": "q = (a | b) & (c | d)",
+    "evidence": "problem.txt explicitly requires combinational logic; its 0..90 ns waveform covers every binary input combination.",
+    "latency": "No clock or pipeline; output follows current inputs after combinational settling.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "At time 0 inputs 0000 require q=0 after combinational settling; no stored state."
+  },
+  "numeric": {
+    "widths": "All ports are one bit.",
+    "domain": "Binary truth table is fully specified.",
+    "arithmetic": "Bitwise Boolean operations; no signed arithmetic, rounding, overflow or saturation."
+  },
+  "verification": {
+    "oracle": "Literal input/output rows transcribed from original problem, independent of RTL equation.",
+    "timing": "Replay rows at original 0,5,...,90 ns timestamps; sample 1 ps after each drive to allow delta settling.",
+    "coverage": "19 original rows, all 16 binary combinations; repeated reverse-order truth-table sweep verifies combinational response independent of history.",
+    "failure": "Case-inequality mismatches call $fatal; bounded timeout; explicit PASS after checks.",
+    "commands": [
+      "python3 smoke_environment.py",
+      "python3 validate_contract.py",
+      "python3 dev_check.py --label initial"
+    ]
+  },
+  "specification_ambiguities": [
+    "X/Z input behavior is not specified by the original binary waveform; implementation uses natural four-state bitwise semantics without additional requirements."
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 1
+      },
+      "state": {
+        "direction": "input",
+        "width": 10,
+        "range": "9:0"
+      },
+      "next_state": {
+        "direction": "output",
+        "width": 10,
+        "range": "9:0"
+      },
+      "out1": {
+        "direction": "output",
+        "width": 1
+      },
+      "out2": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "type": "Pure combinational state transition and Moore output logic; no state flip-flops",
+    "clock_reset_initialization": "No clock, reset, storage, or initialization ports/behavior. Outputs follow current inputs after combinational settling.",
+    "encoding": "state[i] represents active Si; multiple active bits are permitted; contributions combine by OR. Zero state gives zero next_state and outputs.",
+    "transitions_by_input": {
+      "0": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        9,
+        0,
+        0,
+        0
+      ],
+      "1": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        7,
+        1,
+        1
+      ]
+    },
+    "outputs": {
+      "out1": "state[8] OR state[9]",
+      "out2": "state[7] OR state[9]"
+    }
+  },
+  "numeric": {
+    "representation": "Unsigned 10-bit bitsets and one-bit Boolean input/outputs",
+    "operations": "Only Boolean AND, OR and NOT; no arithmetic, rounding, overflow, saturation, or truncation",
+    "bit_order": "Bit i corresponds to Si for both state and next_state"
+  },
+  "verification": {
+    "plan": "Independent table-driven oracle: iterate all 1024 state bitsets and both input values; for each active source state OR its table-selected destination and Moore outputs. Compare all 12 output bits after settling.",
+    "coverage": "2048 binary cases including zero-hot, every one-hot state, and all multi-hot combinations",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts; static inspection for combinational completeness"
+  },
+  "specification_ambiguities": [
+    "X/Z input behavior is unspecified; exhaustive verification covers binary inputs only."
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790753472.3290987,
+      "source_sha256": "cff02b4082917b934fd56b25a756d1846dd993a0b6045ae42921e927b0916794",
+      "testbench_sha256": "43de94678d74d3f469aaf0808faa02f71aa2937f03a3c2e67dcd7e77792adcd9",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob013_m2014_q4e/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.010835174471139908
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS NOR truth table and transitions (9 checks)\ndev_tb.sv:31: $finish called at 9000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.005412374623119831
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_gate": {
+    "status": "passed_structure_only",
+    "checked_at_unix": 1790753443.5702937,
+    "contract_sha256": "97d5d80d3615ff279f17f49a73958e95dd22dbd3ff03c7f3d2e29dda3f005048"
+  },
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "X/Z inputs are not explicitly specified by the original problem and are not tested.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_tb_changes": {
+    "rtl": "Initial implementation uses one-bit continuous bitwise NOR; no revisions.",
+    "testbench": "Initial independent explicit truth-table oracle, repeated input transitions, case-inequality mismatch checks and bounded timeout; no revisions.",
+    "contract": "Frozen before RTL and structurally validated; no corrections."
+  },
+  "static_review": "Exact TopModule ports and widths preserved; combinational output with no added ports, state, reset or latency.",
+  "initial_snapshot_unchanged": true
+}

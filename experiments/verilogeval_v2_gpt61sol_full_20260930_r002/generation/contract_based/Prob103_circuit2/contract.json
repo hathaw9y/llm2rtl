@@ -1,0 +1,49 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1,
+      "d": 1
+    },
+    "outputs": {
+      "q": 1
+    },
+    "clock": null,
+    "reset": null,
+    "evidence": "Original interface lists only a, b, c, d and q, each one bit."
+  },
+  "semantics": {
+    "function": "q = ~(a ^ b ^ c ^ d)",
+    "behavior": "Pure combinational even parity, no state or added latency.",
+    "initialization": "At time 0, inputs 0000 imply q=1 after combinational delta settling; no reset or stored initial state.",
+    "evidence": "Original states combinational circuit; waveform enumerates all 16 combinations from 0000 through 1111, with q=1 for even population count."
+  },
+  "numeric": {
+    "input_width": 1,
+    "output_width": 1,
+    "interpretation": "Boolean bits",
+    "rounding": "not applicable",
+    "overflow": "not applicable"
+  },
+  "verification": {
+    "oracle": "Literal expected outputs transcribed from original waveform, independent of parity implementation.",
+    "timing": "Drive original rows at 0,5,10,15,20,...,90 ns; check after delta settling at the same timestamp.",
+    "coverage": "All original 19 rows, all 16 binary combinations, reverse-order truth-table replay to check history independence.",
+    "failure": "$fatal on mismatch; bounded timeout; PASS printed only after all checks.",
+    "commands": [
+      "python3 smoke_environment.py",
+      "python3 validate_contract.py",
+      "python3 dev_check.py --label initial"
+    ]
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z inputs",
+      "evidence": "Original waveform contains only binary inputs.",
+      "resolution": "No X/Z acceptance requirement inferred; natural four-state XOR behavior is outside verified scope."
+    }
+  ]
+}

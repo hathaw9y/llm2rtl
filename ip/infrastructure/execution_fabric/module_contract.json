@@ -1,0 +1,126 @@
+{
+  "schema": "llm2rtl.infrastructure_integration.v1",
+  "module_id": "execution_fabric",
+  "version": 1,
+  "status": "frozen_for_implementation",
+  "purpose": "connect the sparse ISA dispatcher, direction-local DataMover engine, valid-ready stream bank adapters, and sparse local-memory subsystem while leaving vendor DataMover IP and GEMM arithmetic as explicit top-level boundaries",
+  "clock_reset": {
+    "clock": "aclk",
+    "reset": "synchronous active-low aresetn",
+    "target_period_ns": 5.0,
+    "target_part": "xczu7ev-ffvc1156-2-e",
+    "tool": "Vivado 2025.2"
+  },
+  "fixed_configuration": {
+    "BANK_NUM": 16,
+    "BANK_WORD_BYTES": {"0": 16, "1": 16, "2": 16, "3": 128, "4_to_15": 1},
+    "BANK_CAPACITY_BYTES": {"0": 32768, "1": 65536, "2": 1048576, "3": 131072, "4_to_15": 1},
+    "MM2S_supported_banks": [0, 1, 2],
+    "S2MM_supported_banks": [3],
+    "GEMM_ports": {"ACT": 1, "WGT": 2, "OUT": 3},
+    "bank_read_latency": 3,
+    "datamover_stream_width_bits": 64
+  },
+  "children": {
+    "dispatcher": {
+      "module": "sparse_isa_dispatcher",
+      "index": "ip/infrastructure/sparse_isa_dispatcher/module_index.json",
+      "index_sha256": "abe0b9532cb184e711b8357590eab7c24cfd1a12e092d693e506b39294d3f683",
+      "rtl_sha256": "9305b7f5b104c2a1373f718272ce8db3eacced8b1dcff97f7690d78de72b2569",
+      "verification_report": "ip/infrastructure/sparse_isa_dispatcher/evidence/run_002/independent_verification/module_verification_report.json",
+      "verification_sha256": "349b25bc5afbcaee0520cc6204331d94cbc510ca18f08b9483f2f0df323bff20"
+    },
+    "datamover_engine": {
+      "module": "datamover_engine",
+      "index": "ip/infrastructure/datamover_engine/evidence/engine/run_003/integration_source_index.json",
+      "index_sha256": "01a43f663128d4bbb7f74677260ae2e88feaafe62eded8f6178a48cbcc51e82e",
+      "command_queue_rtl_sha256": "100b21a26a76baf436e67fdd8389cb020df5470cc4b19624ab6db96bee96d17c",
+      "verification_report": "ip/infrastructure/datamover_engine/evidence/engine/run_003/module_verification_report.json",
+      "verification_sha256": "67ae42cd960a433f2a2e570245734a94def949b142714b6da7bbc954909df38f"
+    },
+    "stream_adapters": {
+      "modules": ["mm2s_stream_bank_adapter", "s2mm_stream_bank_adapter"],
+      "index": "ip/infrastructure/stream_bank_adapters/module_index.json",
+      "index_sha256": "54c87cdb0f22cb268a55ca705a1b8b8bd3d856fec86400b7843e175ad525ffb0",
+      "verification_report": "ip/infrastructure/stream_bank_adapters/evidence/run_001/module_verification_report.json",
+      "verification_sha256": "6995b4f1b7508829fc6e29f1f668a2fa8d8360c312ae0dc830e792a40fcd30ea"
+    },
+    "bank_subsystem": {
+      "module": "bank_subsystem",
+      "index": "ip/infrastructure/bank_subsystem/module_index.json",
+      "index_sha256": "e13b62631b2a041842441fb7d0812181586a8ce48fff35f9d0f99075cc46d4ef",
+      "verification_report": "ip/infrastructure/bank_subsystem/evidence/run_001/integration_verification_report.json",
+      "verification_sha256": "e5c3f37a3eff5b92bc6cc4ed9550572cf287ab01970b35e4cb6e9e6354a2cdf4"
+    }
+  },
+  "instances": {
+    "sparse_isa_dispatcher": 1,
+    "datamover_engine": 1,
+    "mm2s_stream_bank_adapter": {"count": 3, "banks": [0, 1, 2]},
+    "s2mm_stream_bank_adapter": {"count": 1, "banks": [3]},
+    "bank_subsystem": 1
+  },
+  "public_boundaries": {
+    "command_bram_native_read": ["cmd_enb", "cmd_addrb", "cmd_doutb"],
+    "run_control": ["cmd_dispatcher_start", "cmd_dispatcher_busy", "cmd_dispatcher_done", "cmd_dispatcher_error", "cmd_dispatcher_error_code", "current_pc"],
+    "vendor_datamover": "both MM2S and S2MM command, payload, and status AXI-Stream interfaces are exposed unchanged",
+    "gemm_control": "dispatcher GEMM request and completion handshake are exposed to an external GEMM core; compute operands are banks and dimensions only, and the compatibility out_base_addr output is fixed to zero",
+    "gemm_memory": "ACT bank1 read, WGT bank2 read, and OUT bank3 read/write request ports are valid-ready; their read responses are ready-less valid pulses exactly three cycles after an accepted request",
+    "recovery": ["mm2s_pause", "mm2s_abort", "s2mm_pause", "s2mm_abort"],
+    "diagnostics": "engine fault/status diagnostics and all bank-subsystem error outputs remain observable"
+  },
+  "wiring_rules": [
+      "dispatcher DMA command address, byte count, low 23 bits of byte offset, and bank connect to the matching DataMover engine direction; the dispatcher rejects any DMA command with nonzero local_offset bits 31 through 23 before acquisition",
+    "dispatcher DMA command tag is a bank identity and is not connected to the DataMover engine internal sequence tag",
+      "DataMover engine completion_bank connects to dispatcher s_ctrl direction status tag; completion_valid, completion_error_code, and completion_ready connect by direction",
+    "DataMover engine completion_tag and completion_received_tag remain external diagnostics for vendor status correlation",
+    "MM2S grant for bank i is asserted only when engine request i is high and bank i is busy with owner MM2S; only banks 0, 1, and 2 can grant",
+    "S2MM grant for bank 3 is asserted only when engine request 3 is high and bank 3 is busy with owner S2MM; every other S2MM grant is zero",
+    "each supported engine adapter start, abort, offset, payload, done, and ready signal connects only to its fixed-bank adapter instance",
+    "the three MM2S adapter write outputs share the bank-subsystem MM2S port through a fixed three-input one-hot mux; ready returns only to the selected valid adapter",
+    "the bank3 S2MM adapter connects directly to the bank-subsystem S2MM request/response port",
+    "dispatcher acquire and release vectors connect directly to bank_subsystem ownership inputs; bank state returns directly to dispatcher",
+    "GEMM control does not bypass dispatcher ownership; external GEMM memory traffic reaches only the typed ACT, WGT, and OUT ports of bank_subsystem",
+    "unsupported adapter-array entries are tied inactive and cannot generate a memory request"
+  ],
+  "start_and_address_semantics": {
+    "dispatcher_start": "public cmd_dispatcher_start is a one-cycle pulse; holding it high across DONE or ERROR is forbidden because that requests an immediate new run",
+    "adapter_start": "DataMover engine adapter start is a level held through the transaction until adapter done; the fabric must not edge-detect or pulse-shorten it",
+    "gemm_bank_base": "ACT bank1 WGT bank2 and OUT bank3 native word address zero are implicit operation bases; GEMM does not accept a data-bank address operand",
+    "gemm_compatibility_out_base_addr": "must be 32'd0 and may not be interpreted as a DDR or local-memory address"
+  },
+  "protocol_invariants": [
+    "all valid-ready payloads remain stable while valid is high and ready is low",
+    "at most one MM2S adapter may assert bank_write_valid in a cycle",
+    "an engine grant implies both a matching engine request and matching bank ownership",
+    "DMA completion cannot release a bank from the vendor sequence tag; release identity comes only from completion_bank",
+    "no bank payload access occurs before the corresponding ownership acquisition is visible",
+    "END completes only after dispatcher pending operations and bank ownership drain",
+    "DataMover descriptor error codes 01 through 06 release the matching bank because no payload operation remains active",
+    "DataMover transport and recovery error codes 10 20 30 40 and 50 retain the matching pending bit and ownership until explicit recovery/reset; the fabric does not invent an automatic release",
+    "command BRAM is outside the data-bank namespace and is never bank 0"
+  ],
+  "required_integration_tests": [
+    "source identity and closed-source elaboration for every consumed child",
+    "command BRAM program MM2S bank1 then GEMM banks1/2/3 then S2MM bank3 then END",
+    "concurrent MM2S loads to different supported banks are accepted in program order without duplicate memory writes",
+    "vendor command backpressure and payload backpressure preserve command and data",
+    "MM2S payload reaches the selected bank exactly through packing and byte strobes",
+    "GEMM BFM reads exact ACT and WGT payloads and writes an exact OUT payload only while owners 3 4 5 are held",
+    "S2MM serializes the exact bank3 payload with correct keep and last",
+    "engine internal sequence tag differing from bank ID still releases the correct bank through completion_bank",
+    "invalid descriptor produces ordered error completion with no vendor command and no memory touch",
+    "DataMover transport fault holds the bank and requires recovery",
+    "reset, repeated program, END drain, and all sticky error outputs",
+    "Vivado XSIM, lint/elaboration, and 5 ns OOC synthesis with no black boxes or unconstrained clock paths"
+  ],
+  "does_not_claim": [
+    "vendor DataMover IP implementation",
+    "GEMM or systolic-array arithmetic implementation",
+    "AXI BRAM Controller implementation",
+    "PS or board block design",
+    "post-route timing",
+    "bitstream",
+    "physical-board validation"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "outcome": "passed",
+      "details": "Six Moore states retain direction through falling and digging. Walking precedence is fall, dig, then the bump in the current walking direction. Positive-edge asynchronous areset selects walking left. Combinational next-state defaults and illegal-state recovery are present; sequential assignments are nonblocking."
+    },
+    {
+      "name": "Icarus development compile",
+      "outcome": "tool_failed",
+      "exit_code": 139,
+      "timeout_seconds": 30,
+      "top": "dev_tb",
+      "language_option": "-g2012",
+      "log": "dev_compile.log",
+      "status_file": "dev_compile_status.json",
+      "details": "Compile exited with code 139 and emitted no diagnostics. No development simulation was run."
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate retained without revisions. Independent self-checking testbench created, but compile tool failure prevented dynamic validation.",
+  "limitations": [
+    "No successful development compile or simulation; testbench coverage is planned, not demonstrated.",
+    "No synthesis, timing analysis, or board testing performed.",
+    "Official evaluation is external and its results are unavailable."
+  ],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"]
+}

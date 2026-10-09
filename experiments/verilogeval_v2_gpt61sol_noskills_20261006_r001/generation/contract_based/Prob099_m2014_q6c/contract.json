@@ -1,0 +1,54 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "y": 6,
+      "w": 1
+    },
+    "outputs": {
+      "Y1": 1,
+      "Y3": 1
+    },
+    "ports_only": true
+  },
+  "semantics": {
+    "kind": "combinational next-state bit equations",
+    "encoding": {
+      "A": 1,
+      "B": 2,
+      "C": 4,
+      "D": 8,
+      "E": 16,
+      "F": 32
+    },
+    "Y1": "Next y[1]: A transitions to B only when w=0",
+    "Y3": "Next y[3]: B,C,E,F transition to D only when w=1",
+    "reset": "State machine resets to A, but this interface has no reset or state storage; y is supplied externally. At y=A,w=0 outputs are 1,0; at y=A,w=1 outputs are 0,0.",
+    "timing": "No clock, latency or initialized storage specified; outputs respond combinationally to y,w."
+  },
+  "numeric": {
+    "widths": "6-bit one-hot state; single-bit input and outputs",
+    "equations": {
+      "Y1": "y[0] & ~w",
+      "Y3": "(y[1] | y[2] | y[4] | y[5]) & w"
+    },
+    "invalid_states": "No recovery specified; use inspected one-hot Boolean equations without validity gating."
+  },
+  "verification": {
+    "oracle": "Original transition list independently mapped to destination state indices, then project bits 1 and 3.",
+    "coverage": "All six legal states with both w values, zero and multi-hot extension via union of per-state transitions, directed unknown-input propagation",
+    "sampling": "Drive inputs then wait one time unit for combinational settling",
+    "success": "Fatal on mismatches; bounded timeout and PASS after all checks"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Corrupted prose names Y2 and Y4 while interface lists Y1 and Y3.",
+      "resolution": "Preserve declared Y1/Y3 ports and compute explicitly requested next y[1]/y[3]."
+    },
+    {
+      "issue": "Behavior for non-one-hot states is not separately defined.",
+      "resolution": "Implement Boolean equations by inspection; additional development cases test this equation extension, not an asserted FSM recovery requirement."
+    }
+  ]
+}

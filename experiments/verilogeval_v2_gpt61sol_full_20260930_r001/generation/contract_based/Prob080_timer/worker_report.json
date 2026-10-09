@@ -1,0 +1,56 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial snapshot",
+      "outcome": "candidate_initial.sv preserved immediately after writing candidate.sv, before checks; final candidate identical",
+      "passed": true
+    },
+    {
+      "name": "static review",
+      "outcome": "One unsigned 10-bit register; rising-edge nonblocking updates; load priority; sized subtract with zero hold; combinational zero detect; exact ports; no reset or initialization; no dependencies or simulation constructs in DUT."
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "outcome": "failed; no diagnostics or executable",
+      "log": "compile_retry.log",
+      "status_file": "compile_status.json"
+    },
+    {
+      "name": "development simulation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "exit_code": 255,
+      "outcome": "could not run because executable missing",
+      "log": "simulation_retry.log"
+    },
+    {
+      "name": "orchestration error",
+      "outcome": "Initial shell used read-only zsh status variable; retry used compile_result and sim_result. All errors retained in development_errors.log; no RTL change."
+    }
+  ],
+  "development_outcome": "Best RTL delivered with frozen contract and static review. Development simulation not successful because compiler exited 139.",
+  "limitations": [
+    "No functional simulation pass established.",
+    "No synthesis, timing or board evidence produced.",
+    "Power-up state is unspecified until load, as the problem provides no reset or initialization.",
+    "Single D flip-flop wording interpreted as one 10-bit state register to satisfy the explicit timer behavior.",
+    "Official evaluation was not accessed and its result is unknown."
+  ],
+  "artifacts": [
+    "candidate.sv",
+    "candidate_initial.sv",
+    "contract.json",
+    "dev_tb.sv",
+    "worker_report.json",
+    "development_errors.log"
+  ]
+}

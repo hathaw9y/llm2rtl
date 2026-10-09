@@ -1,0 +1,198 @@
+{
+  "schema": "llm2rtl.isa_candidate_note.v1",
+  "status": "proposal_only_not_reviewed_isa",
+  "model_id": "Qwen/Qwen2.5-0.5B",
+  "user_decisions_path": "verification/research/qwen2_5_0_5b_initial_review/user_decisions.json",
+  "warning": "This is a discussion artifact, not isa_spec.json, not a runtime trace, not an interpreter validation result and not an implementation contract.",
+  "instruction_transport": "existing separate PS-writable command BRAM; END followed by outstanding drain; strict in-order current-PC issue",
+  "numeric_opcode_encoding": "not_assigned",
+  "opcodes": [
+    {
+      "name": "DMA_LOAD",
+      "class": "dma_load",
+      "tensor_operands": [
+        "DDR source address",
+        "destination local bank ID"
+      ],
+      "executor": "DataMover"
+    },
+    {
+      "name": "DMA_STORE",
+      "class": "dma_store",
+      "tensor_operands": [
+        "source local bank ID",
+        "DDR destination address"
+      ],
+      "executor": "DataMover"
+    },
+    {
+      "name": "GEMM",
+      "class": "compute",
+      "executor": "shared GEMM",
+      "modes": [
+        "W4 codes x BF16, group FP32 scaling/accumulation",
+        "BF16 x BF16, FP32 accumulation"
+      ],
+      "tensor_operands": [
+        "activation local bank",
+        "weight or dynamic B local bank",
+        "optional FP32 scale local bank",
+        "FP32 partial/result local bank"
+      ],
+      "numeric_semantics": "as agreed in user_decisions; INIT/ACCUM/FINAL and exact reductions still pending"
+    },
+    {
+      "name": "RMSNORM",
+      "class": "compute",
+      "executor": "RMSNorm",
+      "tensor_operands": [
+        "activation local bank",
+        "BF16 gamma local bank",
+        "output local bank"
+      ],
+      "algorithm": "pending"
+    },
+    {
+      "name": "ROPE",
+      "class": "compute",
+      "executor": "RoPE",
+      "tensor_operands": [
+        "Q or K local bank",
+        "rotary table local bank",
+        "output local bank"
+      ],
+      "table_and_arithmetic_semantics": "pending"
+    },
+    {
+      "name": "SOFTMAX_MASKED",
+      "class": "compute",
+      "executor": "masked softmax",
+      "tensor_operands": [
+        "score local bank",
+        "probability local bank"
+      ],
+      "responsibilities": [
+        "score scaling",
+        "causal mask",
+        "stable softmax"
+      ],
+      "algorithm_and_formats": "pending"
+    },
+    {
+      "name": "VECTOR",
+      "class": "compute",
+      "executor": "shared vector",
+      "proposed_modes": [
+        "BIAS_ADD_FP32_TO_BF16",
+        "RESIDUAL_ADD",
+        "SILU_MUL",
+        "W4_EMBEDDING_DEQUANT",
+        "CAST_FP32_TO_BF16"
+      ],
+      "mode_coverage_status": "DEQUANT/CAST/LAYOUT modes agreed; exact mode packing and numerical/layout details pending",
+      "tensor_operands": "logical local bank IDs only"
+    },
+    {
+      "name": "END",
+      "class": "control",
+      "executor": "dispatcher drain",
+      "tensor_operands": []
+    }
+  ],
+  "compute_forbidden_operands": [
+    "external DDR address",
+    "raw local address",
+    "local bank base",
+    "local bank offset"
+  ],
+  "source_lifetime_flags": "Per-source last_use flags agreed; encoding and descriptor implementation pending",
+  "bank_layout": "not_finalized",
+  "command_record_width_and_capacity": "agreed 256-bit x 1024 records; packing pending",
+  "python_ISA_interpreter_validation": "not_performed",
+  "module_RTL_implementation_authorized": false,
+  "normal_chunk_state_retention": "agreed for required bank data, valid descriptors and KV; exact chunk protocol pending",
+  "command_memory_proposal": {
+    "status": "agreed_capacity_and_single_memory_policy_record_packing_pending",
+    "record_bits": 256,
+    "record_count": 1024,
+    "logical_command_memory_bytes": 32768,
+    "max_non_END_records_per_chunk": 1023,
+    "single_logical_command_memory": true,
+    "double_buffering_selected": false,
+    "record_width_reason": "Existing fixed DMA fields plus model-specific shape, mode, scale-bank, identity and lifetime flags; exact packing remains pending.",
+    "single_logical_memory_is_not_one_physical_BRAM_primitive": true,
+    "normal_chunk_protocol_candidate": [
+      "PS waits for previous successful DONE and confirms idle",
+      "PS writes complete next program image including terminal END",
+      "PS performs required memory/cache visibility ordering",
+      "PS publishes START",
+      "PL starts command PC at zero and executes without resetting preserved tensor/KV state"
+    ],
+    "PS_program_mutation_while_BUSY": "forbidden",
+    "actual_BRAM_primitive_count": "must verify in synthesis",
+    "fixed_record_alignment": "pending",
+    "user_selection": "어"
+  },
+  "additional_control_instruction_proposal": {
+    "status": "agreed_initial_control_policy_schedule_validation_pending",
+    "candidate": "Initially use END as the only explicit terminal/drain control instruction; no FENCE, LOOP, JUMP, standalone bank invalidation opcode or double-buffered command memory.",
+    "local_dependency_rule": "The current-PC scoreboard waits for matched completion and exclusive ownership release on operand banks.",
+    "DDR_alias_hazard_example": [
+      "DMA_STORE local bank A to DDR region R",
+      "DMA_LOAD overlapping DDR region R to distinct local bank B"
+    ],
+    "DDR_alias_hazard_reason": "Distinct local banks do not create a scoreboard dependency; request issue order alone does not prove DDR write-to-read visibility.",
+    "alias_ordering_candidate": [
+      "Reuse a common local bank when valid for capacity/layout and lifetime, so its ownership enforces completion before dependent issue",
+      "Otherwise split after the store at END; PS waits for successful DONE before publishing the dependent load chunk"
+    ],
+    "compiler_requirement": "Analyze explicit DMA address ranges and read/write ordering; reject or split unsafe programs rather than relying on implicit DDR hazards.",
+    "loop_distinction": "GEMM internally iterates over agreed local-bank compute tiles, K16 steps and group128 processing; PS emits explicit DDR-residency tiles. These do not require ISA LOOP/JUMP.",
+    "cost": "Additional chunk boundaries can increase PS publication overhead; this must be reported in end-to-end latency. A future FENCE or double buffer requires measured benefit and user discussion.",
+    "actual_model_schedule_and_command_count": "pending bank inventory/layout and runtime lowering",
+    "scope_change_rule": "Any future FENCE/LOOP/JUMP/double buffer addition requires design discussion, updated contracts and affected validation.",
+    "user_selection": "ㅇㅇ 그렇게 하자"
+  },
+  "additional_control_instruction_decision": {
+    "status": "agreed",
+    "user_selection": "ㅇㅇ 그렇게 하자",
+    "explicit_terminal_control": "END",
+    "FENCE_selected": false,
+    "LOOP_selected": false,
+    "JUMP_selected": false,
+    "standalone_bank_invalidation_selected": false,
+    "command_double_buffering_selected": false,
+    "DDR_alias_ordering": "Use a common operand bank ownership dependency where valid for capacity/layout; otherwise end the store chunk and wait for successful DONE before publishing dependent loads.",
+    "PS_generator_obligation": "Validate DMA read/write address-range dependencies and split unsafe schedules; request issue order alone is insufficient for different-bank DDR aliases.",
+    "GEMM_internal_iterations": "local-bank K16/N4 compute loops and group128 processing, not ISA control loops",
+    "PS_residency_iterations": "explicit instruction records in END-terminated program chunks",
+    "performance_accounting": "Include all chunk load/publication and boundary costs in end-to-end latency.",
+    "future_changes": "Discuss necessity/cost and update affected contracts and evidence before adding control instructions or buffering."
+  },
+  "vector_conversion_layout_proposal": {
+    "status": "agreed_modes_implementation_details_pending",
+    "executor": "existing agreed shared vector executor",
+    "proposed_additional_modes": [
+      {
+        "mode": "W4_EMBEDDING_DEQUANT",
+        "operation": "Reconstruct explicitly DMA-loaded shared embedding W4 codes and FP32 group scales to BF16 embedding activations. Runtime PS supplies token-derived DMA addresses only."
+      },
+      {
+        "mode": "CAST_FP32_TO_BF16",
+        "operation": "Round completed FP32 GEMM result banks to BF16 activation banks using the agreed final rounding policy."
+      },
+      {
+        "mode": "LAYOUT",
+        "operation": "Copy/extract/pack head and tensor tiles between distinct logical bank handles according to an explicitly defined tensor layout. No raw local address/offset tensor operand."
+      }
+    ],
+    "purpose": "Ensure embedding reconstruction, numeric conversion and required head/tile movement are explicitly lowered and executed in PL.",
+    "module_boundary_change": "Add modes to the agreed shared vector executor, not a new dedicated compute executor.",
+    "bank_layout_and_semantic_selectors": "pending",
+    "float_conversion_details": "pending",
+    "transpose_or_GQA_replication_materialization": "not_assumed; assess supported GEMM layouts and reuse before selecting extra movement",
+    "RTL_implementation_authorized": false,
+    "user_selection": "그렇게 하자"
+  },
+  "bank_candidate_path": "verification/research/qwen2_5_0_5b_initial_review/bank_candidate.json"
+}

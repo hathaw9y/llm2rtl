@@ -1,0 +1,29 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"clk": 1, "areset": 1, "j": 1, "k": 1},
+    "outputs": {"out": 1}
+  },
+  "semantics": {
+    "kind": "Two-state Moore FSM",
+    "clock": "Transitions at rising edges of clk; conventional FSM edge interpretation for the specified clk input.",
+    "reset": "Active-high asynchronous areset forces OFF, as explicitly stated in problem.txt; reset dominates clock transitions while asserted.",
+    "transitions": {"OFF": "j=0 holds OFF; j=1 enters ON; k irrelevant", "ON": "k=0 holds ON; k=1 enters OFF; j irrelevant"},
+    "output": "OFF gives out=0; ON gives out=1, directly decoded from current state without extra latency.",
+    "initialization": "No power-up state is specified; no initialized register or pre-reset output guarantee is added.",
+    "reset_release": "Deassertion alone causes no transition; next rising clock edge samples the inputs."
+  },
+  "numeric": {"port_widths": "All ports are one bit as specified", "state_width": 1, "arithmetic": "None"},
+  "verification": {
+    "oracle_basis": "Original problem.txt transition diagram and asynchronous reset statement",
+    "sampling": "Observe out after NBA settling at rising edges; also verify stability between clock edges and asynchronous reset response away from edges.",
+    "directed": "All four j,k combinations from each state, repeated transitions, irrelevant-input changes, held reset, reset from ON, reset release with j asserted.",
+    "checks": "Self-checking dev_tb with fatal mismatches, bounded timeout and final PASS; run unchanged dev_check.py --label initial.",
+    "scope": "Development simulation only; no official evaluation or synthesis."
+  },
+  "specification_ambiguities": [
+    {"topic": "Clock edge", "evidence": "Problem specifies clk and FSM but does not explicitly name an edge", "interpretation": "Use conventional rising-edge state update"},
+    {"topic": "Power-up and unknown inputs", "evidence": "Only reset-to-OFF and binary transitions are specified", "interpretation": "Do not impose pre-reset or X/Z-input behavior in the oracle"}
+  ]
+}

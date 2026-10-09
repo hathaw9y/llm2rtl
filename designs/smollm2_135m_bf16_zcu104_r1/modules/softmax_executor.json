@@ -1,0 +1,41 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "softmax_executor",
+  "module_kind": "opcode_executor",
+  "opcode": "SOFTMAX",
+  "status": "frozen",
+  "target": {
+    "board": "ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 150
+  },
+  "interface": {
+    "rtl_module": "smollm2_softmax_executor",
+    "compute_channel": 4,
+    "request": "opcode 7, bank B10 only, query_start bits [26:17], m_count [16:11] in 1..32, kv_len [10:0] in 1..1024, query_start+m_count<=kv_len, all other payload bits zero",
+    "response": "held done_valid/done_ready, tag B10, bank_count=1, B10 release and error",
+    "bank_role": 14,
+    "bank_word_bits": 128,
+    "layout": "B10 [m_count,9,ceil(kv_len/8)] words, eight BF16 lanes per word; padded and future key lanes store zero probabilities",
+    "completion_order": "after last in-place B10 write handshake"
+  },
+  "architecture": {
+    "algorithm": "three passes per row/head: finite valid-score maximum, interpolated exponential sum, reread and in-place probability write",
+    "mask": "key index <= query_start+row; arbitrary padding masks and custom position IDs unsupported",
+    "in_place_safety": "each output word is read before its own write; no earlier score is required after the third pass reaches it"
+  },
+  "numeric": {
+    "score": "BF16 finite valid lanes converted to signed Q16.16 with round-to-nearest-even and saturation",
+    "exponential": "exp(-x) lookup over [0,24) with 1/32 spacing in unsigned Q0.30, linear interpolation rounded to nearest; x>=24 returns zero",
+    "normalization": "41-bit Q0.30 sum, restoring 2^60/sum integer reciprocal, Q0.30 probability and BF16 round-to-nearest-even",
+    "reference": "first-layer SmolLM2-135M checkpoint revision 93efa2f097d58c2a74874c7e644dbc9b0cee75a2, FP32 stable causal softmax followed by BF16 cast",
+    "observed_error": "standalone RTL prefill32 9216/9216, decode1 360/360 including padding, and synthetic context1024 9216/9216 all within 2 BF16 ULP; maximum observed 1 ULP"
+  },
+  "verification": {
+    "standalone": "XSIM golden and illegal-command cases pass; 150 MHz OOC synthesis WNS +0.781 ns, LUT 1281, BRAM tile 2, DSP 7",
+    "integration": "cumulative RTL XSIM prefill32 and decode1 pass with GPIO-provided pinned scores; ATTN_SCORE arithmetic remains a probe",
+    "physical_board": "pending user run of new BIT/ELF"
+  }
+}

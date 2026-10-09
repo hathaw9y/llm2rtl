@@ -1,0 +1,41 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1
+    },
+    "outputs": {
+      "out": 1
+    },
+    "evidence": "problem.txt: listed input a, input b, output out; all ports one bit"
+  },
+  "semantics": {
+    "function": "out is 1 for 00 and 11, and 0 for 01 and 10",
+    "timing": "Combinational; no clock, state, or additional latency",
+    "reset": "No reset port or reset behavior specified",
+    "initialization": "No stored state or initialization specified; output follows current inputs",
+    "evidence": "problem.txt: The module should implement an XNOR gate"
+  },
+  "numeric": {
+    "width": 1,
+    "operation": "bitwise XNOR",
+    "signedness": "unsigned single bits",
+    "rounding_overflow": "not applicable"
+  },
+  "verification": {
+    "oracle": "Explicit original XNOR truth table, independent of DUT expression",
+    "coverage": "All four binary input pairs, repeated transitions changing each input",
+    "sampling": "Sample after 1 ns combinational settling; no clock sampling",
+    "failure": "Case-inequality comparisons with $fatal; bounded timeout",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z input behavior",
+      "evidence": "Original problem defines an XNOR gate without explicit four-state cases",
+      "resolution": "Use standard SystemVerilog bitwise XNOR propagation; required truth-table oracle covers binary inputs"
+    }
+  ]
+}

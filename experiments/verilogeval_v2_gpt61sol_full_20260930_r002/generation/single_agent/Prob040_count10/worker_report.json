@@ -1,0 +1,39 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "self_check_count": 416
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed.",
+    "Pre-reset state is unspecified by the original problem and is not constrained by the testbench."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": [
+    "candidate.sv",
+    "candidate_initial.sv"
+  ],
+  "testbench_files": [
+    "dev_tb.sv"
+  ],
+  "interface_cycle_semantics": "TopModule(clk, reset, q[3:0]); positive-edge decade counter; active-high synchronous reset to zero; 9 wraps to 0 on next rising edge.",
+  "numeric_width_decisions": "4-bit unsigned counter with explicitly sized constants.",
+  "pipeline": "One update per rising clock edge; no extra latency.",
+  "static_review": "Single always_ff driver, nonblocking assignments, specified reset priority and modulo-10 wrap."
+}

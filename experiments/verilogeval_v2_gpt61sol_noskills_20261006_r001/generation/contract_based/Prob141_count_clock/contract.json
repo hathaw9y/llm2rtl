@@ -1,0 +1,19 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "ena": 1}, "outputs": {"pm": 1, "hh": 8, "mm": 8, "ss": 8}},
+  "semantics": {
+    "edge": "All state updates on positive clk edge, as explicitly specified.",
+    "reset": "Active high synchronous reset, higher priority than ena, sets hh=0x12, mm=0, ss=0, pm=0 (12:00 AM).",
+    "enable": "Each positive edge with ena=1 and reset=0 advances one second; ena=0 holds all outputs.",
+    "rollover": "Seconds and minutes carry at 59. Hours advance 01 through 12 then 01. AM/PM toggles at 11:59:59 to 12:00:00; 12:59:59 to 01:00:00 preserves AM/PM, implied by a 12-hour clock.",
+    "initialization": "No power-up value specified; no initial assignments; verification establishes known state through synchronous reset."
+  },
+  "numeric": {"encoding": "Two BCD nibbles per 8-bit time output", "hours": "01-12", "minutes": "00-59", "seconds": "00-59", "pm": "1 for PM, 0 for AM"},
+  "verification": {
+    "oracle": "Independent integer seconds since midnight converted to 12-hour BCD at comparisons, grounded in original clock specification.",
+    "sampling": "Drive inputs on falling edge and compare after rising edge NBA updates; also verify no changes before rising edge.",
+    "cases": "Reset with enable both low and high, enable holds, decimal carries, all hour transitions, noon and midnight over two full days, deterministic enable gaps and resets.",
+    "completion": "Fatal mismatch, bounded simulation timeout, explicit PASS only after all checks."
+  },
+  "specification_ambiguities": ["Power-up state and recovery from invalid BCD values are unspecified; neither is assigned additional behavior or required by the testbench."]
+}

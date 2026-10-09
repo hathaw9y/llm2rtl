@@ -1,0 +1,26 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "details": "Correct fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+    },
+    {
+      "name": "initial",
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "details": "Icarus 12 compilation and simulation passed; 15404 independent cycle checks."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation was not accessed.",
+    "No pre-reset output value is required by the specification; checks begin after synchronous reset."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Moore FSM tracks consecutive ones, asserts discard after five ones followed by zero, flag after six ones followed by zero, and error throughout runs of seven or more ones. Reset synchronously establishes the previous-zero state.",
+  "verification": "Independent run-length oracle checks all ten-bit streams, long error runs, recovery, reset at run boundaries, randomized continuous streams, and output stability between rising edges. Initial RTL snapshot preserved before development checks."
+}

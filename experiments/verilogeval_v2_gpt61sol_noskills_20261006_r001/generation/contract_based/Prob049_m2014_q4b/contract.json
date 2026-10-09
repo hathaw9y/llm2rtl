@@ -1,0 +1,51 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "ar": 1,
+      "d": 1
+    },
+    "outputs": {
+      "q": 1
+    }
+  },
+  "semantics": {
+    "clock": "Capture d at each positive edge of clk when reset is inactive; evidence: positive edge triggered D flip flop.",
+    "reset": "Asynchronously clear q to 0 when ar is asserted; assume active-high ar.",
+    "priority": "Asserted ar overrides d at a positive clock edge.",
+    "hold": "Hold q between positive clock edges unless reset is asserted; reset deassertion alone does not capture d.",
+    "initialization": "No initial state specified; no initialization added."
+  },
+  "numeric": {
+    "widths": "All ports are one bit as specified.",
+    "data": "q stores the sampled one-bit d without arithmetic."
+  },
+  "verification": {
+    "oracle": "Directed expected values derived from positive-edge D storage and asynchronous reset.",
+    "cases": [
+      "Data capture for 0 and 1",
+      "Data changes between edges",
+      "Falling edges hold state",
+      "Reset assertion between clock edges",
+      "Reset priority while d=1",
+      "Reset deassertion holds until next positive edge",
+      "Reset asserted while clock high and low"
+    ],
+    "sampling": "Check after 1 ns to allow nonblocking assignments to settle.",
+    "termination": "Fatal on mismatches and bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "reset polarity and value",
+      "evidence": "Original text says asynchronous reset ar without explicit polarity or value.",
+      "resolution": "Interpret uncomplemented ar as active high and reset as clearing q to zero."
+    },
+    {
+      "topic": "power-up state",
+      "evidence": "Original text specifies no initial value.",
+      "resolution": "Do not add initialization or require a particular power-up value in the oracle."
+    }
+  ]
+}

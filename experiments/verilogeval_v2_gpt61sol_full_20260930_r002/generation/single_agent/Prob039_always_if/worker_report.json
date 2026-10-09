@@ -1,0 +1,37 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "vectors_checked": 32,
+      "evidence": "dev_checks.jsonl and development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Exhaustive binary inputs tested; unspecified X/Z selector behavior is not asserted."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "One-bit combinational mux implemented with continuous assign and complete procedural if/else; unchanged original ports; no clock, reset, or added latency.",
+  "static_review": "Complete combinational assignment, single drivers, one-bit operands, no inferred latch.",
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  },
+  "synthesis_or_board_work": "Not performed as instructed."
+}

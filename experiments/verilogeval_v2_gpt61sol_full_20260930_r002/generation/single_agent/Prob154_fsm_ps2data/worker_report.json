@@ -1,0 +1,55 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790743975.8830154,
+      "source_sha256": "52253376a01bb7c47edb96d2d9b3c54fca96f8d18d1a681d19526ddb7a80e6df",
+      "testbench_sha256": "a2fc846bc961dc17c64c8fd9fadf869c84547ea824cdea756d9bfe43f4b657db",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob154_fsm_ps2data/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.013330736197531223
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS independent stream oracle and original waveform: 1546 edge checks\ndev_tb.sv:116: $finish called at 15457000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.015076220966875553
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed.",
+    "out_bytes is intentionally unspecified when done is low."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Four-state FSM with synchronous active-high reset; captures first byte when bit 3 is set, captures two following bytes, and asserts done for the cycle after the third-byte capture. COMPLETE also searches for the next first byte.",
+  "verification": "Environment smoke passed correct/fault/repair cases. Icarus 12 initial development check passed 1546 edge checks: original waveform timing, exhaustive first-byte and rejected-byte values, back-to-back packets, reset cancellation, between-edge reset pulse, and deterministic varied streams.",
+  "initial_snapshot_preserved": true
+}

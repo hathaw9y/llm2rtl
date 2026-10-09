@@ -1,0 +1,174 @@
+{
+  "schema": "llm2rtl.model_trace.v1",
+  "design_id": "qwen25_05b_w4_shared_zcu104",
+  "revision": "r1",
+  "model_identity": {
+    "model_id": "Qwen/Qwen2.5-0.5B",
+    "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "transformers_version": "4.46.3",
+    "source_path": "verification/research/qwen2_5_0_5b_initial_review/modeling_qwen2.py",
+    "source_sha256": "4568d588b45dd28152d97c37300a5e227589bc70b9fef5224af29977ecf6abdc"
+  },
+  "operations": [
+    {
+      "operation_id": "embedding_lookup",
+      "semantic_kind": "Token address lookup on PS; explicit W4 row/scale DMA and PL DEQUANT.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "rmsnorm",
+      "semantic_kind": "FP32 reduction/rsqrt, intermediate BF16, BF16 gamma multiply.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "weight_projection",
+      "semantic_kind": "Explicit activation extract, W4/scale DMA, group128 GEMM and BF16 conversion.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "bias",
+      "semantic_kind": "FP32 projection plus BF16 bias before BF16 output.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "rope_table",
+      "semantic_kind": "Fixed pinned-reference BF16 table DMA from DDR.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "rope_rotation",
+      "semantic_kind": "BF16 rounded products and sum, rotate-half per64 feature head.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "KV_append",
+      "semantic_kind": "Explicit per-token/head DMA_STORE; commit cache length only after workload success.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "KV_read",
+      "semantic_kind": "Explicit one-head context DMA_LOAD after DDR store dependency END.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "GQA_mapping",
+      "semantic_kind": "Seven Q heads reuse a KV head; no physical repeat tensor.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "QK_transpose",
+      "semantic_kind": "Shared BF16 GEMM with semantic transpose mode, FP32 score.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "scale_causal_softmax",
+      "semantic_kind": "BF16 QK/scale boundaries, explicit mask, FP32 stable approximate softmax, BF16 probability.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "PV",
+      "semantic_kind": "Shared BF16 GEMM, FP32 result, BF16 CAST.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "residual",
+      "semantic_kind": "BF16 residual add in vector.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "SiLU_times_up",
+      "semantic_kind": "FP32 approximate SiLU with intermediate BF16 before BF16 up multiply.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "head_layout",
+      "semantic_kind": "Semantic extract/insert between distinct bank handles, with coverage checks.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    },
+    {
+      "operation_id": "LM_head",
+      "semantic_kind": "Tied quantization codes/scales, independent DDR tile representation; last-token logits only.",
+      "source_location": "pinned modeling_qwen2.py; original_reference_trace/summary.json"
+    }
+  ],
+  "workloads": [
+    {
+      "workload_id": "prefill",
+      "operations": [
+        "embedding_lookup",
+        "rmsnorm",
+        "weight_projection",
+        "bias",
+        "rope_table",
+        "rope_rotation",
+        "KV_append",
+        "KV_read",
+        "GQA_mapping",
+        "QK_transpose",
+        "scale_causal_softmax",
+        "PV",
+        "residual",
+        "SiLU_times_up",
+        "head_layout",
+        "LM_head"
+      ],
+      "conditions": {
+        "batch": 1,
+        "tokens": [
+          9707,
+          11
+        ],
+        "prefix": 0,
+        "padding": false,
+        "last_logits_only": true
+      }
+    },
+    {
+      "workload_id": "decode",
+      "operations": [
+        "embedding_lookup",
+        "rmsnorm",
+        "weight_projection",
+        "bias",
+        "rope_table",
+        "rope_rotation",
+        "KV_append",
+        "KV_read",
+        "GQA_mapping",
+        "QK_transpose",
+        "scale_causal_softmax",
+        "PV",
+        "residual",
+        "SiLU_times_up",
+        "head_layout",
+        "LM_head"
+      ],
+      "conditions": {
+        "batch": 1,
+        "tokens": [
+          151643
+        ],
+        "prefix": 2,
+        "padding": false,
+        "last_logits_only": true
+      }
+    }
+  ],
+  "supported_scope": {
+    "max_prefill": 512,
+    "max_context": 1024,
+    "decode_rows": 1,
+    "layers": 24
+  },
+  "unobserved_paths": [
+    "An ISA-produced prefix1023 followed by decode1024 has not been numerically executed; boundary test uses a declared reference seed."
+  ],
+  "unsupported_paths": [
+    "batch>1",
+    "padding",
+    "custom/noncontiguous position IDs",
+    "sliding eviction",
+    "sampling/argmax",
+    "training/dropout"
+  ]
+}

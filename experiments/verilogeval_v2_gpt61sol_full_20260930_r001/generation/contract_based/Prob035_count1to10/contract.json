@@ -1,0 +1,50 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 4
+      }
+    }
+  },
+  "semantics": {
+    "clock": "All sequential updates occur on the positive edge of clk.",
+    "reset": "Active-high synchronous reset; reset sampled high at a rising edge sets q to 1 with priority over counting.",
+    "transition": "With reset low, each rising edge advances 1,2,3,4,5,6,7,8,9,10,1 and repeats.",
+    "between_edges": "q holds its value between rising edges, including when reset changes.",
+    "initialization": "No initial value is specified before a rising edge with reset high.",
+    "invalid_states": "Behavior outside the legal sequence before reset is unspecified."
+  },
+  "numeric": {
+    "q": "Unsigned 4-bit binary count; legal values 1 through 10 inclusive.",
+    "increment": "For legal q from 1 through 9, add one; for q equal to 10, set q to 1.",
+    "constants": "Use explicitly sized 4-bit constants; no saturation or rounding is needed."
+  },
+  "verification": {
+    "method": "Independent self-checking testbench with integer expected count and explicit sequence boundary checks.",
+    "coverage": [
+      "Synchronous reset assertion between edges does not change q",
+      "Reset sets q to 1 at rising edge",
+      "Repeated reset holds 1 across rising edges",
+      "Multiple complete 1-through-10 cycles and 10-to-1 wrap",
+      "Reset during counting including at 10",
+      "Reset pulse entirely between rising edges has no effect",
+      "Output remains stable on falling edges"
+    ],
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts; preserve logs.",
+    "gate": "Structural contract gate must pass before RTL is written."
+  },
+  "specification_ambiguities": [
+    "Power-up state and behavior from states outside 1 through 10 are unspecified; no initialization or recovery requirement is added."
+  ]
+}

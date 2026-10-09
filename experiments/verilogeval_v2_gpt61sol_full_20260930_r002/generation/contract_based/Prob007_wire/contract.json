@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    },
+    "evidence": "problem.txt explicitly names TopModule, input in and output out; all ports one bit."
+  },
+  "semantics": {
+    "equation": "out = in",
+    "timing": "Continuous combinational connection; no clock-cycle latency or explicit delay.",
+    "clock_reset": "No clock or reset ports specified.",
+    "initialization": "No internal state or initialization. Output follows the input including its initial unknown value after combinational settling.",
+    "evidence": "problem.txt: The module should behave like a wire."
+  },
+  "numeric": {
+    "type": "One-bit four-state SystemVerilog signal",
+    "operations": "Identity connection; no arithmetic, rounding, truncation, saturation or overflow."
+  },
+  "verification": {
+    "oracle_basis": "Original problem wire behavior, compared with four-state case inequality.",
+    "directed_cases": [
+      "Initial undriven X",
+      "0",
+      "1",
+      "X",
+      "Z",
+      "all ordered transitions between 0, 1, X, Z",
+      "repeated binary toggles"
+    ],
+    "sampling": "Sample 1 ns after each drive to allow continuous assignment delta-cycle settling; no DUT delay is permitted.",
+    "timeout": "Bounded independent simulation timeout",
+    "primary_command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

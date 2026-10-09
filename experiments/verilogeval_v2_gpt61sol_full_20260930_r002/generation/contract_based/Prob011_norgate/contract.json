@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"a": "input, 1 bit", "b": "input, 1 bit", "out": "output, 1 bit"},
+    "evidence": "problem.txt explicitly names TopModule and lists a, b, out; all ports are one bit."
+  },
+  "semantics": {
+    "function": "out is 1 exactly when a and b are both 0; otherwise out is 0 for binary inputs.",
+    "timing": "Combinational NOR gate, with no stored state or added cycle latency.",
+    "clock_reset": "None: original interface contains no clock or reset.",
+    "initialization": "No initialization requirement or sequential state in original specification.",
+    "evidence": "problem.txt: The module should implement a NOR gate."
+  },
+  "numeric": {
+    "width": "All operands and output are single-bit logic.",
+    "arithmetic": "Boolean NOR; rounding, saturation and overflow do not apply.",
+    "four_state": "Use standard SystemVerilog gate semantics: any known 1 input forces 0; without a known 1, X/Z makes output X."
+  },
+  "verification": {
+    "oracle": "Explicit original NOR truth table, independent of DUT expression.",
+    "coverage": "All four binary combinations in repeated orders, individual-input transitions, and supplemental X/Z gate semantics.",
+    "sampling": "Sample after one simulation time unit for combinational settling; no clock edges exist.",
+    "failure": "Case-inequality comparisons with $fatal, bounded timeout, PASS printed only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "Original specification does not explicitly describe X/Z inputs or physical propagation delay. Standard four-state NOR behavior is supplemental verification; no physical delay is introduced."
+  ]
+}

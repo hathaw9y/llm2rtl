@@ -1,0 +1,182 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob066_edgecapture",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob066_edgecapture",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob066_edgecapture/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790751662.7661629,
+    "ended_at_unix": 1790751810.8096747,
+    "seconds": 148.04351258277893,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 126737,
+      "cached_input_tokens": 111616,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2617,
+      "reasoning_output_tokens": 31
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "063735f6ae3084cf83a02721c4cee38938eaab9df31b4e2618c2b6d5bc80505a",
+  "contract_sha256": "87879ca6981ee3b97bf1c98b9eb10b584557c2d1a292ee6b3bfdaef52ba70c44",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "initial",
+        "status": "passed",
+        "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob066_edgecapture/development/01",
+        "compile_returncode": 0,
+        "simulation_returncode": 0,
+        "pass_marker": "PASS 481 sampled checks plus directed assertions"
+      }
+    ],
+    "development_outcome": "passed",
+    "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+    "contract_gate": "passed_structure_only",
+    "limitations": [
+      "Development verification is not official benchmark correctness; official evaluation was not accessed.",
+      "Power-up state is unspecified and left uninitialized; tests establish defined output via synchronous reset.",
+      "Input history during reset is unspecified explicitly; chosen behavior samples every rising edge, including reset edges, as recorded in contract.json.",
+      "No synthesis or board verification performed."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "32-bit previous-input register samples every positive edge; output accumulates per-bit sampled falling edges, with active-high synchronous reset priority.",
+    "verification_coverage": "Independent per-lane oracle; 481 sampled comparisons, all 32 individual lanes, constant inputs, rising and falling transitions, alternating masks, reset between edges, reset dominance, post-reset falling capture, unsampled pulse, deterministic pseudorandom inputs and resets.",
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "development_records": "dev_checks.jsonl"
+    },
+    "initial_snapshot_unchanged": true
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "063735f6ae3084cf83a02721c4cee38938eaab9df31b4e2618c2b6d5bc80505a",
+      "Prob066_edgecapture_ref.sv": "e36bcc084d7672e3f76f3c485f386b9ae02341252cb27e3c4605d54a227af1fe",
+      "Prob066_edgecapture_test.sv": "26b8419de40ce26cf4e4be19d1292fe55a1d9f1b0ee9fe6d3a5a5194a39af006"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob066_edgecapture_test.sv",
+        "Prob066_edgecapture_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013711212202906609
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb066_edgecapture_test.sv:86: $finish called at 1330 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 266 samples\n\nSimulation finished at 1330 ps\nMismatches: 0 in 266 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008422097191214561
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "063735f6ae3084cf83a02721c4cee38938eaab9df31b4e2618c2b6d5bc80505a",
+      "Prob066_edgecapture_ref.sv": "e36bcc084d7672e3f76f3c485f386b9ae02341252cb27e3c4605d54a227af1fe",
+      "Prob066_edgecapture_test.sv": "26b8419de40ce26cf4e4be19d1292fe55a1d9f1b0ee9fe6d3a5a5194a39af006"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob066_edgecapture_test.sv",
+        "Prob066_edgecapture_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010804368183016777
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb066_edgecapture_test.sv:86: $finish called at 1330 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 266 samples\n\nSimulation finished at 1330 ps\nMismatches: 0 in 266 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008224590681493282
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

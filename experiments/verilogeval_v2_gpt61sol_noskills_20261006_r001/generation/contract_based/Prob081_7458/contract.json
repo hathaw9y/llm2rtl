@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "p1a": 1,
+      "p1b": 1,
+      "p1c": 1,
+      "p1d": 1,
+      "p1e": 1,
+      "p1f": 1,
+      "p2a": 1,
+      "p2b": 1,
+      "p2c": 1,
+      "p2d": 1
+    },
+    "outputs": {
+      "p1y": 1,
+      "p2y": 1
+    }
+  },
+  "semantics": {
+    "p1y": "(p1a AND p1b AND p1c) OR (p1d AND p1e AND p1f)",
+    "p2y": "(p2a AND p2b) OR (p2c AND p2d)",
+    "timing": "Combinational gates, continuous outputs, no clock or latency. Evidence: original explicitly permits assign for each output.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or specified startup value; outputs follow inputs after combinational settling."
+  },
+  "numeric": {
+    "widths": "All ports one bit as specified.",
+    "operators": "Bitwise AND and OR implement gate truth tables including ordinary Verilog four-state propagation; no arithmetic."
+  },
+  "verification": {
+    "oracle": "Independent truth-table gate functions based on the original two stated gate groupings.",
+    "binary": "Exhaust all 1024 combinations of ten binary inputs.",
+    "four_state": "Exhaust 4096 p1 input combinations and 256 p2 input combinations over 0,1,X,Z, with other group at zero.",
+    "sampling": "Sample one testbench time unit after each change to allow continuous assignments to settle; no clock timing is specified.",
+    "completion": "Fatal on mismatch; bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "Original specifies no explicit X/Z truth table; use standard Verilog AND/OR gate semantics. No binary functionality ambiguity."
+  ]
+}

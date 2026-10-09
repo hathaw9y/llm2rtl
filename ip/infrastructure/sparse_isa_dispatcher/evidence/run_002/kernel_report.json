@@ -1,0 +1,60 @@
+{
+  "schema": "llm2rtl.kernel_report.v1",
+  "status": "passed",
+  "module_id": "sparse_isa_dispatcher",
+  "run_id": "run_002",
+  "agent_role": "infrastructure_command_dispatcher",
+  "coverage_level": "bounded_sparse_isa_dispatcher_integration_safety_revision",
+  "module_index_sha256": "abe0b9532cb184e711b8357590eab7c24cfd1a12e092d693e506b39294d3f683",
+  "module_contract_sha256": "03a3e6f29b7d017b9a6900f189db673ec45556198f0afd74891f17b88f12f11f",
+  "rtl_sha256": "9305b7f5b104c2a1373f718272ce8db3eacced8b1dcff97f7690d78de72b2569",
+  "testbench_sha256": "52641a72ff05f0013d0bd229fda1b8ad1e3ecb6b5c857e409900f5e814f9d380",
+  "interface_contract": {
+    "opcodes": {"END": 0, "MM2S": 1, "S2MM": 2, "GEMM": 3},
+    "dma_response_error_code_bits": 8,
+    "dma_response_handshake": "valid && ready only",
+    "response_backpressure": "all executor responses are held off during ISSUE_COMMAND so an offered request cannot be retracted by a concurrent fault",
+    "descriptor_errors": "01..06 clear matching pending, release exact owner, and enter error drain",
+    "transport_faults": "10/20/30/40/50 retain pending and ownership, never release, and remain in error drain until reset",
+    "dma_offset_width_gate": "local_offset[31:23]==0",
+    "gemm_compute_address_policy": "bank-only; axi_address==0; m_ctrl_sa_out_base_addr=0; output native base word0",
+    "gemm_semantics_preserved": "shape and owner3/4/5 atomic bank acquire/release unchanged"
+  },
+  "simulation": {
+    "tool": "Vivado XSIM 2025.2 exact xsimk snapshot",
+    "status": "passed",
+    "cases": 19,
+    "pass_marker": "SPARSE_ISA_DISPATCHER_XSIM_PASS cases=19",
+    "log": "xsim_retry1/xsim_direct.log",
+    "log_sha256": "259302997719b8426db33ed20df38e9b2d5bb97679f7dc0206c48ccc8697f925",
+    "coverage": ["legacy typed opcode and concurrency regression", "MM2S and S2MM upper-offset reject", "GEMM nonzero-address reject and zero compatibility output", "request backpressure stability", "response valid-ready backpressure stability", "DMA success release", "all descriptor codes 01..06 retire and release", "all transport/recovery codes 10/20/30/40/50 retain pending and ownership with no release", "MM2S and S2MM code paths", "fault retention until synchronous reset", "spurious DMA and GEMM completion", "GEMM executor error semantics", "reset and repeated program"]
+  },
+  "verilator": {
+    "version": "Verilator 4.038 2020-07-11 rev v4.036-114-g0cd4a57ad",
+    "status": "passed",
+    "warning_count_after_policy": 0,
+    "allowed_warning_classes": {"LITENDIAN": "frozen [0:15] bank-vector ordering", "UNUSED": "frozen bank_owner_port compatibility input and reserved instruction padding"},
+    "log": "verilator_lint.log",
+    "log_sha256": "2fffc4b70de6273222367e561de27583e78a3a63d6ff5ff25ac5c7fdc1970a4b"
+  },
+  "vivado": {
+    "version": "2025.2 build 6299465",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "stage": "post_synth_ooc",
+    "clock_ns": 5.0,
+    "status": "passed",
+    "wns_ns": 2.731,
+    "tns_ns": 0.0,
+    "whs_ns": 0.087,
+    "ths_ns": 0.0,
+    "wpws_ns": 2.225,
+    "failing_endpoints": 0,
+    "blackboxes": 0,
+    "drc_checks": 0,
+    "methodology_checks": 0,
+    "ooc_clock_source": "BUFGCE_HDIO_X0Y2"
+  },
+  "resources": {"clb_luts": 457, "clb_registers": 171, "dsp": 0, "bram_tiles": 0, "uram": 0, "bonded_iob": 0},
+  "known_risks": ["transport faults intentionally prevent terminal error assertion until coordinated reset because retained pending/ownership keeps ERROR_DRAIN active", "response code 03 overlaps the dispatcher's historical ERR_RESPONSE numeric value; classification is determined by matching response identity and handshake context", "OOC post-synthesis timing is not routed integration timing"],
+  "does_not_claim": ["executor datapath correctness", "DataMover transport implementation", "data-bank payload routing", "ownership table integration", "post-route timing", "board wrapper", "bitstream", "physical-board execution"]
+}

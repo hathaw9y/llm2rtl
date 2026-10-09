@@ -1,0 +1,24 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": {"direction": "input", "width": 1}, "areset": {"direction": "input", "width": 1}, "in": {"direction": "input", "width": 1}, "out": {"direction": "output", "width": 1}}
+  },
+  "semantics": {
+    "machine": "Two-state Moore FSM: A outputs 0, B outputs 1",
+    "clock": "State updates at rising edge of clk",
+    "reset": "Active-high asynchronous areset sets state B; reset has priority over input and holds B while high",
+    "transitions": {"A,in=0": "B", "A,in=1": "A", "B,in=0": "A", "B,in=1": "B"},
+    "output": "out continuously decodes current state, with no extra register or input-dependent combinational output",
+    "initialization": "No specified power-up state before reset; no RTL initialization added",
+    "reset_release": "Deassertion alone preserves state B; subsequent rising clock edge applies input transition"
+  },
+  "numeric": {"state_width": 1, "state_encoding": {"A": 0, "B": 1}, "arithmetic": "Boolean state transitions only; no arithmetic, rounding, saturation, or overflow"},
+  "verification": {
+    "oracle": "Independent symbolic A/B transition table and output comparison after settling",
+    "coverage": ["All four transitions", "Repeated holds and toggles", "Asynchronous reset assertion between clock edges", "Reset held across clock edges for both inputs", "Reset release without clock", "Input changes between edges do not alter Moore output", "Exhaustive eight-input sequences from reset", "Reset during state A"],
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts",
+    "scope": "Independent local development verification only; no official evaluation or synthesis"
+  },
+  "specification_ambiguities": ["Clock edge is not stated explicitly; use conventional rising-edge FSM behavior", "Power-up state before reset is unspecified"]
+}

@@ -1,0 +1,91 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "x": {
+        "width": 4,
+        "range": "[4:1]"
+      }
+    },
+    "outputs": {
+      "f": {
+        "width": 1
+      }
+    },
+    "evidence": "Original map labels x[1], x[2], x[3], x[4]."
+  },
+  "semantics": {
+    "type": "combinational Karnaugh-map function",
+    "columns": [
+      "00",
+      "01",
+      "11",
+      "10"
+    ],
+    "column_bits": [
+      "x[1]",
+      "x[2]"
+    ],
+    "rows": [
+      "00",
+      "01",
+      "11",
+      "10"
+    ],
+    "row_bits": [
+      "x[3]",
+      "x[4]"
+    ],
+    "cells": [
+      [
+        "d",
+        "0",
+        "d",
+        "d"
+      ],
+      [
+        "0",
+        "d",
+        "1",
+        "0"
+      ],
+      [
+        "1",
+        "1",
+        "d",
+        "d"
+      ],
+      [
+        "1",
+        "1",
+        "0",
+        "d"
+      ]
+    ],
+    "latency": "No clock or state specified; output follows input combinationally.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No initial value or unknown-input behavior specified; verify settled binary inputs.",
+    "dont_care": "Any binary output allowed at d cells."
+  },
+  "numeric": {
+    "bit_order": "Port range [4:1] binds original literal bit labels; numerical vector order is x[4],x[3],x[2],x[1].",
+    "arithmetic": "Boolean only, no signed arithmetic or overflow."
+  },
+  "verification": {
+    "oracle": "Literal original map traversed by row and column, independent of RTL expression.",
+    "coverage": "All 16 binary inputs, repeated reverse traversal to exercise input changes.",
+    "sampling": "Sample one ns after input assignment to allow combinational settling.",
+    "failure": "Fatal mismatch or bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Port width is given without a vector range.",
+      "resolution": "Use [4:1] because map explicitly references x[4] through x[1]."
+    },
+    {
+      "issue": "Unknown or high impedance input behavior is unspecified.",
+      "resolution": "No constraints beyond binary map entries; no invented X/Z requirements."
+    }
+  ]
+}

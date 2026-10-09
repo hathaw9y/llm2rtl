@@ -1,0 +1,28 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": {"direction": "input", "width": 1}, "reset": {"direction": "input", "width": 1}, "in": {"direction": "input", "width": 1}, "disc": {"direction": "output", "width": 1}, "flag": {"direction": "output", "width": 1}, "err": {"direction": "output", "width": 1}}
+  },
+  "semantics": {
+    "clock": "All state updates occur on the positive edge of clk; one input bit is sampled per edge when reset is low.",
+    "reset": "Active-high synchronous reset takes priority over in and sets a state equivalent to having just received zero. All outputs are low after the reset edge.",
+    "initialization": "No power-up state is specified; a reset edge establishes defined behavior.",
+    "disc": "Assert for the full cycle immediately following sampling a zero preceded by exactly five consecutive ones.",
+    "flag": "Assert for the full cycle immediately following sampling a zero preceded by exactly six consecutive ones.",
+    "err": "Assert for the full cycle immediately following sampling the seventh consecutive one and remain asserted on each further one. A sampled zero clears err and starts new zero-based history.",
+    "moore": "Outputs depend only on registered state, never directly on current in. A terminating zero for disc or flag also establishes zero history for subsequent sequences. Outputs are mutually exclusive."
+  },
+  "numeric": {
+    "data": "All ports are unsigned single bits; no payload arithmetic, rounding, truncation or signed arithmetic is required.",
+    "history": "Track run lengths zero through six and a saturated seven-or-more error state; never wrap long runs. Separate Moore states represent discard and flag after a zero."
+  },
+  "verification": {
+    "oracle": "Independent testbench counts consecutive sampled ones, saturating at seven. On a zero it expects discard iff the previous count was five and flag iff six; on one it expects error iff the updated count is seven.",
+    "directed": "Check zero runs, one runs of lengths zero through twenty, terminating zeros, adjacent framing patterns, error recovery and reset from active/output states.",
+    "exhaustive": "Enumerate all binary input sequences of length twelve, resetting between sequences and comparing all outputs after every sampled edge.",
+    "timing": "Compare after nonblocking updates; change input/reset between positive edges and verify outputs hold until the next positive edge, including synchronous reset.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top, matching vvp, bounded compile/simulation execution and internal timeout. No official tests or synthesis."
+  },
+  "specification_ambiguities": []
+}

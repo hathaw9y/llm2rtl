@@ -1,0 +1,1137 @@
+{
+  "scope": "offline exact tensor oracle; RTL AXIS/concurrency tested separately",
+  "records": 16,
+  "assets": [
+    {
+      "name": "activation",
+      "kind": "input",
+      "address": 1048576,
+      "bytes": 1152,
+      "sha256": "531d29b9ec927ca9ebd66d926c58a57575edf8116433a5cb01a454954fea6fae"
+    },
+    {
+      "name": "weight_b3",
+      "kind": "input",
+      "address": 2097152,
+      "bytes": 110592,
+      "sha256": "8827accbaad40100d39ac01034ca72c2482d76d7685c31495ef965997cdbe6d2"
+    },
+    {
+      "name": "weight_b15",
+      "kind": "input",
+      "address": 3145728,
+      "bytes": 110592,
+      "sha256": "ff66e5ee6583cc718299c29324e6a898dfddcfb193ad8e6678b833877836cde9"
+    },
+    {
+      "name": "scale_b3",
+      "kind": "input",
+      "address": 4194304,
+      "bytes": 48,
+      "sha256": "e3ce2ae9801879d5b5dc0668e5760ec5ac052aee180eaf145523f787d5b914c3"
+    },
+    {
+      "name": "scale_b15",
+      "kind": "input",
+      "address": 4259840,
+      "bytes": 48,
+      "sha256": "dc0b424ec7cf298b0ec0251473d6a14fe0f9b757954481ee421e87bb182e8a18"
+    },
+    {
+      "name": "output_b5",
+      "kind": "expected",
+      "address": 5242880,
+      "bytes": 384,
+      "sha256": "0926feb67896359ad6badda92e9a93dbe7e09d8ebd8f4b39f87e7fab6a907c05"
+    },
+    {
+      "name": "output_b6",
+      "kind": "expected",
+      "address": 5308416,
+      "bytes": 384,
+      "sha256": "c2075c8fb50b84ddc042b742b8f8cc0eb3c2a5d1c41e4b016d754215434ea069"
+    },
+    {
+      "name": "quantized_a",
+      "kind": "expected",
+      "address": null,
+      "bytes": 576,
+      "sha256": "85a09bfe9af649c461303c0e673d5a2c7627827c0f525ae7cb74a7fe4d90dc05"
+    },
+    {
+      "name": "activation_scale",
+      "kind": "expected",
+      "address": null,
+      "bytes": 16,
+      "sha256": "18a5dacc42deef76307e0d90d32f39ab6a9438a925d86d16062ee47fc42d9fe6"
+    }
+  ],
+  "oracle_sources": {
+    "scripts/isa_interpreter.py": "224ab0b9a79ee567310832a5cbbc223266c6bb5c82e6f020107e1bd46a57b8f5",
+    "scripts/exact_numeric.py": "c263de75595554d33955093fe57d7dfc461cc9337f0e2d5fa18e7edfc36aee3c",
+    "scripts/isa_codec.py": "1d6647bd92987d92b5234316aae979dea435251fb8142235342c13c5fef4cfcd",
+    "scripts/generate_fabric_pingpong_fixture.py": "eda012584f3a32db768392523d43c9432f3438cb37c27cb13e3025e6bc0fecc1"
+  },
+  "ledger": [
+    {
+      "command_id": 1,
+      "hex128": "f2000000000000000002000002400023",
+      "opcode": "BANK_CONFIG",
+      "status": "OK",
+      "used_banks": [
+        2
+      ],
+      "accepted_generations": [
+        0
+      ],
+      "before": {
+        "2": {
+          "profile": null,
+          "generation": 0,
+          "ready": false,
+          "busy": false,
+          "components": {},
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "2": {
+          "profile": "norm_output",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                1152
+              ],
+              "ready": false,
+              "sha256": "4cf9816ed1062189ff0c8d427fba5e912cc68fc9af76cf7f08fd255977de3b33"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 2,
+      "hex128": "12000000000000090000200000000000",
+      "opcode": "DMA_LOAD",
+      "status": "OK",
+      "used_banks": [
+        2
+      ],
+      "accepted_generations": [
+        1
+      ],
+      "before": {
+        "2": {
+          "profile": "norm_output",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                1152
+              ],
+              "ready": false,
+              "sha256": "4cf9816ed1062189ff0c8d427fba5e912cc68fc9af76cf7f08fd255977de3b33"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "2": {
+          "profile": "norm_output",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                1152
+              ],
+              "ready": true,
+              "sha256": "531d29b9ec927ca9ebd66d926c58a57575edf8116433a5cb01a454954fea6fae"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 3,
+      "hex128": "d20d0000000000000000000001200200",
+      "opcode": "QUANTIZE",
+      "status": "OK",
+      "used_banks": [
+        2,
+        13
+      ],
+      "accepted_generations": [
+        1,
+        0
+      ],
+      "before": {
+        "2": {
+          "profile": "norm_output",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                1152
+              ],
+              "ready": true,
+              "sha256": "531d29b9ec927ca9ebd66d926c58a57575edf8116433a5cb01a454954fea6fae"
+            }
+          },
+          "embedding_lanes": {}
+        },
+        "13": {
+          "profile": null,
+          "generation": 0,
+          "ready": false,
+          "busy": false,
+          "components": {},
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "2": {
+          "profile": "norm_output",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                1152
+              ],
+              "ready": true,
+              "sha256": "531d29b9ec927ca9ebd66d926c58a57575edf8116433a5cb01a454954fea6fae"
+            }
+          },
+          "embedding_lanes": {}
+        },
+        "13": {
+          "profile": "A_INT8",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                576
+              ],
+              "ready": true,
+              "sha256": "85a09bfe9af649c461303c0e673d5a2c7627827c0f525ae7cb74a7fe4d90dc05"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294928
+              ],
+              "ready": true,
+              "sha256": "18a5dacc42deef76307e0d90d32f39ab6a9438a925d86d16062ee47fc42d9fe6"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 4,
+      "hex128": "f3000000000000000002000002401804",
+      "opcode": "BANK_CONFIG",
+      "status": "OK",
+      "used_banks": [
+        3
+      ],
+      "accepted_generations": [
+        0
+      ],
+      "before": {
+        "3": {
+          "profile": null,
+          "generation": 0,
+          "ready": false,
+          "busy": false,
+          "components": {},
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "3": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": false,
+              "sha256": "7c98d2da7afa2bdee9765910c81cb588e14781b77538fb54df84f7e7039e4348"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": false,
+              "sha256": "17b0761f87b081d5cf10757ccc89f12be355c70e2e29df288b65b30710dcbcd1"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 5,
+      "hex128": "13000000000003600000400000000000",
+      "opcode": "DMA_LOAD",
+      "status": "OK",
+      "used_banks": [
+        3
+      ],
+      "accepted_generations": [
+        1
+      ],
+      "before": {
+        "3": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": false,
+              "sha256": "7c98d2da7afa2bdee9765910c81cb588e14781b77538fb54df84f7e7039e4348"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": false,
+              "sha256": "17b0761f87b081d5cf10757ccc89f12be355c70e2e29df288b65b30710dcbcd1"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "3": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": true,
+              "sha256": "8827accbaad40100d39ac01034ca72c2482d76d7685c31495ef965997cdbe6d2"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": false,
+              "sha256": "17b0761f87b081d5cf10757ccc89f12be355c70e2e29df288b65b30710dcbcd1"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 6,
+      "hex128": "13000004800000006000800000000000",
+      "opcode": "DMA_LOAD",
+      "status": "OK",
+      "used_banks": [
+        3
+      ],
+      "accepted_generations": [
+        1
+      ],
+      "before": {
+        "3": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": true,
+              "sha256": "8827accbaad40100d39ac01034ca72c2482d76d7685c31495ef965997cdbe6d2"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": false,
+              "sha256": "17b0761f87b081d5cf10757ccc89f12be355c70e2e29df288b65b30710dcbcd1"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "3": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": true,
+              "sha256": "8827accbaad40100d39ac01034ca72c2482d76d7685c31495ef965997cdbe6d2"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": true,
+              "sha256": "e3ce2ae9801879d5b5dc0668e5760ec5ac052aee180eaf145523f787d5b914c3"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 7,
+      "hex128": "ff000000000000000002000002401804",
+      "opcode": "BANK_CONFIG",
+      "status": "OK",
+      "used_banks": [
+        15
+      ],
+      "accepted_generations": [
+        0
+      ],
+      "before": {
+        "15": {
+          "profile": null,
+          "generation": 0,
+          "ready": false,
+          "busy": false,
+          "components": {},
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "15": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": false,
+              "sha256": "7c98d2da7afa2bdee9765910c81cb588e14781b77538fb54df84f7e7039e4348"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": false,
+              "sha256": "17b0761f87b081d5cf10757ccc89f12be355c70e2e29df288b65b30710dcbcd1"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 8,
+      "hex128": "f5000000000000000002000000c00028",
+      "opcode": "BANK_CONFIG",
+      "status": "OK",
+      "used_banks": [
+        5
+      ],
+      "accepted_generations": [
+        0
+      ],
+      "before": {
+        "5": {
+          "profile": null,
+          "generation": 0,
+          "ready": false,
+          "busy": false,
+          "components": {},
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "5": {
+          "profile": "K_BF16",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                384
+              ],
+              "ready": false,
+              "sha256": "a1a4f5721c1c4610af7f71078f3a68c330536d679803b0e0507ee8dc10c5dfca"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 9,
+      "hex128": "f6000000000000000002000000c0002a",
+      "opcode": "BANK_CONFIG",
+      "status": "OK",
+      "used_banks": [
+        6
+      ],
+      "accepted_generations": [
+        0
+      ],
+      "before": {
+        "6": {
+          "profile": null,
+          "generation": 0,
+          "ready": false,
+          "busy": false,
+          "components": {},
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "6": {
+          "profile": "V_BF16",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                384
+              ],
+              "ready": false,
+              "sha256": "a1a4f5721c1c4610af7f71078f3a68c330536d679803b0e0507ee8dc10c5dfca"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 10,
+      "hex128": "3d3500000000000000000060000a40c0",
+      "opcode": "GEMM_INT8",
+      "status": "OK",
+      "used_banks": [
+        13,
+        3,
+        5
+      ],
+      "accepted_generations": [
+        1,
+        1,
+        1
+      ],
+      "before": {
+        "13": {
+          "profile": "A_INT8",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                576
+              ],
+              "ready": true,
+              "sha256": "85a09bfe9af649c461303c0e673d5a2c7627827c0f525ae7cb74a7fe4d90dc05"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294928
+              ],
+              "ready": true,
+              "sha256": "18a5dacc42deef76307e0d90d32f39ab6a9438a925d86d16062ee47fc42d9fe6"
+            }
+          },
+          "embedding_lanes": {}
+        },
+        "3": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": true,
+              "sha256": "8827accbaad40100d39ac01034ca72c2482d76d7685c31495ef965997cdbe6d2"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": true,
+              "sha256": "e3ce2ae9801879d5b5dc0668e5760ec5ac052aee180eaf145523f787d5b914c3"
+            }
+          },
+          "embedding_lanes": {}
+        },
+        "5": {
+          "profile": "K_BF16",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                384
+              ],
+              "ready": false,
+              "sha256": "a1a4f5721c1c4610af7f71078f3a68c330536d679803b0e0507ee8dc10c5dfca"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "13": {
+          "profile": "A_INT8",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                576
+              ],
+              "ready": true,
+              "sha256": "85a09bfe9af649c461303c0e673d5a2c7627827c0f525ae7cb74a7fe4d90dc05"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294928
+              ],
+              "ready": true,
+              "sha256": "18a5dacc42deef76307e0d90d32f39ab6a9438a925d86d16062ee47fc42d9fe6"
+            }
+          },
+          "embedding_lanes": {}
+        },
+        "3": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": true,
+              "sha256": "8827accbaad40100d39ac01034ca72c2482d76d7685c31495ef965997cdbe6d2"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": true,
+              "sha256": "e3ce2ae9801879d5b5dc0668e5760ec5ac052aee180eaf145523f787d5b914c3"
+            }
+          },
+          "embedding_lanes": {}
+        },
+        "5": {
+          "profile": "K_BF16",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                384
+              ],
+              "ready": true,
+              "sha256": "0926feb67896359ad6badda92e9a93dbe7e09d8ebd8f4b39f87e7fab6a907c05"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 11,
+      "hex128": "1f000000000003600000600000000000",
+      "opcode": "DMA_LOAD",
+      "status": "OK",
+      "used_banks": [
+        15
+      ],
+      "accepted_generations": [
+        1
+      ],
+      "before": {
+        "15": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": false,
+              "sha256": "7c98d2da7afa2bdee9765910c81cb588e14781b77538fb54df84f7e7039e4348"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": false,
+              "sha256": "17b0761f87b081d5cf10757ccc89f12be355c70e2e29df288b65b30710dcbcd1"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "15": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": true,
+              "sha256": "ff66e5ee6583cc718299c29324e6a898dfddcfb193ad8e6678b833877836cde9"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": false,
+              "sha256": "17b0761f87b081d5cf10757ccc89f12be355c70e2e29df288b65b30710dcbcd1"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 12,
+      "hex128": "1f000004800000006000820000000000",
+      "opcode": "DMA_LOAD",
+      "status": "OK",
+      "used_banks": [
+        15
+      ],
+      "accepted_generations": [
+        1
+      ],
+      "before": {
+        "15": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": true,
+              "sha256": "ff66e5ee6583cc718299c29324e6a898dfddcfb193ad8e6678b833877836cde9"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": false,
+              "sha256": "17b0761f87b081d5cf10757ccc89f12be355c70e2e29df288b65b30710dcbcd1"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "15": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": true,
+              "sha256": "ff66e5ee6583cc718299c29324e6a898dfddcfb193ad8e6678b833877836cde9"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": true,
+              "sha256": "dc0b424ec7cf298b0ec0251473d6a14fe0f9b757954481ee421e87bb182e8a18"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 13,
+      "hex128": "3df600000000000000000060000a40c0",
+      "opcode": "GEMM_INT8",
+      "status": "OK",
+      "used_banks": [
+        13,
+        15,
+        6
+      ],
+      "accepted_generations": [
+        1,
+        1,
+        1
+      ],
+      "before": {
+        "13": {
+          "profile": "A_INT8",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                576
+              ],
+              "ready": true,
+              "sha256": "85a09bfe9af649c461303c0e673d5a2c7627827c0f525ae7cb74a7fe4d90dc05"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294928
+              ],
+              "ready": true,
+              "sha256": "18a5dacc42deef76307e0d90d32f39ab6a9438a925d86d16062ee47fc42d9fe6"
+            }
+          },
+          "embedding_lanes": {}
+        },
+        "15": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": true,
+              "sha256": "ff66e5ee6583cc718299c29324e6a898dfddcfb193ad8e6678b833877836cde9"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": true,
+              "sha256": "dc0b424ec7cf298b0ec0251473d6a14fe0f9b757954481ee421e87bb182e8a18"
+            }
+          },
+          "embedding_lanes": {}
+        },
+        "6": {
+          "profile": "V_BF16",
+          "generation": 1,
+          "ready": false,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                384
+              ],
+              "ready": false,
+              "sha256": "a1a4f5721c1c4610af7f71078f3a68c330536d679803b0e0507ee8dc10c5dfca"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "13": {
+          "profile": "A_INT8",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                576
+              ],
+              "ready": true,
+              "sha256": "85a09bfe9af649c461303c0e673d5a2c7627827c0f525ae7cb74a7fe4d90dc05"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294928
+              ],
+              "ready": true,
+              "sha256": "18a5dacc42deef76307e0d90d32f39ab6a9438a925d86d16062ee47fc42d9fe6"
+            }
+          },
+          "embedding_lanes": {}
+        },
+        "15": {
+          "profile": "weight_INT8",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                110592
+              ],
+              "ready": true,
+              "sha256": "ff66e5ee6583cc718299c29324e6a898dfddcfb193ad8e6678b833877836cde9"
+            },
+            "scale": {
+              "range": [
+                294912,
+                294960
+              ],
+              "ready": true,
+              "sha256": "dc0b424ec7cf298b0ec0251473d6a14fe0f9b757954481ee421e87bb182e8a18"
+            }
+          },
+          "embedding_lanes": {}
+        },
+        "6": {
+          "profile": "V_BF16",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                384
+              ],
+              "ready": true,
+              "sha256": "c2075c8fb50b84ddc042b742b8f8cc0eb3c2a5d1c41e4b016d754215434ea069"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 14,
+      "hex128": "25000000000000030000a00000000000",
+      "opcode": "DMA_STORE",
+      "status": "OK",
+      "used_banks": [
+        5
+      ],
+      "accepted_generations": [
+        1
+      ],
+      "before": {
+        "5": {
+          "profile": "K_BF16",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                384
+              ],
+              "ready": true,
+              "sha256": "0926feb67896359ad6badda92e9a93dbe7e09d8ebd8f4b39f87e7fab6a907c05"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "5": {
+          "profile": "K_BF16",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                384
+              ],
+              "ready": true,
+              "sha256": "0926feb67896359ad6badda92e9a93dbe7e09d8ebd8f4b39f87e7fab6a907c05"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 15,
+      "hex128": "26000000000000030000a20000000000",
+      "opcode": "DMA_STORE",
+      "status": "OK",
+      "used_banks": [
+        6
+      ],
+      "accepted_generations": [
+        1
+      ],
+      "before": {
+        "6": {
+          "profile": "V_BF16",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                384
+              ],
+              "ready": true,
+              "sha256": "c2075c8fb50b84ddc042b742b8f8cc0eb3c2a5d1c41e4b016d754215434ea069"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "after": {
+        "6": {
+          "profile": "V_BF16",
+          "generation": 1,
+          "ready": true,
+          "busy": false,
+          "components": {
+            "data": {
+              "range": [
+                0,
+                384
+              ],
+              "ready": true,
+              "sha256": "c2075c8fb50b84ddc042b742b8f8cc0eb3c2a5d1c41e4b016d754215434ea069"
+            }
+          },
+          "embedding_lanes": {}
+        }
+      },
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    },
+    {
+      "command_id": 16,
+      "hex128": "00000000000000000000000000000000",
+      "opcode": "END",
+      "status": "OK",
+      "used_banks": [],
+      "accepted_generations": [],
+      "before": {},
+      "after": {},
+      "completion_scope": "synchronous response after all interpreter writes; cycle/AXI behavior checked separately"
+    }
+  ],
+  "required_dynamic_checks": [
+    "DMA writes to B15 overlap actual B3 GEMM work",
+    "no B3 payload write during B3 GEMM ownership",
+    "ISA-only command and DDR preload; no DUT native memory preload",
+    "exact BF16 stored output and FP32 activation scale"
+  ]
+}

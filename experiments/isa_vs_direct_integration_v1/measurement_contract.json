@@ -1,0 +1,49 @@
+{
+  "schema": "isa_vs_direct.measurement.v1",
+  "trusted_writer": "experiment supervisor and immutable evaluator; not participant",
+  "submission_required_fields": [
+    "trial_id", "task_id", "condition", "submission_id", "source_manifest_sha256",
+    "snapshot_path", "received_utc", "participant_elapsed_seconds",
+    "cumulative_input_tokens", "cumulative_cached_input_tokens", "cumulative_output_tokens",
+    "public_evaluator_sha256", "input_manifest_sha256", "report_sha256"
+  ],
+  "source_snapshot_rules": [
+    "Freeze all production RTL, program generators, host code, adapters and constraints before evaluation.",
+    "Include required run-time instruction images and parameter tables in the manifest.",
+    "Do not count logs or rebuilt binary timestamps as source revisions.",
+    "Do not overwrite snapshots or failed reports.",
+    "The first submitted integration revision is repair zero, including compile or elaboration failure.",
+    "Increment repair count on a changed source manifest since the preceding submission.",
+    "Retries of unchanged source do not increment the repair count.",
+    "Record independent self-test and editing iterations separately; submission count is not total debugging effort."
+  ],
+  "checkpoint_repairs": [0, 1, 3],
+  "checkpoint_reporting_rules": [
+    "Report evaluated coverage and the full denominator of assigned runs, including timeouts.",
+    "Public evaluator results at a checkpoint are labelled public success, not hidden success.",
+    "Replay preserved snapshots after session end to obtain hidden success at earlier checkpoints.",
+    "Do not give hidden failure details to an active participant.",
+    "Record both first verified success within budget and the final submitted source result.",
+    "An earlier pass does not excuse a regression in the final submitted source.",
+    "Unavailable checkpoints remain unevaluated unless the same verified final source is explicitly carried forward after early success."
+  ],
+  "error_categories": [
+    "arithmetic", "operation_order", "address_or_layout", "tensor_lifetime",
+    "kv_state", "completion_or_backpressure", "interface_or_elaboration",
+    "resource_sharing", "synthesis_or_timing", "infrastructure", "unclassified"
+  ],
+  "error_annotation_required_fields": [
+    "category", "first_observed_submission", "raw_log_reference", "observed_failure",
+    "cause_confirmed", "fix_source_manifest_sha256"
+  ],
+  "cycle_metrics": [
+    "start_accept_to_final_completion", "per_executor_accept_to_completion",
+    "gemm_commands_accepted", "gemm_array_instance_count", "kv_committed_length"
+  ],
+  "cycle_comparison_rule": "Use identical inputs, memory latency, ready stalls and seed. Publish stall-free and stressed runs separately.",
+  "resource_metrics": ["LUT", "FF", "DSP", "BRAM", "URAM", "PE_instances", "blackboxes", "unconstrained_internal_paths"],
+  "resource_comparison_rule": "Compare fully linked tops at the same part, clock and memory implementation; account for ISA instruction memory. Report simulation memory models separately from synthesizable banks.",
+  "human_intervention_classes": ["initial_requirements", "design_hint", "source_edit", "progress_prompt", "infrastructure_repair", "physical_board_operation"],
+  "unassisted_success_rule": "No design hints, human source edits or progress prompts after the initial specification.",
+  "evaluator_infrastructure_rule": "Infrastructure failure is recorded and rerun on the same snapshot; it is never converted to a design PASS or silently discarded."
+}

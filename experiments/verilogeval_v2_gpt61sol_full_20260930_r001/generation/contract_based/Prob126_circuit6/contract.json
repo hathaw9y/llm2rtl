@@ -1,0 +1,50 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 3,
+        "signed": false
+      },
+      "q": {
+        "direction": "output",
+        "width": 16,
+        "signed": false
+      }
+    }
+  },
+  "semantics": {
+    "kind": "combinational lookup",
+    "mapping_hex": {
+      "0": "1232",
+      "1": "aee0",
+      "2": "27d4",
+      "3": "5a0e",
+      "4": "2066",
+      "5": "64ce",
+      "6": "c526",
+      "7": "2f19"
+    },
+    "timing": "Output depends only on current a, with no clock, state, or cycle latency; evaluate after combinational settling.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization required. Unknown a produces unknown q, consistent with initial waveform.",
+    "unknown_inputs": "Use all-X q for any input containing X or Z; partially unknown inputs are unspecified by the waveform."
+  },
+  "numeric": {
+    "input": "Unsigned 3-bit selector, all binary values 0 through 7 legal.",
+    "output": "Exact 16-bit hexadecimal bit patterns from the waveform.",
+    "arithmetic": "None; no rounding, truncation, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Independent expected-value table transcribed from the original waveform.",
+    "coverage": "All 8 selectors, every ordered pair of selectors to check history independence, repeated selections, initial all-X input, and return from unknown to each legal value.",
+    "comparison": "Case inequality against exact 16-bit expected values after settling.",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top; finite compile and run timeouts.",
+    "scope": "Development checks only; no official evaluation, synthesis, or board evidence."
+  },
+  "specification_ambiguities": [
+    "Waveform shows all-X startup only; partially unknown and high-impedance input behavior is not specified. Default all-X output is a simulation convention for these inputs."
+  ]
+}

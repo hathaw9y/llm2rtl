@@ -1,0 +1,190 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob133_2014_q3fsm",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob133_2014_q3fsm",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob133_2014_q3fsm/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791273217.7602,
+    "ended_at_unix": 1791273293.6437187,
+    "seconds": 75.88351917266846,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 78763,
+      "cached_input_tokens": 61568,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2700,
+      "reasoning_output_tokens": 146
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "4dbf41f08034f33ca7f83db8bd3cc8bfc2450d46d42fb591206cdfba52f61afd",
+  "contract_sha256": "7444a3a51153ec22de63f84de292337d23ca802edabcc46ac30ebf8da03ab458",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json"
+      },
+      {
+        "name": "contract_structure",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "name": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "simulation_cycles": 746
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is independent local testing, not official evaluation; no official feedback was available.",
+      "The referenced FSM depiction was not supplied. Output timing follows the original prose: the interval after the third sample is the result cycle.",
+      "Functional checks begin with synchronous reset; unspecified pre-reset power-up behavior is not asserted."
+    ],
+    "justified_RTL_changes": [],
+    "justified_TB_changes": [],
+    "contract_changes": [],
+    "implementation": "Eight-state Moore FSM; entering B excludes entry-edge w; continuous nonoverlapping three-sample groups; result pulse overlaps first cycle of the next group.",
+    "preserved_initial_snapshot": "candidate_initial.sv"
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "4dbf41f08034f33ca7f83db8bd3cc8bfc2450d46d42fb591206cdfba52f61afd",
+      "Prob133_2014_q3fsm_ref.sv": "3c52c08d38debcd7e09092f2e7cf82e0497e058a9584ece479d1c3a4957afef1",
+      "Prob133_2014_q3fsm_test.sv": "7838cbe970c633be739f4ce7eb19d642baae7818068e05994acb802a94fd0c45"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob133_2014_q3fsm_test.sv",
+        "Prob133_2014_q3fsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013069376349449158
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb133_2014_q3fsm_test.sv:59: $finish called at 7071 (1ps)\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 1414 samples\n\nSimulation finished at 7071 ps\nMismatches: 0 in 1414 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013414910063147545
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "4dbf41f08034f33ca7f83db8bd3cc8bfc2450d46d42fb591206cdfba52f61afd",
+      "Prob133_2014_q3fsm_ref.sv": "3c52c08d38debcd7e09092f2e7cf82e0497e058a9584ece479d1c3a4957afef1",
+      "Prob133_2014_q3fsm_test.sv": "7838cbe970c633be739f4ce7eb19d642baae7818068e05994acb802a94fd0c45"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob133_2014_q3fsm_test.sv",
+        "Prob133_2014_q3fsm_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013761593028903008
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb133_2014_q3fsm_test.sv:59: $finish called at 7071 (1ps)\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 1414 samples\n\nSimulation finished at 7071 ps\nMismatches: 0 in 1414 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01322056632488966
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

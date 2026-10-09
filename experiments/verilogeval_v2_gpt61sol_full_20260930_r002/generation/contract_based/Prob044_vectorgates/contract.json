@@ -1,0 +1,49 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": "3-bit unsigned vector [2:0]",
+      "b": "3-bit unsigned vector [2:0]"
+    },
+    "outputs": {
+      "out_or_bitwise": "3-bit vector [2:0]",
+      "out_or_logical": "1 bit",
+      "out_not": "6-bit vector [5:0]"
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "bitwise_or": "Each output bit is OR of corresponding a and b bits.",
+    "logical_or": "One when either input vector is nonzero; zero when both are zero.",
+    "inverse": "out_not[5:3] is bitwise NOT b; out_not[2:0] is bitwise NOT a.",
+    "timing": "Combinational, no added cycles or state; original specifies gates and no clock port.",
+    "reset": "None; original interface has no reset.",
+    "initialization": "No stored state or initialization specified; outputs follow input values after combinational settling."
+  },
+  "numeric": {
+    "a_width": 3,
+    "b_width": 3,
+    "bitwise_or_width": 3,
+    "logical_or_width": 1,
+    "inverse_width": 6,
+    "packing": "b inverse upper half, a inverse lower half",
+    "arithmetic": "Boolean operations only; no rounding, saturation or overflow."
+  },
+  "verification": {
+    "oracle_source": "Original problem.txt gate descriptions and packing requirement",
+    "binary_coverage": "Exhaust all 8 x 8 binary input pairs using per-bit truth tables and nonzero comparisons.",
+    "sampling": "Drive inputs, wait 1 ns for combinational settling, compare with case inequality.",
+    "four_state": "Directed X/Z cases check conventional SystemVerilog OR/NOT behavior, as supplemental coverage.",
+    "failure": "$fatal on any mismatch and bounded timeout",
+    "success": "Explicit PASS line after all comparisons",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z input values",
+      "evidence": "Original does not explicitly describe unknown or high-impedance inputs.",
+      "resolution": "Use standard SystemVerilog bitwise and logical operator semantics; binary behavior is exhaustively checked."
+    }
+  ]
+}

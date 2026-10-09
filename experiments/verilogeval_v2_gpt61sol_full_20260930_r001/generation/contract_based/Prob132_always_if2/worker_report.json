@@ -1,0 +1,58 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "result": "PASS (structure only)",
+      "evidence": "contract_gate.json"
+    },
+    {
+      "name": "initial candidate preservation",
+      "result": "PASS, candidate.sv equals candidate_initial.sv"
+    },
+    {
+      "name": "static RTL review",
+      "result": "Both outputs assigned on every path; exact original module/ports; no state, clock, reset or arithmetic added; reg outputs preserved for interface compatibility"
+    },
+    {
+      "name": "Icarus compilation with -g2012 -Wall -s dev_tb and 20s timeout",
+      "result": "FAIL: exit 139, no diagnostic output",
+      "evidence": [
+        "dev_compile.log",
+        "dev_status.log"
+      ]
+    },
+    {
+      "name": "Icarus v12 version check with 10s timeout",
+      "result": "Version 12.0 reported; internal ivl version query warning",
+      "evidence": [
+        "dev_tool_version.log",
+        "dev_tool_status.log"
+      ]
+    },
+    {
+      "name": "Icarus compilation retry with -g2012 -s dev_tb and 20s timeout",
+      "result": "PASS: exit 0; same RTL, -Wall omitted",
+      "evidence": [
+        "dev_compile_retry.log",
+        "dev_retry_status.log"
+      ]
+    },
+    {
+      "name": "Matching vvp simulation with 20s timeout",
+      "result": "PASS: 128 comparisons covering all eight binary combinations and all 64 ordered input transitions; exit 0",
+      "evidence": [
+        "dev_simulation_retry.log",
+        "dev_retry_status.log"
+      ]
+    }
+  ],
+  "development_outcome": "Initial RTL passes independent exhaustive binary truth-table and transition simulation with no RTL revisions. Initial -Wall compiler failure preserved; successful retry omitted -Wall.",
+  "limitations": [
+    "Official evaluation was not accessed and results are unavailable.",
+    "No synthesis, timing analysis or board testing performed.",
+    "X/Z input behavior is unspecified and not verified.",
+    "The initial compiler exit 139 remains unexplained; no successful -Wall lint result is claimed."
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790748228.734714,
+      "source_sha256": "00038f2bf2f1768cc9b71c1f6118f261670dec8b91d206441235fb81efb90d66",
+      "testbench_sha256": "92ee08c6dbe44b707698dd0a3fade141ee721a1a5f223f953b747dc8d66a1263",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob118_history_shift/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.01074634213000536
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS history shift: 1006 comparisons\ndev_tb.sv:99: $finish called at 3337000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.018488721922039986
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis or board work performed, as required.",
+    "Power-up history is unspecified by the original problem; verification begins with asynchronous reset."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "environment_smoke": "passed: correct fixture passed, deliberately wrong fixture failed, repaired fixture passed",
+  "contract_gate": "passed_structure_only",
+  "rtl_files": [
+    "candidate.sv",
+    "candidate_initial.sv"
+  ],
+  "testbench_files": [
+    "dev_tb.sv"
+  ],
+  "interface_cycle_contract": "Original TopModule ports; posedge clk updates, active-high asynchronous reset; rollback precedes prediction; output is the register with no extra latency.",
+  "numeric_width_decisions": "32-bit history; append direction at bit 0 and discard oldest bit 31.",
+  "static_review": "Single always_ff driver, nonblocking assignments, explicit 32-bit reset and concatenation widths, implicit hold; no dependencies or extra ports.",
+  "verification_coverage": "1006 successful comparisons; directed boundaries, both branch directions, rollback patterns, simultaneous updates, async reset during activity, held reset, off-edge stability, and deterministic pseudorandom inputs."
+}

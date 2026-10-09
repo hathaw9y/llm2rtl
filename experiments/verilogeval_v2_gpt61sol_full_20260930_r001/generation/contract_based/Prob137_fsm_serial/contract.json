@@ -1,0 +1,51 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "in": {
+        "direction": "input",
+        "width": 1
+      },
+      "done": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "All inputs sampled on rising clk edges. One serial bit per edge.",
+    "reset": "Active-high synchronous reset has priority; returns receiver to idle and clears done. No specified power-up state before reset.",
+    "receive": "Idle high waits; idle low is start. Next eight edges are data regardless of value. Following edge samples stop.",
+    "completion": "Valid high stop asserts done after that edge for one clock cycle. On next edge receiver can accept a low start, allowing consecutive frames.",
+    "recovery": "Low expected stop produces no done. Ignore subsequent low bits until a high bit is sampled; that recovery high produces no done and returns to idle. Next edge may accept a new start."
+  },
+  "numeric": {
+    "payload": "Eight data bits arrive least significant first but no payload output or storage is required.",
+    "arithmetic": "Only unsigned 3-bit data-bit index 0 through 7; increment only below 7. No rounding, saturation, or numeric payload operations."
+  },
+  "verification": {
+    "oracle": "Independent integer countdown model of start, eight data samples, stop, and recovery; compare done after every sampled edge.",
+    "directed": [
+      "idle",
+      "all 256 byte patterns with consecutive frames",
+      "invalid stop and delayed recovery",
+      "reset during each frame position and recovery",
+      "synchronous reset does not affect output between edges"
+    ],
+    "random": "Deterministic pseudo-random bits and reset pulses checked against countdown oracle.",
+    "tools": "Icarus Verilog v12 -g2012 explicit dev_tb top; compile and run each under finite timeout."
+  },
+  "specification_ambiguities": [
+    "The problem does not explicitly state pulse width or output phase; interpret done as a one-cycle indication immediately after sampling a valid stop bit.",
+    "Power-up state before a synchronous reset is unspecified."
+  ]
+}

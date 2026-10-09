@@ -1,0 +1,84 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": {
+        "width": 16,
+        "type": "unsigned packed vector"
+      },
+      "b": {
+        "width": 16,
+        "type": "unsigned packed vector"
+      },
+      "c": {
+        "width": 16,
+        "type": "unsigned packed vector"
+      },
+      "d": {
+        "width": 16,
+        "type": "unsigned packed vector"
+      },
+      "e": {
+        "width": 16,
+        "type": "unsigned packed vector"
+      },
+      "f": {
+        "width": 16,
+        "type": "unsigned packed vector"
+      },
+      "g": {
+        "width": 16,
+        "type": "unsigned packed vector"
+      },
+      "h": {
+        "width": 16,
+        "type": "unsigned packed vector"
+      },
+      "i": {
+        "width": 16,
+        "type": "unsigned packed vector"
+      },
+      "sel": {
+        "width": 4,
+        "type": "unsigned packed vector"
+      }
+    },
+    "outputs": {
+      "out": {
+        "width": 16,
+        "type": "unsigned packed vector"
+      }
+    }
+  },
+  "semantics": {
+    "function": "sel 0 through 8 selects a,b,c,d,e,f,g,h,i respectively; sel 9 through 15 produces 16 bits of one",
+    "timing": "Purely combinational; output responds to current inputs without a clock cycle or storage",
+    "clock": "none",
+    "reset": "none",
+    "initialization": "No stored state or initialization required",
+    "handshake": "none"
+  },
+  "numeric": {
+    "data_width": 16,
+    "selector_width": 4,
+    "arithmetic": "None; selected vector copied bit for bit",
+    "default_value": "0xffff",
+    "rounding_overflow_saturation": "Not applicable"
+  },
+  "verification": {
+    "oracle": "Independent array indexed by known selector; selectors >=9 expect 0xffff",
+    "coverage": [
+      "All 16 selector values with distinct input patterns",
+      "All-zero and all-one inputs",
+      "Walking-one and walking-zero data bits on every selected port",
+      "Deterministic pseudorandom vectors for every selector",
+      "Input changes with selector held constant to detect stale outputs"
+    ],
+    "comparison": "Exact 16-bit comparison after combinational settling",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts"
+  },
+  "specification_ambiguities": [
+    "X/Z selector behavior is unspecified by the original problem; no verification requirement is imposed for unknown selectors."
+  ]
+}

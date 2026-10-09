@@ -1,0 +1,52 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "passed",
+      "details": "Exact ports; synchronous active-low reset; separate next-state and state-register blocks; complete Moore output decode; priority 0 > 1 > 2; no preemption; release returns to idle."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "result": "failed",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "exit_code": 255,
+      "result": "failed_no_compiled_input",
+      "log": "dev_simulation.log"
+    },
+    {
+      "name": "tool_version",
+      "command": "timeout 10s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -V",
+      "exit_code": 0,
+      "result": "driver_reports_12.0_but_backend_version_failed",
+      "log": "dev_tool_version.log"
+    },
+    {
+      "name": "dut_elaboration",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -s TopModule -o dev_elaborated candidate.sv",
+      "exit_code": 139,
+      "result": "failed",
+      "log": "dev_elaboration.log"
+    }
+  ],
+  "development_outcome": "Initial candidate preserved unchanged. Contract structural gate and static review passed. Compiler failed with exit 139 for both testbench and standalone DUT; no simulation success claimed.",
+  "limitations": [
+    "Diagram typo and omitted D transitions resolved using original prose, as recorded in frozen contract.",
+    "Self-checking development testbench created but could not execute due to compilation failure.",
+    "Behavior before synchronous reset is unspecified.",
+    "No official evaluation results available; no synthesis or board work performed."
+  ]
+}

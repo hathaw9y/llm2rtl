@@ -1,0 +1,33 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "ring": {"direction": "input", "width": 1},
+      "vibrate_mode": {"direction": "input", "width": 1},
+      "ringer": {"direction": "output", "width": 1},
+      "motor": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "kind": "combinational, stateless",
+    "behavior": "When ring is 0 both outputs are 0. When ring is 1 and vibrate_mode is 0, ringer is 1 and motor is 0. When both inputs are 1, ringer is 0 and motor is 1.",
+    "equations": {"ringer": "ring & ~vibrate_mode", "motor": "ring & vibrate_mode"},
+    "timing": "Outputs follow current inputs after combinational settling; no clock cycles or registered latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization requirement; outputs derive from inputs."
+  },
+  "numeric": {
+    "type": "Single-bit Boolean signals",
+    "arithmetic": "Only Boolean inversion and conjunction; no arithmetic, overflow, rounding or saturation.",
+    "unknown_inputs": "Specification constrains binary inputs only; no additional X/Z behavior required."
+  },
+  "verification": {
+    "oracle": "Independent explicit truth table indexed by ring and vibrate_mode: 00 -> outputs 00, 01 -> 00, 10 -> 10, 11 -> 01 (output order ringer,motor).",
+    "coverage": "Check all four binary input pairs and all sixteen directed transitions between input pairs after settling.",
+    "invariants": "Outputs never both asserted; either output asserted exactly when ring is asserted.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp; finite shell timeouts for compilation and simulation.",
+    "scope": "Local independent development verification only; no official evaluation or synthesis."
+  },
+  "specification_ambiguities": []
+}

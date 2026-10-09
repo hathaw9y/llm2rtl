@@ -1,0 +1,47 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract structural gate",
+      "command": "python3 validate_contract.py",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial candidate preservation",
+      "result": "candidate.sv and candidate_initial.sv are byte-identical"
+    },
+    {
+      "name": "static review",
+      "result": "All eight waveform entries match; exact TopModule ports and widths; complete combinational case with default, blocking assignments, no clock, state, reset, or arithmetic."
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "failed",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "status_log": "dev_status.log",
+      "diagnostics": "Compiler emitted no diagnostic text."
+    },
+    {
+      "name": "development simulation",
+      "result": "not_run",
+      "reason": "Compilation failed; no simulation success claimed."
+    }
+  ],
+  "development_outcome": "Synthesizable combinational lookup candidate delivered unchanged after initial preservation. Structural contract gate passed; development compiler failed with exit code 139, preventing dynamic verification.",
+  "limitations": [
+    "No development simulation result because compiler failed.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing, resource, or board checks performed.",
+    "Partially unknown and high-impedance inputs are unspecified by the original waveform; RTL defaults to all-X."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static_review",
+      "result": "pass",
+      "details": "Exact TopModule interface; one-bit combinational outputs; ringer = ring & ~vibrate_mode and motor = ring & vibrate_mode. No state, clock, reset, latches, or pipeline. Four binary input cases reviewed."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "log": "compile.log",
+      "details": "Compiler exited with code 139 and produced no diagnostics."
+    },
+    {
+      "name": "development_simulation",
+      "result": "not_run",
+      "details": "Compilation failed; matching vvp was not invoked. Independent dev_tb.sv checks all four binary input combinations and includes a finite simulation timeout."
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate retained unchanged. Static review passed; development simulation unverified due to compiler failure.",
+  "limitations": [
+    "No successful compilation or simulation result is claimed.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing, or board verification was performed."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  }
+}

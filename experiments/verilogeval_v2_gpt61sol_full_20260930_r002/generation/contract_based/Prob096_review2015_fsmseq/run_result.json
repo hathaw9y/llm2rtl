@@ -1,0 +1,187 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob096_review2015_fsmseq",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob096_review2015_fsmseq",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob096_review2015_fsmseq/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790751275.0101888,
+    "ended_at_unix": 1790751431.1374075,
+    "seconds": 156.1272189617157,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 127047,
+      "cached_input_tokens": 106240,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2765,
+      "reasoning_output_tokens": 24
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "5a439d7f2488ccf742ae9753157c114d068c71fe4abb1a5b48a2e883967e5be6",
+  "contract_sha256": "8b358cd1eaaf00424ef7281a0814a8b8ca343ed3d64a5182dd1fb794d4c2dca3",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "outcome": "passed",
+        "details": "Correct fixture passed, injected fault failed simulation, repaired fixture passed."
+      },
+      {
+        "command": "python3 validate_contract.py",
+        "outcome": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "outcome": "passed",
+        "evidence": "development/01 and dev_checks.jsonl",
+        "details": "Icarus 12 compile and simulation passed without diagnostics; 4138 positive-edge oracle comparisons."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "Original problem does not specify power-up state; testbench begins checking after a sampled reset.",
+      "No synthesis or board verification was performed, as required."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "implementation": "Five-state FSM recognizes contiguous 1101 with suffix retention and an absorbing FOUND state. Active-high synchronous reset returns to SEARCH. Output asserts immediately after the edge sampling the final sequence bit.",
+    "verification": "Independent rolling four-bit history oracle, exhaustive eight-bit input streams, directed long-one suffix case, sticky persistence, partial-match reset, reset priority, repeated reset, and inter-edge reset pulse. Bounded timeout and fatal mismatch checks.",
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json"
+    },
+    "static_review": "Original one-bit ports and TopModule name preserved; explicit enum if/else transitions, complete combinational assignments, one sequential driver, no extra latency or ports."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "5a439d7f2488ccf742ae9753157c114d068c71fe4abb1a5b48a2e883967e5be6",
+      "Prob096_review2015_fsmseq_test.sv": "a69cc992533c8b2dec59616462e5e842098fde509721af776865c56156338f4f",
+      "Prob096_review2015_fsmseq_ref.sv": "0fb569e05f0af10285612204baabc9997637a47106bee5de8c4afc7e4fb4bfbd"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob096_review2015_fsmseq_test.sv",
+        "Prob096_review2015_fsmseq_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.016984770074486732
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb096_review2015_fsmseq_test.sv:74: $finish called at 3216 (1ps)\nHint: Output 'start_shifting' has no mismatches.\nHint: Total mismatched samples is 0 out of 643 samples\n\nSimulation finished at 3216 ps\nMismatches: 0 in 643 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011937717907130718
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "5a439d7f2488ccf742ae9753157c114d068c71fe4abb1a5b48a2e883967e5be6",
+      "Prob096_review2015_fsmseq_test.sv": "a69cc992533c8b2dec59616462e5e842098fde509721af776865c56156338f4f",
+      "Prob096_review2015_fsmseq_ref.sv": "0fb569e05f0af10285612204baabc9997637a47106bee5de8c4afc7e4fb4bfbd"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob096_review2015_fsmseq_test.sv",
+        "Prob096_review2015_fsmseq_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014712031930685043
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb096_review2015_fsmseq_test.sv:74: $finish called at 3216 (1ps)\nHint: Output 'start_shifting' has no mismatches.\nHint: Total mismatched samples is 0 out of 643 samples\n\nSimulation finished at 3216 ps\nMismatches: 0 in 643 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011690549552440643
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

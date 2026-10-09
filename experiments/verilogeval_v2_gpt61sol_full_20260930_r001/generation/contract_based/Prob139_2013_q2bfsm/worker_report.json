@@ -1,0 +1,48 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS: passed_structure_only",
+      "log": "contract_validation.log",
+      "limitation": "Structural validation is not functional verification."
+    },
+    {
+      "name": "manual_static_review",
+      "result": "No contract mismatch found by source inspection",
+      "log": "static_review.md"
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "FAIL: exit code 139; compiler produced no diagnostics",
+      "logs": ["dev_compile.log", "dev_status.log"]
+    },
+    {
+      "name": "tool_version_diagnostics",
+      "result": "Driver and runtime identify version 12.0; driver version output reports inability to get backend ivl version",
+      "logs": ["dev_tool_version.log", "dev_vvp_version.log", "dev_status.log"]
+    },
+    {
+      "name": "development_simulation",
+      "result": "NOT RUN: compilation failed; no successful executable produced",
+      "planned_command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim"
+    }
+  ],
+  "development_outcome": "Delivered initial synthesizable RTL after manual contract review. Frozen contract passed the structural gate. Self-checking dev_tb.sv was created, but compilation failed with exit code 139, so no simulation success is claimed.",
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  },
+  "limitations": [
+    "Development test coverage is planned and unexecuted due to compiler failure.",
+    "Clock-cycle interpretation is documented in the frozen contract ambiguity list.",
+    "Initialization requires a sampled synchronous reset; no power-up behavior is specified.",
+    "No official evaluation results are available, and no reference RTL or official testbench was accessed.",
+    "No synthesis, implementation, timing or board validation was performed."
+  ]
+}

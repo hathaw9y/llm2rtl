@@ -1,0 +1,38 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "outcome": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "outcome": "passed",
+      "evidence_directory": "development/01",
+      "simulation_checks": 2097
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_tb_changes": {
+    "rtl": "Initial combinational byte permutation; no revisions.",
+    "testbench": "Independent bit-index oracle with directed, walking-bit, exhaustive per-byte, random, and X/Z propagation cases; no corrections."
+  },
+  "interface": "TopModule: 32-bit input in and 32-bit output out; combinational with no clock, reset, or added latency.",
+  "static_review": "All four bytes mapped once, preserving bit order within each byte; no state or incomplete assignments.",
+  "files": [
+    "candidate.sv",
+    "candidate_initial.sv",
+    "dev_tb.sv",
+    "dev_checks.jsonl",
+    "development/01"
+  ]
+}

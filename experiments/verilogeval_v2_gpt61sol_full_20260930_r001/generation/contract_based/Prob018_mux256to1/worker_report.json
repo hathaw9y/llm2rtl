@@ -1,0 +1,81 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "exit_code": 0,
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "PASS: exact ports and widths; unsigned selector; combinational continuous assignment; no state, latch, clock, reset, arithmetic or dependencies"
+    },
+    {
+      "name": "development_compile",
+      "tool": "Icarus v12",
+      "top": "dev_tb",
+      "options": "-g2012 -Wall",
+      "timeout_seconds": 30,
+      "exit_code": 139,
+      "result": "FAIL: compiler crashed without diagnostic output",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "timeout_seconds": 30,
+      "exit_code": 255,
+      "result": "FAIL: no compiled executable",
+      "log": "dev_simulation.log"
+    },
+    {
+      "name": "tool_version",
+      "timeout_seconds": 10,
+      "exit_code": 0,
+      "log": "dev_tool_version.log",
+      "result": "Version 12.0 reported; internal ivl version query failed"
+    },
+    {
+      "name": "dut_only_compile",
+      "top": "TopModule",
+      "options": "-g2012",
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "dev_dut_compile.log"
+    },
+    {
+      "name": "development_compile_retry",
+      "top": "dev_tb",
+      "options": "-g2012 -Wall",
+      "timeout_seconds": 30,
+      "exit_code": 139,
+      "result": "FAIL after testbench cast simplification; RTL unchanged",
+      "log": "dev_compile_retry.log"
+    },
+    {
+      "name": "development_simulation_retry",
+      "timeout_seconds": 30,
+      "exit_code": 255,
+      "result": "FAIL: no compiled executable",
+      "log": "dev_simulation_retry.log"
+    }
+  ],
+  "development_outcome": "Frozen contract validated and candidate preserved before checks. DUT-only elaboration passed. Self-checking simulation could not execute due to testbench compilation crashes; no functional simulation success claimed.",
+  "limitations": [
+    "Official evaluation is external and its results are unavailable.",
+    "Development functional simulation was blocked by Icarus compilation failures.",
+    "X/Z selector behavior is unspecified by the problem.",
+    "No synthesis, timing or board checks performed."
+  ],
+  "preserved_files": [
+    "candidate_initial.sv",
+    "candidate.sv",
+    "contract.json",
+    "dev_tb_initial.sv",
+    "dev_tb.sv"
+  ],
+  "testbench_changes": 1
+}

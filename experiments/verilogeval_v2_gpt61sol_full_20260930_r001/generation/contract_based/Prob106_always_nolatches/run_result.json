@@ -1,0 +1,191 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob106_always_nolatches",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob106_always_nolatches",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob106_always_nolatches/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790731843.904504,
+    "ended_at_unix": 1790731927.8773453,
+    "seconds": 83.97284197807312,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 100687,
+      "cached_input_tokens": 76544,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2122,
+      "reasoning_output_tokens": 24
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "2b9c66a21fd01a596084c95da5b2635886c8a961b117343039e32d1e1248b5e8",
+  "contract_sha256": "95b84a32fdf913e62ff1eabb2557e8d7e7df3dcddcd8ed5f82b0f3093fec90c8",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract_gate",
+        "outcome": "PASS (structure only)",
+        "command": "python3 validate_contract.py",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "static_review",
+        "outcome": "PASS",
+        "details": "Exact TopModule interface; combinational blocking assignments default every output to zero; four exact 16-bit case matches; no state, clocks, resets, arithmetic or module dependencies."
+      },
+      {
+        "name": "development_compile",
+        "outcome": "FAIL_TOOL",
+        "exit_code": 139,
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim.vvp candidate.sv dev_tb.sv",
+        "log": "development_compile.log",
+        "details": "Compiler exited with code 139 and emitted no diagnostics; exit status preserved in development_compile.exit."
+      },
+      {
+        "name": "development_simulation",
+        "outcome": "NOT_RUN",
+        "details": "Compilation did not succeed."
+      }
+    ],
+    "development_outcome": "Contract gate passed and RTL statically reviewed. Independent exhaustive testbench created, but development compilation failed with exit code 139; no simulation success claimed.",
+    "limitations": [
+      "Binary-input functional behavior has not been confirmed by simulation because the compiler failed.",
+      "X/Z input behavior is unspecified by the problem.",
+      "No synthesis, timing or board checks performed.",
+      "Official evaluation is external and its results are unavailable."
+    ],
+    "artifacts": [
+      "contract.json",
+      "contract_gate.json",
+      "contract_gate_history.jsonl",
+      "contract_validation.log",
+      "candidate.sv",
+      "candidate_initial.sv",
+      "dev_tb.sv",
+      "development_compile.log",
+      "development_compile.exit"
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2b9c66a21fd01a596084c95da5b2635886c8a961b117343039e32d1e1248b5e8",
+      "Prob106_always_nolatches_ref.sv": "c224ca40684f97dd739096b361e1d85155a07ae5faf9548c12575d6f0f347ad6",
+      "Prob106_always_nolatches_test.sv": "fd636060098952703ed11e5d88b56f384a91c0a573d10ed98187db89cdf62136"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob106_always_nolatches_test.sv",
+        "Prob106_always_nolatches_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013316335156559944
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb106_always_nolatches_test.sv:43: $finish called at 150100 (1ps)\nHint: Output 'left' has no mismatches.\nHint: Output 'down' has no mismatches.\nHint: Output 'right' has no mismatches.\nHint: Output 'up' has no mismatches.\nHint: Total mismatched samples is 0 out of 30020 samples\n\nSimulation finished at 150100 ps\nMismatches: 0 in 30020 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.20443939790129662
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2b9c66a21fd01a596084c95da5b2635886c8a961b117343039e32d1e1248b5e8",
+      "Prob106_always_nolatches_ref.sv": "c224ca40684f97dd739096b361e1d85155a07ae5faf9548c12575d6f0f347ad6",
+      "Prob106_always_nolatches_test.sv": "fd636060098952703ed11e5d88b56f384a91c0a573d10ed98187db89cdf62136"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob106_always_nolatches_test.sv",
+        "Prob106_always_nolatches_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014288130216300488
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb106_always_nolatches_test.sv:43: $finish called at 150100 (1ps)\nHint: Output 'left' has no mismatches.\nHint: Output 'down' has no mismatches.\nHint: Output 'right' has no mismatches.\nHint: Output 'up' has no mismatches.\nHint: Total mismatched samples is 0 out of 30020 samples\n\nSimulation finished at 150100 ps\nMismatches: 0 in 30020 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.20524010341614485
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

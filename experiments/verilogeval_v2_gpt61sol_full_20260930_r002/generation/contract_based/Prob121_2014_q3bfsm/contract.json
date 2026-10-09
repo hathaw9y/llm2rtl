@@ -1,0 +1,64 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "x": 1
+    },
+    "outputs": {
+      "z": 1
+    }
+  },
+  "semantics": {
+    "evidence": "problem.txt: state-assigned table and synchronous active high reset, positive clock edge",
+    "reset": "At each posedge, reset=1 overrides x and sets state 000. No asynchronous reset response.",
+    "transitions": {
+      "000": [
+        "000",
+        "001"
+      ],
+      "001": [
+        "001",
+        "100"
+      ],
+      "010": [
+        "010",
+        "001"
+      ],
+      "011": [
+        "001",
+        "010"
+      ],
+      "100": [
+        "011",
+        "100"
+      ]
+    },
+    "output": "Combinational Moore z=1 in 011 and 100; z=0 in 000,001,010. After a posedge, output reflects updated state with no additional cycle latency.",
+    "initialization": "No initial state prescribed; test begins with synchronous reset."
+  },
+  "numeric": {
+    "state_width": 3,
+    "state_encoding": "Exact unsigned binary assignments from table",
+    "port_width": 1,
+    "arithmetic": "None"
+  },
+  "verification": {
+    "oracle": "Independent integer table from original problem; observes z before and after edges",
+    "coverage": "All 10 legal state/input transitions, reset from each reachable state with both x values, reset asserted between edges, exhaustive 8-bit input histories",
+    "sampling": "Drive on falling edges; check after settling and one time unit after rising edge",
+    "failure": "fatal mismatches, bounded timeout, explicit PASS"
+  },
+  "specification_ambiguities": [
+    {
+      "item": "States 101,110,111",
+      "resolution": "Unspecified by original; implement recovery to 000, do not claim this as required or test it as specified behavior."
+    },
+    {
+      "item": "Before first reset",
+      "resolution": "Unspecified; no initialization added and no expected output imposed before reset."
+    }
+  ]
+}

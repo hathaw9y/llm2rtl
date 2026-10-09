@@ -1,0 +1,26 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": "Correct fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "result": "Icarus 12 compilation and simulation passed; 1287 output and synchronous timing checks."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is independent and does not establish official evaluation correctness.",
+    "Only physically valid sensor patterns 000, 001, 011, and 111 are specified and verified. Other patterns retain the current state.",
+    "Power-up state is unspecified; checks begin after a synchronous reset."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Registers water level and direction of the most recent distinct level change. Intermediate levels assert supplemental flow on upward changes and retain it while unchanged. Extreme levels override supplemental flow. Active-high synchronous reset selects the all-outputs-asserted lowest level.",
+  "initial_snapshot": "candidate_initial.sv"
+}

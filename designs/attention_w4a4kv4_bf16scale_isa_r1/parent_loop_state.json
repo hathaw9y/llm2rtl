@@ -1,0 +1,54 @@
+{
+  "status": "complete_bounded_attention_ISA_RTL",
+  "design": "attention_w4a4kv4_bf16scale_isa_r1",
+  "authorization": "User continued from full ISA program to controller and compute engine RTL",
+  "skills": [
+    "multi-agent-hdl-generation",
+    "parent-module-decomposition"
+  ],
+  "current_contract_system": "contracts/README.md minimal four-common-contracts",
+  "waves": [
+    {
+      "agent": "/root/native_tests",
+      "role": "math_implementation",
+      "contract": {
+        "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_fp32_math.json",
+        "sha256": "5b24dfa7f8dd8db519cf807b40df0b5e830c22be8379d23e30b072007a934421"
+      }
+    },
+    {
+      "agent": "/root/native_core",
+      "role": "control_implementation",
+      "contract": {
+        "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_control.json",
+        "sha256": "53fe7ef380ce28536cd9c48be01b1957230f7263bbf5c65bc8eb872cc6a38ec2"
+      }
+    },
+    {
+      "agent": "/root/native_review",
+      "role": "tensor_executor_implementation",
+      "contract": {
+        "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/modules/attention_tensor_executor.json",
+        "sha256": "0023e5d80df0b358aadc30431dc9ca38279cf6e51d8d9fc534333453ee7c0292"
+      }
+    }
+  ],
+  "blocked_dependencies": [],
+  "scope_exclusions": [
+    "board",
+    "full pretrainedmodel",
+    "persistentKVcache",
+    "large tensor tiling"
+  ],
+  "next_parent_action": "none within authorized standalone RTL scope",
+  "child_status": {
+    "math": "PASS math_final001 independentlyreviewed",
+    "control": "PASS current010/control_review_ackfix,38casesperlat1/2",
+    "executor": "PASS 243cases,independentreview73b3b6b9",
+    "full_integration": "PASS parent_acceptance8efae2f3; final0029profiles52cases+lat2prefill36+strictlint9+actualtop5nsOOCpositive"
+  },
+  "validation": {
+    "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/rtl_validation.json",
+    "sha256": "8e336a75009db852d049b07d84306e7d1eb74cb02e7e57c9c8bb292be020d554"
+  }
+}

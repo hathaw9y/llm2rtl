@@ -1,0 +1,38 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1,
+      "d": 1
+    },
+    "outputs": {
+      "q": 1
+    }
+  },
+  "semantics": {
+    "type": "combinational",
+    "equation": "q = b OR c",
+    "evidence": "Original table at 0 through 90 ns covers all 16 binary inputs; q is zero exactly when b=c=0.",
+    "latency": "No clock cycles or storage; combinational settling only.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "Original 0ns row drives 0000 with q=0; no initialized state required."
+  },
+  "numeric": {
+    "widths": "All ports unsigned one-bit logic",
+    "operation": "bitwise OR",
+    "arithmetic": "No rounding, saturation, or overflow applicable."
+  },
+  "verification": {
+    "oracle": "Literal expected q values from original waveform table, not DUT equation.",
+    "timing": "Drive original rows at 0,5,...,90 ns; sample after one precision tick for combinational settling.",
+    "coverage": "Original replay includes all 16 binary combinations and repeated initial rows; additionally replay combinations in reverse order to check stateless behavior.",
+    "failure": "Case inequality, fatal mismatch, bounded timeout, final PASS marker.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "X/Z input behavior is unspecified; verification acceptance covers the binary waveform only. Sampling within a timestamp is unspecified; testbench uses one 1ps settling tick without shifting stimulus timestamps."
+  ]
+}

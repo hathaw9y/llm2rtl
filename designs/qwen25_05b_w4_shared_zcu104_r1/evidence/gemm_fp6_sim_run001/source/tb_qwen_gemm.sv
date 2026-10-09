@@ -1,0 +1,59 @@
+`timescale 1ns/1ps
+module tb_qwen_gemm;
+ logic clk=0;always #2.5 clk=~clk;
+ logic rst_n=0,cmd_valid,cmd_ready,rsp_valid,rsp_ready,rsp_error;
+ logic [9:0] cmd_id,rsp_cmd_id;logic [4:0] cmd_a,cmd_b,cmd_scale,cmd_dst,cmd_rows;
+ logic [10:0] cmd_n,cmd_k;logic [1:0] cmd_mode;logic cmd_init;logic [7:0] rsp_error_code;
+ logic act_rd_en,wgt_rd_en,scale_rd_en,dst_rd_en,dst_wr_en;
+ logic [12:0] act_rd_addr,wgt_rd_addr,scale_rd_addr,dst_rd_addr,dst_wr_addr;
+ logic [127:0] act_rd_data,wgt_rd_data,scale_rd_data,dst_rd_data,dst_wr_data;logic [15:0] dst_wr_mask;
+ logic [127:0] act[0:2047],wgt[0:8191],scale[0:31],dst[0:4095],expected[0:4095];
+ logic [127:0] ap[0:2],bp[0:2],sp[0:2],dp[0:2];
+ integer mode,rows,n,k,initialize,ac,bc,sc,dc,cycles,writes,case_id,fd,got;string directory;
+ qwen_gemm_executor dut(.*);
+ always @* begin act_rd_data=ap[2];wgt_rd_data=bp[2];scale_rd_data=sp[2];dst_rd_data=dp[2];end
+ always @(posedge clk)begin
+  ap[0]<=act_rd_en?act[act_rd_addr]:128'b0;bp[0]<=wgt_rd_en?wgt[wgt_rd_addr]:128'b0;sp[0]<=scale_rd_en?scale[scale_rd_addr]:128'b0;dp[0]<=dst_rd_en?dst[dst_rd_addr]:128'b0;
+  for(integer i=1;i<3;i=i+1)begin ap[i]<=ap[i-1];bp[i]<=bp[i-1];sp[i]<=sp[i-1];dp[i]<=dp[i-1];end
+  if(act_rd_en && act_rd_addr>=ac)$fatal(1,"ACT bounds");
+  if(wgt_rd_en && wgt_rd_addr>=bc)$fatal(1,"WGT bounds");
+  if(scale_rd_en && scale_rd_addr>=sc)$fatal(1,"SCALE bounds");
+  if(dst_rd_en && dst_rd_addr>=dc)$fatal(1,"PSUM bounds");
+  if(dst_wr_en)begin if(dst_wr_addr>=dc || dst_wr_mask!=16'hffff)$fatal(1,"DST bounds");dst[dst_wr_addr]<=dst_wr_data;writes=writes+1;end
+ end
+ task automatic run_command(input logic error_expected);
+  writes=0;@(negedge clk);cmd_valid=1;@(posedge clk);if(!cmd_ready)$fatal(1,"not ready");@(negedge clk);cmd_valid=0;cycles=0;
+  while(!rsp_valid)begin @(negedge clk);cycles=cycles+1;if(cycles>1000000)$fatal(1,"timeout case%0d state%0d",case_id,dut.state_r);end
+  if(rsp_error!=error_expected || rsp_cmd_id!=cmd_id)$fatal(1,"response case%0d code%0d",case_id,rsp_error_code);
+  repeat(3)begin @(negedge clk);if(!rsp_valid || rsp_cmd_id!=cmd_id)$fatal(1,"response hold");end
+  rsp_ready=1;@(negedge clk);rsp_ready=0;if(rsp_valid || !cmd_ready)$fatal(1,"completion");
+ endtask
+ initial begin
+  if(!$value$plusargs("VECTORS=%s",directory))$fatal(1,"vectors");
+  cmd_valid=0;rsp_ready=0;cmd_id=0;cmd_a=6;cmd_b=7;cmd_scale=8;cmd_dst=11;cmd_rows=1;cmd_n=128;cmd_k=128;cmd_mode=0;cmd_init=1;ac=16;bc=512;sc=32;dc=32;writes=0;case_id=0;
+  repeat(4)@(negedge clk);rst_n=1;fd=$fopen({directory,"/headers.txt"},"r");if(fd==0)$fatal(1,"headers");
+  while(!$feof(fd))begin
+   got=$fscanf(fd,"%d %d %d %d %d %d %d %d %d\n",mode,rows,n,k,initialize,ac,bc,sc,dc);if(got!=9)$fatal(1,"header invalid");
+   cmd_mode=2'(mode);cmd_rows=5'(rows);cmd_n=11'(n);cmd_k=11'(k);cmd_init=1'(initialize);cmd_a=mode==2?21:6;cmd_b=mode==0?7:mode==1?9:10;cmd_dst=mode==1?18:11;cmd_id=10'(case_id+1);
+   $readmemh($sformatf("%s/%0d_act.mem",directory,case_id),act,0,ac-1);
+   $readmemh($sformatf("%s/%0d_wgt.mem",directory,case_id),wgt,0,bc-1);
+   $readmemh($sformatf("%s/%0d_scale.mem",directory,case_id),scale,0,sc-1);
+   $readmemh($sformatf("%s/%0d_initial.mem",directory,case_id),dst,0,dc-1);
+   $readmemh($sformatf("%s/%0d_expected.mem",directory,case_id),expected,0,dc-1);
+   run_command(0);
+   for(integer i=0;i<dc;i=i+1)if(dst[i]!==expected[i])$fatal(1,"GEMM case%0d word%0d got=%h expected=%h",case_id,i,dst[i],expected[i]);
+   $display("PASS GEMM case%0d mode%0d M%0d N%0d K%0d cycles%0d",case_id,mode,rows,n,k,cycles);case_id=case_id+1;
+  end
+  $fclose(fd);cmd_rows=0;cmd_id=90;run_command(1);if(writes!=0)$fatal(1,"shape wrote");
+  cmd_mode=0;cmd_rows=1;cmd_n=128;cmd_k=128;cmd_a=6;cmd_b=7;cmd_dst=11;cmd_init=1;ac=16;bc=512;sc=32;dc=32;
+  cmd_a=7;cmd_id=91;run_command(1);if(writes!=0)$fatal(1,"route wrote");cmd_a=6;
+  for(integer i=0;i<16;i=i+1)act[i]=0;act[0][15:0]=16'h7fc0;cmd_id=92;run_command(1);act[0]=0;
+  for(integer i=0;i<512;i=i+1)wgt[i]=0;wgt[0][3:0]=8;cmd_id=93;run_command(1);wgt[0]=0;
+  for(integer i=0;i<32;i=i+1)scale[i]={4{32'h3f800000}};scale[0][31:0]=32'hbf800000;cmd_id=94;run_command(1);scale[0]={4{32'h3f800000}};
+  cmd_init=0;dst[0][31:0]=32'h7fc00000;cmd_id=95;run_command(1);dst[0]=0;
+  cmd_init=1;cmd_id=96;run_command(0);
+  @(negedge clk);cmd_valid=1;@(negedge clk);cmd_valid=0;repeat(15)@(negedge clk);rst_n=0;repeat(3)@(negedge clk);rst_n=1;#1;
+  if(rsp_valid || !cmd_ready)$fatal(1,"reset flush");cmd_id=97;run_command(0);
+  $display("PASS GEMM payload/error/backpressure/reset");$finish;
+ end
+endmodule

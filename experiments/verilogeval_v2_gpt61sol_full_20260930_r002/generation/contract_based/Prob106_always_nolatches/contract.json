@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"scancode": "16-bit unsigned input [15:0]"},
+    "outputs": {"left": "1 bit", "down": "1 bit", "right": "1 bit", "up": "1 bit"},
+    "evidence": "Original problem interface lists only scancode and four direction outputs."
+  },
+  "semantics": {
+    "mapping": {"16'he06b": "left", "16'he072": "down", "16'he074": "right", "16'he075": "up", "anything_else": "all outputs zero"},
+    "output_rule": "Exactly the matching direction is asserted; all other directions are zero.",
+    "timing": "Combinational response to present scancode, no cycle latency or retained output.",
+    "reset_initialization": "No clock/reset ports or state are specified; outputs follow input after combinational settling.",
+    "evidence": "Original problem says build a circuit recognizing four scancodes using case or if-elseif and maps anything else to none."
+  },
+  "numeric": {
+    "comparison": "Exact full-width 16-bit scancode match; no signed arithmetic.",
+    "output_width": "Four independent one-bit flags; no truncation, overflow, or rounding."
+  },
+  "verification": {
+    "oracle": "Independent per-direction equality checks against the four constants from the original problem.",
+    "coverage": "Directed arrow-to-arrow and arrow-to-invalid transitions, zero and maximum values, all 65536 binary inputs.",
+    "sampling": "Drive input and wait one simulation time unit for combinational settling before comparison.",
+    "failure_success": "$fatal on any mismatch; bounded timeout; PASS line only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {"topic": "Four-state inputs", "evidence": "Original problem does not specify X/Z scancodes.", "resolution": "Use exact case matching with zero default; binary input coverage is the required functional oracle and X/Z checks are supplemental implementation checks."}
+  ]
+}

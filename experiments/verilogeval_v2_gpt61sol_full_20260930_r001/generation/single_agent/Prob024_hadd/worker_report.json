@@ -1,0 +1,36 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "outcome": "pass",
+      "details": "Exact TopModule one-bit interface; combinational XOR sum and AND carry; no state, latches, or non-synthesizable constructs."
+    },
+    {
+      "name": "development compile",
+      "outcome": "tool_failure",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+      "options": "-g2012 -Wall -s dev_tb",
+      "timeout_seconds": 20,
+      "exit_code": 139,
+      "log": "compile.log",
+      "details": "Compiler exited with code 139 without diagnostic output or a simulation executable."
+    },
+    {
+      "name": "development simulation attempt",
+      "outcome": "tool_failure",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+      "timeout_seconds": 20,
+      "log": "simulation.log",
+      "details": "vvp reported dev_sim: Unable to open input file. The independent testbench checks all four binary input combinations, but could not execute."
+    }
+  ],
+  "development_outcome": "Initial candidate retained unchanged. Static review passed; no simulation success is claimed.",
+  "limitations": [
+    "Development simulation unavailable because the requested compiler failed.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing, or board checks performed."
+  ],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"]
+}

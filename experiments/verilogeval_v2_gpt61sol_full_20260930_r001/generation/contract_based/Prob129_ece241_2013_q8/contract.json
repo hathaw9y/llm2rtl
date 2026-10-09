@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "ports": {"clk": {"direction": "input", "width": 1}, "aresetn": {"direction": "input", "width": 1}, "x": {"direction": "input", "width": 1}, "z": {"direction": "output", "width": 1}}},
+  "semantics": {
+    "clock": "State advances on positive clk edges, sampling x when aresetn is high.",
+    "reset": "Active-low asynchronous reset triggered by negedge aresetn; while low, state is empty at every positive clock edge. Reset discards prior input history.",
+    "initialization": "No power-up state specified; assert reset before expecting defined behavior.",
+    "states": ["EMPTY: no matching prefix", "ONE: suffix 1", "ONE_ZERO: suffix 10"],
+    "transitions": {"EMPTY": {"0": "EMPTY", "1": "ONE"}, "ONE": {"0": "ONE_ZERO", "1": "ONE"}, "ONE_ZERO": {"0": "EMPTY", "1": "ONE"}},
+    "output": "Combinational Mealy z = (state == ONE_ZERO) AND x. Reflects current x immediately without an additional register; reset to EMPTY makes z zero. At the clock consuming the final 1, state becomes ONE, preserving overlap.",
+    "state_count": 3
+  },
+  "numeric": {"domain": "Single-bit Boolean sequence matching", "state_encoding": "Three states encoded by 2 unsigned bits", "arithmetic": "No arithmetic, rounding, saturation, or overflow"},
+  "verification": {"oracle": "Independent two-bit sampled history plus valid-history length; expect z iff last two sampled bits are 10 and current x is 1", "tests": ["Exhaust all 256 eight-bit streams with reset between streams", "Check outputs before and after each sampling edge", "Change x between clock edges to check Mealy behavior", "Assert reset between edges during partial and detected sequences", "Check overlapping 10101 and repeated ones/zeros"], "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp; finite external timeouts and testbench watchdog"},
+  "specification_ambiguities": []
+}

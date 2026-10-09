@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "load": 1, "ena": 2, "data": 100}, "outputs": {"q": 100}},
+  "semantics": {"sampling": "Rising edge of clk; synchronous load and ena per original problem", "priority": "load high loads data instead of rotating", "right": "ena=01 moves old bit i to (i+99)%100", "left": "ena=10 moves old bit i to (i+1)%100", "hold": "ena=00 or 11 preserves q", "reset": "No reset port or reset behavior specified", "initialization": "No initial value specified; no initialization added", "latency": "q updates on the accepting rising edge, without extra cycles"},
+  "numeric": {"width": 100, "type": "Unsigned bit vector", "wrap": "Rotation preserves every bit including boundary bits", "arithmetic": "No rounding, saturation, or arithmetic overflow"},
+  "verification": {"oracle": "Independent per-bit index mapping derived from original problem", "sampling": "Drive on falling edges, check stability before rising edge, sample after nonblocking updates", "cases": "Load priority for all ena values; both hold values; one-hot boundary and all positions; full rotations; alternating and random data; zero and all ones", "timeout": "Bounded simulation with fatal mismatch and explicit PASS"},
+  "specification_ambiguities": ["Initial q and unknown control behavior are unspecified; do not add initialization or require a defined power-up value.", "Clock edge is implicit in the synchronous register description; use conventional rising-edge operation."]
+}

@@ -1,0 +1,39 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1,
+      "d": 1
+    },
+    "outputs": {
+      "out": 1,
+      "out_n": 1
+    },
+    "evidence": "Original interface lists six one-bit ports; no clock or reset ports."
+  },
+  "semantics": {
+    "equation": "out = (a AND b) OR (c AND d); out_n = NOT out",
+    "structure": "Two intermediate wires, each driven by its respective AND; OR drives out; inverter consumes out.",
+    "timing": "Pure combinational logic, no cycle latency or stored state; observe after simulator settling.",
+    "reset": "None specified or present.",
+    "initialization": "No state or specified initialization; outputs follow current gate inputs.",
+    "evidence": "Original problem explicitly describes two AND gates, one OR gate and inverted out."
+  },
+  "numeric": {
+    "widths": "All inputs, outputs and intermediate wires are one bit.",
+    "operations": "Bitwise AND, OR and inversion; no arithmetic, rounding or overflow.",
+    "four_state": "Standard Verilog gate semantics for X/Z; no forced initialization."
+  },
+  "verification": {
+    "oracle": "Independent truth-table classification from original gate description.",
+    "coverage": "All 16 binary input combinations, plus all 256 four-state input combinations.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling.",
+    "failure": "Case-inequality comparison and $fatal; bounded timeout.",
+    "success": "Explicit PASS line only after all comparisons.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

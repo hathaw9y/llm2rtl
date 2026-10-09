@@ -1,0 +1,28 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "outcome": "passed",
+      "details": "Reviewed 1101 prefix transitions, repeated-one overlap, absorbing FOUND state, active-high synchronous reset priority, one-bit interface, complete combinational assignments, and sequential nonblocking assignments. Detection asserts after the rising edge sampling the final 1."
+    },
+    {
+      "name": "Icarus development compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "outcome": "tool_failed",
+      "exit_code": 139,
+      "log": "compile.log",
+      "details": "No diagnostic text was emitted and no simulation executable was produced."
+    },
+    {
+      "name": "development simulation",
+      "outcome": "not_run",
+      "details": "Compilation failed. The independent testbench covers all 4096 twelve-bit streams, sticky detection, reset during a partial match, and synchronous reset behavior, but these checks have not executed."
+    }
+  ],
+  "development_outcome": "Initial candidate delivered unchanged after static review; development compilation failed in the tool with exit code 139. No simulation success is claimed.",
+  "limitations": [
+    "Dynamic behavior has not been verified because the requested development compiler failed.",
+    "No synthesis, timing analysis, board access, official testbench access, or official evaluation was performed."
+  ]
+}

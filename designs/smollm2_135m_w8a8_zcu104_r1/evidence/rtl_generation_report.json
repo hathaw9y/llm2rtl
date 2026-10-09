@@ -1,0 +1,60 @@
+{
+  "schema": "llm2rtl.rtl_generation_report.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "module_id": "int8_gemm_executor",
+  "status": "RTL_GENERATED_STANDALONE_FUNCTIONAL_VERIFIED",
+  "scope": "shared W8A8 GEMM/QK/PV executor, not full model accelerator",
+  "architecture": [
+    "N16xK16 signed INT8 shared core, 256 products per accepted staged cycle",
+    "INT32 accumulation without runtime overflow detection",
+    "two internal N16xK32 B panels; ISA weight banks B3/B15 support explicit DMA pingpong",
+    "96 GQA contexts, FP32 RNE scale chain, four-lane BF16 output",
+    "registered A staging/result FIFO reads, bounded native read credits, captured identities and error drain/invalidation"
+  ],
+  "source_sha256": {
+    "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+    "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+    "rtl/fp32_bf16_epilogue.sv": "3fbf60151b57fe04f4aa1546f62735562b283a5499a0c18e6cf281e085e78611",
+    "rtl/int8_dot_core.sv": "9825be03f1f6021cab761a4ae15a238f81e02f43e15685abb65c8789e47b589e",
+    "rtl/smollm2_int8_gemm_executor.sv": "e773805dbf1860e2759057777f0f14534f821c4e1952fac310525c4cbf924335",
+    "tb/executor_tb.sv": "22400d20725133ecfe87167ff4be6b237cf66072ded1f70d497e637bb36930e0"
+  },
+  "contract_manifest": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/gemm_module_manifest.json",
+    "sha256": "ac38583b214a2374a6cd8df71174676cfc4e51715a7c6f68c06a454eb48cb781"
+  },
+  "rtl_binding": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/rtl_port_binding.json",
+    "sha256": "ea033a7269285571057582d32e193dc17c115a84911d4f1646bb4cd096b78504"
+  },
+  "fixtures": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/tb/executor_vectors/manifest.json",
+    "sha256": "aeb623c6e4c1d2e60fa48922a5f017f4015c64587b5a31f3578b13cc17057a28"
+  },
+  "self_verification": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/evidence/int8_gemm_executor/kernel_report.json",
+    "sha256": "636fc415dd2cf32d6eba72619d60ea8464dc4ecde31c98293c9bb21d98f4ebd7"
+  },
+  "independent_verification": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_executor_audit/module_verification_report.json",
+    "sha256": "1199c4081d5ad798740ac2cb44a85371f17a66b425d43abe3f9aa6316500aa8b"
+  },
+  "tests": {
+    "normal": 17,
+    "fault": 15,
+    "repeat_reset": 3,
+    "long_stall": 4,
+    "independent_replays": 10,
+    "independent_stress_replays": 2,
+    "all_passed": true
+  },
+  "synthesis": "NOT_RUN_PENDING_USER_DESIGNATED_BUILD_MACHINE",
+  "remaining": [
+    "Vivado2025.2 5ns OOC resource/setup/hold/pulse-width validation",
+    "actual native fabric, dispatcher ownership and concurrent alternate-bank DMA integration",
+    "remaining opcode executors and full-model RTL/quality validation",
+    "board integration, routed artifacts and user-run hardware validation"
+  ],
+  "full_promotion_eligible": false
+}

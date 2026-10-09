@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "ports": {"clk": {"direction":"input","width":1}, "reset":{"direction":"input","width":1}, "in":{"direction":"input","width":8}, "out_bytes":{"direction":"output","width":24}, "done":{"direction":"output","width":1}}},
+  "semantics": {
+    "clock": "All input bytes sampled on positive clock edges; one byte per edge, no handshake",
+    "reset": "Active high synchronous; at a reset edge discard partial or pending packets, return to boundary search, and clear done",
+    "initialization": "Behavior before a synchronous reset edge is unspecified; output payload is unconstrained when done is zero",
+    "framing": "While searching discard bytes with bit 3 zero. A byte with bit 3 one is the first byte; accept the next two bytes unconditionally",
+    "completion": "If first, second, third bytes are sampled at edges n,n+1,n+2, done is high immediately after edge n+3 for one clock cycle and out_bytes equals their concatenation",
+    "overlap": "Edge n+3 also searches for the next first byte; continuous messages can complete every three edges",
+    "payload": "out_bytes[23:16] first byte, [15:8] second byte, [7:0] third byte; valid throughout done cycle"
+  },
+  "numeric": {"data":"Unsigned opaque 8-bit bytes, copied exactly", "packing":"24-bit concatenation in arrival order, first byte most significant", "arithmetic":"No arithmetic, rounding, saturation, or overflow behavior required"},
+  "verification": {"oracle":"Independent byte-count parser with pending completed-message publication one edge later", "directed":"Original waveform; boundary search; bit 3 ignored for second and third bytes; back-to-back packets; all-zero/all-one payload bytes; reset at every partial and pending stage", "random":"Deterministic pseudorandom byte streams and resets, compare done every edge and payload only when done", "sampling":"Drive on falling edge and compare after positive edge NBA updates", "tools":"Icarus -g2012 with explicit dev_tb top and finite compile and simulation timeouts"},
+  "specification_ambiguities": [{"topic":"Meaning of cycle immediately after third byte", "resolution":"Original waveform explicitly samples third byte 09 at 35ns and asserts done at 45ns; use a one-edge delayed completion"}]
+}

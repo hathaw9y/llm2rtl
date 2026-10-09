@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "code": 8
+    },
+    "outputs": {
+      "out": 4,
+      "valid": 1
+    },
+    "clock_reset": "No clock or reset ports in original interface."
+  },
+  "semantics": {
+    "behavior": "Combinational decode of current code; no state or added latency.",
+    "mapping": {
+      "45": 0,
+      "16": 1,
+      "1e": 2,
+      "26": 3,
+      "25": 4,
+      "2e": 5,
+      "36": 6,
+      "3d": 7,
+      "3e": 8,
+      "46": 9
+    },
+    "recognized": "out is mapped digit and valid is 1.",
+    "unrecognized": "Both outputs are zero.",
+    "initialization": "No specified initial state; outputs determined by input after combinational settling.",
+    "evidence": "Original problem specifies outputs for matching and nonmatching input with no clock, reset, or sequential behavior."
+  },
+  "numeric": {
+    "code": "8-bit scancode compared exactly against hexadecimal constants.",
+    "out": "4-bit unsigned digit 0 through 9; default zero.",
+    "valid": "1-bit recognition flag."
+  },
+  "verification": {
+    "oracle": "Independent digit-indexed scancode table from original mapping.",
+    "coverage": "All 256 binary inputs in ascending and descending order plus recognized-to-unrecognized transitions.",
+    "sampling": "Sample one nanosecond after each input change for combinational settling.",
+    "failure": "$fatal on mismatch and bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "Behavior for code containing X or Z is not explicitly specified; use exact case matching with default zero, and do not treat unknown-input behavior as an official correctness claim."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence_directory": "development/01", "compile_returncode": 0, "simulation_returncode": 0, "pass_marker": "PASS Rule 110: 9285 complete-vector checks"}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "The original specifies no initial state or reset. Functional evolution comparisons begin after synchronous load.",
+    "Unknown-valued input behavior is not specified and is not independently verified.",
+    "No synthesis or board work performed, as required."
+  ],
+  "justified_changes": {"rtl": [], "testbench": [], "contract": []},
+  "implementation": {"source": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json", "cycle_behavior": "Synchronous active-high load priority; otherwise one simultaneous Rule 110 step per rising edge", "numeric": "512 one-bit cells, zero-valued exterior neighbors", "static_review": "Exact original ports; nonblocking state updates; no initialization, reset, extra ports, or extra latency; Boolean equation checked against all eight table rows"},
+  "verification_coverage": ["Every original binary table row at all 510 interior positions", "Zero and all-one states", "Alternating patterns", "Isolated endpoint cells", "Repeated and consecutive loads", "State stability between rising edges", "40 random loads with 25 evolution steps each", "Bounded timeout and fatal mismatch checks"]
+}

@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"in": "255-bit vector [254:0]"}, "outputs": {"out": "8-bit vector [7:0]"}},
+  "semantics": {"function": "out equals the number of input bits equal to 1 for binary input vectors", "timing": "Combinational; the original specifies a population count circuit with no clock or cycle latency", "reset": "No reset port or reset behavior specified", "initialization": "No state or initialization required; output follows the input after combinational settling"},
+  "numeric": {"input_width": 255, "output_width": 8, "minimum": 0, "maximum": 255, "interpretation": "Unsigned count; all possible counts fit in 8 bits"},
+  "verification": {"oracle": "Independent count of set bit positions from the original population-count definition", "sampling": "Drive input then wait one simulation time unit before checking combinational output", "cases": "Zero, all ones, every one-hot and one-cold vector, all counts 0 through 255, alternating patterns, random binary vectors", "failure": "Fatal mismatch and bounded timeout; PASS printed only after all checks"},
+  "specification_ambiguities": ["Behavior for X or Z input bits is not specified; development checks target binary vectors."]
+}

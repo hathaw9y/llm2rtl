@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"clk": 1, "a": 1, "b": 1},
+    "outputs": {"out_assign": 1, "out_always_comb": 1, "out_always_ff": 1},
+    "extra_ports": false
+  },
+  "semantics": {
+    "combinational": "out_assign and out_always_comb equal bitwise a XOR b after combinational settling, implemented respectively using assign and combinational always block.",
+    "sequential": "On every positive edge of clk, out_always_ff samples a XOR b using nonblocking assignment; holds that value between positive edges. No additional pipeline stage.",
+    "reset": "No reset port or reset behavior is specified; do not add reset.",
+    "initialization": "No initial value is specified; leave the flip-flop uninitialized (X in four-state simulation before its first positive edge).",
+    "evidence": "Original problem: XOR gate three ways; flip-flop output is delayed; all sequential logic triggered on positive edge. Original port list has no reset."
+  },
+  "numeric": {
+    "width": "All signals are unsigned one-bit four-state logic.",
+    "operation": "Bitwise XOR; binary truth table 00=0, 01=1, 10=1, 11=0; X or Z operands yield X.",
+    "arithmetic": "No rounding, overflow, saturation, or numeric conversion."
+  },
+  "verification": {
+    "oracle": "Independent original-spec truth table, including four-state unknown cases.",
+    "coverage": "All binary input pairs and all X/Z combinations; input changes with clock low and high; rising-edge sample and falling-edge hold; initial uninitialized register.",
+    "sampling": "Drive inputs away from clock edges, check combinational settling and registered hold, then check registered output after NBA settling at rising edges.",
+    "completion": "Self-checking dev_tb, fatal mismatches, bounded timeout, PASS marker; run mandated dev_check.py initial."
+  },
+  "specification_ambiguities": [
+    {"topic": "Initial registered output", "original_evidence": "No reset or initial value is specified.", "resolution": "No defined hardware initial value is promised; test simulation X before the first edge as the consequence of uninitialized RTL."}
+  ]
+}

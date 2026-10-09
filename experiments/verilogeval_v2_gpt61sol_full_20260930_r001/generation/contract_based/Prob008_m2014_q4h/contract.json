@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "in",
+        "direction": "input",
+        "width_bits": 1
+      },
+      {
+        "name": "out",
+        "direction": "output",
+        "width_bits": 1
+      }
+    ]
+  },
+  "semantics": {
+    "function": "out = in combinationally",
+    "timing": "Continuous combinational propagation; zero registered cycle latency and no explicit delay.",
+    "clock": "None",
+    "reset": "None",
+    "initialization": "No state or initialization requirement; output follows input.",
+    "input_changes": "Every input change propagates to output."
+  },
+  "numeric": {
+    "representation": "One-bit signal",
+    "operation": "Identity connection, including X/Z propagation under four-state simulation.",
+    "arithmetic": "None; no rounding, truncation, saturation, or overflow."
+  },
+  "verification": {
+    "basis": "Original problem only; independent directed truth-table test.",
+    "cases": [
+      "Drive 0 and expect 0",
+      "Drive 1 and expect 1",
+      "Repeat both transitions",
+      "Check X and Z propagation as continuous-connection simulation behavior"
+    ],
+    "comparison": "Case inequality after a simulation settling interval.",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top; finite compile and simulation timeouts.",
+    "scope": "Development elaboration and self-checking simulation only; no synthesis or official evaluation."
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,36 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "coverage": "All 80 legal one-hot state and binary input combinations",
+      "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; no diagnostics"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation is pending.",
+    "No synthesis or board work performed.",
+    "Testbench covers specified one-hot states and binary inputs; unspecified invalid-state and unknown-input cases are not asserted."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Direct one-hot incoming-transition equations and Moore output equations. Original TopModule ports and widths preserved; no clock, reset port, registers, or added latency.",
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  },
+  "static_review": "All outputs continuously driven with bitwise combinational equations; no latches, sequential logic, or additional interfaces."
+}

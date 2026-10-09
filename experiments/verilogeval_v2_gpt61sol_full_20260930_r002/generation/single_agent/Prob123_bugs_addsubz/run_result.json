@@ -1,0 +1,185 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob123_bugs_addsubz",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob123_bugs_addsubz",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob123_bugs_addsubz/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790743636.4262726,
+    "ended_at_unix": 1790743720.2199447,
+    "seconds": 83.79367280006409,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 75152,
+      "cached_input_tokens": 63872,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1450,
+      "reasoning_output_tokens": 12
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "7b8502c319abbfa756ee3de234133b2293e719b39d769c8529937fcc80756120",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed as expected",
+          "repair": "passed"
+        }
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "evidence": "development/01",
+        "checked_cases": 131080,
+        "coverage": "All 131072 binary input combinations plus eight directed zero-flag transition and wraparound cases",
+        "compiler": "Icarus Verilog 12, -g2012 -Wall -Wno-timescale"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "Unknown or high-impedance input behavior is not specified and was not tested.",
+      "No synthesis, timing, or board evidence was produced."
+    ],
+    "justified_rtl_changes": [
+      "Initial implementation computes the specified addition or subtraction with truncation to eight bits.",
+      "Replaces the faulty bitwise complement condition with an explicit equality-to-zero test.",
+      "Assigns result_is_zero on every combinational evaluation to remove inferred storage.",
+      "Preserves TopModule and all original port names, widths, and directions; adds no reset, clock, ports, or latency."
+    ],
+    "justified_tb_changes": [],
+    "static_review": "Complete combinational assignments with blocking assignment; eight-bit wraparound and zero detection; no added pipeline or state.",
+    "initial_snapshot": "candidate_initial.sv"
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "7b8502c319abbfa756ee3de234133b2293e719b39d769c8529937fcc80756120",
+      "Prob123_bugs_addsubz_test.sv": "b3259685e3ac8b6f30533fb60c7758738d92db8b5e12e792208ec114c792e182",
+      "Prob123_bugs_addsubz_ref.sv": "7669a9ce6ae5f5ab094ac215fd29f6891733813ad143488ea3daa22c7477a649"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob123_bugs_addsubz_test.sv",
+        "Prob123_bugs_addsubz_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01273110881447792
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb123_bugs_addsubz_test.sv:57: $finish called at 590 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Output 'result_is_zero' has no mismatches.\nHint: Total mismatched samples is 0 out of 118 samples\n\nSimulation finished at 590 ps\nMismatches: 0 in 118 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007131545804440975
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "7b8502c319abbfa756ee3de234133b2293e719b39d769c8529937fcc80756120",
+      "Prob123_bugs_addsubz_test.sv": "b3259685e3ac8b6f30533fb60c7758738d92db8b5e12e792208ec114c792e182",
+      "Prob123_bugs_addsubz_ref.sv": "7669a9ce6ae5f5ab094ac215fd29f6891733813ad143488ea3daa22c7477a649"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob123_bugs_addsubz_test.sv",
+        "Prob123_bugs_addsubz_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014192390255630016
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb123_bugs_addsubz_test.sv:57: $finish called at 590 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Output 'result_is_zero' has no mismatches.\nHint: Total mismatched samples is 0 out of 118 samples\n\nSimulation finished at 590 ps\nMismatches: 0 in 118 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007714214734733105
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

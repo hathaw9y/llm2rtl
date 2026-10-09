@@ -1,0 +1,42 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen contract structural gate",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "passed",
+      "details": "Exact ports; posedge synchronous active-high reset; sized unsigned counter saturates at four; no initialization, latches, or dependencies."
+    },
+    {
+      "name": "Icarus development compilation",
+      "exit_code": 139,
+      "log": "compile.log",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "status_log": "compile_status.log"
+    },
+    {
+      "name": "independent self-checking development simulation",
+      "log": "simulation.log",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "not run because compilation failed"
+    }
+  ],
+  "development_outcome": "RTL delivered unchanged; contract structural gate passed; Icarus compilation failed with exit code 139 and no diagnostics; simulation not run.",
+  "limitations": [
+    "Official evaluation not accessed or run.",
+    "Power-up state before sampled reset is unspecified.",
+    "No synthesis, timing, or board evidence produced.",
+    "Contract gate validates structure only."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

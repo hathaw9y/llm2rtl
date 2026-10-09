@@ -1,0 +1,106 @@
+{
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "gemm_systolic_wordbuf_executor",
+  "architecture": "16x16 output-stationary systolic PE array, K chunk 16, registered DSP BF16 significand multipliers",
+  "source_sha256": {
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_gemm_systolic_wordbuf_executor.sv": "23ff8e19908e24b738335ad60550c353314c07cb45d7899cd4bfc59c6c10d472",
+    "designs/smollm2_135m_bf16_zcu104_r1/tb/tb_smollm2_gemm_systolic_wordbuf_executor.sv": "36d6c59b182d6473b3182bd58533498e9c20cb81cb3c4accac30433db6490481",
+    "designs/smollm2_135m_bf16_zcu104_r1/modules/gemm_systolic_wordbuf_executor.json": "faf9ce34787949ac53eb76c85843f5606e6b60c044c048029148246c7545c9a4",
+    "designs/smollm2_135m_bf16_zcu104_r1/gemm_systolic_wordbuf_design.md": "69095931b4697737bad16b37286009e26b51760c21638b78eb4afbc4036338af",
+    "designs/smollm2_135m_bf16_zcu104_r1/isa_spec.json": "0bd58b58c1a6419ff1482df75e8f074acd27a7dee815f825209b2ac60c990321",
+    "designs/smollm2_135m_bf16_zcu104_r1/isa_validation.json": "7b12b5ce2f44c976fd1191c6b5e3f60a7be4fb9ef2e31dfc230c08a66bbb0033",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_gemm_systolic_wordbuf_xsim.sh": "4708f8d1b71d0bf3ddc33bdb019c025fd81e89107fc1153b318db9c6d8a6d706",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_gemm_systolic_wordbuf_ooc.tcl": "04162e0820171b996432dd2e0db9320d7b2712415cd863d31669e7d576bb6bed",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/generate_gemm_systolic_model_vectors.py": "9e8ea1e34b115a03a737444f942f8ad523534d4047f3d85497b8773806c1ae9d",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/write_gemm_systolic_wordbuf_evidence.py": "b2e2a52bebfc02d0bb964b4c939a6d9dd097cb9a54a12d7e44b9591dd3ad8e93",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_systolic_model/manifest.json": "0cefe7a3ee4a59cac61f600e7d9b57b7e7ac64fb3f54ef8cc179fa11696b4e9b",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_executor/activation.hex": "0e7429ce9859f71564efc8d74f4441c9a7be1a3d79b3dfc517ac466619f611b4",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_executor/expected.hex": "5874b8edc391f6c7789d239c55b596b80fa56451aa0dc2902469fd1e18b5ed21",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_executor/weight.hex": "71f12f063345aefb2d94097764c1fd6f5f84499d655e1d2a8611490e074388a2",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/decode_activation.hex": "918a8c744b9419dfc8fed8c96e3f2a15e803db594c8431a1038534ec4e54634c",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/decode_exact.hex": "d42ff43d210ee068cb62f32f73493565ba5b13503a18acc1e56dc7cdf029fc37",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/decode_torch.hex": "d42ff43d210ee068cb62f32f73493565ba5b13503a18acc1e56dc7cdf029fc37",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/model_weight.hex": "acef37b91bf69248c918c1c343d66f4dc8efe33b4cc4fdf6cc69f1fac2d5be57",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/prefill_activation.hex": "aed458127cfa089978cfd27916198e79c4fe995ac206a1016ea727da4074007c",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/prefill_exact.hex": "70266072e0313e50f93d19475e91d962d84ec580ad352858a7e3b15fb783b1f3",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_model/prefill_torch.hex": "70266072e0313e50f93d19475e91d962d84ec580ad352858a7e3b15fb783b1f3",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_systolic_model/decode_exact16.hex": "b2232b68f27b846c125c1308041bcd4fa4976ab01599a397db684f70e5999e05",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_systolic_model/decode_torch16.hex": "b2232b68f27b846c125c1308041bcd4fa4976ab01599a397db684f70e5999e05",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_systolic_model/prefill32_exact16.hex": "790de7e26271cf097419d26ed3d51083e78ca4a3681e6a1bee4fc31427820e15",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_systolic_model/prefill32_torch16.hex": "790de7e26271cf097419d26ed3d51083e78ca4a3681e6a1bee4fc31427820e15",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_systolic_model/prefill_exact16.hex": "836ce9d7481bcf7391f96328fbfd7b3b9fde7c1e674832ab2a85c509a06dc7dd",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_systolic_model/prefill_torch16.hex": "836ce9d7481bcf7391f96328fbfd7b3b9fde7c1e674832ab2a85c509a06dc7dd",
+    "designs/smollm2_135m_bf16_zcu104_r1/golden/gemm_systolic_model/weight16.hex": "96d7bdacb7db05cd42decda42dae780ccd58f560da131a60546ccace435ece89"
+  },
+  "evidence_identity": {
+    "xsim_run": "run_001",
+    "full_ooc_run": "run_001, Vivado 2025.2, -flatten_hierarchy none",
+    "pe_ooc_run": "same PE arithmetic as prior version; no separate PE run",
+    "synth_dcp_sha256": "e867cad88322115ce0a39b0ca86c46e7dccb9d79bb0881be6bbecde1b7b79ff1"
+  },
+  "checks": {
+    "xsim": "PASS, behavioral bank-word model; includes BF16 numerical, control, tails and full 32x192x576",
+    "checkpoint_prefill": "512/512 bitwise equal to exact BF16 and PyTorch BF16 for layer-0 q_proj, 32 rows x first 16 columns",
+    "checkpoint_decode": "16/16 bitwise equal to exact BF16 and PyTorch BF16 for layer-0 q_proj",
+    "verilator_lint": "exit 0 with nonfatal warnings",
+    "isa_structure": "passed_structure_only with this module as GEMM opcode binding",
+    "ooc_synthesis": "PASS, 5 ns clock constraint",
+    "ooc_setup": "PASS",
+    "drc": "no Error severity; DSP pipelining advisory warnings recorded separately",
+    "fabric_integration": "not run",
+    "placed_routed_timing": "not run",
+    "board_execution": "not run"
+  },
+  "resources_post_synth": {
+    "clb_luts": 137660,
+    "clb_registers": 42327,
+    "dsp48": 263,
+    "bram_tiles": 0,
+    "uram": 0
+  },
+  "comparison_to_prior_standalone_ooc": {
+    "prior_luts": 190018,
+    "lut_reduction": 52358,
+    "prior_registers": 38206,
+    "register_increase": 4121,
+    "prior_dsp48": 263,
+    "same_xsim_full_command_cycles": true
+  },
+  "timing_post_synth_ns": {
+    "clock_period": 5.0,
+    "wns": 0.734,
+    "tns": 0.0,
+    "failing_endpoints": 0,
+    "total_endpoints": 114462,
+    "whs": 0.039
+  },
+  "drc_advisory_counts": {
+    "DPIP-2": 518,
+    "DPOP-3": 4,
+    "DPOP-4": 261
+  },
+  "cycles_no_bank_stalls": {
+    "full_m32_n192_k1": 28465,
+    "full_k1536_one_output": 12870,
+    "checkpoint_prefill_2x576_576x4": 5506,
+    "checkpoint_decode_1x576_576x4": 5490,
+    "m17_n17_k33": 3624,
+    "full_m32_n192_k576": 218137
+  },
+  "full_m32_n192_k576": {
+    "mac_count": 3538944,
+    "cycles": 218137,
+    "seconds_if_200mhz": 0.001090685,
+    "speedup_vs_scalar_xsim": 97.45362318176193,
+    "not_board_throughput": true
+  },
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "numeric_rule": "exact BF16 significand product in DSP; K-ascending signed 32-bit shared-exponent accumulation with four guard bits and magnitude-truncating alignment; BF16 nearest-even output",
+  "limitations": [
+    "Only selected layer-0 q_proj columns are compared to the real checkpoint; all layers and end-to-end logits remain unverified.",
+    "Standalone XSIM uses a behavioral 128-bit bank model, not the integrated XPM bank fabric.",
+    "OOC synthesis timing is not placed/routed timing and cannot establish a working ZCU104 bitstream.",
+    "Other executors, integrated resource total, Vitis runtime and physical board execution remain outstanding."
+  ]
+}

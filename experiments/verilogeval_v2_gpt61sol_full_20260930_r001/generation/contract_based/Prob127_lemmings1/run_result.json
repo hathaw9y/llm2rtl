@@ -1,0 +1,208 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob127_lemmings1",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob127_lemmings1",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob127_lemmings1/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790733192.2577777,
+    "ended_at_unix": 1790733341.838152,
+    "seconds": 149.58037447929382,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 193894,
+      "cached_input_tokens": 172288,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3520,
+      "reasoning_output_tokens": 162
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "0d4b3956a809f074db2a2fcf7f3466333e1241008075dedd591e56d04a6c7098",
+  "contract_sha256": "fb6eb8fda237e2fac26e3d8f83d4dff43ebfc88898f2af5e8e528ae48a49b5ad",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract_gate",
+        "command": "python3 validate_contract.py",
+        "result": "PASS (structure only)",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "initial_preservation",
+        "result": "candidate_initial.sv preserved immediately after initial implementation, before development checks; identical to final candidate.sv"
+      },
+      {
+        "name": "static_review",
+        "result": "Two one-bit Moore states; exact ports; posedge clk and active-high asynchronous reset; complete transition behavior; no arithmetic, inferred latch or external RTL dependency."
+      },
+      {
+        "name": "development_compile_initial",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "exit_code": 139,
+        "result": "FAIL: compiler terminated without diagnostic output",
+        "log": "compile.log",
+        "testbench": "dev_tb_initial.sv"
+      },
+      {
+        "name": "development_simulation_initial",
+        "result": "FAIL: executable absent; no simulation ran",
+        "log": "simulation.log"
+      },
+      {
+        "name": "tool_version",
+        "result": "Icarus identifies version 12.0; backend version query emitted a failure diagnostic",
+        "log": "tool_version.log"
+      },
+      {
+        "name": "standalone_elaboration",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s TopModule -o dev_elaboration candidate.sv",
+        "exit_code": 0,
+        "result": "PASS",
+        "log": "elaboration.log"
+      },
+      {
+        "name": "development_compile_retry",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim_retry candidate.sv dev_tb.sv",
+        "exit_code": 139,
+        "result": "FAIL after testbench coverage array flattened; RTL unchanged",
+        "log": "compile_retry.log"
+      },
+      {
+        "name": "development_simulation_retry",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim_retry",
+        "exit_code": 255,
+        "result": "FAIL: executable absent; no simulation ran",
+        "log": "simulation_retry.log"
+      }
+    ],
+    "development_outcome": "Contract structurally validated and DUT elaboration passed. Self-checking development simulation could not run because testbench compilation failed. Final candidate is the unchanged initial RTL.",
+    "limitations": [
+      "No successful dynamic simulation; compiler failure cause not established.",
+      "Initial state before asynchronous reset is unspecified.",
+      "No synthesis, timing, board work or official evaluation performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "0d4b3956a809f074db2a2fcf7f3466333e1241008075dedd591e56d04a6c7098",
+      "Prob127_lemmings1_ref.sv": "92c8b0e80f637209925cea25d328f114857342e50f04494e2b01177cfb91181d",
+      "Prob127_lemmings1_test.sv": "769944739c0fa53eb38559e291d2982890e87dc521b539cb78b0959e529a8077"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob127_lemmings1_test.sv",
+        "Prob127_lemmings1_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015026944689452648
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb127_lemmings1_test.sv:73: $finish called at 1146 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Total mismatched samples is 0 out of 229 samples\n\nSimulation finished at 1146 ps\nMismatches: 0 in 229 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007971221581101418
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "0d4b3956a809f074db2a2fcf7f3466333e1241008075dedd591e56d04a6c7098",
+      "Prob127_lemmings1_ref.sv": "92c8b0e80f637209925cea25d328f114857342e50f04494e2b01177cfb91181d",
+      "Prob127_lemmings1_test.sv": "769944739c0fa53eb38559e291d2982890e87dc521b539cb78b0959e529a8077"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob127_lemmings1_test.sv",
+        "Prob127_lemmings1_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013074309565126896
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb127_lemmings1_test.sv:73: $finish called at 1146 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Total mismatched samples is 0 out of 229 samples\n\nSimulation finished at 1146 ps\nMismatches: 0 in 229 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007713123224675655
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

@@ -1,0 +1,54 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "slowena": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 4
+      }
+    }
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "reset": "Active-high synchronous: each rising edge with reset=1 sets q=0, regardless of slowena.",
+    "transition": "At each rising edge without reset, slowena=1 advances q from 0 through 9 then wraps to 0; slowena=0 holds q.",
+    "visibility": "q updates after the rising edge and remains stable between rising edges.",
+    "initialization": "Power-up state unspecified; no initial value imposed. Clocked reset establishes valid state."
+  },
+  "numeric": {
+    "encoding": "Unsigned 4-bit binary q; legal initialized states 0..9.",
+    "increment": "Add one for q=0..8; q=9 wraps to zero on enabled edge.",
+    "period": "10 enabled edges per full cycle, excluding resets.",
+    "invalid_states": "Behavior before reset or for states 10..15 is unspecified by the problem."
+  },
+  "verification": {
+    "method": "Independent self-checking testbench with integer modulo-10 reference state, sampled after sequential updates.",
+    "directed": [
+      "Clocked reset with slowena both 0 and 1",
+      "Multiple complete decade cycles",
+      "Hold at each legal counter value",
+      "Reset during counting and paused states",
+      "Reset asserted between edges must not change q until rising edge",
+      "Output stability at falling edges"
+    ],
+    "mixed": "Deterministic mixed reset and enable stimulus checked each cycle.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; compile and simulation each finite timeout."
+  },
+  "specification_ambiguities": [
+    "No defined power-up value before synchronous reset.",
+    "Recovery from illegal q encodings 10..15 is not specified; verification covers states reachable after reset."
+  ]
+}

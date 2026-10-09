@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {"direction": "input", "width": 1},
+      "b": {"direction": "input", "width": 1},
+      "out": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "function": "out = a AND b",
+    "truth_table": ["00 -> 0", "01 -> 0", "10 -> 0", "11 -> 1"],
+    "timing": "Combinational continuous response to inputs; no clock or cycle latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization requirement. Output follows current inputs."
+  },
+  "numeric": {
+    "type": "Single-bit unsigned logic inputs and output",
+    "operation": "Bitwise AND",
+    "arithmetic": "No arithmetic, rounding, truncation, overflow, or saturation."
+  },
+  "verification": {
+    "plan": "Independent self-checking testbench drives all four binary input pairs and compares against explicit truth-table expected constants after combinational settling; repeat in reverse order to check input response.",
+    "compile": "Icarus v12, -g2012, explicit dev_tb top, finite external timeout",
+    "simulation": "Matching vvp with finite external timeout and testbench watchdog; fatal on mismatch, explicit PASS on completion",
+    "review": "Check exact port names and widths, continuous combinational assignment, no state, delays, or dependencies in DUT."
+  },
+  "specification_ambiguities": []
+}

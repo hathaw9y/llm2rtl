@@ -1,0 +1,188 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob087_gates",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob087_gates",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob087_gates/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791272159.4908698,
+    "ended_at_unix": 1791272208.5279975,
+    "seconds": 49.03712821006775,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 76123,
+      "cached_input_tokens": 66944,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1808,
+      "reasoning_output_tokens": 96
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "1ff07aa1178192deb16a21c7b5342739ce595dcc3311c2e01cf8e1385b89f225",
+  "contract_sha256": "f7df9a833d300bf04ff8e85b53ff8902ded18003f863fa8c37fa843bb3890e0d",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "check": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json"
+      },
+      {
+        "check": "contract_structure",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "check": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "coverage": "15 checks: exhaustive binary truth table, repeated input transitions, supplemental X/Z controlling-value cases"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development PASS is not official evaluation or proof of official correctness.",
+      "Original specification does not explicitly define X/Z behavior; supplemental tests use standard Verilog gate propagation."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "implementation": "Seven continuous bitwise gate assignments, original one-bit ports, no state or latency."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "1ff07aa1178192deb16a21c7b5342739ce595dcc3311c2e01cf8e1385b89f225",
+      "Prob087_gates_ref.sv": "fd05947bb790cc30fbc348bd272053377e718611affdd86892a1922edec454f2",
+      "Prob087_gates_test.sv": "cf35d2299705395fa53f59d3f1a18f8de39bb6dadbdac6bdc55a221d7883e8a7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob087_gates_test.sv",
+        "Prob087_gates_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01467884611338377
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb087_gates_test.sv:38: $finish called at 1050 (1ps)\nHint: Output 'out_and' has no mismatches.\nHint: Output 'out_or' has no mismatches.\nHint: Output 'out_xor' has no mismatches.\nHint: Output 'out_nand' has no mismatches.\nHint: Output 'out_nor' has no mismatches.\nHint: Output 'out_xnor' has no mismatches.\nHint: Output 'out_anotb' has no mismatches.\nHint: Total mismatched samples is 0 out of 210 samples\n\nSimulation finished at 1050 ps\nMismatches: 0 in 210 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008412997238337994
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "1ff07aa1178192deb16a21c7b5342739ce595dcc3311c2e01cf8e1385b89f225",
+      "Prob087_gates_ref.sv": "fd05947bb790cc30fbc348bd272053377e718611affdd86892a1922edec454f2",
+      "Prob087_gates_test.sv": "cf35d2299705395fa53f59d3f1a18f8de39bb6dadbdac6bdc55a221d7883e8a7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob087_gates_test.sv",
+        "Prob087_gates_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014093739911913872
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb087_gates_test.sv:38: $finish called at 1050 (1ps)\nHint: Output 'out_and' has no mismatches.\nHint: Output 'out_or' has no mismatches.\nHint: Output 'out_xor' has no mismatches.\nHint: Output 'out_nand' has no mismatches.\nHint: Output 'out_nor' has no mismatches.\nHint: Output 'out_xnor' has no mismatches.\nHint: Output 'out_anotb' has no mismatches.\nHint: Total mismatched samples is 0 out of 210 samples\n\nSimulation finished at 1050 ps\nMismatches: 0 in 210 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007954820059239864
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

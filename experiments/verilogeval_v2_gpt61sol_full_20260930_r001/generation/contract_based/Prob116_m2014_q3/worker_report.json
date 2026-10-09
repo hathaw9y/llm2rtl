@@ -1,0 +1,45 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "PASS (structural validation only)",
+      "exit_code": 0,
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static RTL review",
+      "outcome": "PASS",
+      "details": "Single continuous Boolean assignment; no state, latches, clocks, resets, or dependencies. Equation matches all nine specified map cells using x[4:1]."
+    },
+    {
+      "name": "development compilation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "outcome": "FAILED: process exited 139, no diagnostics emitted",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "outcome": "FAILED: dev_sim: Unable to open input file. Compilation produced no runnable executable.",
+      "log": "dev_simulation.log"
+    }
+  ],
+  "development_outcome": "Initial candidate delivered unchanged; contract gate and static review passed. Development simulation did not run successfully due to compiler failure.",
+  "limitations": [
+    "No successful development simulation or lint evidence.",
+    "Official evaluation is external and results are unavailable.",
+    "No synthesis or board work performed.",
+    "Original specification does not define behavior for X/Z input bits."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  },
+  "verification_plan_implemented": "Independent map table checks every binary input in ascending and descending order; testbench includes finite internal timeout."
+}

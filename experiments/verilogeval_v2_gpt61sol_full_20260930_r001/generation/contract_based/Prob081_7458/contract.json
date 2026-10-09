@@ -1,0 +1,77 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "p1a": {
+        "direction": "input",
+        "width": 1
+      },
+      "p1b": {
+        "direction": "input",
+        "width": 1
+      },
+      "p1c": {
+        "direction": "input",
+        "width": 1
+      },
+      "p1d": {
+        "direction": "input",
+        "width": 1
+      },
+      "p1e": {
+        "direction": "input",
+        "width": 1
+      },
+      "p1f": {
+        "direction": "input",
+        "width": 1
+      },
+      "p2a": {
+        "direction": "input",
+        "width": 1
+      },
+      "p2b": {
+        "direction": "input",
+        "width": 1
+      },
+      "p2c": {
+        "direction": "input",
+        "width": 1
+      },
+      "p2d": {
+        "direction": "input",
+        "width": 1
+      },
+      "p1y": {
+        "direction": "output",
+        "width": 1
+      },
+      "p2y": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "p1y": "(p1a AND p1b AND p1c) OR (p1d AND p1e AND p1f)",
+    "p2y": "(p2a AND p2b) OR (p2c AND p2d)",
+    "timing": "Pure combinational response to current inputs; no clock or cycle latency, no specified physical delay.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization requirement.",
+    "handshake": "None."
+  },
+  "numeric": {
+    "type": "One-bit unsigned Boolean signals.",
+    "operations": "Bitwise AND and OR only.",
+    "arithmetic": "No addition, signed arithmetic, rounding, overflow, or saturation."
+  },
+  "verification": {
+    "method": "Independent self-checking exhaustive binary truth-table test over all 1024 input combinations.",
+    "oracle": "For each AND group, compare its packed input group to the all-ones value; output is true if either group matches.",
+    "observation": "Allow one testbench time unit for combinational settling, then compare both outputs with case inequality.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top, matching vvp, finite compile and simulation timeouts.",
+    "pass": "All 1024 combinations match, with explicit PASS marker."
+  },
+  "specification_ambiguities": []
+}

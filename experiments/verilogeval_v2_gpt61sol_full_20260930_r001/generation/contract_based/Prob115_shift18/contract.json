@@ -1,0 +1,40 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "load": {"direction": "input", "width": 1},
+      "ena": {"direction": "input", "width": 1},
+      "amount": {"direction": "input", "width": 2},
+      "data": {"direction": "input", "width": 64},
+      "q": {"direction": "output", "width": 64}
+    }
+  },
+  "semantics": {
+    "clock": "Inputs are sampled on the rising edge of clk; q updates after that edge.",
+    "priority": "If load is high, q takes data regardless of ena or amount. Otherwise, if ena is high, q shifts according to amount. Otherwise q holds.",
+    "amount": {"00": "left 1", "01": "left 8", "10": "arithmetic right 1", "11": "arithmetic right 8"},
+    "reset": "No reset port or reset behavior is specified or implemented.",
+    "initialization": "Initial contents are unspecified; verification begins with a synchronous load.",
+    "between_edges": "q remains stable between rising edges; load is synchronous."
+  },
+  "numeric": {
+    "state_width": 64,
+    "left_shift": "Discard high bits and insert zeros into low bits; result is exactly 64 bits.",
+    "right_shift": "Discard low bits and replicate the old q[63] into the vacated high bits.",
+    "load": "Copy all 64 data bits unchanged.",
+    "rounding_saturation": "None; shifts operate directly on bit patterns."
+  },
+  "verification": {
+    "oracle": "Independent per-bit model computes destination bits from source indices, sign bit or zero fill, rather than using RTL shift expressions.",
+    "directed": "Check synchronous load, load priority with ena low and high, all four shift modes on positive and negative patterns, disabled holds, truncation, repeated shifts to zero or sign fill, and stability away from rising edges.",
+    "random": "Run deterministic pseudorandom load, enable, amount and data sequences and compare every post-edge q against the model.",
+    "tools": "Compile with specified Icarus v12, -g2012 and explicit dev_tb top, then run matching vvp; each command has a finite external timeout and testbench has a watchdog.",
+    "scope": "Development checks only; no official evaluation, synthesis or board claims."
+  },
+  "specification_ambiguities": [
+    "Clock edge is not explicitly stated; conventional rising-edge synchronous operation is assumed.",
+    "Power-up contents and unknown-valued control behavior are unspecified and are not assigned extra requirements."
+  ]
+}

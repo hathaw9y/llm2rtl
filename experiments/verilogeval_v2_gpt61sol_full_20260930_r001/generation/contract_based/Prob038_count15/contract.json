@@ -1,0 +1,56 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "q": {
+        "direction": "output",
+        "width": 4,
+        "range": "[3:0]"
+      }
+    }
+  },
+  "semantics": {
+    "clock": "positive edge of clk",
+    "reset": "active high synchronous; reset sampled high at rising edge sets q to 0 with priority over counting",
+    "transition": "On each rising edge with reset low, q becomes (previous q + 1) modulo 16",
+    "between_edges": "q holds its value; changing reset alone does not change q",
+    "initialization": "No power-up value specified; use synchronous reset to establish known state",
+    "period": "16 rising edges with reset low return to the same known count"
+  },
+  "numeric": {
+    "representation": "unsigned 4-bit binary",
+    "range": [
+      0,
+      15
+    ],
+    "increment": 1,
+    "overflow": "wrap modulo 16, including 15 to 0",
+    "rounding": "not applicable"
+  },
+  "verification": {
+    "oracle": "independent integer expected state updated at rising edges: reset gives 0, otherwise (expected + 1) % 16",
+    "directed_checks": [
+      "initial synchronous reset",
+      "all 16 counter states and repeated wraparound",
+      "reset asserted and deasserted between edges preserves q",
+      "reset while counting",
+      "reset held over multiple rising edges",
+      "resume at 1 after reset release",
+      "no changes at falling edges"
+    ],
+    "observation": "compare after nonblocking assignments settle; do not assume pre-reset q",
+    "tools": "Icarus Verilog v12, -g2012 with explicit dev_tb top; finite compile and simulation timeouts"
+  },
+  "specification_ambiguities": [
+    "Power-up q before a synchronous reset is unspecified; no initialization is added."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "scope": "Architecture estimates only, no new RTL, simulation, synthesis or timing PASS.",
+  "W4_case": "M1/N128/K128 ACCUM; fixed6stage product, FP32 tree16/group order, serial supply/controller, native128 read3,200MHz",
+  "cycle_model": "T(P)=44416/P+1843; W4 group(P) includes four K32 pairs each83+3P cycles, plus15+2.25P cycles finalization;16ACT reads/drain19cycles. T matches measured suppliedN4=12947 and nativeN8=7395.",
+  "cases": [
+    {
+      "outputs": 8,
+      "parallel_products": 128,
+      "DSP_linear_estimate": 147,
+      "W4_ACCUM_cycles": 7395,
+      "time_us_at200MHz": 36.975,
+      "GMAC_s_at200MHz": 0.44311020960108183,
+      "speedup_vs_N8": 1.0,
+      "LUT_naive_linear_estimate": 62528
+    },
+    {
+      "outputs": 16,
+      "parallel_products": 256,
+      "DSP_linear_estimate": 291,
+      "W4_ACCUM_cycles": 4619,
+      "time_us_at200MHz": 23.095,
+      "GMAC_s_at200MHz": 0.7094176228620914,
+      "speedup_vs_N8": 1.6009958865555316,
+      "LUT_naive_linear_estimate": 125056
+    },
+    {
+      "outputs": 32,
+      "parallel_products": 512,
+      "DSP_linear_estimate": 579,
+      "W4_ACCUM_cycles": 3231,
+      "time_us_at200MHz": 16.155,
+      "GMAC_s_at200MHz": 1.014175177963479,
+      "speedup_vs_N8": 2.288765088207985,
+      "LUT_naive_linear_estimate": 250112
+    }
+  ],
+  "device_LUT_capacity": 230400,
+  "device_DSP_capacity": 1728,
+  "LUT_estimate_limitation": "Naive module scaling multiplies shared control and private storage too. It is not a fitted synthesis model or a capacity proof. Full board also needs other executors/infrastructure.",
+  "decision": "Consider N32, but full replication FP32 reductions likely LUT/route bound; compare N16 or N32 products with shared/pipelined FP32 reduction. No implementation selected."
+}

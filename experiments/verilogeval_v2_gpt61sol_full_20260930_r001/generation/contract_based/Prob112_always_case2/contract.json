@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 4,
+        "range": "[3:0]"
+      },
+      "pos": {
+        "direction": "output",
+        "width": 2,
+        "range": "[1:0]"
+      }
+    },
+    "additional_ports": false
+  },
+  "semantics": {
+    "function": "pos = min({i in 0..3 : in[i] == 1}) when any bit is set; otherwise pos = 0",
+    "priority": "bit 0 highest, then bit 1, bit 2, bit 3",
+    "timing": "pure combinational; output follows current input after combinational settling, no clock-cycle latency",
+    "clock": "none",
+    "reset": "none",
+    "initialization": "no state or initialization required",
+    "history": "output independent of previous inputs"
+  },
+  "numeric": {
+    "input": "unsigned four-bit vector; all 16 binary patterns legal",
+    "output": "unsigned two-bit index 0 through 3",
+    "zero_input_output": 0,
+    "arithmetic": "index selection only; no arithmetic overflow, rounding, truncation, or saturation"
+  },
+  "verification": {
+    "oracle": "independent truth table for input values 0..15: [0,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0]",
+    "coverage": "all 16 inputs and all 256 ordered input transitions, including zero, one-hot, and multi-hot values",
+    "comparison": "case inequality after settling; mismatch fatal",
+    "tool": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp",
+    "timeout": "finite shell timeout for each compile and simulation; simulation watchdog"
+  },
+  "specification_ambiguities": [
+    "Behavior for X or Z input bits is unspecified; verification covers binary inputs only."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "sel": 3,
+      "data0": 4,
+      "data1": 4,
+      "data2": 4,
+      "data3": 4,
+      "data4": 4,
+      "data5": 4
+    },
+    "outputs": {
+      "out": 4
+    },
+    "evidence": "Original problem interface lists exactly these ports."
+  },
+  "semantics": {
+    "function": "out = data[sel] for integer sel in 0..5; out = 0 for sel 6 or 7",
+    "timing": "Pure combinational response; no clock, cycle latency, or storage. Inferred from the specified multiplexer and absence of clock ports.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or initialization specified; output follows current inputs after combinational settling."
+  },
+  "numeric": {
+    "data": "4-bit bit vectors, copied without arithmetic or interpretation",
+    "selector": "3-bit selection code",
+    "default": "4-bit zero",
+    "rounding_overflow": "Not applicable; no arithmetic."
+  },
+  "verification": {
+    "oracle": "Independent array indexing with selector range guard, grounded in original problem.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling.",
+    "coverage": "Every selector and every value of every input independently; all 16 selected nibble values with varied unselected inputs; changes while selector is held; invalid selectors with changing inputs; selected X/Z payload propagation.",
+    "failure": "Case-inequality comparison with $fatal; bounded timeout; PASS only after all checks.",
+    "primary_command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z selector",
+      "evidence": "Problem defines integer selector range but does not explicitly define four-state selector behavior.",
+      "decision": "Use ordinary exact case with zero default; no correctness claim or oracle assertions for X/Z selectors."
+    }
+  ]
+}

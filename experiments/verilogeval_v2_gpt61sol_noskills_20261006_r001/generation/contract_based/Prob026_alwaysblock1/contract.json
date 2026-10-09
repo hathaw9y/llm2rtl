@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1
+    },
+    "outputs": {
+      "out_assign": 1,
+      "out_alwaysblock": 1
+    },
+    "evidence": "Original problem lists these four one-bit ports."
+  },
+  "semantics": {
+    "function": "Both outputs equal the AND of a and b.",
+    "implementation": {
+      "out_assign": "continuous assign statement",
+      "out_alwaysblock": "combinational always block"
+    },
+    "timing": "Combinational evaluation after input changes; no clock, cycle latency, or reset port is specified.",
+    "initialization": "No initial value is specified; outputs follow current inputs under Verilog combinational semantics.",
+    "evidence": "Original problem requires an AND gate using both an assign statement and a combinational always block."
+  },
+  "numeric": {
+    "width": "All ports are one bit.",
+    "operator": "one-bit bitwise AND",
+    "truth_table": [
+      "00 -> 0",
+      "01 -> 0",
+      "10 -> 0",
+      "11 -> 1"
+    ]
+  },
+  "verification": {
+    "oracle": "Independent explicit AND truth table grounded in the original problem.",
+    "cases": "All four binary input combinations, transitions changing each input independently, and supplemental four-state AND propagation.",
+    "sampling": "Check after a 1 ns settling interval following input changes.",
+    "completion": "Fatal on mismatch, bounded timeout, PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "The original problem does not explicitly describe X/Z inputs; supplemental checks use standard Verilog AND semantics without adding initialization requirements."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1
+    },
+    "outputs": {
+      "w": 1,
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "semantics": {
+    "connections": {
+      "w": "a",
+      "x": "b",
+      "y": "b",
+      "z": "c"
+    },
+    "timing": "Continuous combinational wires with no clock, state, reset, or cycle latency.",
+    "evidence": "Original problem states behave like wires and lists a -> w, b -> x, b -> y, c -> z.",
+    "initialization": "No initialization specified; outputs reflect current input values after combinational settling."
+  },
+  "numeric": {
+    "widths": "Every port is one bit per original interface.",
+    "operations": "Direct signal connections; no arithmetic or signed interpretation.",
+    "four_state": "Wire connections propagate 0, 1, X, and Z."
+  },
+  "verification": {
+    "oracle": "Check each output against its listed original input connection using case inequality.",
+    "coverage": "All 64 combinations of 0, 1, X, Z on three inputs, including all eight binary combinations.",
+    "sampling": "Allow 1 ns for continuous assignments to settle after each input change; no clock sampling is specified.",
+    "completion": "Fatal mismatches, bounded timeout, explicit PASS after all checks."
+  },
+  "specification_ambiguities": []
+}

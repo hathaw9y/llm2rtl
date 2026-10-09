@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 3
+    },
+    "outputs": {
+      "q": 16
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "kind": "combinational lookup",
+    "latency": "No clock or cycle latency; output settles after input changes",
+    "reset": "No reset port or reset behavior specified",
+    "initialization": "Waveform shows a=x and q=x at 0, 5, 10 ns; unknown input produces all unknown output",
+    "evidence": "Original waveform provides all eight binary input mappings and repeats them without history dependence"
+  },
+  "numeric": {
+    "input": "3-bit unsigned index 0 through 7",
+    "output": "16-bit hexadecimal values",
+    "mapping": {
+      "0": "1232",
+      "1": "aee0",
+      "2": "27d4",
+      "3": "5a0e",
+      "4": "2066",
+      "5": "64ce",
+      "6": "c526",
+      "7": "2f19"
+    }
+  },
+  "verification": {
+    "oracle": "Literal values and timestamps transcribed independently from problem.txt",
+    "waveform": "Replay 0 through 90 ns with original 5 ns spacing, check after combinational delta settling at each timestamp",
+    "coverage": "All eight inputs, repeated values, additional exhaustive input transitions, initial unknown",
+    "failure": "$fatal for mismatch and bounded timeout; PASS only on completion"
+  },
+  "specification_ambiguities": [
+    "Waveform x does not distinguish partial unknown or high-impedance inputs; choose all-X output for any nonbinary input.",
+    "Combinational output is sampled after delta settling at the waveform timestamps; no physical propagation delay is specified."
+  ]
+}

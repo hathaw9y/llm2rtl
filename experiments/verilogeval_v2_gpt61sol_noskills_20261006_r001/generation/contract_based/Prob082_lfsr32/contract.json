@@ -1,0 +1,14 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1}, "outputs": {"q": 32}},
+  "semantics": {
+    "clock": "All state changes occur on positive clk edges, as explicitly specified.",
+    "reset": "Active high synchronous reset has priority and sets q to 32'h1 on a positive edge.",
+    "transition": "Shift right; old q[0] feeds back into one-based tap positions 32,22,2,1 (zero-based q[31],q[21],q[1],q[0]). q[31] receives feedback; other tapped positions receive shifted source XOR feedback.",
+    "initialization": "No power-up value is specified; no initial assignment is implemented. Verification establishes a known state through synchronous reset.",
+    "latency": "Each positive edge performs exactly one transition or reset. Output holds between positive edges."
+  },
+  "numeric": {"width": 32, "reset_value": "32'h00000001", "feedback_mask": "32'h80200003", "arithmetic": "Bitwise XOR, unsigned logical right shift"},
+  "verification": {"oracle": "Independent per-bit next-state model derived from original right shift and one-based taps", "cases": ["Synchronous reset timing and priority", "First transition from seed yields 80200003", "Long seeded sequence", "Repeated reset and midstream restart", "Output holds on falling edges and reset changes without rising edges"], "sampling": "Sample one time unit after positive edge for nonblocking updates", "failure": "$fatal on mismatch with bounded timeout; PASS only after all checks"},
+  "specification_ambiguities": ["Tap positions are expressed one-based (32 denotes the MSB); map them to zero-based output indices 31,21,1,0.", "Power-up state is unspecified; no defined pre-reset numeric value is required."]
+}

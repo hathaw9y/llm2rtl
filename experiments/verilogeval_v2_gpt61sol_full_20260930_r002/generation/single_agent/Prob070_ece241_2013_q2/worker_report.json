@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "coverage": "All 12 defined input combinations, ascending and descending; 24 output-pair checks",
+      "evidence_directory": "development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Inputs 3, 8, 11, and 12 are specified as never occurring and their output values are unconstrained.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": {
+    "out_sop": "(~a & ~b & c) | (c & d)",
+    "out_pos": "c & (~a | b) & (~b | d)",
+    "interface": "Original one-bit ports, combinational outputs, no added latency or ports",
+    "static_review": "Continuous assignments with explicit bitwise operations; no state, latches, or width ambiguity",
+    "minimality": "SOP has two product terms and five literals; POS has three sum factors and five literals using specified don't-care conditions."
+  }
+}

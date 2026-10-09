@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": [
+      {
+        "name": "in",
+        "direction": "input",
+        "width": 100,
+        "range": "[99:0]"
+      },
+      {
+        "name": "out",
+        "direction": "output",
+        "width": 100,
+        "range": "[99:0]"
+      }
+    ]
+  },
+  "semantics": {
+    "function": "For every integer i from 0 through 99, out[i] = in[99-i].",
+    "timing": "Purely combinational; output tracks current input after combinational settling, with no clock-cycle latency.",
+    "clock": "None",
+    "reset": "None",
+    "initialization": "No stored state or initialization requirement.",
+    "transactions": "No handshake; all input bit patterns are valid."
+  },
+  "numeric": {
+    "representation": "100-bit unsigned packed bit vector",
+    "operation": "Bit permutation only; no arithmetic, rounding, truncation, saturation, overflow, or sign extension.",
+    "bit_order": "Input bit 99 maps to output bit 0; input bit 0 maps to output bit 99.",
+    "four_state": "Direct wiring preserves each source bit value, including X and Z in simulation."
+  },
+  "verification": {
+    "oracle": "Build expected vector by iterating source indices downward and shifting bits into a separate reference vector.",
+    "directed": "All zero, all one, alternating patterns, each of 100 walking-one and walking-zero positions.",
+    "random": "1000 independently generated 100-bit input vectors.",
+    "four_state": "Mixed X/Z pattern checked with case inequality.",
+    "timing": "Change inputs repeatedly and compare after a finite settling delay; no clock or reset.",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top; finite timeout on compile and simulation."
+  },
+  "specification_ambiguities": []
+}

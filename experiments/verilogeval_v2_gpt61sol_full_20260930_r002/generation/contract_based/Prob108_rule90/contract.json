@@ -1,0 +1,52 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "clk": "input 1 bit",
+      "load": "input 1 bit",
+      "data": "input [511:0]",
+      "q": "output [511:0]"
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "clock": "positive edge, explicitly required by original final sentence",
+    "load": "At each positive edge, if load is asserted q becomes data, from original load instruction; takes priority over evolution",
+    "evolution": "Otherwise q_next[i] = q_old[i-1] XOR q_old[i+1], simultaneously for all 512 cells",
+    "boundaries": "q[-1] and q[512] are zero, explicitly stated",
+    "reset": "No reset port or reset behavior specified; none added",
+    "initialization": "Original does not specify initial q; no initialization added, simulation starts unknown until loaded",
+    "latency": "State updates at the same rising edge; one evolution per cycle; no extra pipeline"
+  },
+  "numeric": {
+    "cell": "one-bit Boolean XOR",
+    "width": 512,
+    "indices": "0 through 511",
+    "arithmetic": "No signed arithmetic, rounding, saturation or overflow"
+  },
+  "verification": {
+    "oracle": "Independent per-cell loop using original neighbor equation and explicit boundary conditions",
+    "sampling": "Drive at falling edges; compare before rising edge and one time unit after rising edge to allow nonblocking updates",
+    "cases": [
+      "unknown startup observation without prescribing a hardware power-up value",
+      "zero",
+      "ones",
+      "alternating",
+      "single-cell seeds at both boundaries and middle",
+      "all eight local truth-table neighborhoods",
+      "consecutive loads",
+      "deterministic random states and multi-cycle evolution",
+      "no updates on input change or falling edges"
+    ],
+    "failure": "$fatal on mismatch with bounded timeout",
+    "primary_command": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Initial state",
+      "evidence": "No reset or initialization specified in original interface or behavior",
+      "resolution": "Leave q uninitialized; functional evolution checks begin with a load."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Exact TopModule interface; two independent one-bit four-input NAND expressions; combinational continuous assignments with no state or inferred latches."
+    },
+    {
+      "name": "Icarus development compilation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "log": "compile.log",
+      "exit_record": "compile.exit",
+      "details": "Compiler exited without diagnostics and did not produce dev_sim."
+    },
+    {
+      "name": "Exhaustive development simulation",
+      "result": "not_run",
+      "details": "Independent dev_tb.sv checks all 256 binary input combinations; simulation was prevented by compilation failure."
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate delivered unchanged and preserved as candidate_initial.sv. Static review passed; development simulation success is not claimed.",
+  "limitations": [
+    "Development compiler failed with exit code 139; functional simulation was not completed.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing, or board checks were performed."
+  ]
+}

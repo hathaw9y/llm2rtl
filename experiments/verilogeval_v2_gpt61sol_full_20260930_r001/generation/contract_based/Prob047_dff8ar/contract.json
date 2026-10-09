@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "areset": {"direction": "input", "width": 1},
+      "d": {"direction": "input", "width": 8, "range": "7:0"},
+      "q": {"direction": "output", "width": 8, "range": "7:0"}
+    }
+  },
+  "semantics": {
+    "storage": "Eight D flip-flops, one per bit",
+    "capture": "At each positive edge of clk, if areset is low, q becomes d sampled at that edge",
+    "reset": "Active-high asynchronous reset: assertion of areset clears q to 8'b00000000 without a clock edge; reset takes priority over capture and keeps q zero while asserted",
+    "hold": "Otherwise q retains its previous value; falling clock edges and changes to d do not capture; reset deassertion alone does not capture d",
+    "initialization": "No initial value is specified before a reset or rising clock event",
+    "latency": "Captured value is observable after the nonblocking update of the same rising edge"
+  },
+  "numeric": {
+    "data": "Eight-bit bit vector copied bit-for-bit from d[7:0] to q[7:0]",
+    "reset_value": "8'h00",
+    "arithmetic": "None; no rounding, overflow, saturation, or signed interpretation"
+  },
+  "verification": {
+    "method": "Independent self-checking directed simulation with explicit stimulus and expected values after update settling",
+    "coverage": ["Asynchronous reset assertion between clock edges", "Reset priority at rising clock edges", "Reset deassertion without capture", "All 256 data patterns captured on positive edges", "Data changes and falling edges preserve stored q", "Repeated reset after nonzero capture"],
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp, finite compile and simulation timeouts",
+    "scope": "Development verification only; no official tests, synthesis, or board evidence"
+  },
+  "specification_ambiguities": ["Power-up value before the first reset or capture is unspecified; no initialization is added"]
+}

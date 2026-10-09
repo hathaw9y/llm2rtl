@@ -1,0 +1,39 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "result": "candidate.sv and candidate_initial.sv are byte-identical"
+    },
+    {
+      "name": "static_rtl_review",
+      "result": "Exact TopModule interface; two one-bit registers, posedge-only nonblocking assignments; no reset, initialization, combinational latch, or extra ports; matches frozen delayed-inversion contract."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "result": "failed without diagnostic output",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "result": "not run because compilation failed",
+      "status_log": "dev_status.log"
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate delivered without RTL revisions. Independent self-checking testbench created, but simulation success is not established because Icarus compilation failed.",
+  "limitations": [
+    "Waveform admits multiple possible circuits; selected minimal two-register delayed inversion.",
+    "Contract gate validates structure only, not functional correctness.",
+    "Development compiler exited 139 without diagnostics; testbench has not run.",
+    "No synthesis, board access, official testbench, reference RTL, or evaluation results were used."
+  ],
+  "contract_corrections": []
+}

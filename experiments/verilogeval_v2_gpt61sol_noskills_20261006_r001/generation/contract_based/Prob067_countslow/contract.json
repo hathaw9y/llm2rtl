@@ -1,0 +1,23 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "slowena": 1}, "outputs": {"q": 4}},
+  "semantics": {
+    "clock": "All sequential logic updates on the positive edge of clk, as stated in the original problem.",
+    "reset": "Active high synchronous reset sets q to zero on a positive edge, regardless of slowena.",
+    "enabled": "On a positive edge with reset low and slowena high, advance the decade count by one; 9 advances to 0.",
+    "paused": "On a positive edge with reset low and slowena low, retain q.",
+    "between_edges": "Input changes alone do not update q.",
+    "initialization": "No power-up value is specified; no initialization is added. Functional counting checks begin after synchronous reset."
+  },
+  "numeric": {"representation": "4-bit unsigned count", "legal_sequence": [0,1,2,3,4,5,6,7,8,9], "period_enabled_edges": 10},
+  "verification": {
+    "oracle": "Independent integer model derived from original reset, enable and decade sequence requirements.",
+    "sampling": "Drive inputs at falling edges; check stability before rising edge and sample after rising-edge nonblocking assignments settle.",
+    "directed": "Synchronous reset between edges, reset priority for both enable values, full cycles, hold at 0 and 9, resume and rollover.",
+    "additional": "Deterministic mixed enable/reset sequence, bounded timeout, fatal mismatches, explicit PASS only at completion."
+  },
+  "specification_ambiguities": [
+    "Power-up q is unspecified; verification imposes no value before the first reset edge.",
+    "Behavior for unreachable count values 10 through 15 and unknown inputs is unspecified; no forced-state or unknown-input oracle is imposed."
+  ]
+}

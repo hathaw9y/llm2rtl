@@ -1,0 +1,191 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob057_kmap2",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob057_kmap2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob057_kmap2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790739467.9455566,
+    "ended_at_unix": 1790739596.119886,
+    "seconds": 128.17432975769043,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 100454,
+      "cached_input_tokens": 76288,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2284,
+      "reasoning_output_tokens": 139
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "d3d446a4dd3bb9c45653849f576bbfc2a1cd7c712efe6c1d4ec02b127052a625",
+  "contract_sha256": "e6c4534e415400cab4c088fa7bc71732f93a607cae0812bb591e2b01afa7ad25",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract gate",
+        "command": "python3 validate_contract.py",
+        "result": "PASS (passed_structure_only)",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "initial preservation",
+        "result": "PASS",
+        "detail": "candidate_initial.sv copied immediately after initial implementation before development checks"
+      },
+      {
+        "name": "compile and warnings",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "result": "PASS, exit 0, no diagnostics",
+        "log": "dev_compile.log"
+      },
+      {
+        "name": "exhaustive independent K-map simulation",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+        "result": "PASS, exit 0, 32 comparisons covering all 16 binary combinations in ascending and descending order",
+        "log": "dev_simulation.log"
+      },
+      {
+        "name": "static RTL review",
+        "result": "PASS",
+        "detail": "Exact one-bit ports, continuous combinational assignment, no state, delays, inferred latches, external dependencies, or arithmetic-width issues"
+      }
+    ],
+    "development_outcome": "PASS; initial candidate retained without RTL revisions and matches the frozen contract in exhaustive binary development simulation.",
+    "limitations": [
+      "X/Z input behavior is unspecified and not tested.",
+      "Contract validation is structural only.",
+      "Official evaluation results are unavailable.",
+      "No synthesis, physical timing, or board validation performed."
+    ],
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_rtl": "candidate_initial.sv",
+      "contract": "contract.json",
+      "testbench": "dev_tb.sv",
+      "status_log": "dev_status.log"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob057_kmap2_ref.sv": "83158896f78e373b197b40a8637334b78a01c740a0df0b2da65452a076bdc4d8",
+      "candidate.sv": "d3d446a4dd3bb9c45653849f576bbfc2a1cd7c712efe6c1d4ec02b127052a625",
+      "Prob057_kmap2_test.sv": "1752d6f03374c971cc2364affd4a0f4052c7956e5d14d1b146c40af886eb2b73"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob057_kmap2_test.sv",
+        "Prob057_kmap2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013017730787396431
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb057_kmap2_test.sv:38: $finish called at 1161 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 232 samples\n\nSimulation finished at 1161 ps\nMismatches: 0 in 232 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008127662353217602
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob057_kmap2_ref.sv": "83158896f78e373b197b40a8637334b78a01c740a0df0b2da65452a076bdc4d8",
+      "candidate.sv": "d3d446a4dd3bb9c45653849f576bbfc2a1cd7c712efe6c1d4ec02b127052a625",
+      "Prob057_kmap2_test.sv": "1752d6f03374c971cc2364affd4a0f4052c7956e5d14d1b146c40af886eb2b73"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob057_kmap2_test.sv",
+        "Prob057_kmap2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011903106234967709
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb057_kmap2_test.sv:38: $finish called at 1161 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 232 samples\n\nSimulation finished at 1161 ps\nMismatches: 0 in 232 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008074977435171604
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

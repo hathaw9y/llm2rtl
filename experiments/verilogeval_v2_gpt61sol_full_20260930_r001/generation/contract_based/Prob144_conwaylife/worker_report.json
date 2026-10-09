@@ -1,0 +1,51 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "pass",
+      "exit_code": 0,
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "command": "timeout 60s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "pass",
+      "exit_code": 0,
+      "edge_comparisons": 5147,
+      "log": "dev_simulation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "pass",
+      "details": "Exact TopModule ports; no reset or initialization added; positive-edge load priority; 256 parallel updates from old q; modulo-16 constant indices; explicitly zero-extended four-bit count represents 0..8; single sequential driver; no behavioral delays in DUT"
+    },
+    {
+      "name": "initial_snapshot",
+      "result": "preserved before development checks; no RTL edits thereafter",
+      "file": "candidate_initial.sv"
+    }
+  ],
+  "development_outcome": "PASS: independent oracle matched all 5147 edge comparisons. Covered empty/full states, every isolated-cell position, corner-wrapped stable block, blinker, 512 local patterns at each of four representative positions, seeded random multigeneration runs, consecutive loads and output stability between edges.",
+  "limitations": [
+    "Official evaluation was not accessed and its outcome is unknown.",
+    "No synthesis, timing analysis or board validation performed.",
+    "Contract gate checks structure only; semantic conformance was reviewed and development-tested.",
+    "Power-up state before first load is unspecified by the problem.",
+    "Development tests cover binary inputs and representative trajectories, not all possible 256-bit grids."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

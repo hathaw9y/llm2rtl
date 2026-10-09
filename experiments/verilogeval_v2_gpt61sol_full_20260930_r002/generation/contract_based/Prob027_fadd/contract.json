@@ -1,0 +1,43 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "cin": 1
+    },
+    "outputs": {
+      "cout": 1,
+      "sum": 1
+    },
+    "evidence": "Original problem lists five one-bit ports and names TopModule."
+  },
+  "semantics": {
+    "function": "Add a, b and cin; sum is the low bit and cout is the high bit of the result.",
+    "timing": "Combinational; outputs follow current inputs after combinational settling, with no clock or added latency.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No persistent state or initialized output specified.",
+    "evidence": "Original problem calls this a full adder that adds three bits and produces sum and carry-out; interface has no clock/reset."
+  },
+  "numeric": {
+    "inputs": "Unsigned single bits, each 0 or 1.",
+    "total_range": [
+      0,
+      3
+    ],
+    "result_width": 2,
+    "encoding": "2*cout + sum = a + b + cin",
+    "overflow": "Two result bits represent all possible sums exactly."
+  },
+  "verification": {
+    "oracle": "Independent integer addition of the three original input bits.",
+    "coverage": "Exhaust all eight input combinations in ascending and descending order, including zero and maximum total.",
+    "sampling": "Drive inputs, wait 1 ns for combinational settling, compare both outputs using case inequality.",
+    "failure": "$fatal on mismatch and bounded timeout; PASS only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z inputs is not defined by the original specification; binary inputs are the verified domain."
+  ]
+}

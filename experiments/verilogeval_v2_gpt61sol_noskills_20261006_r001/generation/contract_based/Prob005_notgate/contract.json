@@ -1,0 +1,48 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    },
+    "evidence": "Original problem names TopModule and one-bit in/out ports."
+  },
+  "semantics": {
+    "function": "out is the combinational inversion of in",
+    "cycles": "No clock or latency; original requests a NOT gate.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or initialization specified; output follows input inversion."
+  },
+  "numeric": {
+    "domain": "One-bit logic",
+    "truth_table": {
+      "0": "1",
+      "1": "0"
+    },
+    "four_state": "Standard Verilog inversion maps x and z to x."
+  },
+  "verification": {
+    "oracle": "Explicit NOT truth table from original problem",
+    "directed_cases": [
+      "0 -> 1",
+      "1 -> 0",
+      "repeated input transitions"
+    ],
+    "supplemental_cases": [
+      "x -> x",
+      "z -> x under standard Verilog logic"
+    ],
+    "sampling": "Sample after combinational settling, without clock.",
+    "failure": "$fatal on mismatch and bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    "Original problem does not explicitly define x/z behavior; use standard Verilog NOT semantics and treat those checks as supplemental."
+  ]
+}

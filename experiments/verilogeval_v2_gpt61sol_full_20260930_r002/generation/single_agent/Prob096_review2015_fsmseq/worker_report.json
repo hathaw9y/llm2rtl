@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed (expected)",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "checked_cycles": 53487,
+      "evidence_directory": "development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board work performed.",
+    "Behavior before the first synchronous reset is unspecified by the problem and is not asserted by the testbench."
+  ],
+  "justified_changes": {
+    "rtl": [],
+    "testbench": []
+  },
+  "rtl_files": [
+    "candidate.sv",
+    "candidate_initial.sv"
+  ],
+  "testbench_files": [
+    "dev_tb.sv"
+  ],
+  "interface_cycle_semantics": "Original one-bit ports preserved. Bits sampled on positive clock edges. Output asserts immediately after sampling the final bit of 1101 and stays asserted until a positive edge with reset high.",
+  "implementation": "Five-state prefix FSM with absorbing FOUND state; explicit if/else next-state assignments; three-bit enum; no added ports or pipeline latency.",
+  "verification": "Independent four-bit history oracle checks all 4096 twelve-bit streams, reset at each prefix length, reset priority, output stability before sampling edges, and sticky output. Bounded timeout and fatal mismatch checks included.",
+  "static_review": "Complete combinational assignments, nonblocking state register, synchronous active-high reset, and single driver reviewed."
+}

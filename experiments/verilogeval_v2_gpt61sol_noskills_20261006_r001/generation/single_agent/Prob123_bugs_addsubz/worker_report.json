@@ -1,0 +1,30 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json",
+      "cases": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+    },
+    {
+      "name": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "coverage": "131080 checks: exhaustive 8-bit input pairs for both operations plus directed zero/nonzero transitions and wraparound boundaries.",
+      "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; no warnings",
+      "simulation": "Matching vvp completed with explicit PASS."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Exhaustive checks cover binary inputs; the original problem specifies no required behavior for unknown or high-impedance inputs."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation computes the selected addition or subtraction with 8-bit truncation and assigns the zero flag on every combinational evaluation using equality to zero. This fixes bitwise-complement misuse and the missing nonzero flag assignment. No subsequent RTL revisions."
+  ],
+  "justified_tb_changes": [],
+  "initial_snapshot": "candidate_initial.sv",
+  "testbench": "dev_tb.sv"
+}

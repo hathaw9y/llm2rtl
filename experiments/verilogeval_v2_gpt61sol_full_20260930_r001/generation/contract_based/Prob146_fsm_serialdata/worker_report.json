@@ -1,0 +1,44 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "initial_snapshot",
+      "result": "PASS",
+      "detail": "candidate_initial.sv preserved immediately after initial candidate creation, before development checks; candidate remains identical",
+      "identical": true
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "TOOL FAILURE",
+      "exit_code": 139,
+      "log": "compile_initial.log",
+      "detail": "No diagnostic output; simulation not run."
+    },
+    {
+      "name": "tool_version_probe",
+      "command": "timeout 10s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -V",
+      "result": "See tool_version.log; probe is not a functional check",
+      "log": "tool_version.log"
+    },
+    {
+      "name": "static_review",
+      "result": "PASS by inspection",
+      "detail": "Exact ports; synchronous active-high reset; 8 indexed LSB-first samples; stop success pulse with registered byte; malformed frame recovery; no latches, multiple drivers, or simulation-only RTL."
+    }
+  ],
+  "development_outcome": "Initial RTL delivered without revisions. Independent self-checking testbench created but not executed because the required Icarus compiler failed with exit code 139.",
+  "contract_corrections": [],
+  "limitations": [
+    "No successful development compilation or simulation; correctness is based on contract and static inspection only.",
+    "Official evaluation not accessed and results unknown.",
+    "No synthesis, timing, or board validation performed.",
+    "Recovery high interpreted as resynchronization without done; only a correctly positioned stop completes a frame."
+  ]
+}

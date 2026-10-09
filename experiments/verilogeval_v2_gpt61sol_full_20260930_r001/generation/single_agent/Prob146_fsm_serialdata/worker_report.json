@@ -1,0 +1,30 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Reviewed synchronous active-high reset, eight LSB-first samples, registered stop-cycle done pulse and byte output, framing-error recovery, sized three-bit count, nonblocking sequential assignments, and default state recovery."
+    },
+    {
+      "name": "Icarus development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "tool failure",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "details": "No diagnostic text or simulation executable was produced. Exit status is recorded separately in dev_tool_status.log."
+    },
+    {
+      "name": "development simulation attempt",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "could not run",
+      "log": "dev_sim.log",
+      "details": "vvp reported that dev_sim could not be opened; simulation did not execute."
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate retained after static review; development compilation failed at tool execution. No simulation success claimed.",
+  "limitations": [
+    "Self-checking development testbench was written for all 256 byte values, back-to-back frames, idle cycles, bad-stop recovery, and resets during reception, but could not execute.",
+    "No synthesis, timing, board, or official evaluation results are available."
+  ]
+}

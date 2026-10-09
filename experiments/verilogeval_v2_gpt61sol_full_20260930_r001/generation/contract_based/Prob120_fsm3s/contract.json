@@ -1,0 +1,33 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "reset": {"direction": "input", "width": 1},
+      "in": {"direction": "input", "width": 1},
+      "out": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "type": "four-state Moore FSM",
+    "clock": "All state updates occur on the rising edge of clk.",
+    "reset": "Synchronous active-high reset has priority over in and selects A on a rising edge. Assertion between rising edges does not change state or output.",
+    "initialization": "No power-up state is specified; defined operation begins after a rising edge with reset high.",
+    "transitions": {"A": {"0": "A", "1": "B"}, "B": {"0": "C", "1": "B"}, "C": {"0": "A", "1": "D"}, "D": {"0": "C", "1": "B"}},
+    "outputs": {"A": 0, "B": 0, "C": 0, "D": 1},
+    "output_timing": "out decodes the current registered state, including the new state after a rising edge; changes to in alone do not change out."
+  },
+  "numeric": {
+    "signals": "All public signals are single-bit unsigned logic.",
+    "arithmetic": "No arithmetic, rounding, saturation, or overflow behavior is present.",
+    "state_encoding": "Internal encoding is an implementation choice; four states require two bits."
+  },
+  "verification": {
+    "oracle": "Independent integer-state model implementing the original transition table and Moore output map.",
+    "coverage": "Exhaust all 256 eight-bit input sequences from reset, track all eight state/input transitions, and test reset from every state with both input values.",
+    "timing": "Compare after each rising edge settles; change input and assert reset between rising edges and check output is unchanged until the next edge.",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top, finite compile and simulation timeouts, self-checking PASS/FAIL and internal watchdog."
+  },
+  "specification_ambiguities": ["Power-up state before synchronous reset is unspecified; no pre-reset output is required."]
+}

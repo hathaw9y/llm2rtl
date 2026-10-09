@@ -1,0 +1,28 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"a": 1, "b": 1},
+    "outputs": {"out": 1},
+    "evidence": "Original problem explicitly names TopModule and one-bit a, b, out."
+  },
+  "semantics": {
+    "function": "out is the logical NOR of a and b: 00 gives 1; 01, 10, 11 give 0.",
+    "timing": "Combinational, with no clock, state, or added cycle latency; original asks for a NOR gate.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "No stored state or initialization requirement; output follows inputs after combinational settling."
+  },
+  "numeric": {
+    "width": "All signals are one-bit; no arithmetic or signed interpretation.",
+    "four_state": "Use standard Verilog bitwise NOR: a known high input forces output low; otherwise unknown or high-impedance inputs propagate unknown."
+  },
+  "verification": {
+    "oracle": "Explicit truth-table expectations derived from the original NOR requirement, independent of RTL expression.",
+    "cases": "All four binary combinations, repeated input transitions, and supplemental standard four-state cases.",
+    "sampling": "Drive inputs then wait 1 ns before observing combinational output; no clock edges exist.",
+    "completion": "Fatal on mismatch, bounded timeout, PASS only after all checks; fixed dev_check.py evaluator."
+  },
+  "specification_ambiguities": [
+    "Original problem does not explicitly define X/Z behavior; standard Verilog NOR semantics are used as supplemental verification."
+  ]
+}

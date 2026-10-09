@@ -1,0 +1,26 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "coverage": "Correct fixture passed, injected fault failed, repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "development/01 and dev_checks.jsonl", "comparisons": 63543, "compile": "Icarus 12 -g2012 -Wall -Wno-timescale; no diagnostics", "simulation": "Matching vvp, explicit PASS marker, exit code 0"}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not been run or accessed.",
+    "Cycle-wording interpretations are recorded in contract.json; the oracle follows the original problem's ordered startup, x monitoring, and two-cycle y window.",
+    "No defined power-up behavior before reset was required or tested.",
+    "No synthesis, timing, board work, or external source reuse was performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "artifacts": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json"},
+  "implementation": {
+    "interface": "Original one-bit clk/resetn/x/y/f/g ports, exact TopModule name.",
+    "reset": "Active-low synchronous positive-edge reset.",
+    "state_width": 4,
+    "cycle_behavior": "One startup f cycle; consecutive 101 detector; g high over two eligible y samples then permanent success/failure until reset.",
+    "static_review": "Single state-register driver, complete combinational next-state case, explicit enum if/else transitions, no added ports, latency, initializer, or inferred latches."
+  }
+}

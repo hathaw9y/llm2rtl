@@ -1,0 +1,33 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "d": {"direction": "input", "width": 1},
+      "ena": {"direction": "input", "width": 1},
+      "q": {"direction": "output", "width": 1}
+    }
+  },
+  "semantics": {
+    "storage": "One-bit level-sensitive D latch implemented using an always block",
+    "enable": "Active high: q follows d while ena is 1; q retains its previous value while ena is 0",
+    "timing": "No clock or cycle latency; input changes propagate through the enabled latch after procedural simulation scheduling",
+    "reset": "No reset port or reset behavior",
+    "initialization": "No specified initial value; do not initialize q in RTL; simulation begins unknown until enabled with known d"
+  },
+  "numeric": {
+    "data": "One-bit logic copied without arithmetic",
+    "signedness": "Unsigned scalar ports",
+    "rounding_overflow_saturation": "Not applicable"
+  },
+  "verification": {
+    "oracle": "Directed expected values from transparent-latch and hold semantics, checked after settling",
+    "cases": ["Disabled startup has no forced value", "Enable assertion captures each binary d value", "Both d transitions propagate while ena remains high", "Both stored values hold across disabled d transitions", "Enable deassertion holds captured value", "Repeated enable/disable sequences"],
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top, matching vvp, finite command timeouts and testbench watchdog",
+    "scope": "Independent development testbench only; no official evaluation or synthesis"
+  },
+  "specification_ambiguities": [
+    "Initial q is unspecified; RTL supplies no initialization.",
+    "Unknown/high-impedance input behavior is not specified; binary functional behavior is the verification target."
+  ]
+}

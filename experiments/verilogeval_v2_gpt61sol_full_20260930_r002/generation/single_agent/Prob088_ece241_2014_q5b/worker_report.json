@@ -1,0 +1,14 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "compiler": "Icarus Verilog 12", "output_checks": 10787, "evidence": "development/01", "check_record": "dev_checks.jsonl"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "No synthesis or board verification performed.", "Behavior before the first reset is unspecified by the problem and was not asserted."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Two-bit one-hot A=01, B=10 state register, positive-edge transitions, asynchronous active-high reset into A, combinational Mealy output with no added latency.",
+  "verification": "Independent first-sampled-one oracle; all 256 eight-bit input streams; checks before and after rising edges, between edges, and after falling edges; reset in B and rising edges while reset is held high; bounded timeout and fatal mismatch checks.",
+  "static_review": "Original interface preserved; explicit enum if/else next-state assignment; nonblocking state update; complete combinational next-state assignments; one-hot legal states. Initial snapshot preserved unchanged."
+}

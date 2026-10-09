@@ -1,0 +1,39 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "load": 1, "data": 10},
+    "outputs": {"tc": 1},
+    "reset": "No reset port is specified."
+  },
+  "semantics": {
+    "edge": "All state transitions occur on the positive edge of clk, as explicitly specified.",
+    "load": "If load is 1 at a positive edge, replace the count with data, including during an active countdown.",
+    "countdown": "If load is 0 and the count is nonzero, decrement it by one; zero holds until loaded.",
+    "output": "tc indicates the current count equals zero, without an extra registered cycle of latency.",
+    "initialization": "No reset or initial count is specified; do not introduce initialization. Tests use a load to establish known state."
+  },
+  "numeric": {
+    "count_width": 10,
+    "unsigned_range": [0, 1023],
+    "zero_behavior": "Saturate at zero; never wrap to 1023 from zero.",
+    "duration": "Loading N sets count to N; tc asserts after N subsequent positive edges with load=0. Loading zero asserts tc immediately after the loading edge."
+  },
+  "verification": {
+    "oracle": "Independent integer remaining-duration model derived from the original load/decrement/hold rules.",
+    "sampling": "Drive inputs while clk is low; check tc before the next positive edge and after nonblocking updates. Check absence of state changes at negative edges.",
+    "coverage": "Zero, one, two, maximum duration, every 10-bit load value, reload while active, consecutive loads, zero reload, and prolonged terminal hold.",
+    "initial_state": "Observe uninitialized tc before the first load, while recording that its value is not specified as a functional requirement.",
+    "pass": "Fatal mismatches, bounded timeout, and a PASS line only after all checks succeed."
+  },
+  "specification_ambiguities": [
+    {
+      "text": "The module should implement a single D flip-flop.",
+      "resolution": "A literal one-bit flip-flop cannot store the specified 10-bit countdown. Interpret this as one 10-bit clocked state register; prioritize the explicit timer behavior and interface."
+    },
+    {
+      "text": "No initial counter value is given.",
+      "resolution": "Leave state uninitialized; functional assertions begin after an explicit load."
+    }
+  ]
+}

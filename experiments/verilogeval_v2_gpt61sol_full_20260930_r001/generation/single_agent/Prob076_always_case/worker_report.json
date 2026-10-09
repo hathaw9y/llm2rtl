@@ -1,0 +1,35 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Required TopModule ports and widths retained. Combinational blocking assignments cover selectors 0 through 5 and a zero-valued default. No clock, reset, registers, or latch required."
+    },
+    {
+      "name": "development compilation",
+      "result": "tool_failure",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "log": "dev_compile.log",
+      "details": "Compiler produced no diagnostic text."
+    },
+    {
+      "name": "development simulation",
+      "result": "not_run",
+      "log": "dev_simulation.log",
+      "details": "Compilation failed. Independent testbench contains 768 expected-versus-actual checks across all selectors and all values of each input, plus a finite simulation watchdog."
+    }
+  ],
+  "development_outcome": "Initial RTL retained without revisions after static review; development compilation failed and simulation success is not claimed.",
+  "limitations": [
+    "RTL has not been validated by a successful development simulation.",
+    "Official evaluation results are unavailable and were not accessed.",
+    "No synthesis, timing, or board validation performed."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  }
+}

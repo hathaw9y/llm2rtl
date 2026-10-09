@@ -1,0 +1,66 @@
+{
+  "module_id": "smollm2_dma_engine_link",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "proof_scope": "Common DataMover engine and model bridge connected; XSIM uses modeled AXI stream/status and bank responses, no vendor IP or DDR",
+  "source_sha256": {
+    "ip/infrastructure/datamover_engine/rtl/datamover_engine_pkg.sv": "9134093b3f51049657714b77e1422a0d632cd28c36a67f85d308e4776a7ce792",
+    "ip/infrastructure/datamover_engine/rtl/pipeline.sv": "a898c37725e714a6b5ea7ebdc63d6b04db5263b6f591d9e7b15c13f1c6621ddd",
+    "ip/infrastructure/datamover_engine/rtl/fifo.sv": "08429e4fc6fc43d23248fbd2a3d85bab12e7a51bee033fbb4c7a95148cdc305f",
+    "ip/infrastructure/datamover_engine/rtl/axis_width_up_converter.sv": "fa71fed6c724ec92fea95bcc035f85a79c1a1107728c8ee1f0c172db273f81b2",
+    "ip/infrastructure/datamover_engine/rtl/axis_width_down_converter.sv": "d7e6da6402eb17db83d4a01b332327d87fd67d9303ec23bfd46b82407e3b036d",
+    "ip/infrastructure/datamover_engine/rtl/axis_width_converter.sv": "403dbd62f09c0ac98143576575aa1090e9884dafa5b5bf5ff305ba17f100c050",
+    "ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv": "0606d2b72a34765c067cbbc9ca9962e98002c24c5bb7999d482be96837b16f00",
+    "ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv": "59bc18e6c8a61f163423a22664a970e28ee853e6d4cf013657a4feda171368fa",
+    "ip/infrastructure/datamover_engine/rtl/datamover_command_queue.sv": "100b21a26a76baf436e67fdd8389cb020df5470cc4b19624ab6db96bee96d17c",
+    "ip/infrastructure/datamover_engine/rtl/mm2s_channel.sv": "90b487f67e5d2eea7eb92a2c2888d8da15df3b6694f2e26973f7ce3468aa96a9",
+    "ip/infrastructure/datamover_engine/rtl/s2mm_channel.sv": "728c43bf1208a6cf259ab23054516eb6fb7e99551acda7f5d6ded2098a5cc82a",
+    "ip/infrastructure/datamover_engine/rtl/datamover_engine.sv": "a8ebb6a9d2bbcf6ec19171596634d0518173c3ee46a043061979beb6ee5e8780",
+    "designs/smollm2_135m_bf16_zcu104_r1/modules/smollm2_dma_engine_link.json": "3b1d4b6315ba0a1a958de886374fe639be96d73da3ec42687645377357d57c6e",
+    "designs/smollm2_135m_bf16_zcu104_r1/modules/smollm2_dma_bank_bridge.json": "557610bdb4c6feb7c35cee069e2a61b95123a50651777d12fb813d75cc480225",
+    "designs/smollm2_135m_bf16_zcu104_r1/modules/smollm2_bank_memories.json": "e35991c4ada277912c5130c79465672c0a7f391107b05498dc80c162972146bd",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_dma_bank_bridge.sv": "42575deb12b0f538557c4465e44241b8b68444d4f964592263634c3026bbce27",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_dma_engine_link.sv": "ba5a3fda6a60bc5a22fc5e7fd9ab77a12375a64dd18c92b3091de00d3e6fc7d6",
+    "designs/smollm2_135m_bf16_zcu104_r1/tb/tb_smollm2_dma_engine_link.sv": "9a253fd27942d51542bca993e2ebb9310f804ef6f3db7a456bb2d9f875b5d341",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_dma_engine_link_xsim.sh": "40d45694d889572ef032d90ca4c358bbd2db6856f9412743bdaa56be750209b1",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_dma_engine_link_ooc.tcl": "1bac57ef6df94bdb81aa9019194f26cc581c7bb31f801ba82952edee5c66cda0",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/check_dma_bank_capacities.py": "949da06576835e38f7827576de19c126d2fd03037a011b2ef50bbb904c52ccc5",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/bank_memories_clock.xdc": "5127d6af45d0824731a9420894371f0d7825842f4e10d80851efa06bd5a3bbde"
+  },
+  "checks": {
+    "design_structure": "passed_structure_only with expected module SHA-256",
+    "bank_pair_identity": "PASS actual prefill/decode pairs match contract, router, dispatcher and DMA bridge",
+    "capacity_identity": "PASS 13 logical, XPM and engine capacity tables match",
+    "verilator_lint": "PASS; existing common adapter WIDTH warnings waived",
+    "xsim_self_check": "PASS smollm2_dma_engine_link, Vivado XSIM 2025.2",
+    "vivado_ooc_synthesis": "PASS, Vivado 2025.2, xczu7ev-ffvc1156-2-e, 5.000 ns clock",
+    "post_synth_drc": "0 checks found",
+    "board_execution": "not run"
+  },
+  "xsim_scenarios": [
+    "LOAD waits for local write and matching DataMover status",
+    "STORE stream waits for DDR write status",
+    "bank-ID response translation while engine validates sequence tag",
+    "high ISA offset reports descriptor error 06 without DDR command",
+    "bad DataMover tag reports error 20 and recovery required",
+    "bridge ownership denial emits direction-local abort error 50"
+  ],
+  "post_synth_resources": {
+    "clb_luts": 4429,
+    "clb_registers": 1039,
+    "bram_tiles": 0,
+    "uram": 0,
+    "dsps": 0
+  },
+  "post_synth_timing_ns": {
+    "clock_period": 5.0,
+    "setup_wns": 2.074,
+    "hold_whs": 0.031,
+    "pulse_width_wpws": 1.968
+  },
+  "limitations": [
+    "No vendor AXI DataMover IP, DDR controller, board wrapper, placed/routed timing or Vitis execution in this verification.",
+    "A faulted engine retains its metadata head; system-level recovery must reset engine, vendor DataMover and dispatcher together.",
+    "No inference about full-model acceleration follows from this module-level result."
+  ]
+}

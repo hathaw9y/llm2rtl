@@ -1,0 +1,43 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "passed",
+      "details": "Exact TopModule interface; all ports one bit; continuous combinational assignment implements even parity for all original rows; no state, latch, delay, reset, arithmetic width growth, or external modules."
+    },
+    {
+      "name": "initial_snapshot",
+      "result": "passed",
+      "details": "candidate_initial.sv preserved immediately after initial implementation, before development checks; matches candidate.sv."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "failed",
+      "exit_code": 139,
+      "log": "development_compile.log",
+      "details": "Compiler exited with status 139 and no diagnostics."
+    },
+    {
+      "name": "development_simulation",
+      "result": "not_run",
+      "log": "development_simulation.log",
+      "details": "Compilation failed; no simulation success claimed."
+    }
+  ],
+  "development_outcome": "Synthesizable even-parity candidate delivered; contract gate and static review passed. Development compilation failed with exit 139, so functional simulation remains unverified.",
+  "limitations": [
+    "Official evaluation was not accessed and occurs externally after this turn.",
+    "No synthesis, timing, or board validation performed.",
+    "X/Z input behavior is unspecified by the problem.",
+    "Independent self-checking testbench is provided but could not run due to compiler failure."
+  ]
+}

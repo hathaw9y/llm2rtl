@@ -1,0 +1,30 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "details": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01",
+      "details": "Icarus 12 compilation and simulation passed; independent population-count oracle checked all 256 input bytes."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": {
+    "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+    "testbench_files": ["dev_tb.sv"],
+    "interface": "TopModule: 8-bit in, 1-bit parity; combinational XOR reduction with no clock, reset, extra ports, or latency.",
+    "numeric_widths": "Eight input bits reduced to one parity bit.",
+    "static_review": "Matches specified even parity; no state or inferred latches. Initial snapshot preserved unchanged."
+  }
+}

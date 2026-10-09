@@ -1,0 +1,18 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "details": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "development/01", "comparisons": 1048611}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Partially unknown selectors are not specified by the waveform; implementation returns unknown for unmatched selectors.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Combinational 4-bit mux: selectors 0,1,2,3 choose b,e,a,d; selectors 4 through 15 return 4'hf. No reset, clock, added ports, or latency.",
+  "verification": "Original waveform replay with 5 ns stimulus intervals and 1 ps settling samples, initial unknown checks, exhaustive known input combinations, and unknown payload checks. Bounded timeout and fatal mismatch handling. Icarus 12 compile and simulation passed without diagnostics.",
+  "static_review": "Complete combinational case assignment, explicit 4-bit values, no storage or multiple drivers. Initial RTL preserved unchanged in candidate_initial.sv."
+}

@@ -1,0 +1,180 @@
+{
+  "module_id": "attention_tensor_isa",
+  "status": "passed",
+  "role": "integration_test_author; independent integration audit remains separate",
+  "manifest_sha256": "45b2bf8040b450a55f02c37dee5d72d0c02da74f9353b27232ac14c111a76a8f",
+  "source_identity": "PASS",
+  "components": {
+    "simulation": {
+      "directory": "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/tensor_isa_sim_final002",
+      "manifest_sha256": "8e4dcc886a4fe83b031f61228c8224d50a3e712564c9823244df7c875fd399cb",
+      "result_sha256": "117fbda155301f6e4e7583e882a6831d20cb0b843d2368470275193923343902",
+      "mode": "sim",
+      "configuration": {
+        "CMD_ADDR_WIDTH": 6,
+        "MAX_COMMANDS": 64,
+        "CMD_READ_LATENCY": 1
+      },
+      "status": "PASS"
+    },
+    "lint": {
+      "directory": "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/tensor_isa_lint_final002",
+      "manifest_sha256": "f13f6adaa72f313956fd34147f6c17f49dd686e1a7c8935e677dff25dc274935",
+      "result_sha256": "72c9cfd1d182da62303f9042b368383b28b28d281b02809aa6a14018b143eb3e",
+      "mode": "lint",
+      "configuration": {
+        "CMD_ADDR_WIDTH": 6,
+        "MAX_COMMANDS": 64,
+        "CMD_READ_LATENCY": 1
+      },
+      "status": "LINT_PASS_ONLY"
+    },
+    "latency2": {
+      "directory": "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/tensor_isa_latency2_final002",
+      "manifest_sha256": "6ae196b695a3dcafb7c6f949debc61d638d52a49405844495b7be1afe0b401b6",
+      "result_sha256": "16c5b119cd8ee85eec26113236c6b7e2d679f1d58e3307dab1266d616e831480",
+      "mode": "sim",
+      "configuration": {
+        "CMD_ADDR_WIDTH": 6,
+        "MAX_COMMANDS": 64,
+        "CMD_READ_LATENCY": 2
+      },
+      "status": "PASS"
+    },
+    "ooc": {
+      "directory": "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/tensor_isa_timing004",
+      "manifest_sha256": "1acb1325ffb92a87174080185b38992a6028932a0f81ab4033ccccd63b63fbca",
+      "result_sha256": "36411d3736dfb7ab2d913f283395b52e779579576197672a760d038d3ef09050",
+      "mode": "synth",
+      "configuration": {
+        "CMD_ADDR_WIDTH": 6,
+        "MAX_COMMANDS": 64,
+        "CMD_READ_LATENCY": 1
+      },
+      "status": "SYNTH_PASS_ONLY"
+    }
+  },
+  "accepted_child_reviews": {
+    "math_review.json": {
+      "path": "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/math_review.json",
+      "sha256": "1a5a14d4bcea589ce2cab5e1b821d6ec55f23121134c187a0966c2f56dcaa0a2"
+    },
+    "executor_review.json": {
+      "path": "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/executor_review.json",
+      "sha256": "73b3b6b9055d53eb0c299f3399d7d5ed9b97395cd98ef674b5fbed38a6b80df5"
+    },
+    "control_review_ackfix.json": {
+      "path": "/home/shmin/llm2rtl/designs/attention_w4a4kv4_bf16scale_isa_r1/evidence/control_review_ackfix.json",
+      "sha256": "9ff83dc35de95a72e99dc0c33c05a612228f19bd02ade0efde8d7678765c7131"
+    }
+  },
+  "profiles": {
+    "simulation": [
+      {
+        "profile": "prefill",
+        "cases": 36,
+        "mm2s": 131,
+        "compute": 47,
+        "s2mm": 16,
+        "cycles": 1472383
+      },
+      {
+        "profile": "last_token",
+        "cases": 2,
+        "mm2s": 12,
+        "compute": 26,
+        "s2mm": 15,
+        "cycles": 798506
+      },
+      {
+        "profile": "odd_head",
+        "cases": 2,
+        "mm2s": 12,
+        "compute": 26,
+        "s2mm": 15,
+        "cycles": 1412120
+      },
+      {
+        "profile": "noncausal_mask",
+        "cases": 2,
+        "mm2s": 12,
+        "compute": 26,
+        "s2mm": 15,
+        "cycles": 154062
+      },
+      {
+        "profile": "all_masked",
+        "cases": 2,
+        "mm2s": 12,
+        "compute": 26,
+        "s2mm": 15,
+        "cycles": 33357
+      },
+      {
+        "profile": "zero",
+        "cases": 2,
+        "mm2s": 12,
+        "compute": 26,
+        "s2mm": 15,
+        "cycles": 9004
+      },
+      {
+        "profile": "gentle",
+        "cases": 2,
+        "mm2s": 12,
+        "compute": 26,
+        "s2mm": 15,
+        "cycles": 1391440
+      },
+      {
+        "profile": "max_tokens",
+        "cases": 2,
+        "mm2s": 12,
+        "compute": 26,
+        "s2mm": 15,
+        "cycles": 6288305
+      },
+      {
+        "profile": "max_row",
+        "cases": 2,
+        "mm2s": 12,
+        "compute": 26,
+        "s2mm": 15,
+        "cycles": 9803755
+      }
+    ],
+    "latency2": [
+      {
+        "profile": "prefill",
+        "cases": 36,
+        "mm2s": 131,
+        "compute": 47,
+        "s2mm": 16,
+        "cycles": 1472599
+      }
+    ]
+  },
+  "cases": {
+    "main": 52,
+    "latency2": 36
+  },
+  "golden": "exact payload all13computedbanks6..18, BF16scale words/INT4padding and final bank18; canonical21+diagnostic34 with saved IDs/drained reads/final writes accepted before completion/release",
+  "protocol": "command/DMA stalls, first compute response hold, repeated program reuse, invalid full8bit banks32/255/fields/op/aliases/DDRwrap/missingEND; completion identity/duplicate/errors, outstanding-read reset, late-row numeric publication invalidation, five real completion/RELEASE bank-fault injections",
+  "lint": "all9 empty strictWall logs/exit0",
+  "scope": {
+    "simulation": "9 immutable profiles; CMD_ADDR_WIDTH6/MAX_COMMANDS64/CMD_READ_LATENCY1; canonical21 and diagnostic34 repeated start without reset",
+    "latency2": "prefill same6/64 with CMD_READ_LATENCY2; no separate lint/OOC in this mode",
+    "lint": "9 generated descriptor configurations; strict -Wall with RTL module default parameters10/1024/1; only filename-specific legacy LITENDIAN rules and vendor-interface stub-local unused/undriven annotations",
+    "synthesis": "prefill actualtop6/64/1; Vivado2025.2 xczu7ev-ffvc1156-2-e unplaced5ns OOC with external boundary hold excluded; setup min/max delays unchanged",
+    "late_range": "onepast-capacity external MM request during compute ownership also has wrong owner; no isolated authorized-owner range-fault claim",
+    "fault_force": "only registered router_error_w signal injected for one clean RELEASE case; no datapath/ownership/native-ready force"
+  },
+  "limitations": [
+    "bounded scalar immutable descriptors, not arbitrary Cartesian shapes or production throughput",
+    "native DMA BFMs and actual XPM banks; no vendorDMA/physicalDDR/board/routed deployment claim",
+    "word-exact independent hardware golden is not model quality/accuracy proof",
+    "compute memory ready stalls covered by independent executor BFM, not forced ready in fulltop",
+    "all profile numerical dynamics verified; integrated resource/timing evidence only prefill config",
+    "late numeric errors may leave prior physical words; destination publication remains invalid, no rollback claim"
+  ]
+}

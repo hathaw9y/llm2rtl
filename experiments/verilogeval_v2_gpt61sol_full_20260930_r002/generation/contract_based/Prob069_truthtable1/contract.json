@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "x3": 1,
+      "x2": 1,
+      "x1": 1
+    },
+    "outputs": {
+      "f": 1
+    },
+    "evidence": "problem.txt interface explicitly lists these four one-bit ports."
+  },
+  "semantics": {
+    "kind": "combinational",
+    "truth_table_x3_x2_x1_to_f": {
+      "000": 0,
+      "001": 0,
+      "010": 1,
+      "011": 1,
+      "100": 0,
+      "101": 1,
+      "110": 0,
+      "111": 1
+    },
+    "clock_reset": "None: original interface has no clock or reset.",
+    "latency": "No registered latency; output follows current inputs after combinational settling.",
+    "initialization": "No stored state or initialization requirements; original specifies only binary input rows.",
+    "evidence": "problem.txt calls this a combinational circuit and supplies all eight binary rows."
+  },
+  "numeric": {
+    "width": "All ports one bit",
+    "interpretation": "Boolean values; no signed arithmetic, overflow, rounding, or saturation."
+  },
+  "verification": {
+    "oracle": "Explicit original truth-table rows, independent of DUT Boolean equation.",
+    "coverage": "All eight inputs and all 64 ordered input transitions.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling before case-inequality comparison.",
+    "failure": "$fatal on mismatch; independent bounded timeout.",
+    "success": "PASS marker only after every comparison succeeds.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "Original truth table does not define X/Z input behavior; development checks cover the specified binary domain only."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "top_module",
+    "ports": {"x": {"direction": "input", "width": 1}, "y": {"direction": "input", "width": 1}, "z": {"direction": "output", "width": 1}},
+    "structure": "Two identical A instances and two identical B instances; all receive x,y. First pair feeds OR, second pair feeds AND, and these outputs feed XOR."
+  },
+  "semantics": {
+    "a": "(x ^ y) & x",
+    "b": "~(x ^ y), inferred from all four binary input combinations in the supplied waveform",
+    "z": "(a | b) ^ (a & b)",
+    "truth_table": {"00": 1, "01": 0, "10": 1, "11": 1},
+    "timing": "Pure combinational logic; no clock, cycle latency, stored state, or specified propagation delay. Output follows current inputs after combinational settling.",
+    "reset_initialization": "No reset or initialization ports or requirements; output is determined by current inputs."
+  },
+  "numeric": {
+    "type": "Single-bit unsigned logic for every input, output and intermediate",
+    "operations": "Bitwise XOR, AND, OR and inversion, each yielding one bit",
+    "arithmetic": "No arithmetic, rounding, saturation, truncation or overflow",
+    "unknowns": "Binary inputs are specified; X/Z behavior is not specified by the problem. Use ordinary SystemVerilog bitwise gate semantics."
+  },
+  "verification": {
+    "oracle": "Independent explicit four-entry truth table for top output, derived from supplied A equation, B waveform and gate wiring",
+    "coverage": "Check all four input combinations, all sixteen ordered binary transitions, and replay all nineteen waveform input samples against the top truth table",
+    "method": "Self-checking dev_tb with a settling delay before comparison, fatal mismatch and finite watchdog",
+    "tools": "Icarus v12 -g2012 with explicit dev_tb top and matching vvp; finite external timeouts for compile and simulation",
+    "scope": "Development simulation only; no official evaluation, synthesis or board claims"
+  },
+  "specification_ambiguities": ["The problem text does not explicitly name the top module; use the standard benchmark name top_module.", "The waveform specifies B for binary inputs only and is interpreted as a combinational truth table; no state or clock is described."]
+}

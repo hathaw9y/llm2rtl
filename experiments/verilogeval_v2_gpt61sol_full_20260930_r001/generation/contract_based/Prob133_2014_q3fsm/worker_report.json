@@ -1,0 +1,44 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (passed_structure_only); structural validation, not functional proof",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 0,
+      "result": "PASS; no compiler warnings",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "exit_code": 0,
+      "result": "PASS: 3627 cycle and between-edge checks",
+      "log": "dev_simulation.log"
+    },
+    {
+      "name": "static_review",
+      "result": "Exact module and one-bit ports; positive-edge synchronous active-high reset; unsigned two-bit count bounded to 0..3; nonblocking sequential assignments; no DUT simulation-only constructs or external module dependencies"
+    }
+  ],
+  "development_outcome": "Initial candidate passed independent development simulation without RTL revisions. Four control phases encode idle and three sample positions; partial count and output retain required history. Result pulse overlaps first cycle of the next group.",
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  },
+  "limitations": [
+    "Official evaluation not run or accessed; its results are unavailable.",
+    "No synthesis, timing analysis, or board testing performed.",
+    "Development checks use binary inputs and establish state with synchronous reset; pre-reset physical power-up state and X/Z input behavior are unspecified.",
+    "Contract gate validates JSON structure only.",
+    "Diagram referenced by original prose was unavailable; cycle interpretation recorded in frozen contract."
+  ]
+}

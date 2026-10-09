@@ -1,0 +1,174 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob030_popcount255",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob030_popcount255",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob030_popcount255/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790743219.026946,
+    "ended_at_unix": 1790743306.056927,
+    "seconds": 87.0299813747406,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 74779,
+      "cached_input_tokens": 58112,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1511,
+      "reasoning_output_tokens": 29
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "042771a3855c08aa544c87b02f1479085af79af249145c42cc6b6770a241153d",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "initial",
+        "status": "passed",
+        "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob030_popcount255/development/01"
+      }
+    ],
+    "environment_smoke_outcome": "passed: correct fixture passed, injected fault failed, repair passed",
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "No synthesis or board verification performed.",
+      "Unknown/high-impedance input behavior is unspecified by the original problem and is not asserted by the testbench."
+    ],
+    "justified_rtl_changes": [
+      "Initial implementation: combinational sum of 255 explicitly zero-extended input bits into an 8-bit output; no added ports or latency. No revisions required."
+    ],
+    "justified_tb_changes": [
+      "Initial independent bit-clearing oracle with all counts 0 through 255, all one-hot and one-cold positions, alternating patterns, and 1000 random vectors. No testbench revisions."
+    ],
+    "interface_cycle_contract": "TopModule(input [254:0] in, output [7:0] out); combinational population count, no clock or reset.",
+    "static_review": "Defaults and blocking assignments prevent latches; 8 bits represent the full 0..255 result range.",
+    "tested_vectors": 1770
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "042771a3855c08aa544c87b02f1479085af79af249145c42cc6b6770a241153d",
+      "Prob030_popcount255_test.sv": "d232308e7f686aaf721e7a3eac277a25dab267d0a4fce2b51fb6ff8b3e790354",
+      "Prob030_popcount255_ref.sv": "9159b1dda6cad0c06ec47be5bbd680dd13007eacd0ee6832c443550c8283c9bb"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob030_popcount255_test.sv",
+        "Prob030_popcount255_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015094555914402008
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb030_popcount255_test.sv:49: $finish called at 1076 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 215 samples\n\nSimulation finished at 1076 ps\nMismatches: 0 in 215 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.1445526322349906
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "042771a3855c08aa544c87b02f1479085af79af249145c42cc6b6770a241153d",
+      "Prob030_popcount255_test.sv": "d232308e7f686aaf721e7a3eac277a25dab267d0a4fce2b51fb6ff8b3e790354",
+      "Prob030_popcount255_ref.sv": "9159b1dda6cad0c06ec47be5bbd680dd13007eacd0ee6832c443550c8283c9bb"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob030_popcount255_test.sv",
+        "Prob030_popcount255_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01612476073205471
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb030_popcount255_test.sv:49: $finish called at 1076 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 215 samples\n\nSimulation finished at 1076 ps\nMismatches: 0 in 215 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.14351396169513464
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

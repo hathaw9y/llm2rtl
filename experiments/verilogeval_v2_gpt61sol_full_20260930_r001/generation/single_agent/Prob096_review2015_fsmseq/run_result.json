@@ -1,0 +1,171 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob096_review2015_fsmseq",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob096_review2015_fsmseq",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob096_review2015_fsmseq/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790736813.3917727,
+    "ended_at_unix": 1790736923.2539065,
+    "seconds": 109.86213445663452,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 91345,
+      "cached_input_tokens": 71552,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1960,
+      "reasoning_output_tokens": 70
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "2ea1483d92642581061b6d09891bdb0686085c3457095196c70a99e924b7c8a8",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static RTL review",
+        "outcome": "passed",
+        "details": "Reviewed 1101 prefix transitions, repeated-one overlap, absorbing FOUND state, active-high synchronous reset priority, one-bit interface, complete combinational assignments, and sequential nonblocking assignments. Detection asserts after the rising edge sampling the final 1."
+      },
+      {
+        "name": "Icarus development compile",
+        "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+        "outcome": "tool_failed",
+        "exit_code": 139,
+        "log": "compile.log",
+        "details": "No diagnostic text was emitted and no simulation executable was produced."
+      },
+      {
+        "name": "development simulation",
+        "outcome": "not_run",
+        "details": "Compilation failed. The independent testbench covers all 4096 twelve-bit streams, sticky detection, reset during a partial match, and synchronous reset behavior, but these checks have not executed."
+      }
+    ],
+    "development_outcome": "Initial candidate delivered unchanged after static review; development compilation failed in the tool with exit code 139. No simulation success is claimed.",
+    "limitations": [
+      "Dynamic behavior has not been verified because the requested development compiler failed.",
+      "No synthesis, timing analysis, board access, official testbench access, or official evaluation was performed."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2ea1483d92642581061b6d09891bdb0686085c3457095196c70a99e924b7c8a8",
+      "Prob096_review2015_fsmseq_test.sv": "a69cc992533c8b2dec59616462e5e842098fde509721af776865c56156338f4f",
+      "Prob096_review2015_fsmseq_ref.sv": "0fb569e05f0af10285612204baabc9997637a47106bee5de8c4afc7e4fb4bfbd"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob096_review2015_fsmseq_test.sv",
+        "Prob096_review2015_fsmseq_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015056226402521133
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb096_review2015_fsmseq_test.sv:74: $finish called at 3216 (1ps)\nHint: Output 'start_shifting' has no mismatches.\nHint: Total mismatched samples is 0 out of 643 samples\n\nSimulation finished at 3216 ps\nMismatches: 0 in 643 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01094021461904049
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2ea1483d92642581061b6d09891bdb0686085c3457095196c70a99e924b7c8a8",
+      "Prob096_review2015_fsmseq_test.sv": "a69cc992533c8b2dec59616462e5e842098fde509721af776865c56156338f4f",
+      "Prob096_review2015_fsmseq_ref.sv": "0fb569e05f0af10285612204baabc9997637a47106bee5de8c4afc7e4fb4bfbd"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob096_review2015_fsmseq_test.sv",
+        "Prob096_review2015_fsmseq_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012037214823067188
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb096_review2015_fsmseq_test.sv:74: $finish called at 3216 (1ps)\nHint: Output 'start_shifting' has no mismatches.\nHint: Total mismatched samples is 0 out of 643 samples\n\nSimulation finished at 3216 ps\nMismatches: 0 in 643 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012258507311344147
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json",
+      "cases": [
+        "correct fixture passed",
+        "injected fault failed",
+        "repaired fixture passed"
+      ]
+    },
+    {
+      "name": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "coverage": "All 256 byte values, back-to-back frames, invalid stops and delayed recovery, reset throughout frames and recovery, randomized stream; 5851 cycles and 373 valid frames."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation was not accessed or run.",
+    "Output byte is checked only when done is asserted, as specified."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation_notes": "Positive-edge synchronous active-high reset. Eight LSB-first data samples follow the start bit. A valid expected stop pulses done and publishes the byte. A missing stop discards the frame and waits for a high bit before seeking a new start."
+}

@@ -1,0 +1,42 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "in": 1
+    },
+    "outputs": {
+      "out": 1
+    }
+  },
+  "semantics": {
+    "transition": "At each positive edge of clk, out takes in XOR the prior out.",
+    "between_edges": "out holds its value.",
+    "reset": "No reset port or reset behavior, as explicitly specified.",
+    "initialization": "No initial value is specified; leave the flip-flop uninitialized. Four-state simulation begins with out=X.",
+    "evidence": "Original problem states a positive-edge D flip-flop, no reset, with XOR inputs in and out."
+  },
+  "numeric": {
+    "width": 1,
+    "operation": "Single-bit bitwise XOR; no arithmetic widening.",
+    "four_state": "Unknown out remains unknown under XOR with binary in."
+  },
+  "verification": {
+    "oracle": "Direct original circuit equation sampled before each rising edge; compare after NBA update.",
+    "cases": [
+      "Uninitialized output and X propagation",
+      "No update on input transitions or falling edges",
+      "Verification-only state deposit of 0 and 1 to check hold and toggle",
+      "X and Z input propagation"
+    ],
+    "sampling": "Drive input away from rising edges and check output after a one-nanosecond settling interval.",
+    "termination": "Fatal on mismatch; bounded timeout; PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Power-up state is unspecified.",
+      "resolution": "Do not add initialization. Test natural X behavior, then use testbench-only state deposits to exercise both binary states."
+    }
+  ]
+}

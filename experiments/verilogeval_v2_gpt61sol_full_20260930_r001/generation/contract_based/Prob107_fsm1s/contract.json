@@ -1,0 +1,71 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "reset": {
+        "direction": "input",
+        "width": 1
+      },
+      "in": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "rising edge of clk",
+    "reset": "active-high synchronous; reset has priority over in and sets state B",
+    "states": {
+      "A": {
+        "out": 0,
+        "in_0_next": "B",
+        "in_1_next": "A"
+      },
+      "B": {
+        "out": 1,
+        "in_0_next": "A",
+        "in_1_next": "B"
+      }
+    },
+    "output": "Moore output reflects current registered state; no combinational dependence on in or reset",
+    "initialization": "State before a reset clock edge is unspecified; no power-up initialization required",
+    "sampling": "in and reset are sampled on each rising clock edge; state and out hold between clock edges"
+  },
+  "numeric": {
+    "state_width": 1,
+    "output_width": 1,
+    "arithmetic": "No arithmetic datapath; Boolean state transitions only",
+    "overflow_rounding_saturation": "Not applicable"
+  },
+  "verification": {
+    "oracle": "Independent named-state transition table derived from problem",
+    "directed": [
+      "reset from both states with either input",
+      "all four state/input transitions",
+      "repeated hold and toggle sequences",
+      "reset asserted between edges must not change output",
+      "input changes between edges must not change output"
+    ],
+    "exhaustive": "Enumerate all 256 length-eight binary input sequences after reset",
+    "checks": "Compare output after each rising edge and between edges; explicit dev_tb top, finite compile/simulation timeouts, fatal mismatch and final PASS"
+  },
+  "specification_ambiguities": [
+    {
+      "item": "Clock edge not explicitly stated",
+      "resolution": "Use conventional rising-edge state updates"
+    },
+    {
+      "item": "Power-up state unspecified",
+      "resolution": "Only assert deterministic behavior after synchronous reset"
+    }
+  ]
+}

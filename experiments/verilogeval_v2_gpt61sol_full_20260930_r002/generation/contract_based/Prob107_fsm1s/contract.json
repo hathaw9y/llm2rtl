@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "reset": 1, "in": 1},
+    "outputs": {"out": 1}
+  },
+  "semantics": {
+    "clock": "State updates on rising clk edges; conventional edge assumption for the stated synchronous FSM.",
+    "reset": "Active-high synchronous reset takes priority and sets state B at a rising edge, as explicitly stated in problem.txt.",
+    "transitions": {"B,in=0": "A", "B,in=1": "B", "A,in=0": "B", "A,in=1": "A"},
+    "output": "Moore output: A gives 0, B gives 1; reflects current state without an extra register or cycle.",
+    "initialization": "No power-up state is specified; no RTL initialization and no pre-reset output requirement.",
+    "sampling": "Input/reset sampled at rising edge; output checked after nonblocking updates settle. Input and reset changes between edges do not change state."
+  },
+  "numeric": {
+    "state_width": 1,
+    "encoding": {"A": 0, "B": 1},
+    "arithmetic": "No signed arithmetic, rounding, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Independent table-based state model from the four original transition arrows and original reset/output statements.",
+    "cases": ["All four state/input transitions", "Reset with either input", "Held and repeated reset", "Reset assertion and deassertion away from rising edges", "Input changes away from edges", "Long deterministic input sequence"],
+    "sampling": "Check output before each rising edge and after NBA settlement, plus falling-edge stability.",
+    "pass_condition": "No mismatches; explicit PASS line and bounded timeout.",
+    "tool": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {"topic": "clock edge", "evidence": "Original text says synchronous FSM and supplies clk but does not explicitly name an edge.", "resolution": "Use conventional rising-edge clocking."},
+    {"topic": "pre-reset state", "evidence": "Original specifies reset state B but no initial state.", "resolution": "Do not require a particular output before the first reset edge."}
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "c": {
+        "direction": "input",
+        "width": 1
+      },
+      "d": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "combinational",
+    "kmap_columns_ab": [
+      "00",
+      "01",
+      "11",
+      "10"
+    ],
+    "kmap_rows_cd": [
+      "00",
+      "01",
+      "11",
+      "10"
+    ],
+    "kmap_values": [
+      [
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        1,
+        0
+      ]
+    ],
+    "timing": "Output reflects current inputs combinationally; no clock or cycle latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization required."
+  },
+  "numeric": {
+    "type": "one-bit unsigned Boolean signals",
+    "behavior": "Exact Boolean truth table; equivalent to odd parity of a,b,c,d.",
+    "arithmetic": "No arithmetic accumulation, rounding, truncation, saturation or overflow."
+  },
+  "verification": {
+    "oracle": "Independent lookup of the original map with Gray-order row and column conversion; do not compute expected values using the RTL parity equation.",
+    "coverage": "Exhaust all 16 binary input combinations, then revisit them in reverse order to check input changes.",
+    "comparison": "Case inequality after combinational settling; fatal on mismatch.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, matching vvp; finite external timeouts."
+  },
+  "specification_ambiguities": [
+    "The original problem does not specify X/Z input behavior; verification covers binary inputs only."
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "data": 1, "ack": 1}, "outputs": {"count": 4, "counting": 1, "done": 1}},
+  "semantics": {"clock": "All sequential logic on positive edge, as specified", "reset": "Active high synchronous reset begins searching; overrides all states", "search": "Detect contiguous 1101 with overlapping prefixes; next four edges capture delay MSB first", "start": "After fourth delay bit edge, counting asserted with count equal to captured delay", "finish": "After exactly (delay+1)*1000 counting periods, counting deasserts and done asserts", "ack": "In done state, ack sampled high returns to empty search on that edge; data on that edge ignored", "initialization": "No specified power-up state; verification applies synchronous reset before requiring outputs", "data": "Ignored during counting and done"},
+  "numeric": {"delay": "Unsigned 4-bit 0 through 15", "interval": "Each remaining count value is presented for 1000 full clock periods", "max_cycles": 16000, "subcounter": "10 bits, 0 through 999"},
+  "verification": {"oracle": "Independent serial sliding-window detector and total elapsed-cycle model from original problem", "sampling": "Drive at negative edge; compare after positive-edge NBA updates", "cases": "All 16 delays, overlapping patterns, ignored data, held done, ack, reset during search/capture/count/done", "success": "Fatal on mismatch, bounded timeout and explicit PASS"},
+  "specification_ambiguities": ["Power-up values are unspecified; no checks before first synchronous reset.", "Count outside counting is explicitly don't-care and is not checked.", "Pattern overlap is not separately described; contiguous occurrence detection includes overlapping prefixes."]
+}

@@ -1,0 +1,50 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1,
+      "c": 1
+    },
+    "outputs": {
+      "out": 1
+    },
+    "evidence": "problem.txt interface lists only a, b, c and out; all one bit."
+  },
+  "semantics": {
+    "function": "out = a OR b OR c",
+    "truth_table_abc": {
+      "000": 0,
+      "001": 1,
+      "010": 1,
+      "011": 1,
+      "100": 1,
+      "101": 1,
+      "110": 1,
+      "111": 1
+    },
+    "timing": "Pure combinational output, no clock or added cycle latency.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or initialization requirement; output follows inputs after combinational settling.",
+    "evidence": "Original Karnaugh map columns a=0,1 and rows bc=00,01,11,10 have only (a,bc)=(0,00) equal to zero."
+  },
+  "numeric": {
+    "widths": "All ports unsigned one-bit Boolean signals.",
+    "arithmetic": "Boolean operation only; rounding, overflow, saturation not applicable."
+  },
+  "verification": {
+    "oracle": "Explicit original Karnaugh-map truth table keyed by {a,b,c}, independent of simplified RTL equation.",
+    "coverage": "All eight binary inputs in forward and reverse order to exercise transitions and return to zero.",
+    "sampling": "Drive inputs then wait 1 ns for combinational settling; no clock edges in original specification.",
+    "failure": "Case-inequality comparison with $fatal, bounded timeout, PASS marker only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z inputs",
+      "evidence": "Original map specifies binary inputs only.",
+      "resolution": "No required X/Z truth table inferred; development oracle covers all specified binary entries."
+    }
+  ]
+}

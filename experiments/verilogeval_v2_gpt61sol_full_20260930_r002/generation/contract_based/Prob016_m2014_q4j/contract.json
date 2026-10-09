@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"x": "unsigned 4-bit input", "y": "unsigned 4-bit input"},
+    "outputs": {"sum": "unsigned 5-bit output"},
+    "evidence": "problem.txt specifies x (4 bits), y (4 bits), sum (5 bits)."
+  },
+  "semantics": {
+    "function": "sum equals unsigned x plus unsigned y, implemented by four full-adder stages with initial carry zero and final carry in sum[4].",
+    "timing": "Combinational response after propagation; no clock or extra latency.",
+    "reset": "No reset port or reset behavior specified.",
+    "initialization": "No stored state or defined power-on value; output derives from current inputs.",
+    "evidence": "Original request: Implement a 4-bit adder with full adders. The output sum should include the overflow bit. Interface contains no clock or reset."
+  },
+  "numeric": {
+    "input_range": "Each input 0 through 15, unsigned because no signed declaration is specified.",
+    "output_range": "0 through 30, exactly represented in 5 bits.",
+    "overflow": "Carry out of bit 3 is sum[4]; no truncation, rounding, or saturation.",
+    "carry_in": "Internal first carry is zero; no external carry input is specified."
+  },
+  "verification": {
+    "oracle": "Independent arithmetic addition of zero-extended original input operands.",
+    "coverage": "All 256 binary input pairs, including zero, maximum, and each carry boundary; repeat reversed ordering to check input changes.",
+    "sampling": "Drive inputs then wait one simulation time unit for combinational settling before comparison.",
+    "failure": "$fatal on case-inequality mismatch or bounded timeout; PASS only after all comparisons.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "Four-state X/Z behavior is not specified; verification establishes all binary input combinations without inventing an unknown-input arithmetic contract."
+  ]
+}

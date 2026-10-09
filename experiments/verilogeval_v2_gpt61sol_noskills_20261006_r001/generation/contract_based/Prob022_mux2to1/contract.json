@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"a": 1, "b": 1, "sel": 1}, "outputs": {"out": 1}},
+  "semantics": {"function": "sel=0 selects a; sel=1 selects b", "timing": "Combinational multiplexer with no clock, state, or added latency, as specified by the mux function and port list", "reset": "No reset port or reset behavior specified", "initialization": "No stored state or initial output requirement specified"},
+  "numeric": {"width": "All ports are one bit", "operations": "Selection only; no arithmetic or signed interpretation"},
+  "verification": {"oracle": "For each known selector value, compare out with the selected input from the original problem", "coverage": "All eight binary input combinations, transitions, and selected/unselected unknown and high-impedance data", "sampling": "Sample after a short propagation interval following each input change", "completion": "Fatal on mismatch, bounded timeout, PASS after all checks"},
+  "specification_ambiguities": ["Behavior for an unknown or high-impedance selector is unspecified; implementation uses standard Verilog conditional merge semantics, with no oracle requirement for those selector values."]
+}

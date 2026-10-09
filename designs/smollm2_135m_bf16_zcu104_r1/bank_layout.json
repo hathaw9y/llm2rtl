@@ -1,0 +1,273 @@
+{
+  "schema": "llm2rtl.bank_layout.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "ownership_model": {
+    "mode": "single_exclusive_lock_per_bank",
+    "owner_kind": "module_port_role",
+    "busy_rule": "acquire at command acceptance; release at matched completion",
+    "valid_rule": "records complete successful tensor contents; normal progress uses busy and strict command order",
+    "partial_write_rule": "embedding rows and GEMM N tiles remain incomplete until final successful command",
+    "in_place_rule": "ROPE and SOFTMAX acquire their data bank once with a read-write role",
+    "chunk_rule": "END/DONE does not clear valid contents; reset and error recovery are separate"
+  },
+  "bank_count": 13,
+  "logical_capacity_kib": 2252,
+  "owner_roles": {
+    "NONE": 0,
+    "MM2S_ARBITER": 1,
+    "S2MM_ARBITER": 2,
+    "GEMM_ACT": 3,
+    "GEMM_WGT": 4,
+    "GEMM_PSUM": 5,
+    "RMS_DATA": 6,
+    "RMS_GAMMA": 7,
+    "RMS_DST": 8,
+    "ROPE_DATA_RW": 9,
+    "ROPE_TABLE": 10,
+    "SCORE_Q": 11,
+    "SCORE_K": 12,
+    "SCORE_DST": 13,
+    "SOFTMAX_DATA_RW": 14,
+    "VALUE_PROB": 15,
+    "VALUE_V": 16,
+    "VALUE_DST": 17,
+    "VECTOR_SRC0": 18,
+    "VECTOR_SRC1": 19,
+    "VECTOR_DST": 20
+  },
+  "banks": [
+    {
+      "bank_id": "B0",
+      "encoded_id": 0,
+      "capacity_words": 18432,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "hidden input / next layer",
+      "producers": [
+        "DMA_LOAD",
+        "ADD"
+      ],
+      "consumers": [
+        "RMSNORM",
+        "ADD"
+      ],
+      "capacity_kib": 36
+    },
+    {
+      "bank_id": "B1",
+      "encoded_id": 1,
+      "capacity_words": 18432,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "projection or down output",
+      "producers": [
+        "GEMM"
+      ],
+      "consumers": [
+        "ADD"
+      ],
+      "capacity_kib": 36
+    },
+    {
+      "bank_id": "B2",
+      "encoded_id": 2,
+      "capacity_words": 18432,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "RMS output",
+      "producers": [
+        "RMSNORM"
+      ],
+      "consumers": [
+        "GEMM"
+      ],
+      "capacity_kib": 36
+    },
+    {
+      "bank_id": "B3",
+      "encoded_id": 3,
+      "capacity_words": 294912,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "weight tile or gamma",
+      "producers": [
+        "DMA_LOAD"
+      ],
+      "consumers": [
+        "GEMM",
+        "RMSNORM"
+      ],
+      "capacity_kib": 576
+    },
+    {
+      "bank_id": "B4",
+      "encoded_id": 4,
+      "capacity_words": 18432,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "Q",
+      "producers": [
+        "GEMM",
+        "ROPE"
+      ],
+      "consumers": [
+        "ROPE",
+        "ATTN_SCORE"
+      ],
+      "capacity_kib": 36
+    },
+    {
+      "bank_id": "B5",
+      "encoded_id": 5,
+      "capacity_words": 18432,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "K then attention residual",
+      "producers": [
+        "GEMM",
+        "ROPE",
+        "ADD"
+      ],
+      "consumers": [
+        "ROPE",
+        "DMA_STORE",
+        "RMSNORM",
+        "ADD"
+      ],
+      "capacity_kib": 36
+    },
+    {
+      "bank_id": "B6",
+      "encoded_id": 6,
+      "capacity_words": 6144,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "V current block",
+      "producers": [
+        "GEMM"
+      ],
+      "consumers": [
+        "DMA_STORE"
+      ],
+      "capacity_kib": 12
+    },
+    {
+      "bank_id": "B7",
+      "encoded_id": 7,
+      "capacity_words": 4096,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "RoPE coefficient window",
+      "producers": [
+        "DMA_LOAD"
+      ],
+      "consumers": [
+        "ROPE"
+      ],
+      "capacity_kib": 8
+    },
+    {
+      "bank_id": "B8",
+      "encoded_id": 8,
+      "capacity_words": 196608,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "K cache or current K in-place RoPE, then FFN gate",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM",
+        "ROPE"
+      ],
+      "consumers": [
+        "ATTN_SCORE",
+        "SILU_MUL",
+        "ROPE"
+      ],
+      "capacity_kib": 384
+    },
+    {
+      "bank_id": "B9",
+      "encoded_id": 9,
+      "capacity_words": 196608,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "V cache then FFN up",
+      "producers": [
+        "DMA_LOAD",
+        "GEMM"
+      ],
+      "consumers": [
+        "ATTN_VALUE",
+        "SILU_MUL"
+      ],
+      "capacity_kib": 384
+    },
+    {
+      "bank_id": "B10",
+      "encoded_id": 10,
+      "capacity_words": 294912,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "score/probability then SiLU result",
+      "producers": [
+        "ATTN_SCORE",
+        "SOFTMAX",
+        "SILU_MUL"
+      ],
+      "consumers": [
+        "SOFTMAX",
+        "ATTN_VALUE",
+        "GEMM"
+      ],
+      "capacity_kib": 576
+    },
+    {
+      "bank_id": "B11",
+      "encoded_id": 11,
+      "capacity_words": 18432,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "attention context",
+      "producers": [
+        "ATTN_VALUE"
+      ],
+      "consumers": [
+        "GEMM"
+      ],
+      "capacity_kib": 36
+    },
+    {
+      "bank_id": "B12",
+      "encoded_id": 12,
+      "capacity_words": 49152,
+      "word_bits": 16,
+      "format": "BF16",
+      "layout": "last-token full logits",
+      "producers": [
+        "GEMM"
+      ],
+      "consumers": [
+        "DMA_STORE"
+      ],
+      "capacity_kib": 96
+    }
+  ],
+  "physical_memory": {
+    "logical_tensor_element_bits": 16,
+    "stored_word_bits": 128,
+    "write_port_bits": 128,
+    "dma_stream_bits": 64,
+    "read_latency_cycles": 3,
+    "gemm_wide_source_banks": [
+      2,
+      3,
+      10,
+      11
+    ],
+    "gemm_wide_read_bits": 256,
+    "gemm_wide_read_address": "even 128-bit word address; response {word[a+1],word[a]}",
+    "narrow_read_bits": 128,
+    "stripe_rule": "wide source banks store even and odd 128-bit words in separate physical memories under one logical bank lock"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": "input 1 bit",
+      "reset": "input 1 bit",
+      "d": "input [7:0]",
+      "q": "output [7:0]"
+    },
+    "source": "problem.txt interface list"
+  },
+  "semantics": {
+    "sampling": "On each negative edge of clk, q becomes 8'h34 if reset is high; otherwise q becomes the sampled d.",
+    "reset": "Active high synchronous; reset transitions alone do not update q.",
+    "hold": "q holds between falling edges, including rising edges.",
+    "latency": "Update at the sampling falling edge with no additional cycle.",
+    "initialization": "No power-up value specified; no initialization is added and the oracle imposes no pre-first-edge value.",
+    "source": "problem.txt: active high synchronous reset; reset to 0x34; negative edge of clk"
+  },
+  "numeric": {
+    "width_bits": 8,
+    "reset_value": "0x34",
+    "data_behavior": "Bit-exact copy, no arithmetic or signed interpretation"
+  },
+  "verification": {
+    "top": "dev_tb",
+    "oracle": "Original problem: falling-edge sampling and reset priority, checked after nonblocking assignments settle.",
+    "cases": [
+      "reset away from falling edges",
+      "rising-edge hold",
+      "reset priority with changing data",
+      "all 256 data values",
+      "consecutive reset edges",
+      "reset release and capture"
+    ],
+    "timeout": "Bounded testbench timeout",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Power-up state",
+      "evidence": "Original problem gives reset behavior but no initial value.",
+      "resolution": "Leave uninitialized; do not assert a particular value before first falling edge."
+    }
+  ]
+}

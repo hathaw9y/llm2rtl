@@ -1,0 +1,72 @@
+{
+  "schema": "llm2rtl.rtl_generation_report.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "module_id": "quantization_executor",
+  "status": "RTL_GENERATED_STANDALONE_FUNCTIONAL_VERIFIED",
+  "scope": "QUANTIZE A/Q/K/V/P and embedding DEQUANTIZE; separate shared executor; not full model accelerator",
+  "user_approval": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_implementation_approval.json",
+    "sha256": "3cb075a86e08f0fe202181bd6b216566d4c6a724980c604909a809eb4716c2df"
+  },
+  "manifest": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_module_manifest.json",
+    "sha256": "29f8048bd6dbc761a4c1c73b1f5acebc3401200368a99f376962b9664d689fb8"
+  },
+  "binding": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/quantization_rtl_port_binding.json",
+    "sha256": "b671bd31a3fcff17a0fcd955c0df2a63f802ee963df48b3636c4ccc808acd7dd"
+  },
+  "source_sha256": {
+    "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+    "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+    "rtl/w8a8_fp32_div4.sv": "8f9c1884cc50e1c0e69c4101397ea1af18e6a0323e1fac0b97c9704e928667ce",
+    "rtl/w8a8_quant_lane4.sv": "d3a1459716e5ee22af9c40770be67998a0ebe5755e172cff11953bea06c9d5ad",
+    "rtl/w8a8_dequant_lane4.sv": "012c5a81dde04820412b906cb06f2279e6b358306649d6599eb45245f5fb03ee",
+    "rtl/smollm2_quantization_executor.sv": "fa02a045c836090049818f765484d5f7be0f9f95f35d1edf4b60e976fb01d411",
+    "tb/quant_executor_tb.sv": "f4a8d0cb85e91eafbed5450365f0571296c88ddb0daf91cbea8fd329226a2775",
+    "tb/quant_executor_fault_tb.sv": "d885a3c55c732724255fb54d1d511592f57808e285a0d68a01245c43023dbf99",
+    "tb/quant_executor_repeat_tb.sv": "fc0a68e6c31d4084fbafc1de5bd13e5bc76c6d8ad3dfb6d17d0b89796c0d6bf8"
+  },
+  "architecture": [
+    "4-lane exact FP32 restoring division II1; div19/quant22/dequant8 unstalled cycles",
+    "Dynamic FP32 max/127 scale uses shared quantization divider quotient sideband; two source read passes, no full tensor buffer",
+    "Static prepared K/V scales and per-row selected embedding scale lanes",
+    "RNE FP32 division then saturation and INT8 nearest-even; BF16 dequantized outputs",
+    "Native128bit read FIFO4 perrole, 2word output packer; captured producer generation, retained stalled offers and drain/invalidation"
+  ],
+  "fixtures": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/tb/quant_executor_vectors/manifest.json",
+    "sha256": "c96b1f2578814cd004af4b6d8f50dd6d5768b7d2876019d4622bfd7a12a5c2cc"
+  },
+  "self_verification": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/evidence/quantization_executor/kernel_report.json",
+    "sha256": "af7789e7d7bbe4f7689de765dc54debed21ffdaaaf28bb455c31b85431648d9e"
+  },
+  "independent_arithmetic": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_quant_arithmetic_audit/module_verification_report.json",
+    "sha256": "79f0b59f04663419170031605b28bfe06867a75c4d716e817d86ea8569443cf2"
+  },
+  "independent_executor": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/evidence/independent_quant_executor_audit/module_verification_report.json",
+    "sha256": "4802f7bbe3a9ca5b4215353bc3e77047dc5a04195fa42662415c91ef2cd4ed45"
+  },
+  "tests": {
+    "normal": 41,
+    "fault": 18,
+    "repeat_reset": 12,
+    "independent_normals": 10,
+    "independent_faults": 5,
+    "independent_repeat_reset": 4,
+    "all_passed": true
+  },
+  "prior_GEMM_source_unchanged": true,
+  "synthesis": "NOT_RUN_PENDING_USER_DESIGNATED_BUILD_MACHINE",
+  "remaining": [
+    "Vivado2025.2 5ns OOC resources/setup/hold/pulse-width validation",
+    "Actual native bank/controller/fabric/DMA integration and concurrent execution",
+    "Remaining nonlinear/vector executors and full-model quality validation",
+    "Board integration/routed artifacts/user-run hardware checkpoint"
+  ],
+  "full_promotion_eligible": false
+}

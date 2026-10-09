@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json",
+      "cases": [
+        "correct fixture passed",
+        "injected fault failed",
+        "repaired fixture passed"
+      ]
+    },
+    {
+      "name": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "coverage": "8192 state/input combinations, including every legal one-hot state and all eight input combinations; table-based transition and Moore-output oracle",
+      "compiler": "Icarus Verilog 12, -g2012 -Wall -Wno-timescale"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Extra zero-hot and multi-hot tests verify the direct one-hot equation interpretation; the specified FSM assumes one-hot states.",
+    "No reset or clock port exists: the requested module implements only combinational logic. The supplied S state represents the reset state.",
+    "Unknown-valued inputs are not specified and were not included in the exhaustive binary stimulus."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": []
+}

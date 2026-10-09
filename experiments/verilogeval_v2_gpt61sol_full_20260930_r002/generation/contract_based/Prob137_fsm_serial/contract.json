@@ -1,0 +1,19 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "reset": 1, "in": 1}, "outputs": {"done": 1}},
+  "semantics": {
+    "clock": "All input bits are sampled on positive clk edges, as explicitly specified.",
+    "reset": "Active-high synchronous reset returns to idle and clears done on a rising edge; reset overrides input reception.",
+    "framing": "While idle, sampled 0 is a start. The next eight sampled bits are data, irrespective of value. The following sample must be 1 for success.",
+    "done": "Assert for the cycle immediately after sampling a valid stop bit; clear on the next rising edge. That next edge may accept a new start bit.",
+    "error_recovery": "If the expected stop sample is 0, ignore further zeros until sampling 1. This recovery 1 does not assert done. Only subsequent samples may start a new byte.",
+    "initialization": "No power-up state is specified; verification establishes synchronous reset before checking defined reception behavior.",
+    "data_order": "Data is LSB first, but no payload output exists and data values do not affect framing."
+  },
+  "numeric": {"ports": "One bit unsigned", "data_count": "3-bit unsigned index from 0 through 7 for exactly eight data samples", "arithmetic": "No payload arithmetic, rounding or saturation"},
+  "verification": {"oracle": "Independent integer phase tracker derived from original framing description", "sampling": "Drive at falling edge, check output before rising edge and after NBA settling", "coverage": "All 256 data values, adjacent frames, idle, missing stop and delayed recovery, long low stream, reset at every frame position and deterministic random streams", "failure": "$fatal on mismatch, bounded timeout, PASS only after all checks", "tool": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": [
+    {"topic": "done duration", "evidence": "Original asks to identify when bytes have been correctly received without explicitly describing pulse width", "resolution": "One-cycle completion indication beginning at the successful stop sample, with no extra latency"},
+    {"topic": "power-up", "evidence": "Original specifies synchronous reset but no initialization", "resolution": "No initialized RTL registers and no expected pre-reset value"}
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "status": "PRE_IMPLEMENTATION_BOUNDARY_REVIEW_COMPLETE",
+  "scope": "Read-only comparison of reusable infrastructure with current ISA/common contracts; not RTL functional acceptance. New module packets not frozen at this review.",
+  "source_pins": {
+    "contracts/README.md": "d10a45a5a3089b067010a00430b010c8b02bf79505dcb1c44a9e321152ca2600",
+    "contracts/common/isa_command_contract.json": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15",
+    "contracts/common/local_bank_contract.json": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d",
+    "contracts/common/engine_completion_contract.json": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446",
+    "designs/smollm2_135m_w8a8_zcu104_r1/isa_spec.json": "1b212ac05048122b4377581433052a91efa24c5c3bc3ce9bba3d0f7219cf630c",
+    "designs/smollm2_135m_w8a8_zcu104_r1/bank_layout.json": "dcd26383f787310d301cc6976d27fc76cf8ec44baed43fdf4258039f2441a6f2",
+    "ip/infrastructure/bank_subsystem/rtl/bank_native_ownership.sv": "ef51179c257fc526e6baf84733fc9abc7598197fba1b085b618472ea07a5085f",
+    "ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv": "867cc4d6b17383043d63444af202f637712a9e6391cf563a3c7d601585934223",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/isa_command_dispatcher.sv": "c769a5743c79de7efbdba0abb649dbebc5b365b06b405083a3050ed706e75876",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/bank_tensor_state_tracker.sv": "909f184009f191f0b7d3851612f5de949dadfa4c8d36c315b8d3bde1f5ad2f23"
+  },
+  "findings": [
+    {
+      "id": "B1",
+      "severity": "P1",
+      "source": "ip/infrastructure/bank_subsystem/rtl/bank_native_ownership.sv",
+      "issue": "Separate read/write busy and owner ledgers allow different owners simultaneously on one bank.",
+      "required": "One exclusive owner role per logical bank, with atomic all-used-bank acceptance; reject aliases among used operands before grant."
+    },
+    {
+      "id": "B2",
+      "severity": "P1",
+      "source": "designs/smollm2_135m_bf16_zcu104_r1/rtl/isa_command_dispatcher.sv",
+      "issue": "Legacy compute matcher uses first-bank-derived tag/count/IDs without current transaction or captured generation identity.",
+      "required": "Match channel, transaction32, positional used mask/count/IDs and captured generations; hold identity through release acceptance. Unmatched completion sets07 and releases nothing."
+    },
+    {
+      "id": "B3",
+      "severity": "P1",
+      "source": "designs/smollm2_135m_bf16_zcu104_r1/rtl/isa_command_dispatcher.sv",
+      "issue": "Legacy contiguous count loop cannot represent QUANT/DQ positional mask101; obsolete opcode12 accepted and current13/14/15 absent.",
+      "required": "Decode all15 current opcodes;12 rejected. Bank0 is legal; unused operand is controlled by mask, never numeric bank ID."
+    },
+    {
+      "id": "B4",
+      "severity": "P1",
+      "source": "designs/smollm2_135m_bf16_zcu104_r1/rtl/bank_tensor_state_tracker.sv",
+      "issue": "Legacy untagged write completion validity lacks component generations, accepted-byte coverage and embedding selected-lane tracking.",
+      "required": "Separate coverage observation from engine completion; only accepted byte strobes update coverage. Success cannot manufacture readiness for gaps. Configuration atomically validates before target-only invalidation; errors invalidate target without rollback claims."
+    },
+    {
+      "id": "B5",
+      "severity": "P1",
+      "issue": "Producer begin changes live destination generation before completion echo of original accepted C generation.",
+      "required": "Maintain acquisition identity independently of live descriptor generation; producer begin/invalidate owner authorization uses accepted command plus active producer generation. Release compares original acquisition identity, not current live destination generation."
+    }
+  ],
+  "interface_separation": [
+    "Dispatcher: command BRAM fetch/capture, exact raw128 record validation, strict-PC route, per-engine scoreboard, independent completion arbitration, terminal/fault drain and status.",
+    "Bank controller: exclusive atomic owner grant/release, captured descriptor snapshot, configuration/producer begin/invalidate handshakes, accepted-write coverage and embedding lane selector metadata. No tensor RAM, DMA engine or nonlinear arithmetic.",
+    "Generic external-engine channels may accept raw command/identity and return matched completion; this proves routing/control only. GEMM/QK/PV share one channel; QUANT/DQ share one channel. Do not imply external algorithm implementations.",
+    "Engine command acceptance and atomic bank acquisition must be the same architectural event. Avoid reserving banks while a downstream cmd_valid is stalled; explicitly define snapshot stability during stall and no circular ready dependency.",
+    "Define arbitration for simultaneous independent completions and configuration/producer/write events. Lossless ready/valid arbitration is valid; do not OR identities or drop a completion.",
+    "Preserve descriptors/content across START, END and FENCE. Coordinated reset is separate. END/FENCE wait both outstanding completion and accepted releases; no lookahead past blocked PC.",
+    "Generation is nonzero strictly monotonic per targeted component without wrap. B7 full targets1+2; window update preserves static coverage/gen, static update preserves window. Bank generation=max(component generations). Explicit BANK_CONFIG may skip generations.",
+    "Coverage storage is additional control capacity; byte masks must support duplicate, partial and gapped writes including GEMM N tiles and padded scales. A compact representation needs proof of identical readiness."
+  ],
+  "targeted_tests": [
+    "All15 valid opcode routes with raw payload and positional roles; reserved12 and nonzero reserved bits reject before any acquisition.",
+    "QUANT dynamic and DQ mask101 with ignored bank1 alias; static QUANT mask111; bank0 legal; aliases among active operands rejected atomically.",
+    "One busy operand blocks entire request without partial owners; opposite read/write roles also conflict; disjoint DMA prefetch progresses concurrently with shared-GEMM work; no PC lookahead.",
+    "Stalled request payload/descriptor identity stability; exact once PC advance; downstream readiness and acquire grant agree; same-cycle completion/acquisition policy tested explicitly.",
+    "Matched completions reordered across channels, simultaneous completions, stalled release, repeated/duplicate/stale transaction/wrong channel/mask/ID/generation responses. Every mismatch07 leaves owners untouched; genuine outstanding still drains after sticky failure.",
+    "Failure concurrent with new request prevents new architectural issue; legal matched failure releases only after engine quiescence/invalidation. No DONE or terminal ERROR while tracked ownership remains outstanding.",
+    "Producer C old gen3 -> begin4 -> completion echoes3 -> matched release; subsequent producer begin5. Rejected begin/config leaves descriptor/coverage unchanged; generation0/stale/wrap rejected.",
+    "BANK_CONFIG all profiles shape/capacity boundaries, B7 component0/1/2 independence and generation max; embedding per-row selectors and selector-valid required; static-valid independent of RoPE window-valid.",
+    "Accepted-byte coverage partial BF16 masks, duplicate writes, gap writes, padding extent, late error invalidation, multi-N-tile GEMM accumulation, data complete with scale incomplete remains invalid.",
+    "END/FENCE/START across two fragments preserve metadata/content; missing END after16 records fails boundedly; active command metadata reset cancels only through coordinated reset policy."
+  ],
+  "claims_excluded": [
+    "No new RTL simulation, lint or synthesis performed in this boundary review.",
+    "No functional claim for external DMA/nonlinear engines.",
+    "No physical tensor memory, routed integration, interface timing or board claim."
+  ],
+  "workflow": "contracts/README.md current workflow supersedes deleted legacy contract-index CLI gate; new frozen module packets required before source-bound functional acceptance."
+}

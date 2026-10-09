@@ -1,0 +1,48 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 8
+      },
+      "b": {
+        "direction": "input",
+        "width": 8
+      },
+      "s": {
+        "direction": "output",
+        "width": 8
+      },
+      "overflow": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "behavior": "Pure combinational addition; outputs track current inputs after combinational settling.",
+    "clock": "None",
+    "reset": "None",
+    "initialization": "No state or initialization required.",
+    "latency": "No clock cycles or registered stages.",
+    "input_domain": "All 8-bit binary patterns on both inputs."
+  },
+  "numeric": {
+    "interpretation": "a and b are 8-bit two's complement integers in [-128,127].",
+    "sum": "s is the low 8 bits of the exact mathematical sum (modulo 256).",
+    "overflow": "1 exactly when the mathematical signed sum is less than -128 or greater than 127.",
+    "rounding": "None",
+    "saturation": "None; wraparound sum."
+  },
+  "verification": {
+    "method": "Independent self-checking simulation exhaustive over all 256 x 256 binary input pairs.",
+    "oracle": "Convert each unsigned bit pattern to an integer signed value, add in integer precision, compare low 8 bits and signed range test.",
+    "comparison": "Case inequality detects unknown outputs as failures.",
+    "timing": "Drive each pair then allow 1 ns combinational settling.",
+    "bounds": "Finite external compile and simulation timeouts plus a testbench watchdog.",
+    "static_review": "Exact interface, continuous combinational assignments, no state, explicit 8-bit sum truncation."
+  },
+  "specification_ambiguities": []
+}

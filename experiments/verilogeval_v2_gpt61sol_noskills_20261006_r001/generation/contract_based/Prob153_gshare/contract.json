@@ -1,0 +1,35 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "areset": 1, "predict_valid": 1, "predict_pc": 7, "train_valid": 1, "train_taken": 1, "train_mispredicted": 1, "train_history": 7, "train_pc": 7},
+    "outputs": {"predict_taken": 1, "predict_history": 7}
+  },
+  "semantics": {
+    "prediction": "Combinational direction from PHT[predict_pc XOR current global history]; return current history. At positive edge with predict_valid shift in the pre-edge prediction.",
+    "training": "At positive edge with train_valid update only PHT[train_pc XOR train_history] toward actual outcome.",
+    "recovery": "train_valid AND train_mispredicted overrides speculative history update; history becomes {train_history[5:0], train_taken}.",
+    "concurrency": "Same-entry prediction sees pre-edge counter, with no training bypass.",
+    "reset": "Original explicitly specifies asynchronous active-high reset. Assume history zero and all counters weakly not-taken (01); reset values are omitted in supplied original.",
+    "initialization": "No power-on initialization before reset is specified; sequential state remains unknown before reset.",
+    "invalid_prediction": "Outputs remain combinational even when predict_valid is zero; no history update."
+  },
+  "numeric": {
+    "history": "7-bit shift register: discard oldest bit 6, append newest direction at bit 0.",
+    "table": "128 two-bit unsigned saturating counters: 0 strongly not taken, 1 weakly not taken, 2 weakly taken, 3 strongly taken.",
+    "direction": "Counter MSB; taken increments up to 3, not-taken decrements down to 0.",
+    "index": "7-bit XOR, no PC slicing beyond supplied 7 bits."
+  },
+  "verification": {
+    "oracle": "Independent behavioral model of original XOR addressing, integer bounded counter updates, and history shift; compare before and after positive edges.",
+    "directed": "Async reset off-edge, all 128 entries, both saturation limits and threshold transitions, same-entry concurrent training/prediction, recovery priority, valid gating, history truncation.",
+    "random": "Deterministic randomized transactions, including concurrent requests and repeated resets.",
+    "termination": "Fatal on mismatch or bounded timeout; PASS emitted only after all checks."
+  },
+  "specification_ambiguities": [
+    "Reset state is not specified: choose zero global history and weakly not-taken counters (01). Development checks validate this stated assumption, not an explicit original reset value.",
+    "History shift orientation is implicit: interpret newest branch as bit 0.",
+    "Outputs when predict_valid=0 are unspecified: expose current combinational prediction and history.",
+    "Referenced timing diagram is absent from supplied text; follow explicit pre-edge read and next-positive-edge write description."
+  ]
+}

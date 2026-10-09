@@ -1,0 +1,198 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob022_mux2to1",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob022_mux2to1",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob022_mux2to1/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790738476.5480192,
+    "ended_at_unix": 1790738561.1270876,
+    "seconds": 84.57906913757324,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 77397,
+      "cached_input_tokens": 64896,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1474,
+      "reasoning_output_tokens": 11
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "876b094c29a8b06453cff418f0feef3749965147ede99f6f0a9ce9a5649e1758",
+  "contract_sha256": "b59d1beb1cee7dffe5a3cbb1c72851a322a7441463de380f73222dad8f38e979",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "contract_gate",
+        "result": "pass_structure_only",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "compile",
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev_sim.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "timeout_seconds": 20,
+        "exit_code": 0,
+        "result": "pass",
+        "log": "dev_compile.log"
+      },
+      {
+        "name": "simulation",
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev_sim.vvp"
+        ],
+        "timeout_seconds": 20,
+        "exit_code": 0,
+        "result": "pass",
+        "log": "dev_simulation.log"
+      },
+      {
+        "name": "static_review",
+        "result": "pass",
+        "details": "Exact four one-bit ports; single continuous combinational assignment; no state, delays, latches, arithmetic, or dependencies."
+      }
+    ],
+    "development_outcome": "pass",
+    "limitations": [
+      "Development checks cover binary inputs only; X/Z behavior is unspecified.",
+      "Official evaluation results are unavailable.",
+      "No synthesis, timing analysis, or board testing performed."
+    ],
+    "contract_corrections": [],
+    "preserved_candidates": [
+      "candidate_initial.sv",
+      "candidate.sv"
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob022_mux2to1_test.sv": "1e40ee964c9647dadcd4c37c44954246879042cd071a4055c763866e0fbf7e03",
+      "candidate.sv": "876b094c29a8b06453cff418f0feef3749965147ede99f6f0a9ce9a5649e1758",
+      "Prob022_mux2to1_ref.sv": "7903c8758323f1f61f3aa91c96acdbcfe50df0e1f9af86dff8d744de865c3af0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob022_mux2to1_test.sv",
+        "Prob022_mux2to1_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015260428190231323
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb022_mux2to1_test.sv:43: $finish called at 610 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 122 samples\n\nSimulation finished at 610 ps\nMismatches: 0 in 122 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008442355319857597
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob022_mux2to1_test.sv": "1e40ee964c9647dadcd4c37c44954246879042cd071a4055c763866e0fbf7e03",
+      "candidate.sv": "876b094c29a8b06453cff418f0feef3749965147ede99f6f0a9ce9a5649e1758",
+      "Prob022_mux2to1_ref.sv": "7903c8758323f1f61f3aa91c96acdbcfe50df0e1f9af86dff8d744de865c3af0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob022_mux2to1_test.sv",
+        "Prob022_mux2to1_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012839183211326599
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb022_mux2to1_test.sv:43: $finish called at 610 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 122 samples\n\nSimulation finished at 610 ps\nMismatches: 0 in 122 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007954863831400871
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

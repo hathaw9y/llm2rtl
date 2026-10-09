@@ -1,0 +1,60 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": {
+        "width": 1,
+        "direction": "input"
+      },
+      "b": {
+        "width": 1,
+        "direction": "input"
+      },
+      "c": {
+        "width": 1,
+        "direction": "input"
+      },
+      "d": {
+        "width": 1,
+        "direction": "input"
+      },
+      "e": {
+        "width": 1,
+        "direction": "input"
+      }
+    },
+    "outputs": {
+      "out": {
+        "width": 25,
+        "range": "[24:0]",
+        "direction": "output"
+      }
+    },
+    "clock": null,
+    "reset": null
+  },
+  "semantics": {
+    "function": "All 25 ordered pairwise bit equality comparisons",
+    "ordering": "Let s[0..4] = [a,b,c,d,e]. out[24-(5*r+c)] compares s[r] and s[c], for r,c in 0..4.",
+    "timing": "Pure combinational output follows current inputs after combinational settling; no clock or cycle latency.",
+    "initialization": "No state or initialization requirement.",
+    "reset": "No reset port or reset behavior.",
+    "input_domain": "All 32 binary input combinations are legal."
+  },
+  "numeric": {
+    "operand_width": 1,
+    "output_bit_width": 1,
+    "operation": "Each bit is bitwise XNOR, equivalently (~s[r]) ^ s[c], giving 1 for equal binary bits and 0 otherwise.",
+    "signedness": "Unsigned single-bit signals",
+    "arithmetic": "No addition, rounding, truncation, saturation or overflow.",
+    "four_state": "Use normal SystemVerilog bitwise XNOR semantics; X/Z comparisons propagate X. The problem specifies binary functional behavior."
+  },
+  "verification": {
+    "method": "Independent exhaustive self-checking simulation of all 32 binary combinations. Build expected bits using scalar equality and explicit row/column indexing rather than the DUT vector expression.",
+    "coverage": "Check all 25 output bits per input vector, including every diagonal and both asymmetric positions. Apply inputs sequentially to check combinational updates.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top, matching vvp; finite shell timeouts and a testbench watchdog.",
+    "success": "Zero mismatches and an explicit PASS marker; preserve compiler and simulation logs."
+  },
+  "specification_ambiguities": []
+}

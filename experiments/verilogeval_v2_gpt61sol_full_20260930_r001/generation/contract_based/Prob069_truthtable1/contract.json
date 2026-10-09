@@ -1,0 +1,60 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "x3": {
+        "direction": "input",
+        "width": 1
+      },
+      "x2": {
+        "direction": "input",
+        "width": 1
+      },
+      "x1": {
+        "direction": "input",
+        "width": 1
+      },
+      "f": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "kind": "combinational",
+    "truth_table": {
+      "000": 0,
+      "001": 0,
+      "010": 1,
+      "011": 1,
+      "100": 0,
+      "101": 1,
+      "110": 0,
+      "111": 1
+    },
+    "input_order": [
+      "x3",
+      "x2",
+      "x1"
+    ],
+    "timing": "Output follows current inputs after combinational settling; no clock cycles or registered latency.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No state or initialization required.",
+    "history": "Output is independent of previous input values."
+  },
+  "numeric": {
+    "domain": "One-bit Boolean inputs and output.",
+    "arithmetic": "Boolean logic only; no arithmetic, rounding, truncation, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Literal expected outputs from original truth table, indexed by {x3,x2,x1}; independent of DUT equation.",
+    "coverage": "Exhaust all eight binary combinations, then all 64 ordered transitions between combinations to check history independence.",
+    "comparison": "Four-state strict comparison after settling.",
+    "tools": "Icarus Verilog v12, -g2012, explicit dev_tb top, matching vvp; finite compile and simulation timeouts.",
+    "scope": "Development checks only; no official evaluation, synthesis, or board validation."
+  },
+  "specification_ambiguities": [
+    "Behavior for X or Z inputs is unspecified by the binary truth table and is not an acceptance criterion."
+  ]
+}

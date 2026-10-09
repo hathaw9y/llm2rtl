@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "check": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json",
+      "cases": [
+        "correct fixture passed",
+        "deliberately wrong fixture failed",
+        "repaired fixture passed"
+      ]
+    },
+    {
+      "check": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "compile_log": "development/01/compile.log",
+      "simulation_log": "development/01/simulation.log",
+      "cycles_checked": 1943
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation was not accessed and occurs after this turn.",
+    "out_bytes is unspecified when done is low."
+  ],
+  "justified_RTL_TB_changes": [],
+  "implementation_notes": "Three-byte collection with bit-3 boundary search; completed messages are published one rising edge after the third byte, matching the original waveform. Synchronous active-high reset clears collection and pending completion.",
+  "testbench_notes": "Independent byte-count oracle, exact original waveform edge timestamps with post-NBA output sampling, initial unknown done, falling-edge stability, resets in each collection phase and pending completion, all bit-3-clear byte values, 256 second/third-byte pairs, and deterministic mixed traffic. Bounded timeout and fatal mismatch checks included."
+}

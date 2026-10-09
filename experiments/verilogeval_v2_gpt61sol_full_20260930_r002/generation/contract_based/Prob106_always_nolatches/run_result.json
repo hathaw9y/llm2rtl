@@ -1,0 +1,207 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob106_always_nolatches",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob106_always_nolatches",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob106_always_nolatches/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790744930.4069,
+    "ended_at_unix": 1790745053.7049968,
+    "seconds": 123.29809737205505,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 126957,
+      "cached_input_tokens": 106368,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2146,
+      "reasoning_output_tokens": 17
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "2b9c66a21fd01a596084c95da5b2635886c8a961b117343039e32d1e1248b5e8",
+  "contract_sha256": "508f5337589134a5114ca36b53a07ff08e88ca9a23c916a8341a4401e636ea7d",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": {
+      "environment_smoke": "passed: correct fixture passes, injected fault fails, repaired fixture passes",
+      "contract": "passed_structure_only; see contract_gate.json",
+      "development": [
+        {
+          "label": "initial",
+          "check_index": 1,
+          "checked_at_unix": 1790745024.868231,
+          "source_sha256": "2b9c66a21fd01a596084c95da5b2635886c8a961b117343039e32d1e1248b5e8",
+          "testbench_sha256": "e6cae3a0fc609855023adc31f4b0c362f5f51fffadb589b0fcaf3d1594e50564",
+          "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob106_always_nolatches/development/01",
+          "compile": {
+            "command": [
+              "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+              "-g2012",
+              "-Wall",
+              "-Wno-timescale",
+              "-s",
+              "dev_tb",
+              "-o",
+              "dev.vvp",
+              "candidate.sv",
+              "dev_tb.sv"
+            ],
+            "returncode": 0,
+            "stdout": "",
+            "stderr": "",
+            "timeout": false,
+            "seconds": 0.013064702972769737
+          },
+          "simulation": {
+            "command": [
+              "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+              "dev.vvp"
+            ],
+            "returncode": 0,
+            "stdout": "PASS all 65558 combinational decoder checks\ndev_tb.sv:55: $finish called at 65558000 (1ps)\n",
+            "stderr": "",
+            "timeout": false,
+            "seconds": 0.2530947709456086
+          },
+          "status": "passed"
+        }
+      ]
+    },
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not occurred.",
+      "Original specification does not define X/Z input behavior; supplemental checks exercise exact-case default behavior.",
+      "No synthesis or board verification performed, as required."
+    ],
+    "justified_rtl_tb_changes": [],
+    "coverage": "65536 binary inputs plus directed transitions and supplemental X/Z cases; 65558 checks passed.",
+    "interface_cycle_contract": "TopModule: scancode[15:0] input, left/down/right/up one-bit outputs; combinational, no clock/reset/state/added latency.",
+    "static_review": "Full assignments on every combinational path, exact 16-bit constants, no submodules or arithmetic; no latch inferred by RTL structure.",
+    "initial_snapshot_preserved": true
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2b9c66a21fd01a596084c95da5b2635886c8a961b117343039e32d1e1248b5e8",
+      "Prob106_always_nolatches_ref.sv": "c224ca40684f97dd739096b361e1d85155a07ae5faf9548c12575d6f0f347ad6",
+      "Prob106_always_nolatches_test.sv": "fd636060098952703ed11e5d88b56f384a91c0a573d10ed98187db89cdf62136"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob106_always_nolatches_test.sv",
+        "Prob106_always_nolatches_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.016402938403189182
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb106_always_nolatches_test.sv:43: $finish called at 150100 (1ps)\nHint: Output 'left' has no mismatches.\nHint: Output 'down' has no mismatches.\nHint: Output 'right' has no mismatches.\nHint: Output 'up' has no mismatches.\nHint: Total mismatched samples is 0 out of 30020 samples\n\nSimulation finished at 150100 ps\nMismatches: 0 in 30020 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.20329822786152363
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2b9c66a21fd01a596084c95da5b2635886c8a961b117343039e32d1e1248b5e8",
+      "Prob106_always_nolatches_ref.sv": "c224ca40684f97dd739096b361e1d85155a07ae5faf9548c12575d6f0f347ad6",
+      "Prob106_always_nolatches_test.sv": "fd636060098952703ed11e5d88b56f384a91c0a573d10ed98187db89cdf62136"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob106_always_nolatches_test.sv",
+        "Prob106_always_nolatches_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014779888093471527
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb106_always_nolatches_test.sv:43: $finish called at 150100 (1ps)\nHint: Output 'left' has no mismatches.\nHint: Output 'down' has no mismatches.\nHint: Output 'right' has no mismatches.\nHint: Output 'up' has no mismatches.\nHint: Total mismatched samples is 0 out of 30020 samples\n\nSimulation finished at 150100 ps\nMismatches: 0 in 30020 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.20472994167357683
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

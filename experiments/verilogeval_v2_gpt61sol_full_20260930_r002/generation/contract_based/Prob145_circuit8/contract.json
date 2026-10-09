@@ -1,0 +1,33 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clock": 1,
+      "a": 1
+    },
+    "outputs": {
+      "p": 1,
+      "q": 1
+    },
+    "reset": "none"
+  },
+  "semantics": {
+    "p": "High-level transparent latch: follows a when clock=1, holds when clock=0. Evidence: 90-110 ns tracking, 115-140 ns holding.",
+    "q": "Captures p at falling clock edge and holds otherwise. Evidence: 55,115,175 ns updates; unchanged during high phases.",
+    "initialization": "No initialization; p and q unknown at 0-20 ns. p becomes 0 at 25 ns; q first becomes 0 at 55 ns.",
+    "simultaneous_changes": "At 115 ns clock falls while a becomes 0: p retains prior 1 and q captures 1. At 175 ns clock falls while a becomes 1: p retains prior 0 and q captures 0."
+  },
+  "numeric": {
+    "type": "one-bit four-state logic",
+    "arithmetic": "none"
+  },
+  "verification": {
+    "oracle": "Literal original waveform rows at original 5ns timestamp spacing, sampled after delta settling.",
+    "coverage": "Initial unknowns, high-phase tracking, low-phase hold, simultaneous falling-edge/input transitions, additional hold and tracking cycles.",
+    "checks": "Case-inequality comparisons, fatal mismatch, bounded timeout; mandatory dev_check.py initial run."
+  },
+  "specification_ambiguities": [
+    "Finite waveform cannot uniquely establish behavior for all unseen stimuli. Infer q falling-edge capture of p; a low-level latch of p is observationally equivalent on the supplied binary clock waveform. Unknown clock/input behavior beyond initial outputs is unspecified."
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "frozen contract structural gate",
+      "result": "PASS (passed_structure_only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "Icarus SystemVerilog compile and explicit-top elaboration",
+      "result": "PASS",
+      "log": "compile_initial.log",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv"
+    },
+    {
+      "name": "independent truth-table simulation",
+      "result": "PASS",
+      "log": "simulation_initial.log",
+      "coverage": "24 specified-input checks: all 12 constrained input combinations in ascending and descending sweeps; four dont-cares driven without assertions",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim"
+    },
+    {
+      "name": "exhaustive Boolean-cover minimum check",
+      "result": "PASS",
+      "log": "minimality.log",
+      "command": "timeout 20s python3 check_minimality.py"
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS",
+      "details": "Exact interface, purely combinational continuous assignments, no storage/latches, dependencies, clocks, reset, arithmetic sizing or simulation-only DUT constructs."
+    }
+  ],
+  "development_outcome": "Initial candidate passed development checks; no RTL revisions or contract corrections required. SOP has two products and five literals; POS has three clauses and five literals.",
+  "limitations": [
+    "Official evaluation not accessed or run; results are unavailable.",
+    "Never-occurring input patterns and X/Z input behavior are unconstrained by the original problem.",
+    "No synthesis, timing or board validation performed.",
+    "Contract validator checks structure only; functional evidence comes from independent development checks."
+  ],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  },
+  "contract_corrections": []
+}

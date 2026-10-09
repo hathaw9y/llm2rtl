@@ -1,0 +1,60 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "scancode": 16
+    },
+    "outputs": {
+      "left": 1,
+      "down": 1,
+      "right": 1,
+      "up": 1
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "kind": "combinational decoder",
+    "mapping": {
+      "e06b": "left",
+      "e072": "down",
+      "e074": "right",
+      "e075": "up"
+    },
+    "other_inputs": "all outputs zero",
+    "output_polarity": "asserted high",
+    "cycle_reset_initialization": {
+      "evidence": "Original interface contains only scancode and four outputs; table defines output from present input.",
+      "clock": "none",
+      "reset": "none",
+      "latency": "combinational propagation only",
+      "state": "none",
+      "initialization": "No initial output value specified before input settles."
+    }
+  },
+  "numeric": {
+    "scancode_width": 16,
+    "interpretation": "exact 16-bit hexadecimal patterns; no arithmetic",
+    "output_order_for_verification": [
+      "left",
+      "down",
+      "right",
+      "up"
+    ]
+  },
+  "verification": {
+    "oracle_source": "Original scancode table",
+    "directed": "four recognized values, neighboring values, transitions to invalid values",
+    "exhaustive": "all 65536 two-state inputs, sample after 1 ns settling",
+    "failure": "fatal on mismatch",
+    "timeout": "100000 ns",
+    "success": "PASS only after all comparisons"
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z inputs",
+      "evidence": "Original table specifies hexadecimal values and anything else but does not explicitly discuss four-state simulation.",
+      "resolution": "Use ordinary exact case matches; any pattern containing X/Z selects default zero. Exhaustive correctness checks cover all binary inputs."
+    }
+  ]
+}

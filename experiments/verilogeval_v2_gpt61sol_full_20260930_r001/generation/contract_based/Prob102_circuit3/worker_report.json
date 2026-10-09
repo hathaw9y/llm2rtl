@@ -1,0 +1,44 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract structural gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "manual waveform review",
+      "outcome": "All 16 binary combinations match (a | b) & (c | d); exact scalar interface, continuous assignment, no state or explicit delays."
+    },
+    {
+      "name": "initial candidate preservation",
+      "outcome": "candidate_initial.sv copied immediately after initial implementation, before development checks or edits"
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "exit_code": 139,
+      "outcome": "FAILED: no diagnostics emitted",
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development simulation",
+      "outcome": "NOT RUN: compilation failed",
+      "planned_command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim"
+    }
+  ],
+  "development_outcome": "Best RTL delivered unchanged after compiler tool failure; no simulation success claimed.",
+  "limitations": [
+    "Development compilation failed with exit code 139; simulator verification unavailable.",
+    "X/Z input semantics not specified by original waveform.",
+    "Official evaluation results unavailable; no synthesis, timing, or board validation performed."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "frozen_contract_gate",
+      "result": "PASS (structure only)",
+      "log": "contract_validation_retry.log"
+    },
+    {
+      "name": "initial_candidate_preservation",
+      "result": "PASS: candidate_initial.sv is identical to candidate.sv; copied before development checks"
+    },
+    {
+      "name": "static_review",
+      "result": "PASS: exact interface, continuous one-bit Boolean assignments, no state or latch, no dependencies"
+    },
+    {
+      "name": "development_compile",
+      "result": "PASS",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "log": "development_compile.log"
+    },
+    {
+      "name": "development_simulation",
+      "result": "PASS: 24 comparisons covering all 12 legal transitions twice",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "log": "development_simulation.log"
+    }
+  ],
+  "development_outcome": "Initial RTL passes independent transition-table development simulation. No RTL revisions needed.",
+  "limitations": [
+    "Official evaluation was not accessed and results are unknown.",
+    "Only the specified binary one-hot input domain was tested; invalid state and X/Z behavior is unspecified.",
+    "No synthesis, timing analysis, or board validation performed."
+  ],
+  "tooling_notes": [
+    "First contract command ran the validator successfully but its shell wrapper then failed because status is a read-only zsh variable. Original validator output is retained in contract_validation.log; the structural gate was rerun successfully before RTL creation."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

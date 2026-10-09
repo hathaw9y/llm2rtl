@@ -1,0 +1,65 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790748181.144365,
+      "source_sha256": "61b2a340afdf9360287cea42f859566c416597ba2e34a3820bdb79f651774497",
+      "testbench_sha256": "a75f489b12c4f6e7d8e9cdd67cb8874eea3752eaeecaf7179c6b86794aedfb49",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob033_ece241_2014_q1c/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.011385872028768063
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: 65546 signed addition and overflow checks\ndev_tb.sv:47: $finish called at 65546000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.3090076157823205
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Unknown-input behavior is unspecified and was not assigned an additional contract.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [
+    "Initial implementation uses an eight-bit modulo sum and asserts overflow when equal-sign operands produce an opposite-sign result; no subsequent RTL changes."
+  ],
+  "justified_tb_changes": [
+    "Initial independent integer-range oracle checks all 65536 input pairs and ten directed cases; no subsequent testbench changes."
+  ],
+  "contract": {
+    "status": "frozen",
+    "structural_gate": "passed_structure_only",
+    "corrections": []
+  },
+  "interface_cycle_contract": "TopModule: a[7:0], b[7:0], s[7:0], overflow; combinational, no clock/reset or extra latency.",
+  "numeric_width_decisions": "Eight-bit sum wraps modulo 256; signed overflow represents mathematical sum outside [-128,127].",
+  "static_review": "Single module, continuous assignments, no state, no latches, no additional dependencies.",
+  "environment_smoke": "passed: correct fixture passes, injected fault fails, repair passes"
+}

@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "aresetn": 1, "x": 1}, "outputs": {"z": 1}},
+  "semantics": {
+    "evidence": "Original specifies Mealy 101 detection, exactly three states, overlapping sequences, positive-edge sequential logic and negative-edge asynchronous reset.",
+    "states": {"empty": "No matching suffix", "one": "Matching suffix 1", "one_zero": "Matching suffix 10"},
+    "transitions": {"empty": {"0": "empty", "1": "one"}, "one": {"0": "one_zero", "1": "one"}, "one_zero": {"0": "empty", "1": "one"}},
+    "output": "Combinational z is 1 exactly when current state is one_zero and current x is 1; no output register or added latency.",
+    "reset": "On negedge aresetn asynchronously enter empty; at posedge clk while aresetn is low remain empty.",
+    "initialization": "No power-up initialization specified; state is unspecified until reset. Verification establishes reset before functional assertions."
+  },
+  "numeric": {"port_widths": "All one bit", "state_encoding": "Two-bit storage with exactly three reachable states", "arithmetic": "None"},
+  "verification": {"oracle": "Track the last two clock-sampled input bits independently; before and after each clock edge compare combinational z with whether history ends in 10 and current x is 1.", "cases": "Asynchronous reset between edges, held reset, reset from every prefix, overlap 10101, repeated bits, all binary streams of length eight, within-cycle x changes", "success": "Bounded self-checking dev_tb with fatal mismatches and PASS; fixed dev_check.py initial run"},
+  "specification_ambiguities": ["No state encoding or power-up state is specified; choose binary prefix encoding and no initialization.", "Mealy output follows current x and stored prefix between edges; reset clears prefix rather than adding an unspecified output gate."]
+}

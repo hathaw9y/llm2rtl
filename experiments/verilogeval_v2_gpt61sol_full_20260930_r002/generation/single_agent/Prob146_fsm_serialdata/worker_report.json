@@ -1,0 +1,21 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "details": "Correct fixture passed, injected fault failed, repaired fixture passed."},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "development/01", "details": "Icarus 12 compilation and simulation passed; 4807 checked cycles and 350 valid frames."}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation was not accessed and has not occurred during this turn.",
+    "No synthesis or board work performed.",
+    "Pre-reset state and out_byte outside done are unspecified by the problem and are not checked."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": {
+    "interface": "TopModule(clk, in, reset, out_byte[7:0], done), active-high synchronous reset",
+    "cycle_semantics": "Sample start, eight LSB-first data bits, and stop on consecutive positive edges. Assert done for one cycle immediately after a valid stop is sampled. Discard malformed frames and wait for high before seeking another start.",
+    "widths": "Eight-bit payload and three-bit data index",
+    "static_review": "Single sequential driver per register, nonblocking RTL assignments, explicit state branches, no additional ports or latency."
+  }
+}

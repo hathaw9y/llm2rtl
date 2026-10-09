@@ -1,0 +1,34 @@
+{
+  "schema": "llm2rtl.bank_layout.v1",
+  "design_id": "llama32_1b_w4a4kv4_issue",
+  "revision": "r3",
+  "bank_id_width": 4,
+  "physical_bank_count_for_dispatcher_checkpoint": 16,
+  "command_bank_id": 0,
+  "data_bank_ids": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+  "ownership_model": {
+    "read_and_write_locks_are_separate": true,
+    "acquire_event": "executor_request_valid_and_ready",
+    "release_event": "matching_executor_completion",
+    "release_has_priority_over_acquire_inside_bank_subsystem": true,
+    "same_bank_release_and_reacquire_same_cycle": "forbidden_by_busy_check"
+  },
+  "banks": [
+    {"bank_id": "CMD_BANK", "numeric_id": 0, "capacity_words": 1024, "word_bits": 128, "format": "isa_command_128", "layout": "one_command_per_word", "producers": ["PS"], "consumers": ["isa_command_dispatcher"]},
+    {"bank_id": "BANK_1", "numeric_id": 1, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_2", "numeric_id": 2, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_3", "numeric_id": 3, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_4", "numeric_id": 4, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_5", "numeric_id": 5, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_6", "numeric_id": 6, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_7", "numeric_id": 7, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_8", "numeric_id": 8, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_9", "numeric_id": 9, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_10", "numeric_id": 10, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_11", "numeric_id": 11, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_12", "numeric_id": 12, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_13", "numeric_id": 13, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_14", "numeric_id": 14, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]},
+    {"bank_id": "BANK_15", "numeric_id": 15, "capacity_words": 2048, "word_bits": 128, "format": "operation_defined_local_tile", "layout": "packed", "producers": ["DMA_LOAD", "GEMM"], "consumers": ["DMA_STORE", "GEMM"]}
+  ]
+}

@@ -1,0 +1,260 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob155_lemmings4",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 2,
+  "development_failed_check_count": 1,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob155_lemmings4",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob155_lemmings4/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790752196.5843747,
+    "ended_at_unix": 1790752457.7576501,
+    "seconds": 261.1732761859894,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 165078,
+      "cached_input_tokens": 145920,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 4833,
+      "reasoning_output_tokens": 202
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "6b549af315db25c3e3c8be521cd7a5e767f31405d02f5f108fe878e66616ab5c",
+  "contract_sha256": "5d063bf21b7d04d4d355c3631c57d7e27e47e48999b57dd6869fbd4961315651",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "initial",
+        "check_index": 1,
+        "checked_at_unix": 1790752397.330184,
+        "source_sha256": "6b549af315db25c3e3c8be521cd7a5e767f31405d02f5f108fe878e66616ab5c",
+        "testbench_sha256": "76b8e8fa0386253f42d139b635508821442433127fb2cf4de075b2c615ad7f3f",
+        "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob155_lemmings4/development/01",
+        "compile": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+            "-g2012",
+            "-Wall",
+            "-Wno-timescale",
+            "-s",
+            "dev_tb",
+            "-o",
+            "dev.vvp",
+            "candidate.sv",
+            "dev_tb.sv"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.015649878419935703
+        },
+        "simulation": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+            "dev.vvp"
+          ],
+          "returncode": 1,
+          "stdout": "FATAL: dev_tb.sv:141: Explicit safe-landing boundary failure length=1\n       Time: 11647000  Scope: dev_tb\n",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.01642971858382225
+        },
+        "status": "simulation_failed"
+      },
+      {
+        "label": "initial_tb_fix",
+        "check_index": 2,
+        "checked_at_unix": 1790752414.669341,
+        "source_sha256": "6b549af315db25c3e3c8be521cd7a5e767f31405d02f5f108fe878e66616ab5c",
+        "testbench_sha256": "384eaeb5c9d8b5b6b459fdf3707cbc3e39f5ebd863002812deafc3afdc070927",
+        "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob155_lemmings4/development/02",
+        "compile": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+            "-g2012",
+            "-Wall",
+            "-Wno-timescale",
+            "-s",
+            "dev_tb",
+            "-o",
+            "dev.vvp",
+            "candidate.sv",
+            "dev_tb.sv"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.014321127906441689
+        },
+        "simulation": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+            "dev.vvp"
+          ],
+          "returncode": 0,
+          "stdout": "PASS: independent original-spec oracle; 8517 comparisons\ndev_tb.sv:174: $finish called at 43017000 (1ps)\n",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.05266681965440512
+        },
+        "status": "passed"
+      }
+    ],
+    "development_outcome": "passed",
+    "environment_smoke": "passed: correct fixture passes, deliberately wrong fixture fails, repaired fixture passes",
+    "contract_gate": "passed_structure_only; contract frozen before RTL",
+    "limitations": [
+      "Development verification only; official correctness has not been evaluated.",
+      "No synthesis or board work performed, as requested.",
+      "Pre-reset outputs are unspecified by original problem and were not asserted.",
+      "Fall duration is interpreted as complete falling-state clock intervals, including the first interval after entry; directed tests verify 20 cycles survive and 21 splatter."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [
+      {
+        "preserved_old_version": "dev_tb_before_reset_setup_fix.sv",
+        "reason": "Initial directed safe-landing assertion assumed requested starting direction. Reset task retained prior ground/dig/bump inputs, allowing an intervening positive edge to enter falling or digging before the next directed step. Independent model matched DUT; explicit direction assertion exposed invalid test setup.",
+        "correction": "Drive ground=1, dig=0, bump_left=0, bump_right=0 at negative edge before reset assertion. This establishes neutral inputs through reset release and case setup. No expected values or checks removed or weakened.",
+        "recheck_label": "initial_tb_fix"
+      }
+    ],
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "evidence": "dev_checks.jsonl and development/01, development/02"
+    },
+    "interface_cycle_contract": "TopModule with original one-bit ports, positive-edge sequential logic, active-high asynchronous reset to walking left, Moore outputs and no added latency.",
+    "numeric_width_decisions": "5-bit unsigned fall counter saturates at 21; unbounded falls remain fatal on landing without overflow.",
+    "static_review": "Single RTL top, no submodules, explicit enum if/else transitions, complete next-state defaults, nonblocking sequential assignments, no simulation constructs in DUT.",
+    "initial_snapshot_unchanged": true
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "6b549af315db25c3e3c8be521cd7a5e767f31405d02f5f108fe878e66616ab5c",
+      "Prob155_lemmings4_ref.sv": "a238a1a879b4b4213bedf9bb47a23ece031df6a3d9cb836c5c42769141ae522c",
+      "Prob155_lemmings4_test.sv": "3f22f4ca91763277dcb324821a257ebdbb98fbcdb2daf4011211de72715573e7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob155_lemmings4_test.sv",
+        "Prob155_lemmings4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015081573277711868
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb155_lemmings4_test.sv:158: $finish called at 5016 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Output 'digging' has no mismatches.\nHint: Total mismatched samples is 0 out of 1003 samples\n\nSimulation finished at 5016 ps\nMismatches: 0 in 1003 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015876034274697304
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "6b549af315db25c3e3c8be521cd7a5e767f31405d02f5f108fe878e66616ab5c",
+      "Prob155_lemmings4_ref.sv": "a238a1a879b4b4213bedf9bb47a23ece031df6a3d9cb836c5c42769141ae522c",
+      "Prob155_lemmings4_test.sv": "3f22f4ca91763277dcb324821a257ebdbb98fbcdb2daf4011211de72715573e7"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob155_lemmings4_test.sv",
+        "Prob155_lemmings4_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014996427111327648
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb155_lemmings4_test.sv:158: $finish called at 5016 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Output 'digging' has no mismatches.\nHint: Total mismatched samples is 0 out of 1003 samples\n\nSimulation finished at 5016 ps\nMismatches: 0 in 1003 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015750749967992306
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {"name": "frozen_contract_gate", "command": "python3 validate_contract.py", "result": "PASS (structure only)", "log": "contract_validation.log"},
+    {"name": "initial_candidate_preservation", "result": "candidate_initial.sv copied immediately after initial implementation, before development checks or RTL edits"},
+    {"name": "static_review", "result": "Exact TopModule ports and widths; one-hot bit mapping and incoming transitions match the frozen contract; continuous assignments only, no storage or additional reset behavior."},
+    {"name": "development_compile", "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv", "exit_code": 0, "result": "PASS", "log": "dev_compile.log"},
+    {"name": "development_simulation", "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim", "exit_code": 0, "result": "PASS: 80 exhaustive legal-state/input checks using independent transition-table oracle", "log": "dev_simulation.log"}
+  ],
+  "development_outcome": "Initial candidate passed all development checks; no RTL revisions required. Pure combinational Boolean implementation, no pipeline or clock.",
+  "limitations": [
+    "Official evaluation was not accessed and results are unknown.",
+    "Illegal one-hot encodings and X/Z inputs are unspecified by the problem and were not asserted as functional requirements.",
+    "No synthesis, timing analysis, or board validation performed."
+  ]
+}

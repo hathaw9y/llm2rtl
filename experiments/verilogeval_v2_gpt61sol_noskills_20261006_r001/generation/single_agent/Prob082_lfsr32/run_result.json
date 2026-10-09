@@ -1,0 +1,196 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob082_lfsr32",
+  "official_status": "testbench_timeout",
+  "official_analyzer_code": "T",
+  "workflow_status": "failed",
+  "development_status": "passed",
+  "development_check_count": 2,
+  "development_failed_check_count": 1,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob082_lfsr32",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/single_agent/Prob082_lfsr32/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791272267.3265345,
+    "ended_at_unix": 1791272318.9440634,
+    "seconds": 51.61752939224243,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 69196,
+      "cached_input_tokens": 52864,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1838,
+      "reasoning_output_tokens": 126
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "a5f6754f0b23e91803fc1adaa3ad6a49737796796188a4673d0c20f14957c078",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed",
+          "repair": "passed"
+        }
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "simulation_failed",
+        "evidence": "development/01",
+        "reason": "Testbench inserted an extra falling-edge wait after a mid-sequence reset, skipping observation of the next rising edge."
+      },
+      {
+        "command": "python3 dev_check.py --label initial_tb_corrected",
+        "status": "passed",
+        "evidence": "development/02"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "Simulation checks a finite 2048-cycle sequence with repeated synchronous resets and between-edge reset pulses; it does not exhaust the full LFSR period."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [
+      {
+        "preserved_original": "dev_tb_initial.sv",
+        "change": "Deassert mid-sequence reset after the checked rising edge without waiting an extra falling edge.",
+        "justification": "The original extra falling-edge wait caused the next iteration to skip a rising edge and compare stale expected state. All expected values and checks are retained."
+      }
+    ]
+  },
+  "final": {
+    "status": "testbench_timeout",
+    "file_sha256": {
+      "candidate.sv": "a5f6754f0b23e91803fc1adaa3ad6a49737796796188a4673d0c20f14957c078",
+      "Prob082_lfsr32_test.sv": "6f52b2f9878e64ce0192ad0473123a651e58af70dbc114227e40789d528e8a5a",
+      "Prob082_lfsr32_ref.sv": "cfe347370987a792745fcc0e2b69f3aae151f144606dc4337c4c14a959259941"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob082_lfsr32_test.sv",
+        "Prob082_lfsr32_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014450781047344208
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nTIMEOUT\nProb082_lfsr32_test.sv:114: $finish called at 1000000 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 200000 samples\n\nSimulation finished at 1000000 ps\nMismatches: 0 in 200000 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 1.3634326364845037
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": "T",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "testbench_timeout",
+    "file_sha256": {
+      "candidate.sv": "a5f6754f0b23e91803fc1adaa3ad6a49737796796188a4673d0c20f14957c078",
+      "Prob082_lfsr32_test.sv": "6f52b2f9878e64ce0192ad0473123a651e58af70dbc114227e40789d528e8a5a",
+      "Prob082_lfsr32_ref.sv": "cfe347370987a792745fcc0e2b69f3aae151f144606dc4337c4c14a959259941"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob082_lfsr32_test.sv",
+        "Prob082_lfsr32_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014359474182128906
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nTIMEOUT\nProb082_lfsr32_test.sv:114: $finish called at 1000000 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 200000 samples\n\nSimulation finished at 1000000 ps\nMismatches: 0 in 200000 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 1.3629749584943056
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": "T",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

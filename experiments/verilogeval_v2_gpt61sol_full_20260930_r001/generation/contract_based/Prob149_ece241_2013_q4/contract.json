@@ -1,0 +1,55 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1,
+      "s": 3
+    },
+    "outputs": {
+      "fr2": 1,
+      "fr1": 1,
+      "fr0": 1,
+      "dfr": 1
+    }
+  },
+  "semantics": {
+    "clock": "Sample s on each rising edge of clk; outputs decode the registered water level and direction history after the edge. Inputs changing between edges do not change outputs.",
+    "reset": "Active-high synchronous reset has priority over s, sets level below s[0] and all four outputs high. No power-up initialization is specified before a reset edge.",
+    "levels": {
+      "000": "Below s[0]: fr2/fr1/fr0=111 and dfr=1",
+      "001": "Between s[0] and s[1]: fr2/fr1/fr0=011",
+      "011": "Between s[1] and s[2]: fr2/fr1/fr0=001",
+      "111": "Above s[2]: fr2/fr1/fr0=000 and dfr=0"
+    },
+    "history": "At either intermediate level, dfr is 1 when the level before the latest sampled level change was lower, otherwise 0. Hold dfr on unchanged level. Compare any legal level jump directly against the previous sampled level.",
+    "invalid_sensors": "Physically inconsistent patterns 010,100,101,110 have no specified behavior; implementation holds prior level and direction."
+  },
+  "numeric": {
+    "sensor_order": "s[0] lowest, s[1] middle, s[2] highest; only thermometer patterns are physically legal",
+    "level_encoding": "Unsigned 2-bit increasing level index 0 through 3",
+    "arithmetic": "Unsigned level comparisons only; no rounding, saturation, accumulation, or overflow arithmetic"
+  },
+  "verification": {
+    "oracle": "Independent integer water-level and last-change direction model, with table-based nominal flow outputs",
+    "directed": "Reset with every sensor pattern; synchronous reset timing; rising/falling changes, unchanged-level history retention, endpoint overrides, all 16 legal level-to-level transitions including skipped levels",
+    "sequences": "Enumerate all length-five sequences of legal levels, plus repeated reset while active",
+    "timing": "Check outputs before and after rising clock edge, including mid-cycle sensor/reset changes",
+    "tools": "Explicit dev_tb top, Icarus -g2012 -Wall, finite compile and simulation timeouts; internal simulation watchdog"
+  },
+  "specification_ambiguities": [
+    {
+      "issue": "Physically inconsistent sensor patterns are unspecified",
+      "resolution": "Hold current state; do not claim benchmark correctness for these inputs"
+    },
+    {
+      "issue": "Exact sampling edge is not explicitly stated beyond synchronous reset and state machine",
+      "resolution": "Use conventional positive-edge synchronous Moore state machine"
+    },
+    {
+      "issue": "Intermediate wording may appear counterintuitive for reservoir control",
+      "resolution": "Follow literal instruction: supplemental valve asserted on rising-level changes"
+    }
+  ]
+}

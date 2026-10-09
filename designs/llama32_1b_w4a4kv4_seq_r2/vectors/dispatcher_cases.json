@@ -1,0 +1,46 @@
+{
+  "schema": "llm2rtl.dispatcher_vectors.v1",
+  "cases": [
+    {
+      "case_id": "load_load_gemm_store",
+      "initial_banks": ["free", "free", "free", "free"],
+      "commands": [
+        {"opcode": "DMA_LOAD", "tag": 1, "dst": 0, "success": true},
+        {"opcode": "DMA_LOAD", "tag": 2, "dst": 1, "success": true},
+        {"opcode": "GEMM", "tag": 3, "src0": 0, "src1": 1, "dst": 2, "success": true},
+        {"opcode": "DMA_STORE", "tag": 4, "src0": 2, "release_src": true, "success": true}
+      ],
+      "expected_final_banks": ["ready", "ready", "free", "free"],
+      "expected_terminal_state": "done"
+    },
+    {
+      "case_id": "blocked_source_stalls_same_pc",
+      "initial_banks": ["free", "ready", "free", "free"],
+      "commands": [
+        {"opcode": "GEMM", "tag": 9, "src0": 0, "src1": 1, "dst": 2, "success": true}
+      ],
+      "expected_stalled_pc": 0,
+      "expected_terminal_state": "stalled"
+    },
+    {
+      "case_id": "failed_load_no_ready_commit",
+      "initial_banks": ["free", "free", "free", "free"],
+      "commands": [
+        {"opcode": "DMA_LOAD", "tag": 12, "dst": 0, "success": false},
+        {"opcode": "DMA_LOAD", "tag": 13, "dst": 1, "success": true}
+      ],
+      "expected_final_banks": ["fault", "free", "free", "free"],
+      "expected_stopped_before_tag": 13,
+      "expected_terminal_state": "error"
+    },
+    {
+      "case_id": "gemm_destination_alias_rejected",
+      "initial_banks": ["ready", "ready", "free", "free"],
+      "commands": [
+        {"opcode": "GEMM", "tag": 20, "src0": 0, "src1": 1, "dst": 0, "success": true}
+      ],
+      "expected_stalled_pc": 0,
+      "expected_terminal_state": "error"
+    }
+  ]
+}

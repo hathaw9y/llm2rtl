@@ -1,0 +1,196 @@
+{
+  "schema": "llm2rtl.model_trace.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "model_identity": {
+    "model_id": "HuggingFaceTB/SmolLM2-135M",
+    "revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+    "transformers_version": "5.16.1",
+    "source_path": "/home/shmin/.conda/envs/shmin/lib/python3.11/site-packages/transformers/models/llama/modeling_llama.py",
+    "source_sha256": "13e65b752a9c9d8a5c22b83df73009a8940c0eefdc58c101df3eb910e3efc2f9"
+  },
+  "model_snapshot": {
+    "path": "/home/shmin/.cache/huggingface/hub/models--HuggingFaceTB--SmolLM2-135M/snapshots/93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+    "config_sha256": "1d556eab73b69c7f11f64c557a2f9c6f440bd4c6b89bb2584a6b498c92603843",
+    "attention_implementation": "eager",
+    "dtype": "bfloat16"
+  },
+  "model_shape": {
+    "hidden_size": 576,
+    "intermediate_size": 1536,
+    "num_hidden_layers": 30,
+    "num_attention_heads": 9,
+    "num_key_value_heads": 3,
+    "head_dim": 64,
+    "vocab_size": 49152,
+    "max_position_embeddings": 8192,
+    "accelerator_context_max": 1024,
+    "processing_tokens_max": 32
+  },
+  "scope": {
+    "batch": 1,
+    "contiguous_positions_from_zero": true,
+    "custom_position_ids": false,
+    "arbitrary_padding_mask": false,
+    "output": "last_token_full_logits_to_ddr",
+    "token_selection": "outside_model_execution"
+  },
+  "operations": [
+    {
+      "operation_id": "embedding",
+      "semantic_kind": "embedding_lookup",
+      "source_location": "modeling_llama.py:384-390"
+    },
+    {
+      "operation_id": "input_norm",
+      "semantic_kind": "rmsnorm_before_attention",
+      "source_location": "modeling_llama.py:310"
+    },
+    {
+      "operation_id": "qkv",
+      "semantic_kind": "query_key_value_projections",
+      "source_location": "modeling_llama.py:251-257"
+    },
+    {
+      "operation_id": "rope",
+      "semantic_kind": "rotary_position_embedding",
+      "source_location": "modeling_llama.py:137-161,258-259"
+    },
+    {
+      "operation_id": "kv_update",
+      "semantic_kind": "key_value_cache_update_and_fetch",
+      "source_location": "modeling_llama.py:261-262"
+    },
+    {
+      "operation_id": "score",
+      "semantic_kind": "grouped_query_attention_score_and_causal_mask",
+      "source_location": "modeling_llama.py:191-208"
+    },
+    {
+      "operation_id": "softmax",
+      "semantic_kind": "attention_softmax",
+      "source_location": "modeling_llama.py:209-211"
+    },
+    {
+      "operation_id": "value",
+      "semantic_kind": "attention_probability_times_value",
+      "source_location": "modeling_llama.py:212-214"
+    },
+    {
+      "operation_id": "o_proj",
+      "semantic_kind": "attention_output_projection",
+      "source_location": "modeling_llama.py:274-277"
+    },
+    {
+      "operation_id": "attention_residual",
+      "semantic_kind": "attention_residual_add",
+      "source_location": "modeling_llama.py:308-318"
+    },
+    {
+      "operation_id": "ffn_norm",
+      "semantic_kind": "rmsnorm_before_mlp",
+      "source_location": "modeling_llama.py:320"
+    },
+    {
+      "operation_id": "gate_up",
+      "semantic_kind": "gate_and_up_projections",
+      "source_location": "modeling_llama.py:163-176"
+    },
+    {
+      "operation_id": "silu_mul",
+      "semantic_kind": "silu_gate_times_up",
+      "source_location": "modeling_llama.py:176"
+    },
+    {
+      "operation_id": "down_proj",
+      "semantic_kind": "down_projection",
+      "source_location": "modeling_llama.py:176"
+    },
+    {
+      "operation_id": "ffn_residual",
+      "semantic_kind": "ffn_residual_add",
+      "source_location": "modeling_llama.py:321-324"
+    },
+    {
+      "operation_id": "final_norm",
+      "semantic_kind": "final_rmsnorm",
+      "source_location": "modeling_llama.py:412-414"
+    },
+    {
+      "operation_id": "logits",
+      "semantic_kind": "last_token_tied_lm_head",
+      "source_location": "modeling_llama.py:470-478"
+    }
+  ],
+  "workloads": [
+    {
+      "workload_id": "prefill32_decode1",
+      "conditions": {
+        "batch": 1,
+        "prefill_tokens": 32,
+        "decode_tokens": 1,
+        "context_observed": 33
+      },
+      "operations": [
+        "embedding",
+        "input_norm",
+        "qkv",
+        "rope",
+        "kv_update",
+        "score",
+        "softmax",
+        "value",
+        "o_proj",
+        "attention_residual",
+        "ffn_norm",
+        "gate_up",
+        "silu_mul",
+        "down_proj",
+        "ffn_residual",
+        "final_norm",
+        "logits"
+      ]
+    },
+    {
+      "workload_id": "prefill32_prefill32",
+      "conditions": {
+        "batch": 1,
+        "prefill_blocks": [
+          32,
+          32
+        ],
+        "context_observed": 64
+      },
+      "operations": [
+        "embedding",
+        "input_norm",
+        "qkv",
+        "rope",
+        "kv_update",
+        "score",
+        "softmax",
+        "value",
+        "o_proj",
+        "attention_residual",
+        "ffn_norm",
+        "gate_up",
+        "silu_mul",
+        "down_proj",
+        "ffn_residual",
+        "final_norm",
+        "logits"
+      ]
+    }
+  ],
+  "unobserved_paths": [
+    "numerical full-model execution at context length 1024; only 128-bit wire and bounds validated at position 992..1023"
+  ],
+  "unsupported_paths": [
+    "batch greater than one",
+    "arbitrary padding masks",
+    "caller-supplied position IDs",
+    "training, dropout and loss computation",
+    "attention backends other than eager",
+    "on-PL token selection"
+  ]
+}

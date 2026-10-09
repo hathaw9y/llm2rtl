@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"y": "3-bit current state", "w": "1-bit transition input"}, "outputs": {"Y1": "1-bit next-state bit 1"}},
+  "semantics": {"type": "combinational next-state logic only", "evidence": "Implement just the next-state logic for y[1]; interface contains no clock or reset.", "transitions_w0_w1": {"A": ["B", "A"], "B": ["C", "D"], "C": ["E", "D"], "D": ["F", "A"], "E": ["E", "D"], "F": ["C", "D"]}, "reset_initialization": "No reset or initialization specified; no stored state in this module.", "sampling": "Output responds combinationally; verification samples after settling."},
+  "numeric": {"width": 3, "state_codes": {"A": "000", "B": "001", "C": "010", "D": "011", "E": "100", "F": "101"}, "bit": "Y1 is bit 1 of the destination state code"},
+  "verification": {"oracle": "Independent full destination-state table from the original transitions, then select bit 1", "coverage": "All six legal states and both binary w values; repeat in reverse order to check combinational updates", "failure": "$fatal on any mismatch or bounded timeout", "success": "Explicit PASS line after all checks"},
+  "specification_ambiguities": ["The final phrase 'output Y1 is y[1]' is interpreted as next-state bit 1 because the preceding sentence explicitly requests next-state logic.", "States 110 and 111 and unknown inputs have no specified transitions. Invalid states produce x; no functional correctness requirement is inferred for them."]
+}

@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"a": 1, "b": 1, "c": 1}, "outputs": {"w": 1, "x": 1, "y": 1, "z": 1}, "source": "problem.txt port list; all ports one bit"},
+  "semantics": {"connections": {"w": "a", "x": "b", "y": "b", "z": "c"}, "timing": "Continuous combinational wires, no cycle latency or stored state, from original wire connections", "reset": "No reset or clock ports specified", "initialization": "No initialized state; outputs follow current inputs including unknown/high-impedance values under wire semantics"},
+  "numeric": {"width": "Each port is one bit", "operations": "Signal routing only; no arithmetic, rounding, overflow or signed interpretation"},
+  "verification": {"oracle": "Original problem connections a -> w, b -> x and y, c -> z", "coverage": "All 8 binary combinations and all 64 combinations of 0,1,x,z", "sampling": "Check after one simulation time unit of combinational settling; no clock edges apply", "failure": "$fatal on any case-inequality mismatch and bounded timeout", "tools": "Required smoke_environment.py then validate_contract.py then dev_check.py --label initial"},
+  "specification_ambiguities": []
+}

@@ -1,0 +1,32 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "Exact benchmark ports; combinational continuous assignments; incoming transitions match FSM; no registers or latches."
+    },
+    {
+      "name": "Icarus development compile",
+      "result": "pass",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+      "options": "-g2012 -Wall -s dev_tb",
+      "timeout_seconds": 20,
+      "log": "dev_compile.log"
+    },
+    {
+      "name": "development simulation",
+      "result": "pass",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+      "timeout_seconds": 20,
+      "coverage": "All 12 legal one-hot state/input combinations checked against independently encoded transition table.",
+      "log": "dev_simulation.log"
+    }
+  ],
+  "development_outcome": "Initial candidate passed development checks with no RTL revisions. candidate_initial.sv preserved before checks. Outputs are combinational one-bit next-state inputs with no clock, reset, or pipeline.",
+  "limitations": [
+    "Official evaluation was not accessed and results are unknown.",
+    "Invalid one-hot encodings are outside the specified assumption and were not tested.",
+    "No synthesis, Vivado timing evidence, or board validation was produced."
+  ]
+}

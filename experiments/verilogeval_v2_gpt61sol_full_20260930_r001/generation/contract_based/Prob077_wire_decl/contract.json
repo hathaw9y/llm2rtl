@@ -1,0 +1,52 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "c": {
+        "direction": "input",
+        "width": 1
+      },
+      "d": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      },
+      "out_n": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "out = (a & b) | (c & d); out_n = ~out",
+    "structure": "Two intermediate wires each driven by one AND gate, feeding one OR gate driving out; out feeds the inverter driving out_n.",
+    "timing": "Pure combinational continuous response to current inputs after combinational settling; no cycle latency or clock.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization; outputs are determined by current inputs.",
+    "protocol": "No transaction or handshake."
+  },
+  "numeric": {
+    "type": "One-bit unsigned gate signals",
+    "operators": "Bitwise AND, OR and NOT with standard SystemVerilog four-state gate semantics.",
+    "arithmetic": "No addition, rounding, truncation, saturation or overflow."
+  },
+  "verification": {
+    "plan": "Compile candidate.sv and independent dev_tb.sv with Icarus v12, -g2012 and explicit top dev_tb; run matching vvp under finite timeouts.",
+    "coverage": "Exhaust all 16 binary combinations, then repeat in reverse order to check input response without state.",
+    "oracle": "Independent binary truth table: out is high only for input indices 3, 7, 11, 12, 13, 14, 15 with {a,b,c,d} ordering; out_n is its complement.",
+    "comparison": "After each input assignment allow combinational settling and compare both outputs using case inequality; fatal on mismatch; print PASS on completion."
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "llm2rtl.subagent_result.v1",
+  "task": "stream_bank_adapters bounded HDL packet",
+  "status": "complete",
+  "changed_files": [
+    "README.md",
+    "rtl/mm2s_stream_bank_adapter.sv",
+    "rtl/s2mm_stream_bank_adapter.sv",
+    "tb/tb_stream_bank_adapters.sv",
+    "scripts/generate_golden.py",
+    "scripts/run_ooc_synthesis.tcl",
+    "scripts/run_verilator_lint.py",
+    "scripts/run_xsimk.py",
+    "evidence/run_001/*"
+  ],
+  "verification": {"xsim": "pass", "verilator_dut_lint": "pass", "vivado_ooc_mm2s": "pass", "vivado_ooc_s2mm": "pass"},
+  "excluded_attempts": [
+    {"stage": "xsim wrapper", "artifact": "raw/xsim.log", "reason": "xsim Tcl autoload exception; direct xsimk final run is authoritative"},
+    {"stage": "Vivado invocation", "reason": "initial -tclargs option ordering passed log options into argv and failed before synthesis"},
+    {"stage": "Vivado parallel retry", "artifacts": ["raw/vivado_mm2s_retry.log", "raw/vivado_s2mm_retry.log", "ooc_mm2s/", "ooc_s2mm/"], "reason": "orchestrator yield interrupted authoritative completion tracking; fresh individual final runs were used"}
+  ],
+  "authoritative_evidence": ["source_manifest.json", "golden_report.json", "kernel_report.json", "module_ooc_synthesis_report.json", "mm2s_module_ooc_synthesis_report.json", "s2mm_module_ooc_synthesis_report.json", "raw/xsim_direct_final.log", "raw/verilator_lint.log", "raw/vivado_mm2s_final.log", "raw/vivado_s2mm_final.log"],
+  "remaining_risks": ["native-word alignment is an upstream command requirement", "fresh in-context bank_subsystem and routed timing verification remain parent integration work"],
+  "skill_update_candidate": null
+}

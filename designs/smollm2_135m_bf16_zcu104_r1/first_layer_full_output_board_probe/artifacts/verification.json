@@ -1,0 +1,63 @@
+{
+  "checkpoint_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "scope": "first-layer no-KV final ADD accepted writes, all 576 BF16 channels per row",
+  "software_golden": {
+    "prefill32_values": 18432,
+    "single_token_cold_values": 576,
+    "first16_matches_prior_reference": true
+  },
+  "rtl": {
+    "tap_xsim": "PASS 2304 words / 18432 BF16 values",
+    "tap_ooc_bram_tiles": 11.5
+  },
+  "routed": {
+    "clock_mhz": 100,
+    "setup_wns_ns": 1.203,
+    "hold_whs_ns": 0.01,
+    "drc_errors": 0,
+    "lut": 206981,
+    "bram_tiles": 147,
+    "uram": 64,
+    "dsp": 282
+  },
+  "board": {
+    "status": "physical_board_numerical_fail_legacy_gate",
+    "source": "user-provided ZCU104 UART run",
+    "uart_log": "board_uart_full.txt",
+    "uart_sha256": "e908af97f0c3ea1e73bd55d177b38e47080a7caaca9a6fb6d8a260c4599b101c",
+    "analysis": "board_full_output_analysis.json",
+    "scope": "first-layer no-KV final ADD accepted-write values; B0 BRAM storage not independently read back",
+    "prefill32": {
+      "values": 18432,
+      "mean_abs": 0.0033712747196356454,
+      "rmse": 0.0071873626983796285,
+      "reference_rms": 2.127605631474738,
+      "normalized_rmse": 0.0033781461150757287,
+      "max_abs": 0.125,
+      "max_ulp": 30608,
+      "legacy_failures": 282,
+      "abs_above_0_01": 1380,
+      "abs_above_0_05": 47
+    },
+    "single_token_cold": {
+      "values": 576,
+      "mean_abs": 0.0025583902994791665,
+      "rmse": 0.005763218571344178,
+      "reference_rms": 3.8119001023181327,
+      "normalized_rmse": 0.00151190178563163,
+      "max_abs": 0.03125,
+      "max_ulp": 256,
+      "legacy_failures": 4,
+      "abs_above_0_01": 36,
+      "abs_above_0_05": 0
+    },
+    "uart_summary_matches_analysis": true,
+    "note": "All 32 prefill rows and one cold-token row captured; legacy criterion is ULP>16 and absolute error>0.002. Cold token has no populated KV cache and is not context-aware decode."
+  },
+  "artifacts": {
+    "bit": "c858efe6bf7eb515a0b3a35e35598018aabdaf3772ef4b28e0c37eace2a2b599",
+    "xsa": "8456e61bf13a060cd5a464591eaab6e82678c0518a7dfc8a45188865343d0d91",
+    "hwh": "2496ad96f13c6d447d877d618260295569e415c52f94ff7ee40fe2ee90e0c776",
+    "elf": "ccbbe5ce8566412c98dc04c6ec470f5a3fd905e78eb427dc840a75c1efcd74e4"
+  }
+}

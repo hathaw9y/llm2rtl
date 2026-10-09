@@ -1,0 +1,14 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "coverage": "correct fixture passed, injected fault failed, repaired fixture passed"},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "evidence": "development/01", "coverage": "independent shift/XOR oracle, 31 distinct nonzero states and return to seed, repeated periods, held reset, reset during activity, synchronous reset and falling-edge stability"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not occurred.", "No synthesis or board verification performed."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Five-bit right-shifting Galois LFSR with feedback into bits 4 and 2; positive-edge synchronous active-high reset to 5'd1.",
+  "static_review": "Original interface preserved; sized reset constant, nonblocking sequential assignments, no added latency or ports. Initial candidate retained unchanged.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv"}
+}

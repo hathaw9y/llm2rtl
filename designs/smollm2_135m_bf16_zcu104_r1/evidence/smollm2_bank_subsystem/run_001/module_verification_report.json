@@ -1,0 +1,51 @@
+{
+  "module_id": "smollm2_bank_subsystem",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "proof_scope": "Ownership table, role router and 13 XPM banks integrated; no DMA transfer, compute executor, DDR or board",
+  "source_sha256": {
+    "ip/infrastructure/datamover_engine/rtl/bram_bank.sv": "7199594e43e1c9c951067882d31d0baaa1b1e626ab5d5cb14013af9a9de36221",
+    "ip/infrastructure/datamover_engine/rtl/uram_bank.sv": "11520a8bb955d10c89ca6f699d42bcfccd5458e6abee1be67a044dbfdaa92bd1",
+    "ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv": "28de9cc7ad4cb40c822dd3fe17b0a6f8eb8c69fbf5570e7de66a6729611a04ff",
+    "designs/smollm2_135m_bf16_zcu104_r1/modules/smollm2_bank_subsystem.json": "9f3663fd8d67ebb3dd938777ca383e78b7e0ee8d6dafb916580a5d19adde0492",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_bank_port_router.sv": "5c701b91668aadad96e638f4fc7d820a5e02db392cd6f657307599bd5a3736f8",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_bank_memories.sv": "67ee289771f4dc7014f37a184b2c747b798aa2528332563dce7e0a03ee612cf4",
+    "designs/smollm2_135m_bf16_zcu104_r1/rtl/smollm2_bank_subsystem.sv": "e59a36df518f1ebbfd945131b1b9a25aa7b2531049c38b016164d045c4c5c57b",
+    "designs/smollm2_135m_bf16_zcu104_r1/tb/tb_smollm2_bank_subsystem.sv": "68bf86ae7b984734db6ff7778145e0fd26a854e680f68a018ea411a17a2f6412",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_bank_subsystem_xsim.sh": "dd114968a8575aff5ff2c1a447c27a4702a03255932eff82f81c3455d6461da3",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/run_bank_subsystem_ooc.tcl": "4a73e2761892557b3b13a2e7ad2c5ff3bc9d25f2511fe3ed7dee20679a23999c",
+    "designs/smollm2_135m_bf16_zcu104_r1/scripts/bank_memories_clock.xdc": "5127d6af45d0824731a9420894371f0d7825842f4e10d80851efa06bd5a3bbde"
+  },
+  "checks": {
+    "design_structure": "passed_structure_only with expected module SHA-256",
+    "verilator_lint": "PASS with vendor XPM wrapper stubs",
+    "xsim_self_check": "PASS with real XPM models, Vivado XSIM 2025.2",
+    "vivado_ooc_synthesis": "PASS, Vivado 2025.2, xczu7ev-ffvc1156-2-e, 5.000 ns clock",
+    "post_synth_drc": "0 checks found",
+    "board_execution": "not run"
+  },
+  "xsim_scenarios": [
+    "write, release, reacquire by different role and read",
+    "three concurrent banks",
+    "in-place read and write on distinct addresses",
+    "data retention across reset and ownership reset",
+    "wrong-role write rejected and error propagated"
+  ],
+  "post_synth_resources": {
+    "clb_luts": 4586,
+    "clb_registers": 2009,
+    "bram_tiles": 134,
+    "uram": 60,
+    "dsps": 0
+  },
+  "post_synth_timing_ns": {
+    "clock_period": 5.0,
+    "setup_wns": 0.655,
+    "hold_whs": 0.082,
+    "pulse_width_wpws": 1.8
+  },
+  "limitations": [
+    "OOC synthesis is not placed/routed timing or physical board proof.",
+    "DMA adapters, compute executors, DDR transfer and Vitis software are outside this module."
+  ]
+}

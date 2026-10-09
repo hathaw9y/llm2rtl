@@ -1,0 +1,39 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"clk": 1, "areset": 1, "predict_valid": 1, "predict_pc": 7, "train_valid": 1, "train_taken": 1, "train_mispredicted": 1, "train_history": 7, "train_pc": 7},
+    "outputs": {"predict_taken": 1, "predict_history": 7},
+    "vectors": "Unsigned packed vectors [width-1:0]; no additional ports"
+  },
+  "semantics": {
+    "clock": "All state updates on positive clk edge, except asynchronous active-high areset",
+    "state": "7-bit global history and 128 two-bit PHT counters",
+    "prediction": "Combinational predict_history equals current global history; predict_taken equals MSB of PHT[predict_pc XOR current history]. No training bypass. Outputs are continuously driven; meaningful prediction is requested with predict_valid.",
+    "prediction_update": "On rising edge with predict_valid, shift history left one bit and append pre-edge predict_taken as bit 0",
+    "training": "On rising edge with train_valid, update PHT[train_pc XOR train_history] toward train_taken, regardless of train_mispredicted",
+    "recovery": "train_valid AND train_mispredicted overrides prediction history update: history becomes {train_history[5:0], train_taken}",
+    "idle": "History holds without prediction or valid recovery; PHT holds without valid training",
+    "collision": "Simultaneous prediction and training read old counter before the rising edge; only after that edge does the training update become visible",
+    "reset_initialization": "Asynchronous reset clears history to 0 and sets every PHT counter to 2'b01, taking precedence over all requests. No power-up initial construct."
+  },
+  "numeric": {
+    "hash": "7-bit bitwise XOR, all 128 indices legal",
+    "counter_encoding": "Unsigned 00 strongly not taken, 01 weakly not taken, 10 weakly taken, 11 strongly taken; direction is bit 1",
+    "saturation": "Taken increments unless already 3; not taken decrements unless already 0; no wraparound",
+    "history": "Discard previous bit 6 on shift; newest branch direction occupies bit 0"
+  },
+  "verification": {
+    "gate": "Run python3 validate_contract.py and require successful passed_structure_only before writing RTL",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; matching vvp; finite shell timeouts",
+    "oracle": "Independent integer counter array and integer history model; compare public combinational outputs before and after every active edge",
+    "directed": "Asynchronous reset off-edge, reset every PHT index, counter thresholds and both saturation endpoints at every index, same-entry read before write, speculative history shift, misprediction recovery priority, invalid training, idle hold",
+    "random": "Deterministic randomized PCs, histories, outcomes, and valid/misprediction controls, plus reset during activity",
+    "scope": "Development verification only; no official testbench, synthesis, board access or official evaluation results"
+  },
+  "specification_ambiguities": [
+    {"issue": "Reset state values not explicitly specified", "resolution": "Assume global history 0 and all counters weakly not taken (01)"},
+    {"issue": "History shift direction not explicitly specified", "resolution": "Append newest outcome as bit 0, discard oldest bit 6"},
+    {"issue": "Output behavior while predict_valid=0 not specified", "resolution": "Continuously expose current history and indexed prediction; valid only gates speculative state update"}
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {"direction": "input", "width": 1},
+      "load": {"direction": "input", "width": 1},
+      "data": {"direction": "input", "width": 512, "range": "511:0"},
+      "q": {"direction": "output", "width": 512, "range": "511:0"}
+    }
+  },
+  "semantics": {
+    "clock": "All state updates occur on the positive edge of clk.",
+    "load": "If load is high at a rising edge, q becomes the sampled data vector; loading takes priority over evolution.",
+    "evolution": "If load is low at a rising edge, each q[i] becomes old_q[i-1] XOR old_q[i+1], simultaneously for i=0..511.",
+    "boundaries": "Neighbour indices -1 and 512 are constant zero; no wraparound.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "Power-up state is unspecified; no initial state is imposed. Verification starts by loading a known state.",
+    "between_edges": "q retains its value between positive edges; data and load have no asynchronous effect.",
+    "rate": "One load or one evolution per positive edge, with the result visible after that edge."
+  },
+  "numeric": {
+    "cell_type": "512 independent one-bit Boolean states indexed 511:0.",
+    "operation": "Bitwise XOR of two current neighbouring cells; the center value does not participate.",
+    "edge_equations": "next_q[0]=old_q[1]; next_q[511]=old_q[510].",
+    "arithmetic": "No signed arithmetic, accumulation, rounding, saturation, or overflow applies."
+  },
+  "verification": {
+    "oracle": "Independent loop over cell indices, selecting zero for out-of-range neighbours, XORing scalar neighbours from a saved previous state.",
+    "directed": "Load zero, all ones, alternating states, and a single set bit at every position; check loading and subsequent evolution including both boundaries.",
+    "sequential": "Check long evolution sequences and deterministic random reload/evolution sequences, including consecutive loads.",
+    "timing": "Drive inputs away from rising edges, compare after nonblocking updates, and check q stability before rising edges and at falling edges.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts; self-checking PASS or fatal failure."
+  },
+  "specification_ambiguities": []
+}

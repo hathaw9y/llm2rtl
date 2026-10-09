@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "areset": 1, "in": 1}, "outputs": {"out": 1}},
+  "semantics": {
+    "machine": "Moore; output depends only on current state",
+    "clock": "Original: all sequential logic triggered on positive edge of clk; apply one transition per rising edge",
+    "reset": "Original: positive edge triggered asynchronous reset to A; areset high holds A at clock edges",
+    "transitions": {"A": {"0": "A", "1": "B"}, "B": {"0": "C", "1": "B"}, "C": {"0": "A", "1": "D"}, "D": {"0": "C", "1": "B"}},
+    "outputs": {"A": 0, "B": 0, "C": 0, "D": 1},
+    "initialization": "Original specifies reset to A but no power-up state; do not initialize state, test defined behavior after reset",
+    "sampling": "Check output after nonblocking state updates settle, and between rising edges to verify Moore behavior"
+  },
+  "numeric": {"port_widths": "All ports one bit", "states": "Four distinct states, internal two-bit encoding", "arithmetic": "None"},
+  "verification": {"oracle": "Independent integer state model from original transition table", "coverage": "All eight transitions; exhaustive 8-bit input sequences after reset; asynchronous reset from all states; reset held high; output stability between clock edges", "pass": "Fatal on mismatch, bounded timeout, explicit PASS only at completion", "evaluator": "python3 dev_check.py --label initial"},
+  "specification_ambiguities": ["Power-up state before reset and behavior for unknown input values are unspecified; no defined expectations imposed for those cases."]
+}

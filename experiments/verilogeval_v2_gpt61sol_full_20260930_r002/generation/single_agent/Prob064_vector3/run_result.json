@@ -1,0 +1,187 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob064_vector3",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob064_vector3",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob064_vector3/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790749750.792896,
+    "ended_at_unix": 1790749841.1070235,
+    "seconds": 90.31412768363953,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 94773,
+      "cached_input_tokens": 83072,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1573,
+      "reasoning_output_tokens": 11
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "399f112d8675a6ae98e4662d2a4752ef89d7bca0d782c75e96010454bb08a213",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "status": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed as expected",
+          "repair": "passed"
+        }
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; no diagnostics",
+        "simulation": "PASS 1064 concatenation checks",
+        "evidence": "development/01 and dev_checks.jsonl"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not occurred.",
+      "No synthesis or board work performed."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "rtl_files": [
+      "candidate.sv",
+      "candidate_initial.sv"
+    ],
+    "testbench_files": [
+      "dev_tb.sv"
+    ],
+    "interface_cycle_semantics": "Original six 5-bit inputs and four 8-bit outputs; combinational wiring with no clock, reset, or added latency.",
+    "width_decision": "30 input bits followed by two constant one bits form exactly 32 output bits, ordered w then x then y then z.",
+    "static_review": "Single continuous assignment, explicit constant width, no storage or multiple drivers.",
+    "test_coverage": "All-zero, all-one, distinct input vectors, all 30 walking-one and walking-zero positions, 1000 random vectors, and four-state propagation. Independent expected bytes use explicit input slices."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "399f112d8675a6ae98e4662d2a4752ef89d7bca0d782c75e96010454bb08a213",
+      "Prob064_vector3_ref.sv": "8bc8223b5ae69ce879121668936bcf71d42baf79e2b5c85f99203e19352c6cb8",
+      "Prob064_vector3_test.sv": "d2f4468430bdd9224cf9552ab3f9c74967d96acd6b78521002f7a3fd47ae14be"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob064_vector3_test.sv",
+        "Prob064_vector3_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014589871279895306
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb064_vector3_test.sv:44: $finish called at 630 (1ps)\nHint: Output 'w' has no mismatches.\nHint: Output 'x' has no mismatches.\nHint: Output 'y' has no mismatches.\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 126 samples\n\nSimulation finished at 630 ps\nMismatches: 0 in 126 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009400095790624619
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "399f112d8675a6ae98e4662d2a4752ef89d7bca0d782c75e96010454bb08a213",
+      "Prob064_vector3_ref.sv": "8bc8223b5ae69ce879121668936bcf71d42baf79e2b5c85f99203e19352c6cb8",
+      "Prob064_vector3_test.sv": "d2f4468430bdd9224cf9552ab3f9c74967d96acd6b78521002f7a3fd47ae14be"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob064_vector3_test.sv",
+        "Prob064_vector3_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011694114655256271
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb064_vector3_test.sv:44: $finish called at 630 (1ps)\nHint: Output 'w' has no mismatches.\nHint: Output 'x' has no mismatches.\nHint: Output 'y' has no mismatches.\nHint: Output 'z' has no mismatches.\nHint: Total mismatched samples is 0 out of 126 samples\n\nSimulation finished at 630 ps\nMismatches: 0 in 126 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009358257986605167
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

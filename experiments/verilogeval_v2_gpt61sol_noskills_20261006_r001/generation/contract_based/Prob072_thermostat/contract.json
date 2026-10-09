@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"mode": 1, "too_cold": 1, "too_hot": 1, "fan_on": 1},
+    "outputs": {"heater": 1, "aircon": 1, "fan": 1},
+    "extra_ports": false
+  },
+  "semantics": {
+    "heater": "Assert exactly when mode=1 and too_cold=1.",
+    "aircon": "Assert exactly when mode=0 and too_hot=1.",
+    "fan": "Assert when heater or aircon is asserted, or fan_on=1.",
+    "timing": "Combinational; original specifies direct conditions and provides no clock or storage.",
+    "reset": "No reset port or reset behavior specified; none added.",
+    "initialization": "No initial state specified; outputs derive continuously from inputs, with no state."
+  },
+  "numeric": {
+    "domain": "All ports are one-bit Boolean signals.",
+    "arithmetic": "No arithmetic, counters, signedness, or truncation.",
+    "simultaneous_demands": "Mode selects active demand even when too_cold and too_hot are both asserted."
+  },
+  "verification": {
+    "oracle": "Independent procedural mode selection from original prose, followed by fan request or active equipment.",
+    "coverage": "All 16 binary input combinations in ascending and descending order, including both temperature flags and manual fan request.",
+    "sampling": "Apply inputs and sample after 1 ns combinational settling; no clock edges exist.",
+    "failure": "Case-inequality mismatches invoke fatal; bounded timeout; PASS only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    "Behavior for X/Z input values is unspecified; verification covers binary inputs without imposing additional X/Z behavior."
+  ]
+}

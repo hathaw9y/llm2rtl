@@ -1,0 +1,78 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "smollm2_dma_control_fabric_wide",
+  "module_kind": "infrastructure",
+  "status": "frozen",
+  "target": {
+    "board": "ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 200
+  },
+  "routed_opcodes": [
+    "END",
+    "DMA_LOAD",
+    "DMA_STORE",
+    "FENCE",
+    "GEMM",
+    "RMSNORM",
+    "ROPE",
+    "ATTN_SCORE",
+    "SOFTMAX",
+    "ATTN_VALUE",
+    "ADD",
+    "SILU_MUL"
+  ],
+  "interface": {
+    "children": [
+      "isa_command_dispatcher",
+      "bank_tensor_state_tracker",
+      "smollm2_dma_engine_link",
+      "smollm2_bank_subsystem_wide"
+    ],
+    "command": "PS-loaded 128-bit command BRAM read port with two-cycle declared latency",
+    "external_compute": "seven common executor control channels; role-indexed 128-bit bank ports plus 256-bit paired read responses for GEMM roles 3 and 4",
+    "dma": "external 72-bit command, 64-bit data and 8-bit status AXI streams for each DataMover direction",
+    "banks": 13,
+    "local_word_bits": 128,
+    "reserved_roles": [
+      0,
+      1,
+      2
+    ],
+    "gemm_source_read_bits": 256
+  },
+  "numeric": {
+    "kind": "control_and_data_transport",
+    "tensor_arithmetic": "external_compute_only"
+  },
+  "control_rules": {
+    "completion": "Dispatcher releases a LOAD bank only after matching DataMover status and local adapter completion; the bridge delays adapter completion until its final registered 128-bit bank write has drained",
+    "store_read": "The bridge registers each STORE bank read request for one cycle; the adapter uses four cycles from issue to data return, including the bank's three-cycle read latency",
+    "fence": "FENCE waits for bank ownership and all prior DMA/compute completions, including S2MM DDR write status",
+    "chunk": "END/DONE permits PS to replace one command BRAM chunk; bank data and tensor validity survive until explicit reset",
+    "source_validity": "Bank tensor state tracker marks writes valid only after successful matching completion",
+    "compute": "No compute arithmetic is implemented in this module; external executors must obey command and role-bank contracts",
+    "error": "Transport, bank or dispatcher error-drain state asserts recovery indication. A mismatched compute completion retains ownership; control state and vendor DataMover IP must be reset coherently before restarting if no correct completion arrives"
+  },
+  "verification": {
+    "required_cases": [
+      "two command chunks with retained bank data and tensor validity",
+      "DMA_LOAD FENCE waits for DDR status and final registered bank write",
+      "external compute stub reads two XPM banks and writes one",
+      "DMA_STORE FENCE waits for DDR status",
+      "bad DataMover status enters error state without DONE",
+      "mismatched executor bank ID retains ownership and raises recovery indication",
+      "reset clears control validity and ownership",
+      "200 MHz combined OOC synthesis",
+      "legacy 128-bit DMA and compute-stub regression with striped bank subsystem"
+    ],
+    "required_tools": [
+      "self-checking XSIM with XPM and modeled DataMover streams",
+      "Verilator lint",
+      "Vivado out-of-context synthesis"
+    ],
+    "proof_scope": "integrated command/control/bank data flow with a testbench compute stub; no numerical executor, vendor AXI DataMover IP, DDR controller, placed/routed board or Vitis execution"
+  }
+}

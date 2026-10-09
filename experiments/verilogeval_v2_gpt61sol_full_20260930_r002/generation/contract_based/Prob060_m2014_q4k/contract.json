@@ -1,0 +1,50 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "ports": {
+      "clk": "input 1 bit",
+      "resetn": "input 1 bit",
+      "in": "input 1 bit",
+      "out": "output 1 bit"
+    },
+    "source": "problem.txt interface"
+  },
+  "semantics": {
+    "clock": "Positive edge, per original sequential logic requirement",
+    "reset": "Active-low synchronous; when sampled low clear all four flops to zero",
+    "transition": "On each non-reset rising edge: stage1 captures in; stage2 captures previous stage1; stage3 captures previous stage2; stage4 captures previous stage3; out is stage4",
+    "latency": "An input sampled on edge N appears after edge N+3 (four capturing flops)",
+    "initialization": "No initial value specified; no DUT initialization; functional checks begin after synchronous reset",
+    "between_edges": "Output holds, including when resetn changes between rising edges"
+  },
+  "numeric": {
+    "data_width": 1,
+    "storage_bits": 4,
+    "arithmetic": "None; bit transport only"
+  },
+  "verification": {
+    "oracle": "Independent four-element history updated on rising edges from original shift register description",
+    "sampling": "Check after nonblocking updates; also check before rising edge and at falling edge",
+    "cases": [
+      "reset asserted away from rising edges",
+      "reset held across multiple edges",
+      "isolated pulse and alternating bits",
+      "all 16 four-bit patterns",
+      "reset during occupied pipeline",
+      "deterministic varied input sequence"
+    ],
+    "pass": "Fatal on mismatch, bounded timeout, PASS only after completed checks",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {
+      "item": "Reset value not stated explicitly",
+      "resolution": "Interpret resettable D flops as clearing all stages to zero."
+    },
+    {
+      "item": "Initial state not stated",
+      "resolution": "No initialization guarantee or pre-reset known-value assertion."
+    }
+  ]
+}

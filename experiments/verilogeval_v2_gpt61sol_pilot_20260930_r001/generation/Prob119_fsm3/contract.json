@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "module": "TopModule",
+  "interface": {
+    "clk": "input 1 bit",
+    "areset": "input 1 bit",
+    "in": "input 1 bit",
+    "out": "output 1 bit"
+  },
+  "sequential_semantics": "State advances on posedge clk; active-high asynchronous posedge areset sets state A and has priority while high.",
+  "combinational_semantics": "Moore out is 1 exactly in state D; otherwise 0.",
+  "transitions": {
+    "A": {
+      "0": "A",
+      "1": "B"
+    },
+    "B": {
+      "0": "C",
+      "1": "B"
+    },
+    "C": {
+      "0": "A",
+      "1": "D"
+    },
+    "D": {
+      "0": "C",
+      "1": "B"
+    }
+  },
+  "numeric_widths": {
+    "state": 2,
+    "ports": 1
+  },
+  "latency_reset_behavior": "Input sampled on rising clock; output reflects updated state after sequential update. Reset assertion changes state without clock.",
+  "specification_ambiguities": [
+    "State encoding unspecified; use 2-bit enum. Unknown input behavior unspecified."
+  ],
+  "verification_plan": [
+    "Independent state reference from transition table",
+    "Exhaust all 256 eight-bit input sequences from reset",
+    "Cover all eight state/input transitions",
+    "Check asynchronous reset in D and held reset",
+    "Check Moore output stability under input changes between clocks"
+  ]
+}

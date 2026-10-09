@@ -1,0 +1,40 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract gate",
+      "command": "python3 validate_contract.py",
+      "result": "PASS (structure only)",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static RTL review",
+      "result": "PASS: exact TopModule ports, 8-bit permutation, continuous assignment, no state or latches"
+    },
+    {
+      "name": "development compile",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "PASS, exit code 0, no warnings",
+      "log": "compile.log"
+    },
+    {
+      "name": "development simulation",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim",
+      "result": "PASS, exit code 0: 256 binary cases and 16 X/Z cases",
+      "log": "simulation.log"
+    }
+  ],
+  "development_outcome": "Initial candidate passed exhaustive binary and directed four-state development simulation; no RTL revisions needed.",
+  "limitations": [
+    "Official evaluation has not been run or accessed.",
+    "No synthesis, implementation, timing analysis, or board testing performed.",
+    "Contract validation checks structural completeness only."
+  ],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json"
+  }
+}

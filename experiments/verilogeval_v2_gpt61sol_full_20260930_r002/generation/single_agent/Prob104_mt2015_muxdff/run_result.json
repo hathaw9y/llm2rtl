@@ -1,0 +1,185 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob104_mt2015_muxdff",
+  "official_status": "functional_failure",
+  "official_analyzer_code": "R",
+  "workflow_status": "failed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob104_mt2015_muxdff",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/single_agent/Prob104_mt2015_muxdff/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790753874.4126935,
+    "ended_at_unix": 1790753955.7782006,
+    "seconds": 81.36550784111023,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 75927,
+      "cached_input_tokens": 58752,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1413,
+      "reasoning_output_tokens": 10
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "e95312de7bc3aad05412983eaeab4ac5fa50cc2cf4cb2b56508a2a8554f6ba15",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "smoke_environment",
+        "status": "passed",
+        "cases": {
+          "correct": "passed",
+          "injected_fault": "simulation_failed_as_expected",
+          "repair": "passed"
+        }
+      },
+      {
+        "name": "initial",
+        "command": "python3 dev_check.py --label initial",
+        "status": "passed",
+        "simulator": "Icarus Verilog 12",
+        "assertion_checks": 125,
+        "evidence": "development/01"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not run.",
+      "No synthesis or board verification performed."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "implementation": "One-bit rising-edge register captures r_in when L is asserted and q_in otherwise. Original ports are preserved; no reset, initialization, extra ports, or extra latency.",
+    "testbench": "Independent directed oracle checks initial unknown output, all eight binary input combinations repeated three times, selected and unselected unknown/high-impedance data, changes between edges, and falling-edge stability. Includes fatal mismatch detection and bounded timeout.",
+    "static_review": "Single sequential driver, nonblocking assignments, one-bit widths, and original cycle semantics preserved.",
+    "files": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv"
+    }
+  },
+  "final": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "Prob104_mt2015_muxdff_test.sv": "82f72a64b7516b4734b15e1679749cd6a1cdbd335b454d5990861157a75685ba",
+      "candidate.sv": "e95312de7bc3aad05412983eaeab4ac5fa50cc2cf4cb2b56508a2a8554f6ba15",
+      "Prob104_mt2015_muxdff_ref.sv": "257c3835380c39315cefe2325abc26ac916c4a47423ce2eacb32569add966f1c"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob104_mt2015_muxdff_test.sv",
+        "Prob104_mt2015_muxdff_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.01655640546232462
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb104_mt2015_muxdff_test.sv:21: $finish called at 996 (1ps)\nHint: Output 'Q' has 1 mismatches. First mismatch occurred at time 5.\nHint: Total mismatched samples is 1 out of 199 samples\n\nSimulation finished at 996 ps\nMismatches: 1 in 199 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.00902160070836544
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "Prob104_mt2015_muxdff_test.sv": "82f72a64b7516b4734b15e1679749cd6a1cdbd335b454d5990861157a75685ba",
+      "candidate.sv": "e95312de7bc3aad05412983eaeab4ac5fa50cc2cf4cb2b56508a2a8554f6ba15",
+      "Prob104_mt2015_muxdff_ref.sv": "257c3835380c39315cefe2325abc26ac916c4a47423ce2eacb32569add966f1c"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob104_mt2015_muxdff_test.sv",
+        "Prob104_mt2015_muxdff_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012619887478649616
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb104_mt2015_muxdff_test.sv:21: $finish called at 996 (1ps)\nHint: Output 'Q' has 1 mismatches. First mismatch occurred at time 5.\nHint: Total mismatched samples is 1 out of 199 samples\n\nSimulation finished at 996 ps\nMismatches: 1 in 199 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.008698482066392899
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob070_ece241_2013_q2",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob070_ece241_2013_q2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob070_ece241_2013_q2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790737137.577346,
+    "ended_at_unix": 1790737284.6904514,
+    "seconds": 147.11310577392578,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 102794,
+      "cached_input_tokens": 76928,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2685,
+      "reasoning_output_tokens": 173
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "8d8609f45d15bc7f01cdf4fd955b125c40504223586dd0864cb0a80971221252",
+  "contract_sha256": "e283efb8246b246412b19c56b93e35b8873b59451a34c8d10c65e5efa217c1cd",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "frozen contract structural gate",
+        "result": "PASS (passed_structure_only)",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "Icarus SystemVerilog compile and explicit-top elaboration",
+        "result": "PASS",
+        "log": "compile_initial.log",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv"
+      },
+      {
+        "name": "independent truth-table simulation",
+        "result": "PASS",
+        "log": "simulation_initial.log",
+        "coverage": "24 specified-input checks: all 12 constrained input combinations in ascending and descending sweeps; four dont-cares driven without assertions",
+        "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp dev_sim"
+      },
+      {
+        "name": "exhaustive Boolean-cover minimum check",
+        "result": "PASS",
+        "log": "minimality.log",
+        "command": "timeout 20s python3 check_minimality.py"
+      },
+      {
+        "name": "static RTL review",
+        "result": "PASS",
+        "details": "Exact interface, purely combinational continuous assignments, no storage/latches, dependencies, clocks, reset, arithmetic sizing or simulation-only DUT constructs."
+      }
+    ],
+    "development_outcome": "Initial candidate passed development checks; no RTL revisions or contract corrections required. SOP has two products and five literals; POS has three clauses and five literals.",
+    "limitations": [
+      "Official evaluation not accessed or run; results are unavailable.",
+      "Never-occurring input patterns and X/Z input behavior are unconstrained by the original problem.",
+      "No synthesis, timing or board validation performed.",
+      "Contract validator checks structure only; functional evidence comes from independent development checks."
+    ],
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json"
+    },
+    "contract_corrections": []
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob070_ece241_2013_q2_test.sv": "ad7ff166fb60189016215e47895466d4ac6e0982e3ed557d54795685bc3b8b1b",
+      "Prob070_ece241_2013_q2_ref.sv": "0e4448a046ef77c67a55bdc2d71cd1cd26db714b9ee658b1e539b25a65485024",
+      "candidate.sv": "8d8609f45d15bc7f01cdf4fd955b125c40504223586dd0864cb0a80971221252"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob070_ece241_2013_q2_test.sv",
+        "Prob070_ece241_2013_q2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.015275929123163223
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb070_ece241_2013_q2_test.sv:63: $finish called at 535 (1ps)\nHint: Output 'out_sop' has no mismatches.\nHint: Output 'out_pos' has no mismatches.\nHint: Total mismatched samples is 0 out of 107 samples\n\nSimulation finished at 535 ps\nMismatches: 0 in 107 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007873709313571453
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "Prob070_ece241_2013_q2_test.sv": "ad7ff166fb60189016215e47895466d4ac6e0982e3ed557d54795685bc3b8b1b",
+      "Prob070_ece241_2013_q2_ref.sv": "0e4448a046ef77c67a55bdc2d71cd1cd26db714b9ee658b1e539b25a65485024",
+      "candidate.sv": "8d8609f45d15bc7f01cdf4fd955b125c40504223586dd0864cb0a80971221252"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob070_ece241_2013_q2_test.sv",
+        "Prob070_ece241_2013_q2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012287947349250317
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb070_ece241_2013_q2_test.sv:63: $finish called at 535 (1ps)\nHint: Output 'out_sop' has no mismatches.\nHint: Output 'out_pos' has no mismatches.\nHint: Total mismatched samples is 0 out of 107 samples\n\nSimulation finished at 535 ps\nMismatches: 0 in 107 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.007799049839377403
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

@@ -1,0 +1,40 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "x": {
+        "direction": "input",
+        "width": 4
+      },
+      "y": {
+        "direction": "input",
+        "width": 4
+      },
+      "sum": {
+        "direction": "output",
+        "width": 5
+      }
+    }
+  },
+  "semantics": {
+    "function": "Combinational 4-bit addition using four full adders in a ripple-carry chain. Initial carry is zero; final carry drives sum[4].",
+    "timing": "Output responds combinationally to current inputs after propagation; no cycle latency or stored state.",
+    "clock": "none",
+    "reset": "none",
+    "initialization": "No state or initialization required."
+  },
+  "numeric": {
+    "operands": "Unsigned 4-bit binary values, 0 through 15.",
+    "result": "Unsigned 5-bit exact x+y, 0 through 30.",
+    "overflow": "Carry-out is included as sum[4]; no truncation, rounding, or saturation.",
+    "bit_order": "Bit 0 is least significant; carries propagate toward bit 3."
+  },
+  "verification": {
+    "plan": "Independently enumerate all 256 binary input pairs and compare sum against a 5-bit integer-addition oracle after combinational settling.",
+    "coverage": "Includes zero, maximum operands, every carry propagation pattern, and all overflow cases.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts.",
+    "static_review": "Check exact interface, four full-adder equations, zero initial carry, complete combinational assignments and final carry connection."
+  },
+  "specification_ambiguities": []
+}

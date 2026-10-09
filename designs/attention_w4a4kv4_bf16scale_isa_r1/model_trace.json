@@ -1,0 +1,163 @@
+{
+  "scope": "standalone MHA Attention operator, not pretrained model graph",
+  "profile": "attention_tensor_isa_v1",
+  "model_supplied": false,
+  "numeric_reference": {
+    "path": "/home/shmin/llm2rtl/designs/attention_int4_noscale_zcu104_r1/python/attention_reference.py",
+    "sha256": "db69749d8225981610138010b701dfdf6877f9e8136427e6bb7416c330acc790"
+  },
+  "example_shape": {
+    "tokens": 3,
+    "inputs": 33,
+    "heads": 2,
+    "head_dim": 16,
+    "outputs": 33
+  },
+  "operations": [
+    {
+      "pc": 6,
+      "opcode": "QUANTIZE",
+      "reads": [
+        "x"
+      ],
+      "writes": [
+        "x4"
+      ]
+    },
+    {
+      "pc": 7,
+      "opcode": "PROJECT",
+      "reads": [
+        "x4",
+        "wq"
+      ],
+      "writes": [
+        "qfp"
+      ]
+    },
+    {
+      "pc": 8,
+      "opcode": "QUANTIZE",
+      "reads": [
+        "qfp"
+      ],
+      "writes": [
+        "q"
+      ]
+    },
+    {
+      "pc": 9,
+      "opcode": "PROJECT",
+      "reads": [
+        "x4",
+        "wk"
+      ],
+      "writes": [
+        "kfp"
+      ]
+    },
+    {
+      "pc": 10,
+      "opcode": "QUANTIZE",
+      "reads": [
+        "kfp"
+      ],
+      "writes": [
+        "k"
+      ]
+    },
+    {
+      "pc": 11,
+      "opcode": "PROJECT",
+      "reads": [
+        "x4",
+        "wv"
+      ],
+      "writes": [
+        "vfp"
+      ]
+    },
+    {
+      "pc": 12,
+      "opcode": "QUANTIZE",
+      "reads": [
+        "vfp"
+      ],
+      "writes": [
+        "v"
+      ]
+    },
+    {
+      "pc": 13,
+      "opcode": "QK",
+      "reads": [
+        "q",
+        "k"
+      ],
+      "writes": [
+        "scores"
+      ]
+    },
+    {
+      "pc": 14,
+      "opcode": "SOFTMAX",
+      "reads": [
+        "scores",
+        "mask"
+      ],
+      "writes": [
+        "probabilities"
+      ]
+    },
+    {
+      "pc": 15,
+      "opcode": "PV",
+      "reads": [
+        "probabilities",
+        "v"
+      ],
+      "writes": [
+        "context"
+      ]
+    },
+    {
+      "pc": 16,
+      "opcode": "QUANTIZE",
+      "reads": [
+        "context"
+      ],
+      "writes": [
+        "context4"
+      ]
+    },
+    {
+      "pc": 17,
+      "opcode": "PROJECT",
+      "reads": [
+        "context4",
+        "wo"
+      ],
+      "writes": [
+        "output_fp"
+      ]
+    },
+    {
+      "pc": 18,
+      "opcode": "QUANTIZE",
+      "reads": [
+        "output_fp"
+      ],
+      "writes": [
+        "output4"
+      ]
+    }
+  ],
+  "excluded": [
+    "bias",
+    "RoPE",
+    "LayerNorm",
+    "GQA",
+    "persistentKVcache",
+    "FFN"
+  ]
+}

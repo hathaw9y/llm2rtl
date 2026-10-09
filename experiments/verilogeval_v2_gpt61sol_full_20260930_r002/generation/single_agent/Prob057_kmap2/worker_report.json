@@ -1,0 +1,14 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "details": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "evidence": "development/01", "details": "Icarus 12 compilation and simulation passed; all 16 binary input combinations checked against the original Karnaugh map."}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "The original specification defines binary map entries only; no extra unknown-input behavior was imposed.", "No synthesis or board verification performed."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "TopModule preserves the five one-bit ports and implements the map with a continuous Boolean assignment, with no clock, reset, storage, or added latency.",
+  "static_review": "Combinational single-driver output; one-bit Boolean operations; no inferred latches or non-synthesizable DUT constructs.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "check_records": "dev_checks.jsonl"}
+}

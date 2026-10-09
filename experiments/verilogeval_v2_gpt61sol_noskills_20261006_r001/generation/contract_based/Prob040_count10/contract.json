@@ -1,0 +1,59 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1
+    },
+    "outputs": {
+      "q": 4
+    }
+  },
+  "semantics": {
+    "clock": "All state updates occur on the positive edge of clk, per original problem.",
+    "reset": "Active-high synchronous reset: q becomes 0 on a rising edge with reset high; reset has priority over counting.",
+    "count": "On each rising edge with reset low, advance 0 through 9 inclusive, wrapping 9 to 0. Hold state between rising edges.",
+    "initialization": "Original problem specifies no power-up value. No initial assignment; verification establishes state by synchronous reset."
+  },
+  "numeric": {
+    "representation": "4-bit unsigned binary",
+    "sequence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "period_edges": 10
+  },
+  "verification": {
+    "oracle": "Independent integer modulo-10 expected count derived from original problem.",
+    "sampling": "Drive reset away from rising edges; check outputs after NBA updates and before edges to verify synchronous behavior.",
+    "cases": [
+      "reset asserted between edges",
+      "reset priority at nonzero counts and at 9",
+      "multiple full decade periods",
+      "reset held over multiple rising edges",
+      "state holds on falling edges"
+    ],
+    "failure": "Use case inequality and $fatal, bounded timeout, and PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Power-up state",
+      "evidence": "The original problem specifies synchronous reset but no initial value.",
+      "resolution": "Do not impose an initial output requirement; apply reset before counting checks."
+    },
+    {
+      "topic": "States 10 through 15",
+      "evidence": "The original problem defines counting from 0 through 9 only.",
+      "resolution": "No requirement for forced invalid states; test reachable states after reset."
+    }
+  ]
+}

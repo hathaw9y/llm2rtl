@@ -1,0 +1,62 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "c": {
+        "direction": "input",
+        "width": 1
+      },
+      "w": {
+        "direction": "output",
+        "width": 1
+      },
+      "x": {
+        "direction": "output",
+        "width": 1
+      },
+      "y": {
+        "direction": "output",
+        "width": 1
+      },
+      "z": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "connections": {
+      "w": "a",
+      "x": "b",
+      "y": "b",
+      "z": "c"
+    },
+    "timing": "Continuous combinational connections; no clock or cycle latency. Outputs track current inputs after combinational settling.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization; outputs are determined by current inputs.",
+    "handshake": "None."
+  },
+  "numeric": {
+    "type": "One-bit unsigned signals",
+    "arithmetic": "None; direct bit-preserving connections.",
+    "rounding_overflow_saturation": "Not applicable.",
+    "simulation": "Direct connections propagate 0, 1, X and Z without transformation."
+  },
+  "verification": {
+    "plan": "Independently drive all eight binary input combinations and all 64 four-state combinations; check each output against its specified source using case inequality after settling.",
+    "oracle": "w equals a, x equals b, y equals b, z equals c.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp.",
+    "termination": "Finite compile and simulation shell timeouts plus testbench watchdog.",
+    "scope": "Development checks only; no official evaluation, synthesis or board claims."
+  },
+  "specification_ambiguities": []
+}

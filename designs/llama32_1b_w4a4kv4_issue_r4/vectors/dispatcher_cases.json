@@ -1,0 +1,56 @@
+{
+  "schema": "llm2rtl.dispatcher_vectors.v2",
+  "cases": [
+    {
+      "case_id": "two_independent_loads_issue_before_completion",
+      "commands": [
+        {"opcode": "DMA_LOAD", "bank": 1},
+        {"opcode": "DMA_LOAD", "bank": 2},
+        {"opcode": "END"}
+      ],
+      "events": ["issue:0", "issue:1", "see_end:2", "complete_load:1", "complete_load:2"],
+      "expected_issue_order": [0, 1],
+      "expected_max_outstanding": 2,
+      "expected_terminal": "done"
+    },
+    {
+      "case_id": "same_bank_second_load_stalls",
+      "commands": [
+        {"opcode": "DMA_LOAD", "bank": 3},
+        {"opcode": "DMA_LOAD", "bank": 3},
+        {"opcode": "END"}
+      ],
+      "events": ["issue:0", "stall:1", "complete_load:3", "issue:1", "see_end:2", "complete_load:3"],
+      "expected_issue_order": [0, 1],
+      "expected_stalled_pc": 1,
+      "expected_terminal": "done"
+    },
+    {
+      "case_id": "loads_then_gemm_then_store",
+      "commands": [
+        {"opcode": "DMA_LOAD", "bank": 1},
+        {"opcode": "DMA_LOAD", "bank": 2},
+        {"opcode": "GEMM", "src1": 1, "src2": 2, "dst": 3},
+        {"opcode": "DMA_STORE", "bank": 3},
+        {"opcode": "END"}
+      ],
+      "events": ["issue:0", "issue:1", "stall:2", "complete_load:1", "complete_load:2", "issue:2", "stall:3", "complete_gemm:3", "issue:3", "see_end:4", "complete_store:3"],
+      "expected_issue_order": [0, 1, 2, 3],
+      "expected_max_outstanding": 2,
+      "expected_terminal": "done"
+    },
+    {
+      "case_id": "completion_error_stops_issue_and_drains",
+      "commands": [
+        {"opcode": "DMA_LOAD", "bank": 4},
+        {"opcode": "DMA_LOAD", "bank": 5},
+        {"opcode": "DMA_LOAD", "bank": 6},
+        {"opcode": "END"}
+      ],
+      "events": ["issue:0", "issue:1", "error_load:4", "complete_load:5"],
+      "expected_issue_order": [0, 1],
+      "expected_not_issued_pc": 2,
+      "expected_terminal": "error"
+    }
+  ]
+}

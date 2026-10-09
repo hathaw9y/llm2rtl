@@ -1,0 +1,125 @@
+{
+  "schema": "llm2rtl.kernel_report.v1",
+  "status": "passed",
+  "design_id": "llama32_1b_w4a4kv4_seq",
+  "revision": "r2",
+  "module_id": "isa_command_dispatcher",
+  "agent_role": "command_bram_fetch_in_order_scoreboard_dispatch",
+  "coverage_level": "target_infrastructure_control_rtl",
+  "contract_sha256": "91dc7aa4d20d9378fdb2357492b7c4650d49fe9de81cde587661061b26addf1f",
+  "source_sha256": "c41b0e4b188f1f9dd8ab3549af8560dc55cc6bdcd56e6a471f77584c92a3d603",
+  "source_manifest_sha256": "95df1c05474e3dce53f5193138b782c466ec11388845ca487fcc27880122ddb2",
+  "source_manifest": {
+    "rtl_sha256": "c41b0e4b188f1f9dd8ab3549af8560dc55cc6bdcd56e6a471f77584c92a3d603",
+    "testbench_sha256": "0fb1ab28d66464dfcc6ef45c1e2decc199fb94bb974927eaa6702dc2ff5eda36",
+    "vivado_tcl_sha256": "13e93b56f1563d3bfd1c72e2909c900d6b687eac547006647806a57a9e4e0de4"
+  },
+  "test_vector_sha256": "be200fb398a7e2a1485d2256d2acea914b741a0a9db2f134b5476fbb0fdb14e3",
+  "verification_report_sha256": "42dfd435712cc5ac0c9ea2b27efa550bf7ca8c8de7fe4cd90de86b5fabb7e583",
+  "interface_contract": {
+    "clock": "aclk",
+    "reset": "synchronous active-low aresetn",
+    "instruction_width_bits": 256,
+    "command_bram_word_bits": 128,
+    "command_bram_read_latency_cycles": 1,
+    "request_protocol": "ready_valid",
+    "response_protocol": "ready_valid",
+    "single_pc": true,
+    "maximum_outstanding_commands": 1
+  },
+  "r2_corrections": {
+    "request_valid_independent_of_executor_ready": true,
+    "request_payload_stable_until_handshake": true,
+    "gemm_destination_source_alias_rejected": true,
+    "gemm_equal_sources_distinct_destination_legal": true
+  },
+  "implemented_behavior": {
+    "fsm": ["IDLE", "FETCH_LO", "FETCH_HI", "CHECK_READY", "ISSUE", "WAIT_COMPLETION", "DONE_STATE", "ERROR_STATE"],
+    "fetch": "lower 128-bit word then upper 128-bit word for current PC only",
+    "blocked_policy": "hold current decoded command without lookahead",
+    "issue_policy": "eligible command enters ISSUE without observing executor ready; selected request valid then remains asserted until handshake",
+    "reservation_policy": "bank reservation commits only on request valid-and-ready",
+    "completion_policy": "PC advances only after matching successful response handshake",
+    "queue_policy": "no ring queue and no producer/consumer index"
+  },
+  "latency": {
+    "minimum_start_accept_to_request_valid_cycles": 5,
+    "minimum_start_accept_to_request_accept_cycles": 6,
+    "executor_completion_latency": "external and variable",
+    "initiation_interval": "one complete command including its response; maximum one outstanding"
+  },
+  "simulation": {
+    "tool": "Vivado XSIM 2025.2 exact xsimk snapshot",
+    "status": "passed",
+    "pass_marker": "PASS: isa_command_dispatcher r2 strict ready-valid verification",
+    "log": "xsim_direct.log",
+    "log_sha256": "42dfd435712cc5ac0c9ea2b27efa550bf7ca8c8de7fe4cd90de86b5fabb7e583",
+    "coverage": [
+      "normal DMA_LOAD DMA_LOAD GEMM DMA_STORE strict order",
+      "blocked current command no-lookahead and no later fetch",
+      "DMA and GEMM valid-before-ready without deadlock",
+      "all 256 request payload bits equal fetched commands",
+      "DMA and GEMM payload stability under backpressure",
+      "zero and 1025 command count rejection",
+      "1024 commands execute through PC 1023 and BRAM word 2047",
+      "unknown opcode and out-of-range bank rejection",
+      "GEMM destination-source alias rejection",
+      "GEMM equal-source distinct-destination acceptance",
+      "GEMM release flags",
+      "DMA_STORE error source rollback",
+      "GEMM error source preservation and destination fault",
+      "later-command suppression after error",
+      "completion tag mismatch",
+      "reset in FETCH_LO FETCH_HI CHECK_READY ISSUE WAIT_COMPLETION",
+      "repeated successful execution"
+    ]
+  },
+  "verilator": {
+    "executable": "/usr/bin/verilator",
+    "version": "Verilator 4.038 2020-07-11 rev v4.036-114-g0cd4a57ad",
+    "version_log_sha256": "e9af8edbc4366e97ab35cf36cc274bf8d63b74abd46f00b89eb874fc502f2774",
+    "executable_log_sha256": "def795f8a5eff044d5bdffaab518842771cd519c568fb08248414050886c7721",
+    "command": "/usr/bin/verilator --lint-only --Wall --Wno-fatal designs/llama32_1b_w4a4kv4_seq_r2/rtl/isa_command_dispatcher.sv",
+    "status": "passed",
+    "warning_count": 0
+  },
+  "vivado": {
+    "version": "2025.2 build 6299465",
+    "stage": "post_synth_ooc",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_period_ns": 5.0,
+    "clock_frequency_mhz": 200.0,
+    "status": "passed",
+    "wns_ns": 3.057,
+    "tns_ns": 0.0,
+    "setup_failing_endpoints": 0,
+    "whs_ns": 0.091,
+    "ths_ns": 0.0,
+    "hold_failing_endpoints": 0,
+    "wpws_ns": 2.225,
+    "tpws_ns": 0.0,
+    "pulse_width_failing_endpoints": 0,
+    "ooc_clock_source": "BUFGCE_HDIO_X0Y2",
+    "ooc_external_hold_policy": "Only unplaced external-port ingress/egress hold paths are excluded; all DUT register-to-register setup and hold paths remain timed.",
+    "drc_checks_found": 0,
+    "methodology_checks_found": 0,
+    "timing_report_sha256": "2236edd3d5dc96151984103d9796add8ae851b26209b8bd3fee1243458b2838d"
+  },
+  "resources": {
+    "clb_luts": 164,
+    "clb_registers": 296,
+    "dsp": 0,
+    "bram_tiles": 0,
+    "uram": 0,
+    "bonded_iob": 0,
+    "assessment": "fixture_control_scaffold"
+  },
+  "does_not_claim": [
+    "AXI BRAM Controller or PS register wrapper",
+    "DMA or GEMM executor implementation",
+    "tensor arithmetic correctness",
+    "full-model execution",
+    "post-place or post-route timing",
+    "board integration, bitstream, or physical-board validation"
+  ]
+}

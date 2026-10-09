@@ -1,0 +1,39 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "label": "initial",
+      "status": "passed",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "self_check_count": 2609,
+      "evidence_directory": "development/01",
+      "coverage": [
+        "Uninitialized state before loading",
+        "Positive-edge updates and stable state between edges",
+        "Zero and all-one states",
+        "Every single-cell position including both boundaries",
+        "Alternating and random states with multiple evolution cycles",
+        "Consecutive loads and load priority"
+      ]
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Finite directed and randomized simulation does not exhaust all 512-bit states."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Positive-edge synchronous load; otherwise XOR the two neighboring cell vectors with zero at both external boundaries.",
+  "initial_snapshot": "candidate_initial.sv"
+}

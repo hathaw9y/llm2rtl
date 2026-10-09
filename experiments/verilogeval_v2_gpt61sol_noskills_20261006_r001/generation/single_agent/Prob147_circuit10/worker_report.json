@@ -1,0 +1,33 @@
+{
+  "revision_count": 1,
+  "checks": [
+    {
+      "label": "smoke_environment",
+      "status": "passed",
+      "details": "Correct fixture passed, injected fault failed, repair passed."
+    },
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence": "development/01",
+      "details": "At 125 ns state was 0 instead of 1."
+    },
+    {
+      "label": "revision_1",
+      "status": "passed",
+      "evidence": "development/02",
+      "details": "Icarus 12 compile and simulation passed all 55 checks."
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not been run."
+  ],
+  "justified_rtl_changes": [
+    "Revision 1 replaces AND-only state capture with majority feedback: 00 clears, 11 sets, unequal inputs hold. Original waveform at 125 ns and 135 ns requires holding state 1. q remains state XOR a XOR b."
+  ],
+  "justified_tb_changes": [
+    "Preserved prior testbench as dev_tb_before_directed_extension.sv. Added complete binary state-transition checks to the directed truth-table cases; original waveform expectations and timestamps were unchanged."
+  ],
+  "timing": "At simultaneous rising-clock/input timestamps, clock samples preceding input values and input updates settle in the NBA phase; checks sample 1 ps later. Initial unknown state is checked and no reset or initialization is added."
+}

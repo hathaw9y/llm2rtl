@@ -1,0 +1,17 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "compile": "Icarus 12, -g2012 -Wall -Wno-timescale; no diagnostics", "simulation": "PASS 1064 concatenation checks", "evidence": "development/01 and dev_checks.jsonl"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not occurred.", "No synthesis or board work performed."],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "interface_cycle_semantics": "Original six 5-bit inputs and four 8-bit outputs; combinational wiring with no clock, reset, or added latency.",
+  "width_decision": "30 input bits followed by two constant one bits form exactly 32 output bits, ordered w then x then y then z.",
+  "static_review": "Single continuous assignment, explicit constant width, no storage or multiple drivers.",
+  "test_coverage": "All-zero, all-one, distinct input vectors, all 30 walking-one and walking-zero positions, 1000 random vectors, and four-state propagation. Independent expected bytes use explicit input slices."
+}

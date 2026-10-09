@@ -1,0 +1,36 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": [],
+    "outputs": {
+      "zero": {
+        "width": 1,
+        "direction": "output"
+      }
+    },
+    "evidence": "Original interface: output zero; all ports one bit unless otherwise specified."
+  },
+  "semantics": {
+    "equation": "zero = 1'b0 continuously",
+    "clock": "none; original interface has no inputs",
+    "reset": "none; original interface has no reset",
+    "latency": "no clock or added latency",
+    "initialization": "constant LOW from simulation initialization after continuous assignment settles; no state or specified unknown period",
+    "evidence": "The module should always outputs a LOW."
+  },
+  "numeric": {
+    "width_bits": 1,
+    "value": 0,
+    "arithmetic": "none",
+    "rounding_overflow": "not applicable"
+  },
+  "verification": {
+    "oracle": "Original problem requires zero strictly equal to one-bit LOW",
+    "sampling": "time-zero after delta settling, then repeated checks at positive times",
+    "unknown_detection": "case inequality rejects X and Z",
+    "timeout": "bounded independent watchdog",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

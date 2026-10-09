@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 import datamover_engine_pkg::*;
 module tb_engine_integration;
-  parameter integer BANK_DATA_WIDTH=32, BANK_READ_LAT=1;
+  parameter integer BANK_DATA_WIDTH=32, BANK_READ_LAT=3;
   localparam integer BANK_NUM=2, BANK_WIDTH=1;
   logic  clk = '0;
   logic  rstn = '0;
@@ -182,7 +182,7 @@ module tb_engine_integration;
     .s_axis_s2mm_tready(w_bank_tready),
     .s_axis_s2mm_tlast(w_bank_tlast));
   for(genvar b=0;b<BANK_NUM;b=b+1) begin: banks
-    integration_bank #(.WIDTH(BANK_DATA_WIDTH),.LATENCY(BANK_READ_LAT)) bank(
+    integration_bank #(.WIDTH(BANK_DATA_WIDTH),.BANK_READ_LAT(BANK_READ_LAT)) bank(
       .clk(clk),.rstn(rstn),.contend(contend),
       .wr_req(wr_req[b]),.rd_req(rd_req[b]),.wr_grant(wr_grant[b]),.rd_grant(rd_grant[b]),
       .wr_start(r_adapter_start[b]),.rd_start(w_adapter_start[b]),

@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "outcome": "passed",
+      "details": "TopModule has exactly one one-bit output named one, driven continuously by the sized constant 1'b1. No clock, reset, state, or simulation-only constructs are present."
+    },
+    {
+      "name": "development compile",
+      "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+      "arguments": "-g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "timeout_seconds": 20,
+      "exit_code": 139,
+      "outcome": "tool_failed",
+      "log": "development_compile.log",
+      "details": "Compiler returned exit code 139 with no diagnostic output. Exit status preserved in development_status.log."
+    },
+    {
+      "name": "development simulation",
+      "outcome": "not_run",
+      "details": "Compilation failed; matching vvp was not run."
+    }
+  ],
+  "development_outcome": "Initial implementation retained after static review; development compilation failed and simulation success is not claimed.",
+  "limitations": [
+    "No successful development simulation due to compiler tool failure.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing, or board checks performed."
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "stage": "pre-repair_read_only_boundary_review",
+  "baseline_identity_all_pins_match": true,
+  "findings": [
+    {
+      "module": "gemm",
+      "issue": "Several additional variable-divisor cones remain beyond response ar/stride",
+      "locations": [
+        170,
+        171,
+        172,
+        211,
+        214,
+        215,
+        255,
+        278,
+        281,
+        282,
+        287
+      ],
+      "recommendation": "Separate handshake request, response, and stage-capture row/chunk/head/token counters; carry QK causal metadata through fixed96tag sparebits to FIFO/epilogue; no divide decode in output stall path"
+    },
+    {
+      "module": "gemm",
+      "issue": "Odd16-byte source alignment uses current response highhalf plus previous A_high address",
+      "locations": [
+        338,
+        342
+      ],
+      "recommendation": "Counters must reproduce previousword write and sourcehead/query masking, including paddedL1/33 andM17headwrap; avoid metadata advancement until response consumed"
+    },
+    {
+      "module": "quantization",
+      "issue": "Independent REDUCE/STREAM sequencing and held child offer counters",
+      "locations": [
+        189,
+        192,
+        211,
+        216,
+        266,
+        330
+      ],
+      "recommendation": "Advance row/head/feature/group only bundleaccepted; rewind reduction->stream; held error offer retains original scale/mask/tag; relativeA groups not originalsource groups"
+    },
+    {
+      "module": "sharedchildren",
+      "issue": "Any shared arithmetic edit affects both closures and frozen latency association",
+      "recommendation": "Single child source ownership and independent fresh arithmetic gate; preserve rawquotient and double-rounding semantics; cannot inherit historical child PASS"
+    }
+  ],
+  "notes": [
+    "All BF16 feature/head/group lengths multiples4 allow uniform4lane group without crossover",
+    "No numerical/ISA changes, relaxed clock or timing exception authorized",
+    "Current packet/user authorization supersedes stale prior bringup hold metadata"
+  ]
+}

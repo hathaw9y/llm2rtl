@@ -1,0 +1,25 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {"correct": "passed", "injected_fault": "simulation_failed", "repair": "passed"}
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "label": "initial",
+      "status": "passed",
+      "coverage": "All 16 binary input combinations traversed forward and backward; outputs sampled after combinational settling.",
+      "evidence_directory": "development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not been run.",
+    "Unknown-input behavior is not specified by the original problem and is not tested."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Combinational heater enabled by heating mode and too_cold; aircon enabled by cooling mode and too_hot; fan enabled by either appliance or fan_on. No clock or reset is specified. Initial RTL snapshot preserved before development checks."
+}

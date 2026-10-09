@@ -1,0 +1,8 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"a": 1, "b": 1}, "outputs": {"out": 1}, "extra_ports": false},
+  "semantics": {"function": "out is the combinational AND of a and b", "evidence": "Original problem: implement a 2-input AND gate", "cycles": "No clock or latency; settle combinational output before sampling", "reset": "No reset port or reset behavior specified", "initialization": "No stored state or initialization specified"},
+  "numeric": {"width": "All ports are one bit per original interface", "truth_table": {"00": 0, "01": 0, "10": 0, "11": 1}, "four_state": "Standard Verilog AND propagation; zero dominates unknown or high impedance"},
+  "verification": {"oracle": "Explicit truth table derived from original AND gate requirement", "cases": "All four binary input combinations, repeated transitions, and supplemental four-state cases", "sampling": "One time unit after each input change", "failure": "$fatal on mismatch or bounded timeout", "success": "PASS line after all checks"},
+  "specification_ambiguities": ["Original text does not explicitly describe X/Z behavior; use standard Verilog bitwise AND semantics, with four-state checks supplemental to the binary truth table."]
+}

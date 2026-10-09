@@ -1,0 +1,30 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"sel": 1, "a": 8, "b": 8},
+    "outputs": {"out": 1},
+    "evidence": "Original module declares scalar out; explicit harness instruction requires preserving original ports and widths."
+  },
+  "semantics": {
+    "selection": "sel=0 selects a; sel=1 selects b. Selected byte is assigned to the original scalar output, retaining bit zero.",
+    "timing": "Combinational continuous assignment with no clock, reset, state, or added latency, as in the original implementation.",
+    "initialization": "No initialization is specified; output follows the current inputs.",
+    "unknown_selector": "Use conditional operator bit merging for unknown sel; this is a language-defined implementation choice, not an explicit specification requirement."
+  },
+  "numeric": {
+    "inputs": "Unsigned eight-bit vectors",
+    "output_conversion": "Assignment to scalar out truncates selected vector to bit zero.",
+    "bug": "Scalar bitwise selector does not replicate across a byte; conditional selection expresses the intended mux operation."
+  },
+  "verification": {
+    "oracle": "For known selector, compare out with selected input bit zero, following declared output width and harness constraint.",
+    "coverage": "Exhaust all 256 by 256 input pairs for both selector values; check unknown initial inputs and unknown selector merging at bit zero.",
+    "sampling": "Wait one nanosecond after each combinational stimulus update.",
+    "failure": "Use fatal mismatches and bounded timeout; print PASS only after checks finish."
+  },
+  "specification_ambiguities": [
+    "The phrase 8-bit 2-to-1 mux suggests an eight-bit output, but the supplied declaration has scalar out. The explicit instruction to preserve original widths takes precedence, so output remains scalar. Official expected width is unavailable.",
+    "Four-state behavior is not explicitly specified; conditional operator semantics are used."
+  ]
+}

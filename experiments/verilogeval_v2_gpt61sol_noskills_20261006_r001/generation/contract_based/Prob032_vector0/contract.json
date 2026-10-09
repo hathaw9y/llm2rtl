@@ -1,0 +1,26 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {"vec": "3-bit vector [2:0]"},
+    "outputs": {"outv": "3-bit vector [2:0]", "o2": "1 bit", "o1": "1 bit", "o0": "1 bit"}
+  },
+  "semantics": {
+    "behavior": "outv equals vec; o0 equals vec[0], o1 equals vec[1], o2 equals vec[2]",
+    "timing": "Combinational connections with no clock or cycle latency, grounded in the original request to output the same vector and connect each position",
+    "reset": "No reset port or reset behavior specified",
+    "initialization": "No stored state or initialization specified; outputs follow input values once combinational assignments settle"
+  },
+  "numeric": {
+    "width": 3,
+    "bit_order": "Position 0 is vec[0], position 1 is vec[1], position 2 is vec[2]",
+    "operations": "Direct bit connections; no arithmetic or signed interpretation"
+  },
+  "verification": {
+    "oracle": "Original problem's vector equality and individual positional connections",
+    "cases": "Exhaustive eight binary inputs, repeated transitions, and four-state propagation checks",
+    "sampling": "Check after one simulation time unit for combinational settling",
+    "failure": "$fatal on any mismatch or bounded timeout; PASS only after all checks"
+  },
+  "specification_ambiguities": []
+}

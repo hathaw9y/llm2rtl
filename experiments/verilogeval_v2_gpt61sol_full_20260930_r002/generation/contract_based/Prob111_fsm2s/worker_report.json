@@ -1,0 +1,40 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "status": "simulation_failed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob111_fsm2s/development/01"
+    },
+    {
+      "label": "initial_tb_corrected",
+      "status": "passed",
+      "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob111_fsm2s/development/02"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_gate": "passed_structure_only",
+  "limitations": [
+    "Development verification only; official evaluation was not accessed.",
+    "Power-up state and X/Z input behavior are unspecified in the original problem.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [
+    {
+      "preserved_old_version": "dev_tb_before_timing_fix.sv",
+      "reason": "Initial step task waited through a falling edge after its checked rising edge, so the next step waited through another rising edge with old inputs. The oracle failed to account for that real state transition. Replace that final falling-edge wait with an intra-cycle delay, leaving exactly one rising edge per step. Expected transition values and all coverage checks retained."
+    }
+  ],
+  "rtl_files": [
+    "candidate.sv",
+    "candidate_initial.sv"
+  ],
+  "testbench": "dev_tb.sv",
+  "interface_cycle_contract": "TopModule with original five single-bit ports; rising-edge state update; active-high synchronous reset to OFF; Moore output with no additional latency.",
+  "numeric_widths": "One-bit enum OFF=0 ON=1; no arithmetic.",
+  "static_review": "Single state register driver, complete next-state assignment, explicit enum if/else, no added ports or initialization.",
+  "verification_summary": "Icarus 12 compile and simulation passed with 482 comparisons covering both states, every binary input pair, reset priority, reset in ON, and between-edge output stability.",
+  "initial_snapshot_unchanged": true
+}

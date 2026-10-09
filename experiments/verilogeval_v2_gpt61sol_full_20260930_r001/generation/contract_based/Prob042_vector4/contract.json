@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 8,
+        "range": "[7:0]"
+      },
+      "out": {
+        "direction": "output",
+        "width": 32,
+        "range": "[31:0]"
+      }
+    }
+  },
+  "semantics": {
+    "behavior": "Purely combinational: out[7:0] equals in and each bit out[31:8] equals in[7].",
+    "timing": "No clock or cycle latency; output follows input after combinational settling.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No internal state or initialization required.",
+    "handshake": "None; all input bit patterns are legal."
+  },
+  "numeric": {
+    "input_interpretation": "8-bit two's-complement signed value, range -128 through 127.",
+    "output_interpretation": "Same value represented in 32-bit two's complement.",
+    "operation": "Concatenate 24 copies of in[7] followed by in[7:0].",
+    "rounding_truncation_overflow": "None; extension preserves every input bit and signed value."
+  },
+  "verification": {
+    "plan": "Independent self-checking simulation of all 256 binary input patterns. Compute expected signed integer as input value for 0..127, or input value minus 256 for 128..255, then compare its 32-bit representation against out.",
+    "boundaries": [
+      0,
+      127,
+      128,
+      255
+    ],
+    "timing": "Drive each input and allow one simulation time unit to settle before checking.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; matching vvp; finite external timeouts.",
+    "static_review": "Check exact ports, widths, continuous combinational assignment, no state and synthesizable source."
+  },
+  "specification_ambiguities": []
+}

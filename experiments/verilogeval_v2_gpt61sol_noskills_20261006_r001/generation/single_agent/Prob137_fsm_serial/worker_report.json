@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "smoke_environment",
+      "status": "passed",
+      "cases": {
+        "correct_fixture": "passed",
+        "deliberately_wrong_fixture": "simulation_failed_as_expected",
+        "repaired_fixture": "passed"
+      }
+    },
+    {
+      "name": "dev_check",
+      "label": "initial",
+      "status": "passed",
+      "evidence_directory": "development/01",
+      "compile_returncode": 0,
+      "simulation_returncode": 0,
+      "samples_checked": 5846
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not been run.",
+    "The specification does not define pre-reset state; checks begin with synchronous reset."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "FSM detects a low start bit, consumes eight data samples, and pulses done upon a high stop sample. An invalid stop enters recovery until a high sample, with no done pulse for recovery. Active-high reset is synchronous.",
+  "verification": "Independent protocol countdown oracle checks output after rising edges and stability between edges. Includes all byte values, consecutive frames, prolonged invalid stop recovery, reset at frame boundaries and during recovery, and randomized input and reset. Testbench includes fatal mismatches and a bounded timeout.",
+  "artifacts": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "dev_checks.jsonl", "development/01"]
+}

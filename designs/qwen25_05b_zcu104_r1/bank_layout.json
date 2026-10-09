@@ -1,0 +1,310 @@
+{
+  "schema": "llm2rtl.bank_layout.v1",
+  "design_id": "qwen25_05b_zcu104",
+  "revision": "r1",
+  "status": "draft",
+  "ownership_model": {
+    "mode": "single_exclusive_lock_per_bank",
+    "acquire": "All operand banks atomically acquired with command handshake",
+    "release": "Matching port-role completion releases ownership; valid data state separate from busy lock",
+    "port_role_names": {
+      "END": [],
+      "DMA_LOAD": [
+        "datamover_executor.dst"
+      ],
+      "DMA_STORE": [
+        "datamover_executor.src"
+      ],
+      "GEMM_W4": [
+        "gemm_executor.activation",
+        "gemm_executor.packed_weight",
+        "gemm_executor.scales",
+        "gemm_executor.bias",
+        "gemm_executor.output"
+      ],
+      "DEQUANT": [
+        "vector_executor.packed_weight",
+        "vector_executor.scales",
+        "vector_executor.output"
+      ],
+      "RMSNORM": [
+        "rmsnorm_executor.activation",
+        "rmsnorm_executor.gamma",
+        "rmsnorm_executor.output"
+      ],
+      "ROPE": [
+        "rope_executor.activation",
+        "rope_executor.cos",
+        "rope_executor.sin",
+        "rope_executor.output"
+      ],
+      "ATTENTION": [
+        "attention_executor.q",
+        "attention_executor.k",
+        "attention_executor.v",
+        "attention_executor.output"
+      ],
+      "ADD": [
+        "vector_executor.a",
+        "vector_executor.b",
+        "vector_executor.output"
+      ],
+      "SILU_MUL": [
+        "vector_executor.gate",
+        "vector_executor.up",
+        "vector_executor.output"
+      ],
+      "CAST": [
+        "vector_executor.activation",
+        "vector_executor.output"
+      ]
+    },
+    "port_id_assignment": "Preserve common MM2S/S2MM and GEMM_ACT/WGT/PSUM IDs; additional roles require design-specific router binding"
+  },
+  "banks": [
+    {
+      "bank_id": "0",
+      "name": "ACT",
+      "capacity_words": 4096,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "token-major flat features",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    },
+    {
+      "bank_id": "1",
+      "name": "WGT",
+      "capacity_words": 20480,
+      "word_bits": 128,
+      "format": "packed signed INT4",
+      "layout": "row-major output rows; even K low nibble",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    },
+    {
+      "bank_id": "2",
+      "name": "SCALE",
+      "capacity_words": 4096,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "output-row-major K-groups",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    },
+    {
+      "bank_id": "3",
+      "name": "BIAS_GAMMA",
+      "capacity_words": 1024,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "vector",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    },
+    {
+      "bank_id": "4",
+      "name": "RESULT",
+      "capacity_words": 4096,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "token-major flat features",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    },
+    {
+      "bank_id": "5",
+      "name": "VECTOR_PEER",
+      "capacity_words": 4096,
+      "word_bits": 128,
+      "format": "BF16 or FP32",
+      "layout": "token-major flat features",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    },
+    {
+      "bank_id": "6",
+      "name": "Q",
+      "capacity_words": 4096,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "token-major 14 heads x 64",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    },
+    {
+      "bank_id": "7",
+      "name": "SPARE",
+      "capacity_words": 4096,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "unallocated operand reservation",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    },
+    {
+      "bank_id": "8",
+      "name": "K",
+      "capacity_words": 32768,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "position-major 2 heads x 64",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    },
+    {
+      "bank_id": "9",
+      "name": "V",
+      "capacity_words": 32768,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "position-major 2 heads x 64",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    },
+    {
+      "bank_id": "10",
+      "name": "COS",
+      "capacity_words": 1024,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "position-major split-half RoPE coefficients",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    },
+    {
+      "bank_id": "11",
+      "name": "SIN",
+      "capacity_words": 1024,
+      "word_bits": 128,
+      "format": "BF16",
+      "layout": "position-major split-half RoPE coefficients",
+      "valid": false,
+      "busy": false,
+      "owner": "NONE",
+      "producers": [
+        "DMA_LOAD",
+        "compute_output_where_declared"
+      ],
+      "consumers": [
+        "DMA_STORE",
+        "compute_operand_where_declared"
+      ]
+    }
+  ],
+  "physical_storage_assignment": "Pending new synthesis; logical bank capacities only",
+  "data_capacity_bytes": 1818624,
+  "command_memory": {
+    "namespace": "separate_from_data_banks",
+    "proposed_capacity_records": 24576,
+    "capacity_bytes": 1572864,
+    "interface": "Native dual-port command-BRAM protocol; physical BRAM/URAM composition pending",
+    "publish": "Complete END-terminated program while idle, then START"
+  },
+  "ddr_residency": "All full weight tensors and all-layer KV in DDR; PS generates explicit tile DMA; compute sees only local banks",
+  "kv_prefix_policy": "Start must equal successful cached_length; failed program invalidates cache; reset permits new prefill",
+  "scratch_lifetime": "Stable allocation names reused on subsequent <=4-token calls; no per-decode region accumulation",
+  "limitations": [
+    "Raw capacities are not routed resource-fit evidence",
+    "No accepted board DDR address ranges"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": {"direction": "input", "width": 1}, "x": {"direction": "input", "width": 1}, "z": {"direction": "output", "width": 1}},
+    "reset_port": null
+  },
+  "semantics": {
+    "state": "Three one-bit D flip-flop outputs named xor_r, and_r, or_r",
+    "initialization": "All three state bits are initialized to zero before the first clock edge; z initially equals one",
+    "clock": "Positive edge of clk; all state updates use the old state and the x sampled at that edge",
+    "transitions": {"xor_r_next": "x XOR xor_r", "and_r_next": "x AND NOT and_r", "or_r_next": "x OR NOT or_r"},
+    "output": "z = NOT (xor_r OR and_r OR or_r), combinational from current state",
+    "between_edges": "State holds; changing x alone cannot change z",
+    "reset": "No runtime reset behavior or reset input is specified"
+  },
+  "numeric": {
+    "representation": "All ports and state bits are single-bit unsigned logic",
+    "operations": "One-bit Boolean XOR, AND, OR, complement and three-input NOR",
+    "arithmetic": "No numeric addition, overflow, rounding, saturation or widening is involved"
+  },
+  "verification": {
+    "oracle": "Independent enumerated transition table for all eight state combinations and both binary x values, output one only in state 000",
+    "startup": "Check z is one before the first positive clock edge",
+    "coverage": "Apply every binary input sequence of length eight to a separately initialized DUT instance; check output after each positive edge",
+    "timing": "Change x while clk is low and verify output holds; check output after falling edges as well",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top, matching vvp; finite shell and testbench timeouts",
+    "scope": "Independent development simulation only; no official reference or evaluation access, synthesis or board work"
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,16 @@
+{
+  "design_id": "qwen25_05b_zcu104",
+  "revision": "r1",
+  "status": "awaiting_isa_boundary_discussion",
+  "existing_builds_used": false,
+  "actions": [
+    "Checked three common contracts",
+    "Executed original model prefill/decode",
+    "Reviewed exact Transformers source and checkpoint identity",
+    "Recorded user INT4 choice",
+    "Prepared candidate executors and packed-weight/KV capacity calculations",
+    "Recorded separate Attention executor for scale/mask/softmax; shared GEMM for QK transpose and PV per preceding discussion",
+    "User corrected previous parent interpretation: Attention executor owns QK transpose, scale, causal mask, softmax and PV; GEMM executor handles weight projections"
+  ],
+  "next_action": "Discuss concrete candidate boundaries, then define ISA and bit-exact interpreter before any RTL dispatch"
+}

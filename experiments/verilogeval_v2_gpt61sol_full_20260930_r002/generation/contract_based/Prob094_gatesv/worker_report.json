@@ -1,0 +1,66 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790748713.367658,
+      "source_sha256": "6cd511dd96564b3e75c0585ee52602347dacce3224febcfe86373d709b67ba7e",
+      "testbench_sha256": "30fff6ddbedd065cbeec9a8aa6bc21076369b8cc458da5b043e1b35ee1a678b0",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob094_gatesv/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.012409358285367489
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS neighbor relationships: 289 input checks\ndev_tb.sv:60: $finish called at 289000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.01439573708921671
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Original specification leaves out_both[3] and out_any[0] unspecified; implementation drives zero and oracle excludes these bits.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "verification_summary": {
+    "smoke_environment": "passed: correct passes, injected fault fails, repair passes",
+    "contract_gate": "passed_structure_only",
+    "simulation": "Icarus 12 with matching vvp through dev_check.py; 289 input checks passed",
+    "coverage": "Initial X input, all 16 binary patterns, all 256 four-state patterns, reverse binary sweep"
+  },
+  "implementation_summary": {
+    "rtl": "candidate.sv; candidate_initial.sv preserved unchanged",
+    "testbench": "dev_tb.sv",
+    "interface_cycle": "Exact original 4-bit ports, combinational with no clock, reset, state or added latency",
+    "numeric": "Single-bit bitwise AND/OR/XOR relationships",
+    "static_review": "Complete continuous assignments; no latches or dependencies"
+  }
+}

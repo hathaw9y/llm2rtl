@@ -1,0 +1,39 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 8,
+        "packed_range": "[7:0]"
+      },
+      "parity": {
+        "direction": "output",
+        "width": 1
+      }
+    },
+    "additional_ports": false
+  },
+  "semantics": {
+    "function": "parity equals XOR of all eight input bits; appending parity produces an even number of ones",
+    "timing": "Combinational output follows current input after combinational settling; no cycle latency or sampling edge",
+    "clock": "None",
+    "reset": "None",
+    "initialization": "No state or initialization required",
+    "transactions": "All 256 binary input bytes are legal; no handshake"
+  },
+  "numeric": {
+    "input_type": "Unsigned 8-bit bit vector",
+    "output_type": "One-bit parity",
+    "arithmetic": "Population count modulo two, equivalent to reduction XOR",
+    "overflow_rounding_saturation": "Not applicable"
+  },
+  "verification": {
+    "compile": "Icarus Verilog v12 with -g2012 and explicit dev_tb top, finite timeout",
+    "simulation": "Exhaustively apply all 256 binary byte values, wait for combinational settling, compare parity with independent integer bit-count modulo two oracle; repeat in reverse order",
+    "failure_handling": "Case-inequality comparison and fatal failure on mismatch; simulation watchdog and finite external timeout",
+    "scope": "Independent development testing only; no official evaluation or synthesis"
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,14 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"name": "smoke_environment", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed", "repair": "passed"}},
+    {"name": "dev_check", "label": "initial", "status": "passed", "evidence": "development/01", "coverage": "All 16 binary inputs, ascending and descending; original Karnaugh-map oracle", "simulator": "Icarus Verilog 12 with matching vvp"}
+  ],
+  "development_outcome": "passed",
+  "limitations": ["Development verification only; official evaluation has not run.", "Unknown-input behavior is unspecified by the problem and is not asserted.", "No synthesis or board verification performed."],
+  "justified_rtl_changes": ["Initial combinational Boolean expression implements the original Karnaugh map with the exact TopModule interface; no RTL revisions."],
+  "justified_tb_changes": ["Initial independent oracle directly transcribes map rows, accounting for Gray-order columns; no testbench revisions."],
+  "interface": "input x[3:0], output f; combinational, no clock, reset, or added latency",
+  "static_review": "Explicit one-bit Boolean terms; continuous assignment; no registers or inferred latches.",
+  "artifacts": ["candidate.sv", "candidate_initial.sv", "dev_tb.sv", "dev_checks.jsonl", "development/01"]
+}

@@ -1,0 +1,201 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob115_shift18",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 2,
+  "development_failed_check_count": 1,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob115_shift18",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob115_shift18/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790747048.126016,
+    "ended_at_unix": 1790747212.1800303,
+    "seconds": 164.0540153980255,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 153850,
+      "cached_input_tokens": 123520,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2912,
+      "reasoning_output_tokens": 51
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "e2bc06bf25801c816772ff37d94d4086634f7cc038d3573d37f4c54c531f5d35",
+  "contract_sha256": "cf6e69fc97014530bfbb45af1a3d5acd6c153ec1dcf0a85df148ddcc43b38814",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "command": "python3 smoke_environment.py",
+        "outcome": "passed",
+        "details": "Correct fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+      },
+      {
+        "command": "python3 validate_contract.py",
+        "outcome": "passed_structure_only"
+      },
+      {
+        "command": "python3 dev_check.py --label initial",
+        "outcome": "simulation_failed",
+        "evidence": "development/01",
+        "reason": "TB timeout 20000 was shorter than the planned 2685-cycle stimulus."
+      },
+      {
+        "command": "python3 dev_check.py --label initial_tb_timeout_fixed",
+        "outcome": "passed",
+        "evidence": "development/02",
+        "details": "PASS 2685 shift-register checks; Icarus 12 compilation and simulation succeeded."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation has not occurred.",
+      "Original specification does not explicitly name a clock edge; rising edge is assumed and recorded in contract.",
+      "Original power-up value is unspecified; no initialization or reset added.",
+      "No synthesis or board work performed."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [
+      {
+        "preserved_old_version": "dev_tb_before_timeout_fix.sv",
+        "change": "Increased bounded timeout from 20000 to 40000 time units.",
+        "reason": "2685 checks at a 10-unit clock period require about 26850 time units; the old bound prematurely terminated the test. Oracle, stimulus, sampling phases and mismatch checks are unchanged."
+      }
+    ],
+    "contract_changes": [],
+    "static_review": "Exact interface preserved; load priority; hold when disabled; 64-bit left truncation and signed arithmetic right shift; no extra latency or reset.",
+    "artifacts": [
+      "candidate.sv",
+      "candidate_initial.sv",
+      "contract.json",
+      "dev_tb.sv",
+      "dev_tb_before_timeout_fix.sv",
+      "dev_checks.jsonl",
+      "development/01",
+      "development/02"
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "e2bc06bf25801c816772ff37d94d4086634f7cc038d3573d37f4c54c531f5d35",
+      "Prob115_shift18_ref.sv": "e477ab1ff3a1f29bea20089690d7944606c863bb3347e373a31b96feb421aa64",
+      "Prob115_shift18_test.sv": "c0794f1654f17091837f69fcabd7ec1b586197bdb1f2f1e04b18b233572b08c9"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob115_shift18_test.sv",
+        "Prob115_shift18_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013486496172845364
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb115_shift18_test.sv:75: $finish called at 20206 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 4041 samples\n\nSimulation finished at 20206 ps\nMismatches: 0 in 4041 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.05288046319037676
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "e2bc06bf25801c816772ff37d94d4086634f7cc038d3573d37f4c54c531f5d35",
+      "Prob115_shift18_ref.sv": "e477ab1ff3a1f29bea20089690d7944606c863bb3347e373a31b96feb421aa64",
+      "Prob115_shift18_test.sv": "c0794f1654f17091837f69fcabd7ec1b586197bdb1f2f1e04b18b233572b08c9"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob115_shift18_test.sv",
+        "Prob115_shift18_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013996375724673271
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb115_shift18_test.sv:75: $finish called at 20206 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 4041 samples\n\nSimulation finished at 20206 ps\nMismatches: 0 in 4041 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.038695438764989376
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

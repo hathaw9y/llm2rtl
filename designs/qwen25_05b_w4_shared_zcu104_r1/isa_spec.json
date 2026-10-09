@@ -1,0 +1,394 @@
+{
+  "schema": "llm2rtl.isa_spec.v1",
+  "design_id": "qwen25_05b_w4_shared_zcu104",
+  "revision": "r1",
+  "status": "reviewed",
+  "unresolved_decisions": [],
+  "common_contracts": {
+    "contracts/common/evidence_identity_contract.json": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda",
+    "contracts/common/isa_command_contract.json": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15",
+    "contracts/common/local_bank_contract.json": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d"
+  },
+  "command_transport": {
+    "command_order_owner": "ps_software",
+    "residency_tiling_owner": "ps_software",
+    "recovery_policy_owner": "ps_software",
+    "pl_dispatcher_role": "route_execute_report_only",
+    "request_protocol": "ready_valid",
+    "response_protocol": "ready_valid",
+    "program_transport": "ps_preloaded_command_bram",
+    "queue_policy": "no_ring_queue",
+    "dispatch_policy": "strict_in_order_single_pc_scoreboard",
+    "execution_policy": "issue_on_request_handshake_with_scoreboard_completion",
+    "outstanding_policy": "bank_hazard_limited_multiple",
+    "pc_advance_event": "executor_command_acceptance",
+    "response_collection": "independent_of_current_pc",
+    "program_terminal_policy": "end_opcode_then_drain_outstanding",
+    "blocked_pc_policy": "stall_without_lookahead",
+    "program_publish_order": [
+      "instruction_records_ending_in_END",
+      "start"
+    ],
+    "mutation_while_busy": "forbidden"
+  },
+  "opcodes": [
+    {
+      "opcode": "END",
+      "encoding": 0,
+      "module_id": "isa_command_dispatcher",
+      "opcode_class": "control",
+      "operands": [],
+      "operand_semantics": "Logical bank handles and semantic selectors; no raw compute address.",
+      "completion_semantics": "Exactly one identified success/error response; END drains all outstanding commands.",
+      "failure_semantics": "No destination valid commit or source last_use consumption on failure; partially written destination invalid."
+    },
+    {
+      "opcode": "DMA_LOAD",
+      "encoding": 1,
+      "module_id": "datamover_executor",
+      "opcode_class": "dma_load",
+      "operands": [
+        {
+          "name": "ddr",
+          "kind": "external_ddr_address"
+        },
+        {
+          "name": "bank",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bytes",
+          "kind": "transfer_length"
+        },
+        {
+          "name": "offset",
+          "kind": "local_bank_offset"
+        }
+      ],
+      "operand_semantics": "Explicit DMA DDR/local transfer.",
+      "completion_semantics": "Exactly one identified success/error response; END drains all outstanding commands.",
+      "failure_semantics": "No destination valid commit or source last_use consumption on failure; partially written destination invalid."
+    },
+    {
+      "opcode": "DMA_STORE",
+      "encoding": 2,
+      "module_id": "datamover_executor",
+      "opcode_class": "dma_store",
+      "operands": [
+        {
+          "name": "ddr",
+          "kind": "external_ddr_address"
+        },
+        {
+          "name": "bank",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "bytes",
+          "kind": "transfer_length"
+        },
+        {
+          "name": "offset",
+          "kind": "local_bank_offset"
+        }
+      ],
+      "operand_semantics": "Explicit DMA DDR/local transfer.",
+      "completion_semantics": "Exactly one identified success/error response; END drains all outstanding commands.",
+      "failure_semantics": "No destination valid commit or source last_use consumption on failure; partially written destination invalid."
+    },
+    {
+      "opcode": "GEMM",
+      "encoding": 3,
+      "module_id": "gemm_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "src0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "src1",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "dst",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "shape",
+          "kind": "dimension"
+        },
+        {
+          "name": "mode_flags",
+          "kind": "flags"
+        },
+        {
+          "name": "scale_bank",
+          "kind": "local_bank_id"
+        }
+      ],
+      "operand_semantics": "Logical bank handles and semantic selectors; no raw compute address.",
+      "completion_semantics": "Exactly one identified success/error response; END drains all outstanding commands.",
+      "failure_semantics": "No destination valid commit or source last_use consumption on failure; partially written destination invalid."
+    },
+    {
+      "opcode": "RMSNORM",
+      "encoding": 4,
+      "module_id": "rmsnorm_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "src0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "src1",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "dst",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "shape",
+          "kind": "dimension"
+        },
+        {
+          "name": "mode_flags",
+          "kind": "flags"
+        }
+      ],
+      "operand_semantics": "Logical bank handles and semantic selectors; no raw compute address.",
+      "completion_semantics": "Exactly one identified success/error response; END drains all outstanding commands.",
+      "failure_semantics": "No destination valid commit or source last_use consumption on failure; partially written destination invalid."
+    },
+    {
+      "opcode": "ROPE",
+      "encoding": 5,
+      "module_id": "rope_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "src0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "src1",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "dst",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "shape",
+          "kind": "dimension"
+        },
+        {
+          "name": "mode_flags",
+          "kind": "flags"
+        }
+      ],
+      "operand_semantics": "Logical bank handles and semantic selectors; no raw compute address.",
+      "completion_semantics": "Exactly one identified success/error response; END drains all outstanding commands.",
+      "failure_semantics": "No destination valid commit or source last_use consumption on failure; partially written destination invalid."
+    },
+    {
+      "opcode": "SOFTMAX_MASKED",
+      "encoding": 6,
+      "module_id": "softmax_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "src",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "dst",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "shape",
+          "kind": "dimension"
+        },
+        {
+          "name": "mode_flags",
+          "kind": "flags"
+        }
+      ],
+      "operand_semantics": "Logical bank handles and semantic selectors; no raw compute address.",
+      "completion_semantics": "Exactly one identified success/error response; END drains all outstanding commands.",
+      "failure_semantics": "No destination valid commit or source last_use consumption on failure; partially written destination invalid."
+    },
+    {
+      "opcode": "VECTOR",
+      "encoding": 7,
+      "module_id": "vector_executor",
+      "opcode_class": "compute",
+      "operands": [
+        {
+          "name": "src0",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "src1",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "dst",
+          "kind": "local_bank_id"
+        },
+        {
+          "name": "shape",
+          "kind": "dimension"
+        },
+        {
+          "name": "mode_flags",
+          "kind": "flags"
+        }
+      ],
+      "operand_semantics": "Logical bank handles and semantic selectors; no raw compute address.",
+      "completion_semantics": "Exactly one identified success/error response; END drains all outstanding commands.",
+      "failure_semantics": "No destination valid commit or source last_use consumption on failure; partially written destination invalid."
+    }
+  ],
+  "instruction_record": {
+    "width_bits": 256,
+    "bytes_per_record": 32,
+    "byte_order": "little_endian",
+    "fields": [
+      {
+        "name": "opcode",
+        "bit_offset": 252,
+        "width_bits": 4
+      },
+      {
+        "name": "a",
+        "bit_offset": 247,
+        "width_bits": 5
+      },
+      {
+        "name": "b",
+        "bit_offset": 242,
+        "width_bits": 5
+      },
+      {
+        "name": "c",
+        "bit_offset": 237,
+        "width_bits": 5
+      },
+      {
+        "name": "offset",
+        "bit_offset": 205,
+        "width_bits": 32
+      },
+      {
+        "name": "btt",
+        "bit_offset": 182,
+        "width_bits": 23
+      },
+      {
+        "name": "address",
+        "bit_offset": 150,
+        "width_bits": 32
+      },
+      {
+        "name": "mode",
+        "bit_offset": 146,
+        "width_bits": 4
+      },
+      {
+        "name": "flags",
+        "bit_offset": 138,
+        "width_bits": 8
+      },
+      {
+        "name": "scale",
+        "bit_offset": 133,
+        "width_bits": 5
+      },
+      {
+        "name": "m",
+        "bit_offset": 128,
+        "width_bits": 5
+      },
+      {
+        "name": "n",
+        "bit_offset": 117,
+        "width_bits": 11
+      },
+      {
+        "name": "k",
+        "bit_offset": 106,
+        "width_bits": 11
+      },
+      {
+        "name": "row",
+        "bit_offset": 95,
+        "width_bits": 11
+      },
+      {
+        "name": "col",
+        "bit_offset": 82,
+        "width_bits": 13
+      },
+      {
+        "name": "position",
+        "bit_offset": 71,
+        "width_bits": 11
+      },
+      {
+        "name": "head",
+        "bit_offset": 67,
+        "width_bits": 4
+      },
+      {
+        "name": "tensor",
+        "bit_offset": 51,
+        "width_bits": 16
+      },
+      {
+        "name": "layout",
+        "bit_offset": 47,
+        "width_bits": 4
+      },
+      {
+        "name": "src_layout",
+        "bit_offset": 43,
+        "width_bits": 4
+      },
+      {
+        "name": "group",
+        "bit_offset": 37,
+        "width_bits": 6
+      },
+      {
+        "name": "extent_m",
+        "bit_offset": 32,
+        "width_bits": 5
+      },
+      {
+        "name": "extent_n",
+        "bit_offset": 19,
+        "width_bits": 13
+      }
+    ],
+    "reserved_zero_bits": [
+      0,
+      18
+    ],
+    "DMA_large_rows": "m=0 uses extent_n as row count; compute M is1..16"
+  },
+  "command_capacity": {
+    "records": 1024,
+    "non_END_max": 1023,
+    "double_buffer": false,
+    "DDR_alias_rule": "Chunker drains at END before overlapping store->load, conservatively irrespective of bank alias."
+  },
+  "autonomy_authorization": "User: 너가 이제 알아서 다 정해봐.",
+  "numeric_contract": {
+    "path": "designs/qwen25_05b_w4_shared_zcu104_r1/numeric_contract.json",
+    "sha256": "c47c1cd15afdedcb178df704e1ee9c9488d7f234c1b3f192cb489e6581386227"
+  },
+  "status_limits": "Reviewed contracts do not mean verified RTL or accepted original BF16 quality."
+}

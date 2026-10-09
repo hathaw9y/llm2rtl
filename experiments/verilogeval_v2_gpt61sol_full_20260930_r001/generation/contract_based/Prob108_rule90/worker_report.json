@@ -1,0 +1,52 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "result": "passed_structure_only",
+      "log": "contract_validation.log"
+    },
+    {
+      "name": "static_rtl_review",
+      "result": "passed_inspection",
+      "log": "static_review.log"
+    },
+    {
+      "name": "development_compile",
+      "result": "failed",
+      "exit_code": 139,
+      "log": "compile.log",
+      "exit_record": "compile.exit",
+      "command": "timeout 30s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv"
+    },
+    {
+      "name": "tool_version_diagnostic",
+      "result": "driver reports Icarus 12.0; backend version query failed",
+      "log": "tool_version.log"
+    },
+    {
+      "name": "runtime_version",
+      "result": "vvp reports version 12.0",
+      "log": "vvp_version.log"
+    },
+    {
+      "name": "development_simulation",
+      "result": "not_run",
+      "reason": "Compilation exited 139 without producing executable."
+    }
+  ],
+  "development_outcome": "Initial RTL delivered unchanged. Contract structural gate and manual inspection passed. Requested compiler failed with exit 139 and an empty diagnostic log; simulation success is not claimed.",
+  "limitations": [
+    "Independent dev_tb.sv was created but could not be executed due to compiler failure.",
+    "Initial state is unspecified until a load, as in the original problem.",
+    "No official evaluation results are available.",
+    "No synthesis, timing, or board checks were performed."
+  ],
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "testbench": "dev_tb.sv"
+  }
+}

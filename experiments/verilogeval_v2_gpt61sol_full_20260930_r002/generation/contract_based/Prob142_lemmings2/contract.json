@@ -1,0 +1,16 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "areset": 1, "bump_left": 1, "bump_right": 1, "ground": 1}, "outputs": {"walk_left": 1, "walk_right": 1, "aaah": 1}},
+  "semantics": {
+    "clock": "All sequential transitions occur on posedge clk, as explicitly required in the original final sentence.",
+    "reset": "posedge areset asynchronously sets walking-left; while areset is high, clock edges also reset. Original specifies positive edge triggered asynchronous reset to walk left.",
+    "states": ["walking left", "walking right", "falling with remembered left", "falling with remembered right"],
+    "walking": "ground=0 takes priority over bumps and enters falling with current direction. With ground=1, bump_left reverses walking left and bump_right reverses walking right. Both bumps reverse either direction.",
+    "falling": "Ignore bumps. ground=1 resumes remembered direction, including when bumped on landing. ground=0 continues falling.",
+    "outputs": "Moore outputs reflect current state: walking states assert only the corresponding walk output; falling states assert only aaah. Changes to ground/bumps between clock edges do not change outputs.",
+    "initialization": "Original does not specify power-up state before areset; no initialized state or required pre-reset output is added. Verification begins by asserting reset."
+  },
+  "numeric": {"ports": "All ports are single-bit logic", "state": "Four states encoded in two bits", "arithmetic": "No arithmetic, overflow, rounding, or saturation"},
+  "verification": {"oracle": "Independent remembered-direction and falling flags derived from original prose", "sampling": "Drive at negedge; check stable Moore output before posedge and after NBA settling; reset asserted between clock edges", "coverage": "All four starting states with all eight ground/bump combinations, prolonged falling, repeated reversal, landing bumps, held reset, reset in every state", "failure": "$fatal on mismatches, bounded timeout, explicit PASS after checks", "tools": "Required smoke_environment.py, validate_contract.py, and dev_check.py --label initial"},
+  "specification_ambiguities": [{"topic": "pre-reset state and unknown inputs", "resolution": "Unspecified by original; no functional assertions before reset or for unknown input values."}]
+}

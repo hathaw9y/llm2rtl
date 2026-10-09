@@ -1,0 +1,198 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob142_lemmings2",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob142_lemmings2",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob142_lemmings2/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790733417.2878864,
+    "ended_at_unix": 1790733560.1931267,
+    "seconds": 142.90524101257324,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 172656,
+      "cached_input_tokens": 156672,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3623,
+      "reasoning_output_tokens": 145
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "b84efe26aa1db0bbe5f2301dc82490ab39bce7848fde91477c784c5e0b578648",
+  "contract_sha256": "8f5e4829df2c546f5acb0b643058cb3db9fb49d269a6875afe7d87c3912e48cf",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract gate",
+        "result": "PASS structure only",
+        "log": "contract_validation.log"
+      },
+      {
+        "name": "static RTL review",
+        "result": "PASS",
+        "details": "Exact one-bit interface; four-state Moore FSM; positive-edge clock and active-high asynchronous reset; ground priority; fall direction retained; no arithmetic, latches or additional source dependencies."
+      },
+      {
+        "name": "initial development simulation",
+        "result": "FAIL testbench sequencing",
+        "compile_log": "compile.log",
+        "simulation_log": "simulation.log",
+        "resolution": "Testbench now establishes neutral inputs during reset to avoid an unmodeled transition after reset release."
+      },
+      {
+        "name": "development retry 1",
+        "result": "FAIL testbench watchdog",
+        "compile_log": "compile_retry1.log",
+        "simulation_log": "simulation_retry1.log",
+        "resolution": "Extended finite watchdog from 20000 to 100000 simulation units to cover planned full trace."
+      },
+      {
+        "name": "development retry 2",
+        "result": "PASS",
+        "compile_log": "compile_retry2.log",
+        "simulation_log": "simulation_retry2.log",
+        "output_checks": 4560,
+        "coverage": "All eight input combinations in all four states; all two-step input sequences in all four states; reset from every state asynchronously and held across clock edge; between-edge Moore stability; 1000 pseudorandom steps."
+      }
+    ],
+    "development_outcome": "Initial candidate unchanged; final independent self-checking development simulation passed with Icarus -g2012 -Wall -s dev_tb and matching vvp. Every compile and simulation used a 30-second shell timeout. Both earlier failed logs and testbench versions preserved.",
+    "limitations": [
+      "Contract gate checks structure only.",
+      "Official evaluation was not accessed and its outcome is unknown.",
+      "No synthesis, timing or board testing performed.",
+      "Power-up before reset and unknown-valued inputs are unspecified and were not tested."
+    ],
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_rtl": "candidate_initial.sv",
+      "contract": "contract.json",
+      "testbench": "dev_tb.sv"
+    },
+    "tools": {
+      "iverilog": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+      "vvp": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp"
+    }
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "b84efe26aa1db0bbe5f2301dc82490ab39bce7848fde91477c784c5e0b578648",
+      "Prob142_lemmings2_ref.sv": "d12d0d89d1ca10c260297a0b5e01e619272eb817d3aa18da9528008d9a34db70",
+      "Prob142_lemmings2_test.sv": "b5c82af5e3d74789a715c6c57d9f0f29020cf59d408978dc8ffae8bc471f37cf"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob142_lemmings2_test.sv",
+        "Prob142_lemmings2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014179856516420841
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb142_lemmings2_test.sv:80: $finish called at 2206 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Total mismatched samples is 0 out of 441 samples\n\nSimulation finished at 2206 ps\nMismatches: 0 in 441 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011024941690266132
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "b84efe26aa1db0bbe5f2301dc82490ab39bce7848fde91477c784c5e0b578648",
+      "Prob142_lemmings2_ref.sv": "d12d0d89d1ca10c260297a0b5e01e619272eb817d3aa18da9528008d9a34db70",
+      "Prob142_lemmings2_test.sv": "b5c82af5e3d74789a715c6c57d9f0f29020cf59d408978dc8ffae8bc471f37cf"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob142_lemmings2_test.sv",
+        "Prob142_lemmings2_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013812227174639702
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb142_lemmings2_test.sv:80: $finish called at 2206 (1ps)\nHint: Output 'walk_left' has no mismatches.\nHint: Output 'walk_right' has no mismatches.\nHint: Output 'aaah' has no mismatches.\nHint: Total mismatched samples is 0 out of 441 samples\n\nSimulation finished at 2206 ps\nMismatches: 0 in 441 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011459033004939556
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

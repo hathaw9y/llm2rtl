@@ -1,0 +1,21 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "x": 1}, "outputs": {"z": 1}, "reset_port": "none specified"},
+  "semantics": {
+    "state": "Three one-bit flip-flop outputs A (XOR), B (AND), C (OR)",
+    "initialization": "A=B=C=0 before machine begins, as explicitly assumed in original problem; implement initial values without adding reset port",
+    "clock": "All three flip-flops update simultaneously on positive edge of clk using previous state",
+    "transition": {"A_next": "x XOR A", "B_next": "x AND complement(B)", "C_next": "x OR complement(C)"},
+    "output": "z = NOR(A,B,C), combinational from current flip-flop outputs; initially z=1",
+    "between_edges": "Changing x does not change state or z"
+  },
+  "numeric": {"widths": "All ports and all state bits one bit", "operators": "bitwise XOR, AND, OR, complement and NOR", "arithmetic": "none"},
+  "verification": {
+    "oracle": "Independent three-bit state transition truth table derived from original gate connections",
+    "sampling": "Check initialized output after settling; before rising edge; after rising edge and nonblocking updates; after falling edge and input changes",
+    "cases": "Both input values from every reachable state, all 8-bit input sequences, extended constant runs and alternating input",
+    "failure": "Use case inequality and fatal on mismatch, bounded timeout, PASS only after all checks",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,210 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob052_gates100",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob052_gates100",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob052_gates100/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790746465.90706,
+    "ended_at_unix": 1790746609.4361446,
+    "seconds": 143.52908515930176,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 125381,
+      "cached_input_tokens": 87552,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2485,
+      "reasoning_output_tokens": 30
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "4ccb950c13bb719a007365c38175793cb22ca24b7e7578afcaa1283f6713ade1",
+  "contract_sha256": "0b2b948011cb4c731b43ee91e3752ffeca2699153ab57b2559eedc5f397ddd57",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "label": "initial",
+        "check_index": 1,
+        "checked_at_unix": 1790746574.0926154,
+        "source_sha256": "4ccb950c13bb719a007365c38175793cb22ca24b7e7578afcaa1283f6713ade1",
+        "testbench_sha256": "bcf2198241b2db09648cd0f5af7e3f7f5de860de612a92543c154b58725bed0e",
+        "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob052_gates100/development/01",
+        "compile": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+            "-g2012",
+            "-Wall",
+            "-Wno-timescale",
+            "-s",
+            "dev_tb",
+            "-o",
+            "dev.vvp",
+            "candidate.sv",
+            "dev_tb.sv"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.010764243081212044
+        },
+        "simulation": {
+          "command": [
+            "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+            "dev.vvp"
+          ],
+          "returncode": 0,
+          "stdout": "PASS: 1310 combinational gate checks\ndev_tb.sv:75: $finish called at 1310000 (1ps)\n",
+          "stderr": "",
+          "timeout": false,
+          "seconds": 0.3434249619022012
+        },
+        "status": "passed"
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; official evaluation was not accessed and remains pending.",
+      "Exhaustive enumeration of all 2^100 binary inputs was not performed.",
+      "X/Z behavior is unspecified by the original problem; supplemental tests use standard SystemVerilog gate semantics.",
+      "No synthesis or board work performed, as required."
+    ],
+    "justified_changes": {
+      "rtl": [],
+      "testbench": [],
+      "contract": []
+    },
+    "implementation": "Three continuous reduction assignments implementing 100-input AND, OR, and XOR, with exact original ports and no state or added latency.",
+    "verification": "Independent population-count binary oracle; all-zero/all-one, every single-one/single-zero position, population counts 0..100, alternating patterns, 1000 randomized inputs, and five supplemental four-state cases. 1310 checks passed.",
+    "contract_gate": "passed_structure_only",
+    "environment_smoke": "passed: correct fixture passed, deliberate fault failed, repaired fixture passed",
+    "initial_snapshot": "candidate_initial.sv is byte-identical to candidate.sv",
+    "static_review": "Exact TopModule ports; 100-bit unsigned input and one-bit outputs; combinational only; no latches, registers, dependencies, or testbench constructs in RTL."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "4ccb950c13bb719a007365c38175793cb22ca24b7e7578afcaa1283f6713ade1",
+      "Prob052_gates100_ref.sv": "dcf314f2a0e23b9b47ec355193bf79d8b113cf0999883f712bb95a7335fd3e14",
+      "Prob052_gates100_test.sv": "0643c8d9dc397379597e7ae07b2168c82b3457f66a198c9256491cdfda904ee4"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob052_gates100_test.sv",
+        "Prob052_gates100_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.012885223142802715
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb052_gates100_test.sv:63: $finish called at 2166 (1ps)\nHint: Output 'out_and' has no mismatches.\nHint: Output 'out_or' has no mismatches.\nHint: Output 'out_xor' has no mismatches.\nHint: Total mismatched samples is 0 out of 433 samples\n\nSimulation finished at 2166 ps\nMismatches: 0 in 433 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010648421943187714
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "4ccb950c13bb719a007365c38175793cb22ca24b7e7578afcaa1283f6713ade1",
+      "Prob052_gates100_ref.sv": "dcf314f2a0e23b9b47ec355193bf79d8b113cf0999883f712bb95a7335fd3e14",
+      "Prob052_gates100_test.sv": "0643c8d9dc397379597e7ae07b2168c82b3457f66a198c9256491cdfda904ee4"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob052_gates100_test.sv",
+        "Prob052_gates100_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011456416919827461
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb052_gates100_test.sv:63: $finish called at 2166 (1ps)\nHint: Output 'out_and' has no mismatches.\nHint: Output 'out_or' has no mismatches.\nHint: Output 'out_xor' has no mismatches.\nHint: Total mismatched samples is 0 out of 433 samples\n\nSimulation finished at 2166 ps\nMismatches: 0 in 433 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009799609892070293
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

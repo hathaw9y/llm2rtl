@@ -1,0 +1,45 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "reset": 1
+    },
+    "outputs": {
+      "ena": 3,
+      "q": 16
+    }
+  },
+  "semantics": {
+    "clock": "All sequential updates occur on positive clk edges, as stated.",
+    "reset": "Synchronous active-high reset sets all four digits to zero; reset has priority over counting.",
+    "count": "Each non-reset rising edge increments the decimal count by one, carrying from ones to thousands.",
+    "enable": "Combinational ena[0] indicates ones=9; ena[1] indicates lower two digits=99; ena[2] indicates lower three digits=999. These indicate upper-digit increments on the upcoming counting edge.",
+    "initialization": "No initial state is specified; no initialization is imposed before the first reset edge."
+  },
+  "numeric": {
+    "encoding": "q[3:0] ones, q[7:4] tens, q[11:8] hundreds, q[15:12] thousands; each digit 0..9.",
+    "range": "0000 through 9999 inclusive, wrapping to 0000."
+  },
+  "verification": {
+    "oracle": "Independent integer decimal counter converted to BCD, based on original problem.",
+    "sampling": "Check settled outputs after rising edges and combinational enables between edges. Assert reset between edges to verify synchronous behavior.",
+    "cases": "Reset, consecutive resets, every count over two complete decimal periods, all carry boundaries, and reset during a nonzero count.",
+    "termination": "Fatal on mismatch, bounded timeout, PASS only after all checks."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "Enable bit mapping and reset gating",
+      "resolution": "Map ena[0], ena[1], ena[2] to digits 1,2,3 respectively. Use lower-digit carry conditions independent of reset, because enable indicates when digits should increment and reset is separately synchronous."
+    },
+    {
+      "topic": "Overflow",
+      "resolution": "Four decimal digits naturally wrap 9999 to 0000; no overflow port is specified."
+    },
+    {
+      "topic": "Power-up state",
+      "resolution": "Unspecified; verification establishes state with synchronous reset before expecting count values."
+    }
+  ]
+}

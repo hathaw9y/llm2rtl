@@ -1,0 +1,40 @@
+{
+  "revision_count": 0,
+  "checks": {
+    "environment_smoke": "passed: correct fixture passed, injected fault failed, repair passed",
+    "contract_structure": "passed_structure_only",
+    "development": [
+      {
+        "label": "initial",
+        "status": "passed",
+        "compile_returncode": 0,
+        "simulation_returncode": 0,
+        "simulation_output": "PASS: 4749 output checks, all 12 transitions, exhaustive length-8 inputs and reset cases\ndev_tb.sv:107: $finish called at 23746000 (1ps)\n"
+      }
+    ]
+  },
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "Original specification does not constrain power-up or illegal-state behavior; no pre-reset output expectation was imposed.",
+    "No synthesis or board work performed as required."
+  ],
+  "justified_RTL_TB_changes": {
+    "RTL": [],
+    "testbench": [],
+    "contract": []
+  },
+  "implementation": {
+    "files": [
+      "candidate.sv",
+      "candidate_initial.sv",
+      "dev_tb.sv",
+      "contract.json"
+    ],
+    "interface_cycle": "Original one-bit ports; synchronous active-high reset to A; posedge transitions and combinational Moore output; separate state-table and state-flop blocks.",
+    "numeric": "Six 3-bit enum states; no arithmetic.",
+    "static_review": "Transitions and output match original table; fully assigned combinational next state; nonblocking sequential assignments; no extra ports or latency.",
+    "coverage": "4749 output comparisons; all 12 transitions; 256 length-8 binary sequences from reset; reset assertion, hold and deassertion across all six states with both input values.",
+    "initial_snapshot_unchanged": true
+  }
+}

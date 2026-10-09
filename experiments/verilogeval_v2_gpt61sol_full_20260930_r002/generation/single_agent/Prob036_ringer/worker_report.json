@@ -1,0 +1,33 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "details": "Correct sequential fixture passed; injected fault failed; repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "details": "Icarus 12 compilation and simulation passed with 32 truth-table checks covering all four input cases and every ordered transition.",
+      "evidence": "development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "The original specification defines binary input behavior; unknown/high-impedance input behavior is not specified.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "interface": "Original four one-bit ports preserved; combinational, no clock or reset.",
+    "numeric_widths": "One-bit Boolean expressions.",
+    "latency": "Combinational; no added pipeline latency.",
+    "static_review": "Both outputs gated by ring; vibrate_mode selects exactly one output for a call; no state or inferred latches."
+  }
+}

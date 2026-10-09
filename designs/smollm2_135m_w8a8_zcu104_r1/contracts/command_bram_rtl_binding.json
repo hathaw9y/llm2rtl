@@ -1,0 +1,23 @@
+{
+  "schema": "llm2rtl.command_bram_rtl_binding.v1",
+  "status": "frozen",
+  "module": "smollm2_command_bram",
+  "inputs": {
+    "clk": 1,
+    "resetn": 1,
+    "write_allowed": 1,
+    "start": 1,
+    "program_wr_valid": 1,
+    "program_wr_address": 4,
+    "program_wr_data": 128,
+    "program_wr_strb": 16,
+    "cmd_enb": 1,
+    "cmd_addrb": 4
+  },
+  "outputs": {
+    "program_wr_ready": 1,
+    "cmd_doutb": 128
+  },
+  "storage": "16x128 actual BRAM, byte-strobedPSwrite, fixed2cycle native read using verified reusable bram_bank source or exactXPMprimitive; no behavioral replacement",
+  "writes": "ready=resetn&&write_allowed&&!start. START haspriority; no acceptedwrite while executing/initblocked. PayloadRAM not reset; resetreadpipeline only. Software mustpreload completeprogram withEND beforestart."
+}

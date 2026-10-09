@@ -1,0 +1,32 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "clk": 1,
+      "a": 1
+    },
+    "outputs": {
+      "q": 1
+    }
+  },
+  "semantics": {
+    "transition": "At each positive clock edge, q captures the bitwise complement of the pre-edge value of a. Between positive edges q holds its value.",
+    "reset": "No reset port or reset behavior is specified.",
+    "initialization": "q is uninitialized and unknown at time 0. With a initially unknown, the 5 ns edge leaves q unknown.",
+    "waveform_evidence": "a changes from x to 0 at 5 ns and from 0 to 1 at 35 ns, coincident with rising clock edges; q becomes 1 at 15 ns and 0 at 45 ns. Input changes are interpreted as occurring after sampling at the coincident edge."
+  },
+  "numeric": {
+    "widths": "All ports are single bits.",
+    "operation": "Four-state bitwise complement: ~0=1, ~1=0, ~x=x, ~z=x."
+  },
+  "verification": {
+    "oracle": "Original waveform literal expected values at 0 through 90 ns, sampled after nonblocking updates.",
+    "stimulus": "Clock toggles every 5 ns. a updates at the original 5 ns and 35 ns timestamps after edge sampling using nonblocking assignments.",
+    "directed": "Additional pre-edge input transitions verify inversion, hold behavior, and unknown propagation without a second pipeline stage.",
+    "success": "All comparisons use case inequality; bounded timeout and PASS emitted only after all checks."
+  },
+  "specification_ambiguities": [
+    "The table does not specify event-region ordering for a and clk changing at the same timestamp. Chosen interpretation is a single positive-edge inverter register sampling the old input at coincident transitions. A two-stage circuit sampling new input can also match the sparse waveform; no extra stage is inferred."
+  ]
+}

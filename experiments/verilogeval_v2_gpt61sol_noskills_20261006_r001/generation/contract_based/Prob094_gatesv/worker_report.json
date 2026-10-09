@@ -1,0 +1,42 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "check": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json",
+      "cases": [
+        "correct fixture passes",
+        "injected fault fails",
+        "repair passes"
+      ]
+    },
+    {
+      "check": "contract_structure",
+      "status": "passed_structure_only",
+      "evidence": "contract_gate.json"
+    },
+    {
+      "check": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "coverage": "16 exhaustive binary and 256 four-state input patterns; all specified output bits checked"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation; official feedback was unavailable.",
+    "out_both[3] and out_any[0] are unspecified by the original problem, driven to zero and excluded from oracle assertions.",
+    "X/Z tests verify conventional bitwise behavior, which the original problem does not explicitly require."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json",
+    "check_history": "dev_checks.jsonl"
+  }
+}

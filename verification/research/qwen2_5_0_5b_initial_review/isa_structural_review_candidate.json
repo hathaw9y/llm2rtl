@@ -1,0 +1,112 @@
+{
+  "status": "structural_ISA_review_candidate_not_frozen",
+  "instruction_bits": 256,
+  "records_per_chunk": 1024,
+  "opcodes": [
+    {
+      "value": 0,
+      "name": "END",
+      "executor": "dispatcher drain"
+    },
+    {
+      "value": 1,
+      "name": "DMA_LOAD",
+      "template_name": "MM2S",
+      "executor": "DataMover"
+    },
+    {
+      "value": 2,
+      "name": "DMA_STORE",
+      "template_name": "S2MM",
+      "executor": "DataMover"
+    },
+    {
+      "value": 3,
+      "name": "GEMM",
+      "executor": "shared GEMM",
+      "modes": [
+        "W4_BF16",
+        "BF16_BF16_QK_TRANSPOSE",
+        "BF16_BF16_PV"
+      ],
+      "partial_sum": [
+        "INIT",
+        "ACCUM"
+      ]
+    },
+    {
+      "value": 4,
+      "name": "RMSNORM",
+      "executor": "RMSNorm"
+    },
+    {
+      "value": 5,
+      "name": "ROPE",
+      "executor": "RoPE"
+    },
+    {
+      "value": 6,
+      "name": "SOFTMAX_MASKED",
+      "executor": "masked Softmax"
+    },
+    {
+      "value": 7,
+      "name": "VECTOR",
+      "executor": "shared vector",
+      "modes": [
+        "BIAS_ADD_FP32_TO_BF16",
+        "RESIDUAL_ADD",
+        "SILU_MUL",
+        "W4_EMBEDDING_DEQUANT",
+        "CAST_FP32_TO_BF16",
+        "LAYOUT"
+      ]
+    }
+  ],
+  "compute_control": {
+    "request": [
+      "cmd_valid",
+      "cmd_ready",
+      "cmd_id",
+      "opcode/mode",
+      "bank handles",
+      "semantic shape/selectors",
+      "last_use flags"
+    ],
+    "response": [
+      "rsp_valid",
+      "rsp_ready",
+      "cmd_id",
+      "success/error",
+      "error_code"
+    ],
+    "response_count": "Exactly one response per accepted command; response held stable under backpressure.",
+    "cmd_id_candidate": "10-bit current PC; unique within a chunk. Chunk publication after all outstanding responses drained prevents cross-chunk overlap.",
+    "alias_rule_candidate": "Compute source and destination handles distinct, apart from GEMM reading and writing its own designated FP32 destination in ACCUM mode. Distinct roles never simultaneously own the same bank."
+  },
+  "record_packing_basis": {
+    "fixed_prefix": "Preserve template opcode/three bank operands/local_offset/BTT/AXI_address bit positions for DMA.",
+    "fixed_prefix_bits": 106,
+    "user_extension_bits": 150,
+    "compute_fixed_address_fields": "Must be zero; semantic selectors use extension fields.",
+    "extension_fields_pending": [
+      "mode",
+      "scale bank",
+      "shape",
+      "semantic tile/head selectors",
+      "tensor identity",
+      "layout identity",
+      "lifetime and initialization flags"
+    ]
+  },
+  "bank_state": "Agreed packing/readiness rules, including SCORE reuse for FFN scratch.",
+  "new_control_opcodes": [],
+  "pending": [
+    "user review of structural packet",
+    "exact bit packing/descriptor representation",
+    "numeric exceptional/subnormal policy",
+    "nonlinear implementation and error measurement",
+    "full schedule/compiler checks and ISA interpreter comparison"
+  ],
+  "HDL_implementation_authorized": false
+}

@@ -1,0 +1,18 @@
+{
+  "status": "frozen",
+  "interface": {"module": "TopModule", "inputs": {"clk": 1, "in": 1, "reset": 1}, "outputs": {"out_byte": 8, "done": 1}},
+  "semantics": {
+    "clock": "All sequential logic samples on the positive clock edge, as explicitly required.",
+    "reset": "Active-high synchronous reset abandons any partial frame and returns to idle; done is cleared on the reset edge.",
+    "frame": "An idle sampled zero is the start bit. The following eight positive edges sample data bits 0 through 7. The next positive edge checks the stop bit.",
+    "success": "A high expected stop bit asserts done for the cycle immediately following that edge and makes the sampled byte valid. A following low may start the next frame immediately.",
+    "error": "A low expected stop bit invalidates the frame. Ignore zeros until a high is sampled, then permit a subsequent zero to start a new frame.",
+    "initialization": "No power-up state is specified; verification begins with a synchronous reset. out_byte is checked only when done is one."
+  },
+  "numeric": {"data_width": 8, "order": "Least significant bit first, explicitly stated", "data_index": "0 through 7 inclusive", "stop_bits": 1, "start_bits": 1},
+  "verification": {"oracle": "Independent transaction-progress reference driven from the original start/data/stop requirements", "sampling": "Drive at falling edges; compare after positive-edge sequential updates", "cases": "Idle, every byte value, consecutive frames, bad stop and delayed recovery, reset at every frame phase, reset synchronization, deterministic pseudorandom stream", "completion": "Bounded timeout and fatal mismatches; PASS only after all checks"},
+  "specification_ambiguities": [
+    {"text": "It should assert done each time it finds a stop bit", "resolution": "Read in context of correctly received bytes: assert only on a high at the expected stop position. A later high after a failed stop resynchronizes without validating the invalid frame."},
+    {"text": "Initial register values and out_byte outside done are unspecified", "resolution": "Do not assume initial values; reset before checks and ignore out_byte when done is low."}
+  ]
+}

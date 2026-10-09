@@ -1,0 +1,176 @@
+{
+  "mode": "single_agent",
+  "problem_id": "Prob030_popcount255",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob030_popcount255",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/single_agent/Prob030_popcount255/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790730583.2024474,
+    "ended_at_unix": 1790730645.3615026,
+    "seconds": 62.159056186676025,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 70778,
+      "cached_input_tokens": 55808,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1546,
+      "reasoning_output_tokens": 62
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "2685c5b9af8f228d4c71670bd3324892a730605f4deb064b31b258792685a354",
+  "contract_sha256": null,
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "name": "static_rtl_review",
+        "result": "passed",
+        "details": "Exact TopModule interface; purely combinational logic with complete initialization; all 255 input bits counted; explicitly zero-extended one-bit operands; eight bits represent the full 0 through 255 result range."
+      },
+      {
+        "name": "development_compile",
+        "result": "tool_failed",
+        "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "options": "-g2012 -Wall -s dev_tb",
+        "timeout_seconds": 30,
+        "exit_code": 139,
+        "log": "compile.log"
+      },
+      {
+        "name": "development_simulation",
+        "result": "not_run_successfully",
+        "tool": "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "timeout_seconds": 30,
+        "log": "simulation.log",
+        "details": "Invocation failed because compilation produced no dev_sim executable."
+      }
+    ],
+    "development_outcome": "Initial candidate retained without RTL revisions. Independent self-checking testbench prepared for 1768 directed and randomized checks, but simulation success is not established due to compiler failure.",
+    "limitations": [
+      "No successful development simulation due to Icarus compilation exit code 139.",
+      "No synthesis, timing, or board checks performed.",
+      "Official evaluation results are unavailable."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2685c5b9af8f228d4c71670bd3324892a730605f4deb064b31b258792685a354",
+      "Prob030_popcount255_test.sv": "d232308e7f686aaf721e7a3eac277a25dab267d0a4fce2b51fb6ff8b3e790354",
+      "Prob030_popcount255_ref.sv": "9159b1dda6cad0c06ec47be5bbd680dd13007eacd0ee6832c443550c8283c9bb"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob030_popcount255_test.sv",
+        "Prob030_popcount255_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014754620380699635
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb030_popcount255_test.sv:49: $finish called at 1076 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 215 samples\n\nSimulation finished at 1076 ps\nMismatches: 0 in 215 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.14423176925629377
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "2685c5b9af8f228d4c71670bd3324892a730605f4deb064b31b258792685a354",
+      "Prob030_popcount255_test.sv": "d232308e7f686aaf721e7a3eac277a25dab267d0a4fce2b51fb6ff8b3e790354",
+      "Prob030_popcount255_ref.sv": "9159b1dda6cad0c06ec47be5bbd680dd13007eacd0ee6832c443550c8283c9bb"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob030_popcount255_test.sv",
+        "Prob030_popcount255_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013780086301267147
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb030_popcount255_test.sv:49: $finish called at 1076 (1ps)\nHint: Output 'out' has no mismatches.\nHint: Total mismatched samples is 0 out of 215 samples\n\nSimulation finished at 1076 ps\nMismatches: 0 in 215 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.1483430927619338
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

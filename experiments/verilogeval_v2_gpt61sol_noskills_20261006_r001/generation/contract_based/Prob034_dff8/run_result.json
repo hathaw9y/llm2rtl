@@ -1,0 +1,195 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob034_dff8",
+  "official_status": "functional_failure",
+  "official_analyzer_code": "R",
+  "workflow_status": "failed",
+  "development_status": "passed",
+  "development_check_count": 1,
+  "development_failed_check_count": 0,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 0,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob034_dff8",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob034_dff8/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791273635.6388566,
+    "ended_at_unix": 1791273694.0022986,
+    "seconds": 58.363442182540894,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 75322,
+      "cached_input_tokens": 58624,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1884,
+      "reasoning_output_tokens": 20
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "a6ada7fdd78e3caf554b6044f70b470582214870d109ace25aed5df89432c5b9",
+  "contract_sha256": "4ad933d635756d92907f88c0df96505fd2ee9540e762a610c265e101014b5c53",
+  "worker_report": {
+    "revision_count": 0,
+    "checks": [
+      {
+        "check": "environment_smoke",
+        "status": "passed",
+        "evidence": "environment_smoke.json",
+        "observations": "Correct sequential fixture passed, injected fault failed, repaired fixture passed."
+      },
+      {
+        "check": "contract_structure",
+        "status": "passed_structure_only",
+        "evidence": "contract_gate.json"
+      },
+      {
+        "check": "initial",
+        "status": "passed",
+        "evidence": "development/01/result.json",
+        "observations": "Icarus 12 compilation and simulation succeeded; 1394 capture and retention checks passed."
+      }
+    ],
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification is not official evaluation; official correctness feedback was not accessed.",
+      "Original specification leaves initial q unspecified; the testbench observes initial retention without requiring a particular power-up value."
+    ],
+    "justified_rtl_changes": [],
+    "justified_tb_changes": [],
+    "contract_changes": [],
+    "artifacts": {
+      "rtl": "candidate.sv",
+      "initial_snapshot": "candidate_initial.sv",
+      "testbench": "dev_tb.sv",
+      "contract": "contract.json",
+      "development_history": "dev_checks.jsonl"
+    }
+  },
+  "final": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "a6ada7fdd78e3caf554b6044f70b470582214870d109ace25aed5df89432c5b9",
+      "Prob034_dff8_ref.sv": "f2cefccbae78a8cd532c6b66eb75eb08b60cf11497b3f89bd09bcb9d892fef69",
+      "Prob034_dff8_test.sv": "021b074f53d3d1a1fd6982a73d5460a9151f8b6eb9a5f2034ff821835fe94e1b"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob034_dff8_test.sv",
+        "Prob034_dff8_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.010208606719970703
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb034_dff8_test.sv:36: $finish called at 206 (1ps)\nHint: Output 'q' has 1 mismatches. First mismatch occurred at time 5.\nHint: Total mismatched samples is 1 out of 41 samples\n\nSimulation finished at 206 ps\nMismatches: 1 in 41 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.006071185693144798
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "a6ada7fdd78e3caf554b6044f70b470582214870d109ace25aed5df89432c5b9",
+      "Prob034_dff8_ref.sv": "f2cefccbae78a8cd532c6b66eb75eb08b60cf11497b3f89bd09bcb9d892fef69",
+      "Prob034_dff8_test.sv": "021b074f53d3d1a1fd6982a73d5460a9151f8b6eb9a5f2034ff821835fe94e1b"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob034_dff8_test.sv",
+        "Prob034_dff8_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011000439524650574
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb034_dff8_test.sv:36: $finish called at 206 (1ps)\nHint: Output 'q' has 1 mismatches. First mismatch occurred at time 5.\nHint: Total mismatched samples is 1 out of 41 samples\n\nSimulation finished at 206 ps\nMismatches: 1 in 41 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.005887155421078205
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 1,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

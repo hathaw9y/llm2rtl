@@ -1,0 +1,292 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_w8a8_zcu104",
+  "revision": "r1",
+  "status": "frozen",
+  "module_id": "int8_gemm_executor",
+  "module_kind": "opcode_executor",
+  "opcode": "GEMM_INT8",
+  "implemented_opcodes": [
+    "GEMM_INT8",
+    "ATTN_SCORE_INT8",
+    "ATTN_VALUE_INT8"
+  ],
+  "authorization": "User explicitly approved the concrete GEMM implementation proposal with reply \uadf8\ub798 on 2026-10-09 Asia/Seoul; this freezes the reviewed implementation contract. No RTL, synthesis or board evidence is implied.",
+  "common_contracts": {
+    "engine_completion_contract": {
+      "path": "contracts/common/engine_completion_contract.json",
+      "sha256": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446"
+    },
+    "evidence_identity_contract": {
+      "path": "contracts/common/evidence_identity_contract.json",
+      "sha256": "ba8c545481eb9bc89eed1eb227c7f1e40db4650169e9d75a72f4163ffbb79eda"
+    },
+    "isa_command_contract": {
+      "path": "contracts/common/isa_command_contract.json",
+      "sha256": "d15c3a8c92d133fbc8847e2fd33f904c088c9ad2f5a75e993096606dd8499b15"
+    },
+    "local_bank_contract": {
+      "path": "contracts/common/local_bank_contract.json",
+      "sha256": "0436d9337ed6dd56d11113fca47eb1ae28c45a253a412fe463a41801b9927b6d"
+    }
+  },
+  "design_refs": {
+    "isa_spec.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/isa_spec.json",
+      "sha256": "1b212ac05048122b4377581433052a91efa24c5c3bc3ce9bba3d0f7219cf630c"
+    },
+    "bank_layout.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/bank_layout.json",
+      "sha256": "dcd26383f787310d301cc6976d27fc76cf8ec44baed43fdf4258039f2441a6f2"
+    },
+    "contracts/numeric_contract.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/numeric_contract.json",
+      "sha256": "f5bb6dbf52528e9fe921867e465aca6c74768402be7860cedeadc950e9bf9261"
+    },
+    "contracts/compute_interface.json": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/compute_interface.json",
+      "sha256": "c2b579e39ac9b4cb7fbb6ca2fb751e7020d11d7b9a597a942ebb64550f772d06"
+    }
+  },
+  "children": {
+    "int8_dot_core": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/datapaths/int8_dot_core.json",
+      "sha256": "68a0eee518d475d0df3fd2e6052150ca9c9bd59b79f400eb74ee3eb48324ecff"
+    },
+    "fp32_bf16_epilogue": {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/datapaths/fp32_bf16_epilogue.json",
+      "sha256": "bfdbcda07d9fc29b38a4bcfa0f3ed188603a3f3d2988ee41d028ad5a0fd6c20b"
+    }
+  },
+  "golden": {
+    "path": "designs/smollm2_135m_w8a8_zcu104_r1/verification/tensor_golden/manifest.json",
+    "sha256": "fe916c48afba868a28e0ad7ee86d92dbc0d98d0a20b13c9b50676815b4a33534"
+  },
+  "hardware_profile": {
+    "path": "config/hardware/zcu104.json",
+    "sha256": "6606119737c7342859b86f888d0232179020aecd564f6224fbf106995efff9a6"
+  },
+  "workflow": {
+    "path": "docs/framework_workflow.md",
+    "sha256": "e0c7da8a4e67d943b330862d3adc3338e035995f868965fcdaa188459e924257"
+  },
+  "target": {
+    "board": "AMD ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_status": "approved module OOC target; no timing result or board clock claim",
+    "tool_version": "Vivado2025.2 matching inspected baseline; build machine still unresolved",
+    "clock_mhz": 200,
+    "clock_period_ns": 5.0
+  },
+  "interface": {
+    "rtl_module": "smollm2_int8_gemm_executor",
+    "command": {
+      "valid": "cmd_valid",
+      "ready": "cmd_ready",
+      "ports": {
+        "cmd_opcode": 4,
+        "cmd_payload": 112,
+        "cmd_bank_ids": 12,
+        "cmd_transaction_id": 32,
+        "cmd_generations": 96
+      },
+      "acceptance": "all three bank roles atomically acquired externally before/with acceptance; only idle executor accepts; capture fields and descriptors; hold cmd_ready low until prior response retires"
+    },
+    "response": {
+      "valid": "resp_valid",
+      "ready": "resp_ready",
+      "ports": {
+        "resp_transaction_id": 32,
+        "resp_used_bank_mask": 3,
+        "resp_used_bank_count": 2,
+        "resp_bank_ids": 12,
+        "resp_generations": 96,
+        "resp_error_code": 8
+      },
+      "identity": "mask111/count3; original accepted identity, stable until response handshake; retain controller ownership identity until release accepted"
+    },
+    "local_memory": {
+      "ports": [
+        "A read role",
+        "B read role",
+        "C write role"
+      ],
+      "address_unit": "128-bit word index; byte selection/strobes local to executor",
+      "read_request": "rd_valid/rd_ready, bank_id4, word_address19, wide flag1; role-specific independent ports",
+      "read_response": "rd_resp_valid, rd_data256, tagged by in-order role acceptance FIFO; narrow data at low128 bits; no response-ready port",
+      "read_latency_cycles": 3,
+      "maximum_outstanding_per_role": 4,
+      "response_storage_per_role_bytes": 128,
+      "credit_rule": "reserve response FIFO space before request acceptance; must consume every returned beat even when compute/output stalls",
+      "widths": "A/B wide256 only for banks3,13,14,15 at even word address; banks8/9 narrow128; metadata reads consume selected valid lanes only",
+      "read_bounds": "aligned beat must stay inside allocated bank; selected tensor/scale bytes must be covered; unrelated alignment/padding bytes never become operands",
+      "write": "wr_valid/wr_ready, bank_id4, word_address19, data128, strb16; stable on stalls; update output coverage only on accepted writes"
+    },
+    "bank_roles": {
+      "GEMM_INT8": [
+        3,
+        4,
+        5
+      ],
+      "ATTN_SCORE_INT8": [
+        11,
+        12,
+        13
+      ],
+      "ATTN_VALUE_INT8": [
+        15,
+        16,
+        17
+      ]
+    },
+    "completion": "one matched response after all accepted read responses processed, arithmetic pipeline/results drained, final BF16 write accepted and coverage updates published; no further request for retired command; never signal done merely on last MAC",
+    "descriptors": "fabric supplies captured descriptor/profile, shape, position/layer, component byte-validity and scale locations; parent ISA validation rules precede memory access; no BANK_CONFIG or DDR control ports in this kernel"
+  },
+  "architecture": {
+    "compute_style": "N16 by K16 SIMD dot-product core, 256 products/cycle",
+    "memory_style": "ISA-owned B3/B15 external-bank pingpong; internal K32 panel pingpong and staged A; no implicit DMA",
+    "sharing": "one physical core and epilogue for all three opcodes; one in-flight collectively",
+    "scale_groups": "M up to16 shared rows, N16 weight/features, full reduction K; preserve frozen dynamic/static scale policy",
+    "projection_schedule": "for N16 subset of current ISA tile, loop K32 panels ascending; issue both K16 halves across M rows; accumulator persists across panels; output N start is ISA n_start+local N; m_start applies only input rows",
+    "QK_schedule": "per KV head, preload associated3 query heads into up to96 logical rows (head-major); load Kcache token N16 by feature K32 panels and reuse across those rows; divide by sqrt64 via frozen FP32 scale sequence; process only causal valid outputs and explicitly write zero to all masked/padded score slots",
+    "PV_schedule": "per KV head, preload3 query heads of P into up to96 logical rows, each full padded context; transpose V token K32 by feature N16 panels into B[N,K]; reuse across query heads; full context reduction with masked/tail P zero; per-V-feature16 scales",
+    "GQA_mapping": "query head h uses KV head floor(h/3); no integer partial sums shared across distinct query heads",
+    "panels": "one active and one filling internal B panel; local panel readiness includes byte validity and final accepted read response. Cannot overwrite active panel; no autonomous access to alternate ISA weight bank.",
+    "decode_limit": "external/local bank feed and panel transposition can dominate decode; 256 products/cycle is staged compute capacity, not sustained end-to-end performance; GQA reuse amortizes K/V loads across three heads",
+    "epilogue_flow": "128 completed-vector FIFO absorbs last-K row bursts; four output lanes, stalls eventually stop core and new bank requests by credits; no arbitrary output stall may cause data loss"
+  },
+  "numeric": {
+    "input": "signed INT8 -127..127; P0..127; zero-point0",
+    "dot": "exact INT32 across full K; no per-K scale or rounding",
+    "scale": "FP32 positive finite prepared/dynamic values from bank sidecars",
+    "output": "BF16 bitwise numeric_contract; separate four-lane epilogue child",
+    "overflow_runtime_detector": false
+  },
+  "memory": {
+    "buffers": [
+      {
+        "name": "A_staging",
+        "bytes": 98304,
+        "formula": "max(32*1536,3*32*64,3*32*1024)",
+        "purpose": "one full dense A or three GQA query heads; one256-bit local read per cycle; storage width256, depth3072"
+      },
+      {
+        "name": "B_panels",
+        "bytes": 1024,
+        "formula": "2*16*32",
+        "purpose": "two N16 by K32 INT8 panels, 16 channel partitions; each panel provides16 K operands per channel each cycle"
+      },
+      {
+        "name": "partial_sums",
+        "bytes": 6144,
+        "formula": "96*16*4",
+        "purpose": "16 separately readable/writable channel partitions; exact row context"
+      },
+      {
+        "name": "result_FIFO",
+        "bytes": 10240,
+        "formula": "128*(16*4+16)",
+        "purpose": "128 vectors; each64B dots+16B address/scale/mask metadata"
+      },
+      {
+        "name": "scale_metadata",
+        "bytes": 256,
+        "formula": "64*4",
+        "purpose": "selected/cached FP32 scales; not whole model scales"
+      },
+      {
+        "name": "A_read_response_FIFO",
+        "bytes": 128,
+        "formula": "4*32",
+        "purpose": "reserve no-backpressure native read responses"
+      },
+      {
+        "name": "B_read_response_FIFO",
+        "bytes": 128,
+        "formula": "4*32",
+        "purpose": "reserve no-backpressure native read responses"
+      },
+      {
+        "name": "B_transpose_staging",
+        "bytes": 512,
+        "formula": "16*32",
+        "purpose": "PV gather/transposition staging before panel publication"
+      },
+      {
+        "name": "BF16_write_packer",
+        "bytes": 32,
+        "formula": "2*16",
+        "purpose": "double buffered128-bit output packing"
+      }
+    ],
+    "logical_buffer_total_bytes": 116768,
+    "physical_note": "logical payload capacity only; physical BRAM/URAM/LUTRAM packing, pipeline storage and metadata counters require synthesis; buffers are additional to frozen logical bank pool2224928B"
+  },
+  "resource_objective": {
+    "device_inventory": {
+      "lut": 230400,
+      "ff": 460800,
+      "dsp": 1728,
+      "bram_36k": 312,
+      "uram": 96
+    },
+    "product_path_floor": 256,
+    "baseline_product_DSP_target": 256,
+    "hard_limits": "no unmeasured per-module fit claim; report all resources and hierarchy; combined full-design resource fit remains board-stage work",
+    "OOC_objective": "5ns setup/hold/pulse-width pass, registered real256 product paths, demonstrated staged II1; use measured evidence before reducing lane count"
+  },
+  "control_rules": {
+    "errors": "shared error codes; illegal descriptors before memory access; numerical error invalidates destination on matched quiescent error; prior accepted tile writes may exist but must not be consumable",
+    "overflow": "no runtime INT32 overflow detector/error",
+    "recovery": "stop new work and drain accepted reads/writes/results; report error only at quiescence; otherwise coordinated reset retains ownership; PS owns retry",
+    "END": "handled by dispatcher; kernel does not clear ready bank data on fragment END"
+  },
+  "verification": {
+    "golden": "selected per-command input/output gzip bytes and coverage from pinned tensor_golden manifest; exact_numeric for directed edge cases; compare selected valid BF16 bytes bitwise and INT32 child dots to independent integer oracle",
+    "cases": [
+      "full M32 N192 K576 and K1536",
+      "source m_start31; destination lm_head N offsets through49152",
+      "N1 and partial N output strobe/gap coverage",
+      "M1/16/17/32 row scale groups",
+      "QK/PV GQA heads9 to3; context1/33/1024",
+      "prefill causal masks and aligned padding zero writes",
+      "all127 maximum legal reductions; no overflow error circuit",
+      "scale group ordering and all rounding/subnormal/signedzero boundaries",
+      "random A/B request and destination stalls; response credit limits",
+      "B panel no overwrite while active; row0 accumulation feedback",
+      "compute B3 while DMA fills B15, then reversed; DMA and scale identity guards",
+      "invalid descriptors/scales and drain before error",
+      "held command/response identity; duplicate/wrong completion cannot release banks",
+      "last read processing and final accepted write precede response",
+      "reset under coordinated reset; no stale response"
+    ],
+    "required_evidence": [
+      "self-checking RTL simulation report",
+      "independent RTL audit of source/contract/vector hashes",
+      "Vivado2025.2 OOC synthesis resource hierarchy",
+      "5ns timing summary incl setup/hold/pulse-width",
+      "256-product parallelism and staged issue trace",
+      "fabric/native-bank integration and alternate-bank DMA tests"
+    ],
+    "claims_excluded": [
+      "actual checkpoint accuracy",
+      "all30 layers validated",
+      "nonlinear RTL equivalence",
+      "routed full-board fit/timing",
+      "physical hardware PASS",
+      "end-to-end throughput derived from peak MACs"
+    ]
+  },
+  "review_state": {
+    "frozen_semantics": "existing ISA, bank, numeric and completion contracts unchanged",
+    "RTL_dispatch": "not started; concrete implementation contract approved. Implementation and verification are separate subsequent work; scoped contract checks do not grant full-model promotion.",
+    "approved_implementation_choices": [
+      "N16 K16 dot core rather than BF16 systolic reuse",
+      "K32 internal panel pingpong",
+      "three-head GQA reuse and96 contexts",
+      "four-lane FP32/BF16 output",
+      "200MHz OOC target"
+    ]
+  },
+  "approved_proposal_sha256": "d64e4de9115f289ec4caf6148ad0873d92c2136af8dd6835710f5f0bc007a0b3"
+}

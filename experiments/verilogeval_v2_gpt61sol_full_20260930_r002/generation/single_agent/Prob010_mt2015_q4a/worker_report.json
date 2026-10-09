@@ -1,0 +1,28 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "details": "Correct sequential fixture passed, deliberately wrong fixture failed, repaired fixture passed."
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "details": "Icarus 12 compilation and matching vvp simulation passed exhaustive binary truth-table and repeated transition checks.",
+      "evidence": "development/01"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "rtl_files": ["candidate.sv", "candidate_initial.sv"],
+  "testbench_files": ["dev_tb.sv"],
+  "interface_cycle_contract": "TopModule has one-bit inputs x and y and one-bit output z; continuous combinational z = (x ^ y) & x, with no clock, reset, or added latency.",
+  "numeric_width_decisions": "All ports and operations are one bit.",
+  "static_review": "Direct continuous assignment; no state, latches, or multiple drivers. Initial snapshot preserved unchanged."
+}

@@ -1,0 +1,24 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "outcome": "passed", "details": "Correct fixture passed, deliberately wrong fixture failed simulation, repaired fixture passed."},
+    {"command": "python3 validate_contract.py", "outcome": "passed_structure_only", "evidence": "contract_gate.json"},
+    {"command": "python3 dev_check.py --label initial", "outcome": "passed", "evidence": "dev_checks.jsonl and development/01", "details": "Icarus 12 compilation and matching vvp simulation passed; 140293 checked edges; no compile warnings."}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis or board work was performed, as required.",
+    "Power-up outputs before synchronous reset are unspecified and were not checked.",
+    "count outside counting is explicitly don't-care and was not checked.",
+    "First counting interval interpretation is recorded in contract.json."
+  ],
+  "justified_changes": {"rtl": [], "testbench": [], "contract": []},
+  "artifacts": {"rtl": "candidate.sv", "unchanged_initial": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json"},
+  "implementation": {
+    "interface_cycle_contract": "Original TopModule ports; active-high synchronous reset; duration sampled MSB first; counting begins after fourth delay bit; each remaining value lasts 1000 intervals; done held until ack.",
+    "numeric_widths": "4-bit unsigned remaining duration and 10-bit 0..999 subcounter.",
+    "static_review": "Single sequential driver, explicit conditional state assignments, sized arithmetic, no extra ports or latency, portable synthesizable DUT with no instantiated dependencies.",
+    "verification": "Independent integer remaining-time and sliding-window oracle; all delays, timer boundaries, overlap, ignored data/ack during counting, done hold, repeated operations, synchronous reset and cancellation."
+  }
+}

@@ -1,0 +1,197 @@
+--- baseline.sv
++++ isa_command_dispatcher.sv
+@@ -136,7 +136,7 @@
+     // USER_OPCODES_BEGIN
+     localparam logic [OPCODE_WIDTH-1:0] OP_GEMM = 3, OP_RMS = 4,
+         OP_ROPE = 5, OP_SCORE = 6, OP_SOFTMAX = 7, OP_VALUE = 8,
+-        OP_ADD = 9, OP_SILU = 10, OP_FENCE = 11;
++        OP_ADD = 9, OP_SILU = 10, OP_FENCE = 11, OP_GEMM_TILES = 12;
+     // USER_OPCODES_END
+ 
+     localparam logic [7:0] ERR_NONE        = 8'h00;
+@@ -165,6 +165,58 @@
+     logic [CMD_DATA_WIDTH-1:0] command_r;
+     /* verilator lint_on UNUSED */
+     logic [7:0] error_code_r;
++    logic macro_active_r, macro_gemm_r;
++    logic [CMD_DATA_WIDTH-1:0] macro_command_r;
++    logic [15:0] macro_n_r;
++    logic [31:0] macro_address_r;
++    logic macro_legal_w;
++
++    function automatic logic [7:0] macro_tile_width(
++        input logic [CMD_DATA_WIDTH-1:0] descriptor,
++        input logic [15:0] n_start);
++        logic [15:0] remaining;
++        begin
++            remaining = descriptor[79:64] - n_start;
++            macro_tile_width = (remaining >= {8'd0, descriptor[40:33]}) ?
++                descriptor[40:33] : remaining[7:0];
++        end
++    endfunction
++
++    function automatic logic [CMD_DATA_WIDTH-1:0] macro_load_command(
++        input logic [CMD_DATA_WIDTH-1:0] descriptor,
++        input logic [31:0] address,
++        input logic [15:0] n_start);
++        logic [31:0] bytes;
++        logic [CMD_DATA_WIDTH-1:0] result;
++        begin
++            bytes = 32'(macro_tile_width(descriptor, n_start)) *
++                    32'(descriptor[63:53]) * 32'd2;
++            result = '0;
++            result[127:124] = OP_MM2S;
++            result[123:120] = descriptor[119:116];
++            result[79:57] = bytes[22:0];
++            result[56:25] = address;
++            macro_load_command = result;
++        end
++    endfunction
++
++    function automatic logic [CMD_DATA_WIDTH-1:0] macro_gemm_command(
++        input logic [CMD_DATA_WIDTH-1:0] descriptor,
++        input logic [15:0] n_start);
++        logic [CMD_DATA_WIDTH-1:0] result;
++        begin
++            result = '0;
++            result[127:124] = OP_GEMM;
++            result[123:112] = descriptor[123:112];
++            result[62:47] = n_start;
++            result[46:31] = descriptor[79:64];
++            result[30:25] = descriptor[52:47];
++            result[24:19] = descriptor[46:41];
++            result[18:8] = descriptor[63:53];
++            result[7:0] = macro_tile_width(descriptor, n_start);
++            macro_gemm_command = result;
++        end
++    endfunction
+ 
+     /* verilator lint_off LITENDIAN */
+     logic [0:BANK_NUM-1] pending_mm2s_r;
+@@ -300,6 +352,27 @@
+     assign local_offset_w = command_r[OPERAND2_LSB-1 -: BANK_ADDR_WIDTH];
+     assign byte_count_w = command_r[LOCAL_OFFSET_LSB-1 -: BTT_WIDTH];
+     assign axi_address_w = command_r[BYTE_COUNT_LSB-1 -: AXI_ADDR_WIDTH];
++
++    assign macro_legal_w = (command_r[32:0] == '0) &&
++        (operand1_bank_w == 4'd3) &&
++        ({1'b0, operand0_bank_w} < BANK_NUM_LIMIT) &&
++        ({1'b0, operand2_bank_w} < BANK_NUM_LIMIT) &&
++        (operand0_bank_w != operand1_bank_w) &&
++        (operand0_bank_w != operand2_bank_w) &&
++        (operand1_bank_w != operand2_bank_w) &&
++        bank_allowed(int'(role_for(OP_GEMM, 0)), operand0_bank_w) &&
++        bank_allowed(int'(role_for(OP_GEMM, 1)), operand1_bank_w) &&
++        bank_allowed(int'(role_for(OP_GEMM, 2)), operand2_bank_w) &&
++        (command_r[83:80] == 4'd0) &&
++        (command_r[79:64] != 16'd0) &&
++        (command_r[79:64] <= 16'd49152) &&
++        (command_r[63:53] != 11'd0) &&
++        (command_r[63:53] <= 11'd1536) &&
++        (command_r[40:33] != 8'd0) &&
++        (command_r[40:33] <= 8'd192) &&
++        (command_r[46:41] != 6'd0) &&
++        (command_r[46:41] <= 6'd32) &&
++        ({1'b0, command_r[52:47]} + {1'b0, command_r[46:41]} <= 7'd32);
+ 
+     always_comb begin
+         operand0_tag_w = TAG_WIDTH'(operand0_bank_w);
+@@ -735,6 +808,11 @@
+             fetch_count_r <= '0;
+             command_r <= '0;
+             error_code_r <= ERR_NONE;
++            macro_active_r <= 1'b0;
++            macro_gemm_r <= 1'b0;
++            macro_command_r <= '0;
++            macro_n_r <= '0;
++            macro_address_r <= '0;
+             pending_mm2s_r <= '0;
+             pending_s2mm_r <= '0;
+         end else begin
+@@ -756,6 +834,8 @@
+                             pc_r <= '0;
+                             fetch_count_r <= '0;
+                             error_code_r <= ERR_NONE;
++                            macro_active_r <= 1'b0;
++                            macro_gemm_r <= 1'b0;
+                             if (PARAMETERS_LEGAL) begin
+                                 state_r <= FETCH;
+                             end else begin
+@@ -774,7 +854,21 @@
+                         end
+                     end
+                     CHECK_COMMAND: begin
+-                        if (!opcode_known_w) begin
++                        if (opcode_w == OP_GEMM_TILES && !macro_active_r) begin
++                            if (!macro_legal_w) begin
++                                error_code_r <= ERR_OPERAND;
++                                state_r <= ERROR_DRAIN;
++                            end else begin
++                                macro_command_r <= command_r;
++                                macro_n_r <= '0;
++                                macro_address_r <= command_r[111:80];
++                                macro_active_r <= 1'b1;
++                                macro_gemm_r <= 1'b0;
++                                command_r <= macro_load_command(
++                                    command_r, command_r[111:80], 16'd0);
++                                state_r <= CHECK_COMMAND;
++                            end
++                        end else if (!opcode_known_w) begin
+                             error_code_r <= ERR_OPCODE;
+                             state_r <= ERROR_DRAIN;
+                         end else if (!command_legal_w) begin
+@@ -793,13 +887,39 @@
+                             end else if (opcode_w == OP_S2MM) begin
+                                 pending_s2mm_r[operand0_bank_w] <= 1'b1;
+                             end
+-                            if (pc_r == LAST_PC) begin
+-                                error_code_r <= ERR_MISSING_END;
+-                                state_r <= ERROR_DRAIN;
++                            if (macro_active_r && !macro_gemm_r) begin
++                                command_r <= macro_gemm_command(
++                                    macro_command_r, macro_n_r);
++                                macro_gemm_r <= 1'b1;
++                                state_r <= CHECK_COMMAND;
++                            end else if (macro_active_r &&
++                                ({1'b0, macro_n_r} +
++                                 {9'd0, macro_tile_width(macro_command_r, macro_n_r)} <
++                                 {1'b0, macro_command_r[79:64]})) begin
++                                macro_n_r <= macro_n_r +
++                                    16'(macro_tile_width(macro_command_r, macro_n_r));
++                                macro_address_r <= macro_address_r +
++                                    32'(macro_tile_width(macro_command_r, macro_n_r)) *
++                                    32'(macro_command_r[63:53]) * 32'd2;
++                                command_r <= macro_load_command(
++                                    macro_command_r,
++                                    macro_address_r +
++                                    32'(macro_tile_width(macro_command_r, macro_n_r)) *
++                                    32'(macro_command_r[63:53]) * 32'd2,
++                                    macro_n_r +
++                                    16'(macro_tile_width(macro_command_r, macro_n_r)));
++                                macro_gemm_r <= 1'b0;
++                                state_r <= CHECK_COMMAND;
+                             end else begin
+-                                pc_r <= pc_r + 1'b1;
+-                                fetch_count_r <= '0;
+-                                state_r <= FETCH;
++                                macro_active_r <= 1'b0;
++                                if (pc_r == LAST_PC) begin
++                                    error_code_r <= ERR_MISSING_END;
++                                    state_r <= ERROR_DRAIN;
++                                end else begin
++                                    pc_r <= pc_r + 1'b1;
++                                    fetch_count_r <= '0;
++                                    state_r <= FETCH;
++                                end
+                             end
+                         end
+                     end
+@@ -818,6 +938,8 @@
+                             pc_r <= '0;
+                             fetch_count_r <= '0;
+                             error_code_r <= ERR_NONE;
++                            macro_active_r <= 1'b0;
++                            macro_gemm_r <= 1'b0;
+                             if (PARAMETERS_LEGAL) begin
+                                 state_r <= FETCH;
+                             end else begin

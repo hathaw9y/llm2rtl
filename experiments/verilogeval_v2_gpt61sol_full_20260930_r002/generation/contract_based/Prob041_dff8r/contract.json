@@ -1,0 +1,31 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {"clk": "input 1 bit", "reset": "input 1 bit", "d": "input [7:0]", "q": "output [7:0]"},
+    "source": "problem.txt interface"
+  },
+  "semantics": {
+    "edge": "positive edge of clk, as explicitly specified",
+    "transition": "At each positive edge: q becomes 8'h00 if reset is high; otherwise q becomes the sampled d.",
+    "reset": "Active high synchronous, explicitly stated in problem.txt; reset changes between rising edges do not change q.",
+    "hold": "q holds between positive edges, including negative edges.",
+    "initialization": "No power-up value is specified; do not initialize RTL or require a particular initial value in the oracle.",
+    "sampling": "Check output after nonblocking updates for the current rising edge; no additional pipeline latency."
+  },
+  "numeric": {
+    "width": 8,
+    "mapping": "Each d bit maps to the corresponding q bit.",
+    "arithmetic": "None; bit-exact copy or zero."
+  },
+  "verification": {
+    "oracle": "Independent expectations from original problem.txt: reset priority at rising edges, otherwise sampled d, and hold elsewhere.",
+    "cases": ["all 256 data patterns", "walking bit coverage through exhaustive patterns", "reset asserted and released between edges", "reset held over rising edges with nonzero d", "negative-edge hold", "input mutation between edges"],
+    "sampling": "Stimulus away from rising edges; comparisons one time unit after events.",
+    "completion": "Fatal on mismatch, bounded timeout, PASS only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {"issue": "Power-up q is unspecified", "resolution": "Do not assert a power-up value; start functional checking after a synchronous reset edge."}
+  ]
+}

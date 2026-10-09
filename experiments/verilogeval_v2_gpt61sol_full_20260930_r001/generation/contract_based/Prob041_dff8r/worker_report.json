@@ -1,0 +1,45 @@
+{
+  "revision_count": 0,
+  "contract_corrections": [],
+  "checks": [
+    {
+      "name": "contract_gate",
+      "command": "python3 validate_contract.py",
+      "outcome": "PASS: structural gate only",
+      "log": "contract_validation.log",
+      "note": "First shell wrapper used zsh read-only variable status after validation executed; rerun with gate_rc completed successfully. First output preserved in contract_validation_attempt1.log."
+    },
+    {
+      "name": "static_review",
+      "outcome": "PASS",
+      "details": "Exact TopModule ports and widths; one always_ff on posedge clk; active-high synchronous reset takes priority; nonblocking assignments; no initialization or extra behavior; direct eight-bit capture."
+    },
+    {
+      "name": "development_compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "outcome": "FAILED",
+      "exit_code": 139,
+      "log": "development_compile.log",
+      "exit_record": "development_compile.exit",
+      "details": "Compiler exited with code 139 and produced no diagnostic output."
+    },
+    {
+      "name": "development_simulation",
+      "outcome": "NOT_RUN",
+      "details": "Compilation failed; no simulation success claimed."
+    }
+  ],
+  "development_outcome": "Initial synthesizable candidate delivered without RTL revisions. Contract gate and static review passed; development compilation failed at tool execution, so behavior remains unverified by simulation.",
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "contract": "contract.json",
+    "independent_testbench": "dev_tb.sv"
+  },
+  "limitations": [
+    "No successful development simulation due to compiler exit code 139.",
+    "Contract validator checks structure only, not functional correctness.",
+    "Power-up q value is unspecified by the problem and is not initialized.",
+    "No synthesis, timing, board work, or official evaluation performed."
+  ]
+}

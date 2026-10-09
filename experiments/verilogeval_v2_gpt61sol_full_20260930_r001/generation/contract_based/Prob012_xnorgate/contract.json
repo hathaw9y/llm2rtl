@@ -1,0 +1,65 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "a": {
+        "direction": "input",
+        "width": 1
+      },
+      "b": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "function": "XNOR: out is 1 when binary a and b are equal, otherwise 0",
+    "truth_table": [
+      {
+        "a": 0,
+        "b": 0,
+        "out": 1
+      },
+      {
+        "a": 0,
+        "b": 1,
+        "out": 0
+      },
+      {
+        "a": 1,
+        "b": 0,
+        "out": 0
+      },
+      {
+        "a": 1,
+        "b": 1,
+        "out": 1
+      }
+    ],
+    "timing": "Pure combinational logic; output follows current inputs after simulator combinational settling, with no clock cycles or intentional delay.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No stored state or initialization required."
+  },
+  "numeric": {
+    "operand_width_bits": 1,
+    "output_width_bits": 1,
+    "operation": "Bitwise XNOR",
+    "signedness": "Unsigned single-bit logic",
+    "overflow_rounding_saturation": "Not applicable; no arithmetic or width conversion."
+  },
+  "verification": {
+    "oracle": "Explicit original-spec XNOR truth table, independent of RTL expression.",
+    "coverage": "All four binary input pairs, repeated in reverse order to exercise input transitions.",
+    "comparison": "Case inequality against expected bit after settling detects unexpected X/Z.",
+    "tools": "Icarus v12 and matching vvp; explicit dev_tb top; -g2012; finite compile and simulation timeouts.",
+    "scope": "Development elaboration and simulation only; no official evaluation, synthesis or board access."
+  },
+  "specification_ambiguities": [
+    "Original problem does not specify X/Z input behavior; binary truth table is the verification requirement."
+  ]
+}

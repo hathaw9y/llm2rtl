@@ -1,0 +1,27 @@
+{
+  "status": "frozen",
+  "module": "TopModule",
+  "interface": {
+    "clk": "input 1-bit",
+    "aresetn": "input 1-bit",
+    "x": "input 1-bit",
+    "z": "output 1-bit"
+  },
+  "semantics": "Three-state Mealy recognizer: EMPTY, PREFIX_1, PREFIX_10. EMPTY: x=0 stays EMPTY, x=1 goes PREFIX_1. PREFIX_1: x=0 goes PREFIX_10, x=1 stays PREFIX_1. PREFIX_10: x=0 goes EMPTY, x=1 goes PREFIX_1. z=(state==PREFIX_10)&&x.",
+  "numeric_widths": {
+    "state": 2,
+    "ports": 1
+  },
+  "latency_reset_behavior": "State samples x on posedge clk. z is combinational from current state and x, no registered output latency. Falling edge aresetn asynchronously resets state to EMPTY; reset also wins at rising clock edges.",
+  "specification_ambiguities": [
+    "Output is conventional Mealy combinational output, not a registered pulse. Reset clears state rather than gating z directly."
+  ],
+  "verification_plan": [
+    "Exhaustive 10-bit input sequences checked against sampled-history reference before and after each rising clock edge.",
+    "Asynchronous reset during partial and complete detection, with clock held low.",
+    "Input mutations between edges checked for combinational response."
+  ],
+  "source_closure": [
+    "candidate.sv"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {
+      "a": 1,
+      "b": 1
+    },
+    "outputs": {
+      "q": 1
+    },
+    "clock": null,
+    "reset": null,
+    "evidence": "Original interface lists only a, b, q, each one bit."
+  },
+  "semantics": {
+    "function": "q = a AND b",
+    "truth_table": {
+      "00": 0,
+      "01": 0,
+      "10": 0,
+      "11": 1
+    },
+    "latency": "Combinational, no added delay or storage. Observe after same-timestamp delta settling.",
+    "initialization": "No state or initialization specified; original inputs at 0ns are a=0, b=0, q=0.",
+    "evidence": "Original says combinational; 0ns gives 00->0, 25ns gives 01->0, 35ns gives 10->0, 45ns gives 11->1; repeated at 55/65/75/85ns."
+  },
+  "numeric": {
+    "widths": "All ports one bit",
+    "interpretation": "Boolean binary inputs",
+    "arithmetic": "No signed arithmetic, overflow, rounding or saturation."
+  },
+  "verification": {
+    "oracle": "Literal expected q values from original waveform, independent of DUT expression.",
+    "stimulus": "Replay every original row at 0 through 90ns in 5ns increments, including repeated levels.",
+    "sampling": "Drive at original row timestamp; sample after #0 delta settling without advancing physical time.",
+    "coverage": "All four binary combinations, transitions between them, repeated observations and return to 00.",
+    "failure": "Case-inequality mismatch triggers $fatal; bounded timeout; PASS only after all 19 rows."
+  },
+  "specification_ambiguities": [
+    {
+      "topic": "X/Z inputs",
+      "evidence": "Original waveform includes only 0 and 1.",
+      "resolution": "No extra X/Z acceptance requirement; implement ordinary four-state bitwise AND."
+    }
+  ]
+}

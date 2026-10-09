@@ -1,0 +1,19 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"name": "environment_smoke", "command": "python3 smoke_environment.py", "status": "passed", "details": "Correct sequential fixture passed; deliberately wrong fixture failed; repaired fixture passed."},
+    {"name": "contract_structure", "command": "python3 validate_contract.py", "status": "passed_structure_only", "evidence": "contract_gate.json"},
+    {"name": "initial", "command": "python3 dev_check.py --label initial", "status": "passed", "evidence": "development/01/result.json", "details": "Icarus 12 compile and simulation succeeded with no warnings; 2777 checks passed."}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official correctness has not been evaluated.",
+    "Invalid nonphysical sensor combinations are unspecified by the original problem and are implemented as state holds; verification uses valid sensor combinations.",
+    "The original problem does not specify power-up state; checks begin with synchronous reset.",
+    "Rising-edge sampling and ordinal handling of skipped levels are documented interpretations of the synchronous state-machine specification."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Registered water-level rank and supplemental valve history with combinational nominal flow decoding. Supplemental opens when the previous distinct sampled level was lower, following the original wording. Reset forces lowest level and all outputs asserted.",
+  "artifacts": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv", "contract": "contract.json", "development_history": "dev_checks.jsonl"}
+}

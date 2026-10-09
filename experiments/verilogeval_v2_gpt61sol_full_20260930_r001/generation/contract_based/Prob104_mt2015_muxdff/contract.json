@@ -1,0 +1,55 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "clk": {
+        "direction": "input",
+        "width": 1
+      },
+      "L": {
+        "direction": "input",
+        "width": 1
+      },
+      "q_in": {
+        "direction": "input",
+        "width": 1
+      },
+      "r_in": {
+        "direction": "input",
+        "width": 1
+      },
+      "Q": {
+        "direction": "output",
+        "width": 1
+      }
+    }
+  },
+  "semantics": {
+    "clock": "posedge clk",
+    "next_state": "At each rising edge, Q <= r_in if L is 1; otherwise Q <= q_in.",
+    "latency": "Selected input is reflected after the rising-edge nonblocking update; one register stage.",
+    "between_edges": "Q holds its last sampled value; falling edges do not update Q.",
+    "reset": "No reset port or reset behavior.",
+    "initialization": "No specified initial value; no RTL initialization.",
+    "factoring": "q_in supplies the externally computed recurrence bit; XOR and inter-flip-flop wiring belong outside this submodule.",
+    "sampling": "Inputs are sampled at every rising edge, with no enable or handshake."
+  },
+  "numeric": {
+    "type": "Single-bit logic for all ports and state",
+    "arithmetic": "No arithmetic in this submodule; only selection and storage.",
+    "rounding_overflow_saturation": "Not applicable."
+  },
+  "verification": {
+    "method": "Independent self-checking testbench with expected sampled bit and case-inequality comparisons.",
+    "cases": [
+      "All eight binary combinations of L, q_in and r_in, from both prior Q states",
+      "Input changes between rising edges must not change Q",
+      "Falling edge must not change Q",
+      "Consecutive load and recurrence selections"
+    ],
+    "initial_state": "Do not require a defined initial Q; establish known state using a rising-edge load.",
+    "tools": "Icarus Verilog v12 with -g2012 and explicit dev_tb top; finite compile and simulation timeouts."
+  },
+  "specification_ambiguities": []
+}

@@ -1,0 +1,41 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "a": 8,
+      "b": 8
+    },
+    "outputs": {
+      "s": 8,
+      "overflow": 1
+    },
+    "evidence": "Original problem explicitly lists these ports and widths."
+  },
+  "semantics": {
+    "operation": "Combinational addition; s is the low eight bits of a+b; overflow reports signed overflow.",
+    "timing": "No clock or reset ports are specified; outputs follow inputs without cycle latency.",
+    "initialization": "No state or initial output requirement is specified; verification uses known inputs after combinational settling.",
+    "evidence": "Original asks to add two 8-bit two's complement numbers and compute signed overflow."
+  },
+  "numeric": {
+    "encoding": "8-bit two's complement",
+    "operand_range": [
+      -128,
+      127
+    ],
+    "sum_range": [
+      -256,
+      254
+    ],
+    "result": "Sum modulo 256",
+    "overflow": "True exactly when mathematical signed sum is below -128 or above 127."
+  },
+  "verification": {
+    "oracle": "Decode each operand as an integer in [-128,127], add, compare low eight bits and signed range overflow.",
+    "coverage": "All 65536 known input pairs, with directed boundary cases first.",
+    "sampling": "Drive inputs then wait 1 ns before checking combinational outputs.",
+    "failure": "Use case inequality and $fatal; bounded timeout; PASS after all checks."
+  },
+  "specification_ambiguities": []
+}

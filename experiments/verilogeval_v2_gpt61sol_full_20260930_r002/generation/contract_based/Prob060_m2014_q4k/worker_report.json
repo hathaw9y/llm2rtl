@@ -1,0 +1,41 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "environment_smoke",
+      "status": "passed",
+      "evidence": "environment_smoke.json"
+    },
+    {
+      "label": "contract",
+      "status": "passed_structure_only",
+      "contract": "contract.json"
+    },
+    {
+      "label": "initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "command": "python3 dev_check.py --label initial",
+      "comparisons": 1061
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Original text does not explicitly state the reset value; interpreted as zero for all four flops.",
+    "No initial state guarantee is specified; checks of known values begin after synchronous reset.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "interface_cycle_contract": "TopModule with one-bit clk, resetn, in, out. Four positive-edge D flops; synchronous active-low reset clears all stages. Input sampled at edge N appears after edge N+3.",
+  "numeric_width_decisions": "Four one-bit storage stages; no arithmetic.",
+  "static_review": "Single sequential driver, nonblocking assignments, complete reset, direct final-stage output, no extra ports or latency.",
+  "artifacts": {
+    "rtl": "candidate.sv",
+    "initial_rtl": "candidate_initial.sv",
+    "testbench": "dev_tb.sv",
+    "contract": "contract.json",
+    "development_evidence": "dev_checks.jsonl"
+  }
+}

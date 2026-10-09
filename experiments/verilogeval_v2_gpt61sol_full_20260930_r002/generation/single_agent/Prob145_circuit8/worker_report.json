@@ -1,0 +1,31 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": {
+        "correct": "passed",
+        "injected_fault": "simulation_failed as expected",
+        "repair": "passed"
+      }
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence_directory": "development/01",
+      "checked_cases": 46
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "No synthesis or board verification performed."
+  ],
+  "justified_rtl_tb_changes": {
+    "rtl": "Initial implementation only: high-transparent latch for p and falling-edge register capturing p for q. No reset or initialization added.",
+    "testbench": "Original waveform replayed at its 5 ns timestamps, including simultaneous clock/input changes and initial unknown values; comparisons occur 1 ps after stimulus for event settling. Seven additional directed checks cover transparency, holding, and falling-edge capture. No testbench revisions."
+  },
+  "interface_cycle_contract": "TopModule(clock, a, p, q), all one bit; p follows a while clock is high and holds while low; q captures p on falling clock edges.",
+  "static_review": "Intentional latch, single drivers, nonblocking sequential assignments, unchanged ports and no extra latency."
+}

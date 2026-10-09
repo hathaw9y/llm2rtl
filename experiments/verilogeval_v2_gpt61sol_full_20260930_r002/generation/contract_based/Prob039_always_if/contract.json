@@ -1,0 +1,28 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"a": 1, "b": 1, "sel_b1": 1, "sel_b2": 1},
+    "outputs": {"out_assign": 1, "out_always": 1},
+    "evidence": "Original problem lists these six single-bit ports."
+  },
+  "semantics": {
+    "function": "Both outputs select b exactly when both selectors are true; otherwise select a.",
+    "implementation": "out_assign uses continuous assign; out_always uses a procedural if/else.",
+    "timing": "Combinational, no clock, no added cycle latency or stored state; sample after combinational settling.",
+    "reset_initialization": "No clock, reset, or initialization requirements appear in the original interface or behavior; no such ports or state are added."
+  },
+  "numeric": {
+    "type": "Single-bit logic signals",
+    "arithmetic": "No arithmetic, rounding, saturation, or overflow applies."
+  },
+  "verification": {
+    "oracle": "Truth table independently expressed by selector case: 00,01,10 select a; 11 selects b.",
+    "coverage": "All 16 binary input combinations, then reverse traversal to check changes and lack of retained state.",
+    "sampling": "Drive inputs and wait one simulation time unit before comparing both outputs with case inequality.",
+    "success": "Fatal on any mismatch; bounded timeout; PASS printed only after all checks."
+  },
+  "specification_ambiguities": [
+    "X/Z input behavior is unspecified. Binary functional coverage is required; standard SystemVerilog conditional and procedural-if semantics apply outside binary inputs without an added behavioral requirement."
+  ]
+}

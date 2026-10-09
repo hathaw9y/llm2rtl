@@ -1,0 +1,24 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "command": "python3 smoke_environment.py",
+      "status": "passed",
+      "cases": "correct fixture passed, deliberately wrong fixture failed, repaired fixture passed"
+    },
+    {
+      "command": "python3 dev_check.py --label initial",
+      "status": "passed",
+      "evidence": "development/01/result.json",
+      "coverage": "131103 checked samples, including all 65536 ordered byte pairs, held values, single-bit rising/falling transitions, output stability between edges, and an unsampled pulse"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation; official correctness is not yet known.",
+    "No reset or initial register values are specified. The testbench primes one sample before checking defined outputs."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "At each positive clock edge, register the per-bit XOR of the current input and the previous sampled input, and save the current input for the next comparison."
+}

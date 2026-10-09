@@ -1,0 +1,199 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob147_circuit10",
+  "official_status": "passed",
+  "official_analyzer_code": ".",
+  "workflow_status": "passed",
+  "development_status": "passed",
+  "development_check_count": 2,
+  "development_failed_check_count": 1,
+  "development_simulation_ran": true,
+  "observed_checked_rtl_revisions": 1,
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "-c",
+      "features.plugins=false",
+      "-c",
+      "features.apps=false",
+      "-c",
+      "features.skip_host_skill_discovery=true",
+      "-c",
+      "skills.include_instructions=false",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob147_circuit10",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob147_circuit10/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1791272786.2866502,
+    "ended_at_unix": 1791272882.0203595,
+    "seconds": 95.73370957374573,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 125416,
+      "cached_input_tokens": 112000,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3411,
+      "reasoning_output_tokens": 269
+    },
+    "cli_errors": []
+  },
+  "revision_count": 1,
+  "final_source_sha256": "d00d2eeec934985bd4fe445fe52d7e10e8c2fa9362c0755f51260c256390042c",
+  "contract_sha256": "401df197c5d5745b8ee08336f48ae239cc5fc45cc46c34acd589e391101b1c8d",
+  "worker_report": {
+    "revision_count": 1,
+    "checks": [
+      {
+        "label": "initial",
+        "status": "simulation_failed",
+        "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob147_circuit10/development/01"
+      },
+      {
+        "label": "revision_1",
+        "status": "passed",
+        "evidence_directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_noskills_20261006_r001/generation/contract_based/Prob147_circuit10/development/02"
+      }
+    ],
+    "environment_smoke": "passed: correct passes, injected fault fails, repair passes",
+    "contract_validation": "passed_structure_only; initial and corrected contract validation retained in helper history",
+    "development_outcome": "passed",
+    "limitations": [
+      "Development verification only; no official evaluation accessed.",
+      "Coincident input/clock scheduling inferred from original waveform and replayed with NBA input updates."
+    ],
+    "justified_rtl_changes": [
+      {
+        "revision": 1,
+        "reason": "Original waveform at 125 ns and 135 ns requires mixed inputs to retain state; initial AND next-state was incorrect. Replaced with three-input majority. XOR output unchanged."
+      }
+    ],
+    "justified_tb_changes": [
+      {
+        "preserved": "dev_tb_initial.sv",
+        "reason": "Original waveform oracle unchanged. Added exhaustive binary next-state checks and corrected supplemental unknown-input setup to establish state=0 before checking majority zero masking; initial AND-specific masking expectation was invalid for majority."
+      }
+    ],
+    "contract_changes": [
+      {
+        "preserved": "contract_initial.json",
+        "reason": "Failed waveform replay exposed incorrect AND transition inference. Frozen contract corrected to majority and structurally revalidated before RTL revision."
+      }
+    ],
+    "verification_summary": "39 original timestamp rows plus directed truth-table, transition, initial unknown, unknown propagation, and recovery checks; 79 successful observations."
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "d00d2eeec934985bd4fe445fe52d7e10e8c2fa9362c0755f51260c256390042c",
+      "Prob147_circuit10_ref.sv": "2dcf39be47b8847f2e6a831112633d3a917efd2ba45268488155a0d27dc8c9b7",
+      "Prob147_circuit10_test.sv": "8740465ba59035be5f35aa0647cf25ca6552ec74d0dfb0647a13273c973f6335"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob147_circuit10_test.sv",
+        "Prob147_circuit10_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.013667442835867405
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb147_circuit10_test.sv:50: $finish called at 1160 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Output 'state' has no mismatches.\nHint: Total mismatched samples is 0 out of 232 samples\n\nSimulation finished at 1160 ps\nMismatches: 0 in 232 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.006944415159523487
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "functional_failure",
+    "file_sha256": {
+      "candidate.sv": "9e3eaaed9d1ceb75db93053803c0fc35cc2d8f5ed9afc0e1834b3aed3aa4b1e0",
+      "Prob147_circuit10_ref.sv": "2dcf39be47b8847f2e6a831112633d3a917efd2ba45268488155a0d27dc8c9b7",
+      "Prob147_circuit10_test.sv": "8740465ba59035be5f35aa0647cf25ca6552ec74d0dfb0647a13273c973f6335"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob147_circuit10_test.sv",
+        "Prob147_circuit10_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.009938707575201988
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb147_circuit10_test.sv:50: $finish called at 1160 (1ps)\nHint: Output 'q' has 4 mismatches. First mismatch occurred at time 130.\nHint: Output 'state' has 4 mismatches. First mismatch occurred at time 130.\nHint: Total mismatched samples is 4 out of 232 samples\n\nSimulation finished at 1160 ps\nMismatches: 4 in 232 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.00710783526301384
+    },
+    "pre_official_analyzer_status": "functional_failure",
+    "official_analyzer_record": {
+      "passfail": "R",
+      "num_mismatch": 4,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  }
+}

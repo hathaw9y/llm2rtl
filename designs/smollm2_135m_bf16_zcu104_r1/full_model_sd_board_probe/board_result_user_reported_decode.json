@@ -1,0 +1,40 @@
+{
+  "source": "user-pasted UART excerpt, decode portion only",
+  "scope": "30-layer prefill32 then decode1, decode diagnostics and logits",
+  "physical_execution": {
+    "decode_chunks_done": 185,
+    "completion_marker": "BOARD FULL MODEL ISA EXECUTION COMPLETE; REVIEW LOGITS",
+    "sd_load_marker_in_excerpt": false,
+    "prefill_log_in_excerpt": false
+  },
+  "decode_logits": {
+    "count": 49152,
+    "legacy_mismatches": 3,
+    "legacy_mismatch_rule": "BF16 ULP distance > 16 AND absolute error > 0.002",
+    "max_ulp": 56,
+    "max_abs": 0.3125,
+    "mean_abs": 0.08486,
+    "mse": 0.010408758,
+    "rmse_approx": 0.1020233,
+    "board_top1": 28,
+    "reference_top1": 85,
+    "reference_logit_28": 26.25,
+    "reference_logit_85": 26.375,
+    "reference_top1_margin": 0.125
+  },
+  "decode_layer_first16": {
+    "layer0_mean_abs": 0.001831,
+    "layer29_mean_abs": 0.373047,
+    "layer0_mse": 0.000017762,
+    "layer29_mse": 0.217712402
+  },
+  "gemm_only_fp32_accumulation_experiment": {
+    "source": "verification/prototypes/smollm2_135m_numeric_sweep_result.json",
+    "same_token_sequence_decode_mean_abs": 0.025119146332144737,
+    "same_token_sequence_decode_rmse": 0.04918289929628372,
+    "same_token_sequence_decode_top1": 28,
+    "candidate_logit_28": 26.25,
+    "candidate_logit_85": 26.25
+  },
+  "interpretation": "Command execution completed. Numerical error grows through layers; the small 0.125 reference top1 margin allows BF16 rounding to change top1, as the prior software experiment also did. This excerpt alone does not identify a specific faulty executor or prove SD loading."
+}

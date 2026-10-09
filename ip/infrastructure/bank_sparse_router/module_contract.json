@@ -1,0 +1,95 @@
+{
+  "schema": "llm2rtl.infrastructure_module.v1",
+  "module_id": "bank_sparse_router",
+  "version": 1,
+  "status": "frozen_for_implementation",
+  "purpose": "generate a compile-time sparse heterogeneous-width bank router from bank_config_pkg without a full all-bank all-port crossbar",
+  "package": {
+    "name": "bank_config_pkg",
+    "path": "ip/infrastructure/bank_sparse_router/rtl/bank_config_pkg.sv",
+    "source_basis": "user supplied config_pkg bank inventory and role lists",
+    "required_changes_from_source_basis": [
+      "rename package to bank_config_pkg",
+      "set BANK_READ_LATENCY to 3 to match current bram_bank and uram_bank contracts",
+      "add owner ID constants 1 through 5",
+      "add active-bank and role-capability query functions without changing the supplied bank inventory or role lists"
+    ]
+  },
+  "bank_inventory": {
+    "BANK_NUM": 16,
+    "active_banks": [0, 1, 2, 3],
+    "inactive_banks": "4 through 15 are BANK_NONE and illegal request targets",
+    "banks": {
+      "0": {"type": "BANK_BRAM", "write_width": 128, "read_width": 128, "write_depth": 2048},
+      "1": {"type": "BANK_BRAM", "write_width": 128, "read_width": 256, "write_depth": 4096},
+      "2": {"type": "BANK_URAM", "write_width": 128, "read_width": 128, "write_depth": 65536},
+      "3": {"type": "BANK_BRAM", "write_width": 1024, "read_width": 1024, "write_depth": 1024}
+    }
+  },
+  "owner_ids": {
+    "NONE": 0,
+    "MM2S": 1,
+    "S2MM": 2,
+    "SA_ACT": 3,
+    "SA_WGT": 4,
+    "SA_OUT": 5
+  },
+  "role_bank_lists": {
+    "MM2S": [0, 1, 2],
+    "S2MM": [3],
+    "SA_ACT": [1],
+    "SA_WGT": [2],
+    "SA_OUT": [3]
+  },
+  "external_role_widths": {
+    "MM2S_WRITE": 128,
+    "S2MM_READ": 1024,
+    "SA_ACT_READ": 256,
+    "SA_WGT_READ": 128,
+    "SA_OUT_READ_WRITE": 1024
+  },
+  "physical_interface_rule": "use explicit named bank0 through bank3 physical ports at each bank's exact width; a MAX_BANK_WIDTH packed array is forbidden at the router boundary",
+  "physical_connections": [
+    "MM2S write decodes only to bank0 bank1 or bank2",
+    "SA_ACT read connects directly to bank1",
+    "SA_WGT read connects directly to bank2",
+    "SA_OUT write connects directly to bank3",
+    "SA_OUT read and S2MM read share only bank3 read port under mutually exclusive ownership",
+    "bank0 has no read consumer in this revision"
+  ],
+  "request_protocol": {
+    "write": "valid_ready; accept one word on valid and ready",
+    "read": "valid_ready request and fixed response exactly BANK_READ_LATENCY cycles later",
+    "response_backpressure": false,
+    "ownership": "request requires active configured bank, role capability, bank_busy, and matching bank_owner_port"
+  },
+  "fault_policy": {
+    "behavior": "denied request never enables a physical bank and latches first fault until reset",
+    "classes": ["inactive_or_out_of_range_bank", "role_bank_not_supported", "bank_not_busy", "owner_mismatch", "physical_port_collision"]
+  },
+  "verification": {
+    "target_part": "xczu7ev-ffvc1156-2-e",
+    "target_clock_ns": 5.0,
+    "vivado": "2025.2",
+    "required_cases": [
+      "package inventory and role lists exactly match the frozen contract",
+      "MM2S writes banks 0 1 and 2 and cannot write bank3 or BANK_NONE",
+      "SA_ACT reads only bank1 at 256 bits after latency 3",
+      "SA_WGT reads only bank2 at 128 bits after latency 3",
+      "SA_OUT reads and writes bank3 at 1024 bits",
+      "S2MM reads only bank3 at 1024 bits",
+      "SA_OUT and S2MM bank3 read collision is blocked",
+      "different physical banks operate concurrently",
+      "wrong owner and free bank requests produce no physical enable",
+      "reset flushes response-valid pipelines and sticky fault",
+      "OOC utilization is compared against full router baseline 7053 LUT and 95 FF"
+    ]
+  },
+  "does_not_claim": [
+    "physical bank memory instantiation",
+    "bank ownership acquisition or release",
+    "DataMover adapter integration",
+    "systolic-array arithmetic",
+    "routed board timing or bitstream"
+  ]
+}

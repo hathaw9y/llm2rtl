@@ -1,0 +1,9 @@
+{
+  "schema":"llm2rtl.hdl_module_implementation.v1","module_id":"datamover_engine","revision":"abort_priority_run_003","status":"PASS_READY_FOR_INDEPENDENT_VERIFICATION",
+  "finding_fixed":"P1 abort plus accepted status could latch faulted while suppressing both abort and later normal completion.",
+  "fix":"Abort suppresses new normal completion, overrides new status-derived response with code 0x50, and uses one pending bit to serialize code 0x50 behind an already offered response without popping the FIFO head.",
+  "concurrency_coverage":["good status+adapter_done+abort","bad status+adapter_done+abort","no status+adapter_done+abort","good status+no adapter_done+abort","bad status+no adapter_done+abort","no status+no adapter_done+abort","existing stalled completion+abort","existing accepted completion+abort"],
+  "verification":{"unit":"PASS","dedicated_xsim":"PASS","integration_xsim":"PASS 4/4","independent_probe":"PASS 3/3","lint":"PASS","ooc":"PASS WNS +2.876 ns WHS +0.057 ns WPWS +1.968 ns"},
+  "evidence":["source_manifest.sha256","integration_source_index.json","unit_sim.log","abort_concurrency_xsim.log","integration_xsim.log","independent_probe_xsim.log","verilator_lint.log","ooc/vivado.log","ooc/timing_summary.rpt","ooc/utilization.rpt","kernel_report.json","module_ooc_synthesis_report.json","subagent_result.json"],
+  "limitations":["OOC synthesis only","No vendor DataMover, placed/routed, board, or hardware proof"]
+}

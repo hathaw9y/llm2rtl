@@ -1,0 +1,57 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790742093.3617165,
+      "source_sha256": "eeb3e6fa1f01159d3ddfb287ea2f2f402f2240437fcacd42d239a6839e5d56d7",
+      "testbench_sha256": "c22f7acb91177aacb310bde2a59db5d61c60df29bc4524f696733b3ff3d71234",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob058_alwaysblock2/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.01171423401683569
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS: XOR truth table, positive-edge sampling, and hold checks (81 checks)\ndev_tb.sv:77: $finish called at 81000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.0062493011355400085
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_validation": "passed_structure_only",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis or board verification performed.",
+    "Original problem does not promise a hardware initial register value; RTL leaves it uninitialized."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "One continuous XOR assignment, one always_comb XOR assignment, and one positive-edge always_ff nonblocking XOR assignment. Original one-bit ports preserved; no reset or additional latency.",
+  "verification_coverage": "81 checks: all binary and X/Z operand combinations, uninitialized simulation register, rising-edge sample, high/low input changes, falling-edge hold, and recovery to known values.",
+  "initial_snapshot_preserved": true
+}

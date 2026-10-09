@@ -1,0 +1,237 @@
+{
+  "schema": "llm2rtl.isa_validation.v1",
+  "design_id": "qwen25_05b_w4_shared_zcu104",
+  "revision": "r1",
+  "status": "passed",
+  "no_host_tensor_compute": true,
+  "model_trace": {
+    "path": "designs/qwen25_05b_w4_shared_zcu104_r1/model_trace.json",
+    "sha256": "12fc1a74285df6e114d9bd495936ea850fa094141cd25a144c80ce423887c118"
+  },
+  "isa_spec": {
+    "path": "designs/qwen25_05b_w4_shared_zcu104_r1/isa_spec.json",
+    "sha256": "3df875733fb0efba2440ab581bcac5bdc23bf00470ee1534ae94ace3d8f597d2"
+  },
+  "bank_layout": {
+    "path": "designs/qwen25_05b_w4_shared_zcu104_r1/bank_layout.json",
+    "sha256": "d5f6eebd8ff3d9db966b8719efaae361224f28929799bd96a13cf381bd18e120"
+  },
+  "model_source_sha256": "4568d588b45dd28152d97c37300a5e227589bc70b9fef5224af29977ecf6abdc",
+  "lowerings": [
+    {
+      "operation_id": "embedding_lookup",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": []
+        },
+        {
+          "opcode": "VECTOR",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "rmsnorm",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": []
+        },
+        {
+          "opcode": "RMSNORM",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "weight_projection",
+      "instructions": [
+        {
+          "opcode": "VECTOR",
+          "banks": []
+        },
+        {
+          "opcode": "DMA_LOAD",
+          "banks": []
+        },
+        {
+          "opcode": "GEMM",
+          "banks": []
+        },
+        {
+          "opcode": "VECTOR",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "bias",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": []
+        },
+        {
+          "opcode": "VECTOR",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "rope_table",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "rope_rotation",
+      "instructions": [
+        {
+          "opcode": "ROPE",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "KV_append",
+      "instructions": [
+        {
+          "opcode": "DMA_STORE",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "KV_read",
+      "instructions": [
+        {
+          "opcode": "DMA_LOAD",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "GQA_mapping",
+      "instructions": [
+        {
+          "opcode": "VECTOR",
+          "banks": []
+        },
+        {
+          "opcode": "GEMM",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "QK_transpose",
+      "instructions": [
+        {
+          "opcode": "GEMM",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "scale_causal_softmax",
+      "instructions": [
+        {
+          "opcode": "SOFTMAX_MASKED",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "PV",
+      "instructions": [
+        {
+          "opcode": "GEMM",
+          "banks": []
+        },
+        {
+          "opcode": "VECTOR",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "residual",
+      "instructions": [
+        {
+          "opcode": "VECTOR",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "SiLU_times_up",
+      "instructions": [
+        {
+          "opcode": "VECTOR",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "head_layout",
+      "instructions": [
+        {
+          "opcode": "VECTOR",
+          "banks": []
+        }
+      ]
+    },
+    {
+      "operation_id": "LM_head",
+      "instructions": [
+        {
+          "opcode": "VECTOR",
+          "banks": []
+        },
+        {
+          "opcode": "DMA_LOAD",
+          "banks": []
+        },
+        {
+          "opcode": "GEMM",
+          "banks": []
+        },
+        {
+          "opcode": "VECTOR",
+          "banks": []
+        },
+        {
+          "opcode": "DMA_STORE",
+          "banks": []
+        }
+      ]
+    }
+  ],
+  "workload_results": [
+    {
+      "workload_id": "prefill",
+      "status": "passed",
+      "vector_sha256": "23bcfdec7d95abcc8456e795f1743a7308cd9f9540f2e717ac6d4a4ccc374e03"
+    },
+    {
+      "workload_id": "decode",
+      "status": "passed",
+      "vector_sha256": "38a96abb9ca1c101ef376a7995d1982def157c16326a52a384f1701d541c3923"
+    }
+  ],
+  "evidence": {
+    "path": "designs/qwen25_05b_w4_shared_zcu104_r1/evidence/isa_small_run002/report.json",
+    "sha256": "a2cf54c7507cf9212be7b8b22d726b6985a2df874357e43034bb2e155b21ff46"
+  },
+  "scope": "Small prefill/decode only; W4 reference numerical execution. Original BF16 quality probe failed. No RTL/board claim.",
+  "full_scope_status": "failed_prefill512_KV_tolerance",
+  "extended_evidence": {
+    "path": "designs/qwen25_05b_w4_shared_zcu104_r1/evidence/isa_extended_run001/report.json",
+    "sha256": "2ca5179ac3fd6231c87e64ac08cd3c55a3d76438d8b83eae675c3351b0b4a3ce"
+  },
+  "extended_limitations": "prefill17 passed; prefill512 KV relative L2 threshold failed; decode1024 passed with a reference-seeded prefix1023. No full ISA-generated1023-token chain proof."
+}

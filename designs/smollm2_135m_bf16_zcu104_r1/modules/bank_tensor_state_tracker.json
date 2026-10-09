@@ -1,0 +1,31 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_id": "bank_tensor_state_tracker",
+  "module_kind": "infrastructure",
+  "routed_opcodes": ["DMA_LOAD", "GEMM", "RMSNORM", "ROPE", "ATTN_SCORE", "SOFTMAX", "ATTN_VALUE", "ADD", "SILU_MUL"],
+  "status": "frozen",
+  "target": {"board": "ZCU104", "part": "xczu7ev-ffvc1156-2-e", "clock_mhz": 200},
+  "interface": {
+    "clock_reset": "aclk and synchronous active-low aresetn",
+    "bank_count": 13,
+    "inputs": ["wr_issue_valid[bank]", "wr_issue_kind[bank]", "wr_issue_index[bank]", "wr_issue_count[bank]", "wr_issue_total[bank]", "wr_complete_valid[bank]", "wr_complete_error[bank]"],
+    "outputs": ["tensor_valid[bank]", "tensor_progress[bank]", "write_pending[bank]", "state_error"],
+    "write_kinds": {"FULL": 0, "PART": 1, "INPLACE": 2},
+    "busy_owner": "bank_ownership_table, not this module",
+    "event_owner": "model-specific dispatcher and fabric derive issue and matched completion events from real executor handshakes"
+  },
+  "numeric": {
+    "kind": "metadata_only",
+    "tensor_arithmetic": "none",
+    "progress_unit": "logical row for embedding PART; logical output column for GEMM PART",
+    "completion": "FULL marks valid on successful completion; PART marks valid only after final segment; INPLACE restores valid after successful completion",
+    "failure": "failed write clears valid and progress; sticky state_error records malformed event sequences"
+  },
+  "verification": {
+    "required_cases": ["single FULL DMA completion", "32 ordered embedding rows", "8 ordered 192-column GEMM tiles", "same-bank overlapping issue rejected", "in-place success and error", "failed write invalidation", "state survives chunk DONE when reset is not asserted", "simultaneous events on different banks"],
+    "required_tools": ["self-checking Icarus simulation", "Verilator lint", "Vivado out-of-context synthesis"],
+    "proof_scope": "bank completion metadata only; no data bank memory, dispatcher, compute, or board execution"
+  }
+}

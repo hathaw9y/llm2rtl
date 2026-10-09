@@ -1,0 +1,34 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {"direction": "input", "width": 4, "range": "[3:0]"},
+      "out_both": {"direction": "output", "width": 4, "range": "[3:0]"},
+      "out_any": {"direction": "output", "width": 4, "range": "[3:0]"},
+      "out_different": {"direction": "output", "width": 4, "range": "[3:0]"}
+    },
+    "clock_reset_handshake": "None"
+  },
+  "semantics": {
+    "timing": "Pure combinational logic; outputs follow current input after combinational settling, with no cycle latency or stored state.",
+    "reset_initialization": "No reset or initialization required; no sequential state.",
+    "out_both": "For i=0,1,2: out_both[i] = in[i] AND in[i+1]. Bit 3 is unspecified by the problem and is tied to zero as an implementation choice.",
+    "out_any": "For i=1,2,3: out_any[i] = in[i] OR in[i-1]. Bit 0 is unspecified by the problem and is tied to zero as an implementation choice.",
+    "out_different": "For i=0,1,2: out_different[i] = in[i] XOR in[i+1]; out_different[3] = in[3] XOR in[0]."
+  },
+  "numeric": {
+    "representation": "Unsigned four-bit packed vectors containing independent Boolean bits.",
+    "operations": "One-bit bitwise AND, OR, XOR; no arithmetic, rounding, truncation, saturation, or overflow.",
+    "unknowns": "Use standard SystemVerilog four-state bitwise operator semantics; specified functional validation covers binary inputs."
+  },
+  "verification": {
+    "oracle": "Independent per-bit loop using Boolean truth conditions on binary input bits and modulo-four indexing for wraparound.",
+    "coverage": "Exhaust all 16 binary input vectors, checking all specified output bits; additionally check the chosen zero tie-offs and repeat vectors in reverse order to detect state dependence.",
+    "tools": "Icarus v12 with -g2012 and explicit dev_tb top; matching vvp. Compile and simulation each run under finite timeout.",
+    "acceptance": "No mismatches, successful compile and simulation exit, and explicit PASS marker. No official evaluation or synthesis claims."
+  },
+  "specification_ambiguities": [
+    "out_both[3] and out_any[0] are explicitly unneeded and have no required value. Choose zero tie-offs; do not infer wrapping for these two outputs."
+  ]
+}

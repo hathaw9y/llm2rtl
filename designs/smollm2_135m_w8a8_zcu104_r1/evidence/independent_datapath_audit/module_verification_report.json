@@ -1,0 +1,106 @@
+{
+  "schema": "llm2rtl.independent_module_verification.v1",
+  "status": "blocked",
+  "functional_status": "passed",
+  "functional_integration_gate": "OPEN_FOR_BOUNDED_EXECUTOR_SIMULATION",
+  "full_promotion_eligible": false,
+  "scope": "Independent source-read-only audit of dot core and exact four-lane epilogue children; approved current common workflow overrides legacy start/done/index assumptions. No synthesis launched.",
+  "parent_contract_sha256": "5a21d45e1461bedc5dad49348c25d142a07f13a8c3e6125abbd9f5d7f0ccb19c",
+  "rtl_port_binding_sha256": "ea033a7269285571057582d32e193dc17c115a84911d4f1646bb4cd096b78504",
+  "source_sha256": {
+    "rtl/int8_dot_core.sv": "9825be03f1f6021cab761a4ae15a238f81e02f43e15685abb65c8789e47b589e",
+    "rtl/w8a8_fp32_pkg.sv": "3ce058314eb02c8bc52a8e7665a2adf17ef84cc80d8058190a1649cf1d77955f",
+    "rtl/w8a8_fp32_mul.sv": "e8b522152e972a035af5da495f2c55dcb269fd6f5d1786479cb345b3bf169e62",
+    "rtl/fp32_bf16_epilogue.sv": "3fbf60151b57fe04f4aa1546f62735562b283a5499a0c18e6cf281e085e78611"
+  },
+  "test_sha256": {
+    "scripts/audit_datapath_children.py": "4dbc9fdacdbe96e6e169e0a26530582c9cae594f57681ae621dc83cbcc54c3eb",
+    "evidence/independent_datapath_audit/audit_numeric.sv": "ede6307e68ae7479485a96578006f2b67551437fe7ee652b7fbeccfb3d5a1fa6",
+    "evidence/independent_datapath_audit/audit_epilogue.sv": "6cd6e38cb573d1bdee05bcb05348fc13ec150614df95d2acde2956c3f66e5800",
+    "evidence/independent_datapath_audit/audit_mul.hex": "a5848bdf5a5280248e29047c46d8766cd8b98f6fc72d6d5055f1f4b03c2c7bdc",
+    "evidence/independent_datapath_audit/audit_pkg.hex": "8c5e1e921c904667f9f4e7ebcdab1bf200745892452ef128c6066c8a0be210ba",
+    "evidence/independent_datapath_audit/audit_epi.hex": "10b4a70142d7ef4e20ae31c025bd32a30669ec544752a44b3c42ba9c086c6287"
+  },
+  "children": {
+    "int8_dot_core": {
+      "functional_status": "passed",
+      "contract_sha256": "68a0eee518d475d0df3fd2e6052150ca9c9bd59b79f400eb74ee3eb48324ecff",
+      "independent_integer_oracle": {
+        "steps": 9718,
+        "results": 250,
+        "implementation_oracle_reused": false
+      },
+      "fresh_primary_simulation": "CORE_PASS inputs=9718 outputs=250 max_II1_burst=359 cycles=10179",
+      "static_review": [
+        "signed 8x8 to16 product; balanced17/18/19/20 reduction and explicit32sign extension",
+        "global advance freezes arithmetic/metadata/sums under result stall",
+        "accumulation samples current row psum at commit, supports consecutive row0",
+        "invalid N products zero; first_k replaces context; full result metadata held until handshake",
+        "synchronous coordinated reset clears valid/sums; no stale emitted result"
+      ],
+      "ooc_status": "pending_designated_machine"
+    },
+    "fp32_bf16_epilogue": {
+      "functional_status": "passed",
+      "contract_sha256": "bfdbcda07d9fc29b38a4bcfa0f3ed188603a3f3d2988ee41d028ad5a0fd6c20b",
+      "independent_tests": {
+        "binary32_products": 25046,
+        "int32_to_binary32": 12000,
+        "binary32_to_bf16": 12000,
+        "four_lane_bundles": 4000,
+        "stalled_payload_and_valid_assertions": true,
+        "masked_nonfinite_error": true,
+        "gradual_underflow_and_signed_zero": true,
+        "oracle": "Exact Fraction numeric reference, independent stimuli and scoreboard"
+      },
+      "fresh_primary_simulation": {
+        "status": "PASS_FP32_EPILOGUE",
+        "bundle_count": 4864,
+        "multiplier_count": 11946,
+        "reset_replay": true,
+        "complete_golden_commands": [
+          84,
+          226,
+          1352,
+          1495,
+          2621,
+          2764
+        ]
+      },
+      "static_review": [
+        "INT32mag conversion nearest-even handles minINT32 and conversion ties",
+        "finite multiplier normalizes subnormal operands; product normalized before one binary32round boundary",
+        "subnormal one-step rounding and promotion to smallest normal preserve gradualunderflow",
+        "four lanes and tag/mask/bad metadata use identical elastic readiness",
+        "combined zero permitted; original-scale validity belongs parent builder",
+        "BF16round preserves signedzero and reports storedBF16overflow on selectedlanes"
+      ],
+      "ooc_status": "pending_designated_machine"
+    }
+  },
+  "findings": [
+    {
+      "severity": "P1",
+      "requirement": "Mandatory Vivado2025.2 OOC resource/timing proof",
+      "status": "blocked_by_explicit_build_machine_policy",
+      "evidence": "User has not designated synthesis machine; build not launched. 5ns setup/hold/pulse-width and256DSP inference not proven.",
+      "retry_owner": "parent after user machine designation"
+    }
+  ],
+  "functional_findings": [],
+  "no_P0_P1_P2_functional_findings": true,
+  "residual_risks": [
+    "Core resettable partial-sum array may map to FF/LUTRAM; area/fanout and5ns timing unmeasured.",
+    "FP32 normalization/underflow variable shifts and combinational convert stages require real OOC timing.",
+    "Declared II1 proven in functional simulation; physical256product/DSP mapping and200MHz unproven.",
+    "Child acceptance does not prove executor bank credits, producer metadata, write coverage or DDRpingpong integration."
+  ],
+  "evidence_exclusions": [
+    "full model PASS",
+    "real checkpoint accuracy",
+    "physical board PASS",
+    "routed resources/timing",
+    "full promotion before OOC"
+  ],
+  "skill_update_candidate": null
+}

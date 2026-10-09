@@ -1,0 +1,15 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "reset": 1, "in": 8}, "outputs": {"out_bytes": 24, "done": 1}},
+  "semantics": {
+    "clock": "All sequential logic samples on positive clk edges, per original text.",
+    "reset": "Active-high synchronous reset clears packet progress and done at the sampling edge; incomplete packets are discarded.",
+    "acceptance": "Every non-reset rising edge consumes one byte. While searching, discard bytes with bit 3 zero; a byte with bit 3 one starts a packet. Consume the next two bytes unconditionally.",
+    "completion": "After the edge consuming the third byte, done is high for one cycle and out_bytes contains that packet. The following edge may accept a new first byte without a bubble.",
+    "waveform_evidence": "The displayed input changes at rising-edge timestamps are applied after sampling: 2c at 15 ns is consumed at 25 ns, 81 at 35 ns, 09 at 45 ns, when done becomes 1. 6b is consumed at 55 ns and its packet completes at 75 ns.",
+    "initialization": "No initial values are required before the first synchronous reset. Example shows done and out_bytes unknown at 0 ns. Payload outside done is don't-care."
+  },
+  "numeric": {"bytes": "Unsigned 8-bit opaque data, no arithmetic", "packing": "First byte [23:16], second [15:8], third [7:0]", "boundary_bit": 3},
+  "verification": {"primary": "python3 dev_check.py --label initial", "oracle": "Independent byte count and packet assembly from original algorithm", "cases": "Exact waveform timestamp replay; discarded bytes; arbitrary second/third bytes; contiguous packets; reset at all progress positions; all 256 possible search bytes; deterministic randomized streams", "sampling": "Check after NBA updates and again at falling edges", "timeout": "Bounded simulation with fatal timeout"},
+  "specification_ambiguities": [{"issue": "Waveform input updates coincide with rising edges, without delta-cycle notation", "resolution": "Treat displayed inputs as post-edge values. Sampling previous stable inputs matches every listed done and payload."}, {"issue": "Initial payload and payload outside done are unconstrained", "resolution": "Do not check payload outside done or demand initial values; RTL uses no initialization."}]
+}

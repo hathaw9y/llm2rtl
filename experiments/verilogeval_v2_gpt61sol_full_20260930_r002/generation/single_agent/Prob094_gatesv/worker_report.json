@@ -1,0 +1,18 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {"command": "python3 smoke_environment.py", "status": "passed", "cases": {"correct": "passed", "injected_fault": "simulation_failed as expected", "repair": "passed"}},
+    {"command": "python3 dev_check.py --label initial", "status": "passed", "compile_returncode": 0, "simulation_returncode": 0, "coverage": "All 16 binary inputs; every specified output bit, including wraparound", "evidence_directory": "development/01"}
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification is not official evaluation; official correctness remains unevaluated.",
+    "out_both[3] and out_any[0] are unspecified by the problem, assigned zero, and excluded from the oracle.",
+    "No synthesis or board work performed."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "implementation": "Four-bit combinational AND/OR neighbour relationships and XOR with left-neighbour wraparound; original ports preserved; no clock, reset, or added latency.",
+  "static_review": "All outputs continuously driven with four-bit expressions; no state or inferred latches.",
+  "files": {"rtl": "candidate.sv", "initial_snapshot": "candidate_initial.sv", "testbench": "dev_tb.sv"}
+}

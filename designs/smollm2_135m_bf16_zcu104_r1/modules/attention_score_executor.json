@@ -1,0 +1,45 @@
+{
+  "schema": "llm2rtl.module_contract.v1",
+  "design_id": "smollm2_135m_bf16_zcu104",
+  "revision": "r1",
+  "module_kind": "opcode_executor",
+  "status": "routed_100mhz_board_run_pending",
+  "target": {
+    "board": "ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "clock_mhz": 100
+  },
+  "module_id": "attention_score_executor",
+  "opcode": "ATTN_SCORE",
+  "interface": {
+    "rtl_module": "smollm2_gemm_systolic_wide_executor",
+    "compute_channel": 3,
+    "request": "opcode 6, banks ['B4', 'B8', 'B10'], query_start bits [26:17], m_count [16:11] 1..32, kv_len [10:0] 1..1024, query_start+m_count<=kv_len, upper payload zero",
+    "response": "held done_valid/done_ready, tag B4, bank_count=3, all three banks released, error flag",
+    "bank_roles": [
+      11,
+      12,
+      13
+    ],
+    "bank_word_bits": 128,
+    "layout": "Q B4 [m,9,64]; K B8 [kv_len,3,64]; score B10 [m,9,ceil(kv_len/8)]",
+    "completion_order": "after final destination BF16 strobe handshake and all heads/tiles complete"
+  },
+  "architecture": {
+    "algorithm": "16x16 shared GEMM PE array; Q and K 128-bit reads; each of nine query heads runs N tiles of at most 192 keys; K reduction is 64; future and padded scores are zero",
+    "score_mask": "future and padded score lanes written zero",
+    "bank_access": "one outstanding read per source role; output BF16 element writes use two-byte strobes; fabric demultiplexes command, response and bank roles by logical channel"
+  },
+  "numeric": {
+    "input": "finite BF16 operands; nonfinite input reports executor error",
+    "multiply": "one registered 8x8 BF16 significand multiplier in each of 256 PEs",
+    "accumulator": "K ascending, signed 32-bit shared-exponent mantissa with four guard bits; alignment shifts truncate magnitude toward zero",
+    "output": "BF16 round-to-nearest-even; QK score exponent reduced by three for /8",
+    "observed_error": "XSIM first-layer checkpoint full prefill32 and decode1: score max 1 BF16 ULP, context max 3 BF16 ULP"
+  },
+  "verification": {
+    "standalone": "shared GEMM mode XSIM full prefill32 and decode1 golden pass; synthetic N=193 and K=193 tile boundary pass",
+    "integration": "prefill32, focused one-key, and decode1 kv_len=33 two-command-chunk XSIM PASS with first 16 values per row; normal GEMM regression XSIM PASS",
+    "physical_board": "100 MHz ZCU104 Vivado 2025.2 routed WNS +1.475 ns, WHS +0.010 ns, WPWS +3.500 ns; BIT/XSA/ELF matching verified; physical board execution pending user"
+  }
+}

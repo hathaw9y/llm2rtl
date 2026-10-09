@@ -1,0 +1,37 @@
+{
+  "status": "frozen",
+  "interface": {
+    "top": "TopModule",
+    "inputs": {"in": 1, "state": 2},
+    "outputs": {"next_state": 2, "out": 1},
+    "clock_reset": "None: original interface has only in and state as inputs."
+  },
+  "semantics": {
+    "evidence": "Original problem requests only the combinational state transition logic and Moore output logic.",
+    "encoding": {"A": "00", "B": "01", "C": "10", "D": "11"},
+    "table": {
+      "A": {"in_0": "A", "in_1": "B", "out": 0},
+      "B": {"in_0": "C", "in_1": "B", "out": 0},
+      "C": {"in_0": "A", "in_1": "D", "out": 0},
+      "D": {"in_0": "C", "in_1": "B", "out": 1}
+    },
+    "timing": "Combinational response to current inputs; no added cycle latency or storage.",
+    "initialization": "No internal state or initialization specified; binary inputs determine outputs after combinational settling.",
+    "reset": "No reset port or reset behavior specified."
+  },
+  "numeric": {
+    "state_type": "Unsigned 2-bit encoding; all four binary encodings are valid.",
+    "in_out_type": "Single-bit logic",
+    "arithmetic": "No arithmetic, rounding, saturation, or overflow."
+  },
+  "verification": {
+    "oracle": "Independent literal eight-entry truth table derived from original problem.",
+    "coverage": "All eight input combinations, then all 64 ordered pairs of combinations to check response to input mutation and absence of retained outputs.",
+    "sampling": "Drive inputs then sample after 1 ns of combinational settling; no clock edges are present in specification.",
+    "failure": "Case-inequality checks with $fatal, bounded timeout, PASS only after all checks.",
+    "evaluator": "python3 dev_check.py --label initial"
+  },
+  "specification_ambiguities": [
+    {"topic": "X/Z input values", "evidence": "Original table specifies only binary states and in=0/1.", "resolution": "X/Z behavior is outside specified functionality; oracle asserts only binary cases."}
+  ]
+}

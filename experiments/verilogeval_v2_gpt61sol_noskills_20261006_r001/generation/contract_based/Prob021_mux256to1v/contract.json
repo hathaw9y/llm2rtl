@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "inputs": {
+      "in": 1024,
+      "sel": 8
+    },
+    "outputs": {
+      "out": 4
+    },
+    "extra_ports": false
+  },
+  "semantics": {
+    "function": "out is the four-bit input group numbered sel, with group 0 at in[3:0]",
+    "timing": "Pure combinational multiplexer; no clock or latency specified or present in interface",
+    "reset": "No reset port or reset behavior specified",
+    "initialization": "No stored state or initialization specified; output follows selected input"
+  },
+  "numeric": {
+    "groups": 256,
+    "group_width": 4,
+    "selection_range": [
+      0,
+      255
+    ],
+    "selected_bit_indices": "For output bit b in 0..3, source index is 4*sel+b",
+    "signedness": "Unsigned vector selection; no arithmetic on data"
+  },
+  "verification": {
+    "oracle": "Read individual source bits at index 4*selected_group+b from original problem mapping",
+    "cases": [
+      "All 256 selectors with every selected nibble value 0..15",
+      "Walking single set bit across all 1024 source bits",
+      "Changes to selected and unselected data with fixed selector",
+      "Selected X/Z data preservation with known selector"
+    ],
+    "sampling": "Drive inputs then sample after 1 ns combinational settling",
+    "failure": "$fatal on mismatch and bounded timeout; PASS only after all checks"
+  },
+  "specification_ambiguities": [
+    "Unknown or high-impedance selector behavior is not explicitly specified; no dedicated behavior imposed. Known selector and four-state data are tested."
+  ]
+}

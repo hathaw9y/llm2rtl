@@ -1,0 +1,29 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "name": "static RTL review",
+      "result": "pass",
+      "details": "TopModule ports match the specification; eight-bit q uses nonblocking assignments on positive clk edges with active-high asynchronous reset to zero. RTL contains no simulation-only constructs."
+    },
+    {
+      "name": "Icarus development compile",
+      "command": "timeout 20s /home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog -g2012 -Wall -s dev_tb -o dev_sim candidate.sv dev_tb.sv",
+      "result": "tool_failure",
+      "exit_code": 139,
+      "log": "compile.log",
+      "details": "Compiler exited with code 139 and produced no diagnostic output or executable. Status preserved in check_status.log."
+    },
+    {
+      "name": "development simulation",
+      "result": "not_run",
+      "details": "Compilation failed. Independent dev_tb.sv covers all 256 input patterns, output hold, asynchronous reset assertion, reset priority, and recovery; these checks were not executed."
+    }
+  ],
+  "development_outcome": "Synthesizable candidate.sv delivered with identical candidate_initial.sv preserved before development checks. Static review passed; development simulation is unverified due to compiler failure.",
+  "limitations": [
+    "No successful development compilation or simulation.",
+    "Official evaluation results are unavailable.",
+    "No synthesis, timing analysis, or board validation performed."
+  ]
+}

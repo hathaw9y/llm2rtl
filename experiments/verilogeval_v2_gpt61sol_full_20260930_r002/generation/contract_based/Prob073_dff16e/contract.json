@@ -1,0 +1,18 @@
+{
+  "status": "frozen",
+  "interface": {"top": "TopModule", "inputs": {"clk": 1, "resetn": 1, "byteena": 2, "d": 16}, "outputs": {"q": 16}},
+  "semantics": {
+    "sampling": "All DFFs triggered by positive edge of clk, as explicitly stated in problem.txt; updates visible after nonblocking assignment settlement.",
+    "reset": "Synchronous active-low reset as explicitly stated: at posedge with resetn=0, clear all 16 bits, overriding byte enables.",
+    "write": "At posedge with resetn=1, byteena[1] writes d[15:8] to q[15:8]; byteena[0] writes d[7:0] to q[7:0]. Disabled bytes retain state.",
+    "between_edges": "No state updates on input changes or falling edges.",
+    "initialization": "No power-up value specified; no DUT initialization. Unwritten bits remain unknown in four-state simulation until reset or enabled write.",
+    "latency": "The sampled data updates q on that same rising edge, with no extra cycle."
+  },
+  "numeric": {"representation": "16-bit bit vector; two 8-bit bytes", "arithmetic": "None", "reset_value": "16'h0000 (interpretation of reset; value not explicitly stated)"},
+  "verification": {"oracle": "Independent per-bit state model from original reset and byte-enable descriptions", "coverage": ["initial unknown retention", "partial initialization", "all enable combinations", "reset overriding enables", "reset assertion between rising edges", "falling-edge hold", "input mutation between edges", "walking bits", "zero and all-one boundaries"], "sampling": "Drive away from rising edges; compare after NBA settlement", "failure": "$fatal on mismatch and bounded timeout; PASS only at successful completion", "commands": ["python3 smoke_environment.py", "python3 validate_contract.py", "python3 dev_check.py --label initial"]},
+  "specification_ambiguities": [
+    {"issue": "Reset value is not explicitly stated", "resolution": "Interpret reset of all DFFs as clearing q to zero; reset takes precedence over byte enables."},
+    {"issue": "Power-up state is unspecified", "resolution": "No initialization imposed; test unknown retention before any defining edge in simulation."}
+  ]
+}

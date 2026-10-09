@@ -1,0 +1,44 @@
+{
+  "status": "frozen",
+  "interface": {
+    "module": "TopModule",
+    "ports": {
+      "in": {
+        "direction": "input",
+        "width": 1
+      },
+      "out": {
+        "direction": "output",
+        "width": 1
+      }
+    },
+    "evidence": "Original problem explicitly names TopModule and one-bit input in/output out."
+  },
+  "semantics": {
+    "behavior": "out continuously equals in; a direct wire connection.",
+    "timing": "Combinational propagation with no added latency or clock.",
+    "reset": "No reset port or reset behavior specified; no state.",
+    "initialization": "No initialized state; out follows the current input, including an undriven unknown.",
+    "evidence": "The module should behave like a wire; interface contains only in and out."
+  },
+  "numeric": {
+    "width": 1,
+    "operations": "Identity connection; no arithmetic or signedness conversion.",
+    "four_state": "Direct connection propagates 0, 1, X, and Z."
+  },
+  "verification": {
+    "oracle": "Original wire requirement: compare out to driven in using case inequality after simulation settling.",
+    "directed_cases": [
+      "initial X",
+      "0",
+      "1",
+      "repeated transitions",
+      "X",
+      "Z",
+      "return to known values"
+    ],
+    "sampling": "Drive input then sample after 1 ns to allow continuous assignment settling; no cycle assumptions.",
+    "completion": "Fatal on mismatch, bounded timeout, PASS only after all checks."
+  },
+  "specification_ambiguities": []
+}

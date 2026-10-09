@@ -1,0 +1,64 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790754063.307725,
+      "source_sha256": "6701e875c8225ce00dcd4c2c97066ac214a2a1ca81cc30bb5b3cfbe1aba68cb4",
+      "testbench_sha256": "c111854b676a3d6d3faa71875e73d2532e1bd6dedd46d26efa37c311efa22529",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob119_fsm3/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.014377529732882977
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS all transitions, exhaustive input sequences, Moore stability and asynchronous reset; checks=8282\ndev_tb.sv:87: $finish called at 16299000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.023758157156407833
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "limitations": [
+    "Development verification only; official evaluation has not run.",
+    "Power-up behavior before reset and unknown input/reset behavior are unspecified and not asserted.",
+    "No synthesis or board work performed as required."
+  ],
+  "justified_rtl_changes": [],
+  "justified_tb_changes": [],
+  "contract_changes": [],
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_validation": "passed_structure_only",
+  "files": {
+    "rtl": "candidate.sv",
+    "initial_snapshot": "candidate_initial.sv",
+    "testbench": "dev_tb.sv"
+  },
+  "interface_cycle_contract": "Single-bit original ports; rising-clock Moore FSM; active-high asynchronous reset to A; combinational output high only in D; no extra latency.",
+  "numeric_width_decisions": "Two-bit enum state; one-bit input/output; no arithmetic.",
+  "static_review": "Transition and output table match original problem; complete combinational assignment; nonblocking state update; no extra ports or initial state assignment.",
+  "coverage": "8282 output comparisons; all eight transitions; all 256 eight-bit sequences from reset; asynchronous reset from A/B/C/D; held reset and deassertion; input and falling-edge stability."
+}

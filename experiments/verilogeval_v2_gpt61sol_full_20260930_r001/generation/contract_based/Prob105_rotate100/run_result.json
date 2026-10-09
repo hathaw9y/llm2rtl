@@ -1,0 +1,182 @@
+{
+  "mode": "contract_based",
+  "problem_id": "Prob105_rotate100",
+  "official_status": "passed",
+  "workflow_status": "passed",
+  "protocol_issues": [],
+  "generation": {
+    "command": [
+      "codex",
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "features.multi_agent=false",
+      "-c",
+      "web_search=\"disabled\"",
+      "--json",
+      "-C",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob105_rotate100",
+      "--output-last-message",
+      "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r001/generation/contract_based/Prob105_rotate100/final_message.txt",
+      "-"
+    ],
+    "started_at_unix": 1790730929.3813148,
+    "ended_at_unix": 1790731041.990185,
+    "seconds": 112.60887098312378,
+    "returncode": 0,
+    "timeout": false,
+    "usage": {
+      "input_tokens": 143897,
+      "cached_input_tokens": 129408,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2835,
+      "reasoning_output_tokens": 53
+    },
+    "cli_errors": []
+  },
+  "revision_count": 0,
+  "final_source_sha256": "f682a0f81e82513e5ed036f5f8e31a7141e7199c77f0f4d01564b7244177aa43",
+  "contract_sha256": "94746f5e80673f7ac9b31cc043f9dde5add50604c673c3fce20bba323cb10f18",
+  "worker_report": {
+    "revision_count": 0,
+    "contract_corrections": [],
+    "checks": [
+      {
+        "name": "contract structural gate",
+        "result": "PASS",
+        "log": "contract_validation.log",
+        "scope": "Structure only, not functional correctness"
+      },
+      {
+        "name": "static RTL review",
+        "result": "PASS",
+        "details": "Exact interface; rising-edge nonblocking updates; load priority; right and left wraparound; both disabled encodings hold; no reset or initialization added; single register driver and no dependencies."
+      },
+      {
+        "name": "Icarus development compile",
+        "result": "TOOL_FAILURE",
+        "exit_code": 139,
+        "log": "compile.log",
+        "details": "Finite 30-second timeout, -g2012, -Wall and explicit dev_tb top. Process exited 139 without diagnostic output."
+      },
+      {
+        "name": "development simulation",
+        "result": "NOT_RUN",
+        "details": "Compilation failed; no simulation success claimed."
+      }
+    ],
+    "development_outcome": "Initial synthesizable candidate delivered unchanged with candidate_initial.sv preserved before development checks. Independent self-checking dev_tb.sv prepared, but tool failure prevented simulation.",
+    "limitations": [
+      "Functional correctness assessed by static review only; development simulation did not run.",
+      "Rising clock edge assumed because original specification does not explicitly name an edge.",
+      "Initial state is unspecified until first load; no reset exists.",
+      "No synthesis, timing, board testing, official testbench access or official evaluation performed."
+    ],
+    "workflow_notes": [
+      "First contract validator invocation completed, but its shell wrapper failed when assigning zsh read-only variable status. Original validator output is preserved in contract_validation_first.log. Validator was rerun successfully before any RTL was written."
+    ]
+  },
+  "final": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "f682a0f81e82513e5ed036f5f8e31a7141e7199c77f0f4d01564b7244177aa43",
+      "Prob105_rotate100_ref.sv": "20e49d5acbe2ec4a90074e17e9aabd0305bd4e32922df8f712c898a3e842a1b8",
+      "Prob105_rotate100_test.sv": "f2ed015d2b50e3b6161fa660758e2e32df2e31e49079c9feda4673c27dc6b0b0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob105_rotate100_test.sv",
+        "Prob105_rotate100_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.014691819436848164
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb105_rotate100_test.sv:25: $finish called at 20026 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 4005 samples\n\nSimulation finished at 20026 ps\nMismatches: 0 in 4005 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.03839979413896799
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "initial": {
+    "status": "passed",
+    "file_sha256": {
+      "candidate.sv": "f682a0f81e82513e5ed036f5f8e31a7141e7199c77f0f4d01564b7244177aa43",
+      "Prob105_rotate100_ref.sv": "20e49d5acbe2ec4a90074e17e9aabd0305bd4e32922df8f712c898a3e842a1b8",
+      "Prob105_rotate100_test.sv": "f2ed015d2b50e3b6161fa660758e2e32df2e31e49079c9feda4673c27dc6b0b0"
+    },
+    "compile": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+        "-Wall",
+        "-Winfloop",
+        "-Wno-timescale",
+        "-g2012",
+        "-s",
+        "tb",
+        "-o",
+        "sim.vvp",
+        "candidate.sv",
+        "Prob105_rotate100_test.sv",
+        "Prob105_rotate100_ref.sv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.011353172361850739
+    },
+    "simulation": {
+      "command": [
+        "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+        "sim.vvp"
+      ],
+      "returncode": 0,
+      "stdout": "VCD info: dumpfile wave.vcd opened for output.\nProb105_rotate100_test.sv:25: $finish called at 20026 (1ps)\nHint: Output 'q' has no mismatches.\nHint: Total mismatched samples is 0 out of 4005 samples\n\nSimulation finished at 20026 ps\nMismatches: 0 in 4005 samples\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.03250336181372404
+    },
+    "pre_official_analyzer_status": "passed",
+    "official_analyzer_record": {
+      "passfail": ".",
+      "num_mismatch": 0,
+      "prompt_tokens": 0,
+      "resp_tokens": 0,
+      "cost": 0.0
+    }
+  },
+  "official_analyzer_code": "."
+}

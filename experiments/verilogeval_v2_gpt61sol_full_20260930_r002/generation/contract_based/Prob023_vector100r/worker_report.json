@@ -1,0 +1,69 @@
+{
+  "revision_count": 0,
+  "checks": [
+    {
+      "label": "initial",
+      "check_index": 1,
+      "checked_at_unix": 1790744631.7827125,
+      "source_sha256": "1a31cd58fcb60e8a2e8b52c216fc3a712a436c75541dcf541d7663bafd5aa36e",
+      "testbench_sha256": "ff5897f354b9bbf54a193ea32f467247cc0f74606d288d32089973da6f4c7ac3",
+      "directory": "/home/shmin/llm2rtl/experiments/verilogeval_v2_gpt61sol_full_20260930_r002/generation/contract_based/Prob023_vector100r/development/01",
+      "compile": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/iverilog",
+          "-g2012",
+          "-Wall",
+          "-Wno-timescale",
+          "-s",
+          "dev_tb",
+          "-o",
+          "dev.vvp",
+          "candidate.sv",
+          "dev_tb.sv"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.01578037440776825
+      },
+      "simulation": {
+        "command": [
+          "/home/shmin/nl2hdl/.conda_pkgs/iverilog-12.0-ha738cfc_1/bin/vvp",
+          "dev.vvp"
+        ],
+        "returncode": 0,
+        "stdout": "PASS bit reversal: 605 cases\ndev_tb.sv:65: $finish called at 605000 (1ps)\n",
+        "stderr": "",
+        "timeout": false,
+        "seconds": 0.19847198016941547
+      },
+      "status": "passed"
+    }
+  ],
+  "development_outcome": "passed",
+  "environment_smoke": "passed: correct fixture passed, injected fault failed, repaired fixture passed",
+  "contract_gate": "passed_structure_only",
+  "limitations": [
+    "Development verification only; official evaluation has not occurred.",
+    "No synthesis or board work performed."
+  ],
+  "justified_RTL_TB_changes": {
+    "RTL": [],
+    "testbench": [],
+    "contract": []
+  },
+  "implementation": "TopModule with 100-bit in/out; combinational out[i] = in[99-i], no state, clock, reset, or added latency.",
+  "verification_coverage": "605 cases: initial unknowns, constants, alternating patterns, all walking ones and zeros, 200 deterministic pseudorandom vectors, and X/Z at every position.",
+  "static_review": "All 100 outputs have one continuous driver; indices stay within 0..99; no arithmetic or truncation; no submodule dependencies.",
+  "artifacts": [
+    "candidate.sv",
+    "candidate_initial.sv",
+    "dev_tb.sv",
+    "contract.json",
+    "contract_gate.json",
+    "contract_gate_history.jsonl",
+    "dev_checks.jsonl",
+    "development/01"
+  ]
+}
