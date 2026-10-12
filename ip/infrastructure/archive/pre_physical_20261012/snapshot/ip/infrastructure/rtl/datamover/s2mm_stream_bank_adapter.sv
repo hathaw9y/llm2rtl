@@ -1,0 +1,1 @@
+../../stream_bank_adapters/rtl/s2mm_stream_bank_adapter.sv

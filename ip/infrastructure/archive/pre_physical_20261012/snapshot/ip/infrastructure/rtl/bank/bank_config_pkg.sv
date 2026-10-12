@@ -1,0 +1,1 @@
+../../bank_sparse_router/rtl/bank_config_pkg.sv

@@ -13,7 +13,7 @@ xvlog -sv "$design_dir/tb/tb_smollm2_bank_port_router.sv" \
   > "$evidence_dir/xvlog.log" 2>&1
 xelab tb_smollm2_bank_port_router -s tb_smollm2_bank_port_router_sim \
   > "$evidence_dir/xelab.log" 2>&1
-python3 "$repo_dir/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
+python3 "$repo_dir/ip/infrastructure/archive/pre_physical_20261012/snapshot/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
   "$run_dir/xsim.dir/tb_smollm2_bank_port_router_sim/xsimk" \
   'PASS smollm2_bank_port_router' \
   > "$evidence_dir/xsim.log" 2>&1

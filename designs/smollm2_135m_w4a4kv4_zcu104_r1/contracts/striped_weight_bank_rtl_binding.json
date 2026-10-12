@@ -1,0 +1,45 @@
+{
+  "schema": "llm2rtl.striped_weight_bank_rtl_binding.v1",
+  "module": "smollm2_striped_weight_bank",
+  "coverage_level": "target_storage_leaf",
+  "contract_path": "/home/iamjames77/llm2rtl/designs/smollm2_135m_w4a4kv4_zcu104_r1/contracts/striped_weight_bank_contract.json",
+  "contract_sha256": "f9da1cfbf1564a0602e3caf9aef4b573181525a73d7e888dfc9fe6261f850468",
+  "rtl_path": "/home/iamjames77/llm2rtl/designs/smollm2_135m_w4a4kv4_zcu104_r1/rtl/smollm2_striped_weight_bank.sv",
+  "rtl_sha256": "6f47b372e98cbb20ff3de2f39f5791028a2e5575a09bdda258d343d12de4d48e",
+  "primitive_path": "/home/iamjames77/llm2rtl/ip/infrastructure/datamover_engine/rtl/uram_bank.sv",
+  "primitive_sha256": "11520a8bb955d10c89ca6f699d42bcfccd5458e6abee1be67a044dbfdaa92bd1",
+  "source_closure": [
+    {
+      "path": "/home/iamjames77/llm2rtl/designs/smollm2_135m_w4a4kv4_zcu104_r1/rtl/smollm2_striped_weight_bank.sv",
+      "sha256": "6f47b372e98cbb20ff3de2f39f5791028a2e5575a09bdda258d343d12de4d48e"
+    },
+    {
+      "path": "/home/iamjames77/llm2rtl/ip/infrastructure/datamover_engine/rtl/uram_bank.sv",
+      "sha256": "11520a8bb955d10c89ca6f699d42bcfccd5458e6abee1be67a044dbfdaa92bd1"
+    }
+  ],
+  "default_parameters": {
+    "PORT_COUNT": 4,
+    "PORT_DATA_WIDTH": 128,
+    "DEPTH": 16384,
+    "READ_LATENCY": 3,
+    "ADDR_WIDTH": 32
+  },
+  "ports": {
+    "write": "four independently enabled byte-masked128bit writes at native stripe rows; no arbitration",
+    "read": "one common native row; doutb_o[p*128+:128] belongs to stripe p",
+    "commit": "33bit exclusive prefix = minimum of all stripe prefixes",
+    "errors": "combinational enabled out-of-range indicators, disabled while aresetn=0"
+  },
+  "reset_visibility": "Synchronous reset clears prefixes and first-fresh-read visibility. Internal primitive memory retained. Output remains0 after reset until a post-reset read matures at the original configured latency.",
+  "clear": "Suppresses writes and clears prefix metadata on the edge; does not reset read pipeline or erase memory. Epoch draining and ownership stay external.",
+  "clock": "aclk, active-low synchronous aresetn",
+  "common_start_done_waiver": "The explicitly frozen native bank-leaf contract takes priority over generic kernel start_i/done_o defaults. This memory accepts native requests at II1.",
+  "numeric_scope": "Opaque packed storage only. Scales, W4/A4/KV4 quantization method, real checkpoint packing and arithmetic are not frozen or validated here.",
+  "does_not_claim": [
+    "connected four-DMA channels",
+    "bank-pool/consumer/ISA integration",
+    "full Smol model correctness or quality",
+    "implementation/routed/board timing"
+  ]
+}

@@ -5,6 +5,8 @@ from pathlib import Path
 from xsim_runtime import snapshot_run,VIVADO
 from isa_test_vectors import write_isa_vectors
 BASE=Path(__file__).resolve().parents[1];ROOT=BASE.parents[1]
+sys.path.insert(0,str(ROOT/'scripts'))
+from infrastructure_sources import resolve_reference
 
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def logged(command,work,log):
@@ -23,17 +25,20 @@ def main():
     doc=json.loads(packet.read_text());pins=dict(doc['common_contracts'])
     for name in ['child','child_contract','child_independent_review','native_contract','controller_contract','controller_index']:
         ref=doc[name];pins[ref['path']]=ref['sha256']
+    resolved_pins={name:resolve_reference(name,root=ROOT,expected_sha256=digest)
+                   for name,digest in pins.items()}
     for name,digest in pins.items():
-        if sha(ROOT/name)!=digest:raise RuntimeError('Pinned input changed: '+name)
+        if sha(resolved_pins[name])!=digest:raise RuntimeError('Pinned input changed: '+name)
     native=ROOT/'ip/infrastructure';rtl=BASE/'rtl'
-    sources=[rtl/'attention_quantizer_bank_config_pkg.sv',native/'bank_subsystem/rtl/bank_native_ownership.sv',native/'bank_subsystem/rtl/bank_native_router.sv',native/'bank_subsystem/rtl/bank_native_memories.sv',native/'datamover_engine/rtl/bram_bank.sv',native/'datamover_engine/rtl/uram_bank.sv',rtl/'attention_int4_quantizer.sv',rtl/'attention_quantizer_controller.sv',rtl/'attention_quantizer_executor.sv',rtl/'attention_quantizer_bank_subsystem.sv',rtl/'attention_quantizer_isa_top.sv']
+    sources=[rtl/'attention_quantizer_bank_config_pkg.sv',native/'bank/bank_native_ownership.sv',native/'bank/bank_native_router.sv',native/'bank/bank_native_memories.sv',native/'bank/bram_bank.sv',native/'bank/uram_bank.sv',rtl/'attention_int4_quantizer.sv',rtl/'attention_quantizer_controller.sv',rtl/'attention_quantizer_executor.sv',rtl/'attention_quantizer_bank_subsystem.sv',rtl/'attention_quantizer_isa_top.sv']
+    sources=[resolve_reference(str(source.relative_to(ROOT)),root=ROOT) for source in sources]
     tb=BASE/'tb/tb_attention_quantizer_isa.sv'
     audit=out/'generation_audit'
     logged(['python3',BASE/'scripts/generate_quantizer_isa.py','--output-dir',audit],ROOT,out/'generation_audit.log')
     generated=[audit/name for name in ['attention_quantizer_controller.sv','attention_quantizer_bank_config_pkg.sv','attention_quantizer_bank_subsystem.sv','attention_quantizer_isa_top.sv']]
     for source in generated:
         if sha(source)!=sha(rtl/source.name):raise RuntimeError('Active generated copy differs: '+source.name)
-    files=[*sources,*generated,tb,packet,addendum,*[ROOT/name for name in pins],BASE/'reference/quantizer_reference.py',BASE/'reference/isa_encoder.py',*[BASE/'scripts'/name for name in ['run_quantizer_isa.py','isa_test_vectors.py','quantizer_isa_ooc.tcl','xsim_runtime.py','generate_quantizer_isa.py','check_quantizer_isa.py','isa_lint_memory_stubs.sv']],native/'cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv',native/'bank_subsystem_template/rtl/bank_subsystem.sv.tpl',native/'bank_subsystem_template/rtl/bank_config_pkg.sv.tpl']
+    files=[*sources,*generated,tb,packet,addendum,*resolved_pins.values(),BASE/'reference/quantizer_reference.py',BASE/'reference/isa_encoder.py',*[BASE/'scripts'/name for name in ['run_quantizer_isa.py','isa_test_vectors.py','quantizer_isa_ooc.tcl','xsim_runtime.py','generate_quantizer_isa.py','check_quantizer_isa.py','isa_lint_memory_stubs.sv']],ROOT/'scripts/infrastructure_sources.py',native/'migration.json',native/'controller/cmd_dispatcher_template.sv',native/'archive/pre_physical_20261012/snapshot/ip/infrastructure/bank_subsystem_template/rtl/bank_subsystem.sv.tpl',native/'archive/pre_physical_20261012/snapshot/ip/infrastructure/bank_subsystem_template/rtl/bank_config_pkg.sv.tpl']
     if a.mode in ['sim','all']:
         work=out/'xsim';work.mkdir();rows,bad=write_isa_vectors(work)
         files.extend(work/name for name in ['isa_inputs.hex','isa_outputs.hex','isa_metadata.hex','isa_programs.hex','isa_bad_programs.hex','isa_reference_rows.json'])

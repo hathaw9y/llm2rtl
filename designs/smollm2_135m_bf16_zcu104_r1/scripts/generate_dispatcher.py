@@ -7,7 +7,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[3]
 DESIGN = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv"
+SOURCE = ROOT / "ip/infrastructure/controller/cmd_dispatcher_template.sv"
 OUTPUT = DESIGN / "rtl/isa_command_dispatcher.sv"
 
 BODIES = {

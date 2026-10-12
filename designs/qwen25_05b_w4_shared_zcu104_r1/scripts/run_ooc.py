@@ -8,7 +8,7 @@ def main():
  p=argparse.ArgumentParser();p.add_argument('top');p.add_argument('out',type=Path);a=p.parse_args()
  a.out=a.out.resolve();a.out.mkdir(exist_ok=False,parents=True);src=a.out/'source';(src/'rtl').mkdir(parents=True)
  files=list((BASE/'rtl').glob('*.sv'))+list((BASE/'evidence/fp32_run001').glob('*.mem'))+[BASE/'scripts/executor_ooc.tcl']
- if a.top=='qwen_bank_fabric':files += [ROOT/'ip/infrastructure/datamover_engine/rtl'/n for n in ['bram_bank.sv','uram_bank.sv']]
+ if a.top=='qwen_bank_fabric':files += [ROOT/'ip/infrastructure/bank'/n for n in ['bram_bank.sv','uram_bank.sv']]
  for f in files:
   dest=src/'rtl'/f.name if f.suffix=='.sv' else src/f.name;shutil.copyfile(f,dest)
  # Use immutable ROM copies even if the workspace changes during a long run.

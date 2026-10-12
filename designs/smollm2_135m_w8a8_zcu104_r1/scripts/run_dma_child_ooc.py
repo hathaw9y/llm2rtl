@@ -2,8 +2,10 @@
 import argparse,hashlib,json,pathlib,re,subprocess,sys
 p=argparse.ArgumentParser();p.add_argument('--module',choices=['dma_transaction_bridge','command_bram'],required=True);p.add_argument('--run-dir',required=True);a=p.parse_args()
 D=pathlib.Path(__file__).resolve().parents[1];root=D.parents[1];run=pathlib.Path(a.run_dir).resolve();run.mkdir(parents=True,exist_ok=True)
+sys.path.insert(0,str(root/'scripts'))
+from infrastructure_sources import resolve_reference
 if (run/'process_result.json').exists():raise SystemExit('Refusing to overwrite a completed run')
-module=json.loads((D/'modules'/f'{a.module}.json').read_text());sources=[root/n for n in module['child_RTL_pins']]+[D/'rtl'/f'smollm2_{a.module}.sv',D/'scripts'/f'{a.module}_ooc.tcl']
+module=json.loads((D/'modules'/f'{a.module}.json').read_text());sources=[resolve_reference(n,root=root,expected_sha256=digest) for n,digest in module['child_RTL_pins'].items()]+[D/'rtl'/f'smollm2_{a.module}.sv',D/'scripts'/f'{a.module}_ooc.tcl']
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 before={str(p):sha(p) for p in sources};(run/'source_hashes_before.json').write_text(json.dumps(before,indent=2));(run/'sources').mkdir(exist_ok=True)
 for s in sources:(run/'sources'/s.name).write_bytes(s.read_bytes())

@@ -1,0 +1,1 @@
+../../datamover_engine/rtl/uram_bank.sv

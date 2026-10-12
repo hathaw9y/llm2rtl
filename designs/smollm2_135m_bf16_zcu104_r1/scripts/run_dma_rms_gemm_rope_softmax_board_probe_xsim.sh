@@ -10,21 +10,21 @@ cp "$design_dir"/dma_rms_gemm_rope_board_probe/*.hex vectors/
 cp "$design_dir"/golden/softmax_checkpoint/{prefill32,decode1}_{score,expected}_words.hex vectors/
 cp "$design_dir"/golden/rmsnorm_checkpoint/gamma_words.hex vectors/
 xvlog -sv -i "$design_dir/rtl" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/datamover_engine_pkg.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/fifo.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/pipeline.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/axis_width_up_converter.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/axis_width_down_converter.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/axis_width_converter.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/datamover_command_queue.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/mm2s_channel.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/s2mm_channel.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/datamover_engine.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/bram_bank.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/uram_bank.sv" \
-  "$repo_dir/ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv" \
+  "$repo_dir/ip/infrastructure/archive/pre_reference_integrated_20261012/snapshot/ip/infrastructure/datamover/datamover_engine_pkg.sv" \
+  "$repo_dir/ip/infrastructure/utils/fifo.sv" \
+  "$repo_dir/ip/infrastructure/utils/pipeline.sv" \
+  "$repo_dir/ip/infrastructure/archive/pre_width_converter_removal_20261012/snapshot/ip/infrastructure/utils/axis_width_up_converter.sv" \
+  "$repo_dir/ip/infrastructure/archive/pre_width_converter_removal_20261012/snapshot/ip/infrastructure/utils/axis_width_down_converter.sv" \
+  "$repo_dir/ip/infrastructure/archive/pre_width_converter_removal_20261012/snapshot/ip/infrastructure/utils/axis_width_converter.sv" \
+  "$repo_dir/ip/infrastructure/archive/pre_reference_integrated_20261012/snapshot/ip/infrastructure/datamover/mm2s_adapter.sv" \
+  "$repo_dir/ip/infrastructure/archive/pre_reference_integrated_20261012/snapshot/ip/infrastructure/datamover/s2mm_adapter.sv" \
+  "$repo_dir/ip/infrastructure/archive/pre_reference_integrated_20261012/snapshot/ip/infrastructure/datamover/datamover_command_queue.sv" \
+  "$repo_dir/ip/infrastructure/archive/pre_reference_integrated_20261012/snapshot/ip/infrastructure/datamover/mm2s_channel.sv" \
+  "$repo_dir/ip/infrastructure/archive/pre_reference_integrated_20261012/snapshot/ip/infrastructure/datamover/s2mm_channel.sv" \
+  "$repo_dir/ip/infrastructure/archive/pre_reference_integrated_20261012/snapshot/ip/infrastructure/datamover/datamover_engine.sv" \
+  "$repo_dir/ip/infrastructure/bank/bram_bank.sv" \
+  "$repo_dir/ip/infrastructure/bank/uram_bank.sv" \
+  "$repo_dir/ip/infrastructure/bank/bank_ownership_table.sv" \
   "$design_dir/rtl/smollm2_bank_port_router_wide.sv" \
   "$design_dir/rtl/smollm2_bank_memories_wide.sv" \
   "$design_dir/rtl/smollm2_bank_subsystem_wide.sv" \
@@ -44,7 +44,7 @@ xvlog -sv -i "$design_dir/rtl" \
   > xvlog.log 2>&1
 xelab tb_smollm2_dma_rms_gemm_rope_softmax_board_probe -L xpm --timescale 1ns/1ps \
   -s tb_smollm2_dma_rms_gemm_rope_softmax_board_probe_sim > xelab.log 2>&1
-python3 "$repo_dir/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
+python3 "$repo_dir/ip/infrastructure/archive/pre_physical_20261012/snapshot/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
   "$run_dir/xsim.dir/tb_smollm2_dma_rms_gemm_rope_softmax_board_probe_sim/xsimk" \
   'PASS smollm2_dma_rms_gemm_rope_softmax_board_probe' > xsim.log 2>&1
 evidence_dir="$design_dir/evidence/smollm2_dma_rms_gemm_rope_softmax_board_probe/run_001"

@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 import argparse,hashlib,json,os,shutil,subprocess,time
+import sys
 from pathlib import Path
 BASE=Path(__file__).resolve().parents[1];ROOT=BASE.parents[1]
+sys.path.insert(0,str(ROOT/'scripts'))
+from infrastructure_sources import resolve_reference
 def main():
  p=argparse.ArgumentParser();p.add_argument('out',type=Path);p.add_argument('--stage',choices=['validate','build'],default='build');a=p.parse_args();out=a.out.resolve();out.mkdir(parents=True,exist_ok=False);src=out/'source';(src/'rtl').mkdir(parents=True);(src/'common').mkdir()
- common=ROOT/'ip/infrastructure/datamover_engine/rtl';files=list(common.glob('*.sv'))+[ROOT/'ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv']
+ snapshot=ROOT/'ip/infrastructure/archive/pre_physical_20261012/snapshot'
+ common=snapshot/'ip/infrastructure/datamover_engine/rtl'
+ files=[resolve_reference(f.relative_to(snapshot),root=ROOT) for f in common.glob('*.sv')]+[ROOT/'ip/infrastructure/bank/bank_ownership_table.sv']
  for f in files:shutil.copyfile(f,src/'common'/f.name)
  for f in list((BASE/'rtl').glob('*.sv'))+list((BASE/'rtl').glob('*.v')):shutil.copyfile(f,src/'rtl'/f.name);files.append(f)
  shutil.copyfile(BASE/'hardware_profile.json',src/'hardware_profile.json');files.append(BASE/'hardware_profile.json')

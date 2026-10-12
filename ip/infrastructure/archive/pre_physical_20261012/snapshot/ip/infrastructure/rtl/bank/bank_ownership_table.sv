@@ -1,0 +1,1 @@
+../../bank_ownership_table/rtl/bank_ownership_table.sv

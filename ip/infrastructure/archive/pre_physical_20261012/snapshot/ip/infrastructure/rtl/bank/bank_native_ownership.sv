@@ -1,0 +1,1 @@
+../../bank_subsystem/rtl/bank_native_ownership.sv

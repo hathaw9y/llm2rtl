@@ -10,7 +10,7 @@ xvlog -sv -i "$design_dir/rtl" \
   "$design_dir/tb/tb_smollm2_softmax_executor.sv" > xvlog.log 2>&1
 xelab tb_smollm2_softmax_executor -L xpm --timescale 1ns/1ps \
   -s tb_smollm2_softmax_executor_sim > xelab.log 2>&1
-python3 "$design_dir/../../ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
+python3 "$design_dir/../../ip/infrastructure/archive/pre_physical_20261012/snapshot/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
   "$run_dir/xsim.dir/tb_smollm2_softmax_executor_sim/xsimk" \
   'PASS smollm2_softmax_executor' > xsim.log 2>&1
 evidence_dir="$design_dir/evidence/smollm2_softmax_executor/run_001"

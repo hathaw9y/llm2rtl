@@ -8,9 +8,12 @@ import argparse
 import hashlib
 import json
 import re
+import sys
 
 DESIGN = Path(__file__).resolve().parents[1]
 ROOT = DESIGN.parents[1]
+sys.path.insert(0,str(ROOT/'scripts'))
+from infrastructure_sources import resolve_reference
 
 
 def region(text, name, body):
@@ -178,7 +181,7 @@ BANK_OUTPUTS = '''  for (genvar b=0; b<BANK_NUM; b++) begin : g_quant_outputs
 
 
 def generate_controller():
-    source = (ROOT/'ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv').read_text()
+    source = (ROOT/'ip/infrastructure/controller/cmd_dispatcher_template.sv').read_text()
     result = source
     for name, body in CONTROLLER.items(): result = region(result, name, body)
     base, extended = source, result
@@ -196,7 +199,7 @@ def generate_controller():
 
 
 def generate_package():
-    result = (ROOT/'ip/infrastructure/bank_subsystem_template/rtl/bank_config_pkg.sv.tpl').read_text()
+    result = (ROOT/'ip/infrastructure/archive/pre_physical_20261012/snapshot/ip/infrastructure/bank_subsystem_template/rtl/bank_config_pkg.sv.tpl').read_text()
     changes = {
         '{{PACKAGE_NAME}}':'attention_quantizer_bank_config_pkg',
         '  localparam int BANK_NUM = 2;':'  localparam int BANK_NUM = 3;',
@@ -219,14 +222,14 @@ def generate_package():
 
 
 def generate_banks():
-    result = (ROOT/'ip/infrastructure/bank_subsystem_template/rtl/bank_subsystem.sv.tpl').read_text()
+    result = (ROOT/'ip/infrastructure/archive/pre_physical_20261012/snapshot/ip/infrastructure/bank_subsystem_template/rtl/bank_subsystem.sv.tpl').read_text()
     for name,body in [('PORTS',BANK_PORTS),('ROUTING',BANK_ROUTING),('OUTPUTS',BANK_OUTPUTS)]:
         result=region(result,name,body)
     return result.replace('{{MODULE_NAME}}','attention_quantizer_bank_subsystem').replace('{{PACKAGE_NAME}}','attention_quantizer_bank_config_pkg')
 
 
 def generate_top():
-    controller = (ROOT/'ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv').read_text()
+    controller = (ROOT/'ip/infrastructure/controller/cmd_dispatcher_template.sv').read_text()
     public = controller[controller.index('    input  logic aclk,'):controller.index('    output logic [BANK_NUM-1:0] bank_wr_acquire_valid')]
     for old,new in [('AXI_ADDR_WIDTH','32'),('BTT_WIDTH','23'),('BANK_NUM_WIDTH','2'),('TAG_WIDTH','4'),('BANK_ADDR_WIDTH','32'),('CMD_DATA_WIDTH','128')]:
         public=public.replace(old,new)
@@ -309,14 +312,14 @@ def main():
     packet=json.loads(packet_path.read_text())
     for key in ('child','child_contract','child_independent_review','native_contract','controller_contract','controller_index'):
         p=packet[key]
-        if hashlib.sha256((ROOT/p['path']).read_bytes()).hexdigest()!=p['sha256']:
+        if hashlib.sha256(resolve_reference(p['path'],root=ROOT,expected_sha256=p['sha256']).read_bytes()).hexdigest()!=p['sha256']:
             raise RuntimeError(f'pin mismatch: {key}')
     for path,expected in packet['common_contracts'].items():
-        if hashlib.sha256((ROOT/path).read_bytes()).hexdigest()!=expected: raise RuntimeError(f'pin mismatch {path}')
+        if hashlib.sha256(resolve_reference(path,root=ROOT,expected_sha256=expected).read_bytes()).hexdigest()!=expected: raise RuntimeError(f'pin mismatch {path}')
     args.output_dir.mkdir(parents=True,exist_ok=True)
     for filename,text in [('attention_quantizer_controller.sv',generate_controller()),('attention_quantizer_bank_config_pkg.sv',generate_package()),('attention_quantizer_bank_subsystem.sv',generate_banks()),('attention_quantizer_isa_top.sv',generate_top())]:
         (args.output_dir/filename).write_text(text)
-    controller_input=ROOT/'ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv'
+    controller_input=ROOT/'ip/infrastructure/controller/cmd_dispatcher_template.sv'
     controller_output=args.output_dir/'attention_quantizer_controller.sv'
     evidence={
         'packet_sha256':hashlib.sha256(packet_path.read_bytes()).hexdigest(),

@@ -9,9 +9,9 @@ mkdir -p "$run_dir" "$evidence_dir"
 cd "$run_dir"
 
 xvlog -sv \
-  "$repo_dir/ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/bram_bank.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/uram_bank.sv" \
+  "$repo_dir/ip/infrastructure/bank/bank_ownership_table.sv" \
+  "$repo_dir/ip/infrastructure/bank/bram_bank.sv" \
+  "$repo_dir/ip/infrastructure/bank/uram_bank.sv" \
   "$design_dir/rtl/smollm2_bank_port_router.sv" \
   "$design_dir/rtl/smollm2_bank_memories.sv" \
   "$design_dir/rtl/smollm2_bank_subsystem.sv" \
@@ -19,7 +19,7 @@ xvlog -sv \
   > "$evidence_dir/xvlog.log" 2>&1
 xelab tb_smollm2_bank_subsystem -L xpm -s tb_smollm2_bank_subsystem_sim \
   > "$evidence_dir/xelab.log" 2>&1
-python3 "$repo_dir/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
+python3 "$repo_dir/ip/infrastructure/archive/pre_physical_20261012/snapshot/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
   "$run_dir/xsim.dir/tb_smollm2_bank_subsystem_sim/xsimk" \
   'PASS smollm2_bank_subsystem' \
   > "$evidence_dir/xsim.log" 2>&1

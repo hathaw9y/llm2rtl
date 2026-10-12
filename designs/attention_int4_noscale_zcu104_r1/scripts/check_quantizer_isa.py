@@ -8,6 +8,8 @@ from pathlib import Path
 import argparse,hashlib,json,sys
 BASE=Path(__file__).resolve().parents[1]
 ROOT=BASE.parents[1]
+sys.path.insert(0,str(ROOT/'scripts'))
+from infrastructure_sources import resolve_reference
 PACKET=BASE/'modules/attention_quantizer_isa.json'
 EXPECTED='cb0734d094aaa449f4f1cdcee01ac0f3cc43aac427bc1aab0288d7850d027a47'
 
@@ -36,12 +38,13 @@ def check(root=ROOT,require_rtl=False):
         relative=Path(name)
         if relative.is_absolute() or '..' in relative.parts:
             raise ValueError('unsafe pin path')
-        source=root/relative
+        source=resolve_reference(relative,root=root,expected_sha256=wanted)
         if not source.is_file() or source.is_symlink() or digest(source)!=wanted:
             raise ValueError('pinned input identity mismatch: '+name)
     if doc['isa']['opcodes']!={'END':0,'MM2S':1,'S2MM':2,'QUANTIZE':3}:
         raise ValueError('opcode mapping mismatch')
-    if json.loads((root/doc['controller_contract']['path']).read_text())['version']!=4:
+    if json.loads(resolve_reference(doc['controller_contract']['path'],root=root,
+        expected_sha256=doc['controller_contract']['sha256']).read_text())['version']!=4:
         raise ValueError('requires completion-qualified controller v4')
     generated={}
     if require_rtl:

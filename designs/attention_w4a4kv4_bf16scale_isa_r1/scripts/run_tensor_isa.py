@@ -5,7 +5,7 @@ sys.path.insert(0,str(ROOT/'designs/attention_int4_noscale_zcu104_r1/scripts'))
 from xsim_runtime import snapshot_run,VIVADO
 PROFILES=['prefill','last_token','odd_head','noncausal_mask','all_masked','zero','gentle','max_tokens','max_row']
 QUANT=ROOT/'designs/attention_int4_noscale_zcu104_r1/rtl/attention_int4_quantizer.sv'
-SHARED=[ROOT/'ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv',ROOT/'ip/infrastructure/bank_port_router/rtl/bank_port_router.sv',ROOT/'ip/infrastructure/datamover_engine/rtl/bram_bank.sv']
+SHARED=[ROOT/'ip/infrastructure/bank/bank_ownership_table.sv',ROOT/'ip/infrastructure/bank/bank_port_router.sv',ROOT/'ip/infrastructure/bank/bram_bank.sv']
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def run(cmd,cwd,log):
     if log.exists():raise RuntimeError('Existing log '+str(log))

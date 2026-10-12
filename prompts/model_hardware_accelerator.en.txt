@@ -30,9 +30,33 @@ For tokenization, token selection/sampling, embedding lookup, position coefficie
 identify online tensor computation, address selection, or offline preparation and agree on the execution boundary.
 
 First read README.md, docs/framework_workflow.md, docs/isa_model_lowering.md,
-docs/model_graph_bringup.md, docs/runtime_gemm_trace.md, and contracts/common/.
-Also inspect the dispatcher, ownership, and fabric templates under ip/infrastructure/;
-the contracts and actual DataMover, bank, router, and adapter sources; scripts/check_*.py; and verification/framework/.
+docs/structure_contract.md, docs/model_graph_bringup.md, docs/runtime_gemm_trace.md, and contracts/common/.
+The default RTL references for a new design are the active sources in ip/infrastructure/sources.json.
+Read ip/infrastructure/README.md and the manifest first, then inspect actual ports, resets, address units, cycles and dependencies.
+For DMA, inspect datamover/mm2s_engine.sv and datamover/s2mm_engine.sv for direct bank connections,
+command-context FIFOs, data/status handshakes and completion/error handling.
+Both engines use datamover/config_pkg.sv and utils/fifo.sv; S2MM also uses utils/pipeline.sv.
+For banks, inspect bank/ memory, arbitration and ownership/router modules. For control, inspect
+controller/cmd_dispatcher_template.sv and its existing interface and constraints.
+The controller is compatibility code; do not assume it already implements the new model's contract.
+Record whether each selected active module is reused unchanged, parameterized, adapted or replaced, with reasons.
+Prefer reuse where capabilities match; isolate model-specific adaptations under designs/<new_revision>/.
+The config_pkg bank IDs, widths, payload and numeric defaults belong to the reference model, not an agreed W4A4KV4 contract.
+Do not use retired generic channels, adapters, command queues, AXIS width converters or archives as default inputs.
+Preserve necessary FIFOs, read latency and backpressure based on the active engines' actual behavior, and reverify the new configuration.
+Follow the concrete examples in sections 1.1-1.3 of docs/framework_workflow.md.
+Supply weights to a stripe bank through multiple transfer ports.
+Select port count and width from the target memory interfaces, effective bandwidth, weight consumption rate and resource budget.
+Do not mandate a particular board's HP port count or a fixed four-port configuration.
+Connect each port's enable/address/data/byte enables to its stripe and combine reads in the agreed packing order.
+Verify per-port stalls, completion, errors, readiness across all required stripes and tail handling.
+The active mm2s_engine alone does not supply a complete multiport weight loader.
+For S2MM, verify actual BANK_RD_LATENCY and data/keep/last stability under backpressure.
+For controller authoring, follow the cmd_dispatcher_template example in section 1.3 of docs/framework_workflow.md.
+Compare its command format with DMA payloads/responses for a command-BRAM LOAD -> STORE -> END sequence.
+Verify same-bank LOAD-before-STORE ordering, real bank acquisition/release acceptance and END drain.
+These numbers illustrate the method; finalize bank IDs, widths and layouts in the new model contract.
+Inspect scripts/check_*.py and verification/framework/.
 If the historical scheduler architecture in docs/architecture.md or src/README.md conflicts with current documents,
 report the difference and follow the current PS-issued ISA documents, common contracts, and this user's decisions.
 If new requirements conflict with a current contract, propose the change and affected boundaries before changing it.
@@ -43,9 +67,12 @@ Do not inherit their user decisions, numerical limits, or PASS results.
 Check the exact identity and capabilities of reusable sources and reverify them in the new configuration.
 
 1. Inspect the repository and inputs
-Check Git working state, input paths, active common contracts, template identities, and installed tools.
-Run the common contract check, infrastructure template contract-only check, binding template check,
-and framework regression tests. Report passes, failures, skips, and the scope each check proves.
+Check Git working state, input paths, active common contracts, reference-source identities, and installed tools.
+Run scripts/infrastructure_sources.py --check and framework regression tests.
+The common JSON contract checker covers single-exclusive compatibility; do not report it as directional validation.
+The existing infrastructure template and binding checks cover the earlier compatibility family;
+run them when reusing that family and do not present their PASS as a check of a new native binding.
+Report passes, failures, skips, and the scope each check proves.
 Run design-specific checks when the required files are available.
 If source and evidence hashes differ, record the affected files and identities.
 Do not merely update hashes or weaken checks to obtain PASS. Identify boundaries requiring reverification.
@@ -97,15 +124,32 @@ Compare sharing/fusion candidates in numeric boundaries, buffer/port costs, and 
 Do not create an opcode for every architectural component or low-level Python call.
 Share GEMM implementations where capabilities match. Distinguish embedding address selection from tensor computation.
 Present opcode and module lists as candidates and finalize them only after discussion with the user.
+During this discussion, draft designs/<new_revision>/structure_contract.json.
+Behavioral contracts define what to perform; the structural contract defines how modules, connections, memories and pipelines realize it.
+Record module responsibilities, sharing/instance counts, actual port connections, clocks/resets, widths/address units,
+directional bank roles, multiport weight stripes, executor read/operand/core paths,
+buffers/credits, controller reservation/issue/completion/release/END and resource/bandwidth rationale.
+Link each structural obligation ID to requirements, actual sources, affected modules/connections and checks/expected results.
+Reference the paths, versions and hashes of ISA/bank/numeric contracts and active sources; distinguish fixed structure from allowed tuning ranges.
+During inspect_and_propose, label candidates and affected unresolved decisions rather than claim agreement or implementation.
 
 The default transport is PS-preloaded command BRAM. PS writes the entire current program including terminal END,
 then publishes START; records cannot be modified while BUSY.
 The dispatcher examines only the current instruction at a single PC and never skips a blocked PC.
-Atomically acquire operand banks and advance the PC in the same cycle as executor command acceptance.
-Nonconflicting commands may remain outstanding; collect completions independently of the current PC.
-END stops new issue; DONE occurs after all outstanding commands complete and release their banks.
+Define bank acquisition and command acceptance from the selected active RTL and the agreed design contract.
+Advance the PC on command valid/ready. Specify whether nonconflicting commands may remain outstanding.
+END stops new issue; DONE waits for required completions and bank releases.
 Command BRAM is separate from the data-bank namespace; data bank 0 is legal.
-Use exclusive ownership per bank. The owner identifies a module operand port role, not an opcode.
+New designs separate read/write owners and acquire/release/busy per direction.
+Allow one owner per direction; reserve input read roles and output write operand-port roles.
+Atomically reserve and confirm all required directional roles before presenting the engine command.
+Overlap requires the actual memory conflict policy and the read_addr < commit availability bound.
+Follow section 1.5 of docs/framework_workflow.md for generation, append, in-place input preservation and ownership cycles.
+Do not treat existing single-exclusive primitives or previous JSON contracts as directional implementations.
+The reference command header is opcode + SRC0..SRC3 + DST + opcode-specific payload; derive bank-ID
+width from this design's bank inventory. Engine payloads remain model-specific.
+Read-while-write overlap requires an explicit committed-prefix/data-availability policy in the engine;
+split ownership alone does not establish that the data is ready.
 Specify busy/owner separately from tensor validity, progress, and logical lifetime.
 Failed commands do not commit a valid destination.
 Compute tensor operands are logical bank IDs: do not pass DDR addresses, raw local addresses, or bank offsets.
@@ -129,7 +173,12 @@ Compare double buffering and LOOP/JUMP with the single-BRAM approach in necessit
 then decide with the user. Do not introduce a command ring queue without justification.
 
 6. Validate the reference and ISA interpreter after agreement
-Save the agreed trace, ISA, and bank layout using the current checker schemas.
+Save the agreed trace, ISA, and bank layout with explicit schema and control-family versions.
+Concretize the structural contract for the current implementation scope and check consistency with behavioral, ISA and bank contracts.
+Existing common checker PASS does not validate the new structural contract. Define design-specific checks and report actual coverage.
+scripts/check_isa_design.py currently requires single exclusive ownership. For a native directional
+design, define and validate its ISA/binding schema before claiming those checks pass; do not force
+the new ownership semantics into the compatibility schema or weaken checks to obtain PASS.
 Do not falsely mark candidates reviewed/frozen/passed or create empty contracts for unimplemented modules.
 The Python ISA interpreter must execute actual tensor values, cache, and bank state.
 Record golden inputs, outputs, and intermediate state per command, with complete tensors or reproducible files and hashes.
@@ -143,12 +192,30 @@ Do not begin affected HDL while interpreter validation fails or implementation-r
 7. Implement and verify agreed modules incrementally
 For each current executor, first propose operation scope, algorithm, ports, bank access, numerics, parallelism,
 target clock/resources, and golden verification criteria; record the user's decisions in its module contract.
+First read the behavioral/ISA/bank contracts and structural contract to derive this module's implementation.
+Concretize applicable structural obligations; include contract path/version/hash and obligation IDs in the module packet.
+Map each obligation to implementation files, instances, ports, parameters, cycles and checks before writing RTL.
+Record concrete choices within allowed ranges; changes to fixed boundaries require rationale, impact, a new contract version and relevant reverification.
+Do not reapprove authorized decisions or introduce a separate contract approval hierarchy.
 The Parent owns the model, ISA, banks, and task decomposition. Use an implementation Child and a separate independent verification Child.
-Provide current contracts and that module's contract to each Child, without using historical Skills.
-Compute executors provide cmd_valid, cmd_ready, command information, and identifiable completion/error responses.
-Return exactly one response per accepted command. Connect bank data ports through the fabric/wrapper.
-Reuse the common dispatcher, DataMover, and ownership logic. Fill model-specific decode, routing, and completion tracking
-only in the template's permitted extension regions. Verify generated binding and RTL for the new revision.
+Provide current contracts and the same structural contract, implementation mapping and current module contract to both Children, without using historical Skills.
+The independent verification Child compares actual RTL structure/connections and full behavior against structural obligations; file existence is insufficient.
+Pipeline each executor's bank reads as request issue -> response alignment -> operand register -> compute core.
+Do not connect bank outputs combinationally straight into the compute core. Align data and
+valid/last/mask/index/transaction metadata for weights, activations, scales and KV to actual read latency.
+utils/pipeline.sv provides fixed delay without stall support; handle backpressure with response buffers and credits.
+Drain outstanding reads, operand/compute pipelines and final writes before completion and bank release.
+Follow section 1.4 of docs/framework_workflow.md for connection, cycle and verification rules.
+Define each operation engine's command acceptance, context storage, core/bank execution,
+memory drain, identifiable completion/error response and bank-release conditions in its contract.
+Use the selected active infrastructure files and their recorded reuse/adaptation decisions as implementation inputs.
+Pass their exact paths, hashes, interfaces and dependencies to the implementation and verification agents.
+Derive model-specific opcodes, port routing, payload layouts and numerics in the new revision;
+unsupported or unimplemented operations must reject. Verify necessary FIFOs and buffering.
+Do not make a separate generic executor, ownership/router, adapter or command-queue layer a prerequisite.
+Check the new revision's binding and generated RTL under its declared contracts. Source identity,
+compilation/elaboration and historical fixture PASS do not prove new-model arithmetic, synthesis,
+timing or board behavior. Do not rely on retired template USER regions as a required writing workflow.
 Distinguish golden comparisons, RTL simulation/lint, synthesis, routed timing/resources, integration, and physical hardware.
 Proceed to the next executor after the user's cumulative board checkpoint results are accepted.
 Do not repeat approval requests for decisions or stage progression already authorized in this conversation.
@@ -163,6 +230,7 @@ Do not claim full-model accelerator completion before the agreed prefill/decode 
 [Deliverables for this run]
 For inspect_and_propose, present repository inspection results, verified model/hardware identities,
 execution traces and unobserved paths, resource/command-capacity estimates, operation→ISA→module candidates,
+structural contract candidates with fixed boundaries and allowed tuning ranges,
 prioritized unresolved decisions, and the next single question.
 Do not begin HDL implementation or finalize ISA/module boundaries.
 For continue_agreed_work, check existing decisions and evidence first and perform the next authorized work.

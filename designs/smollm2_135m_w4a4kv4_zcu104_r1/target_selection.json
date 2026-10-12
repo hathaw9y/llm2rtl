@@ -1,0 +1,94 @@
+{
+  "schema": "llm2rtl.target_selection.v1",
+  "design_id": "smollm2_135m_w4a4kv4_zcu104_r1",
+  "recorded_date": "2026-10-10",
+  "timezone": "Asia/Seoul",
+  "status": "target_selected_numeric_method_not_frozen",
+  "user_confirmed": {
+    "model_id": "HuggingFaceTB/SmolLM2-135M",
+    "precision_label": "W4A4KV4",
+    "weight_bits": 4,
+    "activation_bits": 4,
+    "key_cache_bits": 4,
+    "value_cache_bits": 4,
+    "confirmation": "사용자가 가중치·활성값·KV 모두 4비트인 W4A4KV4를 선택함."
+  },
+  "model_identity_reference": {
+    "model_id": "HuggingFaceTB/SmolLM2-135M",
+    "revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+    "transformers_version": "5.16.1",
+    "source_path": "/home/shmin/.conda/envs/shmin/lib/python3.11/site-packages/transformers/models/llama/modeling_llama.py",
+    "source_sha256": "13e65b752a9c9d8a5c22b83df73009a8940c0eefdc58c101df3eb910e3efc2f9"
+  },
+  "model_shape_reference": {
+    "hidden_size": 576,
+    "intermediate_size": 1536,
+    "num_hidden_layers": 30,
+    "num_attention_heads": 9,
+    "num_key_value_heads": 3,
+    "head_dim": 64,
+    "vocab_size": 49152,
+    "max_position_embeddings": 8192,
+    "accelerator_context_max": 1024,
+    "processing_tokens_max": 32
+  },
+  "hardware_candidate": {
+    "board": "AMD ZCU104",
+    "part": "xczu7ev-ffvc1156-2-e",
+    "target_clock_mhz": 200,
+    "status": "candidate_inherited_from_existing_project_not_new_signoff",
+    "hardware_profile_skill": "/home/iamjames77/.codex/skills/zcu104-xczu7ev-hardware/SKILL.md"
+  },
+  "scope_plan": [
+    "Software quantization reference and held-out quality probe before numerical RTL dispatch; the independent opaque bank leaf may proceed under the separate user instruction.",
+    "One real-dimension Smol decoder layer with GQA, RoPE, persistent KV cache and DMA/bank boundaries.",
+    "Multiple-layer integration and full-model evaluation only after the corresponding evidence exists."
+  ],
+  "existing_references": [
+    {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/model_trace.json",
+      "sha256": "65f7d33c96117c7c67c7e77307a03ce22cd86fbe55fdca5e58fda14d0cb12276",
+      "reuse_scope": "Smol model identity and shape only; no W4 quality or execution claim."
+    },
+    {
+      "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/RTL_README.md",
+      "sha256": "5d8d0e3508a2b21c2df87393748eca96b47984778b62dfd70c487bdd629e7584",
+      "reuse_scope": "Bounded standalone W4A4KV4 Attention reference; BF16 probabilities/PV path; no Smol-scale GQA, RoPE or persistent KV support."
+    },
+    {
+      "path": "designs/attention_int4_noscale_zcu104_r1/reference/quantizer_reference.py",
+      "sha256": "b1bd5271a8b8c98c015bb579432a141f9dc938fe7114b4708b1f0ea5f629fefe",
+      "reuse_scope": "Candidate rounding and saturation reference; numerical policy not adopted or frozen for the new model."
+    },
+    {
+      "path": "designs/attention_w4a4kv4_bf16scale_isa_r1/isa_program.py",
+      "sha256": "986a2d80904762b2e8de52c3fd723971297128ada7ffc482d0a753a68b526aa1",
+      "reuse_scope": "Candidate nibble packing and descriptor reference; new model layouts remain pending."
+    },
+    {
+      "path": "designs/smollm2_135m_w8a8_zcu104_r1/contracts/numeric_contract.json",
+      "sha256": "f5bb6dbf52528e9fe921867e465aca6c74768402be7860cedeadc950e9bf9261",
+      "reuse_scope": "Previous 8-bit contract preserved; reference for boundary ownership and model semantics only."
+    }
+  ],
+  "numerical_contract_frozen": false,
+  "implementation_started": true,
+  "measurements": {
+    "model_quality": null,
+    "simulation": null,
+    "synthesis": null,
+    "routed_timing": null,
+    "board_execution": null,
+    "cost_usd": null
+  },
+  "notes": [
+    "The chosen bit widths are targets, not measured quality or hardware completion.",
+    "No existing RTL, frozen contracts, reports or experiment results were overwritten.",
+    "Existing higher-precision probability and other tensor paths must not be silently counted as A4 coverage.",
+    "Scale metadata, accumulators and nonlinear intermediates require explicit separate precision rules.",
+    "Existing model snapshot and software paths are references; their current availability has not been revalidated.",
+    "User requested the external striped-weight-bank pattern; frozen existing designs and external reference remain unchanged."
+  ],
+  "implementation_scope": "Four-ingress opaque weight-bank leaf only; numerical datapath and full-model implementation not started",
+  "bank_architecture_path": "memory_architecture.json"
+}

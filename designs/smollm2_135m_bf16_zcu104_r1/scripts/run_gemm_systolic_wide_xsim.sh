@@ -15,7 +15,7 @@ xvlog -sv "$design_dir/rtl/smollm2_gemm_systolic_wide_executor.sv" \
   > "$evidence_dir/xvlog.log" 2>&1
 xelab tb_smollm2_gemm_systolic_wide_executor --timescale 1ns/1ps \
   -s tb_smollm2_gemm_systolic_wide_executor_sim > "$evidence_dir/xelab.log" 2>&1
-python3 "$repo_dir/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
+python3 "$repo_dir/ip/infrastructure/archive/pre_physical_20261012/snapshot/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
   "$run_dir/xsim.dir/tb_smollm2_gemm_systolic_wide_executor_sim/xsimk" \
   'PASS smollm2_gemm_systolic_wide_executor' > "$evidence_dir/xsim.log" 2>&1
 cat "$evidence_dir/xsim.log"

@@ -15,7 +15,7 @@ def main():
  ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--out',required=True,type=Path);ap.add_argument('--mode',choices=['sim','lint','synth','all'],default='all');ap.add_argument('--late-fault-case',type=int,choices=[-1,0,1,2,3],default=-1);args=ap.parse_args()
  out=args.out.resolve();out.mkdir(parents=True,exist_ok=False)
  rtl=BASE/'rtl';ip=ROOT/'ip/infrastructure'
- sources=[rtl/'attention_tensor_pkg.sv',rtl/'attention_tensor_config_pkg.sv',rtl/'attention_descriptor_rom.sv',rtl/'attention_tensor_controller.sv',ip/'bank_ownership_table/rtl/bank_ownership_table.sv',ip/'bank_port_router/rtl/bank_port_router.sv',ip/'datamover_engine/rtl/bram_bank.sv',rtl/'attention_tensor_bank_subsystem.sv']
+ sources=[rtl/'attention_tensor_pkg.sv',rtl/'attention_tensor_config_pkg.sv',rtl/'attention_descriptor_rom.sv',rtl/'attention_tensor_controller.sv',ip/'bank/bank_ownership_table.sv',ip/'bank/bank_port_router.sv',ip/'bank/bram_bank.sv',rtl/'attention_tensor_bank_subsystem.sv']
  packet=BASE/'modules/attention_tensor_control.json'
  if sha(packet)!='53fe7ef380ce28536cd9c48be01b1957230f7263bbf5c65bc8eb872cc6a38ec2':raise RuntimeError('packet identity changed')
  pins=json.loads(packet.read_text());pinned=dict(pins['common_contracts'])

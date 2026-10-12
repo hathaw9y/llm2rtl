@@ -1,0 +1,1 @@
+../../stream_bank_adapters/rtl/mm2s_stream_bank_adapter.sv

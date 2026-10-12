@@ -3,7 +3,7 @@ from pathlib import Path
 import hashlib,json,re
 BASE=Path(__file__).resolve().parents[1];ROOT=BASE.parents[1]
 def main():
- template=ROOT/'ip/infrastructure/cmd_dispatcher_template/history/v2/rtl/cmd_dispatcher_template.sv'
+ template=ROOT/'ip/infrastructure/archive/pre_physical_20261012/snapshot/ip/infrastructure/cmd_dispatcher_template/history/v2/rtl/cmd_dispatcher_template.sv'
  assert hashlib.sha256(template.read_bytes()).hexdigest()=='f1d4dcb08faac1f469c857132344b6be057c82b52c6f870557dde2a45a46d8fe', 'Pinned exclusive-owner template changed'
  source=template.read_text()
  regions={

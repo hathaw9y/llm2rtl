@@ -1,0 +1,45 @@
+{
+  "schema": "llm2rtl.module_packet.v1",
+  "task_id": "smol_w4a4kv4_striped_weight_bank",
+  "agent_role": "hdl-module-implementation",
+  "subagents_allowed": false,
+  "design_id": "smollm2_135m_w4a4kv4_zcu104_r1",
+  "module_name": "smollm2_striped_weight_bank",
+  "allowed_write_root": "/home/iamjames77/llm2rtl/designs/smollm2_135m_w4a4kv4_zcu104_r1",
+  "rtl_path": "rtl/smollm2_striped_weight_bank.sv",
+  "tb_path": "tb/tb_smollm2_striped_weight_bank.sv",
+  "contract_path": "contracts/striped_weight_bank_contract.json",
+  "contract_sha256": "f9da1cfbf1564a0602e3caf9aef4b573181525a73d7e888dfc9fe6261f850468",
+  "protected_paths": [
+    "/home/iamjames77/SmolLM2_FPGA/pl/hdl/bank/striped_weight_bank.sv",
+    "/home/iamjames77/SmolLM2_FPGA/pl/hdl/config_pkg.sv",
+    "/home/iamjames77/llm2rtl/ip/infrastructure/datamover_engine/rtl/uram_bank.sv",
+    "/home/iamjames77/llm2rtl/designs/smollm2_135m_w4a4kv4_zcu104_r1/target_selection.json",
+    "/home/iamjames77/llm2rtl/designs/smollm2_135m_w4a4kv4_zcu104_r1/numeric_decisions_pending.json"
+  ],
+  "resource_objective": "Real four-stripe storage, default depth16384; report actual OOC mapping and utilization without claiming full accelerator fit.",
+  "target": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "tool": "Vivado 2025.2",
+    "clock_period_ns": 5.0
+  },
+  "required_artifacts": [
+    "rtl/smollm2_striped_weight_bank.sv",
+    "tb/tb_smollm2_striped_weight_bank.sv",
+    "scripts/run_striped_weight_bank.py",
+    "contracts/striped_weight_bank_rtl_binding.json",
+    "evidence/striped_weight_bank/subagent_result.json"
+  ],
+  "allowed_tuning": [
+    "Testbench depth for functional simulation",
+    "Read latency2/3 verification",
+    "Parameterized stripe count including default4 and a nondefault count"
+  ],
+  "forbidden_changes": [
+    "Existing frozen Smol BF16/W8A8 designs",
+    "External reference repository",
+    "Common uram_bank primitive",
+    "Numerical decisions for W4A4KV4",
+    "Full-model implementation or paid model runs"
+  ]
+}

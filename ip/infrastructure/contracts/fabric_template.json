@@ -1,0 +1,40 @@
+{
+  "schema": "llm2rtl.execution_fabric_template.v2",
+  "template_id": "execution_fabric_template",
+  "required_roles": [
+    "model_specific_dispatcher",
+    "datamover_engine",
+    "bank_ownership_table",
+    "local_bank_router_and_memories",
+    "dma_stream_bank_adapters",
+    "model_specific_executors"
+  ],
+  "pinned_infrastructure": [
+    {
+      "path": "ip/infrastructure/contracts/datamover_source_index.json",
+      "sha256": "08b9571cccb05222df86d21147440d1ac47d93e7cda7a793f49ddcfdfe026525"
+    },
+    {
+      "path": "ip/infrastructure/datamover/datamover_engine.sv",
+      "sha256": "ae3f25daa2531d4d92efa9b510a807e36c8998cf6b9914af744cebfcb4c7f076"
+    },
+    {
+      "path": "ip/infrastructure/bank/bank_ownership_table.sv",
+      "sha256": "28de9cc7ad4cb40c822dd3fe17b0a6f8eb8c69fbf5570e7de66a6729611a04ff"
+    }
+  ],
+  "fixed_boundaries": [
+    "PS supplies the ISA program; dispatcher does not schedule model operations",
+    "only DMA requests contain external DDR addresses",
+    "compute tensor operands use logical bank IDs",
+    "command BRAM is separate from data banks",
+    "ownership is acquired on executor request acceptance and released on matched completion",
+    "DataMover status identifies the completed bank independently of vendor sequence tags"
+  ],
+  "binding_template": "ip/infrastructure/contracts/fabric_binding_template.json",
+  "rtl_template": "ip/infrastructure/templates/execution_fabric.sv.tpl",
+  "generator_policy": "Agent generates a new design-specific execution_fabric RTL from a checked binding; do not copy the frozen sparse execution_fabric as the new design.",
+  "evidence_policy": "Source identity only. Generated integration requires fresh verification; historical synthesis evidence is not inherited.",
+  "datamover_source_index": "ip/infrastructure/contracts/datamover_source_index.json",
+  "layout_revision": "physical_20261012_001"
+}

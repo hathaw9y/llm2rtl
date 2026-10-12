@@ -20,10 +20,16 @@ class InfrastructureBindingTest(unittest.TestCase):
         self.addCleanup(fixture.doCleanups)
         self.fixture = fixture
         self.root = fixture.root
-        for relative in ('ip/infrastructure/bank_ownership_table',
-                         'ip/infrastructure/execution_fabric_template',
-                         'ip/infrastructure/datamover_engine'):
-            shutil.copytree(ROOT / relative, self.root / relative)
+        for relative in ('ip/infrastructure/bank', 'ip/infrastructure/datamover',
+                         'ip/infrastructure/controller', 'ip/infrastructure/utils',
+                         'ip/infrastructure/templates', 'ip/infrastructure/contracts'):
+            if (ROOT / relative).exists():
+                shutil.copytree(ROOT / relative, self.root / relative)
+            else:
+                (self.root / relative).mkdir(parents=True, exist_ok=True)
+        relative = 'ip/infrastructure/archive/pre_reference_integrated_20261012'
+        shutil.copytree(ROOT / relative, self.root / relative)
+        shutil.copy2(ROOT / 'ip/infrastructure/migration.json', self.root / 'ip/infrastructure/migration.json')
         shutil.copy2(ROOT / 'scripts/check_isa_design.py',
                      self.root / 'scripts/check_isa_design.py')
         for index, bank in enumerate(fixture.banks['banks']):
@@ -84,23 +90,36 @@ class InfrastructureBindingTest(unittest.TestCase):
             CHECKER.check_binding(self.root, self.write_binding())
 
     def test_template_source_identity_fails_closed(self):
-        source = self.root / 'ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv'
+        source = self.root / 'ip/infrastructure/bank/bank_ownership_table.sv'
         source.write_text(source.read_text() + '\n')
         with self.assertRaisesRegex(CHECKER.BindingError, 'ownership source SHA-256'):
             CHECKER.check_templates(self.root)
 
     def test_datamover_child_source_identity_fails_closed(self):
-        source = self.root / 'ip/infrastructure/datamover_engine/rtl/datamover_command_queue.sv'
+        source = CHECKER.safe_path(self.root, 'ip/infrastructure/datamover/datamover_command_queue.sv')
         source.write_text(source.read_text() + '\n')
-        with self.assertRaisesRegex(CHECKER.BindingError, 'DataMover source SHA-256'):
+        with self.assertRaisesRegex(CHECKER.BindingError, 'SHA-256 mismatch'):
             CHECKER.check_templates(self.root)
 
-    def test_datamover_evidence_identity_fails_closed(self):
+    def test_datamover_source_index_identity_fails_closed(self):
         template = CHECKER.read_json(self.root / CHECKER.FABRIC_TEMPLATE)
-        index = CHECKER.read_json(self.root / template['datamover_source_index'])
-        report = self.root / index['verification']['verification_report.json']['path']
-        report.write_text(report.read_text() + '\n')
-        with self.assertRaisesRegex(CHECKER.BindingError, 'verification evidence SHA-256'):
+        index = self.root / template['datamover_source_index']
+        index.write_text(index.read_text() + '\n')
+        with self.assertRaisesRegex(CHECKER.BindingError, 'infrastructure source SHA-256'):
+            CHECKER.check_templates(self.root)
+
+    def test_active_index_cannot_inherit_historical_verification(self):
+        template_path = self.root / CHECKER.FABRIC_TEMPLATE
+        template = CHECKER.read_json(template_path)
+        index_path = self.root / template['datamover_source_index']
+        index = CHECKER.read_json(index_path)
+        index['verification'] = {'status': 'historical_pass'}
+        index_path.write_text(json.dumps(index))
+        for pin in template['pinned_infrastructure']:
+            if pin['path'] == template['datamover_source_index']:
+                pin['sha256'] = CHECKER.sha256(index_path)
+        template_path.write_text(json.dumps(template))
+        with self.assertRaisesRegex(CHECKER.BindingError, 'must not inherit'):
             CHECKER.check_templates(self.root)
 
 

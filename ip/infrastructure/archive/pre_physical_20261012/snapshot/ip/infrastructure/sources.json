@@ -1,0 +1,452 @@
+{
+  "schema": "llm2rtl.infrastructure_sources.v1",
+  "revision": "cleanup_20261012_001",
+  "reference_organization": "SmolLM2_FPGA/pl/hdl/{bank,datamover,controller,utils}",
+  "navigation_only": true,
+  "source_authority": "Existing regular packet RTL paths; role views are links for browsing only.",
+  "sources": {
+    "bank_ownership_table": {
+      "path": "ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv",
+      "sha256": "28de9cc7ad4cb40c822dd3fe17b0a6f8eb8c69fbf5570e7de66a6729611a04ff",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bank_ownership_table.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "bank_port_router": {
+      "path": "ip/infrastructure/bank_port_router/rtl/bank_port_router.sv",
+      "sha256": "0e9382fec2abc3535b8304bb0b7bb3b58af1c4fc6b7bf5d3ec65f39e4aaf925e",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bank_port_router.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "bank_config_pkg": {
+      "path": "ip/infrastructure/bank_sparse_router/rtl/bank_config_pkg.sv",
+      "sha256": "00020944752c8754b6f8208478dbacf84b6d76d1f0214dfb4778ee7f3344c7fa",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bank_config_pkg.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "bank_sparse_router": {
+      "path": "ip/infrastructure/bank_sparse_router/rtl/bank_sparse_router.sv",
+      "sha256": "d47d68fbf1450b958a5fe7ddcf72a62da2b05dd5495045e747a32dcb425c3d97",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bank_sparse_router.sv",
+      "depends_on": [
+        "bank_config_pkg"
+      ],
+      "external_libraries": []
+    },
+    "bank_native_memories": {
+      "path": "ip/infrastructure/bank_subsystem/rtl/bank_native_memories.sv",
+      "sha256": "0a78e2526e6f3076b9b4f7bf7afafb09c51eba43a9a42b1ea485aff1a7ed81bd",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bank_native_memories.sv",
+      "depends_on": [
+        "bram_bank",
+        "uram_bank"
+      ],
+      "external_libraries": []
+    },
+    "bank_native_ownership": {
+      "path": "ip/infrastructure/bank_subsystem/rtl/bank_native_ownership.sv",
+      "sha256": "ef51179c257fc526e6baf84733fc9abc7598197fba1b085b618472ea07a5085f",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bank_native_ownership.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "bank_native_router": {
+      "path": "ip/infrastructure/bank_subsystem/rtl/bank_native_router.sv",
+      "sha256": "41138cd9f34c54566d87169970d365b7c9855143ac1f5b92559e400826bd20ac",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bank_native_router.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "bank_subsystem": {
+      "path": "ip/infrastructure/bank_subsystem/rtl/bank_subsystem.sv",
+      "sha256": "d5352d4676c81746284abbbb475bc25b11fd42a25a737eb2d924456f3185d522",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bank_subsystem.sv",
+      "depends_on": [
+        "bank_config_pkg",
+        "bank_ownership_table",
+        "bank_sparse_router",
+        "bram_bank",
+        "uram_bank"
+      ],
+      "external_libraries": []
+    },
+    "cmd_dispatcher_template": {
+      "path": "ip/infrastructure/cmd_dispatcher_template/rtl/cmd_dispatcher_template.sv",
+      "sha256": "867cc4d6b17383043d63444af202f637712a9e6391cf563a3c7d601585934223",
+      "role": "controller",
+      "navigation_view": "ip/infrastructure/rtl/controller/cmd_dispatcher_template.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "axis_width_converter": {
+      "path": "ip/infrastructure/datamover_engine/rtl/axis_width_converter.sv",
+      "sha256": "403dbd62f09c0ac98143576575aa1090e9884dafa5b5bf5ff305ba17f100c050",
+      "role": "utils",
+      "navigation_view": "ip/infrastructure/rtl/utils/axis_width_converter.sv",
+      "depends_on": [
+        "axis_width_down_converter",
+        "axis_width_up_converter"
+      ],
+      "external_libraries": []
+    },
+    "axis_width_down_converter": {
+      "path": "ip/infrastructure/datamover_engine/rtl/axis_width_down_converter.sv",
+      "sha256": "d7e6da6402eb17db83d4a01b332327d87fd67d9303ec23bfd46b82407e3b036d",
+      "role": "utils",
+      "navigation_view": "ip/infrastructure/rtl/utils/axis_width_down_converter.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "axis_width_up_converter": {
+      "path": "ip/infrastructure/datamover_engine/rtl/axis_width_up_converter.sv",
+      "sha256": "fa71fed6c724ec92fea95bcc035f85a79c1a1107728c8ee1f0c172db273f81b2",
+      "role": "utils",
+      "navigation_view": "ip/infrastructure/rtl/utils/axis_width_up_converter.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "bank_arbiter": {
+      "path": "ip/infrastructure/datamover_engine/rtl/bank_arbiter.sv",
+      "sha256": "ce781b1b6bb26ec595c4a4f1a941d62ab57f567decf94497743fb1d56fb1644d",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bank_arbiter.sv",
+      "depends_on": [
+        "bank_write_arbit",
+        "bank_read_arbit"
+      ],
+      "external_libraries": []
+    },
+    "bank_read_arbit": {
+      "path": "ip/infrastructure/datamover_engine/rtl/bank_read_arbit.sv",
+      "sha256": "9a0e2515d28857b601b85b352cb3caa29b8e16a5f46503cdd7b2e4a9b67f8a16",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bank_read_arbit.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "bank_write_arbit": {
+      "path": "ip/infrastructure/datamover_engine/rtl/bank_write_arbit.sv",
+      "sha256": "7b04de7e4dc59550875959e4a91f000a2d07593694f02de605f39a1198d5df11",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bank_write_arbit.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "bram_bank": {
+      "path": "ip/infrastructure/datamover_engine/rtl/bram_bank.sv",
+      "sha256": "7199594e43e1c9c951067882d31d0baaa1b1e626ab5d5cb14013af9a9de36221",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/bram_bank.sv",
+      "depends_on": [],
+      "external_libraries": [
+        "xpm"
+      ]
+    },
+    "datamover_command_queue": {
+      "path": "ip/infrastructure/datamover_engine/rtl/datamover_command_queue.sv",
+      "sha256": "100b21a26a76baf436e67fdd8389cb020df5470cc4b19624ab6db96bee96d17c",
+      "role": "datamover",
+      "navigation_view": "ip/infrastructure/rtl/datamover/datamover_command_queue.sv",
+      "depends_on": [
+        "fifo"
+      ],
+      "external_libraries": []
+    },
+    "datamover_engine": {
+      "path": "ip/infrastructure/datamover_engine/rtl/datamover_engine.sv",
+      "sha256": "ae3f25daa2531d4d92efa9b510a807e36c8998cf6b9914af744cebfcb4c7f076",
+      "role": "datamover",
+      "navigation_view": "ip/infrastructure/rtl/datamover/datamover_engine.sv",
+      "depends_on": [
+        "datamover_engine_pkg",
+        "mm2s_channel",
+        "s2mm_channel"
+      ],
+      "external_libraries": []
+    },
+    "datamover_engine_pkg": {
+      "path": "ip/infrastructure/datamover_engine/rtl/datamover_engine_pkg.sv",
+      "sha256": "9134093b3f51049657714b77e1422a0d632cd28c36a67f85d308e4776a7ce792",
+      "role": "datamover",
+      "navigation_view": "ip/infrastructure/rtl/datamover/datamover_engine_pkg.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "fifo": {
+      "path": "ip/infrastructure/datamover_engine/rtl/fifo.sv",
+      "sha256": "08429e4fc6fc43d23248fbd2a3d85bab12e7a51bee033fbb4c7a95148cdc305f",
+      "role": "utils",
+      "navigation_view": "ip/infrastructure/rtl/utils/fifo.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "mm2s_adapter": {
+      "path": "ip/infrastructure/datamover_engine/rtl/mm2s_adapter.sv",
+      "sha256": "0606d2b72a34765c067cbbc9ca9962e98002c24c5bb7999d482be96837b16f00",
+      "role": "datamover",
+      "navigation_view": "ip/infrastructure/rtl/datamover/mm2s_adapter.sv",
+      "depends_on": [
+        "axis_width_converter"
+      ],
+      "external_libraries": []
+    },
+    "mm2s_channel": {
+      "path": "ip/infrastructure/datamover_engine/rtl/mm2s_channel.sv",
+      "sha256": "2d187db6895e14420f0e7b0754ea7a21af9f488094b41091ec0df93148f7ff1b",
+      "role": "datamover",
+      "navigation_view": "ip/infrastructure/rtl/datamover/mm2s_channel.sv",
+      "depends_on": [
+        "datamover_engine_pkg",
+        "datamover_command_queue"
+      ],
+      "external_libraries": []
+    },
+    "pipeline": {
+      "path": "ip/infrastructure/datamover_engine/rtl/pipeline.sv",
+      "sha256": "a898c37725e714a6b5ea7ebdc63d6b04db5263b6f591d9e7b15c13f1c6621ddd",
+      "role": "utils",
+      "navigation_view": "ip/infrastructure/rtl/utils/pipeline.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "s2mm_adapter": {
+      "path": "ip/infrastructure/datamover_engine/rtl/s2mm_adapter.sv",
+      "sha256": "59bc18e6c8a61f163423a22664a970e28ee853e6d4cf013657a4feda171368fa",
+      "role": "datamover",
+      "navigation_view": "ip/infrastructure/rtl/datamover/s2mm_adapter.sv",
+      "depends_on": [
+        "pipeline",
+        "fifo",
+        "axis_width_converter"
+      ],
+      "external_libraries": []
+    },
+    "s2mm_channel": {
+      "path": "ip/infrastructure/datamover_engine/rtl/s2mm_channel.sv",
+      "sha256": "47838b31bc8e307e5745e547791c70697e8e66d1d6f4962797b9c5bb6a309ef0",
+      "role": "datamover",
+      "navigation_view": "ip/infrastructure/rtl/datamover/s2mm_channel.sv",
+      "depends_on": [
+        "datamover_engine_pkg",
+        "datamover_command_queue"
+      ],
+      "external_libraries": []
+    },
+    "status_decoder": {
+      "path": "ip/infrastructure/datamover_engine/rtl/status_decoder.sv",
+      "sha256": "d8f42671be54cc91cc108f7f4e22943f7e6360eb2a43bbff8db091c019ad753d",
+      "role": "datamover",
+      "navigation_view": "ip/infrastructure/rtl/datamover/status_decoder.sv",
+      "depends_on": [
+        "datamover_engine_pkg"
+      ],
+      "external_libraries": []
+    },
+    "uram_bank": {
+      "path": "ip/infrastructure/datamover_engine/rtl/uram_bank.sv",
+      "sha256": "11520a8bb955d10c89ca6f699d42bcfccd5458e6abee1be67a044dbfdaa92bd1",
+      "role": "bank",
+      "navigation_view": "ip/infrastructure/rtl/bank/uram_bank.sv",
+      "depends_on": [],
+      "external_libraries": [
+        "xpm"
+      ]
+    },
+    "execution_fabric": {
+      "path": "ip/infrastructure/execution_fabric/rtl/execution_fabric.sv",
+      "sha256": "9fed04e1dc11d3d530d6ba51623ad6d8112b1d890420d68e07a66c813608e56d",
+      "role": "integration",
+      "navigation_view": "ip/infrastructure/rtl/integration/execution_fabric.sv",
+      "depends_on": [
+        "bank_config_pkg",
+        "sparse_isa_dispatcher",
+        "datamover_engine",
+        "mm2s_stream_bank_adapter",
+        "s2mm_stream_bank_adapter",
+        "bank_subsystem"
+      ],
+      "external_libraries": []
+    },
+    "sparse_isa_dispatcher": {
+      "path": "ip/infrastructure/sparse_isa_dispatcher/rtl/sparse_isa_dispatcher.sv",
+      "sha256": "9305b7f5b104c2a1373f718272ce8db3eacced8b1dcff97f7690d78de72b2569",
+      "role": "controller",
+      "navigation_view": "ip/infrastructure/rtl/controller/sparse_isa_dispatcher.sv",
+      "depends_on": [
+        "bank_config_pkg"
+      ],
+      "external_libraries": []
+    },
+    "mm2s_stream_bank_adapter": {
+      "path": "ip/infrastructure/stream_bank_adapters/rtl/mm2s_stream_bank_adapter.sv",
+      "sha256": "e27691fa710b54f4314770d254808d74209def0a4ab94a814b9cb9a41577d691",
+      "role": "datamover",
+      "navigation_view": "ip/infrastructure/rtl/datamover/mm2s_stream_bank_adapter.sv",
+      "depends_on": [],
+      "external_libraries": []
+    },
+    "s2mm_stream_bank_adapter": {
+      "path": "ip/infrastructure/stream_bank_adapters/rtl/s2mm_stream_bank_adapter.sv",
+      "sha256": "00276ae1c77ddabf289ede361920b3545f213c470bdf7ad8952afb2712008fc7",
+      "role": "datamover",
+      "navigation_view": "ip/infrastructure/rtl/datamover/s2mm_stream_bank_adapter.sv",
+      "depends_on": [],
+      "external_libraries": []
+    }
+  },
+  "profiles": {
+    "adapters": {
+      "roots": [
+        "mm2s_adapter",
+        "s2mm_adapter"
+      ],
+      "description": "Parameterized enable/address bank adapters; not valid-ready stream adapters."
+    },
+    "support": {
+      "roots": [
+        "fifo",
+        "pipeline",
+        "axis_width_converter"
+      ],
+      "description": "Common FIFO, pipeline and AXIS width conversion."
+    },
+    "command_queue": {
+      "roots": [
+        "datamover_command_queue"
+      ],
+      "description": "Descriptor queue and status ordering."
+    },
+    "engine": {
+      "roots": [
+        "datamover_engine",
+        "status_decoder"
+      ],
+      "description": "Generic DataMover command/status engine."
+    },
+    "dma_integration": {
+      "roots": [
+        "datamover_engine",
+        "mm2s_adapter",
+        "s2mm_adapter",
+        "bank_arbiter",
+        "bram_bank"
+      ],
+      "description": "Scheduler/engine/adapters/arbiter integration with actual XPM BRAM."
+    },
+    "stream_adapters": {
+      "roots": [
+        "mm2s_stream_bank_adapter",
+        "s2mm_stream_bank_adapter"
+      ],
+      "description": "Fixed-width valid-ready bank adapters, independent of enable/address adapters."
+    },
+    "ownership": {
+      "roots": [
+        "bank_ownership_table"
+      ],
+      "description": "Legacy exclusive-owner table."
+    },
+    "port_router": {
+      "roots": [
+        "bank_port_router"
+      ],
+      "description": "Generic exclusive-owner router."
+    },
+    "sparse_router": {
+      "roots": [
+        "bank_sparse_router"
+      ],
+      "description": "Legacy bank_config_pkg-specific router."
+    },
+    "dispatcher": {
+      "roots": [
+        "sparse_isa_dispatcher",
+        "bank_ownership_table"
+      ],
+      "description": "Legacy sparse-ISA dispatcher and exclusive ownership."
+    },
+    "controller": {
+      "roots": [
+        "cmd_dispatcher_template"
+      ],
+      "description": "Native v4 controller; generated user regions remain model-specific."
+    },
+    "native_bank_children": {
+      "roots": [
+        "bank_native_ownership",
+        "bank_native_router",
+        "bank_native_memories"
+      ],
+      "description": "Native directional-owner children; add generated package and subsystem separately."
+    },
+    "legacy_bank": {
+      "roots": [
+        "bank_subsystem"
+      ],
+      "description": "Frozen legacy bank example; distinct from native directional-owner template."
+    },
+    "legacy_fabric": {
+      "roots": [
+        "execution_fabric",
+        "status_decoder"
+      ],
+      "description": "Frozen fixed four-bank integration example; not a model implementation."
+    },
+    "all": {
+      "roots": [
+        "bank_ownership_table",
+        "bank_port_router",
+        "bank_config_pkg",
+        "bank_sparse_router",
+        "bank_native_memories",
+        "bank_native_ownership",
+        "bank_native_router",
+        "bank_subsystem",
+        "cmd_dispatcher_template",
+        "axis_width_converter",
+        "axis_width_down_converter",
+        "axis_width_up_converter",
+        "bank_arbiter",
+        "bank_read_arbit",
+        "bank_write_arbit",
+        "bram_bank",
+        "datamover_command_queue",
+        "datamover_engine",
+        "datamover_engine_pkg",
+        "fifo",
+        "mm2s_adapter",
+        "mm2s_channel",
+        "pipeline",
+        "s2mm_adapter",
+        "s2mm_channel",
+        "status_decoder",
+        "uram_bank",
+        "execution_fabric",
+        "sparse_isa_dispatcher",
+        "mm2s_stream_bank_adapter",
+        "s2mm_stream_bank_adapter"
+      ],
+      "description": "Compile inventory only; select a bounded profile for elaboration."
+    }
+  },
+  "templates": [
+    "ip/infrastructure/execution_fabric_template/rtl/execution_fabric.sv.tpl",
+    "ip/infrastructure/bank_subsystem_template/rtl/bank_config_pkg.sv.tpl",
+    "ip/infrastructure/bank_subsystem_template/rtl/bank_subsystem.sv.tpl"
+  ],
+  "limitations": [
+    "Working-tree source inventory, not historical signoff or timing evidence.",
+    "Do not mix the role view and original paths or recursively compile evidence/TB/templates.",
+    "Smol striped weight bank remains a design-local module; its timing and DMA integration are not promoted."
+  ]
+}

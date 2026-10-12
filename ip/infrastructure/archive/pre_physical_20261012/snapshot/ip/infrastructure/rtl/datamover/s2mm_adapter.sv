@@ -1,0 +1,1 @@
+../../datamover_engine/rtl/s2mm_adapter.sv

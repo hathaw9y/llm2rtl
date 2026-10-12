@@ -1,0 +1,47 @@
+{
+  "schema": "llm2rtl.pending_numeric_decisions.v1",
+  "design_id": "smollm2_135m_w4a4kv4_zcu104_r1",
+  "status": "not_frozen",
+  "decisions": [
+    {
+      "id": "numeric_encoding",
+      "topic": "INT4 encoding, signed/unsigned tensor ranges, reserved codes and zero point"
+    },
+    {
+      "id": "scale_policy",
+      "topic": "Weight/activation/K/V scale grouping, storage precision and static/dynamic generation"
+    },
+    {
+      "id": "rounding",
+      "topic": "Rounding, clipping, all-zero, subnormal and invalid-scale behavior"
+    },
+    {
+      "id": "activation_coverage",
+      "topic": "Explicit tensor-by-tensor A4 coverage, including probability, residual, embedding and projection outputs"
+    },
+    {
+      "id": "weight_coverage",
+      "topic": "Explicit W4 parameter coverage, including embedding/lm_head sharing and normalization parameters"
+    },
+    {
+      "id": "intermediate_precision",
+      "topic": "Accumulator width/order and RMSNorm, RoPE, Softmax, SiLU intermediate precision"
+    },
+    {
+      "id": "cache_layout",
+      "topic": "Persistent GQA KV append/read, quantization placement relative to RoPE, scale identity and packing layout"
+    },
+    {
+      "id": "calibration_quality",
+      "topic": "Disjoint calibration/evaluation inputs and quality thresholds frozen before measurement"
+    },
+    {
+      "id": "execution_budget",
+      "topic": "Software probe, model/agent calls and hardware build budgets before launch"
+    }
+  ],
+  "verification_separation": {
+    "quantization_quality": "Compare the quantized software model against the original BF16 model on held-out inputs.",
+    "rtl_correctness": "Compare RTL against the frozen quantized numerical reference; quality tolerances do not excuse implementation mismatches."
+  }
+}

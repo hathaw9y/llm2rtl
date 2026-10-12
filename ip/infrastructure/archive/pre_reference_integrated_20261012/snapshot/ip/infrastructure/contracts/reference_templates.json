@@ -1,0 +1,222 @@
+{
+  "schema": "llm2rtl.design_reference_templates.v1",
+  "revision": "reference_style_20261012_001",
+  "scope": "design_inputs_not_generated_model",
+  "default_control_family": "native_reference_engine",
+  "purpose": "Change the references used by design agents; no new current-model executor is implemented.",
+  "command_header": {
+    "bits": 128,
+    "opcode_bits": 4,
+    "bank_fields": [
+      "SRC0",
+      "SRC1",
+      "SRC2",
+      "SRC3",
+      "DST"
+    ],
+    "bank_id_width": "derived from design bank inventory",
+    "payload": "remaining bits, opaque and operation-specific",
+    "fixed_terminal_opcode": 0
+  },
+  "control_rules": [
+    "fetch and verify current PC only",
+    "atomic native directional acquire accepted before engine command",
+    "PC advances on engine command valid/ready",
+    "engine latches opcode, all source/destination IDs and payload",
+    "core done release/rearm and memory drain precede clean held response",
+    "matched completion tracked independently of PC; accepted release retires ownership",
+    "END drains all outstanding engines and ownership",
+    "unclean or mismatched responses retain ownership until coherent reset",
+    "read/write overlap requires operation-specific committed-data policy"
+  ],
+  "native_bank_contract": {
+    "path": "ip/infrastructure/contracts/native_bank.json",
+    "sha256": "631c393c53cd56a9c916c91fe5b685be572569fa8c19bb3bb22aebd802e70d1f"
+  },
+  "engine_completion_contract": {
+    "path": "contracts/common/engine_completion_contract.json",
+    "sha256": "f66d131fa5c5dab54ab637633d395772ee4b73c4374c51308e05143939bf3446"
+  },
+  "bank_templates": [
+    {
+      "path": "ip/infrastructure/templates/bank_config_pkg.sv.tpl",
+      "sha256": "684deb932e98cd81d85a682d178efca0e92bb5d8ac98986341ba2ceb6fcf1b97"
+    },
+    {
+      "path": "ip/infrastructure/templates/bank_subsystem.sv.tpl",
+      "sha256": "c656addf5ee41dd8b0636332a2df00bc73860808b1f677b812fc94fbcff4dfa7"
+    }
+  ],
+  "config_fields": [
+    "BANK_NUM",
+    "BANK_NUM_WIDTH",
+    "PORT_ID_WIDTH",
+    "CMD_DATA_WIDTH",
+    "OPCODE_WIDTH",
+    "OP_END",
+    "ENGINE_NUM"
+  ],
+  "config_policy": "Use a design-local package; never copy the reference model bank counts/numeric constants as defaults.",
+  "not_provided": [
+    "numerical compute kernels",
+    "reference model opcode set",
+    "SET/ADD/LOOP and register addressing",
+    "descriptor layer scheduler",
+    "complete model ISA/bank binding",
+    "synthesis/timing/board evidence"
+  ],
+  "unbound_policy": "Controller supports END only; engine rejects unconfigured operation; native fabric mandatory placeholders prevent unrendered compilation.",
+  "completion_transport_assumption": "Exactly once per accepted command and coherent resets. Full command context rejects distinguishable mismatches; an old identical-context response after reuse cannot be universally distinguished without additional generation identity.",
+  "model_boundary": "Native directional ownership and acquire-before-issue are explicit opt-in boundaries; historical common exclusive/atomic-on-command-acceptance semantics and existing designs are unchanged.",
+  "validation": {
+    "status": "passed_bounded_rendered_template_fixture",
+    "scope": "Control/template fixture with real native ownership; synthetic cores, no actual memory traffic or numerical model",
+    "result": {
+      "path": "verification/infrastructure/reference_templates_20261012/run003/result.json",
+      "sha256": "0b5da41b07abb72d361d7f783734eb8211279e06108910af31f54da49f55b2d7"
+    },
+    "cases_passed": 5,
+    "cases_total": 5,
+    "checks": 559,
+    "tool": "Vivado XSIM 2025.2",
+    "verilator": "controller warning-clean; engine UNUSEDPARAM/UNUSEDSIGNAL reported for unconsumed synthetic-core context",
+    "no_model_or_board_signoff": true
+  },
+  "source_examples": [
+    {
+      "path": "ip/infrastructure/references/smollm_style_20261012/controller/controller.sv",
+      "sha256": "d810b787de8164c9ca8bd2613c1527f44d8f663be3d82064101ac02bc2347f30",
+      "origin_path": "/home/iamjames77/SmolLM2_FPGA/pl/hdl/controller/controller.sv",
+      "purpose": "Architecture/style reference only; reference-model payloads and numerical cores are not new-model requirements."
+    },
+    {
+      "path": "ip/infrastructure/references/smollm_style_20261012/controller/REGISTER_ISA.md",
+      "sha256": "2b4eab2b993a297b1997d29f5909c514bea9ecc87eb662ae5d194b845dc7950e",
+      "origin_path": "/home/iamjames77/SmolLM2_FPGA/pl/hdl/controller/REGISTER_ISA.md",
+      "purpose": "Architecture/style reference only; reference-model payloads and numerical cores are not new-model requirements."
+    },
+    {
+      "path": "ip/infrastructure/references/smollm_style_20261012/compute/gemv/gemv_engine.sv",
+      "sha256": "a70dbad4231152589875fdd5457a8a04facdc0de56a44630a96956f5d199a0ea",
+      "origin_path": "/home/iamjames77/SmolLM2_FPGA/pl/hdl/compute/gemv/gemv_engine.sv",
+      "purpose": "Architecture/style reference only; reference-model payloads and numerical cores are not new-model requirements."
+    },
+    {
+      "path": "ip/infrastructure/references/smollm_style_20261012/bank/bank_subsystem.sv",
+      "sha256": "76ac3c118ba5fe94047c1447201c6db9d081b9d708e3c20af6e8cab7c109ff63",
+      "origin_path": "/home/iamjames77/SmolLM2_FPGA/pl/hdl/bank/bank_subsystem.sv",
+      "purpose": "Architecture/style reference only; reference-model payloads and numerical cores are not new-model requirements."
+    },
+    {
+      "path": "ip/infrastructure/references/smollm_style_20261012/bank/striped_weight_bank.sv",
+      "sha256": "c8ab1c75964822333bd52d886087e629620e1b8e4616614b19dabe9be47359db",
+      "origin_path": "/home/iamjames77/SmolLM2_FPGA/pl/hdl/bank/striped_weight_bank.sv",
+      "purpose": "Architecture/style reference only; reference-model payloads and numerical cores are not new-model requirements."
+    },
+    {
+      "path": "ip/infrastructure/references/smollm_style_20261012/config_pkg.sv",
+      "sha256": "d9504a4c8c53a9268b5e4c1be748b6f9184377346afa152e98f0f3f0bf675a06",
+      "origin_path": "/home/iamjames77/SmolLM2_FPGA/pl/hdl/config_pkg.sv",
+      "purpose": "Architecture/style reference only; reference-model payloads and numerical cores are not new-model requirements."
+    },
+    {
+      "path": "ip/infrastructure/references/smollm_style_20261012/bank_config_pkg.sv",
+      "sha256": "50cec2944b8e9da0f2868ffe6297151ef1ba2119af844954f08e1e647c26bc2f",
+      "origin_path": "/home/iamjames77/SmolLM2_FPGA/pl/hdl/bank_config_pkg.sv",
+      "purpose": "Architecture/style reference only; reference-model payloads and numerical cores are not new-model requirements."
+    },
+    {
+      "path": "ip/infrastructure/references/smollm_style_20261012/top.sv",
+      "sha256": "73a84026e7f3d69e7450aa2c03770cead89c63f461e64808408b82bc98a4ad72",
+      "origin_path": "/home/iamjames77/SmolLM2_FPGA/pl/hdl/top.sv",
+      "purpose": "Architecture/style reference only; reference-model payloads and numerical cores are not new-model requirements."
+    }
+  ],
+  "compatibility_inputs": [
+    {
+      "path": "ip/infrastructure/controller/cmd_dispatcher_template.sv",
+      "sha256": "867cc4d6b17383043d63444af202f637712a9e6391cf563a3c7d601585934223"
+    },
+    {
+      "path": "ip/infrastructure/templates/execution_fabric.sv.tpl",
+      "sha256": "566085eebf34d2095e52b6827ba9b576af3bf6632003732aabe13c533df805c6"
+    },
+    {
+      "path": "ip/infrastructure/contracts/fabric_template.json",
+      "sha256": "d55d8524795397a3f8549ab50175fda7b6cd448e779981d5676962442e1dd17d"
+    }
+  ],
+  "compatibility_policy": "Retain earlier fixed-DMA controller/exclusive-fabric families for old references; new native authoring defaults do not select them.",
+  "templates": {
+    "controller": {
+      "path": "ip/infrastructure/templates/controller.sv.tpl",
+      "sha256": "5a2709ba61b6c510543dd447c8d614b4c5e8c385ff2ded7a873890d4fe1eb046",
+      "name_tokens": [
+        "__CONFIG_PKG__",
+        "__CONTROLLER_MODULE__"
+      ],
+      "extension_regions": [
+        "USER_PORTS",
+        "USER_PARAMETERS",
+        "USER_OPCODES",
+        "USER_DECLARATIONS",
+        "USER_DECODE",
+        "USER_ISSUE",
+        "USER_COMPLETION"
+      ],
+      "required_render_tokens": []
+    },
+    "executor_engine": {
+      "path": "ip/infrastructure/templates/executor_engine.sv.tpl",
+      "sha256": "eb890ffe6b757b996159b817d769ca6fe24bf5bfeb661d28a4d045aa663b360c",
+      "name_tokens": [
+        "__CONFIG_PKG__",
+        "__EXECUTOR_MODULE__"
+      ],
+      "extension_regions": [
+        "USER_PORTS",
+        "USER_PARAMETERS",
+        "USER_DECLARATIONS",
+        "USER_LEGALITY",
+        "USER_DATAPATH"
+      ],
+      "required_render_tokens": []
+    },
+    "fabric": {
+      "path": "ip/infrastructure/templates/execution_fabric_native.sv.tpl",
+      "sha256": "a6666ca68baecad9704a3a3fa605dc66502a690c08552e337fa872358c0e8fcf",
+      "name_tokens": [
+        "__CONFIG_PKG__",
+        "__FABRIC_MODULE__",
+        "__CONTROLLER_MODULE__",
+        "__BANK_MODULE__"
+      ],
+      "extension_regions": [
+        "USER_TOP_PORTS",
+        "USER_SHARED_SIGNALS",
+        "USER_CONTROLLER_PORTS",
+        "USER_BANK_PORTS",
+        "USER_ENGINE_INSTANCES",
+        "USER_ASSERTIONS"
+      ],
+      "required_render_tokens": [
+        "__USER_TOP_PORTS__",
+        "__USER_SHARED_SIGNALS__",
+        "__USER_CONTROLLER_PORTS__",
+        "__USER_BANK_PORTS__",
+        "__USER_ENGINE_INSTANCES__",
+        "__USER_ASSERTIONS__"
+      ]
+    }
+  },
+  "checker_scope": {
+    "reference_identity_and_structure": "scripts/check_reference_templates.py",
+    "bounded_control_fixture": "scripts/run_reference_template_sim.py",
+    "compatibility_family_only": [
+      "scripts/check_isa_design.py",
+      "scripts/check_infrastructure_template.py",
+      "scripts/check_infrastructure_binding.py"
+    ],
+    "native_model_isa_binding": "Design-specific schema/checks must be defined and verified when generating a native model; not supplied by this authoring-reference change."
+  }
+}

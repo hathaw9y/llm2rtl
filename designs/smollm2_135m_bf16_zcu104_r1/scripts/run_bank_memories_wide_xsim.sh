@@ -8,14 +8,14 @@ evidence_dir="$design_dir/evidence/smollm2_bank_memories_wide/run_001"
 mkdir -p "$run_dir" "$evidence_dir"
 cd "$run_dir"
 
-xvlog -sv "$repo_dir/ip/infrastructure/datamover_engine/rtl/bram_bank.sv" \
-  "$repo_dir/ip/infrastructure/datamover_engine/rtl/uram_bank.sv" \
+xvlog -sv "$repo_dir/ip/infrastructure/bank/bram_bank.sv" \
+  "$repo_dir/ip/infrastructure/bank/uram_bank.sv" \
   "$design_dir/rtl/smollm2_bank_memories_wide.sv" \
   "$design_dir/tb/tb_smollm2_bank_memories_wide.sv" \
   > "$evidence_dir/xvlog.log" 2>&1
 xelab tb_smollm2_bank_memories_wide -L xpm -s tb_smollm2_bank_memories_wide_sim \
   > "$evidence_dir/xelab.log" 2>&1
-python3 "$repo_dir/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
+python3 "$repo_dir/ip/infrastructure/archive/pre_physical_20261012/snapshot/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
   "$run_dir/xsim.dir/tb_smollm2_bank_memories_wide_sim/xsimk" \
   'PASS smollm2_bank_memories_wide' \
   > "$evidence_dir/xsim.log" 2>&1

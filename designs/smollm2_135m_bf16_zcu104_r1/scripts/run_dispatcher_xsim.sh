@@ -12,11 +12,11 @@ xvlog -sv \
   "$design_dir/tb/tb_isa_command_dispatcher.sv" \
   "$design_dir/rtl/isa_command_dispatcher.sv" \
   "$design_dir/rtl/bank_tensor_state_tracker.sv" \
-  "$repo_dir/ip/infrastructure/bank_ownership_table/rtl/bank_ownership_table.sv" \
+  "$repo_dir/ip/infrastructure/bank/bank_ownership_table.sv" \
   > "$evidence_dir/xvlog.log" 2>&1
 xelab tb_isa_command_dispatcher -s tb_isa_command_dispatcher_sim \
   > "$evidence_dir/xelab.log" 2>&1
-python3 "$repo_dir/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
+python3 "$repo_dir/ip/infrastructure/archive/pre_physical_20261012/snapshot/ip/infrastructure/datamover_engine/scripts/run_xsimk.py" \
   "$run_dir/xsim.dir/tb_isa_command_dispatcher_sim/xsimk" \
   'PASS isa_command_dispatcher integration' \
   > "$evidence_dir/xsim.log" 2>&1

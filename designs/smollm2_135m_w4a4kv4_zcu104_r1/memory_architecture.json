@@ -1,0 +1,77 @@
+{
+  "schema": "llm2rtl.memory_architecture.v1",
+  "design_id": "smollm2_135m_w4a4kv4_zcu104_r1",
+  "status": "bank_leaf_functional_and_ooc_mapping_verified_integration_pending",
+  "selected_weight_bank": {
+    "module": "smollm2_striped_weight_bank",
+    "contract_path": "contracts/striped_weight_bank_contract.json",
+    "contract_sha256": "f9da1cfbf1564a0602e3caf9aef4b573181525a73d7e888dfc9fe6261f850468",
+    "write_ports": 4,
+    "write_bits_per_port": 128,
+    "read_ports": 1,
+    "read_bits": 512,
+    "stripe_depth_default": 16384,
+    "capacity_bytes_per_logical_bank_default": 1048576,
+    "memory_read_latency": 3,
+    "read_ii": 1,
+    "packed_int4_elements_per_wide_read": 128,
+    "native_address_unit": "128-bit stripe row; each write port has its own row, wide read has one common row",
+    "logical_linear_mapping": "128-bit word index w -> stripe w%4 and stripe row w//4; stripe0 occupies wide bits127:0. This specifies logical packing and is not a connected DMA adapter.",
+    "published_prefix": "Minimum contiguous full-byte-row prefix across all stripes; early out-of-order rows require replay before commit publication",
+    "storage": "Four unchanged shared uram_bank instances; default mapping/resources require this new source closure OOC",
+    "reference_path": "/home/iamjames77/SmolLM2_FPGA/pl/hdl/bank/striped_weight_bank.sv",
+    "measured_resources": {
+      "lut": 506,
+      "ff": 647,
+      "dsp": 0,
+      "uram": 32,
+      "bram_36k": 0,
+      "io": 0
+    },
+    "timing": {
+      "wns_ns": 2.362,
+      "tns_ns": 0.0,
+      "setup_failing_endpoints": 0,
+      "setup_total_endpoints": 5288,
+      "whs_ns": -0.007,
+      "ths_ns": -0.007,
+      "hold_failing_endpoints": 1,
+      "hold_total_endpoints": 5288,
+      "wpws_ns": 1.8,
+      "tpws_ns": 0.0,
+      "pulse_width_failing_endpoints": 0,
+      "pulse_width_total_endpoints": 679,
+      "stage": "post_synthesis",
+      "target_period_ns": 5.0,
+      "target_clock_mhz": 200.0,
+      "passed": false,
+      "false_paths_applied": false,
+      "failing_path": "enb_i -> g_pipelined_visibility.read_valid_pipe_r_reg[0]/D",
+      "input_timing_context": "OOC input delay max0.5ns/min0ns, unplaced netlist with external HD.CLK_SRC estimate",
+      "board_signoff": false
+    },
+    "synthesis_warnings": {
+      "under_pipelined_uram_8_6013": 4,
+      "ooc_incomplete_connectivity_drc_23_814": 2
+    }
+  },
+  "integration": {
+    "four_ingress_physical_dma_connected": false,
+    "bank_pool_connected": false,
+    "consumer_512bit_connected": false,
+    "scale_metadata_layout_frozen": false,
+    "kv_cache_bank_layout_frozen": false,
+    "next_dependencies": [
+      "Numerical packing/group/scale contract",
+      "Four-ingress DMA routing or serialized-load adapter selected explicitly",
+      "Bank ownership/generation and consumer response tags",
+      "Consumer read-latency binding and source closure verification"
+    ]
+  },
+  "measured_performance": null,
+  "notes": [
+    "512-bit bank read capacity is not measured external-DDR bandwidth.",
+    "This selection concerns weight banks; activation and persistent KV layouts still require their own contracts."
+  ],
+  "bank_acceptance_path": "evidence/striped_weight_bank/parent_acceptance.json"
+}

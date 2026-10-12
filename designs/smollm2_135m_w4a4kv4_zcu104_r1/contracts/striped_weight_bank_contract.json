@@ -1,0 +1,61 @@
+{
+  "schema": "llm2rtl.striped_weight_bank_contract.v1",
+  "status": "frozen_for_bank_leaf_implementation",
+  "module_name": "smollm2_striped_weight_bank",
+  "scope": "Opaque packed-data bank leaf only; no quantization arithmetic, model, DMA engine or full-bank-pool integration.",
+  "source_references": [
+    {
+      "path": "/home/iamjames77/SmolLM2_FPGA/pl/hdl/bank/striped_weight_bank.sv",
+      "sha256": "c8ab1c75964822333bd52d886087e629620e1b8e4616614b19dabe9be47359db"
+    },
+    {
+      "path": "/home/iamjames77/SmolLM2_FPGA/pl/hdl/config_pkg.sv",
+      "sha256": "e3473bda43b907e40e992ea2c47eb34aea8a95643f17b2bec0b51446ce85df5f"
+    },
+    {
+      "path": "/home/iamjames77/llm2rtl/ip/infrastructure/datamover_engine/rtl/uram_bank.sv",
+      "sha256": "11520a8bb955d10c89ca6f699d42bcfccd5458e6abee1be67a044dbfdaa92bd1"
+    }
+  ],
+  "reference_observation": "Four independent 128-bit write ports, each with its own native row address; one common-row 512-bit read. The referenced design uses memory read latency 2.",
+  "parameters": {
+    "PORT_COUNT": 4,
+    "PORT_DATA_WIDTH": 128,
+    "DEPTH": 16384,
+    "READ_LATENCY": 3,
+    "ADDR_WIDTH": 32
+  },
+  "clock_reset": "aclk; synchronous active-low aresetn resets metadata and read pipeline, does not erase memory. Writes blocked during reset.",
+  "write_interface": "ena_i[PORT_COUNT], addra_i[PORT_COUNT][ADDR_WIDTH], dina_i[PORT_COUNT][PORT_DATA_WIDTH], wea_i[PORT_COUNT][PORT_DATA_WIDTH/8]. Enabled byte writes in range are accepted every clock independently, without arbitration.",
+  "read_interface": "enb_i, addrb_i[ADDR_WIDTH]; doutb_o[PORT_COUNT*PORT_DATA_WIDTH]. Each stripe reads its common native row.",
+  "read_latency": "READ_LATENCY clocks from the accepting rising edge through memory output; reuse the existing uram_bank contract and align any read-valid metadata to the actual XPM pipeline. Disabled read output holds after accepted requests drain.",
+  "throughput": "Up to four 128-bit stripe writes and one 512-bit combined read per clock; II=1 for the default configuration. No arbitrary four-read-address support.",
+  "mapping": "doutb_o[p*PORT_DATA_WIDTH +: PORT_DATA_WIDTH] is stripe p; addra_i[p] and addrb_i use native stripe rows, not global byte addresses. A common row contains 128 packed INT4 elements at the default width; scale metadata layout remains separate and pending.",
+  "primitive": "One shared ip/infrastructure/datamover_engine/rtl/uram_bank.sv instance per stripe; do not change this existing primitive or its frozen contract.",
+  "read_during_write": "The common uram_bank read_first behavior; byte writes affect only enabled bytes in their stripe.",
+  "address_policy": "Suppress physical enables outside [0,DEPTH); expose per-stripe wr_address_error_o and common rd_address_error_o for enabled out-of-range requests. Full-width range check before narrowing protects against high-bit aliasing.",
+  "commit_policy": {
+    "output": "commitb_o[ADDR_WIDTH:0] is the exclusive complete-row prefix shared by all stripes, the minimum per-stripe prefix.",
+    "update": "Advance a stripe prefix only on an in-range full-byte-strobe write exactly at its current prefix row. Other accepted memory writes do not advance the prefix. Older rewrites and holes cannot overstate commit.",
+    "clear": "clear_commit_i takes priority for all prefix counters and starts a new metadata epoch; suppress writes on the clear edge. Memory contents are retained. Read pipeline is reset only by aresetn; epoch drain/ownership remains the external caller responsibility.",
+    "out_of_order": "Writes above a hole may update memory but require replay in prefix order before being published; no hidden coverage bitmap.",
+    "width": "ADDR_WIDTH+1 bits represent DEPTH even when it fills the native address space; no last-row wrap."
+  },
+  "parameter_policy": "Positive byte-aligned PORT_DATA_WIDTH, PORT_COUNT>=1, DEPTH>=1, READ_LATENCY>=1, ADDR_WIDTH sufficient for DEPTH. Parameter errors must fail simulation, rather than synthesize an apparently usable bank.",
+  "verification_required": [
+    "Actual XPM XSIM with source closure, source hashes, raw compile/elaborate/simulation logs and exit codes.",
+    "Four same-clock independent write addresses; common-row read concatenation and packed-nibble lane order.",
+    "Byte masks, first/last legal rows, out-of-range/high-bit alias suppression, full-address-space commit count.",
+    "II1 back-to-back reads, configured latency 2 and 3, read disabled hold, read-first collision, reset with requests in flight and retained memory.",
+    "Unequal producer progress, partial write, skipped row, older rewrite, clear/reset, exact minimum commit and no unsafe prefix advancement.",
+    "Strict lint against the actual leaf closure, separate from simulation stubs.",
+    "Vivado 2025.2 default real-depth OOC synthesis at a declared 5ns clock; no black boxes; real URAM mapping and resource report. Do not claim routed/board timing from synthesis."
+  ],
+  "not_claimed": [
+    "Full Smol W4A4KV4 numerical correctness",
+    "Four physical DMA channels connected",
+    "Complete bank-pool/consumer/ISA integration",
+    "Full-model quality",
+    "Routed timing, BIT generation or physical-board behavior"
+  ]
+}

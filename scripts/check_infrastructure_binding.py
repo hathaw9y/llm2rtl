@@ -10,8 +10,13 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-OWNERSHIP_TEMPLATE = Path('ip/infrastructure/bank_ownership_table/template_contract.json')
-FABRIC_TEMPLATE = Path('ip/infrastructure/execution_fabric_template/template_contract.json')
+_SOURCE_SPEC = importlib.util.spec_from_file_location('binding_source_relocation', ROOT / 'scripts/infrastructure_sources.py')
+_SOURCES = importlib.util.module_from_spec(_SOURCE_SPEC)
+_SOURCE_SPEC.loader.exec_module(_SOURCES)
+OWNERSHIP_TEMPLATE = Path('ip/infrastructure/contracts/ownership_template.json')
+FABRIC_TEMPLATE = Path('ip/infrastructure/contracts/fabric_template.json')
+LEGACY_OWNERSHIP_TEMPLATE = Path('ip/infrastructure/bank_ownership_table/template_contract.json')
+LEGACY_FABRIC_TEMPLATE = Path('ip/infrastructure/execution_fabric_template/template_contract.json')
 
 
 class BindingError(ValueError):
@@ -45,17 +50,26 @@ def safe_path(root, relative):
     require(not path.is_absolute() and '..' not in path.parts and path.as_posix() == relative,
             f'unsafe path: {relative}')
     result = root / path
+    if not result.exists() and relative.startswith('ip/infrastructure/'):
+        try:
+            return _SOURCES.resolve_reference(relative, root=root)
+        except (_SOURCES.SourceError, OSError, ValueError) as error:
+            raise BindingError(f'compatibility reference rejected: {error}') from error
     require(result.is_file() and not result.is_symlink(), f'missing regular file: {relative}')
     return result
 
 
 def check_templates(root=ROOT):
     root = Path(root).resolve()
-    ownership = read_json(root / OWNERSHIP_TEMPLATE)
-    fabric = read_json(root / FABRIC_TEMPLATE)
+    active = (root / OWNERSHIP_TEMPLATE).exists() or (root / FABRIC_TEMPLATE).exists()
+    ownership_path = OWNERSHIP_TEMPLATE if active else LEGACY_OWNERSHIP_TEMPLATE
+    fabric_path = FABRIC_TEMPLATE if active else LEGACY_FABRIC_TEMPLATE
+    ownership = read_json(safe_path(root, ownership_path.as_posix()))
+    fabric = read_json(safe_path(root, fabric_path.as_posix()))
     require(ownership.get('schema') == 'llm2rtl.bank_ownership_template.v1',
             'invalid ownership template schema')
-    require(fabric.get('schema') == 'llm2rtl.execution_fabric_template.v1',
+    require(fabric.get('schema') == ('llm2rtl.execution_fabric_template.v2' if active
+                                   else 'llm2rtl.execution_fabric_template.v1'),
             'invalid fabric template schema')
     source = safe_path(root, ownership.get('implementation'))
     require(sha256(source) == ownership.get('implementation_sha256'),
@@ -73,9 +87,11 @@ def check_templates(root=ROOT):
         require(sha256(safe_path(root, pin['path'])) == pin['sha256'],
                 f'infrastructure source SHA-256 mismatch: {pin["path"]}')
     engine_index_path = fabric.get('datamover_source_index')
-    require(isinstance(engine_index_path, str)
-            and engine_index_path.startswith('ip/infrastructure/datamover_engine/evidence/engine/')
-            and engine_index_path.endswith('/integration_source_index.json'),
+    require(isinstance(engine_index_path, str) and (
+            engine_index_path == 'ip/infrastructure/contracts/datamover_source_index.json'
+            if active else
+            engine_index_path.startswith('ip/infrastructure/datamover_engine/evidence/engine/')
+            and engine_index_path.endswith('/integration_source_index.json')),
             'DataMover source-closure index path required')
     require(any(pin['path'] == engine_index_path for pin in pins),
             'DataMover source-closure index pin required')
@@ -83,17 +99,31 @@ def check_templates(root=ROOT):
     require(engine_index.get('module_id') == 'datamover_engine'
             and engine_index.get('top') == 'datamover_engine',
             'invalid DataMover source-closure index')
-    for source_record in engine_index.get('source_order', []):
+    if active:
+        require(engine_index.get('schema') == 'llm2rtl.infrastructure_active_source_index.v1',
+                'invalid active DataMover source-closure schema')
+        require(engine_index.get('evidence_scope') == 'source_identity_only_new_signoff_required'
+                and 'verification' not in engine_index,
+                'active DataMover index must not inherit historical verification')
+    source_order = engine_index.get('source_order')
+    require(isinstance(source_order, list) and source_order, 'DataMover source order required')
+    source_paths = set()
+    for source_record in source_order:
+        require(isinstance(source_record, dict) and set(source_record) == {'path', 'sha256'},
+                'invalid DataMover source record')
+        require(source_record['path'] not in source_paths, 'duplicate DataMover source path')
+        source_paths.add(source_record['path'])
         require(sha256(safe_path(root, source_record['path'])) == source_record['sha256'],
                 f'DataMover source SHA-256 mismatch: {source_record["path"]}')
     engine_contract = engine_index.get('contract', {})
     require(sha256(safe_path(root, engine_contract['path'])) == engine_contract['sha256'],
             'DataMover interface contract SHA-256 mismatch')
-    verification = engine_index.get('verification', {})
-    for name in ('verification_report.json', 'captured_inputs.json', 'evidence_manifest.json'):
-        record = verification.get(name, {})
-        require(sha256(safe_path(root, record.get('path'))) == record.get('sha256'),
-                f'DataMover verification evidence SHA-256 mismatch: {name}')
+    if not active:
+        verification = engine_index.get('verification', {})
+        for name in ('verification_report.json', 'captured_inputs.json', 'evidence_manifest.json'):
+            record = verification.get(name, {})
+            require(sha256(safe_path(root, record.get('path'))) == record.get('sha256'),
+                    f'DataMover verification evidence SHA-256 mismatch: {name}')
     binding_path = safe_path(root, fabric.get('binding_template'))
     blank = read_json(binding_path)
     require(blank.get('schema') == 'llm2rtl.execution_fabric_binding.v1',
@@ -108,7 +138,10 @@ def check_templates(root=ROOT):
                    'EXECUTOR_INSTANCES', 'INTEGRATION_ASSERTIONS'):
         require(rtl.count(f'@{marker}@') == 1, f'missing or duplicate RTL marker: {marker}')
     return {'status': 'passed_template_structure', 'ownership_source_sha256': sha256(source),
-            'fabric_template_sha256': sha256(root / FABRIC_TEMPLATE)}
+            'scope': 'compatibility_family_only_not_default_design_reference',
+            'fabric_template_sha256': sha256(root / fabric_path),
+            'evidence_scope': ('source_identity_only_new_signoff_required' if active
+                               else 'historical_pinned_verification')}
 
 
 def check_binding(root, binding_relative):

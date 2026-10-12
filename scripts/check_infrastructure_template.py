@@ -9,7 +9,8 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-INDEX = Path('ip/infrastructure/cmd_dispatcher_template/template_index.json')
+INDEX = Path('ip/infrastructure/contracts/controller_index.json')
+LEGACY_INDEX = Path('ip/infrastructure/cmd_dispatcher_template/template_index.json')
 
 
 class TemplateError(ValueError):
@@ -40,7 +41,7 @@ def read_json(path):
 
 def check(root=ROOT, expected_index_sha256=None, require_rtl=True):
     root = Path(root).resolve()
-    index_path = root / INDEX
+    index_path = root / (INDEX if (root / INDEX).exists() else LEGACY_INDEX)
     require(index_path.is_file() and not index_path.is_symlink(), 'missing template index')
     index_hash = digest(index_path)
     if expected_index_sha256 is not None:
@@ -108,6 +109,7 @@ def check(root=ROOT, expected_index_sha256=None, require_rtl=True):
         'module-port ownership interface mismatch')
 
     result = {'status': 'passed_contract_identity', 'index_sha256': index_hash,
+              'scope': 'compatibility_family_only_not_default_design_reference',
               'checked_inputs': identities}
     if not require_rtl:
         return result
