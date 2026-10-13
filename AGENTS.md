@@ -126,9 +126,9 @@ ownership/controller와 실제 payload memory에 적용한다. 요청 register�
 
 ## Bank 읽기의 필수 파이프라인
 
-GEMM executor의 첫 생성에는 `docs/gemm_initial_structure.md`도 적용한다.
-계산 배열·타일 메모리·주소 counter·응답 context·scale/출력 경로를 먼저 계약화하고,
-원래 병렬도와 shape를 줄인 소형 dot-product 테스트를 GEMM 성공으로 대체하지 않는다.
+모든 executor의 첫 생성과 새 연결에는 `docs/executor_initial_structure.md`를 적용한다.
+주소 counter·요청/응답 context·operand 저장·출력과 en/CE 조건의 stage 경계를 먼저 계약화한다.
+GEMM에는 `docs/gemm_initial_structure.md`의 배열·타일·누산 구조 의무도 추가 적용한다.
 
 기준은 `docs/framework_workflow.md` 1.4·1.5절과 `docs/structure_contract.md`의
 읽기 구조 의무다. **모든 executor는 bank 출력을 계산 core에 직접 조합 연결하지 않는다.**
