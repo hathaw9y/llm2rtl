@@ -68,6 +68,26 @@ enable·ready·write를 직접 제어하는 긴 조합 경로를 기본 구조�
 실제 연결 범위와 지연을 기록한다. Register를 추가한다는 이유로 필요한 쓰기 차단을
 늦추거나 오래된 legality로 commit하게 해서는 안 된다.
 
+### 오류 신호의 register 경계와 전달 범위
+
+- **오류 제어 신호는 register에 저장한다.** 조합 오류 검출·집계 결과를 그대로
+  여러 모듈의 CE·enable·ready·write에 연결하지 않는다. 검출에 필요한 비교·OR는
+  stage 내부에서 수행하고 결과를 valid·transaction·generation 등 실제 context와
+  함께 등록한다. 넓은 오류 집계는 여러 register stage로 분할한다.
+- **등록된 전역 error도 계산 배열 전체의 CE를 직접 제어하지 않는다.** Bank·lane
+  그룹·engine별 국소 오류/실행 허용 register로 전달 범위를 나누고, 해당 그룹의
+  data·valid와 cycle을 맞춘다. Error register 뒤에 조합 조건을 다시 결합하여
+  큰 CE fanout을 만드는 구조도 금지한다. 그룹 크기와 추가 지연은 현재 구조 계약에
+  정하며, 고정 fanout 수만으로 타이밍 통과를 단정하지 않는다.
+- **즉시 안전 차단은 별도로 정의한다.** 같은 cycle에 필요한 reset/cancel·쓰기
+  무효화는 해당 commit 경계의 최소 국소 조건으로 보장한다. 오류 등록 지연 때문에
+  잘못된 쓰기를 허용하지 않는다. 이 국소 차단을 전역 조합 오류 broadcast로 확장하지 않는다.
+  이미 진행 중인 operand·연산·쓰기의 정지/무효화/drain 정책을 추가 latency와 함께 기록한다.
+- **첫 RTL과 합성에서 실제 경로를 확인한다.** 오류 검출 register → 집계 register →
+  그룹별 제어 register → 최종 CE/enable의 대응을 구현 전 구조 계약과 생성 후 검토에
+  남긴다. 합성이 동일 register를 병합했는지, 실제 fanout·배선 지연·실패 endpoint가
+  얼마인지 확인한다. Register 복제 문구나 속성만으로 국소 전달이 구현됐다고 판정하지 않는다.
+
 Parent는 검토한 구조 의무와 module 계약을 구현 Child에게 함께 전달한다.
 Child는 첫 RTL 전에 읽고 의무 → 파일·인스턴스·포트·parameter·stage 대응을 작성한다.
 구조를 결정하는 미결정 사항은 영향받는 구현을 막지만 독립 작업은 계속한다.
