@@ -69,7 +69,7 @@ and board during implementation and verification.
 
 ## Architecture
 
-New designs inspect the 14 common RTL sources listed in
+New designs inspect the 15 common RTL sources listed in
 [sources.json](ip/infrastructure/sources.json) and [the infrastructure guide](ip/infrastructure/README.md).
 These provide bank primitives, a compatibility controller, FIFO/pipeline utilities,
 and reference MM2S/S2MM engines with their configuration package.
@@ -211,7 +211,7 @@ cumulative board checkpoint.
 | `config/hardware/` | Hardware profiles |
 | `ip/infrastructure/controller/cmd_dispatcher_template.sv` | Compatibility controller v4; inspect its constraints before adapting to the new ISA |
 | `ip/infrastructure/contracts/ownership_template.json` | Reusable ownership core template for model-specific bank and owner roles |
-| `ip/infrastructure/sources.json` | Paths, hashes, dependencies and build profiles for 14 common RTL sources |
+| `ip/infrastructure/sources.json` | Paths, hashes, dependencies and build profiles for 15 common RTL sources |
 | `ip/infrastructure/archive/pre_reference_integrated_20261012/` | Removed generic components and templates; exact-byte compatibility copies |
 | `scripts/` | Minimal contract and ISA design checkers |
 | `scripts/start_accelerator.py` | Generate a model/hardware prompt and start Codex |

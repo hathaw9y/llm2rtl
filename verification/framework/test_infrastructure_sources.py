@@ -19,7 +19,7 @@ class InfrastructureSourcesTest(unittest.TestCase):
         self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)
         self.manifest = copy.deepcopy(SOURCES.load_manifest())
-        for record in self.manifest['compatibility_sources'].values():
+        for record in {**self.manifest['compatibility_sources'], **self.manifest['sources']}.values():
             source = self.root / record['path']
             source.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / record['path'], source)

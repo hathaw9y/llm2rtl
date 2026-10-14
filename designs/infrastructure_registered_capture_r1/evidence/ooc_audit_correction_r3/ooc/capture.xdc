@@ -1,0 +1,6 @@
+create_clock -name capture_clk -period 5.000 [get_ports aclk]
+set_property HD.CLK_SRC BUFGCE_DIV_X0Y16 [get_ports aclk]
+set_input_delay -clock capture_clk -min 1.0 [get_ports -filter {DIRECTION == IN && NAME != aclk}]
+set_input_delay -clock capture_clk -max 1.0 [get_ports -filter {DIRECTION == IN && NAME != aclk}]
+set_output_delay -clock capture_clk -min 1.0 [get_ports -filter {DIRECTION == OUT}]
+set_output_delay -clock capture_clk -max 1.0 [get_ports -filter {DIRECTION == OUT}]

@@ -1,0 +1,93 @@
+{
+  "schema": "llm2rtl.independent_utility_verification.v1",
+  "status": "passed",
+  "design_id": "infrastructure_registered_capture_r1",
+  "revision": "r1",
+  "module_id": "registered_capture",
+  "top": "registered_capture_example",
+  "contract_sha256": "c7e3a0cd8355502c61cf21e23c5340167ce6ad88dfe61c5f5721b74ca1fbb76f",
+  "structure_sha256": "4530a1df0d6df71bcd6ea3c0038c2e57805c8ba4103ee4952575122815a3eca7",
+  "source_sha256": "6e701c174224b42af5866fff6a41c9cb53e554f80c5cc00a6e59b8daf53a5971",
+  "findings": [],
+  "no_P0_P1_P2_findings": true,
+  "promotion_eligible_scope": "common utility publication only; no executor/board promotion",
+  "evidence_scope": {
+    "static": "full RTL/example/TB and utility obligation mapping inspected; strict direct local Q->CE and R reset priority; prepared E0 packet consumed E1, II1, separate valid path; portable same event semantics",
+    "simulation": "10 real XSIM cases, widths1/32/33/136/438, both strict unisims_ver FDRE/glbl and portable, packed136 example in every case; payload scoreboard/live-input changes/bubbles/II1/reset_pending/reset_capture",
+    "netlist": "same frozen r2 synthesized DCP read-only recovery, 136 exact unique bit D bindings, 5 unique local CEQ net drivers with only capture FDRE CE loads32/32/32/32/8; dedicated R paths from aresetn; blackboxes0",
+    "timing": "post-synthesis OOC at5ns, xczu7ev-ffvc1156-2-e, Vivado2025.2; numeric setup831/hold831/PW279 endpoints; WNS3.558/WHS0.088/WPWS2.225; failing0 and internal check_timing0",
+    "resources": "279FDRE (136prepared+136captured+5CE+2valid),1reset-inversionLUT,0DSP/BRAM/URAM",
+    "inventory": "all original14 source records/hashes preserved, compatibility source/profile records unchanged; active15/profile7 registered utility depends on unisims_ver; generic5 cases passed including all active source syntax compilation and strict/portable elaboration+simulation"
+  },
+  "obligations": {
+    "RC-ALIGN": "satisfied within standalone utility scope",
+    "RC-CE": "satisfied within standalone utility scope",
+    "RC-RESET": "satisfied within standalone utility scope",
+    "RC-PORTABLE": "satisfied within standalone utility scope",
+    "RC-EXAMPLE": "satisfied within standalone utility scope",
+    "RC-EVIDENCE": "satisfied within standalone utility scope"
+  },
+  "commands_inspected": "raw dedicated r2 XVLOG/XELAB/XSIM command records, r2 synthesis exit1 preserved due binding query after DCP; corrected sameDCP recovery exit0 exact marker; generic leaf5 completed commands. Independent audit reran only Python evidence/identity assertions, no redundant HDL suite.",
+  "tested_example_sha256": "f1b3466bd3c0ed0bb1334bacf834a15d12d2728ffe035c17ad24c96aefb8dd77",
+  "published_example_sha256": "44de37b9ce596824d72b9560cf4f596ae5650dab9f0d1dc47203ea6d95442b12",
+  "example_delta": "Comments clarify E1 publish/E2 downstream edge only; independently checked comment/whitespace-stripped RTL equality. Exact tested source remains frozen and is not relabeled.",
+  "failures_preserved": [
+    "r1 invalid predesign Tcl clock invocation + runner changed input",
+    "r2 audit query launch C vs Q and overbroad instance replacement"
+  ],
+  "remaining_risks": [
+    "No ready/stall/credit/cancel ownership or bank legality; consumer must accept pulses or caller reserve capacity; same-cycle write safety remains caller obligation.",
+    "Strict literal CE guarantee depends on supplied Xilinx backend and primitive preservation; portable synthesis CE mapping not guaranteed.",
+    "OOC example136 only: wider modules and integration need fresh timing/fanout/reset review.",
+    "Equal1ns min/max I/O model produces XDCH methodology warnings; synthesized estimated routing and clock context do not prove physical IO or routed clock.",
+    "Vendor library/glbl depend on actual installed Vivado2025.2; dedicated run records library selection, generic run additionally snapshots glbl."
+  ],
+  "forbidden_claims": [
+    "routed/board/fullmodel evidence",
+    "accelerator migration or throughput proof",
+    "existing evidence promotion to current changed design"
+  ],
+  "identities": {
+    "/home/shmin/llm2rtl/ip/infrastructure/utils/registered_capture.sv": "6e701c174224b42af5866fff6a41c9cb53e554f80c5cc00a6e59b8daf53a5971",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/implementation_r2/source_snapshot/ip/infrastructure/examples/registered_capture_example.sv": "f1b3466bd3c0ed0bb1334bacf834a15d12d2728ffe035c17ad24c96aefb8dd77",
+    "/home/shmin/llm2rtl/ip/infrastructure/examples/registered_capture_example.sv": "44de37b9ce596824d72b9560cf4f596ae5650dab9f0d1dc47203ea6d95442b12",
+    "/home/shmin/llm2rtl/ip/infrastructure/tb/tb_registered_capture.sv": "424810655874b658b06733dd587c2cb35f50be573c1d9671541c679a39fbdf42",
+    "/home/shmin/llm2rtl/scripts/run_registered_capture_checks.py": "07a3f860843141d2030e883b6be33d622d58798e929de8b7a26a74cb19dd7b00",
+    "/home/shmin/llm2rtl/scripts/run_infrastructure_sim.py": "01a3d0a9e1304f1625d68637597e62f8f75f8d85264fa63b3c5ca1356001913e",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/module_packet.json": "c7e3a0cd8355502c61cf21e23c5340167ce6ad88dfe61c5f5721b74ca1fbb76f",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/structure_contract.json": "4530a1df0d6df71bcd6ea3c0038c2e57805c8ba4103ee4952575122815a3eca7",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/kernel_report.json": "9677b5a8ca57e6436c22bfb0afc3c93350e641010659fd6282ecf6d25f58e39a",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/implementation_r2/result.json": "aee4fb288d4e3f3a2b5a2451774b0fda87513d58029df7c8b7aa4b44e1eb8c50",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/r2_dcp_binding_recovery/command_result.json": "fa79d02915810937efb24e2f916d6d894156aef92aa74c122560d5fb029fb5d8",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/r2_dcp_binding_recovery/recovery.tcl": "b828099bb313556e4a1f25628ebacecbc254f4831f549e0170fbe5c103ee8487",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/implementation_r2/ooc/synthesized.dcp": "361d5c4b52c37949e26f335bc26dec0be253b188d59c02eda2b4f2b81b43503c",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/r2_dcp_binding_recovery/binding.tsv": "5a5dcfc35f328b27761f81d334dba3b0e97dbf8e19767e2b547254499ff12507",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/r2_dcp_binding_recovery/bit_binding.tsv": "1e88e581700906a893664eb3c16be16f40eee9caf2d465395f5403e5378af276",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/r2_dcp_binding_recovery/timing_summary.rpt": "dc3167e17ce2a6011f102924f11d5b58e9a41b9fb6fd50c31c52923debfdd397",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/r2_dcp_binding_recovery/check_timing.rpt": "3a4dd721fa53d84b17344821e6593b6c40dec7edbb86d19534858b9abce2d526",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/r2_dcp_binding_recovery/utilization.rpt": "e1a99dc2adc1c1fcbaa548cb54bfd95d3424f792595cfe7961731a3288b4baef",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/r2_dcp_binding_recovery/drc.rpt": "ae087d05ef3ed59c52bd7b6dfe20aab83b024548eadaa325eeb421fb80815dfa",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/r2_dcp_binding_recovery/methodology.rpt": "31fd236a394b46cd8bd3eb085ddb9656f308ba58ae7f08d00e9d268d8a48927f",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/evidence/generic_leaf/result.json": "1cc3c1a24b2622d2d89a931592d3894509a25a12211e502da02751af9a7d8e82",
+    "/home/shmin/llm2rtl/ip/infrastructure/sources.json": "eca0671638375ed4fd98407ba3951243b7f89625af0beb203d66371c6a6985e7",
+    "/home/shmin/llm2rtl/AGENTS.md": "85f551a18742734e7f58425e6bc91c22b38b0590624b475e50c964d97dc47b0a",
+    "/home/shmin/llm2rtl/README.md": "3280c3e65f667694961ba797a4bb694bd271edff269d1d4dd4a3b2dd4931d3ff",
+    "/home/shmin/llm2rtl/README.ko.md": "d20a92461c6e6f765e03d0500a7e60281aaa7086523e26cc04367ef0c410a525",
+    "/home/shmin/llm2rtl/docs/framework_workflow.md": "400058436d2d566f3cfafaa108fe1f2a3954e4d5ec0632bcfac4d22806d550a0",
+    "/home/shmin/llm2rtl/docs/registered_capture.md": "6cac71162ebb1615d5fa03f1868d9a9091cf4f56776732a71beaa87e8b694244",
+    "/home/shmin/llm2rtl/ip/infrastructure/README.md": "a978fffde5a82bf3b29f3886e39f7bd831dfc51af459ba4e3e9aa8915fea275b",
+    "/home/shmin/llm2rtl/verification/framework/test_infrastructure_sources.py": "7b495bb8ccf20cbffeb31bca07fe35418997f8a9758a3729e1818afa3c1a94e0",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/baseline_sources.json": "de139b2d5bb265fc16b4547dcc8aa7a0374a86d7302585048cfc9c338ead3dc2",
+    "/home/shmin/llm2rtl/designs/infrastructure_registered_capture_r1/guidance_snapshot/AGENTS.md": "85aee5a9172bc3fbc7a287d4e3ed4048e9b6bb9a62e2f9f6c6b4035552ce4f8a"
+  },
+  "skill_update_candidate": null,
+  "publication_review": {
+    "status": "passed",
+    "manifest_sources": 15,
+    "manifest_profiles": 7,
+    "usage_docs": "Actual docs/registered_capture.md and AGENTS/infrastructure/framework/readme additions inspected: E0/E1/E2 explicitly separated, capture actualacceptance, II1, no ready/cancel/ownership, caller credit/drain/reset/write-safety, portable mapping limitation, strict vendor dependency and fresh connected timing requirements documented.",
+    "guidance_identity": "Preimplementation source_refs are historicalbaseline preserved exactbytes; current docs/publication hashes separately bound.",
+    "inventory_unit_tests": "13 cases PASS parent-provided publication record; not independently rerun. Independent source/hash/profile comparisons and generic raw commands audited.",
+    "publication_result_sha256": "538f8ece1135e818107d2334767addba2f656d5de23370f9d32d19d4ee405915"
+  }
+}

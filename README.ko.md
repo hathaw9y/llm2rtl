@@ -65,7 +65,7 @@ FPGA 도구는 선택한 모델·보드의 구현 및 검증 단계에서 별도
 
 ## 아키텍처
 
-새 설계는 [sources.json](ip/infrastructure/sources.json)의 공통 RTL 14개와
+새 설계는 [sources.json](ip/infrastructure/sources.json)의 공통 RTL 15개와
 [infrastructure 안내](ip/infrastructure/README.md)를 확인합니다.
 Bank 기본 모듈, 기존 controller 호환 코드, FIFO·pipeline과
 레퍼런스 MM2S/S2MM engine·config package가 남아 있습니다.
@@ -199,7 +199,7 @@ HDL 구현 Child는 배정된 모듈만 작성·자체 검증하고, 별도 검�
 | `config/hardware/` | 보드 profile |
 | `ip/infrastructure/controller/cmd_dispatcher_template.sv` | 기존 controller v4; 인터페이스·제약을 확인한 뒤 새 ISA에 맞게 참조 |
 | `ip/infrastructure/contracts/ownership_template.json` | 모델별 bank/owner 역할로 재사용할 ownership 코어 template |
-| `ip/infrastructure/sources.json` | 공통 RTL 14개의 경로·해시·의존성·빌드 profile |
+| `ip/infrastructure/sources.json` | 공통 RTL 15개의 경로·해시·의존성·빌드 profile |
 | `ip/infrastructure/archive/pre_reference_integrated_20261012/` | 삭제한 generic 모듈·template의 같은 바이트를 가진 호환 기록 |
 | `scripts/` | 최소 계약 및 ISA 설계 검사 |
 | `scripts/start_accelerator.py` | 모델·하드웨어 입력으로 프롬프트 생성 및 Codex 시작 |

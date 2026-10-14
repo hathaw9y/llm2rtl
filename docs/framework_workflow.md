@@ -8,7 +8,7 @@
 
 새 설계는 `ip/infrastructure/sources.json`에 등록된 활성 RTL을 기본 참조로 사용한다.
 `ip/infrastructure/README.md`와 실제 소스를 읽고 포트·주소 단위·cycle·리셋·의존성을 확인한다.
-활성 RTL 14개는 bank 8개, controller 1개, utils 2개, datamover 3개다.
+활성 RTL 15개는 bank 8개, controller 1개, utils 3개, datamover 3개다.
 
 - DMA: `datamover/mm2s_engine.sv`, `datamover/s2mm_engine.sv`의 bank 직접 연결·내부 FIFO·handshake·완료/오류 처리를 기준으로 한다.
 - 설정·utility: `datamover/config_pkg.sv`, `utils/fifo.sv`, `utils/pipeline.sv`의 실제 의존성을 따른다.
@@ -193,6 +193,9 @@ Weight·activation·scale·KV 등 실제로 읽는 모든 operand 경로에 이 
 | Drain | 남은 읽기 응답·operand·계산 파이프라인과 최종 쓰기를 처리한 뒤 완료 응답·bank 해제 |
 
 `utils/pipeline.sv`를 고정 지연 제어 정렬에 활용한다.
+등록된 CE로 packet을 포착하는 경계는 `utils/registered_capture.sv`의
+[계약과 예시](registered_capture.md)를 우선 확인한다. 실제 응답 수락 시점과
+E0 준비→E1 출력→E2 downstream sampling, 반환 공간 예약을 현재 구조 계약에 대응시킨다.
 `BANK_RD_LATENCY`는 memory 자체뿐 아니라 실제 bank mux·중간 register를 포함한 요청부터 응답까지의 지연이다.
 Operand register와 core 내부 지연은 그 이후의 단계로 별도 기록하며 지연을 중복 계산하지 않는다.
 Operand별 bank 지연이 다르면 추가 정렬 register나 응답 buffering으로 같은 연산의 데이터를 맞춘다.

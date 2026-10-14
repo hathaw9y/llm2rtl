@@ -114,6 +114,13 @@ ownership/controller와 실제 payload memory에 적용한다. 요청 register�
    strobe·valid·source·role·generation·transaction과 함께 저장한다.
    최종 stage는 선택된 BANK의 국소 조건으로 실제 read issue/write commit을 결정한다.
    경계 뒤에 큰 BANK mux와 여러 검사가 다시 몰리면 추가 분할 대상으로 기록한다.
+   **최종 data/context register의 CE 자체도 register에 저장한다.** 정상 갱신 경로는
+   등록된 CE의 Q가 대상 register의 CE를 직접 제어하도록 구현한다. 그 뒤에 identity
+   비교, BANK 선택, qualify/ready 또는 FSM 조건을 다시 조합해 CE를 만들지 않는다.
+   CE 판단 결과와 대상 data·주소·mask·context는 같은 transaction과 sampling edge로
+   정렬한다. CE register의 D까지 남은 조건도 stage별로 분할·검증하며, 긴 경로의
+   끝점을 CE에서 D로 옮긴 것만으로 타이밍 개선을 판정하지 않는다. Reset과 같은
+   cycle의 국소 안전 차단은 별도 경로로 명시하고 물리 접근의 안전성을 유지한다.
 4. **현재 상태와 안전성:** 앞 stage의 검사 결과를 사용하는 동안 lease·generation·
    CFG·준비 범위가 어떻게 안정적으로 유지되는지 명시한다. 상태가 바뀔 수 있다면
    최종 stage에서 필요한 국소 재검사 또는 무효화로 오래된 허용 결과의 사용을 막는다.
@@ -131,6 +138,19 @@ ownership/controller와 실제 payload memory에 적용한다. 요청 register�
    구조 검토와 실제 타이밍 판정은 구분한다. 첫 합성은 memory enable과 metadata
    commit 경로를 포함하며, 보고서의 실제 시작점·끝점·logic/route 지연을 계획과
    대조한다. 위반 시 실패 이력을 보존하고 별도 revision에서 수정·재검증한다.
+
+## Registered capture 재사용
+
+- CE로 data/context를 갱신하는 경계는 `ip/infrastructure/utils/registered_capture.sv`와
+  `docs/registered_capture.md`, 실제 `examples/registered_capture_example.sv`를 먼저 확인한다.
+  재사용 여부와 FDRE/portable backend, packet field, CE 그룹 폭을 구조 계약에 기록한다.
+- 실제 수락 사건과 data·metadata를 E0에 준비하고 E1 edge 이후 출력한다.
+  동기 downstream의 sampling은 E2다. 추가 latency와 buffer·outstanding credit,
+  reset/cancel·최종 write drain 책임을 호출자 계약에 반영한다. Stall 기능이 있다고 가정하지 않는다.
+- 기존 core 입력 경계가 의무를 충족하면 대응을 명시한다. 중복 stage를 자동 추가하지 않는다.
+  이 모듈은 legality/ownership/fault 안전 차단을 대신하지 않는다. 실제 연결의 최종
+  CE Q→CE, prepared data→D, reset과 남은 경로를 exact source/netlist로 검증한다.
+  Portable 기능 PASS나 모듈 존재만으로 물리 CE 구조·연결 타이밍 PASS를 선언하지 않는다.
 
 ## Memory와 handshake
 

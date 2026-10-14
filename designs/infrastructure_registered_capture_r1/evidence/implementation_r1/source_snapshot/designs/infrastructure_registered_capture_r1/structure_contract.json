@@ -1,0 +1,88 @@
+{
+  "schema": "llm2rtl.utility_structure.v1",
+  "revision": "infrastructure_registered_capture_r1",
+  "version": 1,
+  "status": "PARENT_REVIEWED_FOR_IMPLEMENTATION",
+  "user_authorization": "그렇다면 추가해봐 — reusable CE capture module, example, tests and usage rules",
+  "created_utc": "2026-10-14T10:10:48.759607+00:00",
+  "source_refs": [
+    {
+      "path": "/home/shmin/llm2rtl/AGENTS.md",
+      "sha256": "85aee5a9172bc3fbc7a287d4e3ed4048e9b6bb9a62e2f9f6c6b4035552ce4f8a"
+    },
+    {
+      "path": "/home/shmin/llm2rtl/ip/infrastructure/sources.json",
+      "sha256": "de139b2d5bb265fc16b4547dcc8aa7a0374a86d7302585048cfc9c338ead3dc2"
+    },
+    {
+      "path": "/home/shmin/llm2rtl/docs/structure_contract.md",
+      "sha256": "e450427dc532ea9f3702ed63816c1f11451cae404fc2efc26e14074387bf45bb"
+    },
+    {
+      "path": "/home/shmin/llm2rtl/ip/infrastructure/utils/pipeline.sv",
+      "sha256": "a898c37725e714a6b5ea7ebdc63d6b04db5263b6f591d9e7b15c13f1c6621ddd"
+    }
+  ],
+  "scope": "New common utils registered_capture plus compilable example/tests/targeted runner. Preserve all existingRTL and frozen designs. No ISA/ownership/router/FIFO/ready engine or accelerator migration.",
+  "interface": {
+    "parameters": {
+      "DATA_WIDTH": "positive int default32; data and actualusedmetadata opaque packed together",
+      "GROUP_WIDTH": "int1..32 default32",
+      "USE_XILINX_FDRE": "bit default1; 0portablefunction only, 1strictliteralCE/R backend"
+    },
+    "ports": {
+      "aclk": "single risingclock",
+      "aresetn": "activeLow synchronous reset priority overcapture",
+      "capture_i": "actual accepted/alignedcapture event, sampled each risingedge; not unacceptedproducervalid",
+      "data_i": "DATA_WIDTH packeddata+metadata stable preacceptedge",
+      "data_o": "held lastcapturedpacket; allzero afterreset",
+      "valid_o": "pulse marking data_o foracceptedcapture onnextedge; no held ready/valid handshake"
+    }
+  },
+  "cycle": {
+    "E0": "Sample capture_i/data_i. Unconditionally prepare data_i ininputregister; register one localCE pergroup independently. Separate pendingvalid preserved so valid doesnot increase group CEload.",
+    "E1": "Capture prepared E0packet under oldlocalCEQ; valid_o marksE0acceptedpacket. Bubbles holddata_o withvalid0.",
+    "latency": "Exactlyone fullclock interval fromacceptedgeE0 tooutputedgeE1, two registerboundaries. No passthrough/no variablelatency.",
+    "II": 1,
+    "capacity": "Fixed pipeline, one waitingcapture plus outputevent; downstream mustaccept everyvalidpulse orcallerprovides reservedbuffer/credit.",
+    "reset": "Everyresetedge clearsdata prepare/output/localCE/valid; pendingrequestinvalidated. No independentcancel port; caller manages acceptedcancel/drain andfinalwrite safety."
+  },
+  "obligations": [
+    {
+      "id": "RC-ALIGN",
+      "requirement": "E0prepared data+opaque metadata alignedwith registeredCE, liveinputs maychange afterE0. Tests randomsuccessivepackets/bubbles andpackedtag/index/mask."
+    },
+    {
+      "id": "RC-CE",
+      "requirement": "Xilinxstrict backend actualprotected localCEFFQ directtoFDRE CE, noreset/valid/permission combinationalcondition afterQ. DataFF FDREs dedicatedR andINIT0. ScopedDONT_TOUCH onlyCE/data/valid FF primitives necessary literalpin mapping; no broadmodulepreservation. CEgroupbits<=GROUP_WIDTH<=32 includingtail; separate protectedpendingvalid so groupQloads onlydatacaptureCE pins."
+    },
+    {
+      "id": "RC-RESET",
+      "requirement": "Synchronousreset overrides CE1, outputzero/valid0 andnofuturestaleresponse. Meaningfultests seedallones thenresetoverlappedcapture, resetbetweenE0E1 andbacktobackreset."
+    },
+    {
+      "id": "RC-PORTABLE",
+      "requirement": "Portablebackend identicalcycle/data/reset semantics; no claimedliteralpost-synthCE pin guarantee. RealXilinx vendorFDRE/glbl forstrictsimulation; nohandwrittenFDRE stub."
+    },
+    {
+      "id": "RC-EXAMPLE",
+      "requirement": "Actualinstantiableexample packsdata+metadata, documentsacceptedge/E1/unconditionalconsumer orreservedbuffer. Example sameclock andopaque format, not bankauthority orstallhandling. ChildownsHDLexample."
+    },
+    {
+      "id": "RC-EVIDENCE",
+      "requirement": "Firstsource+example+test snapshots/hashes beforetools; XSIM vendorbothbackends widths1,32,33,136,438/reference scoreboard/coverage; exampleintegrationchecked. FreshactualsmallOOCexample5ns clockbeforeSynth xczu7ev-ffvc1156-2-e Vivado2025.2, earlyDCP, allsetupholdPW/check_timing andactualnonemptyCEclasspergroup/maxload/binding/Rpin/dataD/blackbox0/util. No board/routed/fullmodelclaim."
+    }
+  ],
+  "timing_validation": {
+    "part": "xczu7ev-ffvc1156-2-e",
+    "tool_path": "/media/admin1/backup/tools/Xilinx/2025.2/Vivado/bin",
+    "period_ns": 5.0,
+    "IO_min_max_ns": 1.0,
+    "clock_site": "BUFGCE_DIV_X0Y16",
+    "threads": 4,
+    "prediction": "LocalCE D singleacceptedscalar, directQ routes max32captureloads, prepareddataQ tooutD no arithmetic; predict <=1ns logic +2nsroute with2ns clock/registermargin; measurements required, notguarantee.",
+    "first_synth": "Actual utility+compilablepackedexample only, scoped common module test; not scaledGEMM proof"
+  },
+  "resource_budget": "For width W/groupsG: prepared W +captured W +localCE G +pendingvalid1/outputvalid1 FF, no DSP/BRAM; strictprimitivepreservation can retainunusedfields, packonlyactualusedmetadata. Measured countexplicit; integrationpacking/timing unmeasured.",
+  "parent_review": "Interface/reset/clock/cycle/group/backend fixed; remaininginternalchoices implementationChild. Onecombinedsource/test/tool independentreview, no newuserapproval/legacyindex/mapping hierarchy."
+}

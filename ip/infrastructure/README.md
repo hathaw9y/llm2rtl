@@ -1,6 +1,6 @@
 # 공통 infrastructure
 
-현재 공통 RTL 14개의 경로·해시·의존성과 빌드 profile은
+현재 공통 RTL 15개의 경로·해시·의존성과 빌드 profile은
 [`sources.json`](sources.json)에 있다. 원본 참조 폴더와 참조 전용 index·검사기는 삭제했다.
 레퍼런스의 `mm2s_engine.sv`·`s2mm_engine.sv`와 필수 `config_pkg.sv`는
 `datamover/`에 유지한다. 두 engine은 bank에 직접 연결하며 기존 FIFO·pipeline을 사용한다.
@@ -14,9 +14,9 @@
 | `bank/` | 8 | BRAM/URAM, memories, 중재, 기존 ownership/router |
 | `datamover/` | 3 | 레퍼런스 MM2S/S2MM engine과 config package |
 | `controller/` | 1 | 기존 controller 호환 코드 |
-| `utils/` | 2 | FIFO, pipeline |
+| `utils/` | 3 | FIFO, pipeline, registered capture |
 
-활성 소스는 14개이며 6개 profile이 `sources.json`에 있다.
+활성 소스는 15개이며 7개 profile이 `sources.json`에 있다.
 기존 별도 모듈 5개와 종속 DMA RTL 4개, 기존 작성 템플릿 6개는 활성 경로에서
 삭제했다. 기존 `templates/` 폴더는 제거했다. `tb/`의 기존 테스트와 `contracts/`의 이전
 계약은 호환 검증·동결 기록 확인용이다. 기존 generic channel·adapter·command queue는 활성 소스에서 제외한다.
@@ -49,6 +49,10 @@ W4 데이터 전송, S2MM backpressure·읽기 지연, controller 응답 연결�
 각 executor의 bank 읽기는 요청 발행 → 응답 정렬 → operand register → 계산 core로 파이프라이닝한다.
 `utils/pipeline.sv`로 고정 지연 제어 신호를 정렬하고 데이터·valid·metadata를 함께 전달한다.
 Backpressure와 pending 응답은 별도 buffering·credit으로 처리한다.
+`utils/registered_capture.sv`는 packet 준비와 등록된 CE로 operand를 포착하는 공통 경계다.
+포트·E0/E1/E2 sampling·buffer 책임·FDRE/portable 선택은
+[사용 지침](../../docs/registered_capture.md)과 `examples/registered_capture_example.sv`를 확인한다.
+`registered_capture` profile로 해당 소스만 선택할 수 있다.
 상세 기준은 [설계 지침 1.4절](../../docs/framework_workflow.md)을 따른다.
 
 새 설계는 읽기·쓰기 소유권을 방향별로 분리한다.
@@ -66,7 +70,7 @@ python3 scripts/run_infrastructure_sim.py --suite all \
   --vivado-bin /tools/Xilinx/2025.2/Vivado/bin
 ```
 
-기본 공통 검증은 시뮬레이션 2건과 활성 전체 RTL 컴파일 1건이다.
+기본 공통 검증은 시뮬레이션 4건과 활성 전체 RTL 컴파일 1건이다.
 소스 해시 검사와 공통 RTL 검증은 범위가 다르다.
 새 모델의 수치·합성·timing·보드 검증 결과로 사용하지 않는다.
 
@@ -85,5 +89,5 @@ python3 scripts/run_infrastructure_sim.py --include-compatibility --suite all \
   --vivado-bin /tools/Xilinx/2025.2/Vivado/bin
 ```
 
-이전 호환 회귀는 시뮬레이션 20건과 컴파일 1건이며 새 설계의 기본 구조가 아니다.
+이전 호환 회귀에 두 capture backend를 포함하면 시뮬레이션 22건과 컴파일 1건이며 새 설계의 기본 구조가 아니다.
 앞선 폴더 정리의 기록은 `archive/pre_physical_20261012/`에 별도로 남아 있다.

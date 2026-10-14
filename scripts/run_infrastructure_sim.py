@@ -117,7 +117,8 @@ def main() -> int:
             if path.is_relative_to(out):
                 relative = Path("generated") / path.relative_to(out)
             else:
-                relative = path.relative_to(ROOT)
+                relative = (path.relative_to(ROOT) if path.is_relative_to(ROOT)
+                            else Path("vendor") / path.name)
             snapshot = out / "source_snapshot" / relative
             if str(path) not in captured_inputs:
                 snapshot.parent.mkdir(parents=True, exist_ok=True)
@@ -142,7 +143,7 @@ def main() -> int:
         return Path(record["log"]).read_text(encoding="utf-8", errors="replace")
 
     def case_run(name, profile, top=None, tb=(), parameters=None, simulator="xsim",
-                 marker=None, controller_fixture=False):
+                 marker=None, controller_fixture=False, vendor_fdre=False):
         work = out / name
         work.mkdir(exist_ok=False)
         case = {"name": name, "profile": profile, "top": top, "simulator": simulator,
@@ -152,7 +153,7 @@ def main() -> int:
         try:
             sources = resolve_profile(profile, root=ROOT, manifest=manifest,
                                       include_compatibility=args.include_compatibility)
-            extra_inputs = []
+            extra_inputs = ([vivado_bin.parent / "data/verilog/src/glbl.v"] if vendor_fdre else [])
             if controller_fixture:
                 helper = INFRA / "scripts/materialize_banks.py"
                 templates = [resolve_reference("ip/infrastructure/templates/" + name)
@@ -184,9 +185,13 @@ def main() -> int:
                     case["status"] = "passed"
                     case["coverage"] = "syntax/package compilation; not elaboration or function"
                     return
+                if vendor_fdre:
+                    command(case, [vivado_bin / "xvlog", *extra_inputs], "vendor_compile.log")
                 snapshot = "infrastructure_sim"
                 elaborate = [vivado_bin / "xelab", top, "-L", "xpm", "-s", snapshot,
                              "-timescale", "1ns/1ps"]
+                if vendor_fdre:
+                    elaborate += ["glbl", "-L", "unisims_ver"]
                 for key, value in case["parameters"].items():
                     elaborate += ["-generic_top", f"{key}={value}"]
                 command(case, elaborate, "elaborate.log")
@@ -259,6 +264,12 @@ def main() -> int:
                          ["tb/tb_cmd_dispatcher_template.sv"],
                          {"CMD_READ_LATENCY": latency, "CAPABILITY_CASE": capability},
                          marker="PASS: cmd_dispatcher_template native controller verification", controller_fixture=True)
+            for backend in (0, 1):
+                case_run(f"registered_capture_b{backend}", "registered_capture", "tb_registered_capture",
+                         ["examples/registered_capture_example.sv", "tb/tb_registered_capture.sv"],
+                         {"DATA_WIDTH": 136, "GROUP_WIDTH": 32, "USE_XILINX_FDRE": backend},
+                         marker=f"PASS registered_capture width=136 group=32 backend={backend}",
+                         vendor_fdre=True)
             case_run("all_rtl_compile", "all", simulator="compile")
 
         if args.include_compatibility and args.suite in ("integration", "all"):

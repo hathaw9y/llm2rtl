@@ -1,0 +1,27 @@
+{
+  "structure_sha256": "4530a1df0d6df71bcd6ea3c0038c2e57805c8ba4103ee4952575122815a3eca7",
+  "before_tools": true,
+  "obligations": {
+    "RC-ALIGN": "u_prepare E0 and u_capture E1; packed example scoreboard",
+    "RC-CE": "g_group.u_local_ce Q directly to g_bit.u_capture CE; separate pending valid; max group32",
+    "RC-RESET": "FDRE R !aresetn INIT0; portable reset branch; TB reset CE0/CE1",
+    "RC-PORTABLE": "g_portable always_ff same E0/E1 semantics",
+    "RC-EXAMPLE": "136bit {generation,transaction,index,mask,payload} actual instance",
+    "RC-EVIDENCE": "runner XSIM both backend widths and actual example 5ns OOC"
+  },
+  "sources": {
+    "ip/infrastructure/utils/registered_capture.sv": "6e701c174224b42af5866fff6a41c9cb53e554f80c5cc00a6e59b8daf53a5971",
+    "ip/infrastructure/examples/registered_capture_example.sv": "f1b3466bd3c0ed0bb1334bacf834a15d12d2728ffe035c17ad24c96aefb8dd77",
+    "ip/infrastructure/tb/tb_registered_capture.sv": "424810655874b658b06733dd587c2cb35f50be573c1d9671541c679a39fbdf42",
+    "scripts/run_registered_capture_checks.py": "eedaec0f1077a72ce32f616fe4fe3321dbb2d98b7d5b6d5dd1a5ed5bd02d77ca"
+  },
+  "postimplementation": {
+    "source_sha256": "6e701c174224b42af5866fff6a41c9cb53e554f80c5cc00a6e59b8daf53a5971",
+    "RC-ALIGN": "g_xilinx.g_bit[b].u_prepare samples live packet unconditionally at E0; g_bit[b].u_capture samples prepared Q at E1 under corresponding g_group[b/GROUP_WIDTH].u_local_ce/Q. g_portable prepared/captured/local_ce always_ff implements same edges. TB independent queue tracks accepted packets and example metadata.",
+    "RC-CE": "Netlist binding.tsv lists five exact u_local_ce/Q unique drivers with only capture FDRE CE pins as loads; bit_binding.tsv covers 136 exact u_prepare/Q -> u_capture/D links. There is no combinational logic between group Q and captured CE, or between prepared Q and captured D. CE D uses capture_i scalar; its upstream legality is caller scope. Reset source aresetn reaches dedicated R via the one reset inversion LUT.",
+    "RC-RESET": "Captured FDRE R overrides CE; u_local_ce/pending/output valid INIT0 and dedicated R. TB seeded allones and checks CE0/CE1 reset, pending reset, reset overlapping capture, consecutive reset and no stale event.",
+    "RC-PORTABLE": "Both backend matrices passed widths1,32,33,136,438; strict uses vendor unisims_ver and glbl, portable is cycle-only guarantee.",
+    "RC-EXAMPLE": "Actual registered_capture_example.u_capture width136 group32; generation/transaction/index/mask/payload unpack at output. Publication after E1; synchronous consumer samples at E2.",
+    "RC-EVIDENCE": "kernel_report.json links implementation_r2 ten XSIM to exact same r2 DCP read-only recovery; failure history remains. 279 FDRE,1 LUT,0 DSP/BRAM/URAM; post-synth only."
+  }
+}
